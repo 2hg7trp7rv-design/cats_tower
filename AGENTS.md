@@ -2,7 +2,7 @@
 
 このファイルはリポジトリ全体に適用する。会話履歴や古いversion名だけで判断せず、正本仕様、GitHub、Vercel、runtime、QA証拠を分離して確認する。
 
-工程状態: 工程1A=IN_PROGRESS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
+工程状態: 工程1A=PASS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
 
 工程1A正式名称: V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint
 
@@ -245,7 +245,7 @@ Gate Cでは375×667、390×844、430×932をChromium / WebKitで確認し、物
 
 コード修正前に次を順番に完了する。
 
-1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `IN_PROGRESS`
+1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `PASS`
 2. 100F正本仕様書 — `PENDING_REVALIDATION`
 3. 1〜10F完全設計 — `PENDING_REVALIDATION`（`FLOORS_1_10_DESIGN.md`）
 4. 9画面の完成見本 — `NOT_STARTED`（旧ワイヤーフレーム候補は不合格のまま保持）

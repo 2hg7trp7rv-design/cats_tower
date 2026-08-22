@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-legacy-baseline-round-007",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "status": "PASS",
+  "mode": "initial-main-seal",
+  "workflowId": 335561992,
+  "runId": 32598740249,
+  "runAttempt": 1,
+  "jobId": 97094361501,
+  "headSha": "455fdc40ea1b2644a6280ab28916fd8294ff01f2",
+  "c3": {
+    "status": "PASS",
+    "headSha": "cdb276a51a4d9eae0fb9b24f31f5139b11534cfe",
+    "runId": 32598238103,
+    "runAttempt": 1,
+    "jobId": 97092427268,
+    "artifact": {
+      "id": 9482204382,
+      "name": "cats-v082-step-1-recovery-evidence-attempt-1",
+      "digest": "sha256:e085b0def9474684fa915d841c53d7544f99ec46ffd57d31a7714217cb58d97b",
+      "sizeBytes": 71606939
+    }
+  },
+  "initialMain": {
+    "status": "PASS",
+    "headSha": "455fdc40ea1b2644a6280ab28916fd8294ff01f2",
+    "runId": 32598740249,
+    "runAttempt": 1,
+    "jobId": 97093658068,
+    "artifact": {
+      "id": 9482349435,
+      "name": "cats-v082-step-1-recovery-evidence-attempt-1",
+      "digest": "sha256:e1f3f704593eac227a4e6504650b9c303c482438403e5575651605669e9cac8a",
+      "sizeBytes": 71610371
+    }
+  },
+  "sanitizedArtifact": {
+    "id": 9482354866,
+    "name": "cats-step-1-round-7-external-audit-source-32598740249-1-audit-1",
+    "digest": "sha256:8813cbf5ce9012c648ebf432c39968d4227344add56241533aeef36f53011dc5",
+    "sizeBytes": 1278
+  },
+  "materialBlockers": []
+}

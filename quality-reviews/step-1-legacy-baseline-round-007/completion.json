@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-legacy-baseline-round-007",
+  "round": 7,
+  "status": "PASS",
+  "canonicalStatus": "PASS",
+  "recordedAt": "2026-08-22T21:19:33Z",
+  "initialMerge": "455fdc40ea1b2644a6280ab28916fd8294ff01f2",
+  "externalAuditRecord": {
+    "path": "quality-reviews/step-1-legacy-baseline-round-007/evidence/round-007-initial-external-audit.json",
+    "sha256": "f6774fc69c85dfecc3f30b3c205ada853a6a583d55f82c49d97a1a1b411816d6"
+  }
+}
