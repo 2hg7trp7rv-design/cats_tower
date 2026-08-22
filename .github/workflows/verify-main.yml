@@ -17,6 +17,7 @@ concurrency:
 
 jobs:
   vertical-tower-qa:
+    name: vertical-tower-qa
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -145,17 +146,27 @@ jobs:
 
       - name: Resolve immutable Step 1 verification kit
         id: step1
+        env:
+          EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set -euo pipefail
-          ROUND=quality-reviews/step-1-legacy-baseline/round-006.json
+          ACCEPTANCE=quality-reviews/step-1-legacy-baseline-round-007/acceptance-round-007.json
+          ROUND=quality-reviews/step-1-legacy-baseline-round-007/round-007.json
+          COMPLETION=quality-reviews/step-1-legacy-baseline-round-007/completion.json
+          BASE=88daf9c912fa726e019915e5d7bfed94f0a47158
+          HEAD_SHA=$(git rev-parse HEAD)
+          test "$HEAD_SHA" = "$EXPECTED_HEAD_SHA"
+          test "$(git rev-parse --is-shallow-repository)" = "false"
+          test -z "$(git replace -l)"
           discover_path_introductions() {
+            local TARGET=$1
             while read -r COMMIT PARENTS; do
-              if ! git cat-file -e "$COMMIT:$ROUND" 2>/dev/null; then
+              if ! git cat-file -e "$COMMIT:$TARGET" 2>/dev/null; then
                 continue
               fi
               INTRODUCED=true
               for PARENT in $PARENTS; do
-                if git cat-file -e "$PARENT:$ROUND" 2>/dev/null; then
+                if git cat-file -e "$PARENT:$TARGET" 2>/dev/null; then
                   INTRODUCED=false
                   break
                 fi
@@ -165,41 +176,111 @@ jobs:
               fi
             done < <(git rev-list --parents HEAD)
           }
-          mapfile -t SEALS < <(discover_path_introductions | sort -u)
+          mapfile -t C1S < <(discover_path_introductions "$ACCEPTANCE" | sort -u)
+          test "${#C1S[@]}" -eq 1
+          C1=${C1S[0]}
+          read -ra C1_ROW <<< "$(git rev-list --parents -n 1 "$C1")"
+          test "${#C1_ROW[@]}" -eq 2
+          test "${C1_ROW[0]}" = "$C1"
+          test "${C1_ROW[1]}" = "$BASE"
+          test "$(git rev-parse "$C1^{commit}")" = "$C1"
+          C1_TREE=$(git rev-parse "$C1^{tree}")
+          test -n "$C1_TREE"
+          git merge-base --is-ancestor "$C1" HEAD
+          test "$(git cat-file -t "$C1:$ACCEPTANCE")" = "blob"
+          VALIDATOR_PATH=$GITHUB_WORKSPACE
+          POST_C1=false
+          if [ "$HEAD_SHA" != "$C1" ]; then
+            POST_C1=true
+            VALIDATOR_PATH="$RUNNER_TEMP/sealed-step1-round7-c1"
+            test ! -e "$VALIDATOR_PATH"
+            git worktree add --detach "$VALIDATOR_PATH" "$C1"
+            test "$(git -C "$VALIDATOR_PATH" rev-parse HEAD)" = "$C1"
+            test "$(git -C "$VALIDATOR_PATH" rev-parse HEAD^{tree})" = "$C1_TREE"
+            ! git -C "$VALIDATOR_PATH" symbolic-ref -q HEAD
+          fi
+          test "$(git -C "$VALIDATOR_PATH" rev-parse --is-shallow-repository)" = "false"
+          test -z "$(git -C "$VALIDATOR_PATH" replace -l)"
+          test "$(git -C "$VALIDATOR_PATH" rev-parse HEAD:tests/verify-step-1-baseline.mjs)" = \
+            "$(git rev-parse "$C1:tests/verify-step-1-baseline.mjs")"
+          echo "validator_path=$VALIDATOR_PATH" >> "$GITHUB_OUTPUT"
+          echo "c1=$C1" >> "$GITHUB_OUTPUT"
+          echo "c1_tree=$C1_TREE" >> "$GITHUB_OUTPUT"
+          echo "post_c1=$POST_C1" >> "$GITHUB_OUTPUT"
+
+          mapfile -t SEALS < <(discover_path_introductions "$ROUND" | sort -u)
           test "${#SEALS[@]}" -le 1
           if [ "${#SEALS[@]}" -eq 1 ]; then
             test "$(git rev-list --parents -n 1 "${SEALS[0]}" | wc -w)" -eq 2
           fi
-          if [ "${#SEALS[@]}" -eq 1 ] && [ "${SEALS[0]}" != "$(git rev-parse HEAD)" ]; then
-            git merge-base --is-ancestor "${SEALS[0]}" HEAD
-            git worktree add --detach "$GITHUB_WORKSPACE/sealed-step1" "${SEALS[0]}"
-            echo "kit=sealed-step1" >> "$GITHUB_OUTPUT"
-            echo "historical=true" >> "$GITHUB_OUTPUT"
-            echo "seal=${SEALS[0]}" >> "$GITHUB_OUTPUT"
-          else
-            echo "kit=." >> "$GITHUB_OUTPUT"
-            echo "historical=false" >> "$GITHUB_OUTPUT"
-            echo "seal=${SEALS[0]:-}" >> "$GITHUB_OUTPUT"
+          mapfile -t COMPLETIONS < <(discover_path_introductions "$COMPLETION" | sort -u)
+          test "${#COMPLETIONS[@]}" -le 1
+          HISTORICAL=false
+          KIT=$GITHUB_WORKSPACE
+          if [ "${#COMPLETIONS[@]}" -eq 1 ]; then
+            COMPLETION_SHA=${COMPLETIONS[0]}
+            test "$(git rev-list --parents -n 1 "$COMPLETION_SHA" | wc -w)" -eq 2
+            COMPLETION_TREE=$(git rev-parse "$COMPLETION_SHA^{tree}")
+            mapfile -t COMPLETION_MERGES < <(
+              while read -ra ROW; do
+                if [ "${#ROW[@]}" -ne 3 ] || [ "${ROW[2]}" != "$COMPLETION_SHA" ]; then continue; fi
+                if [ "$(git rev-parse "${ROW[0]}^{tree}")" != "$COMPLETION_TREE" ]; then continue; fi
+                printf '%s\n' "${ROW[0]}"
+              done < <(git rev-list --parents HEAD)
+            )
+            test "${#COMPLETION_MERGES[@]}" -le 1
+            if [ "${#COMPLETION_MERGES[@]}" -eq 1 ] && [ "${COMPLETION_MERGES[0]}" != "$(git rev-parse HEAD)" ]; then
+              git merge-base --is-ancestor "${COMPLETION_MERGES[0]}" HEAD
+              KIT="$RUNNER_TEMP/sealed-step1-round7-completion"
+              test ! -e "$KIT"
+              git worktree add --detach "$KIT" "$COMPLETION_SHA"
+              test "$(git -C "$KIT" rev-parse HEAD)" = "$COMPLETION_SHA"
+              test "$(git -C "$KIT" rev-parse HEAD^{tree})" = "$COMPLETION_TREE"
+              ! git -C "$KIT" symbolic-ref -q HEAD
+              HISTORICAL=true
+            fi
           fi
+          case "$KIT" in
+            /*) ;;
+            *) echo "Step 1 runtime kit must be an absolute path" >&2; exit 1 ;;
+          esac
+          if [ "$HISTORICAL" = "true" ]; then
+            test "$KIT" = "$RUNNER_TEMP/sealed-step1-round7-completion"
+          else
+            test "$KIT" = "$GITHUB_WORKSPACE"
+          fi
+          echo "kit=$KIT" >> "$GITHUB_OUTPUT"
+          echo "historical=$HISTORICAL" >> "$GITHUB_OUTPUT"
+          echo "seal=${SEALS[0]:-}" >> "$GITHUB_OUTPUT"
+          echo "completion=${COMPLETIONS[0]:-}" >> "$GITHUB_OUTPUT"
 
       - name: Finalize event-time CI provenance
         id: ci_provenance
         env:
           EXPECTED_INVOCATION_SHA256: ${{ steps.ci_invocation.outputs.sha256 }}
           HISTORICAL_STEP1_MODE: ${{ steps.step1.outputs.historical }}
+          POST_C1_MODE: ${{ steps.step1.outputs.post_c1 }}
+          EXPECTED_C1_SHA: ${{ steps.step1.outputs.c1 }}
+          EXPECTED_C1_TREE: ${{ steps.step1.outputs.c1_tree }}
         run: |
           set -euo pipefail
           test "$(sha256sum "$RUNNER_TEMP/cats-ci-invocation.json" | cut -d' ' -f1)" = "$EXPECTED_INVOCATION_SHA256"
-          KIT_DIR="$GITHUB_WORKSPACE/${{ steps.step1.outputs.kit }}"
+          KIT_DIR="${{ steps.step1.outputs.validator_path }}"
           KIT_SHA=$(git -C "$KIT_DIR" rev-parse HEAD)
           KIT_TREE=$(git -C "$KIT_DIR" rev-parse HEAD^{tree})
-          if [ "$HISTORICAL_STEP1_MODE" = "true" ]; then
-            KIT_MODE=historical-seal
-            RUNTIME_MODE=sealed-c3-runtime
-            RUNTIME_SHA="$KIT_SHA"
-            RUNTIME_TREE="$KIT_TREE"
+          test "$KIT_SHA" = "$EXPECTED_C1_SHA"
+          test "$KIT_TREE" = "$EXPECTED_C1_TREE"
+          if [ "$POST_C1_MODE" = "true" ]; then
+            KIT_MODE=sealed-round7-c1
           else
-            KIT_MODE=current-head
+            KIT_MODE=current-round7-c1
+          fi
+          if [ "$HISTORICAL_STEP1_MODE" = "true" ]; then
+            RUNTIME_MODE=sealed-round7-completion-runtime
+            RUNTIME_DIR="${{ steps.step1.outputs.kit }}"
+            RUNTIME_SHA=$(git -C "$RUNTIME_DIR" rev-parse HEAD)
+            RUNTIME_TREE=$(git -C "$RUNTIME_DIR" rev-parse HEAD^{tree})
+          else
             RUNTIME_MODE=immutable-baseline-checkout
             RUNTIME_SHA=727b8d00c281e7539117da5ded7309ea01c7e516
             RUNTIME_TREE=c508c58b0bb1b3fa591eefe143aab2dd6eac9271
@@ -226,6 +307,32 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: GitHub recovery ref and live runtime manifest
+        working-directory: ${{ steps.step1.outputs.validator_path }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          EXPECTED_C1_SHA: ${{ steps.step1.outputs.c1 }}
+          EXPECTED_C1_TREE: ${{ steps.step1.outputs.c1_tree }}
+          HISTORICAL_STEP1_MODE: ${{ steps.step1.outputs.historical }}
+        run: |
+          set -euo pipefail
+          VALIDATOR_DIR="${{ steps.step1.outputs.validator_path }}"
+          test "$(git -C "$VALIDATOR_DIR" rev-parse HEAD)" = "$EXPECTED_C1_SHA"
+          test "$(git -C "$VALIDATOR_DIR" rev-parse HEAD^{tree})" = "$EXPECTED_C1_TREE"
+          VALIDATOR_ENV=("CATS_REPO_ROOT=$GITHUB_WORKSPACE")
+          BASELINE_DIR="$GITHUB_WORKSPACE/recovered-v082"
+          if [ -d "$BASELINE_DIR" ]; then
+            test "$(git -C "$BASELINE_DIR" rev-parse HEAD)" = "727b8d00c281e7539117da5ded7309ea01c7e516"
+            test "$(git -C "$BASELINE_DIR" rev-parse HEAD^{tree})" = "c508c58b0bb1b3fa591eefe143aab2dd6eac9271"
+            VALIDATOR_ENV+=("CATS_BASELINE_DIR=$BASELINE_DIR")
+          fi
+          if [ "$HISTORICAL_STEP1_MODE" = "true" ]; then
+            env "${VALIDATOR_ENV[@]}" node tests/verify-step-1-baseline.mjs --remote
+          else
+            env "${VALIDATOR_ENV[@]}" node tests/verify-step-1-baseline.mjs --remote --live
+          fi
 
       - uses: actions/setup-python@v5
         with:
@@ -254,8 +361,12 @@ jobs:
           grep -qx 'assets/v080/r1/' .vercelignore
           grep -qx 'assets/v080/\*.webp' .vercelignore
           test "$(find .github/workflows -maxdepth 1 -type f -printf '%f\n' | sort | paste -sd' ' -)" = "verify-main.yml verify-step-1-artifacts.yml"
-          test "$(find tests -maxdepth 1 -type f -printf '%f\n' | sort | paste -sd' ' -)" = "capture-v082-preview.mjs living-tower-v080.mjs step-1-normal-flow.mjs step-1-service-worker.mjs verify-ci-artifact.mjs verify-step-1-baseline.mjs"
+          test "$(find tests -maxdepth 1 -type f -printf '%f\n' | sort | paste -sd' ' -)" = "artifact-download-transport.mjs artifact-download-transport.test.mjs capture-v082-preview.mjs living-tower-v080.mjs step-1-normal-flow.mjs step-1-service-worker.mjs verify-ci-artifact.mjs verify-step-1-baseline.mjs"
+          node --check tests/artifact-download-transport.mjs
+          node --check tests/artifact-download-transport.test.mjs
           node --check tests/verify-ci-artifact.mjs
+          node --test tests/artifact-download-transport.test.mjs
+          node tests/verify-ci-artifact.mjs self-test
           test "$(find scripts -maxdepth 1 -type f -printf '%f\n' | sort)" = "build_v080_art.py"
           python - <<'PY'
           import json
@@ -385,7 +496,7 @@ jobs:
             exit 0
           fi
           AUTH=(-H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28')
-          ROUND=quality-reviews/step-1-legacy-baseline/round-006.json
+          ROUND=quality-reviews/step-1-legacy-baseline-round-007/round-007.json
           discover_path_introductions() {
             while read -r COMMIT PARENTS; do
               if ! git cat-file -e "$COMMIT:$ROUND" 2>/dev/null; then
@@ -521,9 +632,25 @@ jobs:
                 .id==$id and .name==$name and .size_in_bytes==$size and .digest==$digest and
                 .created_at==$created and .expires_at==$expires and .expired==false)
             ' "${PREFIX}-artifacts.json"
-            curl -fsSL -L "${AUTH[@]}" "https://api.github.com/repos/${{ github.repository }}/actions/artifacts/$ARTIFACT_ID/zip" > "$ZIP_PATH"
-            test "$(stat -c %s "$ZIP_PATH")" -eq "$ARTIFACT_SIZE"
-            test "$(sha256sum "$ZIP_PATH" | cut -d' ' -f1)" = "${ARTIFACT_DIGEST#sha256:}"
+            node --input-type=module - "$ZIP_PATH" "$ARTIFACT_ID" "$ARTIFACT_SIZE" "$ARTIFACT_DIGEST" <<'NODE'
+          import { writeFile } from 'node:fs/promises';
+          import { resolve } from 'node:path';
+          import { pathToFileURL } from 'node:url';
+
+          const [zipPath, artifactIdText, expectedSizeText, expectedDigest] = process.argv.slice(2);
+          const transport = await import(pathToFileURL(resolve('tests/artifact-download-transport.mjs')).href);
+          const bytes = await transport.downloadGithubArtifactArchive({
+            repository: process.env.GITHUB_REPOSITORY,
+            artifactId: Number(artifactIdText),
+            token: process.env.GH_TOKEN,
+            timeoutMs: 120_000,
+          });
+          const bound = transport.assertArtifactArchiveBinding(bytes, {
+            expectedSize: Number(expectedSizeText),
+            expectedDigest,
+          });
+          await writeFile(zipPath, bound, { mode: 0o600 });
+          NODE
             python - "$ZIP_PATH" "$ARTIFACT_FILE_COUNT" <<'PY'
           import sys
           from pathlib import PurePosixPath
@@ -665,18 +792,24 @@ jobs:
             verify_record quality-reviews/step-1-legacy-baseline/evidence/candidate-ci-run.json false candidate
           fi
 
-      - name: GitHub recovery ref and live runtime manifest
+      - name: Exercise repaired artifact transport against Round 6 provider artifacts
+        if: steps.step1.outputs.historical != 'true'
         working-directory: ${{ steps.step1.outputs.kit }}
         env:
-          CATS_REPO_ROOT: ${{ github.workspace }}
-          CATS_BASELINE_DIR: ${{ github.workspace }}/recovered-v082
-          HISTORICAL_STEP1_MODE: ${{ steps.step1.outputs.historical }}
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
-          if [ "$HISTORICAL_STEP1_MODE" = "true" ]; then
-            env -u CATS_BASELINE_DIR node tests/verify-step-1-baseline.mjs
-          else
-            node tests/verify-step-1-baseline.mjs --remote --live
-          fi
+          set -euo pipefail
+          SMOKE_DIR="$RUNNER_TEMP/cats-round7-provider-smoke"
+          mkdir -p "$SMOKE_DIR"
+          node tests/verify-ci-artifact.mjs round6-c3-smoke 32590094723 1 \
+            | tee "$SMOKE_DIR/round6-c3.json"
+          node tests/verify-ci-artifact.mjs round6-main-smoke 32590658257 1 \
+            | tee "$SMOKE_DIR/round6-main.json"
+          jq -e '.status=="PASS" and .role=="round6-c3-smoke" and .runId==32590094723 and .runAttempt==1' \
+            "$SMOKE_DIR/round6-c3.json"
+          jq -e '.status=="PASS" and .role=="round6-main-smoke" and .runId==32590658257 and .runAttempt==1' \
+            "$SMOKE_DIR/round6-main.json"
 
       - name: Install mobile browser QA runtime
         working-directory: ${{ steps.step1.outputs.kit }}
@@ -872,3 +1005,18 @@ jobs:
           path: ${{ steps.step1.outputs.kit }}/test-results
           if-no-files-found: error
           retention-days: 30
+
+  round7-external-audit:
+    name: round7-external-artifact-audit
+    needs: vertical-tower-qa
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && needs['vertical-tower-qa'].result == 'success' }}
+    permissions:
+      contents: read
+      actions: read
+    uses: ./.github/workflows/verify-step-1-artifacts.yml
+    with:
+      source_run_id: ${{ fromJSON(github.run_id) }}
+      source_run_attempt: ${{ fromJSON(github.run_attempt) }}
+      source_head_sha: ${{ github.sha }}
+      source_event: ${{ github.event_name }}
+      source_ref: ${{ github.ref }}

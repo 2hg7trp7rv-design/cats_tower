@@ -6,11 +6,11 @@ Repository: `2hg7trp7rv-design/cats_tower`
 
 Canonical branch: `main`
 
-文書作業branch: `codex/restart-step-1-round6`
+文書作業branch: `codex/restart-step-1-round7`
 
 固定Vercel URL: <https://cats-tau-dusky.vercel.app/>
 
-工程状態: 工程1A=PASS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
+工程状態: 工程1A=IN_PROGRESS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
 
 工程1A正式名称: V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint
 
@@ -22,7 +22,7 @@ Canonical branch: `main`
 
 ただし、100F分の素材やデータを一括生成しない。最初に1〜10Fを完全な商品スライスとして作り、実移動、接敵、複数敵、ショップ選択、猫解放、塔スクロール、夜明け、保存、物理iPhone QAを合格させる。11F以降はその後に10F単位で制作する。
 
-工程1A・V0.8.2 deployed browser-runtime source + deployment-input byte checkpointは新しい完成判定で`PASS`し、その間のゲームruntime変更は0件である。次は工程2を再検証する。工程2と工程3の旧成果物は削除せず`PENDING_REVALIDATION`の候補として保持し、工程4以降は工程2・3の合格前に開始しない。
+工程1A・V0.8.2 deployed browser-runtime source + deployment-input byte checkpointはRound 6の外部artifact監査でHTTP 415となり、`IN_PROGRESS`へ戻した。その間のゲームruntime変更は0件である。Round 7 completion sealが合格するまで工程2へ進まず、工程2と工程3の旧成果物は`PENDING_REVALIDATION`の候補として保持する。
 
 ## 2. 文書の権限
 
@@ -44,12 +44,12 @@ V0.8.2はコード修正前の検証済み比較・復旧checkpointである。G
 
 | 項目 | 値 |
 |---|---|
-| 工程1A状態 | `PASS` — 配信runtime sourceとdeployment inputsのbyte checkpointを検証済み |
-| 現在の`origin/main` | `76c49e9fca82a4c0f6922de8f93ea3b4e57289f6` |
+| 工程1A状態 | 冒頭の工程状態を正本とする。Round 7 completion seal前は工程2着手禁止 |
+| Round 7開始時の`origin/main` | `88daf9c912fa726e019915e5d7bfed94f0a47158` |
 | baseline候補commit | `727b8d00c281e7539117da5ded7309ea01c7e516` |
 | baseline GitHub | <https://github.com/2hg7trp7rv-design/cats_tower/commit/727b8d00c281e7539117da5ded7309ea01c7e516> |
 | 履歴上のbaseline deployment | `dpl_4YVfqsWrzkSUmzQLZMzcTHLVzTe1` / `727b8d0` / `READY` |
-| 現在の固定Production | `dpl_FDbsfp8QxBJ7pysSfjTuSGw4g7Az` / `76c49e9` / `READY` |
+| Round 7開始時の固定Production | `dpl_A2sPMt2c6LHSCMEWZj6jP2Yre4MR` / `88daf9c` / `READY` |
 | 固定Production URL | <https://cats-tau-dusky.vercel.app/> |
 | runtime照合 | baseline候補と現在の固定Productionがbyte単位で一致 |
 | 工程1A再構成によるゲームruntime変更 | 0件 |
@@ -59,7 +59,7 @@ V0.8.2はコード修正前の検証済み比較・復旧checkpointである。G
 | 1〜10F Preview Ready | false |
 | 100F Product Production Ready | false |
 
-remote archive branch `archive/v0.8.2-legacy-baseline`はbaseline候補commitを指す。ローカルannotated tag `v0.8.2-legacy-baseline`はあるがremote tagは未反映である。fresh recovery Previewでは非HTML 15経路が直接一致し、各HTMLはbaseline bytesの直後にdeployment-bound Vercel Preview Toolbar suffixが1回だけ追加されたことを確認した。C1/C2のexact-head CIと手続上独立した再審査に合格し、C3 PR-head CIとmerge後main push CIを外部完了条件に残すsealとして工程1Aを`PASS`とした。
+remote archive branch `archive/v0.8.2-legacy-baseline`はbaseline候補commitを指す。fresh recovery Previewでは非HTML 15経路が直接一致し、各HTMLはbaseline bytesの直後にdeployment-bound Vercel Preview Toolbar suffixが1回だけ追加された。Round 6はC3/main CIまで成功したがexternal audit run `32590920047`がC3 artifact取得時にHTTP 415で失敗したため、Round 6全体は`FAIL`である。Round 7は修正版transportとcompletion sealを別pathで追加し、成功前の`PASS`を禁止する。C1公開後はC1のAcceptance・検証器・workflowを唯一の信頼基点として凍結し、全後続状態をdetached C1検証器から監査する。外部artifact監査は対象main-push runと同じcommitのrelative reusable workflowとして実行し、別のdefault-branch workflowの差替えを完成根拠にしない。
 
 ## 4. 新しい製品定義
 
@@ -266,13 +266,13 @@ Gate B前の総量上限は、名前付き猫2、一時増援1、通常敵2、�
 
 ## 16. 次に行うこと
 
-工程1Aのdeployed browser-runtime source + deployment-input byte checkpointは`PASS`した。次に工程2の`MASTER_SPEC.md`を現行Gateで再検証する。物理iPhoneは後続の製品QAまで未検証として分離し、工程1Aで確認済みと書かない。
+工程1Aのdeployed browser-runtime source + deployment-input byte checkpointのlive状態は冒頭の工程状態を正本とする。completion sealが`PASS`するまで工程2へ進まない。物理iPhoneは後続の製品QAまで未検証として分離する。
 
-工程1Aは新しい完成判定で`PASS`した。工程2の`MASTER_SPEC.md`と工程3の`FLOORS_1_10_DESIGN.md`は削除せず候補として保持するが、現在の判定は`PENDING_REVALIDATION`である。工程4以降とゲーム本体コード修正は`NOT_STARTED`のままとする。
+工程1Aのlive状態は冒頭の工程状態を正本とする。工程2の`MASTER_SPEC.md`と工程3の`FLOORS_1_10_DESIGN.md`は削除せず候補として保持し、工程4以降とゲーム本体コード修正は`NOT_STARTED`のままとする。
 
 ## 17. コード修正前の全順序
 
-1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `PASS`
+1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `IN_PROGRESS`
 2. 100F正本仕様書 — `PENDING_REVALIDATION`
 3. 1〜10F完全設計 — `PENDING_REVALIDATION`
 4. 9画面の完成見本 — `NOT_STARTED`

@@ -1,14 +1,14 @@
 # V0.8.2 復旧基準
 
-更新日: 2026-08-22
+更新日: 2026-08-23
 
-工程状態: 工程1A=PASS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
+工程状態: 工程1A=IN_PROGRESS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
 
 工程1A正式名称: V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint
 
 工程1A対象外: whole-repository backup / player-save backup / physical-iPhone approval / Production alias switch
 
-1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `PASS`
+1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `IN_PROGRESS`
 
 ## 結論
 
@@ -84,17 +84,25 @@ Production切替は現在版が正常でruntimeも同一なため、この監査
 
 目標RTOは切替判断後15分、GitHub内に保持した16配信runtime sourceと2 deployment inputsのbyte欠損RPOは0である。GitHub repositoryとVercel projectの同時削除は対象外であり、プレイヤーsaveのRPOも定義できない。V0.8.2は端末`localStorage`のみで、exportもserver backupもないためである。
 
-## 判定を封印する3 commit
+## Round 6失敗とRound 7の再構成
 
-工程1Aは、「検証後に判定基準や本文を差し替える」抜け道を防ぐため、次の直系3 commitで確定する。
+工程1Aは、「検証後に判定基準や本文を差し替える」抜け道を防ぐため、制作前Acceptance、候補、内部sealを直系commitで結び、main merge後の外部監査を別の停止条件にする。
 
 Round 3のC1 `830b32d`は、履歴runの`pull_requests[]`を不変情報と誤認したためCIで失敗した。Round 4のC1 `44696c97`はexact-head CIには成功したが、CI後の反証で、caller-authored metadataへ依存する外部artifact検証、default branch上の独立監査workflow不在、C1のexact changed-path境界不在、main merge topologyの拘束不足が判明した。Round 5のC1 `cfebec0`もexact-head CIには成功したが、公開後の反証で、future-mainがproviderの最新attemptだけを検査し、後発の失敗rerunが以前の成功attemptを隠す欠陥が判明した。3つのroundはAcceptance bytes、commit/tree、run/jobとmaterial blockerを不変の`FAIL`記録として保持し、Round 6 C1を公開済みRound 5 C1の直接の子として作る。公開済みC1のamend・rebase・force置換は禁止する。
 
-1. **C1 Acceptance**: Acceptance、workflow、validator、snapshot、capture、raw証拠を固定する。状態は`IN_PROGRESS`のまま、exact-head CIを実行する。
-2. **C2 review candidate**: C1 CI証拠、clean recovery証拠、3人のcritic記録だけを追加する。C1の直接の子としてexact-head CIを実行する。
-3. **C3 audit seal**: C2 CI証拠、final judge、round-006、定義済みの機械的な`IN_PROGRESS`→`PASS`変更だけを追加する。C2の直接の子とし、C3 PR-head CI、exact two-parent merge、merge後main treeのC3一致、main push CI、別workflowによる両artifact再検査を完成報告前の外部停止条件とする。
+Round 6はC1 `79b255f`、C2 `ee0d4cf`、C3 `1f552aa`、two-parent merge `88daf9c`、C3/main CIまで成功した。しかしpost-main external audit run `32590920047` / job `97074517000`は、C3 artifact APIのfirst hopへ`Accept: application/octet-stream`を送ったためHTTP 415で失敗し、main artifact検査と監査証拠uploadも実行されなかった。`round-006.json`は外部条件前の内部sealとして不変保持するが、Round 6全体は`FAIL`である。
 
-C2とC3はsingle-parentで、各辺の変更pathはAcceptanceのexact setと一致させる。squash/rebase mergeはC1/C2/C3の証拠結合を失うため使用しない。完成報告前に、merge後のmainがC1/C2/C3を祖先とし、main headのtreeがC3と一致し、そのmain headのpush CIがhistorical-seal modeで成功したことまで確認する。さらにmain push CI完了をtriggerとする別workflowが、GitHub APIを直接使ってC3とmain双方のattempt別artifactを再取得し、run attempt、job interval、digest、95 member、provenance raw bytes、workflow commit/tree/blob、role別kit/runtimeを検査し、成功するまで完成報告しない。この監査jobは不正なsource eventを`skipped`で緑にせず明示的に失敗させる。初回は一意なtwo-parent seal mergeとC3 artifactを検査する。後続mainでは、そのseal mergeの祖先性だけでなく、C3と初回mainの両artifact検査stepが成功した初回外部監査run/jobが今回のprimary runより前に存在することをGitHub APIから再確認してから、当該push artifactを検査する。GitHubが検索条件付きrun一覧を1,000件に制限するため、監査はactor・branch・created・event・head_sha・status等で絞らず、workflow単位の全ページを2回取得して`total_count`、ID重複、`[id,run_attempt]`の安定性を照合する。明示した100,000 runの安全上限、途中変化、欠落、重複はすべてhard FAILとし、候補の絞り込みは完全取得後にローカルで行う。そのうえでproviderが保持するattempt 1から最新attemptまでをexact-attempt run/job APIで走査するため、後日の失敗rerunで先の成功が隠れても見失わない。その初回成功記録がなければfutureの緑で代替できず、同時にC3 artifact自体は再ダウンロードしないため、単なるartifact期限切れで将来の正当な更新を停止させない。C3以降は封印した2つの証拠path内のAcceptance kernelを唯一の機械的正本とし、`QUALITY_GATE.md`はその7つの必須主張をすべて残す進化可能なmirrorとする。検証器は任意の自然言語の意味を完全に解釈するとは主張せず、current文書の編集品質は後続の人間レビュー対象とする。workflowはC1〜C3のpre-seal検証ではexact baseline SHA `727b8d00c281e7539117da5ded7309ea01c7e516`を別checkoutする。C3のdescendantではこのcheckoutを繰り返さず、封印済みC3 kitのruntimeをbaseline objectとSHAへ再照合するため、mutable archive refへ依存しない。GitHub Actionsの履歴runに埋め込まれる`pull_requests[]`は番号・ref・SHAを含め後から現在状態へ変わり得る関連情報なので、履歴証拠には一切使わない。旧runはrun-level identity/headとsynthetic merge object・ordered parents・job logで結び、新しいC1/C2はprimary checkout直後に一度だけ生成してartifactへコピーしたevent-time `ci-provenance.json`のraw bytesを使う。これにより、判定記録のrevertを拒否しつつ、期限切れartifactや後続工程の正当なruntime変更を工程1Aが永久に停止させない。validatorが読むAcceptance、状態、CI、証拠、critic、judge、埋め込みverbatim responseとprovenanceの全JSONは、意味が二重にならないよう重複object keyを拒否する。
+Round 7は`88daf9c`の直接子からやり直す。Round 6の証拠treeは変更せず、兄弟path `quality-reviews/step-1-legacy-baseline-round-007/`にAcceptance、失敗記録、再批評、CI、外部監査、completionを追加する。
+
+1. **C1 Acceptance**: GitHub APIのvendor Accept、manual 302、資格情報のないHTTPS Location、Authorizationを転送しないsecond hop、provider size/digest、ZIP/provenance拘束を実装・固定する。状態は`IN_PROGRESS`。
+2. **C2 review candidate**: exact-head C1 CI、Round 6 C3/main artifactの実provider smoke、3人の独立criticだけを追加する。状態は`IN_PROGRESS`。
+3. **C3 internal seal**: exact-head C2 CI、別のfinal judge、`round-007.json`だけを追加する。内部Gateが合格しても状態は`IN_PROGRESS`、roundは`EXTERNAL_PENDING`とする。
+4. **main external audit**: exact two-parent mergeのmain-push run内で、primary job完了後に同じcommitのrelative reusable workflowを呼び、修正版transportでRound 7 C3とcaller runのmain双方のartifactを検査する。部分失敗時もsanitized結果をuploadした後にaggregate gateを失敗させる。
+5. **completion seal**: 初回外部監査成功をprovider metadataへ結合した記録を追加して初めて正本を`PASS`へ変える。そのcompletion mergeのmain CIとfuture-main外部監査も完成報告前に合格させる。
+
+C1を作成した後は、そのC1に含まれるAcceptance、baseline validator、artifact verifier、transport、primary/reusable audit workflowをRound 7の唯一の信頼基点とする。C2以降はdetached C1 worktreeの検証器を現在の対象repositoryへ向けて実行し、workflow blobもC1と同一でなければ拒否する。監査は別のdefault-branch `workflow_run`へ委ねず、source-bound primaryと同じcommitのrelative reusable workflowとして実行する。raw stdoutは保存せず、`RUNNER_TEMP`のmode `0700`ディレクトリに再構成したexact 2 JSONだけをuploadする。
+
+C1/C2/C3はsingle-parentで、各辺の変更pathはRound 7 Acceptanceのexact setと一致させる。squash/rebase mergeは証拠結合を失うため使用しない。外部監査の結果が出る前に正本へ`PASS`を書かない。GitHubが検索条件付きrun一覧を1,000件に制限するため、監査はworkflow単位の全ページを2回取得し、`total_count`、ID重複、`[id,run_attempt]`の安定性を照合した後、候補をローカルで絞り、全retained attemptをexact APIで検査する。後発の失敗rerunが先行成功を隠しても見失わず、Round 6の成功していない外部監査をRound 7のbootstrapへ代用しない。
 
 ## 品質境界
 

@@ -2,7 +2,7 @@
 
 猫を呼んで塔を奪還し、制圧した部屋で猫が暮らし、選んだ店と配送が上階の戦闘を支える、スマートフォン縦画面専用の100F放置インクリメンタルRPGです。
 
-工程状態: 工程1A=PASS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
+工程状態: 工程1A=IN_PROGRESS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
 
 工程1A正式名称: V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint
 
@@ -15,7 +15,7 @@
 | 対象 | 状態 |
 |---|---|
 | 100F方針 | `PASS` |
-| 工程1A・V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint | `PASS` — 配信runtime sourceとdeployment inputsのbyte checkpointを検証済み |
+| 工程1A・V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint | 冒頭の工程状態を正本とする |
 | 工程2・100F正本仕様書 | `PENDING_REVALIDATION` — 旧成果を候補として保持 |
 | 工程3・1〜10F完全設計 | `PENDING_REVALIDATION` — 旧成果を候補として保持 |
 | 工程4〜9 | `NOT_STARTED` |
@@ -26,24 +26,27 @@
 
 100Fの最上位仕様候補は[`MASTER_SPEC.md`](./MASTER_SPEC.md)、1〜10Fの詳細候補は[`FLOORS_1_10_DESIGN.md`](./FLOORS_1_10_DESIGN.md)です。どちらも現在は`PENDING_REVALIDATION`であり、現行Gateの再合格前は完成成果として扱いません。
 
-## 工程1AのV0.8.2配信runtime検証済みcheckpoint
+## 工程1AのV0.8.2配信runtime checkpoint
 
-コード修正前の検証済み復旧基準は、V0.8.2のcommit `727b8d0`です。GitHub `origin/main`の現在値は文書更新を含む`76c49e9`であり、両者を同じcommitとして扱いません。
+コード修正前の復旧基準は、V0.8.2のcommit `727b8d0`です。GitHub `origin/main`のRound 7開始点はRound 6 merge `88daf9c`であり、両者を同じcommitとして扱いません。
 
 | 役割 | commit / deployment | 状態 |
 |---|---|---|
-| 現在の`origin/main` | `76c49e9fca82a4c0f6922de8f93ea3b4e57289f6` | 文書更新を含む現在の正本branch |
+| Round 7開始時の`origin/main` | `88daf9c912fa726e019915e5d7bfed94f0a47158` | Round 6の内部sealを含むが、外部監査は失敗 |
 | V0.8.2 baseline checkpoint | [`727b8d00c281e7539117da5ded7309ea01c7e516`](https://github.com/2hg7trp7rv-design/cats_tower/commit/727b8d00c281e7539117da5ded7309ea01c7e516) | 比較・復旧用checkpointとして検証済み |
 | 履歴上のbaseline deployment | `dpl_4YVfqsWrzkSUmzQLZMzcTHLVzTe1` / `727b8d0` | `READY`。現在の固定URLの配信先ではない |
-| 現在の固定Production | `dpl_FDbsfp8QxBJ7pysSfjTuSGw4g7Az` / `76c49e9` | `READY`。<https://cats-tau-dusky.vercel.app/> |
+| Round 7開始時の固定Production | `dpl_A2sPMt2c6LHSCMEWZj6jP2Yre4MR` / `88daf9c` | `READY`。<https://cats-tau-dusky.vercel.app/> |
 
-現在の固定Productionに配信されるゲームruntimeはbaseline checkpointとbyte単位で一致し、工程1Aのやり直しによるゲームruntime変更は0件です。byte一致に復旧・CI・独立監査を加えた工程1Aの完成判定は`PASS`ですが、V0.8.2の製品品質合格を意味しません。
+現在の固定Productionに配信されるゲームruntimeはbaseline checkpointとbyte単位で一致し、工程1Aのやり直しによるゲームruntime変更は0件です。ただしRound 6のpost-main外部監査は、GitHub artifact APIへ誤った`Accept`を送ってHTTP 415となったため、Round 6終了時点で工程1Aを`IN_PROGRESS`へ戻しました。byte一致やmain CI成功だけを完成判定へ代用しません。
 
 現時点の制約:
 
 - 実ユーザーのplayer saveを復元するserver backupやexportはありません。削除済み・回復不能に破損した`localStorage`は復旧できません。
 - 物理iPhone Safari、ChatGPT内ブラウザ、standalone PWAは未検証です。
-- baselineと同一treeのfresh recovery Vercel Preview `dpl_3qe2uhLnFQ4e9M4UmedQxRGUY3xV`は`READY`です。非HTML 15経路は直接一致し、各HTMLはbaseline bytesの直後にdeployment-bound Vercel Preview Toolbar suffixが1回だけ追加されたことを確認しました。C1/C2のexact-head CIと手続上独立した再審査を終え、C3 PR-head CIとmerge後main push CIを外部完了条件に残すsealとして工程1Aのbyte checkpointを`PASS`としました。
+- baselineと同一treeのfresh recovery Vercel Preview `dpl_3qe2uhLnFQ4e9M4UmedQxRGUY3xV`は`READY`です。非HTML 15経路は直接一致し、各HTMLはbaseline bytesの直後にdeployment-bound Vercel Preview Toolbar suffixが1回だけ追加されたことを確認しました。
+- Round 6はC1/C2/C3、C3 PR CI、main CIまで成功しましたが、external audit run `32590920047`がC3 artifact取得時のHTTP 415で失敗しました。内部sealの`PASS`記録はその境界を残したまま、Round 6全体は`FAIL`、Round 6終了時点の工程1Aは`IN_PROGRESS`です。
+- Round 7では修正版transportをC1で凍結し、C3時点でも`PASS`にしません。main merge後のC3/main両artifact監査成功を記録するcompletion sealを追加してからだけ`PASS`へ移します。
+- C1公開後はC1自身のAcceptance・検証器・workflowを信頼基点として凍結し、C2以降の現在repositoryをdetached C1検証器で監査します。外部artifact監査も対象main-push run内で同じcommitのrelative reusable workflowとして実行し、別のdefault-branch workflowによる差替えを認めません。
 - 旧成果物は削除せず、再検証対象の候補として保持します。
 
 ## 新しい中核体験
@@ -101,7 +104,7 @@
 
 ## コード修正前の順序
 
-1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `PASS`
+1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `IN_PROGRESS`
 2. 100F正本仕様書 — `PENDING_REVALIDATION`
 3. 1〜10F完全設計 — `PENDING_REVALIDATION`
 4. 9画面の完成見本 — `NOT_STARTED`
