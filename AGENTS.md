@@ -2,7 +2,7 @@
 
 このファイルはリポジトリ全体に適用する。会話履歴や古いversion名だけで判断せず、正本仕様、GitHub、Vercel、runtime、QA証拠を分離して確認する。
 
-工程状態: 工程1A=PASS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
+工程状態: 工程1A=IN_PROGRESS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
 
 工程1A正式名称: V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint
 
@@ -28,14 +28,14 @@
 
 ## 現在の状態
 
-2026-08-22時点:
+2026-08-23時点:
 
 - 100F最終方針: 承認済み
-- 準備工程: 工程1A・V0.8.2 deployed browser-runtime source + deployment-input byte checkpointは`PASS`。次は工程2の再検証
+- 準備工程: 工程1A・V0.8.2 deployed browser-runtime source + deployment-input byte checkpointのlive状態は冒頭の工程状態を正本とする。Round 7外部監査とcompletion seal合格前の工程2着手は禁止する
 - 工程2・3: 旧成果物は保持するが`PENDING_REVALIDATION`
 - コード修正: 未開始
 - 現行公開版: V0.8.2 legacy baseline
-- 監査時の`origin/main`: `76c49e9fca82a4c0f6922de8f93ea3b4e57289f6`
+- Round 7開始時の`origin/main`: `88daf9c912fa726e019915e5d7bfed94f0a47158`
 - V0.8.2配信runtime source基準commit: `727b8d00c281e7539117da5ded7309ea01c7e516`
 - 保存点commit: <https://github.com/2hg7trp7rv-design/cats_tower/commit/727b8d00c281e7539117da5ded7309ea01c7e516>
 - 固定URL: <https://cats-tau-dusky.vercel.app/>
@@ -245,7 +245,7 @@ Gate Cでは375×667、390×844、430×932をChromium / WebKitで確認し、物
 
 コード修正前に次を順番に完了する。
 
-1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `PASS`
+1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `IN_PROGRESS`
 2. 100F正本仕様書 — `PENDING_REVALIDATION`
 3. 1〜10F完全設計 — `PENDING_REVALIDATION`（`FLOORS_1_10_DESIGN.md`）
 4. 9画面の完成見本 — `NOT_STARTED`（旧ワイヤーフレーム候補は不合格のまま保持）

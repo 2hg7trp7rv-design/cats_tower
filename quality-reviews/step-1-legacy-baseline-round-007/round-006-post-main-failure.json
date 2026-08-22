@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-legacy-baseline-round-007",
+  "recordedDate": "2026-08-23",
+  "predecessorRound": 6,
+  "predecessorInternalSeal": {
+    "c1": "79b255f4ccdd8c75a3d67cc5f9e9b50d5682929b",
+    "c2": "ee0d4cf1e7df3f40dbd2ba960aca5662f38abbc7",
+    "c3": "1f552aae0afe3c935a33122b15f85e20708aabc2",
+    "c3Tree": "1aeba9e915990e56a8d777e7b90cd94d4755c7fb",
+    "roundRecord": "quality-reviews/step-1-legacy-baseline/round-006.json",
+    "roundRecordMeaning": "internal C1/C2/C3 review seal only; its own judgment boundary explicitly leaves all post-main external stop conditions pending"
+  },
+  "merge": {
+    "sha": "88daf9c912fa726e019915e5d7bfed94f0a47158",
+    "tree": "1aeba9e915990e56a8d777e7b90cd94d4755c7fb",
+    "parents": [
+      "76c49e9fca82a4c0f6922de8f93ea3b4e57289f6",
+      "1f552aae0afe3c935a33122b15f85e20708aabc2"
+    ]
+  },
+  "successfulPreFailureChecks": {
+    "c3PullRequestCi": {
+      "runId": 32590094723,
+      "runAttempt": 1,
+      "jobId": 97072452889,
+      "conclusion": "success",
+      "artifact": {
+        "id": 9480141426,
+        "name": "cats-v082-step-1-recovery-evidence-attempt-1",
+        "sizeBytes": 71594452,
+        "digest": "sha256:52ff79cc991857c162545f7a0581d65835afe38b48f00aa6f4d5104d6fd97e4a",
+        "createdAt": "2026-08-22T18:18:33Z",
+        "expiresAt": "2026-09-21T18:18:30Z"
+      }
+    },
+    "mergedMainCi": {
+      "runId": 32590658257,
+      "runAttempt": 1,
+      "jobId": 97073864631,
+      "conclusion": "success",
+      "artifact": {
+        "id": 9480288219,
+        "name": "cats-v082-step-1-recovery-evidence-attempt-1",
+        "sizeBytes": 71609224,
+        "digest": "sha256:93bf04404c93bd131d68e2e39658571a6772eb8778787aae9577c67d7d5149c1",
+        "createdAt": "2026-08-22T18:30:02Z",
+        "expiresAt": "2026-09-21T18:29:59Z"
+      }
+    }
+  },
+  "failedExternalAudit": {
+    "workflowId": 340173994,
+    "workflowName": "Verify sealed Step 1 external CI artifacts",
+    "workflowPath": ".github/workflows/verify-step-1-artifacts.yml",
+    "runId": 32590920047,
+    "runNumber": 1,
+    "runAttempt": 1,
+    "event": "workflow_run",
+    "headBranch": "main",
+    "headSha": "88daf9c912fa726e019915e5d7bfed94f0a47158",
+    "status": "completed",
+    "conclusion": "failure",
+    "startedAt": "2026-08-22T18:30:07Z",
+    "updatedAt": "2026-08-22T18:30:21Z",
+    "job": {
+      "id": 97074517000,
+      "name": "verify-sealed-artifacts",
+      "startedAt": "2026-08-22T18:30:10Z",
+      "completedAt": "2026-08-22T18:30:20Z",
+      "failedStep": "Verify C3 pull-request artifact through GitHub API",
+      "skippedSteps": [
+        "Verify merged main artifact through GitHub API",
+        "Upload external artifact audit results"
+      ],
+      "decodedConnectorLogUtf8Bytes": 27497,
+      "decodedConnectorLogSha256": "4c88cdea10c22ac1dab9e60dcf6368e97227ff47c81576080a615fe753fc5a5f",
+      "logHashBoundary": "SHA-256 of the UTF-8 log text returned by the authenticated GitHub connector; not a claim about GitHub's compressed log archive bytes"
+    },
+    "uploadedArtifacts": 0,
+    "failureClass": "implementation-defect",
+    "failureMessage": "GitHub API /actions/artifacts/9480141426/zip failed: 415"
+  },
+  "rootCause": {
+    "oldVerifierPath": "tests/verify-ci-artifact.mjs",
+    "oldVerifierSha256": "65c0a7ef5b7ccc179ea78f378b8ff71a34fe66df8068540aed6f6b154e4131b8",
+    "incorrectFirstHopAccept": "application/octet-stream",
+    "requiredFirstHopAccept": "application/vnd.github+json",
+    "requiredTransport": "authenticated GitHub API GET with manual 302, followed by an unauthenticated GET to the credential-free HTTPS Location",
+    "officialContract": "https://docs.github.com/en/rest/actions/artifacts?apiVersion=2022-11-28#download-an-artifact"
+  },
+  "finalJudgment": {
+    "round6InternalSeal": "PASS",
+    "round6ExternalCompletion": "FAIL",
+    "round6Overall": "FAIL",
+    "step1A": "IN_PROGRESS",
+    "completionReportAllowed": false,
+    "nextRound": 7,
+    "nextRoundBase": "88daf9c912fa726e019915e5d7bfed94f0a47158"
+  },
+  "immutability": {
+    "round6EvidenceTree": "c0a5b81aeca8ec1f034b920774321f4728caac4e",
+    "round6EvidencePath": "quality-reviews/step-1-legacy-baseline",
+    "round6EvidenceMustRemainByteIdentical": true,
+    "baselineSnapshotTree": "c59e35e51ad2d35ae8304bb9d5e5b921101911c3",
+    "runtimeOrDeploymentInputChanges": 0
+  }
+}

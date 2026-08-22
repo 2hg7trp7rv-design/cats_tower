@@ -1,10 +1,42 @@
 name: Verify sealed Step 1 external CI artifacts
 
 on:
-  workflow_run:
-    workflows: ["Verify Cat's Tower baseline and quality records"]
-    branches: [main]
-    types: [completed]
+  workflow_call:
+    inputs:
+      source_run_id:
+        required: true
+        type: number
+      source_run_attempt:
+        required: true
+        type: number
+      source_head_sha:
+        required: true
+        type: string
+      source_event:
+        required: true
+        type: string
+      source_ref:
+        required: true
+        type: string
+    outputs:
+      audit_mode:
+        value: ${{ jobs.verify-sealed-artifacts.outputs.audit_mode }}
+      source_run_id:
+        value: ${{ jobs.verify-sealed-artifacts.outputs.source_run_id }}
+      source_run_attempt:
+        value: ${{ jobs.verify-sealed-artifacts.outputs.source_run_attempt }}
+      source_head_sha:
+        value: ${{ jobs.verify-sealed-artifacts.outputs.source_head_sha }}
+      source_event:
+        value: ${{ jobs.verify-sealed-artifacts.outputs.source_event }}
+      source_ref:
+        value: ${{ jobs.verify-sealed-artifacts.outputs.source_ref }}
+      sanitized_artifact_name:
+        value: ${{ jobs.verify-sealed-artifacts.outputs.sanitized_artifact_name }}
+      sanitized_artifact_id:
+        value: ${{ jobs.verify-sealed-artifacts.outputs.sanitized_artifact_id }}
+      sanitized_artifact_digest:
+        value: ${{ jobs.verify-sealed-artifacts.outputs.sanitized_artifact_digest }}
 
 permissions:
   contents: read
@@ -12,66 +44,259 @@ permissions:
 
 jobs:
   verify-sealed-artifacts:
+    name: round7-external-artifact-audit
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
+    outputs:
+      audit_mode: ${{ steps.audit_mode.outputs.mode }}
+      source_run_id: ${{ steps.source_binding.outputs.source_run_id }}
+      source_run_attempt: ${{ steps.source_binding.outputs.source_run_attempt }}
+      source_head_sha: ${{ steps.source_binding.outputs.source_head_sha }}
+      source_event: ${{ steps.source_binding.outputs.source_event }}
+      source_ref: ${{ steps.source_binding.outputs.source_ref }}
+      sanitized_artifact_name: ${{ steps.source_binding.outputs.sanitized_artifact_name }}
+      sanitized_artifact_id: ${{ steps.audit_upload.outputs.artifact-id }}
+      sanitized_artifact_digest: ${{ steps.audit_upload.outputs.artifact-digest }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+          ref: ${{ inputs.source_head_sha }}
           fetch-depth: 0
 
-      - name: Bind source main workflow run
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Bind same-run primary workflow caller
+        id: source_binding
         env:
-          SOURCE_RUN_ID: ${{ github.event.workflow_run.id }}
-          SOURCE_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
-          SOURCE_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
-          SOURCE_HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
-          SOURCE_EVENT: ${{ github.event.workflow_run.event }}
-          SOURCE_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          GH_REPOSITORY: ${{ github.repository }}
+          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+          SOURCE_RUN_ATTEMPT: ${{ inputs.source_run_attempt }}
+          SOURCE_HEAD_SHA: ${{ inputs.source_head_sha }}
+          SOURCE_EVENT: ${{ inputs.source_event }}
+          SOURCE_REF: ${{ inputs.source_ref }}
+          CURRENT_RUN_ID: ${{ github.run_id }}
+          CURRENT_RUN_ATTEMPT: ${{ github.run_attempt }}
+          CURRENT_HEAD_SHA: ${{ github.sha }}
+          CURRENT_EVENT: ${{ github.event_name }}
+          CURRENT_REF: ${{ github.ref }}
+          CALLER_WORKFLOW_SHA: ${{ github.workflow_sha }}
+          CALLER_WORKFLOW_REF: ${{ github.workflow_ref }}
         run: |
           set -euo pipefail
-          test "$SOURCE_EVENT" = "push"
-          test "$SOURCE_CONCLUSION" = "success"
-          test "$SOURCE_HEAD_BRANCH" = "main"
-          test "$(git rev-parse HEAD)" = "$SOURCE_HEAD_SHA"
-          test -n "$SOURCE_RUN_ID"
+          test "$SOURCE_RUN_ID" -gt 0
           test "$SOURCE_RUN_ATTEMPT" -gt 0
+          test "$SOURCE_RUN_ID" = "$CURRENT_RUN_ID"
+          test "$SOURCE_RUN_ATTEMPT" = "$CURRENT_RUN_ATTEMPT"
+          test "$SOURCE_HEAD_SHA" = "$CURRENT_HEAD_SHA"
+          test "$SOURCE_EVENT" = push
+          test "$SOURCE_EVENT" = "$CURRENT_EVENT"
+          test "$SOURCE_REF" = refs/heads/main
+          test "$SOURCE_REF" = "$CURRENT_REF"
+          test "$CALLER_WORKFLOW_SHA" = "$SOURCE_HEAD_SHA"
+          test "$CALLER_WORKFLOW_REF" = \
+            "$GH_REPOSITORY/.github/workflows/verify-main.yml@refs/heads/main"
+          test "$(git rev-parse HEAD)" = "$SOURCE_HEAD_SHA"
+          test "$(git rev-parse --is-shallow-repository)" = false
+          test -z "$(git replace -l)"
           test -z "$(git status --porcelain --untracked-files=all)"
+          test "$(git ls-tree HEAD -- .github/workflows/verify-main.yml | awk '{print $1}')" = 100644
+          test "$(git ls-tree HEAD -- .github/workflows/verify-step-1-artifacts.yml \
+            | awk '{print $1}')" = 100644
+          SANITIZED_ARTIFACT_NAME="cats-step-1-round-7-external-audit-source-${SOURCE_RUN_ID}-${SOURCE_RUN_ATTEMPT}-audit-${CURRENT_RUN_ATTEMPT}"
+          {
+            echo "source_run_id=$SOURCE_RUN_ID"
+            echo "source_run_attempt=$SOURCE_RUN_ATTEMPT"
+            echo "source_head_sha=$SOURCE_HEAD_SHA"
+            echo "source_event=$SOURCE_EVENT"
+            echo "source_ref=$SOURCE_REF"
+            echo "sanitized_artifact_name=$SANITIZED_ARTIFACT_NAME"
+          } >> "$GITHUB_OUTPUT"
 
-      - name: Resolve seal, audit mode, and exact C3 run when required
+      - name: Initialize sanitized audit records
+        if: always()
+        env:
+          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+          SOURCE_RUN_ATTEMPT: ${{ inputs.source_run_attempt }}
+        run: |
+          set -euo pipefail
+          RESULT_DIR="$RUNNER_TEMP/cats-step1-external-audit-results"
+          test ! -e "$RESULT_DIR"
+          install -d -m 0700 "$RESULT_DIR"
+          test -d "$RESULT_DIR"
+          test ! -L "$RESULT_DIR"
+          jq -n \
+            --arg role round7-c3-pr \
+            --argjson runId 0 \
+            --argjson runAttempt 0 \
+            '{status:"NOT_RUN",role:$role,runId:$runId,runAttempt:$runAttempt}' \
+            > "$RESULT_DIR/round7-c3-pr.json"
+          jq -n \
+            --arg role unresolved-main \
+            --argjson runId "$SOURCE_RUN_ID" \
+            --argjson runAttempt "$SOURCE_RUN_ATTEMPT" \
+            '{status:"NOT_RUN",role:$role,runId:$runId,runAttempt:$runAttempt}' \
+            > "$RESULT_DIR/main.json"
+
+      - name: Assert sanitized verifier result boundary
+        run: |
+          set -euo pipefail
+          C3_RAW_NAME='round7-c3-pr.'"tmp.json"
+          MAIN_RAW_NAME='main.'"tmp.json"
+          ! grep -Fq "$C3_RAW_NAME" \
+            .github/workflows/verify-step-1-artifacts.yml
+          ! grep -Fq "$MAIN_RAW_NAME" \
+            .github/workflows/verify-step-1-artifacts.yml
+          PASS_KEYS='["status","role","runId","runAttempt","jobId","artifactId","event","headSha","artifactDigest","provenanceSha256","verificationKit","servedRuntime","auditVerifierKit","initialExternalAudit","completionMergeAudit"]'
+          jq -n '{
+            status:"PASS", role:"future-main", runId:1, runAttempt:1, jobId:2,
+            artifactId:3, event:"push", headSha:("a"*40),
+            artifactDigest:("sha256:"+("b"*64)), provenanceSha256:("c"*64),
+            verificationKit:{mode:"sealed-round7-c1",sha:("d"*40),tree:("e"*40)},
+            servedRuntime:{mode:"sealed-round7-completion-runtime",sha:("d"*40),tree:("e"*40)},
+            auditVerifierKit:{sha:("d"*40),tree:("e"*40)},
+            initialExternalAudit:{
+              runId:4,runAttempt:1,jobId:5,headSha:("f"*40),
+              completedAt:"2026-08-23T00:00:00Z",
+              sanitizedArtifact:{
+                id:6,
+                name:"cats-step-1-round-7-external-audit-source-4-1-audit-1",
+                digest:("sha256:"+("1"*64)),sizeBytes:7
+              }
+            },
+            completionMergeAudit:{
+              runId:8,runAttempt:1,jobId:9,headSha:("0"*40),
+              completedAt:"2026-08-23T01:00:00Z"
+            },
+            extraSecret:"must-not-cross-wrapper"
+          }' > "$RUNNER_TEMP/raw-extra-field-fixture.json"
+          ! jq -e --argjson keys "$PASS_KEYS" \
+            'type=="object" and ((keys | sort)==($keys | sort))' \
+            "$RUNNER_TEMP/raw-extra-field-fixture.json" >/dev/null
+          jq '{
+            status,role,runId,runAttempt,jobId,artifactId,event,headSha,artifactDigest,
+            provenanceSha256,verificationKit,servedRuntime,auditVerifierKit,initialExternalAudit,
+            completionMergeAudit
+          }' "$RUNNER_TEMP/raw-extra-field-fixture.json" \
+            > "$RUNNER_TEMP/allowlisted-extra-field-fixture.json"
+          jq -e --argjson keys "$PASS_KEYS" '
+            ((keys | sort)==($keys | sort)) and (has("extraSecret") | not)
+          ' "$RUNNER_TEMP/allowlisted-extra-field-fixture.json" >/dev/null
+
+      - name: Resolve Round 7 seal, audit mode, and exact C3 run
         id: audit_mode
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPOSITORY: ${{ github.repository }}
+          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+          SOURCE_RUN_ATTEMPT: ${{ inputs.source_run_attempt }}
+          SOURCE_HEAD_SHA: ${{ inputs.source_head_sha }}
+          SOURCE_EVENT: ${{ inputs.source_event }}
+          SOURCE_REF: ${{ inputs.source_ref }}
+          CURRENT_RUN_ID: ${{ github.run_id }}
+          CURRENT_RUN_ATTEMPT: ${{ github.run_attempt }}
         run: |
           set -euo pipefail
-          ROUND=quality-reviews/step-1-legacy-baseline/round-006.json
+          BASE=88daf9c912fa726e019915e5d7bfed94f0a47158
+          BASE_TREE=1aeba9e915990e56a8d777e7b90cd94d4755c7fb
+          ACCEPTANCE=quality-reviews/step-1-legacy-baseline-round-007/acceptance-round-007.json
+          ROUND=quality-reviews/step-1-legacy-baseline-round-007/round-007.json
+          COMPLETION=quality-reviews/step-1-legacy-baseline-round-007/completion.json
+          test -s "$ACCEPTANCE"
+          test "$(jq -er '.baseCommit' "$ACCEPTANCE")" = "$BASE"
+          test "$(jq -er '.baseTree' "$ACCEPTANCE")" = "$BASE_TREE"
+          test "$(jq -er '.externalAuditProtocol.activeSeal' "$ACCEPTANCE")" = "$ROUND"
+          test "$(jq -er '.externalAuditProtocol.round6SuccessMayBootstrapRound7' "$ACCEPTANCE")" = false
+          test "$(git rev-parse "$BASE^{tree}")" = "$BASE_TREE"
           mapfile -t SEALS < <(
             while read -r COMMIT PARENTS; do
               git cat-file -e "$COMMIT:$ROUND" 2>/dev/null || continue
               INTRODUCED=true
               for PARENT in $PARENTS; do
-                if git cat-file -e "$PARENT:$ROUND" 2>/dev/null; then INTRODUCED=false; break; fi
+                if git cat-file -e "$PARENT:$ROUND" 2>/dev/null; then
+                  INTRODUCED=false
+                  break
+                fi
               done
-              if [ "$INTRODUCED" = "true" ]; then printf '%s\n' "$COMMIT"; fi
+              if [ "$INTRODUCED" = true ]; then printf '%s\n' "$COMMIT"; fi
             done < <(git rev-list --parents HEAD)
           )
           test "${#SEALS[@]}" -eq 1
           C3_SHA=${SEALS[0]}
-          git merge-base --is-ancestor "$C3_SHA" HEAD
+          mapfile -t C3_PARENTS < <(git rev-list --parents -n 1 "$C3_SHA" | cut -d' ' -f2- | tr ' ' '\n')
+          test "${#C3_PARENTS[@]}" -eq 1
+          C2_SHA=${C3_PARENTS[0]}
+          mapfile -t C2_PARENTS < <(git rev-list --parents -n 1 "$C2_SHA" | cut -d' ' -f2- | tr ' ' '\n')
+          test "${#C2_PARENTS[@]}" -eq 1
+          C1_SHA=${C2_PARENTS[0]}
+          test "$(git rev-parse "$C1_SHA^")" = "$BASE"
+          test "$(git rev-list --parents -n 1 "$C1_SHA" | wc -w)" -eq 2
+          C1_TREE=$(git rev-parse "$C1_SHA^{tree}")
           C3_TREE=$(git rev-parse "$C3_SHA^{tree}")
-          mapfile -t SEAL_MERGES < <(
+          assert_same_run_reusable_invocation() {
+            local SOURCE_ID=$1 CURRENT_ID=$2 SOURCE_ATTEMPT=$3 CURRENT_ATTEMPT=$4
+            local SOURCE_SHA=$5 CURRENT_SHA=$6 EVENT=$7 REF=$8
+            test "$SOURCE_ID" = "$CURRENT_ID"
+            test "$SOURCE_ATTEMPT" = "$CURRENT_ATTEMPT"
+            test "$SOURCE_SHA" = "$CURRENT_SHA"
+            test "$EVENT" = push
+            test "$REF" = refs/heads/main
+          }
+          assert_same_run_reusable_invocation \
+            "$SOURCE_RUN_ID" "$CURRENT_RUN_ID" \
+            "$SOURCE_RUN_ATTEMPT" "$CURRENT_RUN_ATTEMPT" \
+            "$SOURCE_HEAD_SHA" "$(git rev-parse HEAD)" "$SOURCE_EVENT" "$SOURCE_REF"
+          ! assert_same_run_reusable_invocation \
+            999999 "$CURRENT_RUN_ID" "$SOURCE_RUN_ATTEMPT" "$CURRENT_RUN_ATTEMPT" \
+            "$SOURCE_HEAD_SHA" "$(git rev-parse HEAD)" workflow_run refs/heads/main
+          for PROTECTED_WORKFLOW in \
+            .github/workflows/verify-main.yml \
+            .github/workflows/verify-step-1-artifacts.yml; do
+            test "$(git rev-parse "HEAD:$PROTECTED_WORKFLOW")" = \
+              "$(git rev-parse "$C1_SHA:$PROTECTED_WORKFLOW")"
+          done
+          mapfile -t INITIAL_MERGES < <(
             while read -ra ROW; do
-              if [ "${#ROW[@]}" -ne 3 ] || [ "${ROW[2]}" != "$C3_SHA" ]; then continue; fi
+              if [ "${#ROW[@]}" -ne 3 ]; then continue; fi
+              if [ "${ROW[1]}" != "$BASE" ] || [ "${ROW[2]}" != "$C3_SHA" ]; then continue; fi
               if [ "$(git rev-parse "${ROW[0]}^{tree}")" != "$C3_TREE" ]; then continue; fi
-              if git merge-base --is-ancestor "$C3_SHA" "${ROW[1]}"; then continue; fi
               printf '%s\n' "${ROW[0]}"
             done < <(git rev-list --parents HEAD)
           )
-          test "${#SEAL_MERGES[@]}" -eq 1
-          SEAL_MERGE=${SEAL_MERGES[0]}
-          git merge-base --is-ancestor "$SEAL_MERGE" HEAD
-          if [ "$(git rev-parse HEAD)" = "$SEAL_MERGE" ]; then
+          test "${#INITIAL_MERGES[@]}" -eq 1
+          INITIAL_MERGE=${INITIAL_MERGES[0]}
+          git merge-base --is-ancestor "$INITIAL_MERGE" HEAD
+          INITIAL_TREE=$(git rev-parse "$INITIAL_MERGE^{tree}")
+          test "$INITIAL_TREE" = "$C3_TREE"
+          C1_WORKTREE="$RUNNER_TEMP/cats-round7-c1-verifier"
+          test ! -e "$C1_WORKTREE"
+          git worktree add --detach "$C1_WORKTREE" "$C1_SHA"
+          test "$(git -C "$C1_WORKTREE" rev-parse HEAD)" = "$C1_SHA"
+          test "$(git -C "$C1_WORKTREE" rev-parse HEAD^{tree})" = "$C1_TREE"
+          test "$(git -C "$C1_WORKTREE" rev-parse --is-shallow-repository)" = false
+          test -z "$(git -C "$C1_WORKTREE" replace -l)"
+          test -z "$(git -C "$C1_WORKTREE" symbolic-ref -q HEAD || true)"
+          test "$(realpath "$C1_WORKTREE")" = \
+            "$(git -C "$C1_WORKTREE" rev-parse --show-toplevel)"
+          assert_c1_regular_file() {
+            local RELATIVE=$1 DISK_PATH="$C1_WORKTREE/$1"
+            test "$(git ls-tree "$C1_SHA" -- "$RELATIVE" | wc -l)" -eq 1
+            test "$(git ls-tree "$C1_SHA" -- "$RELATIVE" | awk '{print $1}')" = 100644
+            test -f "$DISK_PATH"
+            test ! -L "$DISK_PATH"
+            test "$(realpath "$DISK_PATH")" = "$DISK_PATH"
+            cmp -s "$DISK_PATH" <(git show "$C1_SHA:$RELATIVE")
+          }
+          assert_c1_regular_file tests/verify-ci-artifact.mjs
+          assert_c1_regular_file tests/artifact-download-transport.mjs
+          assert_c1_regular_file "$ACCEPTANCE"
+          C1_VERIFIER="$C1_WORKTREE/tests/verify-ci-artifact.mjs"
+          COMPLETION_SHA=
+          COMPLETION_TREE=
+          COMPLETION_MERGE=
+
+          if [ "$(git rev-parse HEAD)" = "$INITIAL_MERGE" ]; then
             MODE=initial-main-seal
             fetch_unfiltered_workflow_snapshot() {
               local OUTPUT=$1
@@ -87,9 +312,9 @@ jobs:
                   -H 'X-GitHub-Api-Version: 2022-11-28' \
                   "https://api.github.com/repos/$GH_REPOSITORY/actions/workflows/verify-main.yml/runs?per_page=100&page=$PAGE" \
                   > "$RUNNER_TEMP/c3-runs-page.json"
-                local TOTAL_NOW
-                local COUNT
-                TOTAL_NOW=$(jq -er '.total_count | select(type=="number" and .>=0 and floor==.)' "$RUNNER_TEMP/c3-runs-page.json")
+                local TOTAL_NOW COUNT
+                TOTAL_NOW=$(jq -er '.total_count | select(type=="number" and .>=0 and floor==.)' \
+                  "$RUNNER_TEMP/c3-runs-page.json")
                 COUNT=$(jq -er '.workflow_runs | length' "$RUNNER_TEMP/c3-runs-page.json")
                 if [ "$EXPECTED_TOTAL" -eq -1 ]; then EXPECTED_TOTAL=$TOTAL_NOW; fi
                 test "$TOTAL_NOW" -eq "$EXPECTED_TOTAL"
@@ -102,13 +327,12 @@ jobs:
               test "$(jq -sr '[.[].id] | length' "$OUTPUT")" -eq "$SEEN"
               test "$(jq -sr '[.[].id] | unique | length' "$OUTPUT")" -eq "$SEEN"
             }
-            # Filtered workflow-run searches are capped at 1,000 by GitHub.
-            # Take two complete, unfiltered workflow-specific snapshots instead,
-            # fail on truncation/shifting, then apply the exact C3 predicates locally.
             fetch_unfiltered_workflow_snapshot "$RUNNER_TEMP/c3-runs-a.ndjson"
             fetch_unfiltered_workflow_snapshot "$RUNNER_TEMP/c3-runs-b.ndjson"
-            jq -r '[.id,.run_attempt] | @tsv' "$RUNNER_TEMP/c3-runs-a.ndjson" | sort -n -k1,1 > "$RUNNER_TEMP/c3-run-identities-a.tsv"
-            jq -r '[.id,.run_attempt] | @tsv' "$RUNNER_TEMP/c3-runs-b.ndjson" | sort -n -k1,1 > "$RUNNER_TEMP/c3-run-identities-b.tsv"
+            jq -r '[.id,.run_attempt] | @tsv' "$RUNNER_TEMP/c3-runs-a.ndjson" \
+              | sort -n -k1,1 -k2,2 > "$RUNNER_TEMP/c3-run-identities-a.tsv"
+            jq -r '[.id,.run_attempt] | @tsv' "$RUNNER_TEMP/c3-runs-b.ndjson" \
+              | sort -n -k1,1 -k2,2 > "$RUNNER_TEMP/c3-run-identities-b.tsv"
             cmp -s "$RUNNER_TEMP/c3-run-identities-a.tsv" "$RUNNER_TEMP/c3-run-identities-b.tsv"
             jq -r --arg sha "$C3_SHA" --arg workflow "Verify Cat's Tower baseline and quality records" '
               select(
@@ -136,7 +360,8 @@ jobs:
                   -H 'X-GitHub-Api-Version: 2022-11-28' \
                   "https://api.github.com/repos/$GH_REPOSITORY/actions/runs/$CANDIDATE_RUN_ID/attempts/$CANDIDATE_ATTEMPT/jobs?per_page=100" \
                   > "$RUNNER_TEMP/c3-exact-jobs.json"
-                jq -e '.total_count==(.jobs | length) and .total_count<=100' "$RUNNER_TEMP/c3-exact-jobs.json" >/dev/null
+                jq -e '.total_count==(.jobs | length) and .total_count<=100' \
+                  "$RUNNER_TEMP/c3-exact-jobs.json" >/dev/null
                 jq -e \
                   --argjson run "$CANDIDATE_RUN_ID" \
                   --argjson attempt "$CANDIDATE_ATTEMPT" \
@@ -164,7 +389,8 @@ jobs:
                       and .conclusion=="success"
                     )] | length==1
                   ' "$RUNNER_TEMP/c3-exact-jobs.json" >/dev/null || continue
-                printf '%s\t%s\n' "$CANDIDATE_RUN_ID" "$CANDIDATE_ATTEMPT" >> "$RUNNER_TEMP/c3-qualified-attempts.tsv"
+                printf '%s\t%s\n' "$CANDIDATE_RUN_ID" "$CANDIDATE_ATTEMPT" \
+                  >> "$RUNNER_TEMP/c3-qualified-attempts.tsv"
               done
             done < <(sort -n -k1,1 -k2,2 "$RUNNER_TEMP/c3-run-candidates.tsv" | uniq)
             SELECTED=$(sort -n -k1,1 -k2,2 "$RUNNER_TEMP/c3-qualified-attempts.tsv" | tail -n 1)
@@ -176,37 +402,519 @@ jobs:
             echo "c3_run_attempt=$C3_RUN_ATTEMPT" >> "$GITHUB_OUTPUT"
           else
             MODE=future-main
+            mapfile -t COMPLETIONS < <(
+              while read -r COMMIT PARENTS; do
+                git cat-file -e "$COMMIT:$COMPLETION" 2>/dev/null || continue
+                INTRODUCED=true
+                for PARENT in $PARENTS; do
+                  if git cat-file -e "$PARENT:$COMPLETION" 2>/dev/null; then
+                    INTRODUCED=false
+                    break
+                  fi
+                done
+                if [ "$INTRODUCED" = true ]; then printf '%s\n' "$COMMIT"; fi
+              done < <(git rev-list --parents HEAD)
+            )
+            test "${#COMPLETIONS[@]}" -eq 1
+            COMPLETION_SHA=${COMPLETIONS[0]}
+            mapfile -t COMPLETION_PARENTS < <(
+              git rev-list --parents -n 1 "$COMPLETION_SHA" | cut -d' ' -f2- | tr ' ' '\n'
+            )
+            test "${#COMPLETION_PARENTS[@]}" -eq 1
+            test "${COMPLETION_PARENTS[0]}" = "$INITIAL_MERGE"
+            jq -r '.completionAllowedPaths[]' "$ACCEPTANCE" | sort \
+              > "$RUNNER_TEMP/completion-expected-paths.txt"
+            git diff-tree --no-commit-id --name-only --no-renames -r \
+              "$INITIAL_MERGE" "$COMPLETION_SHA" | sort \
+              > "$RUNNER_TEMP/completion-actual-paths.txt"
+            cmp -s "$RUNNER_TEMP/completion-expected-paths.txt" \
+              "$RUNNER_TEMP/completion-actual-paths.txt"
+            COMPLETION_TREE=$(git rev-parse "$COMPLETION_SHA^{tree}")
+            mapfile -t COMPLETION_MERGES < <(
+              while read -ra ROW; do
+                if [ "${#ROW[@]}" -ne 3 ]; then continue; fi
+                if [ "${ROW[1]}" != "$INITIAL_MERGE" ] \
+                  || [ "${ROW[2]}" != "$COMPLETION_SHA" ]; then continue; fi
+                if [ "$(git rev-parse "${ROW[0]}^{tree}")" != "$COMPLETION_TREE" ]; then continue; fi
+                printf '%s\n' "${ROW[0]}"
+              done < <(git rev-list --parents HEAD)
+            )
+            test "${#COMPLETION_MERGES[@]}" -eq 1
+            COMPLETION_MERGE=${COMPLETION_MERGES[0]}
+            git merge-base --is-ancestor "$COMPLETION_MERGE" HEAD
           fi
+          select_audit_verifier() {
+            local MODE_TO_SELECT=$1 CURRENT_CANDIDATE=$2 C1_CANDIDATE=$3
+            case "$MODE_TO_SELECT" in
+              initial-main-seal|future-main)
+                test -n "$C1_CANDIDATE"
+                printf '%s\n' "$C1_CANDIDATE"
+                ;;
+              *) return 1 ;;
+            esac
+          }
+          VERIFIER_PATH=$(select_audit_verifier \
+            "$MODE" "$GITHUB_WORKSPACE/tests/verify-ci-artifact.mjs" "$C1_VERIFIER")
+          printf '%s\n' 'console.log(JSON.stringify({status:"PASS",extraSecret:process.env.GITHUB_TOKEN}))' \
+            > "$RUNNER_TEMP/current-descendant-pass-stub.mjs"
+          STUB_SELECTION=$(select_audit_verifier \
+            "$MODE" "$RUNNER_TEMP/current-descendant-pass-stub.mjs" "$VERIFIER_PATH")
+          test "$STUB_SELECTION" = "$VERIFIER_PATH"
+          test "$STUB_SELECTION" != "$RUNNER_TEMP/current-descendant-pass-stub.mjs"
           echo "mode=$MODE" >> "$GITHUB_OUTPUT"
+          echo "c1_sha=$C1_SHA" >> "$GITHUB_OUTPUT"
+          echo "c1_tree=$C1_TREE" >> "$GITHUB_OUTPUT"
           echo "c3_sha=$C3_SHA" >> "$GITHUB_OUTPUT"
-          echo "seal_merge=$SEAL_MERGE" >> "$GITHUB_OUTPUT"
+          echo "c3_tree=$C3_TREE" >> "$GITHUB_OUTPUT"
+          echo "initial_merge=$INITIAL_MERGE" >> "$GITHUB_OUTPUT"
+          echo "initial_tree=$INITIAL_TREE" >> "$GITHUB_OUTPUT"
+          echo "completion_sha=$COMPLETION_SHA" >> "$GITHUB_OUTPUT"
+          echo "completion_tree=$COMPLETION_TREE" >> "$GITHUB_OUTPUT"
+          echo "completion_merge=$COMPLETION_MERGE" >> "$GITHUB_OUTPUT"
+          echo "verifier_path=$VERIFIER_PATH" >> "$GITHUB_OUTPUT"
 
-      - name: Verify C3 pull-request artifact through GitHub API
+      - name: Verify Round 7 C3 pull-request artifact
+        id: c3_audit
         if: steps.audit_mode.outputs.mode == 'initial-main-seal'
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
+          C3_RUN_ID: ${{ steps.audit_mode.outputs.c3_run_id }}
+          C3_RUN_ATTEMPT: ${{ steps.audit_mode.outputs.c3_run_attempt }}
+          C1_SHA: ${{ steps.audit_mode.outputs.c1_sha }}
+          C1_TREE: ${{ steps.audit_mode.outputs.c1_tree }}
+          C3_SHA: ${{ steps.audit_mode.outputs.c3_sha }}
+          C3_TREE: ${{ steps.audit_mode.outputs.c3_tree }}
+          VERIFIER_PATH: ${{ steps.audit_mode.outputs.verifier_path }}
+          CATS_CALLER_RUN_ID: ${{ inputs.source_run_id }}
+          CATS_CALLER_RUN_ATTEMPT: ${{ inputs.source_run_attempt }}
+          CATS_CALLER_HEAD_SHA: ${{ inputs.source_head_sha }}
+          CATS_CALLER_EVENT: ${{ inputs.source_event }}
+          CATS_CALLER_REF: ${{ inputs.source_ref }}
+          CATS_CALLER_WORKFLOW_SHA: ${{ github.workflow_sha }}
+          CATS_CALLER_WORKFLOW_REF: ${{ github.workflow_ref }}
         run: |
           set -euo pipefail
-          mkdir -p external-audit-results
-          node tests/verify-ci-artifact.mjs c3-pr "${{ steps.audit_mode.outputs.c3_run_id }}" "${{ steps.audit_mode.outputs.c3_run_attempt }}" | tee external-audit-results/c3-pr.json
+          RESULT_DIR="$RUNNER_TEMP/cats-step1-external-audit-results"
+          test -d "$RESULT_DIR"
+          test ! -L "$RESULT_DIR"
+          set +x
+          set +e
+          RAW_RESULT=$(CATS_REPO_ROOT="$GITHUB_WORKSPACE" \
+            node "$VERIFIER_PATH" round7-c3-pr "$C3_RUN_ID" "$C3_RUN_ATTEMPT" \
+            2>/dev/null)
+          CODE=$?
+          set -e
+          PASS_KEYS='["status","role","runId","runAttempt","jobId","artifactId","event","headSha","artifactDigest","provenanceSha256","verificationKit","servedRuntime","auditVerifierKit","initialExternalAudit","completionMergeAudit"]'
+          FAIL_KEYS='["status","role","runId","runAttempt","errorCode","message"]'
+          if printf '%s' "$RAW_RESULT" | jq \
+            --argjson passKeys "$PASS_KEYS" --argjson failKeys "$FAIL_KEYS" \
+            --argjson exitCode "$CODE" --arg role round7-c3-pr \
+            --argjson runId "$C3_RUN_ID" --argjson runAttempt "$C3_RUN_ATTEMPT" \
+            --arg event pull_request --arg headSha "$C3_SHA" \
+            --arg verificationMode sealed-round7-c1 --arg verificationSha "$C1_SHA" \
+            --arg verificationTree "$C1_TREE" \
+            --arg servedMode immutable-baseline-checkout \
+            --arg servedSha 727b8d00c281e7539117da5ded7309ea01c7e516 \
+            --arg servedTree c508c58b0bb1b3fa591eefe143aab2dd6eac9271 \
+            --arg auditSha "$C1_SHA" --arg auditTree "$C1_TREE" '
+              def posint: type=="number" and .>0 and floor==.;
+              def sha1: type=="string" and test("^[a-f0-9]{40}$");
+              def sha256: type=="string" and test("^[a-f0-9]{64}$");
+              def pass:
+                type=="object" and ((keys|sort)==($passKeys|sort)) and $exitCode==0
+                and .status=="PASS" and .role==$role and .runId==$runId
+                and .runAttempt==$runAttempt and (.jobId|posint) and (.artifactId|posint)
+                and .event==$event and .headSha==$headSha and (.headSha|sha1)
+                and (.artifactDigest|type=="string" and test("^sha256:[a-f0-9]{64}$"))
+                and (.provenanceSha256|sha256)
+                and (.verificationKit|type=="object" and ((keys|sort)==["mode","sha","tree"])
+                  and .mode==$verificationMode and .sha==$verificationSha and .tree==$verificationTree)
+                and (.servedRuntime|type=="object" and ((keys|sort)==["mode","sha","tree"])
+                  and .mode==$servedMode and .sha==$servedSha and .tree==$servedTree)
+                and (.auditVerifierKit|type=="object" and ((keys|sort)==["sha","tree"])
+                  and .sha==$auditSha and .tree==$auditTree)
+                and .initialExternalAudit==null and .completionMergeAudit==null;
+              def fail:
+                type=="object" and ((keys|sort)==($failKeys|sort)) and .status=="FAIL"
+                and .role==$role and .runId==$runId and .runAttempt==$runAttempt
+                and ((.errorCode|type)=="string")
+                and (.errorCode as $code | [
+                  "VERIFICATION_FAILED","INVALID_ARGUMENT","LOCATION_MISSING","LOCATION_INVALID",
+                  "FIRST_HOP_REQUEST_FAILED","FIRST_HOP_TIMEOUT","FIRST_HOP_STATUS",
+                  "SECOND_HOP_REQUEST_FAILED","SECOND_HOP_TIMEOUT","SECOND_HOP_REDIRECT",
+                  "SECOND_HOP_STATUS","ARCHIVE_READ_FAILED","SIZE_MISMATCH","DIGEST_MISMATCH"
+                ] | index($code)!=null)
+                and ((.message|type)=="string") and ((.message|length)<=320)
+                and ((.message|test("[\\u0000-\\u001f\\u007f]"))|not);
+              if pass then {
+                status,role,runId,runAttempt,jobId,artifactId,event,headSha,artifactDigest,
+                provenanceSha256,verificationKit,servedRuntime,auditVerifierKit,
+                initialExternalAudit,completionMergeAudit
+              } elif fail then {
+                status,role,runId,runAttempt,errorCode,
+                message:"Verifier reported a sanitized failure"
+              }
+              else error("verifier result differs from the allowlisted schema") end
+            ' > "$RESULT_DIR/round7-c3-pr.json" 2>/dev/null; then
+            if jq -e '.status=="FAIL"' "$RESULT_DIR/round7-c3-pr.json" >/dev/null; then
+              CODE=1
+            fi
+          else
+            jq -n \
+              --arg role round7-c3-pr \
+              --argjson runId "$C3_RUN_ID" \
+              --argjson runAttempt "$C3_RUN_ATTEMPT" \
+              '{status:"FAIL",role:$role,runId:$runId,runAttempt:$runAttempt,
+                errorCode:"NO_SANITIZED_RESULT",message:"Verifier did not return an allowlisted result"}' \
+              > "$RESULT_DIR/round7-c3-pr.json"
+            CODE=1
+          fi
+          unset RAW_RESULT
+          cat "$RESULT_DIR/round7-c3-pr.json"
+          exit "$CODE"
 
-      - name: Verify merged main artifact through GitHub API
+      - name: Verify source main artifact
+        id: main_audit
+        if: always() && steps.audit_mode.outcome == 'success'
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-          SOURCE_RUN_ID: ${{ github.event.workflow_run.id }}
-          SOURCE_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+          SOURCE_RUN_ATTEMPT: ${{ inputs.source_run_attempt }}
+          SOURCE_HEAD_SHA: ${{ inputs.source_head_sha }}
+          AUDIT_MODE: ${{ steps.audit_mode.outputs.mode }}
+          C1_SHA: ${{ steps.audit_mode.outputs.c1_sha }}
+          C1_TREE: ${{ steps.audit_mode.outputs.c1_tree }}
+          INITIAL_MERGE: ${{ steps.audit_mode.outputs.initial_merge }}
+          INITIAL_TREE: ${{ steps.audit_mode.outputs.initial_tree }}
+          COMPLETION_SHA: ${{ steps.audit_mode.outputs.completion_sha }}
+          COMPLETION_TREE: ${{ steps.audit_mode.outputs.completion_tree }}
+          COMPLETION_MERGE: ${{ steps.audit_mode.outputs.completion_merge }}
+          VERIFIER_PATH: ${{ steps.audit_mode.outputs.verifier_path }}
+          CATS_CALLER_RUN_ID: ${{ inputs.source_run_id }}
+          CATS_CALLER_RUN_ATTEMPT: ${{ inputs.source_run_attempt }}
+          CATS_CALLER_HEAD_SHA: ${{ inputs.source_head_sha }}
+          CATS_CALLER_EVENT: ${{ inputs.source_event }}
+          CATS_CALLER_REF: ${{ inputs.source_ref }}
+          CATS_CALLER_WORKFLOW_SHA: ${{ github.workflow_sha }}
+          CATS_CALLER_WORKFLOW_REF: ${{ github.workflow_ref }}
         run: |
           set -euo pipefail
-          mkdir -p external-audit-results
-          MODE=${{ steps.audit_mode.outputs.mode }}
-          node tests/verify-ci-artifact.mjs "$MODE" "$SOURCE_RUN_ID" "$SOURCE_RUN_ATTEMPT" | tee "external-audit-results/$MODE.json"
+          RESULT_DIR="$RUNNER_TEMP/cats-step1-external-audit-results"
+          test -d "$RESULT_DIR"
+          test ! -L "$RESULT_DIR"
+          case "$AUDIT_MODE" in
+            initial-main-seal)
+              EXPECTED_VERIFICATION_MODE=sealed-round7-c1
+              EXPECTED_VERIFICATION_SHA=$C1_SHA
+              EXPECTED_VERIFICATION_TREE=$C1_TREE
+              EXPECTED_SERVED_MODE=immutable-baseline-checkout
+              EXPECTED_SERVED_SHA=727b8d00c281e7539117da5ded7309ea01c7e516
+              EXPECTED_SERVED_TREE=c508c58b0bb1b3fa591eefe143aab2dd6eac9271
+              EXPECTED_AUDIT_SHA=$C1_SHA
+              EXPECTED_AUDIT_TREE=$C1_TREE
+              EXPECT_INITIAL_AUDIT=false
+              EXPECT_COMPLETION_MERGE_AUDIT=false
+              ;;
+            future-main)
+              test -n "$COMPLETION_SHA"
+              test -n "$COMPLETION_TREE"
+              EXPECTED_VERIFICATION_MODE=sealed-round7-c1
+              EXPECTED_VERIFICATION_SHA=$C1_SHA
+              EXPECTED_VERIFICATION_TREE=$C1_TREE
+              EXPECTED_AUDIT_SHA=$C1_SHA
+              EXPECTED_AUDIT_TREE=$C1_TREE
+              EXPECT_INITIAL_AUDIT=true
+              if [ "$SOURCE_HEAD_SHA" = "$COMPLETION_MERGE" ]; then
+                EXPECT_COMPLETION_MERGE_AUDIT=false
+                EXPECTED_SERVED_MODE=immutable-baseline-checkout
+                EXPECTED_SERVED_SHA=727b8d00c281e7539117da5ded7309ea01c7e516
+                EXPECTED_SERVED_TREE=c508c58b0bb1b3fa591eefe143aab2dd6eac9271
+              else
+                EXPECT_COMPLETION_MERGE_AUDIT=true
+                EXPECTED_SERVED_MODE=sealed-round7-completion-runtime
+                EXPECTED_SERVED_SHA=$COMPLETION_SHA
+                EXPECTED_SERVED_TREE=$COMPLETION_TREE
+              fi
+              ;;
+            *) exit 1 ;;
+          esac
+          set +x
+          set +e
+          RAW_RESULT=$(CATS_REPO_ROOT="$GITHUB_WORKSPACE" \
+            node "$VERIFIER_PATH" "$AUDIT_MODE" "$SOURCE_RUN_ID" "$SOURCE_RUN_ATTEMPT" \
+            2>/dev/null)
+          CODE=$?
+          set -e
+          PASS_KEYS='["status","role","runId","runAttempt","jobId","artifactId","event","headSha","artifactDigest","provenanceSha256","verificationKit","servedRuntime","auditVerifierKit","initialExternalAudit","completionMergeAudit"]'
+          FAIL_KEYS='["status","role","runId","runAttempt","errorCode","message"]'
+          if printf '%s' "$RAW_RESULT" | jq \
+            --argjson passKeys "$PASS_KEYS" --argjson failKeys "$FAIL_KEYS" \
+            --argjson exitCode "$CODE" --arg role "$AUDIT_MODE" \
+            --argjson runId "$SOURCE_RUN_ID" --argjson runAttempt "$SOURCE_RUN_ATTEMPT" \
+            --arg event push --arg headSha "$SOURCE_HEAD_SHA" \
+            --arg verificationMode "$EXPECTED_VERIFICATION_MODE" \
+            --arg verificationSha "$EXPECTED_VERIFICATION_SHA" \
+            --arg verificationTree "$EXPECTED_VERIFICATION_TREE" \
+            --arg servedMode "$EXPECTED_SERVED_MODE" --arg servedSha "$EXPECTED_SERVED_SHA" \
+            --arg servedTree "$EXPECTED_SERVED_TREE" \
+            --arg auditSha "$EXPECTED_AUDIT_SHA" --arg auditTree "$EXPECTED_AUDIT_TREE" \
+            --argjson expectInitialAudit "$EXPECT_INITIAL_AUDIT" \
+            --argjson expectCompletionMergeAudit "$EXPECT_COMPLETION_MERGE_AUDIT" \
+            --arg initialMerge "$INITIAL_MERGE" --arg completionMerge "$COMPLETION_MERGE" '
+              def posint: type=="number" and .>0 and floor==.;
+              def sha1: type=="string" and test("^[a-f0-9]{40}$");
+              def sha256: type=="string" and test("^[a-f0-9]{64}$");
+              def sanitizedAuditArtifact($runId;$runAttempt):
+                type=="object" and ((keys|sort)==["digest","id","name","sizeBytes"])
+                and (.id|posint) and (.sizeBytes|posint)
+                and .name==("cats-step-1-round-7-external-audit-source-\($runId)-\($runAttempt)-audit-\($runAttempt)")
+                and (.digest|type=="string" and test("^sha256:[a-f0-9]{64}$"));
+              def initialAudit:
+                if $expectInitialAudit then
+                  type=="object"
+                  and ((keys|sort)==["completedAt","headSha","jobId","runAttempt","runId","sanitizedArtifact"])
+                  and (.runId|posint) and (.runAttempt|posint) and (.jobId|posint)
+                  and .headSha==$initialMerge and (.headSha|sha1)
+                  and (.completedAt|type=="string"
+                    and test("^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.+-]+Z$"))
+                  and (.runId as $auditRunId | .runAttempt as $auditRunAttempt
+                    | .sanitizedArtifact
+                    | sanitizedAuditArtifact($auditRunId;$auditRunAttempt))
+                else .==null end;
+              def completionAudit:
+                if $expectCompletionMergeAudit then
+                  type=="object"
+                  and ((keys|sort)==["completedAt","headSha","jobId","runAttempt","runId"])
+                  and (.runId|posint) and (.runAttempt|posint) and (.jobId|posint)
+                  and .headSha==$completionMerge and (.headSha|sha1)
+                  and (.completedAt|type=="string"
+                    and test("^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.+-]+Z$"))
+                else .==null end;
+              def pass:
+                type=="object" and ((keys|sort)==($passKeys|sort)) and $exitCode==0
+                and .status=="PASS" and .role==$role and .runId==$runId
+                and .runAttempt==$runAttempt and (.jobId|posint) and (.artifactId|posint)
+                and .event==$event and .headSha==$headSha and (.headSha|sha1)
+                and (.artifactDigest|type=="string" and test("^sha256:[a-f0-9]{64}$"))
+                and (.provenanceSha256|sha256)
+                and (.verificationKit|type=="object" and ((keys|sort)==["mode","sha","tree"])
+                  and .mode==$verificationMode and .sha==$verificationSha and .tree==$verificationTree)
+                and (.servedRuntime|type=="object" and ((keys|sort)==["mode","sha","tree"])
+                  and .mode==$servedMode and .sha==$servedSha and .tree==$servedTree)
+                and (.auditVerifierKit|type=="object" and ((keys|sort)==["sha","tree"])
+                  and .sha==$auditSha and .tree==$auditTree)
+                and (.initialExternalAudit|initialAudit)
+                and (.completionMergeAudit|completionAudit);
+              def fail:
+                type=="object" and ((keys|sort)==($failKeys|sort)) and .status=="FAIL"
+                and .role==$role and .runId==$runId and .runAttempt==$runAttempt
+                and ((.errorCode|type)=="string")
+                and (.errorCode as $code | [
+                  "VERIFICATION_FAILED","INVALID_ARGUMENT","LOCATION_MISSING","LOCATION_INVALID",
+                  "FIRST_HOP_REQUEST_FAILED","FIRST_HOP_TIMEOUT","FIRST_HOP_STATUS",
+                  "SECOND_HOP_REQUEST_FAILED","SECOND_HOP_TIMEOUT","SECOND_HOP_REDIRECT",
+                  "SECOND_HOP_STATUS","ARCHIVE_READ_FAILED","SIZE_MISMATCH","DIGEST_MISMATCH"
+                ] | index($code)!=null)
+                and ((.message|type)=="string") and ((.message|length)<=320)
+                and ((.message|test("[\\u0000-\\u001f\\u007f]"))|not);
+              if pass then {
+                status,role,runId,runAttempt,jobId,artifactId,event,headSha,artifactDigest,
+                provenanceSha256,verificationKit,servedRuntime,auditVerifierKit,
+                initialExternalAudit,completionMergeAudit
+              } elif fail then {
+                status,role,runId,runAttempt,errorCode,
+                message:"Verifier reported a sanitized failure"
+              }
+              else error("verifier result differs from the allowlisted schema") end
+            ' > "$RESULT_DIR/main.json" 2>/dev/null; then
+            if jq -e '.status=="FAIL"' "$RESULT_DIR/main.json" >/dev/null; then
+              CODE=1
+            fi
+          else
+            jq -n \
+              --arg role "$AUDIT_MODE" \
+              --argjson runId "$SOURCE_RUN_ID" \
+              --argjson runAttempt "$SOURCE_RUN_ATTEMPT" \
+              '{status:"FAIL",role:$role,runId:$runId,runAttempt:$runAttempt,
+                errorCode:"NO_SANITIZED_RESULT",message:"Verifier did not return an allowlisted result"}' \
+              > "$RESULT_DIR/main.json"
+            CODE=1
+          fi
+          unset RAW_RESULT
+          cat "$RESULT_DIR/main.json"
+          exit "$CODE"
 
-      - name: Upload external artifact audit results
+      - name: Validate sanitized audit upload boundary
+        id: audit_boundary
+        if: always()
+        run: |
+          set -euo pipefail
+          RESULT_DIR="$RUNNER_TEMP/cats-step1-external-audit-results"
+          test -d "$RESULT_DIR"
+          test ! -L "$RESULT_DIR"
+          test "$(stat -c %a "$RESULT_DIR")" = 700
+          find "$RESULT_DIR" -mindepth 1 -maxdepth 1 -printf '%f\n' | sort \
+            > "$RUNNER_TEMP/audit-result-filenames.txt"
+          test "$(paste -sd' ' "$RUNNER_TEMP/audit-result-filenames.txt")" = \
+            "main.json round7-c3-pr.json"
+          for NAME in main.json round7-c3-pr.json; do
+            FILE="$RESULT_DIR/$NAME"
+            test -f "$FILE"
+            test ! -L "$FILE"
+            jq -e --arg filename "$NAME" '
+              def posint: type=="number" and .>0 and floor==.;
+              def nonnegativeInteger: type=="number" and .>=0 and floor==.;
+              def sha1: type=="string" and test("^[a-f0-9]{40}$");
+              def sha256: type=="string" and test("^[a-f0-9]{64}$");
+              def notRun:
+                type=="object" and ((keys|sort)==["role","runAttempt","runId","status"])
+                and .status=="NOT_RUN" and (.runId|nonnegativeInteger)
+                and (.runAttempt|nonnegativeInteger)
+                and (if $filename=="round7-c3-pr.json"
+                  then .role=="round7-c3-pr" else .role=="unresolved-main" end);
+              def failure:
+                type=="object"
+                and ((keys|sort)==["errorCode","message","role","runAttempt","runId","status"])
+                and .status=="FAIL" and (.runId|posint) and (.runAttempt|posint)
+                and (if $filename=="round7-c3-pr.json" then .role=="round7-c3-pr"
+                  else (.role=="initial-main-seal" or .role=="future-main") end)
+                and (.errorCode as $code | [
+                  "NO_SANITIZED_RESULT","VERIFICATION_FAILED","INVALID_ARGUMENT",
+                  "LOCATION_MISSING","LOCATION_INVALID","FIRST_HOP_REQUEST_FAILED",
+                  "FIRST_HOP_TIMEOUT","FIRST_HOP_STATUS","SECOND_HOP_REQUEST_FAILED",
+                  "SECOND_HOP_TIMEOUT","SECOND_HOP_REDIRECT","SECOND_HOP_STATUS",
+                  "ARCHIVE_READ_FAILED","SIZE_MISMATCH","DIGEST_MISMATCH"
+                ] | index($code)!=null)
+                and (.message=="Verifier reported a sanitized failure"
+                  or .message=="Verifier did not return an allowlisted result");
+              def kit($modes):
+                type=="object" and ((keys|sort)==["mode","sha","tree"])
+                and (.mode as $mode | $modes | index($mode)!=null)
+                and (.sha|sha1) and (.tree|sha1);
+              def auditKit:
+                type=="object" and ((keys|sort)==["sha","tree"])
+                and (.sha|sha1) and (.tree|sha1);
+              def sanitizedAuditArtifact($runId;$runAttempt):
+                type=="object" and ((keys|sort)==["digest","id","name","sizeBytes"])
+                and (.id|posint) and (.sizeBytes|posint)
+                and .name==("cats-step-1-round-7-external-audit-source-\($runId)-\($runAttempt)-audit-\($runAttempt)")
+                and (.digest|type=="string" and test("^sha256:[a-f0-9]{64}$"));
+              def initialAudit:
+                .==null or (
+                  type=="object"
+                  and ((keys|sort)==["completedAt","headSha","jobId","runAttempt","runId","sanitizedArtifact"])
+                  and (.runId|posint) and (.runAttempt|posint) and (.jobId|posint)
+                  and (.headSha|sha1)
+                  and (.completedAt|type=="string"
+                    and test("^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.+-]+Z$"))
+                  and (.runId as $auditRunId | .runAttempt as $auditRunAttempt
+                    | .sanitizedArtifact
+                    | sanitizedAuditArtifact($auditRunId;$auditRunAttempt))
+                );
+              def completionAudit:
+                .==null or (
+                  type=="object"
+                  and ((keys|sort)==["completedAt","headSha","jobId","runAttempt","runId"])
+                  and (.runId|posint) and (.runAttempt|posint) and (.jobId|posint)
+                  and (.headSha|sha1)
+                  and (.completedAt|type=="string"
+                    and test("^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.+-]+Z$"))
+                );
+              def pass:
+                type=="object" and ((keys|sort)==[
+                  "artifactDigest","artifactId","auditVerifierKit","completionMergeAudit",
+                  "event","headSha",
+                  "initialExternalAudit","jobId","provenanceSha256","role","runAttempt",
+                  "runId","servedRuntime","status","verificationKit"
+                ])
+                and .status=="PASS" and (.runId|posint) and (.runAttempt|posint)
+                and (.jobId|posint) and (.artifactId|posint) and (.headSha|sha1)
+                and (.artifactDigest|type=="string" and test("^sha256:[a-f0-9]{64}$"))
+                and (.provenanceSha256|sha256)
+                and (.verificationKit|kit(["sealed-round7-c1"]))
+                and (.servedRuntime|kit([
+                  "immutable-baseline-checkout","sealed-round7-completion-runtime"
+                ]))
+                and (.auditVerifierKit|auditKit) and (.initialExternalAudit|initialAudit)
+                and (.completionMergeAudit|completionAudit)
+                and (if $filename=="round7-c3-pr.json"
+                  then .role=="round7-c3-pr" and .event=="pull_request"
+                    and .initialExternalAudit==null and .completionMergeAudit==null
+                  elif .role=="initial-main-seal"
+                    then .event=="push" and .initialExternalAudit==null
+                      and .completionMergeAudit==null
+                  else .role=="future-main" and .event=="push"
+                  end);
+              notRun or failure or pass
+            ' "$FILE" >/dev/null
+          done
+
+      - name: Upload sanitized external audit evidence
+        id: audit_upload
+        if: always() && steps.audit_boundary.outcome == 'success'
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
-          name: cats-step-1-external-artifact-audit-source-${{ github.event.workflow_run.id }}-${{ github.event.workflow_run.run_attempt }}-audit-${{ github.run_attempt }}
-          path: external-audit-results
+          name: ${{ steps.source_binding.outputs.sanitized_artifact_name }}
+          path: ${{ runner.temp }}/cats-step1-external-audit-results
           if-no-files-found: error
           retention-days: 30
+
+      - name: Aggregate Round 7 external audit gate
+        if: always()
+        env:
+          MODE: ${{ steps.audit_mode.outputs.mode }}
+          RESOLVE_OUTCOME: ${{ steps.audit_mode.outcome }}
+          C3_OUTCOME: ${{ steps.c3_audit.outcome }}
+          MAIN_OUTCOME: ${{ steps.main_audit.outcome }}
+          BOUNDARY_OUTCOME: ${{ steps.audit_boundary.outcome }}
+          UPLOAD_OUTCOME: ${{ steps.audit_upload.outcome }}
+          C1_SHA: ${{ steps.audit_mode.outputs.c1_sha }}
+          C1_TREE: ${{ steps.audit_mode.outputs.c1_tree }}
+          C3_SHA: ${{ steps.audit_mode.outputs.c3_sha }}
+          C3_TREE: ${{ steps.audit_mode.outputs.c3_tree }}
+          INITIAL_MERGE: ${{ steps.audit_mode.outputs.initial_merge }}
+          INITIAL_TREE: ${{ steps.audit_mode.outputs.initial_tree }}
+        run: |
+          set -euo pipefail
+          RESULT_DIR="$RUNNER_TEMP/cats-step1-external-audit-results"
+          test "$RESOLVE_OUTCOME" = success
+          test "$MAIN_OUTCOME" = success
+          test "$BOUNDARY_OUTCOME" = success
+          test "$UPLOAD_OUTCOME" = success
+          case "$MODE" in
+            initial-main-seal)
+              test "$C3_OUTCOME" = success
+              jq -e --arg audit "$C1_SHA" --arg auditTree "$C1_TREE" '
+                .status=="PASS" and .role=="round7-c3-pr"
+                and .verificationKit.mode=="sealed-round7-c1"
+                and .verificationKit.sha==$audit and .verificationKit.tree==$auditTree
+                and .auditVerifierKit.sha==$audit and .auditVerifierKit.tree==$auditTree
+              ' \
+                "$RESULT_DIR/round7-c3-pr.json" >/dev/null
+              jq -e --arg audit "$C1_SHA" --arg auditTree "$C1_TREE" '
+                .status=="PASS" and .role=="initial-main-seal"
+                and .verificationKit.mode=="sealed-round7-c1"
+                and .verificationKit.sha==$audit and .verificationKit.tree==$auditTree
+                and .auditVerifierKit.sha==$audit and .auditVerifierKit.tree==$auditTree
+              ' \
+                "$RESULT_DIR/main.json" >/dev/null
+              ;;
+            future-main)
+              test "$C3_OUTCOME" = skipped
+              jq -e --arg audit "$C1_SHA" --arg auditTree "$C1_TREE" '
+                .status=="PASS" and .role=="future-main"
+                and .verificationKit.mode=="sealed-round7-c1"
+                and .verificationKit.sha==$audit and .verificationKit.tree==$auditTree
+                and .auditVerifierKit.sha==$audit and .auditVerifierKit.tree==$auditTree
+              ' \
+                "$RESULT_DIR/main.json" >/dev/null
+              ;;
+            *)
+              exit 1
+              ;;
+          esac

@@ -2,9 +2,9 @@
 
 文書状態: **PENDING_REVALIDATION — 旧工程2成果を保持した再検証候補**
 
-更新日: 2026-08-22
+更新日: 2026-08-23
 
-工程状態: 工程1A=PASS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
+工程状態: 工程1A=IN_PROGRESS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
 
 工程1A正式名称: V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint
 
@@ -899,7 +899,7 @@ P0・P1を根拠なくP2へ降格しない。降格には再現結果、影響�
 
 工程1Aが品質Gateを`PASS`するまで、工程2・3の旧成果は削除せず`PENDING_REVALIDATION`の候補として保持し、工程4以降を完成扱いまたは新規着手しない。工程1A合格後は工程2、工程3の順で現行Gateを再実行し、それぞれが`PASS`になった後だけ次へ進む。
 
-1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `PASS`
+1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `IN_PROGRESS`
 2. この100F正本仕様書 — `PENDING_REVALIDATION`
 3. 1〜10F完全設計 — `PENDING_REVALIDATION`
 4. 9画面の完成見本 — `NOT_STARTED`

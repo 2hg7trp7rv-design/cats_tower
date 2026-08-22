@@ -1,6 +1,10 @@
 # Cat's Tower — 完成判定の必須ループ
 
-更新日: 2026-08-22
+更新日: 2026-08-23
+
+工程状態: 工程1A=IN_PROGRESS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
+
+1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `IN_PROGRESS`
 
 この規則は、仕様書、調査、画像、画面、コード、QA、配信など、ユーザーへ成果として渡す全作業へ適用する。目的は「作れた」を「完成した」と誤認しないことにある。
 
@@ -23,6 +27,8 @@
 6. **報告する**
    - `PASS`時だけ完成報告する。未完成時は完成したように表現しない。
    - 報告には自己検収で見つけた問題、再構成、再検証、残る対象外を含める。
+
+外部CI、配信、承認、第三者監査など、制作後にしか判明しない必須条件がある場合、その結果が出る前に正本を`PASS`へ変えない。内部sealは`EXTERNAL_PENDING`として分離し、外部成功を改変不能な証拠へ結合したcompletion sealの後だけ`PASS`にする。
 
 ## 五つのGate
 

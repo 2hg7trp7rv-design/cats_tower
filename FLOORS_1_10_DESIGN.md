@@ -2,21 +2,21 @@
 
 文書状態: **PENDING_REVALIDATION — 旧工程3成果を保持した再検証候補**
 
-更新日: 2026-08-22
+更新日: 2026-08-23
 
-工程状態: 工程1A=PASS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
+工程状態: 工程1A=IN_PROGRESS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
 
 工程1A正式名称: V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint
 
 工程1A対象外: whole-repository backup / player-save backup / physical-iPhone approval / Production alias switch
 
-1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `PASS`
+1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `IN_PROGRESS`
 
 対象地区: 第1地区「灰かぶり入口市場」
 
 上位正本: `MASTER_SPEC.md`
 
-次判定: 工程1Aは合格済み。工程2の品質Gate合格後、本書を工程3成果として再検証する
+次判定: 冒頭の工程状態で工程1Aが`PASS`となった後、工程2、続いて本書を工程3成果として再検証する
 
 ## 0. この文書の役割
 
@@ -651,7 +651,7 @@ Cat's Towerは、制圧階の生活、階をまたぐ配送、公開条件での
 
 ## 19. 旧工程3で使用した合格条件（再検証待ち）
 
-以下のチェックは旧判定時の達成記録であり、現在の`PASS`を意味しない。工程1Aは合格済みであり、工程2合格後に現行の完成判定Gateで実物・反証・判定を再実行する。
+以下のチェックは旧判定時の達成記録であり、現在の`PASS`を意味しない。工程1Aのlive状態は冒頭の工程状態を正本とし、その合格後に工程2、続いて本書を現行の完成判定Gateで再検証する。
 
 - [x] 1〜10Fすべての用途、新規学習、制圧後用途が一意である。
 - [x] 猫4匹の役割と公開解放条件がある。

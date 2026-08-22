@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-legacy-baseline-round-007",
+  "role": "runtime-critic",
+  "reviewTargetCommit": "88fb46b1d1cdbd5c071804275c92dc51a8c59913",
+  "reviewTargetTree": "eff692af7ee2beb6dba6d980c819fd9a3f3ca1a8",
+  "reviewedAcceptanceSha256": "d501fc82371b938e9c037922cea3f786004c7735801b3e10e17802db21af9ca0",
+  "reviewedCiRunId": 32596945947,
+  "reviewedCiRunAttempt": 1,
+  "reviewedCiJobId": 97089333792,
+  "reviewedCiArtifact": {
+    "id": 9481871248,
+    "name": "cats-v082-step-1-recovery-evidence-attempt-1",
+    "digest": "sha256:240f001a5d46a182d23124b74dd478e06460ecd66ce2e6170ae67b9d709d1e15",
+    "sizeBytes": 71545851
+  },
+  "verdict": "PASS",
+  "materialBlockers": [],
+  "method": [
+    "GitHub接続から対象commit、PR workflow run、job全step、artifact metadataを独立に再照会した。",
+    "C1 artifactをprovider経由で再取得し、archiveのbyte数、SHA-256、ZIP inventory、provenance、10件のQA報告を再計算した。",
+    "固定Productionのmanifest全17経路を直接取得し、HTTP 200、byte数、SHA-256を保存済み基準と照合した。",
+    "Vercel接続情報からC1 Previewと固定Productionを別々に再照会し、target、commit、alias、READY状態を比較した。",
+    "baseline commitからC1までの16 runtime sourceと2 deployment inputをGit差分で限定照合した。"
+  ],
+  "findings": [
+    "GitHub provider上のC1 artifactは未失効で、71,545,851 bytesとSHA-256 240f001a5d46a182d23124b74dd478e06460ecd66ce2e6170ae67b9d709d1e15が再取得したarchiveと完全一致した。",
+    "archiveは95件の一意かつ安全なmember、ci-provenance.json 1件、期待されたQA report 10件を持ち、全reportでpassed=true、errors=[]を確認した。credentialまたは署名URLを示す検査パターンは0件だった。",
+    "実providerを使ったRound 6 C3とmainのsmokeは双方PASSで、修復後transportが302のAPI hopから認証headerなしの200 storage hopへ進み、各95 member・provenance 1件・PASS report 10件を検証した。",
+    "旧application/octet-streamによる415は再現テストで拒否され、JSON media type、API version、manual redirectを使う実装へ修復済みである。transportの秘密情報・redirect・timeout・size・digest反証試験は60件すべて合格した。",
+    "固定Productionの17/17経路は現在もHTTP 200で、byte数とSHA-256がruntime manifestに完全一致した。baselineからC1まで16 runtime sourceと2 deployment inputの変更は0件だった。",
+    "C1 Preview dpl_CoPtCsKLk9pEQbhe3pV8MyMzWqMtはtargetなしのREADYでcommit 88fb46b1d1cdbd5c071804275c92dc51a8c59913に結合し、固定Production dpl_A2sPMt2c6LHSCMEWZj6jP2Yre4MRはtarget=productionのREADYでbase commit 88daf9c912fa726e019915e5d7bfed94f0a47158と固定aliasに結合しており、両環境は混同されていない。",
+    "Preview本文はProtectionにより未認証取得時302となるためlive-byte証拠として扱っていない。一方、exact-commit deployment metadata、runtime/deployment input差分0、固定Production 17経路の直接再計算はそれぞれ独立した境界として成立している。",
+    "C1 CIではChromiumとWebKitの390x844および375x667導線、通常保存再読込、Chromium Service Worker復旧が成功し、artifact provenanceは対象C1 commit/treeとimmutable baseline runtimeを明示的に分離している。"
+  ]
+}

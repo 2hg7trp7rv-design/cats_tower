@@ -1,0 +1,367 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-legacy-baseline-round-007",
+  "acceptanceRevision": 1,
+  "status": "FROZEN_AT_C1",
+  "scopeName": "Round 7 repair of the Step 1A external artifact audit and final completion protocol",
+  "baseCommit": "88daf9c912fa726e019915e5d7bfed94f0a47158",
+  "baseTree": "1aeba9e915990e56a8d777e7b90cd94d4755c7fb",
+  "predecessor": {
+    "round": 6,
+    "internalSeal": "1f552aae0afe3c935a33122b15f85e20708aabc2",
+    "merge": "88daf9c912fa726e019915e5d7bfed94f0a47158",
+    "overallStatus": "FAIL",
+    "failureRecord": "quality-reviews/step-1-legacy-baseline-round-007/round-006-post-main-failure.json"
+  },
+  "immutableHistoricalTrees": {
+    "quality-reviews/step-1-legacy-baseline": "c0a5b81aeca8ec1f034b920774321f4728caac4e",
+    ".github/baselines/v0.8.2": "c59e35e51ad2d35ae8304bb9d5e5b921101911c3"
+  },
+  "c1AllowedPaths": [
+    ".github/workflows/verify-main.yml",
+    ".github/workflows/verify-step-1-artifacts.yml",
+    "AGENTS.md",
+    "BASELINE_V082.md",
+    "FLOORS_1_10_DESIGN.md",
+    "MASTER_SPEC.md",
+    "PROJECT_HANDOVER.md",
+    "PROJECT_STATUS.json",
+    "QUALITY_GATE.md",
+    "README.md",
+    "quality-reviews/step-1-legacy-baseline-round-007/acceptance-round-007.json",
+    "quality-reviews/step-1-legacy-baseline-round-007/round-006-post-main-failure.json",
+    "tests/artifact-download-transport.mjs",
+    "tests/artifact-download-transport.test.mjs",
+    "tests/verify-ci-artifact.mjs",
+    "tests/verify-step-1-baseline.mjs"
+  ],
+  "c2AllowedPaths": [
+    "quality-reviews/step-1-legacy-baseline-round-007/audits/round-007-adversarial-critic.json",
+    "quality-reviews/step-1-legacy-baseline-round-007/audits/round-007-repository-critic.json",
+    "quality-reviews/step-1-legacy-baseline-round-007/audits/round-007-runtime-critic.json",
+    "quality-reviews/step-1-legacy-baseline-round-007/evidence/round-007-artifact-download-smoke.json",
+    "quality-reviews/step-1-legacy-baseline-round-007/evidence/round-007-c1-ci-run.json"
+  ],
+  "c3AllowedPaths": [
+    "quality-reviews/step-1-legacy-baseline-round-007/audits/round-007-final-judge.json",
+    "quality-reviews/step-1-legacy-baseline-round-007/evidence/round-007-c2-ci-run.json",
+    "quality-reviews/step-1-legacy-baseline-round-007/round-007.json"
+  ],
+  "completionAllowedPaths": [
+    "AGENTS.md",
+    "BASELINE_V082.md",
+    "FLOORS_1_10_DESIGN.md",
+    "MASTER_SPEC.md",
+    "PROJECT_HANDOVER.md",
+    "PROJECT_STATUS.json",
+    "QUALITY_GATE.md",
+    "README.md",
+    "quality-reviews/step-1-legacy-baseline-round-007/completion.json",
+    "quality-reviews/step-1-legacy-baseline-round-007/evidence/round-007-initial-external-audit.json"
+  ],
+  "commitProtocol": {
+    "c1": "single-parent direct child of baseCommit; exact c1AllowedPaths; canonical Step 1A status is IN_PROGRESS; this final Acceptance and its validator and workflow blobs become the immutable Round 7 trust root",
+    "c2": "single-parent direct child of C1; exact c2AllowedPaths; records exact-head C1 CI, real-provider transport smoke, and three independent critics; status remains IN_PROGRESS",
+    "c3": "single-parent direct child of C2; exact c3AllowedPaths; records exact-head C2 CI and a separate final judge; round status is EXTERNAL_PENDING and canonical status remains IN_PROGRESS",
+    "initialMerge": "exact two-parent [baseCommit,C3] merge whose tree equals C3; squash and rebase are forbidden",
+    "completion": "after a successful provider-bound Round 7 initial external audit, a single-parent commit on the exact initial merge may add the two completion records and apply only completionTransforms to the canonical documents; every other canonical byte remains equal to C3",
+    "completionMerge": "exact two-parent [initialMerge,completion] merge whose tree equals the completion commit; final reporting additionally requires its main CI and future-main external audit to succeed"
+  },
+  "completionTransforms": {
+    "canonicalMarkdown": {
+      "paths": [
+        "AGENTS.md",
+        "BASELINE_V082.md",
+        "FLOORS_1_10_DESIGN.md",
+        "MASTER_SPEC.md",
+        "PROJECT_HANDOVER.md",
+        "QUALITY_GATE.md",
+        "README.md"
+      ],
+      "exactReplacements": [
+        {
+          "from": "工程状態: 工程1A=IN_PROGRESS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED",
+          "to": "工程状態: 工程1A=PASS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED",
+          "requiredCount": 1
+        },
+        {
+          "from": "1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `IN_PROGRESS`",
+          "to": "1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `PASS`",
+          "requiredCount": 1
+        }
+      ],
+      "result": "full-byte-equality-with-c3-after-only-the-exact-replacements"
+    },
+    "projectStatus": [
+      {
+        "pointer": "/documentationBranch",
+        "from": "codex/restart-step-1-round7",
+        "to": "main"
+      },
+      {
+        "pointer": "/preparation/0/status",
+        "from": "IN_PROGRESS",
+        "to": "PASS"
+      },
+      {
+        "pointer": "/step1Round7/status",
+        "from": "IN_PROGRESS",
+        "to": "PASS"
+      },
+      {
+        "pointer": "/step1Round7/externalAudit/state",
+        "from": "PENDING",
+        "to": "PASS"
+      },
+      {
+        "pointer": "/step1Round7/completionSeal/state",
+        "from": "PENDING",
+        "to": "PASS"
+      },
+      {
+        "pointer": "/nextAction",
+        "from": "complete-step-1-round-7-external-audit-and-completion-seal",
+        "to": "revalidate-100f-master-specification"
+      }
+    ],
+    "projectStatusResult": "deep-equality-with-c3-after-only-the-exact-json-pointer-transforms",
+    "completionReportAllowedAtCommit": false,
+    "allOtherCanonicalBytes": "unchanged-from-c3"
+  },
+  "trustRoot": {
+    "authorityCommit": "unique-acceptance-introduction-c1",
+    "baselineValidator": {
+      "path": "tests/verify-step-1-baseline.mjs",
+      "blobBinding": "exact-c1-git-blob-and-worktree-bytes",
+      "targetRepository": "current-head-via-CATS_REPO_ROOT"
+    },
+    "externalArtifactVerifier": {
+      "path": "tests/verify-ci-artifact.mjs",
+      "transportPath": "tests/artifact-download-transport.mjs",
+      "blobBinding": "exact-c1-git-blobs-and-worktree-bytes",
+      "targetRepository": "current-head-via-CATS_REPO_ROOT",
+      "allRound7Modes": true
+    },
+    "workflows": {
+      "primary": {
+        "path": ".github/workflows/verify-main.yml",
+        "blobBinding": "exact-c1-git-blob",
+        "executionAuthority": "event-time-github-workflow-sha-bound-in-provenance"
+      },
+      "external": {
+        "path": ".github/workflows/verify-step-1-artifacts.yml",
+        "blobBinding": "exact-c1-git-blob",
+        "executionAuthority": "same-commit-relative-reusable-workflow-call-from-primary"
+      }
+    },
+    "postC1VerifierKit": {
+      "root": "$RUNNER_TEMP",
+      "mode": "detached-c1-full-history-no-replace",
+      "workspaceReuse": false
+    },
+    "externalSanitizedBoundary": {
+      "directory": "$RUNNER_TEMP/cats-step1-external-audit-results",
+      "directoryMode": "0700",
+      "exactFiles": [
+        "main.json",
+        "round7-c3-pr.json"
+      ],
+      "regularFilesOnly": true,
+      "symlinks": false
+    }
+  },
+  "downloadTransport": {
+    "firstHop": "authenticated GitHub API GET, Accept application/vnd.github+json, explicit API version, redirect manual, exact status 302",
+    "location": "present, newline-free credential-free HTTPS URL",
+    "secondHop": "no Authorization or GitHub API headers, redirect error, exact status 200",
+    "bindings": [
+      "exact run and run attempt",
+      "exact successful job and time interval",
+      "exact artifact id and attempt-scoped name",
+      "unexpired provider metadata",
+      "byte length equals provider size_in_bytes",
+      "ZIP SHA-256 equals provider digest",
+      "95 unique safe ZIP members",
+      "exactly one ci-provenance.json",
+      "ten duplicate-key-free PASS reports",
+      "provenance event, checkout, kit, runtime, workflow commit, tree, and blob"
+    ],
+    "secretBoundary": "signed Location is never persisted or printed; the GitHub bearer token is never sent to the storage hop"
+  },
+  "requiredTransportTests": [
+    "correct first-hop headers and manual 302 followed by an unauthenticated second-hop 200",
+    "old application/octet-stream 415 is not accepted",
+    "non-302, missing Location, non-HTTPS, credentials, newline, second redirect, and non-200 fail closed",
+    "Authorization and GitHub API headers are absent from the storage request",
+    "size and digest mismatch fail closed",
+    "duplicate or unsafe ZIP members and missing, duplicate, or modified provenance fail closed"
+  ],
+  "externalAuditProtocol": {
+    "activeSeal": "quality-reviews/step-1-legacy-baseline-round-007/round-007.json",
+    "triggerAuthority": "main-push-only reusable audit job invoked after the primary verification job through a relative same-commit workflow_call; a separate default-branch workflow_run cannot authorize completion",
+    "callerRunState": "during the reusable audit, the exact caller run may still be in_progress with null conclusion, but its primary verification job must already be completed success and its provider-bound artifact must exist; completion evidence must later re-query the same run as completed success with the reusable audit job completed success",
+    "initialMode": "only the exact Round 7 initial merge main-push run; after that same run uploads its primary artifact, execute the detached C1 artifact verifier against the current target repository and verify both the Round 7 C3 PR artifact and the caller run main artifact independently",
+    "partialFailure": "attempt both verifications; reconstruct allowlisted result JSON without persisting raw verifier stdout; upload only the two exact regular non-symlink files from the mode-0700 RUNNER_TEMP boundary with if: always(); then fail an aggregate gate unless both passed",
+    "completionMergeMode": "the exact completion merge must itself be the head of a completed successful primary main-push run whose same-run reusable future audit job succeeds with the exact C1 step ledger",
+    "laterDescendantMode": "before auditing a later main descendant, discover and bind an earlier provider run on the exact completion merge with completed success primary and same-run reusable audit jobs; a descendant run cannot substitute for or bootstrap a missing completion-merge run, and retained artifact bytes are not required",
+    "futureMode": "in the current main-push run, requires an earlier provider-bound successful same-run reusable Round 7 initial audit for the exact initial merge, then executes the detached C1 artifact verifier against the current target repository and verifies the caller run main artifact; the immediate completion merge re-queries the unexpired sanitized audit artifact, while later descendants bind its frozen completion identity and provider run/job ledger without requiring the historical C3 or sanitized audit artifact to remain downloadable",
+    "round6SuccessMayBootstrapRound7": false
+  },
+  "statusProtocol": {
+    "c1ThroughC3": "IN_PROGRESS",
+    "round7InternalSeal": "EXTERNAL_PENDING",
+    "passAuthority": "completion.json added only after the successful Round 7 initial external audit",
+    "completionReportBeforePassAuthority": false
+  },
+  "evidenceSchemas": {
+    "ciRecord": {
+      "exactKeys": [
+        "schemaVersion",
+        "artifactId",
+        "role",
+        "repository",
+        "workflowId",
+        "runId",
+        "runAttempt",
+        "jobId",
+        "headSha",
+        "headTree",
+        "status",
+        "conclusion",
+        "artifact",
+        "materialBlockers"
+      ],
+      "roles": [
+        "c1-ci",
+        "c2-ci"
+      ],
+      "requiredOutcome": {
+        "status": "completed",
+        "conclusion": "success",
+        "materialBlockers": []
+      },
+      "artifactExactKeys": [
+        "id",
+        "name",
+        "digest",
+        "sizeBytes"
+      ]
+    },
+    "criticRecord": {
+      "exactKeys": [
+        "schemaVersion",
+        "artifactId",
+        "role",
+        "reviewTargetCommit",
+        "reviewTargetTree",
+        "reviewedAcceptanceSha256",
+        "reviewedCiRunId",
+        "reviewedCiRunAttempt",
+        "reviewedCiJobId",
+        "reviewedCiArtifact",
+        "verdict",
+        "materialBlockers",
+        "method",
+        "findings"
+      ],
+      "roles": [
+        "adversarial-critic",
+        "repository-critic",
+        "runtime-critic"
+      ],
+      "requiredOutcome": {
+        "verdict": "PASS",
+        "materialBlockers": []
+      },
+      "artifactExactKeys": [
+        "id",
+        "name",
+        "digest",
+        "sizeBytes"
+      ]
+    },
+    "finalJudgeRecord": {
+      "criticShapePlusExactKey": "criticRecordHashes",
+      "role": "final-judge",
+      "criticRecordHashes": "exact three path-to-lowercase-sha256 bindings"
+    },
+    "artifactSmokeRecord": {
+      "exactKeys": [
+        "schemaVersion",
+        "artifactId",
+        "role",
+        "testedCommit",
+        "status",
+        "targets",
+        "materialBlockers"
+      ],
+      "role": "artifact-download-smoke",
+      "requiredOutcome": {
+        "status": "PASS",
+        "materialBlockers": []
+      },
+      "targetExactKeys": [
+        "role",
+        "runId",
+        "runAttempt",
+        "jobId",
+        "artifact",
+        "firstHopStatus",
+        "secondHopStatus",
+        "storageAuthorizationSent",
+        "archiveMemberCount",
+        "provenanceMemberCount",
+        "passReportCount",
+        "result"
+      ],
+      "targetRoles": [
+        "round6-c3",
+        "round6-main"
+      ],
+      "targetRequiredOutcome": {
+        "firstHopStatus": 302,
+        "secondHopStatus": 200,
+        "storageAuthorizationSent": false,
+        "archiveMemberCount": 95,
+        "provenanceMemberCount": 1,
+        "passReportCount": 10,
+        "result": "PASS"
+      }
+    },
+    "completion": {
+      "completionRequired": "PASS record binding the exact initial merge and SHA-256 of the external-audit record",
+      "externalAuditRequired": "provider-verified successful initial-main-seal primary workflow run and its same-run reusable audit job with independent PASS results for C3 and initial main",
+      "sanitizedAuditArtifactRequired": "exact provider id, source-run-and-attempt-scoped name, digest, and size binding for the same-run uploaded two-file sanitized evidence artifact"
+    }
+  },
+  "canonicalStatusMirrors": [
+    "AGENTS.md",
+    "BASELINE_V082.md",
+    "FLOORS_1_10_DESIGN.md",
+    "MASTER_SPEC.md",
+    "PROJECT_HANDOVER.md",
+    "PROJECT_STATUS.json",
+    "QUALITY_GATE.md",
+    "README.md"
+  ],
+  "externalCompletionStopConditions": [
+    "C1 is the unique immutable Round 7 trust root; every post-C1 validation uses its detached sealed validator or artifact-verifier bytes against the current target repository, and both workflow blobs remain byte-identical to C1",
+    "C1 exact-head CI and real-provider Round 6 C3/main artifact smoke succeed through the repaired transport",
+    "three independent C1 critics report no material blocker",
+    "C2 exact-head CI and a separate final judge report no material blocker",
+    "C3 exact-head PR CI and Vercel Preview succeed",
+    "the exact two-parent Round 7 initial merge preserves C1/C2/C3 and has the C3 tree",
+    "the exact initial merge main-push primary verification job succeeds and uploads its bound artifact",
+    "the same source-bound main-push run invokes the relative reusable audit workflow after the primary job; it verifies both the Round 7 C3 and caller-run main artifacts, proves the exact sanitized RUNNER_TEMP upload boundary, uploads sanitized evidence, binds that upload to exact provider id, scoped name, digest, and size, and passes its aggregate gate",
+    "the completion record binds that external audit before canonical status changes to PASS",
+    "the exact completion merge is independently pushed and its primary job and same-run future-main reusable audit job succeed; every later descendant must provider-bind that earlier exact completion-merge run and cannot bootstrap its absence",
+    "the archive ref, fixed Production deployment metadata, and all 17 live runtime bytes are rechecked after the completion merge"
+  ],
+  "outOfScope": [
+    "whole-repository backup",
+    "player-save backup",
+    "physical-iPhone approval",
+    "product-quality approval for V0.8.2",
+    "GitHub administrator-proof ruleset enforcement"
+  ]
+}

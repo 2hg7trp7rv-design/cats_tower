@@ -4,7 +4,7 @@
   "project": "Cat's Tower",
   "canonicalRepository": "2hg7trp7rv-design/cats_tower",
   "canonicalBranch": "main",
-  "documentationBranch": "codex/restart-step-1-round6",
+  "documentationBranch": "codex/restart-step-1-round7",
   "productSourceOfTruth": "MASTER_SPEC.md",
   "completionQualityGate": "QUALITY_GATE.md",
   "projectStage": "preproduction",
@@ -16,7 +16,7 @@
     {
       "order": 1,
       "name": "legacy-v082-source-runtime-byte-checkpoint",
-      "status": "PASS"
+      "status": "IN_PROGRESS"
     },
     {
       "order": 2,
@@ -494,7 +494,7 @@
   "legacyV082Verification": {
     "githubActionsRun": 32589125939,
     "githubActionsHead": "ee0d4cf1e7df3f40dbd2ba960aca5662f38abbc7",
-    "githubActionsConclusion": "success-and-round-6-quality-judgment-passed",
+    "githubActionsConclusion": "success-round-6-internal-seal-only-external-audit-failed",
     "chromium390x844": "passed-in-clean-checkout-ci",
     "chromium375x667": "passed-in-clean-checkout-ci",
     "webkit390x844": "passed-in-clean-checkout-ci",
@@ -509,6 +509,40 @@
     "pwaStandaloneAndUpdate": "not-verified",
     "precisionBalanceSimulation": "deferred",
     "mayBeReusedAsHundredFloorQaEvidence": false
+  },
+  "step1Round7": {
+    "status": "IN_PROGRESS",
+    "completionReportAllowed": false,
+    "acceptance": "quality-reviews/step-1-legacy-baseline-round-007/acceptance-round-007.json",
+    "baseCommit": "88daf9c912fa726e019915e5d7bfed94f0a47158",
+    "round6InternalSeal": "PASS",
+    "round6ExternalCompletion": "FAIL",
+    "round6ExternalAuditRun": 32590920047,
+    "round6ExternalAuditJob": 97074517000,
+    "round6Failure": "artifact-download-first-hop-returned-http-415",
+    "internalSeal": {
+      "path": "quality-reviews/step-1-legacy-baseline-round-007/round-007.json",
+      "stateBeforeCreation": "PENDING",
+      "stateAtC3": "EXTERNAL_PENDING",
+      "authorizesCanonicalPass": false
+    },
+    "externalAudit": {
+      "required": true,
+      "state": "PENDING",
+      "authorizesCanonicalPass": false
+    },
+    "completionSeal": {
+      "required": true,
+      "state": "PENDING",
+      "authorizesCanonicalPass": true
+    },
+    "runtimeOrDeploymentInputChanges": 0,
+    "currentProductionAtRestart": {
+      "id": "dpl_A2sPMt2c6LHSCMEWZj6jP2Yre4MR",
+      "state": "READY",
+      "githubCommit": "88daf9c912fa726e019915e5d7bfed94f0a47158",
+      "runtimeBytesEqualBaseline": true
+    }
   },
   "deferredToFloors1Through10Design": [
     "exact-floor-by-floor-content",
@@ -529,7 +563,7 @@
     "final-floor-clear-times",
     "three-build-balance"
   ],
-  "nextAction": "revalidate-100f-master-specification",
+  "nextAction": "complete-step-1-round-7-external-audit-and-completion-seal",
   "researchCheckedDate": "2026-08-22",
   "statusVocabulary": [
     "NOT_STARTED",
