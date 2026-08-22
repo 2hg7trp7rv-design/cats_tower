@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-legacy-baseline-round-007",
+  "role": "final-judge",
+  "reviewTargetCommit": "8bcfc04f51b052871fd35673e4c07c2eada262a8",
+  "reviewTargetTree": "f2252ea740833fa226ac39d79d29173fd5acb8cc",
+  "reviewedAcceptanceSha256": "d501fc82371b938e9c037922cea3f786004c7735801b3e10e17802db21af9ca0",
+  "reviewedCiRunId": 32597775951,
+  "reviewedCiRunAttempt": 1,
+  "reviewedCiJobId": 97091331852,
+  "reviewedCiArtifact": {
+    "id": 9482096868,
+    "name": "cats-v082-step-1-recovery-evidence-attempt-1",
+    "digest": "sha256:4f2649a2af7b43dcbc466f043bd8462c1b06e0b4cb0aedb640801bc458748405",
+    "sizeBytes": 71607972
+  },
+  "verdict": "PASS",
+  "materialBlockers": [],
+  "method": [
+    "GitHub providerからPR #6、対象commitのexact-head workflow run 32597775951、job 97091331852、全step、artifact 9482096868を再照会し、run・jobがcompleted/success、PR用外部監査jobが設計どおりskipped、artifactのhead SHA・名前・digest・size・未失効状態が対象C2へ一致することを確認した。",
+    "providerからC2 artifactを独立取得し、71,607,972 bytesとSHA-256 4f2649a2af7b43dcbc466f043bd8462c1b06e0b4cb0aedb640801bc458748405を再計算した。ZIP 95 memberが一意で安全な相対パスかつsymlinkなし、ci-provenance.jsonが1件、10件のQA reportがすべてpassed=true・errors=[]、credential・署名URL・秘密鍵パターンが0件であることを検査した。",
+    "隔離したdetached C1検証kitからCATS_REPO_ROOTをC2へ固定してsealed baseline validatorを実行し、phase c2 PASSを確認した。さらにartifact verifierの14反証fixtureとartifact transportの60試験を独立再実行して全件合格を確認した。",
+    "Git履歴と生バイトを照合し、C2がC1の直接単一親でexact 5 pathだけを追加したこと、Acceptance・2 workflow・3 validator/transport authority blob・8 canonical state mirror・旧証拠tree・baseline snapshot treeがC1から不変であることを確認した。"
+  ],
+  "findings": [
+    "C2 commit 8bcfc04f51b052871fd35673e4c07c2eada262a8は親C1 88fb46b1d1cdbd5c071804275c92dc51a8c59913を1個だけ持ち、treeはf2252ea740833fa226ac39d79d29173fd5acb8ccで、変更集合はAcceptanceのc2AllowedPaths 5件と完全一致した。",
+    "3件のcritic recordはすべてC1 commit/tree、Acceptance生バイトSHA-256、C1 provider run/job/artifactへ一致し、verdict=PASS・materialBlockers=[]である。各recordの生バイトSHA-256はcriticRecordHashesに示す値へ固定された。",
+    "C2 CI provenanceはpull_request #6、exact invocation checkout C2 commit/tree、sealed-round7-c1検証kit、immutable baseline runtime commit 727b8d00c281e7539117da5ded7309ea01c7e516/tree c508c58b0bb1b3fa591eefe143aab2dd6eac9271を明確に分離している。",
+    "baseline commitからC2まで16 runtime sourceと2 deployment inputの変更は0件で、工程1Aのcanonical状態は引き続きIN_PROGRESSである。これはC3前の最終判定PASSであり、工程完了判定ではない。"
+  ],
+  "criticRecordHashes": [
+    {
+      "path": "quality-reviews/step-1-legacy-baseline-round-007/audits/round-007-adversarial-critic.json",
+      "sha256": "8909325e3efaaffe7b757234305a52d127f437b54a25ef8f0c0686f9652f0fea"
+    },
+    {
+      "path": "quality-reviews/step-1-legacy-baseline-round-007/audits/round-007-repository-critic.json",
+      "sha256": "b411d89b77f050fde1e1057b099f432e317dd68acda9365fbe22ce79f59101e4"
+    },
+    {
+      "path": "quality-reviews/step-1-legacy-baseline-round-007/audits/round-007-runtime-critic.json",
+      "sha256": "5687a9c68505a826442018b72bb2b33ecc89f5855f49fbfa11cc1ca5953fa552"
+    }
+  ]
+}

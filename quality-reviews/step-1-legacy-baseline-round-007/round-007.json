@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-legacy-baseline-round-007",
+  "round": 7,
+  "overallStatus": "EXTERNAL_PENDING",
+  "canonicalStatus": "IN_PROGRESS",
+  "reviewTargetCommit": "8bcfc04f51b052871fd35673e4c07c2eada262a8",
+  "materialBlockers": []
+}

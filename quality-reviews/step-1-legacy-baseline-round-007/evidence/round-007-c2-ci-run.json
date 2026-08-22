@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-legacy-baseline-round-007",
+  "role": "c2-ci",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "workflowId": 335561992,
+  "runId": 32597775951,
+  "runAttempt": 1,
+  "jobId": 97091331852,
+  "headSha": "8bcfc04f51b052871fd35673e4c07c2eada262a8",
+  "headTree": "f2252ea740833fa226ac39d79d29173fd5acb8cc",
+  "status": "completed",
+  "conclusion": "success",
+  "artifact": {
+    "id": 9482096868,
+    "name": "cats-v082-step-1-recovery-evidence-attempt-1",
+    "digest": "sha256:4f2649a2af7b43dcbc466f043bd8462c1b06e0b4cb0aedb640801bc458748405",
+    "sizeBytes": 71607972
+  },
+  "materialBlockers": []
+}
