@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-legacy-baseline-round-007",
+  "role": "adversarial-critic",
+  "reviewTargetCommit": "88fb46b1d1cdbd5c071804275c92dc51a8c59913",
+  "reviewTargetTree": "eff692af7ee2beb6dba6d980c819fd9a3f3ca1a8",
+  "reviewedAcceptanceSha256": "d501fc82371b938e9c037922cea3f786004c7735801b3e10e17802db21af9ca0",
+  "reviewedCiRunId": 32596945947,
+  "reviewedCiRunAttempt": 1,
+  "reviewedCiJobId": 97089333792,
+  "reviewedCiArtifact": {
+    "id": 9481871248,
+    "name": "cats-v082-step-1-recovery-evidence-attempt-1",
+    "digest": "sha256:240f001a5d46a182d23124b74dd478e06460ecd66ce2e6170ae67b9d709d1e15",
+    "sizeBytes": 71545851
+  },
+  "verdict": "PASS",
+  "materialBlockers": [],
+  "method": [
+    "対象commitを基点commitの直接の単一親子として確認し、tree、16変更パス、Acceptance生バイトSHA-256、旧証拠tree、実行コードと配信入力の無変更を照合した。",
+    "C1で凍結されるvalidator・artifact verifier・transport・2 workflowを読み、C2/C3/completionでのPASS stub、Acceptance改変、workflow差替え、別run流用、completion merge省略の経路を反証した。",
+    "GitHub provider上のrun 32596945947、job 97089333792、全主要step、artifact 9481871248の名前・digest・size・head SHAを照合し、job logでRound 6 C3/main両artifactの実通信smoke PASSを確認した。",
+    "隔離したclean cloneでC1 validatorを再実行してphase c1 PASSを確認し、CI logにBearer token、GitHub token形式、署名付きLocationの露出がないことも検査した。",
+    "Vercel deployment dpl_CoPtCsKLk9pEQbhe3pV8MyMzWqMtがREADYで、GitHub commit SHAが対象C1と完全一致することをprovider metadataで確認した。"
+  ],
+  "findings": [
+    "C1はAcceptanceの唯一の導入commitであり、以後の検証はRUNNER_TEMP上のdetached C1 worktreeから実行される。現在側のvalidatorをPASS stubへ置換しても選択されず、workflow blob差替えもC1比較で拒否される。",
+    "実provider smokeは旧C3 artifact 9480141426と旧main artifact 9480288219の両方で成功した。修正transportは認証付きGitHub JSON APIの302と、認証情報を送らないstorageの200を強制し、size、SHA-256、95 member、単一provenance、10 PASS reportまで束縛する。",
+    "外部監査はprimaryと同一run・同一attemptの相対workflow_callに限定され、結果は0700のRUNNER_TEMPディレクトリ内にある正規ファイル2個へ再構成される。生のverifier stdoutや署名URLをartifactへ持ち込む経路は確認されなかった。",
+    "C1のpull-request runで外部監査jobがskippedなのは設計どおりであり、工程1AはまだIN_PROGRESSである。C2/C3、初回main同一run外部監査、completion merge、future-main監査を通す前に完了報告できる経路は確認されなかった。"
+  ]
+}

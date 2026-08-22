@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-legacy-baseline-round-007",
+  "role": "artifact-download-smoke",
+  "testedCommit": "88fb46b1d1cdbd5c071804275c92dc51a8c59913",
+  "status": "PASS",
+  "targets": [
+    {
+      "role": "round6-c3",
+      "runId": 32590094723,
+      "runAttempt": 1,
+      "jobId": 97072452889,
+      "artifact": {
+        "id": 9480141426,
+        "name": "cats-v082-step-1-recovery-evidence-attempt-1",
+        "digest": "sha256:52ff79cc991857c162545f7a0581d65835afe38b48f00aa6f4d5104d6fd97e4a",
+        "sizeBytes": 71594452
+      },
+      "firstHopStatus": 302,
+      "secondHopStatus": 200,
+      "storageAuthorizationSent": false,
+      "archiveMemberCount": 95,
+      "provenanceMemberCount": 1,
+      "passReportCount": 10,
+      "result": "PASS"
+    },
+    {
+      "role": "round6-main",
+      "runId": 32590658257,
+      "runAttempt": 1,
+      "jobId": 97073864631,
+      "artifact": {
+        "id": 9480288219,
+        "name": "cats-v082-step-1-recovery-evidence-attempt-1",
+        "digest": "sha256:93bf04404c93bd131d68e2e39658571a6772eb8778787aae9577c67d7d5149c1",
+        "sizeBytes": 71609224
+      },
+      "firstHopStatus": 302,
+      "secondHopStatus": 200,
+      "storageAuthorizationSent": false,
+      "archiveMemberCount": 95,
+      "provenanceMemberCount": 1,
+      "passReportCount": 10,
+      "result": "PASS"
+    }
+  ],
+  "materialBlockers": []
+}
