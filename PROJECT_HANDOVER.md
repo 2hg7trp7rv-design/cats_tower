@@ -10,7 +10,7 @@ Canonical branch: `main`
 
 固定Vercel URL: <https://cats-tau-dusky.vercel.app/>
 
-工程状態: 工程1A=IN_PROGRESS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
+工程状態: 工程1A=PASS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
 
 工程1A正式名称: V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint
 
@@ -272,7 +272,7 @@ Gate B前の総量上限は、名前付き猫2、一時増援1、通常敵2、�
 
 ## 17. コード修正前の全順序
 
-1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `IN_PROGRESS`
+1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `PASS`
 2. 100F正本仕様書 — `PENDING_REVALIDATION`
 3. 1〜10F完全設計 — `PENDING_REVALIDATION`
 4. 9画面の完成見本 — `NOT_STARTED`

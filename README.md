@@ -2,7 +2,7 @@
 
 猫を呼んで塔を奪還し、制圧した部屋で猫が暮らし、選んだ店と配送が上階の戦闘を支える、スマートフォン縦画面専用の100F放置インクリメンタルRPGです。
 
-工程状態: 工程1A=IN_PROGRESS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
+工程状態: 工程1A=PASS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
 
 工程1A正式名称: V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint
 
@@ -104,7 +104,7 @@
 
 ## コード修正前の順序
 
-1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `IN_PROGRESS`
+1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `PASS`
 2. 100F正本仕様書 — `PENDING_REVALIDATION`
 3. 1〜10F完全設計 — `PENDING_REVALIDATION`
 4. 9画面の完成見本 — `NOT_STARTED`

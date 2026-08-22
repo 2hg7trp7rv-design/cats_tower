@@ -4,13 +4,13 @@
 
 更新日: 2026-08-23
 
-工程状態: 工程1A=IN_PROGRESS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
+工程状態: 工程1A=PASS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
 
 工程1A正式名称: V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint
 
 工程1A対象外: whole-repository backup / player-save backup / physical-iPhone approval / Production alias switch
 
-1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `IN_PROGRESS`
+1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `PASS`
 
 対象地区: 第1地区「灰かぶり入口市場」
 

@@ -4,7 +4,7 @@
   "project": "Cat's Tower",
   "canonicalRepository": "2hg7trp7rv-design/cats_tower",
   "canonicalBranch": "main",
-  "documentationBranch": "codex/restart-step-1-round7",
+  "documentationBranch": "main",
   "productSourceOfTruth": "MASTER_SPEC.md",
   "completionQualityGate": "QUALITY_GATE.md",
   "projectStage": "preproduction",
@@ -16,7 +16,7 @@
     {
       "order": 1,
       "name": "legacy-v082-source-runtime-byte-checkpoint",
-      "status": "IN_PROGRESS"
+      "status": "PASS"
     },
     {
       "order": 2,
@@ -511,7 +511,7 @@
     "mayBeReusedAsHundredFloorQaEvidence": false
   },
   "step1Round7": {
-    "status": "IN_PROGRESS",
+    "status": "PASS",
     "completionReportAllowed": false,
     "acceptance": "quality-reviews/step-1-legacy-baseline-round-007/acceptance-round-007.json",
     "baseCommit": "88daf9c912fa726e019915e5d7bfed94f0a47158",
@@ -528,12 +528,12 @@
     },
     "externalAudit": {
       "required": true,
-      "state": "PENDING",
+      "state": "PASS",
       "authorizesCanonicalPass": false
     },
     "completionSeal": {
       "required": true,
-      "state": "PENDING",
+      "state": "PASS",
       "authorizesCanonicalPass": true
     },
     "runtimeOrDeploymentInputChanges": 0,
@@ -563,7 +563,7 @@
     "final-floor-clear-times",
     "three-build-balance"
   ],
-  "nextAction": "complete-step-1-round-7-external-audit-and-completion-seal",
+  "nextAction": "revalidate-100f-master-specification",
   "researchCheckedDate": "2026-08-22",
   "statusVocabulary": [
     "NOT_STARTED",
