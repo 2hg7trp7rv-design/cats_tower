@@ -1,136 +1,84 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#151a2d">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="description" content="猫たちが自動で塔を駆け上がり、天敵と戦い、夜明けを重ねて強くなる縦型放置RPG。">
-  <title>Cat's tower</title>
-  <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="apple-touch-icon" href="/assets/icons/icon-192.png">
-  <link rel="preload" as="image" href="/assets/v080/pixel-r2/tower-night-r2.png">
-  <link rel="preload" as="image" href="/assets/v080/pixel-r2/mugi-sprites-r2.png">
-  <link rel="preload" as="image" href="/assets/v080/pixel-r2/crow-sprites-r2.png">
-  <link rel="preload" as="image" href="/assets/v082/pixel-r3/cats-cast-r3.png">
-  <link rel="preload" as="image" href="/assets/v082/pixel-r3/enemies-r3.png">
-  <link rel="stylesheet" href="/styles.css?v=082r3">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#1b2030">
+<title>Cat's Tower — 戦闘プロトタイプ</title>
+<meta name="description" content="猫を呼んで塔を戦って登る、1〜10F縦切りプロトタイプ (kimiブランチ)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icons/icon-192.png">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main id="app" class="app">
-    <section id="splash" class="splash">
-      <img class="splashArt pixelAsset" src="/assets/v080/pixel-r2/tower-night-r2.png" alt="月夜にそびえる猫たちの塔">
-      <div class="splashShade"></div>
-      <div class="splashCopy">
-        <span class="kicker">月が沈む前に、塔を取り戻す</span>
-        <h1><span>Cat's</span><span>tower</span></h1>
-        <p>猫たちは自分で進む。<br>あなたの一声で、群れはもっと強くなる。</p>
-        <button id="startBtn" class="primaryButton">夜番を始める</button>
-        <small>猫たちと過ごす、月夜の塔攻略</small>
+<div id="app">
+  <div id="stage">
+
+    <!-- 上部: 簡易HUD -->
+    <header id="hud-top">
+      <div id="hud-floor">1F 灰鈴の入口</div>
+      <div id="hud-wave"></div>
+      <div id="hud-rally" title="号令中">📣</div>
+      <div id="hud-delivery" style="display:none" title="配送">
+        <span class="dicon">📦</span><span class="dbar"><i></i></span>
       </div>
-    </section>
+      <div class="hud-spacer"></div>
+      <div id="hud-coins-wrap">🪙<span id="hud-coins">0</span></div>
+      <button id="btn-tower" class="hud-btn" aria-label="塔を見る">🗼</button>
+      <button id="btn-mute" class="hud-btn" aria-label="ミュート">🔊</button>
+    </header>
 
-    <section id="game" class="game hidden">
-      <header class="topbar compactTopbar">
-        <button id="brandBtn" class="floorStamp" aria-label="塔攻略の遊び方">
-          <span class="floorGlyph" aria-hidden="true">階</span>
-          <span><small>現在階</small><strong id="floorLabel">1F</strong></span>
-        </button>
-        <div class="topActions">
-          <button id="coinBtn" class="resource" aria-label="コイン">
-            <i>C</i><span><small>コイン</small><b id="coins">0</b></span>
-          </button>
-          <button id="shardBtn" class="resource shardResource" aria-label="朝の鈴">
-            <i>鈴</i><span><small>朝の鈴</small><b id="dawnShards">0</b></span>
-          </button>
-          <button id="menuBtn" class="iconButton" aria-label="設定"><span aria-hidden="true">設</span></button>
-        </div>
-      </header>
+    <!-- 戦闘領域 (画面高の55%以上) -->
+    <main id="battle-wrap">
+      <canvas id="battle"></canvas>
+      <div id="banner"></div>
+    </main>
 
-      <section class="runHud" aria-label="攻略状況">
-        <div class="runHudMeta"><span>最高 <strong id="bestFloor">1F</strong></span><span>出撃 <strong><span id="catCount">0</span>匹</strong></span></div>
-        <div id="dispatchGauge" class="dispatchGauge" role="progressbar" aria-label="次の自動出撃まで" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="dispatchMeter"></i></div>
-      </section>
-
-      <section id="towerBattlefield" class="towerBattlefield" aria-label="猫と天敵が戦う塔">
-        <div class="towerScene">
-          <div class="towerSlice towerSlice--next" aria-hidden="true">
-            <img class="sliceBackdrop pixelAsset" src="/assets/v080/pixel-r2/tower-night-r2.png" alt="" draggable="false">
-            <span class="sliceFlag">次の階</span>
-            <span class="lockedDoor">未制圧</span>
-          </div>
-
-          <div class="towerSlice towerSlice--battle">
-            <img id="towerBackdrop" class="towerBackdrop pixelAsset" src="/assets/v080/pixel-r2/tower-night-r2.png" alt="現在攻略している塔の階" draggable="false">
-            <div class="battleVignette" aria-hidden="true"></div>
-            <span class="sliceFlag currentFlag">戦闘中</span>
-            <div class="enemyHud">
-              <div><span id="enemyMark">WILD</span><strong id="enemyName">夜ガラス</strong><small id="enemyHpText">HP 0 / 0</small></div>
-              <div id="enemyHpTrack" class="enemyHpTrack" role="progressbar" aria-label="天敵の残り体力" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><i id="enemyHp"></i></div>
-            </div>
-            <div id="unitLayer" class="unitLayer" aria-hidden="true"></div>
-            <div id="effectLayer" class="effectLayer" aria-hidden="true"></div>
-            <div id="floorCallout" class="floorCallout hidden" aria-hidden="true"></div>
-          </div>
-
-          <div class="towerSlice towerSlice--support">
-            <img class="sliceBackdrop pixelAsset" src="/assets/v080/pixel-r2/tower-night-r2.png" alt="制圧した階の後方支援" draggable="false">
-            <span class="sliceFlag supportFlag">後方支援</span>
-            <div class="facilityActivity" aria-hidden="true">
-              <i class="facilityLamp"></i>
-              <span class="supplyCrate"></span>
-              <span class="supplyRoute"></span>
-            </div>
-            <button id="supportNode" class="supportNode hidden" data-action="open-support"></button>
-          </div>
-        </div>
-
-        <div class="battleDock">
-          <section id="upgradePanel" class="upgradeDock" aria-label="戦力強化">
-            <button class="upgradeButton" data-action="upgrade-mugi" data-upgrade="mugi">
-              <span class="upgradeIcon" aria-hidden="true">猫</span><span class="upgradeCopy"><b>ムギ</b><strong id="mugiLevel">Lv.1</strong><small id="mugiCost">10C</small></span>
-            </button>
-            <button class="upgradeButton" data-action="upgrade-weapon" data-upgrade="weapon">
-              <span class="upgradeIcon" aria-hidden="true">爪</span><span class="upgradeCopy"><b>猫パンチ</b><strong id="weaponLevel">Lv.1</strong><small id="weaponCost">18C</small></span>
-            </button>
-            <button class="upgradeButton" data-action="upgrade-dispatch" data-upgrade="dispatch">
-              <span class="upgradeIcon" aria-hidden="true">門</span><span class="upgradeCopy"><b>出撃口</b><strong id="dispatchLevel">Lv.1</strong><small id="dispatchCost">24C</small></span>
-            </button>
-          </section>
-          <button id="tapDispatch" class="dispatchButton" data-action="dispatch-cat" aria-label="増援の猫を呼ぶ">
-            <span class="dispatchIcon" aria-hidden="true">!</span>
-            <span><strong>呼ぶ</strong><small>増援</small></span>
-          </button>
-        </div>
-      </section>
-
-      <button id="dawnButton" class="dawnButton hidden" data-action="open-dawn">
-        <span>夜明けを迎える</span><small id="dawnRewardPreview">朝の鈴 0</small>
-      </button>
-
-      <nav id="bottomNav" class="bottomNav" aria-label="メインメニュー">
-        <button class="active" data-nav="tower" aria-current="page"><i>塔</i><span>攻略</span></button>
-        <button data-nav="cats"><i>猫</i><span>仲間</span></button>
-        <button data-nav="support"><i>店</i><span>拠点</span></button>
-        <button data-nav="memories"><i>録</i><span>記録</span><b id="memoryBadge" class="badge hidden">1</b></button>
-      </nav>
-    </section>
-
-    <div id="modal" class="modal"></div>
-    <div id="toastArea" class="toastArea" aria-live="polite" aria-atomic="false"></div>
-    <template id="sheetTemplate">
-      <div class="modalShade" data-close="1">
-        <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" tabindex="-1">
-          <span class="sheetHandle"></span>
-          <header><div><small></small><h2 id="sheetTitle"></h2></div><button data-close="1" aria-label="閉じる">×</button></header>
-          <div class="sheetBody"></div>
-        </section>
+    <!-- 下部: 常駐UI (呼び鈴・名簿・強化) -->
+    <footer id="hud-bottom">
+      <button id="btn-roster" class="side-btn"><span class="sic">🐱</span><span class="slabel">名簿</span></button>
+      <div id="bell-area">
+        <div id="helper-slots" aria-label="増援枠"></div>
+        <button id="bell" aria-label="呼び鈴">🔔</button>
+        <div id="bell-label"></div>
       </div>
-    </template>
-  </main>
-  <script src="/game-data.js?v=082r3"></script>
-  <script src="/game-core.js?v=082r3"></script>
-  <script src="/app.js?v=082r3"></script>
+      <button id="btn-upgrade" class="side-btn"><span class="sic">⚒️</span><span class="slabel">強化</span><small></small></button>
+    </footer>
+
+    <!-- ボトムシートの挿入先 (モーダルは全面を覆わない) -->
+    <div id="sheets"></div>
+
+    <!-- 塔閲覧モード -->
+    <div id="tower-view">
+      <div id="tower-head">
+        <b>塔閲覧</b><span class="tv-sub">1〜10F 第1地区 / 閲覧中も戦闘は続く</span>
+      </div>
+      <div id="tower-scroll">
+        <div id="tower-list"></div>
+        <div id="tower-boxes"></div>
+        <div id="district-rail">
+          <span>91-100</span><span>…</span><span>11-20</span><span class="on">1-10</span>
+        </div>
+      </div>
+      <button id="tower-return">戦闘へ戻る</button>
+    </div>
+
+    <!-- タイトル -->
+    <div id="title-screen">
+      <div id="title-inner">
+        <div id="title-logo">🐱🔔</div>
+        <h1>Cat's Tower</h1>
+        <p class="title-sub">戦闘プロトタイプ — 第1地区 1〜10F</p>
+        <p class="title-desc">呼び鈴で猫を呼び、塔を戦って登る。<br>制圧した階は店になり、配送が戦いを支える。</p>
+        <button id="btn-start">はじめる</button>
+        <p class="title-note">縦画面推奨 / 音が出ます (右上でミュート可)</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+<script src="game-data.js"></script>
+<script src="game-core.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

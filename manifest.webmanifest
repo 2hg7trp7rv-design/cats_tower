@@ -1,16 +1,16 @@
 {
-  "name": "Cat's tower",
-  "short_name": "Cat's tower",
+  "name": "Cat's Tower プロトタイプ",
+  "short_name": "Cat's Tower",
   "id": "/",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#151a2d",
-  "theme_color": "#151a2d",
+  "background_color": "#141824",
+  "theme_color": "#1b2030",
   "orientation": "portrait",
-  "description": "役割の異なる猫たちが塔を自動で登り、制圧階の施設と号令で10Fを目指す縦型放置RPG。",
+  "description": "呼び鈴で猫を呼び、塔を戦って登る。1〜10F縦切り戦闘プロトタイプ (kimiブランチ)。",
   "icons": [
-    {"src":"/assets/icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
-    {"src":"/assets/icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+    {"src": "/assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "/assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
   ]
 }

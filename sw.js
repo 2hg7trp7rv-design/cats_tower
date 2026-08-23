@@ -1,36 +1,50 @@
-const CACHE='cats-tower-v082-pixel-tower-r3';
-const CORE=[
-  '/','/index.html','/styles.css?v=082r3','/game-data.js?v=082r3','/game-core.js?v=082r3','/app.js?v=082r3','/manifest.webmanifest',
-  '/assets/v080/pixel-r2/tower-night-r2.png',
-  '/assets/v080/pixel-r2/mugi-sprites-r2.png',
-  '/assets/v080/pixel-r2/crow-sprites-r2.png',
-  '/assets/v082/pixel-r3/cats-cast-r3.png',
-  '/assets/v082/pixel-r3/enemies-r3.png',
-  '/assets/fonts/noto-sans-jp-700-ja.woff2',
-  '/assets/icons/icon-192.png','/assets/icons/icon-512.png'
+/* Cat's Tower 戦闘プロトタイプ (kimiブランチ) Service Worker
+ * シェルのみ cache-first。assets/prototype の画像は network-first
+ * (後から追加された画像が反映されるようにする)。 */
+const CACHE = 'ct-proto-kimi-1';
+const SHELL = [
+  './',
+  'index.html',
+  'styles.css',
+  'game-data.js',
+  'game-core.js',
+  'app.js',
+  'manifest.webmanifest'
 ];
-self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting())));
-self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('cats-tower-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
-self.addEventListener('fetch',event=>{
-  if(event.request.method!=='GET')return;
-  const url=new URL(event.request.url);
-  if(url.origin!==location.origin)return;
-  if(event.request.mode==='navigate'){
-    event.respondWith(fetch(event.request).then(async response=>{
-      const isShellPath=url.pathname==='/'||url.pathname==='/index.html';
-      const isHtml=(response.headers.get('content-type')||'').includes('text/html');
-      if(response.ok&&isShellPath&&isHtml){
-        const cache=await caches.open(CACHE);
-        await cache.put('/index.html',response.clone());
-      }
-      return response;
-    }).catch(()=>caches.open(CACHE).then(cache=>cache.match('/index.html'))));
+
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
+});
+
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', e => {
+  const url = new URL(e.request.url);
+  if (e.request.method !== 'GET' || url.origin !== location.origin) return;
+  if (url.pathname.startsWith('/assets/prototype/')) {
+    // 画像は network-first (追加・差替えを即反映)。失敗時はキャッシュ/404。
+    e.respondWith(
+      fetch(e.request)
+        .then(res => {
+          const copy = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, copy));
+          return res;
+        })
+        .catch(() => caches.match(e.request))
+    );
     return;
   }
-  event.respondWith(caches.open(CACHE).then(cache=>cache.match(event.request).then(hit=>hit||fetch(event.request).then(async response=>{
-    if(response.ok&&['style','script','image','font'].includes(event.request.destination)){
-      await cache.put(event.request,response.clone());
-    }
-    return response;
-  }))));
+  e.respondWith(
+    caches.match(e.request).then(hit => hit || fetch(e.request).then(res => {
+      const copy = res.clone();
+      caches.open(CACHE).then(c => c.put(e.request, copy));
+      return res;
+    }))
+  );
 });
