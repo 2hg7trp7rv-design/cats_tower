@@ -1,1767 +1,1105 @@
-(function attachCatsTowerCore(root) {
+/* =========================================================================
+ * Cat's Tower — 戦闘プロトタイプ (kimiブランチ)
+ * game-core.js : 戦闘・進行シミュレーション (描画・DOM・音に依存しない)
+ *
+ * 設計:
+ *   - 固定小数点なしの秒ベース tick。app.js が requestAnimationFrame から
+ *     update(dt) を呼ぶ。Node からも require してバランス検証できる。
+ *   - 複数敵・レーン・役割ターゲティングを持つデータ構造 (MASTER_SPEC §6.5)。
+ *     単体敵のHP差し替え方式は使わない。
+ *   - 攻撃は 予備動作(windup) → 接触/弾着 → ダメージ確定 の順に状態遷移し、
+ *     命中瞬間にイベントを積む。app.js が音・数字・反動・ヒットストップを
+ *     ±50ms 内に同期させる (§6.2)。
+ *   - 画面へ出す全ての出来事は this.events に {type, ...} で積む。
+ * ========================================================================= */
+(function (global) {
   'use strict';
 
-  const Data = root.CatsTowerData;
-  if (!Data) {
-    throw new Error('CatsTowerData must be loaded before game-core.js');
-  }
+  const DATA = (typeof module !== 'undefined' && module.exports)
+    ? require('./game-data.js')
+    : global.GAME_DATA;
 
-  const {
-    BALANCE,
-    CATS,
-    NAMED_CAT_ORDER,
-    HELPER_ROTATION,
-    ENEMIES,
-    ENEMY_ROTATION,
-    UPGRADES,
-  } = Data;
-  const MAX_NUMBER = 1e300;
-  const MAX_LEVEL = 10000;
-  const MAX_FLOOR = 100000;
-  const FINAL_FLOOR = BALANCE.firstBossFloor;
-  const UNIT_LANES = Object.freeze([0.22, 0.42, 0.66, 0.31, 0.55, 0.76]);
-  const VICTORY_ROSTER = Object.freeze([
-    'helper-calico',
-    'toto',
-    'helper-gray',
-    'luna',
-    'helper-tabby',
-    'mugi',
-  ]);
+  const { CATS, HELPERS, ENEMIES, SHOPS, RELICS, FLOORS, BALANCE, DIAGNOSIS } = DATA;
 
-  function currentTime() {
-    return Date.now();
-  }
+  let UID = 1;
 
-  function finiteNumber(value, fallback, minimum = -MAX_NUMBER, maximum = MAX_NUMBER) {
-    const number = Number(value);
-    if (!Number.isFinite(number)) return fallback;
-    return Math.min(maximum, Math.max(minimum, number));
-  }
+  /* ------------------------------------------------------------------ */
+  class Game {
+    constructor() {
+      this.events = [];
+      this.resetRun();
+    }
 
-  function integer(value, fallback, minimum = 0, maximum = Number.MAX_SAFE_INTEGER) {
-    return Math.floor(finiteNumber(value, fallback, minimum, maximum));
-  }
+    emit(type, data) { this.events.push(Object.assign({ type }, data || {})); }
+    drainEvents() { const e = this.events; this.events = []; return e; }
 
-  function positiveTimestamp(value, fallback) {
-    return integer(value, fallback, 0, Number.MAX_SAFE_INTEGER);
-  }
+    /* ---------------- 周回リセット ---------------- */
+    resetRun() {
+      const B = BALANCE;
+      this.time = 0;
+      this.hitstop = 0;
+      this.mode = 'title';           // title | battle | conquest | choice | defeat | cleared
+      this.floor = 1;
+      this.coins = 30;
+      this.upgrades = { atk: 0, hp: 0, bell: 0 };
+      this.shops = {};               // floorNum -> shopId
+      this.relic = null;
+      this.unlocked = { mugi: true, luna: false, toto: false, kohaku: false };
+      this.lunaProgress = 0;         // 補給箱 0/3
+      this.kohaku = { shopKinds: false, deliveries: 0, ledgerFirst: false, done: false, unlocked: false };
+      this.lunaSnipePending = false;
+      this.cats = [];                // 出撃中ユニット (名前付き + 増援)
+      this.enemies = [];
+      this.projectiles = [];
+      this.deliveries = [];
+      this.shopTimers = {};          // floorNum -> 次の配送まで
+      this.waveIdx = 0;
+      this.pendingSpawns = [];
+      this.waveBreakT = 0;
+      this.bellCd = 0;
+      this.rallyT = 0;
+      this.bellLockT = 0;            // ボス第3形態の入口封鎖
+      this.conquestT = 0;
+      this.conquestPhase = '';
+      this.pendingChoice = null;     // {type:'shop'|'relic'|'unlock', ...}
+      this.defeatInfo = null;
+      this.dawnNoticed = false;
+      this.floorKillOrder = [];
+      this.metrics = this.freshMetrics();
+      this.maxFloorReached = 1;
+      this.enterFloor(1, true);
+      this.mode = 'title'; // enterFloor が battle にするのでタイトルへ戻す
+    }
 
-  function uniqueStrings(value, fallback) {
-    if (!Array.isArray(value)) return [...fallback];
-    return [...new Set(value.filter(item => typeof item === 'string' && item.length <= 80))];
-  }
+    freshMetrics() {
+      return { dmgFlying: 0, dmgShielded: 0, supportCasts: 0, breachT: 0, helperUpT: 0, totalT: 0, catHpLost: 0, healed: 0 };
+    }
 
-  function clone(value) {
-    return JSON.parse(JSON.stringify(value));
-  }
+    /* ---------------- ステータス計算 ---------------- */
+    atkMult() {
+      let m = 1 + BALANCE.upgrades.atk.perLevel * this.upgrades.atk;
+      if (this.relic === 'soot_claw') m *= 1.25;
+      return m;
+    }
+    hpMult() { return 1 + BALANCE.upgrades.hp.perLevel * this.upgrades.hp; }
+    helperSlotMax() {
+      let s = BALANCE.bell.maxHelpers + this.upgrades.bell;
+      if (Object.values(this.shops).includes('guild')) s += BALANCE.bell.guildBonusSlots;
+      return s;
+    }
+    hasShop(id) { return Object.values(this.shops).includes(id); }
+    shopKinds() { return new Set(Object.values(this.shops)).size; }
+    floorDef(n) { return FLOORS[n || this.floor]; }
 
-  function addMemory(state, id) {
-    if (!state.memories.includes(id)) {
-      state.memories.push(id);
-      state.memoryNew = true;
+    /* ---------------- 階への入場 ---------------- */
+    enterFloor(n, first) {
+      this.floor = n;
+      this.maxFloorReached = Math.max(this.maxFloorReached, n);
+      this.mode = 'battle';
+      this.enemies = [];
+      this.projectiles = [];
+      this.pendingSpawns = [];
+      this.waveIdx = 0;
+      this.waveBreakT = 0;
+      this.floorKillOrder = [];
+      this.bellLockT = 0;
+      this.hitstop = 0;
+      this.metrics = this.freshMetrics();
+      this.totoDanger = false;
+
+      const def = this.floorDef(n);
+      // 9F: 直近構成でエリートを切替 (爪工房あり→重装、なし→指揮)
+      let waves = def.waves;
+      if (def.eliteChoice) waves = this.hasShop('claw_forge') ? def.wavesAlt : def.waves;
+      this._scheduleWave(waves[0], 0.4);
+
+      // 名前付き猫を入口から入場させる (§6.1: 見た目だけ固定出現させない)
+      this.cats = this.cats.filter(c => c.named && this.unlocked[c.defId]);
+      const W = BALANCE.world;
+      const NAMED_LANE = { mugi: 1, luna: 0, toto: 2, kohaku: 0 };
+      Object.keys(CATS).forEach(id => {
+        if (!this.unlocked[id]) return;
+        let c = this.cats.find(u => u.defId === id);
+        if (!c) { c = this._makeCat(id, true); this.cats.push(c); }
+        c.hp = c.maxHp; c.faintT = 0; c.dead = false;
+        c.x = W.entryX; c.state = 'enter'; c.stateT = 0;
+        c.lane = NAMED_LANE[id];
+        c.homeX = this._homeXFor(c);
+        c.targetUid = null; c.attackCd = 0.5;
+      });
+      // 増援は階をまたがない
+      this.cats = this.cats.filter(c => c.named);
+
+      // 配送タイマー初期化 (初回入場時のみ)
+      if (first) this._resetShopTimers();
+      this.emit('floor-enter', { floor: n, def });
+    }
+
+    _homeXFor(cat) {
+      const W = BALANCE.world;
+      if (cat.role === 'vanguard') return 168;
+      if (cat.role === 'runner') return 150;
+      return 96 + cat.lane * 14; // ranged / healer は後方
+    }
+
+    _resetShopTimers() {
+      this.shopTimers = {};
+      Object.keys(this.shops).forEach(f => {
+        this.shopTimers[f] = BALANCE.deliveries.interval * 0.5;
+      });
+    }
+
+    /* ---------------- ユニット生成 ---------------- */
+    _makeCat(defId, named) {
+      const d = named ? CATS[defId] : HELPERS[defId];
+      const u = {
+        uid: UID++, side: 'cat', defId, named: !!named,
+        name: d.name, role: d.role,
+        x: BALANCE.world.entryX, lane: 1,
+        maxHp: Math.round(d.hp * this.hpMult() * (!named && this.relic === 'resonant_bell' ? 1.25 : 1)),
+        atk: d.atk, heal: d.heal || 0,
+        interval: d.interval, range: d.range, speed: d.speed, windup: d.windup,
+        projectile: d.projectile || null,
+        canHitFlying: d.canHitFlying || 'never',
+        state: 'enter', stateT: 0, attackCd: 0, attackCount: 0,
+        targetUid: null, kb: 0, flash: 0, faintT: 0, dead: false,
+        buffT: 0, shieldUp: false, missT: 0, homeX: 0
+      };
+      u.hp = u.maxHp;
+      return u;
+    }
+
+    _makeEnemy(defId, lane, tag) {
+      const d = ENEMIES[defId];
+      const f = this.floor - 1;
+      const isBoss = !!d.boss;
+      const hpScale = Math.pow(BALANCE.floors.hpScale, f);
+      const atkScale = Math.pow(BALANCE.floors.atkScale, f);
+      const u = {
+        uid: UID++, side: 'enemy', defId, tag: tag || null,
+        name: d.name, role: d.role,
+        x: BALANCE.world.enemyEntryX + 24, lane,
+        maxHp: Math.round(d.hp * hpScale), atk: Math.round(d.atk * atkScale),
+        interval: d.interval, range: d.range, speed: d.speed, windup: d.windup,
+        flying: d.flying, altitude: d.altitude || 0, swoop: d.swoop || false,
+        swooping: false, projectile: d.projectile || null,
+        passThrough: d.passThrough || false,
+        shieldReduce: d.shieldReduce || 0, shieldBroken: 0,
+        summon: d.summon || null, buffAlly: d.buffAlly || null, debuff: d.debuff || null,
+        pushback: d.pushback || null, reward: d.reward,
+        state: 'enter', stateT: 0, attackCd: 1.0, attackCount: 0,
+        targetUid: null, kb: 0, flash: 0, dead: false,
+        summonT: 0, buffT: 0, buffedNext: false, channelT: 0,
+        boss: isBoss ? {
+          phase: 0, phaseT: 0, signatureSeen: false, invulnT: 0,
+          landingT: 0, landCycleT: 0, sealT: 0, stealT: 0, def: d.boss
+        } : null
+      };
+      u.hp = u.maxHp;
+      if (isBoss) { u.x = BALANCE.world.enemyEntryX - 30; u.state = 'boss-intro'; u.stateT = 0; }
+      return u;
+    }
+
+    _scheduleWave(wave, baseDelay) {
+      wave.forEach(s => {
+        this.pendingSpawns.push({ defId: s.e, lane: s.lane, tag: s.tag, at: this.time + baseDelay + (s.delay || 0) });
+      });
+    }
+
+    /* ---------------- 呼び鈴 ---------------- */
+    bellReady() { return this.bellCd <= 0 && this.bellLockT <= 0 && (this.mode === 'battle'); }
+    bellState() {
+      if (this.bellLockT > 0) return 'locked';
+      if (this.bellCd > 0) return 'cooldown';
+      const helpers = this.cats.filter(c => !c.named && !c.dead).length;
+      if (helpers >= this.helperSlotMax()) return 'full';
+      return 'ready';
+    }
+
+    pressBell() {
+      if (this.mode !== 'battle') return { result: 'inactive' };
+      if (this.bellLockT > 0) { this.emit('bell-denied', { reason: '入口が封鎖されている' }); return { result: 'locked' }; }
+      if (this.bellCd > 0) return { result: 'cooldown' };
+      let cd = BALANCE.bell.cooldown;
+      if (this.relic === 'resonant_bell') cd *= 0.7;
+      this.bellCd = cd;
+
+      const helpers = this.cats.filter(c => !c.named && !c.dead).length;
+      if (helpers >= this.helperSlotMax()) {
+        // 満員時は号令へ変換 (§5.1: 主操作を無反応にしない)
+        this.rallyT = BALANCE.bell.rallyDuration;
+        this.emit('rally', { duration: BALANCE.bell.rallyDuration });
+        return { result: 'rally' };
+      }
+      const role = this._pickHelperRole();
+      const u = this._makeCat(role, false);
+      // 走行距離30〜45%を650〜1000msで (BALANCE.run, MASTER_SPEC §6.1)
+      const W = BALANCE.world;
+      const dist = W.width * (BALANCE.run.distanceMin + Math.random() * (BALANCE.run.distanceMax - BALANCE.run.distanceMin));
+      const t = BALANCE.run.timeMin + Math.random() * (BALANCE.run.timeMax - BALANCE.run.timeMin);
+      u.speed = Math.max(u.speed, dist / t);
+      u.lane = [2, 0, 1][helpers % 3];
+      u.x = W.entryX;
+      u.state = 'enter';
+      this.cats.push(u);
+      this.emit('bell-ring', { role });
+      this.emit('helper-spawn', { uid: u.uid, role });
+      return { result: 'spawn', role };
+    }
+
+    _pickHelperRole() {
+      const w = Object.assign({}, BALANCE.helperWeights.base);
+      const hasFlying = this.enemies.some(e => !e.dead && e.flying);
+      const hasShield = this.enemies.some(e => !e.dead && e.shieldReduce > 0);
+      const swarm = this.enemies.filter(e => !e.dead).length >= 3;
+      if (hasFlying) Object.assign(w, this._mergeW(w, BALANCE.helperWeights.vsFlying));
+      if (hasShield) Object.assign(w, this._mergeW(w, BALANCE.helperWeights.vsShield));
+      if (swarm) Object.assign(w, this._mergeW(w, BALANCE.helperWeights.vsSwarm));
+      let total = 0; Object.values(w).forEach(v => total += v);
+      let r = Math.random() * total;
+      for (const k of Object.keys(w)) { r -= w[k]; if (r <= 0) return k; }
+      return 'guard';
+    }
+    _mergeW(base, add) { const o = {}; Object.keys(add).forEach(k => o[k] = (base[k] || 0) + add[k]); return o; }
+
+    /* ---------------- 強化 ---------------- */
+    upgradeCost(kind) {
+      const u = BALANCE.upgrades[kind];
+      const lv = this.upgrades[kind];
+      if (u.max && lv >= u.max) return null;
+      return Math.round(u.baseCost * Math.pow(u.costMult, lv));
+    }
+    buyUpgrade(kind) {
+      const cost = this.upgradeCost(kind);
+      if (cost == null || this.coins < cost) return false;
+      this.coins -= cost;
+      this.upgrades[kind]++;
+      // HP強化は現在の猫へ即時反映 (強化結果を戦闘画面で読めるように)
+      if (kind === 'hp') {
+        this.cats.forEach(c => {
+          const ratio = c.hp / c.maxHp;
+          c.maxHp = Math.round(c.maxHp * (1 + BALANCE.upgrades.hp.perLevel));
+          c.hp = Math.round(c.maxHp * ratio);
+        });
+      }
+      this.emit('upgrade', { kind, level: this.upgrades[kind] });
       return true;
     }
-    return false;
-  }
 
-  function createFreshState(now = currentTime()) {
-    const timestamp = positiveTimestamp(now, currentTime());
-    return {
-      version: Data.VERSION,
-      gameplaySchema: Data.GAMEPLAY_SCHEMA,
-      coins: BALANCE.startingCoins,
-      fish: BALANCE.startingFish,
-      currentFloor: 1,
-      bestFloor: 1,
-      checkpointFloor: 1,
-      runFloorPeak: 1,
-      enemyFloor: 1,
-      enemyHp: null,
-      completed: false,
-      pendingFloor: null,
-      floorTransitionRemainingMs: 0,
-      floorTransitionStage: null,
-      wallElapsedMs: 0,
-      mugiLevel: 1,
-      weaponLevel: 1,
-      dispatchLevel: 1,
-      restaurantLevel: 0,
-      roomLevel: 0,
-      restaurantUnlocked: false,
-      roomUnlocked: false,
-      dawnShards: 0,
-      lifetimeShards: 0,
-      ascensions: 0,
-      firstNightCleared: false,
-      tutorialStep: 'dispatch',
-      specialization: null,
-      mugiMood: 82,
-      memories: ['arrival'],
-      memoryNew: true,
-      totalKills: 0,
-      totalTaps: 0,
-      lifetimeCoins: 0,
-      runCoinsEarned: 0,
-      offlineCoinsEarned: 0,
-      playTimeMs: 0,
-      runStartedAt: timestamp,
-      lastSeen: timestamp,
-      hasPlayed: false,
-      sound: true,
-      migratedFromSchema: null,
-      legacyFirstNightDone: false,
-    };
-  }
-
-  function migrateSchema1(input, now = currentTime()) {
-    const source = input && typeof input === 'object' ? input : {};
-    const state = createFreshState(now);
-    state.coins = finiteNumber(source.coins, state.coins, 0, MAX_NUMBER);
-    state.fish = integer(source.stock, state.fish, 0, 999999);
-    state.mugiMood = finiteNumber(source.mugiMood, state.mugiMood, 0, 100);
-    state.specialization = ['street', 'bistro'].includes(source.specialization)
-      ? source.specialization
-      : null;
-    state.memories = uniqueStrings(source.memories, state.memories);
-    if (!state.memories.includes('arrival')) state.memories.unshift('arrival');
-    state.memoryNew = source.memoryNew !== false;
-    state.lastSeen = positiveTimestamp(source.lastSeen, state.lastSeen);
-    state.hasPlayed = Boolean(source.hasPlayed);
-    state.sound = source.sound !== false;
-    state.legacyFirstNightDone = Boolean(source.firstNightDone);
-    if (state.legacyFirstNightDone && !state.memories.includes('legacy-first-night')) {
-      state.memories.push('legacy-first-night');
+    /* ---------------- 店舗・遺物選択 ---------------- */
+    chooseShop(shopId) {
+      const f = this._choiceFloor || this.floor;
+      this.shops[f] = shopId;
+      this.shopTimers[f] = 2.5; // 最初の配送を早めに見せる
+      this.emit('shop-placed', { floor: f, shopId });
+      this._updateKohakuShopCondition();
+      this.pendingChoice = null;
+      this._afterChoice();
     }
-    state.lifetimeCoins = Math.max(
-      state.coins,
-      finiteNumber(source.sales, 0, 0, MAX_NUMBER) * 14,
-    );
-    state.migratedFromSchema = 1;
-    return state;
-  }
-
-  function migrateLegacyV01(input, now = currentTime()) {
-    const source = input && typeof input === 'object' ? { ...input } : {};
-    if (!Number.isFinite(Number(source.stock)) && Array.isArray(source.floors)) {
-      const food = source.floors.find(floor => floor && floor.type === 'food');
-      if (food) source.stock = food.stock;
+    skipShopChoice() {
+      this.emit('shop-skipped', { floor: this._choiceFloor || this.floor });
+      this.pendingChoice = null;
+      this._afterChoice();
     }
-    const state = migrateSchema1(source, now);
-    state.migratedFromSchema = 0.1;
-    return state;
-  }
-
-  function normalizeSchema2(input, now = currentTime()) {
-    const source = input && typeof input === 'object' ? input : {};
-    const state = createFreshState(now);
-
-    state.coins = finiteNumber(source.coins, state.coins, 0, MAX_NUMBER);
-    state.fish = integer(source.fish, state.fish, 0, 999999);
-    const sourceFloor = integer(source.currentFloor, 1, 1, MAX_FLOOR);
-    const sourceBestFloor = integer(source.bestFloor, sourceFloor, 1, MAX_FLOOR);
-    // V0.8.1 could retain bestFloor 11 after a completed run and a later dawn.
-    // Only the active run pointing beyond the finished slice proves legacy completion.
-    const legacyBossClear = Boolean(source.firstNightCleared) && sourceFloor > FINAL_FLOOR;
-    state.completed = Boolean(source.completed) || source.runStatus === 'completed' || legacyBossClear;
-    state.currentFloor = Math.min(FINAL_FLOOR, sourceFloor);
-    state.bestFloor = Math.min(FINAL_FLOOR, Math.max(sourceBestFloor, state.currentFloor));
-    state.checkpointFloor = integer(source.checkpointFloor, 1, 1, state.bestFloor);
-    state.runFloorPeak = integer(source.runFloorPeak, state.currentFloor, 1, FINAL_FLOOR);
-    state.runFloorPeak = Math.min(FINAL_FLOOR, Math.max(state.runFloorPeak, state.currentFloor));
-    state.enemyFloor = integer(source.enemyFloor, state.currentFloor, 1, FINAL_FLOOR);
-    state.enemyHp = source.enemyHp === null || source.enemyHp === undefined
-      ? null
-      : finiteNumber(source.enemyHp, null, 0, MAX_NUMBER);
-    if (state.enemyFloor !== state.currentFloor) {
-      state.enemyFloor = state.currentFloor;
-      state.enemyHp = null;
+    chooseRelic(id) {
+      this.relic = id;
+      this.emit('relic-chosen', { relic: id });
+      this.pendingChoice = null;
+      this._afterChoice();
     }
-    const pendingFloor = source.pendingFloor === null || source.pendingFloor === undefined
-      ? null
-      : integer(source.pendingFloor, null, 1, FINAL_FLOOR);
-    const transitionStage = ['victory', 'ascending'].includes(source.floorTransitionStage)
-      ? source.floorTransitionStage
-      : null;
-    const transitionRemainingMs = finiteNumber(
-      source.floorTransitionRemainingMs,
-      0,
-      0,
-      BALANCE.floorTransitionMs,
-    );
-    if (!state.completed && pendingFloor === state.currentFloor + 1 && transitionRemainingMs > 0) {
-      state.pendingFloor = pendingFloor;
-      state.floorTransitionRemainingMs = transitionRemainingMs;
-      state.floorTransitionStage = transitionStage || 'victory';
-      state.enemyHp = 0;
-    } else {
-      state.pendingFloor = null;
-      state.floorTransitionRemainingMs = 0;
-      state.floorTransitionStage = null;
-      if (!state.completed && state.enemyHp !== null && state.enemyHp <= 0) {
-        state.enemyHp = null;
-      }
-    }
-    if (state.completed) {
-      state.currentFloor = FINAL_FLOOR;
-      state.bestFloor = FINAL_FLOOR;
-      state.runFloorPeak = FINAL_FLOOR;
-      state.enemyFloor = FINAL_FLOOR;
-      state.enemyHp = 0;
-      state.pendingFloor = null;
-      state.floorTransitionRemainingMs = 0;
-      state.floorTransitionStage = null;
-    }
-    state.wallElapsedMs = state.currentFloor === BALANCE.wallFloor
-      ? finiteNumber(source.wallElapsedMs, 0, 0, BALANCE.wallObserveMs)
-      : 0;
-
-    state.mugiLevel = integer(source.mugiLevel, 1, 1, MAX_LEVEL);
-    state.weaponLevel = integer(source.weaponLevel, 1, 1, MAX_LEVEL);
-    state.dispatchLevel = integer(source.dispatchLevel, 1, 1, MAX_LEVEL);
-    state.restaurantLevel = integer(source.restaurantLevel, 0, 0, MAX_LEVEL);
-    state.roomLevel = integer(source.roomLevel, 0, 0, MAX_LEVEL);
-    state.restaurantUnlocked = Boolean(source.restaurantUnlocked)
-      || state.currentFloor >= BALANCE.restaurantUnlockFloor
-      || state.runFloorPeak >= BALANCE.restaurantUnlockFloor;
-    state.roomUnlocked = Boolean(source.roomUnlocked)
-      || state.bestFloor >= BALANCE.roomUnlockFloor;
-    if (state.restaurantUnlocked && state.restaurantLevel < 1) state.restaurantLevel = 1;
-    if (state.roomUnlocked && state.roomLevel < 1) state.roomLevel = 1;
-
-    state.dawnShards = finiteNumber(source.dawnShards, 0, 0, MAX_NUMBER);
-    state.lifetimeShards = finiteNumber(source.lifetimeShards, 0, 0, MAX_NUMBER);
-    state.lifetimeShards = Math.max(state.lifetimeShards, state.dawnShards);
-    state.ascensions = integer(source.ascensions, 0, 0, Number.MAX_SAFE_INTEGER);
-    state.firstNightCleared = Boolean(source.firstNightCleared);
-    if (state.completed) state.firstNightCleared = true;
-    state.tutorialStep = typeof source.tutorialStep === 'string'
-      ? source.tutorialStep.slice(0, 80)
-      : state.tutorialStep;
-    state.specialization = ['street', 'bistro'].includes(source.specialization)
-      ? source.specialization
-      : null;
-    state.mugiMood = finiteNumber(source.mugiMood, state.mugiMood, 0, 100);
-    state.memories = uniqueStrings(source.memories, state.memories);
-    if (!state.memories.includes('arrival')) state.memories.unshift('arrival');
-    state.memoryNew = source.memoryNew !== false;
-
-    state.totalKills = integer(source.totalKills, 0, 0, Number.MAX_SAFE_INTEGER);
-    state.totalTaps = integer(source.totalTaps, 0, 0, Number.MAX_SAFE_INTEGER);
-    state.lifetimeCoins = finiteNumber(source.lifetimeCoins, 0, 0, MAX_NUMBER);
-    state.runCoinsEarned = finiteNumber(source.runCoinsEarned, 0, 0, MAX_NUMBER);
-    state.offlineCoinsEarned = finiteNumber(source.offlineCoinsEarned, 0, 0, MAX_NUMBER);
-    state.playTimeMs = integer(source.playTimeMs, 0, 0, Number.MAX_SAFE_INTEGER);
-    state.runStartedAt = positiveTimestamp(source.runStartedAt, state.runStartedAt);
-    state.lastSeen = positiveTimestamp(source.lastSeen, state.lastSeen);
-    state.hasPlayed = Boolean(source.hasPlayed);
-    state.sound = source.sound !== false;
-    state.migratedFromSchema = source.migratedFromSchema === null
-      ? null
-      : finiteNumber(source.migratedFromSchema, null, 0, Data.GAMEPLAY_SCHEMA);
-    state.legacyFirstNightDone = Boolean(source.legacyFirstNightDone);
-    state.version = Data.VERSION;
-    state.gameplaySchema = Data.GAMEPLAY_SCHEMA;
-    return state;
-  }
-
-  function normalizeState(input, now = currentTime()) {
-    if (!input || typeof input !== 'object') return createFreshState(now);
-    const schema = Number(input.gameplaySchema);
-    if (schema > Data.GAMEPLAY_SCHEMA) return normalizeSchema2(input, now);
-    if (schema !== Data.GAMEPLAY_SCHEMA) {
-      return migrateSchema1(input, now);
-    }
-    return normalizeSchema2(input, now);
-  }
-
-  function decodeJson(raw) {
-    if (raw && typeof raw === 'object') return { value: raw, corrupt: false };
-    if (typeof raw !== 'string' || !raw.trim()) return { value: null, corrupt: false };
-    try {
-      return { value: JSON.parse(raw), corrupt: false };
-    } catch {
-      return { value: null, corrupt: true };
-    }
-  }
-
-  function restoreState(primaryRaw, legacyRaw, now = currentTime()) {
-    const primary = decodeJson(primaryRaw);
-    if (primary.value) {
-      const schema = Number(primary.value.gameplaySchema);
-      if (schema > Data.GAMEPLAY_SCHEMA) {
-        return {
-          state: normalizeSchema2(primary.value, now),
-          source: 'future-schema',
-          migrated: false,
-          corrupt: false,
-          unsupportedSchema: schema,
-        };
-      }
-      const migrated = Number(primary.value.gameplaySchema) !== Data.GAMEPLAY_SCHEMA;
-      return {
-        state: normalizeState(primary.value, now),
-        source: migrated ? 'schema1' : 'schema2',
-        migrated,
-        corrupt: false,
-      };
+    _updateKohakuShopCondition() {
+      if (this.shopKinds() >= BALANCE.kohaku.shopKinds) this.kohaku.shopKinds = true;
     }
 
-    const legacy = decodeJson(legacyRaw);
-    if (legacy.value) {
-      return {
-        state: migrateLegacyV01(legacy.value, now),
-        source: 'legacy-v01',
-        migrated: true,
-        corrupt: primary.corrupt,
-      };
+    /* ---------------- メイン更新 ---------------- */
+    update(dt) {
+      this.time += dt;
+      // ヒットストップ: 50〜80ms シミュレーションを凍結 (§6.2)
+      if (this.hitstop > 0) { this.hitstop -= dt; return; }
+
+      if (this.bellCd > 0) this.bellCd -= dt;
+      if (this.bellLockT > 0) this.bellLockT -= dt;
+      if (this.rallyT > 0) this.rallyT -= dt;
+
+      if (this.mode === 'battle') this._tickBattle(dt);
+      else if (this.mode === 'conquest') this._tickConquest(dt);
+
+      this._tickDeliveries(dt);
+      this._tickProjectiles(dt);
+      this.metrics.totalT += dt;
     }
 
-    return {
-      state: createFreshState(now),
-      source: 'fresh',
-      migrated: false,
-      corrupt: primary.corrupt || legacy.corrupt,
-    };
-  }
-
-  function deserializeState(raw, now = currentTime()) {
-    return restoreState(raw, null, now).state;
-  }
-
-  function enemyDefinitionForFloor(floor) {
-    if (floor === BALANCE.firstBossFloor) return ENEMIES.boss;
-    if (floor === BALANCE.wallFloor) return ENEMIES.barrier;
-    const id = ENEMY_ROTATION[(floor - 1) % ENEMY_ROTATION.length];
-    return ENEMIES[id] || ENEMIES.crow;
-  }
-
-  function computeEnemyStats(floorValue) {
-    const floor = integer(floorValue, 1, 1, MAX_FLOOR);
-    const definition = enemyDefinitionForFloor(floor);
-    const isBoss = definition.kind === 'boss';
-    const isMiniBoss = !isBoss && floor % 5 === 0;
-    const isWall = definition.kind === 'wall' || floor === BALANCE.wallFloor;
-    let hpMultiplier = definition.hpMultiplier;
-    if (isBoss) hpMultiplier *= BALANCE.enemyBossMultiplier;
-    else if (isMiniBoss) hpMultiplier *= BALANCE.enemyMiniBossMultiplier;
-    if (isWall) hpMultiplier *= BALANCE.wallHpMultiplier;
-
-    const maxHp = BALANCE.enemyBaseHp
-      * Math.pow(BALANCE.enemyHpFloorFactor, floor - 1)
-      * hpMultiplier;
-    const attack = BALANCE.enemyBaseAttack
-      * Math.pow(BALANCE.enemyAttackFloorFactor, floor - 1)
-      * definition.attackMultiplier;
-    const reward = BALANCE.baseKillReward
-      * Math.pow(BALANCE.killRewardFloorFactor, floor - 1)
-      * definition.rewardMultiplier;
-
-    return {
-      id: definition.id,
-      name: definition.name,
-      kind: definition.kind,
-      floor,
-      isBoss,
-      isMiniBoss,
-      isWall,
-      maxHp,
-      attack,
-      attackIntervalMs: BALANCE.enemyAttackIntervalMs
-        * finiteNumber(definition.attackIntervalMultiplier, 1, 0.2, 4),
-      reward,
-      regenPerSecond: isWall ? maxHp * BALANCE.enemyWallRegenPerSecond : 0,
-    };
-  }
-
-  function createEnemy(state) {
-    const stats = computeEnemyStats(state.currentFloor);
-    const restoredHp = state.enemyFloor === state.currentFloor && state.enemyHp !== null
-      ? finiteNumber(state.enemyHp, stats.maxHp, 0, stats.maxHp)
-      : stats.maxHp;
-    return {
-      ...stats,
-      hp: restoredHp,
-      attackCooldownMs: stats.attackIntervalMs,
-      elapsedMs: 0,
-    };
-  }
-
-  function permanentMultiplier(state, extraShards = 0) {
-    const lifetimeShards = finiteNumber(state.lifetimeShards, 0, 0, MAX_NUMBER)
-      + finiteNumber(extraShards, 0, 0, MAX_NUMBER);
-    const roomLevels = Math.max(0, integer(state.roomLevel, 0, 0, MAX_LEVEL) - 1);
-    return 1
-      + lifetimeShards * BALANCE.permanentPowerPerShard
-      + roomLevels * BALANCE.roomPowerPerLevel;
-  }
-
-  function computeDispatchInterval(state) {
-    const level = integer(state.dispatchLevel, 1, 1, MAX_LEVEL);
-    const roomFactor = 1 + Math.max(0, state.roomLevel - 1) * 0.025;
-    return Math.max(
-      BALANCE.autoDispatchMinimumMs,
-      BALANCE.autoDispatchBaseMs
-        * Math.pow(BALANCE.autoDispatchLevelFactor, level - 1)
-        / roomFactor,
-    );
-  }
-
-  function catDefinition(kind) {
-    if (CATS[kind]) return CATS[kind];
-    // `helper` was the only generic kind in 0.8.1. Keep it as an API alias
-    // while all newly spawned helpers use an explicit appearance variant.
-    if (kind === 'helper') return CATS[HELPER_ROTATION[0]];
-    return CATS.mugi;
-  }
-
-  function unlockedNamedCats(state) {
-    const reachedFloor = Math.max(state.bestFloor, state.runFloorPeak, state.currentFloor);
-    return NAMED_CAT_ORDER.filter(id => CATS[id].unlockFloor <= reachedFloor);
-  }
-
-  function computePartyCapacity(state) {
-    const extraNamedSlots = Math.max(0, unlockedNamedCats(state).length - 1);
-    return Math.min(BALANCE.unitCap, BALANCE.startingPartyCap + extraNamedSlots);
-  }
-
-  function computeCatStats(state, kind = 'mugi') {
-    const definition = catDefinition(kind);
-    const permanent = permanentMultiplier(state);
-    const restaurantFactor = 1
-      + Math.max(0, state.restaurantLevel - 1) * BALANCE.restaurantAttackPerLevel;
-    const attack = BALANCE.baseCatAttack
-      * Math.pow(BALANCE.mugiAttackLevelFactor, state.mugiLevel - 1)
-      * Math.pow(BALANCE.weaponLevelFactor, state.weaponLevel - 1)
-      * permanent
-      * restaurantFactor
-      * finiteNumber(definition.attackFactor, 1, 0.05, 5);
-    const maxHp = BALANCE.baseCatHp
-      * Math.pow(BALANCE.mugiHpLevelFactor, state.mugiLevel - 1)
-      * permanent
-      * finiteNumber(definition.hpFactor, 1, 0.05, 5);
-    const travelMs = BALANCE.unitTravelBaseMs
-      * finiteNumber(definition.travelFactor, 1, 0.2, 4);
-    return {
-      kind: definition.id,
-      name: definition.name,
-      role: definition.role,
-      named: definition.named,
-      appearance: definition.appearance,
-      attack,
-      maxHp,
-      travelMs,
-      attackIntervalMs: BALANCE.unitAttackIntervalMs
-        * finiteNumber(definition.attackIntervalFactor, 1, 0.2, 4),
-      supportHealFactor: finiteNumber(definition.supportHealFactor, 0, 0, 0.5),
-      supportCooldownReductionMs: finiteNumber(
-        definition.supportCooldownReductionMs,
-        0,
-        0,
-        2000,
-      ),
-    };
-  }
-
-  function computeRestaurantDeliveryInterval(state) {
-    const level = Math.max(1, integer(state.restaurantLevel, 1, 1, MAX_LEVEL));
-    return Math.max(
-      BALANCE.restaurantDeliveryMinimumMs,
-      BALANCE.restaurantDeliveryBaseMs
-        * Math.pow(BALANCE.restaurantDeliveryLevelFactor, level - 1),
-    );
-  }
-
-  function computeRoomRecoveryMs(state, kind = 'helper') {
-    const definition = catDefinition(kind);
-    const unlockedFactor = state.roomUnlocked ? BALANCE.roomUnlockedRecoveryFactor : 1;
-    const levelFactor = Math.pow(
-      BALANCE.roomRecoveryLevelFactor,
-      Math.max(0, integer(state.roomLevel, 0, 0, MAX_LEVEL) - 1),
-    );
-    const namedFactor = definition.named ? 1 : 0.82;
-    return Math.max(
-      BALANCE.roomRecoveryMinimumMs,
-      BALANCE.roomRecoveryBaseMs * unlockedFactor * levelFactor * namedFactor,
-    );
-  }
-
-  function coinsPerHit(state, floor) {
-    const base = Math.max(1, Math.ceil(floor / 3));
-    const restaurantFactor = 1
-      + Math.max(0, state.restaurantLevel - 1) * BALANCE.restaurantIncomePerLevel;
-    return Math.max(1, Math.floor(base * restaurantFactor));
-  }
-
-  function createMetrics() {
-    return {
-      totalElapsedMs: 0,
-      totalAutoDispatches: 0,
-      totalManualDispatches: 0,
-      totalRallies: 0,
-      totalAttacks: 0,
-      totalSupportPulses: 0,
-      totalEnemyAttacks: 0,
-      totalUnitsDefeated: 0,
-      totalUnitsRecovered: 0,
-      totalRestaurantDeliveries: 0,
-      totalKills: 0,
-      totalFloorsCleared: 0,
-      totalCoinsEarned: 0,
-      totalUpgradesBought: 0,
-      totalDawns: 0,
-      peakUnits: 0,
-      floorReachTimes: { 1: 0 },
-      lastFloorClearMs: null,
-    };
-  }
-
-  function createRuntime(stateInput) {
-    const state = Number(stateInput?.gameplaySchema) === Data.GAMEPLAY_SCHEMA
-      ? stateInput
-      : normalizeState(stateInput);
-    const restoredTransition = !state.completed
-      && state.pendingFloor === state.currentFloor + 1
-      && state.floorTransitionRemainingMs > 0;
-    const runtime = {
-      elapsedMs: 0,
-      carryMs: 0,
-      nextUnitId: 1,
-      nextHelperIndex: 0,
-      units: [],
-      enemy: createEnemy(state),
-      recoveryQueue: [],
-      autoDispatchCooldownMs: 0,
-      manualDispatchCooldownMs: 0,
-      transitionRemainingMs: restoredTransition ? state.floorTransitionRemainingMs : 0,
-      transitionStage: restoredTransition ? state.floorTransitionStage : null,
-      pendingFloor: restoredTransition ? state.pendingFloor : null,
-      rallyRemainingMs: 0,
-      rallyCooldownMs: 0,
-      restaurantDeliveryCooldownMs: state.restaurantUnlocked
-        ? Math.min(3500, computeRestaurantDeliveryInterval(state))
-        : 0,
-      restaurantBuffRemainingMs: 0,
-      enemyElapsedMs: state.currentFloor === BALANCE.wallFloor
-        ? finiteNumber(state.wallElapsedMs, 0, 0, BALANCE.wallObserveMs)
-        : 0,
-      autoDispatches: 0,
-      manualDispatches: 0,
-      kills: 0,
-      atWall: false,
-      phase: state.completed
-        ? 'completed'
-        : restoredTransition
-          ? state.floorTransitionStage
-          : 'climbing',
-      events: [],
-      metrics: createMetrics(),
-    };
-    if (state.completed) {
-      runtime.units = VICTORY_ROSTER.map((kind, index) => {
-        const stats = computeCatStats(state, kind);
-        const id = index + 1;
-        return {
-          id,
-          kind: stats.kind,
-          name: stats.name,
-          role: stats.role,
-          named: stats.named,
-          appearance: stats.appearance,
-          source: 'completion-restore',
-          lane: UNIT_LANES[index % UNIT_LANES.length],
-          phase: 'celebrating',
-          progress: 1,
-          hp: stats.maxHp,
-          maxHp: stats.maxHp,
-          attack: stats.attack,
-          travelMs: stats.travelMs,
-          attackIntervalMs: stats.attackIntervalMs,
-          attackCooldownMs: 0,
-          supportHealFactor: stats.supportHealFactor,
-          supportCooldownReductionMs: stats.supportCooldownReductionMs,
-          bornAtMs: 0,
-        };
-      });
-      runtime.nextUnitId = runtime.units.length + 1;
-      runtime.metrics.peakUnits = runtime.units.length;
-    }
-    syncEnemyState(state, runtime);
-    updateWallAndPhase(state, runtime);
-    return runtime;
-  }
-
-  function syncEnemyState(state, runtime) {
-    state.enemyFloor = state.currentFloor;
-    state.enemyHp = runtime.enemy ? runtime.enemy.hp : null;
-    state.pendingFloor = runtime.pendingFloor;
-    state.floorTransitionRemainingMs = runtime.transitionRemainingMs;
-    state.floorTransitionStage = runtime.transitionStage;
-    state.wallElapsedMs = state.currentFloor === BALANCE.wallFloor
-      ? Math.min(BALANCE.wallObserveMs, Math.max(0, runtime.enemyElapsedMs))
-      : 0;
-  }
-
-  function pushEvent(runtime, type, payload = {}) {
-    runtime.events.push({ type, atMs: runtime.elapsedMs, ...payload });
-    if (runtime.events.length > 240) runtime.events.splice(0, runtime.events.length - 240);
-  }
-
-  function drainEvents(runtime) {
-    const events = runtime.events.map(event => ({ ...event }));
-    runtime.events.length = 0;
-    return events;
-  }
-
-  function catKindReserved(runtime, kind) {
-    return runtime.units.some(unit => unit.kind === kind)
-      || runtime.recoveryQueue.some(entry => entry.kind === kind);
-  }
-
-  function chooseNextCatKind(state, runtime) {
-    const missingNamed = unlockedNamedCats(state)
-      .find(kind => !catKindReserved(runtime, kind));
-    if (missingNamed) return missingNamed;
-    for (let offset = 0; offset < HELPER_ROTATION.length; offset += 1) {
-      const index = (runtime.nextHelperIndex + offset) % HELPER_ROTATION.length;
-      const kind = HELPER_ROTATION[index];
-      if (catKindReserved(runtime, kind)) continue;
-      runtime.nextHelperIndex = (index + 1) % HELPER_ROTATION.length;
-      return kind;
-    }
-    return null;
-  }
-
-  function spawnSpecificCat(state, runtime, kind, source = 'auto') {
-    if (!runtime || !Array.isArray(runtime.units)) {
-      return { ok: false, reason: 'invalid-runtime' };
-    }
-    if (state.completed || runtime.phase === 'completed') {
-      return { ok: false, reason: 'completed' };
-    }
-    const partyCapacity = computePartyCapacity(state);
-    if (runtime.units.length >= partyCapacity) {
-      return { ok: false, reason: 'unit-cap' };
-    }
-    const definition = catDefinition(kind);
-    if (catKindReserved(runtime, definition.id)) {
-      return {
-        ok: false,
-        reason: definition.named ? 'named-cat-present' : 'cat-kind-present',
-        kind: definition.id,
-      };
-    }
-    const stats = computeCatStats(state, kind);
-    const id = runtime.nextUnitId++;
-    const unit = {
-      id,
-      kind: stats.kind,
-      name: stats.name,
-      role: stats.role,
-      named: stats.named,
-      appearance: stats.appearance,
-      source,
-      lane: UNIT_LANES[(id - 1) % UNIT_LANES.length],
-      phase: 'moving',
-      progress: 0,
-      hp: stats.maxHp,
-      maxHp: stats.maxHp,
-      attack: stats.attack,
-      travelMs: stats.travelMs,
-      attackIntervalMs: stats.attackIntervalMs,
-      attackCooldownMs: 0,
-      supportHealFactor: stats.supportHealFactor,
-      supportCooldownReductionMs: stats.supportCooldownReductionMs,
-      bornAtMs: runtime.elapsedMs,
-    };
-    runtime.units.push(unit);
-    if (source === 'manual') {
-      runtime.manualDispatches += 1;
-      runtime.metrics.totalManualDispatches += 1;
-    } else if (source === 'auto') {
-      runtime.autoDispatches += 1;
-      runtime.metrics.totalAutoDispatches += 1;
-    }
-    runtime.metrics.peakUnits = Math.max(runtime.metrics.peakUnits, runtime.units.length);
-    pushEvent(runtime, 'unit-spawned', {
-      unitId: id,
-      kind: unit.kind,
-      role: unit.role,
-      named: unit.named,
-      appearance: unit.appearance,
-      source,
-      lane: unit.lane,
-    });
-    return { ok: true, action: 'dispatch', directDamage: 0, unit: clone(unit) };
-  }
-
-  function spawnCat(state, runtime, source = 'auto') {
-    if (!runtime || !Array.isArray(runtime.units)) {
-      return { ok: false, reason: 'invalid-runtime' };
-    }
-    if (state.completed || runtime.phase === 'completed') {
-      return { ok: false, reason: 'completed' };
-    }
-    const partyCapacity = computePartyCapacity(state);
-    if (runtime.units.length >= partyCapacity) {
-      return { ok: false, reason: 'unit-cap' };
-    }
-    const kind = chooseNextCatKind(state, runtime);
-    if (!kind) return { ok: false, reason: 'roster-recovering' };
-    return spawnSpecificCat(state, runtime, kind, source);
-  }
-
-  function dispatchCat(state, runtime) {
-    if (runtime.manualDispatchCooldownMs > 0) {
-      return {
-        ok: false,
-        reason: 'cooldown',
-        remainingMs: runtime.manualDispatchCooldownMs,
-      };
-    }
-    if (state.completed || runtime.phase === 'completed') {
-      return { ok: false, reason: 'completed', directDamage: 0 };
-    }
-    const partyCapacity = computePartyCapacity(state);
-    if (runtime.units.length >= partyCapacity) {
-      if (runtime.rallyRemainingMs > 0) {
-        return {
-          ok: false,
-          reason: 'rally-active',
-          action: 'rally',
-          remainingMs: runtime.rallyRemainingMs,
-          directDamage: 0,
-        };
-      }
-      if (runtime.rallyCooldownMs > 0) {
-        return {
-          ok: false,
-          reason: 'rally-charging',
-          action: 'rally',
-          remainingMs: runtime.rallyCooldownMs,
-          charge: Math.max(0, 1 - runtime.rallyCooldownMs / BALANCE.rallyCooldownMs),
-          directDamage: 0,
-        };
-      }
-      runtime.rallyRemainingMs = BALANCE.rallyDurationMs;
-      runtime.rallyCooldownMs = BALANCE.rallyCooldownMs;
-      runtime.manualDispatchCooldownMs = BALANCE.manualDispatchCooldownMs;
-      runtime.metrics.totalRallies += 1;
-      state.totalTaps += 1;
-      if (state.tutorialStep === 'dispatch') state.tutorialStep = 'upgrade';
-      pushEvent(runtime, 'rally-started', {
-        durationMs: BALANCE.rallyDurationMs,
-        cooldownMs: BALANCE.rallyCooldownMs,
-        attackSpeedFactor: BALANCE.rallyAttackSpeedFactor,
-        directDamage: 0,
-      });
-      return {
-        ok: true,
-        action: 'rally',
-        durationMs: BALANCE.rallyDurationMs,
-        cooldownMs: BALANCE.rallyCooldownMs,
-        directDamage: 0,
-      };
-    }
-    const result = spawnCat(state, runtime, 'manual');
-    if (!result.ok) return result;
-    runtime.manualDispatchCooldownMs = BALANCE.manualDispatchCooldownMs;
-    state.totalTaps += 1;
-    if (state.tutorialStep === 'dispatch') state.tutorialStep = 'upgrade';
-    return { ...result, directDamage: 0 };
-  }
-
-  function getUpgradeCost(state, id) {
-    const definition = UPGRADES[id];
-    if (!definition) return Infinity;
-    if (definition.unlockFloor && state.bestFloor < definition.unlockFloor) return Infinity;
-    if (id === 'restaurant' && !state.restaurantUnlocked) return Infinity;
-    if (id === 'room' && !state.roomUnlocked) return Infinity;
-    const level = integer(state[definition.stateField], definition.minimumLevel, 0, MAX_LEVEL);
-    const exponent = Math.max(0, level - definition.minimumLevel);
-    return Math.max(1, Math.floor(definition.baseCost * Math.pow(definition.costFactor, exponent)));
-  }
-
-  function refreshUnitStats(state, runtime) {
-    for (const unit of runtime.units) {
-      const previousMax = Math.max(1, unit.maxHp);
-      const healthRatio = Math.max(0, Math.min(1, unit.hp / previousMax));
-      const stats = computeCatStats(state, unit.kind);
-      unit.attack = stats.attack;
-      unit.name = stats.name;
-      unit.role = stats.role;
-      unit.named = stats.named;
-      unit.appearance = stats.appearance;
-      unit.maxHp = stats.maxHp;
-      unit.hp = Math.max(1, stats.maxHp * healthRatio);
-      unit.travelMs = stats.travelMs;
-      unit.attackIntervalMs = stats.attackIntervalMs;
-      unit.supportHealFactor = stats.supportHealFactor;
-      unit.supportCooldownReductionMs = stats.supportCooldownReductionMs;
-      unit.attackCooldownMs = Math.min(unit.attackCooldownMs, unit.attackIntervalMs);
-    }
-  }
-
-  function buyUpgrade(state, runtime, id) {
-    const definition = UPGRADES[id];
-    if (!definition) return { ok: false, reason: 'unknown-upgrade', id };
-    const cost = getUpgradeCost(state, id);
-    if (!Number.isFinite(cost)) return { ok: false, reason: 'locked', id };
-    const balance = finiteNumber(state[definition.currency], 0, 0, MAX_NUMBER);
-    if (balance < cost) {
-      return {
-        ok: false,
-        reason: 'insufficient-funds',
-        id,
-        currency: definition.currency,
-        cost,
-        balance,
-      };
-    }
-
-    const before = integer(state[definition.stateField], definition.minimumLevel, 0, MAX_LEVEL);
-    const recoveryBeforeMs = id === 'room' ? computeRoomRecoveryMs(state) : null;
-    state[definition.currency] = balance - cost;
-    state[definition.stateField] = Math.min(MAX_LEVEL, before + 1);
-    runtime.metrics.totalUpgradesBought += 1;
-    if (id === 'dispatch') {
-      runtime.autoDispatchCooldownMs = Math.min(
-        runtime.autoDispatchCooldownMs,
-        computeDispatchInterval(state),
-      );
-    }
-    if (id === 'restaurant') {
-      runtime.restaurantDeliveryCooldownMs = Math.min(
-        runtime.restaurantDeliveryCooldownMs || computeRestaurantDeliveryInterval(state),
-        computeRestaurantDeliveryInterval(state),
-      );
-    }
-    if (id === 'room' && recoveryBeforeMs > 0) {
-      const recoveryAfterMs = computeRoomRecoveryMs(state);
-      const ratio = recoveryAfterMs / recoveryBeforeMs;
-      for (const entry of runtime.recoveryQueue) {
-        entry.remainingMs = Math.max(0, entry.remainingMs * ratio);
-      }
-      pushEvent(runtime, 'room-recovery-accelerated', {
-        level: state.roomLevel,
-        beforeMs: recoveryBeforeMs,
-        afterMs: recoveryAfterMs,
-      });
-    }
-    refreshUnitStats(state, runtime);
-    pushEvent(runtime, 'upgrade-bought', {
-      id,
-      level: state[definition.stateField],
-      currency: definition.currency,
-      cost,
-    });
-    return {
-      ok: true,
-      id,
-      currency: definition.currency,
-      cost,
-      before,
-      after: state[definition.stateField],
-    };
-  }
-
-  function setSpecialization(state, runtime, style) {
-    if (!['street', 'bistro'].includes(style)) {
-      return { ok: false, reason: 'invalid-specialization' };
-    }
-    if (state.specialization) {
-      return { ok: false, reason: 'already-specialized', style: state.specialization };
-    }
-    state.specialization = style;
-    refreshUnitStats(state, runtime);
-    pushEvent(runtime, 'specialization-selected', { style });
-    return { ok: true, style };
-  }
-
-  function addCoins(state, runtime, amount, source) {
-    const value = finiteNumber(amount, 0, 0, MAX_NUMBER);
-    if (value <= 0) return 0;
-    state.coins = Math.min(MAX_NUMBER, state.coins + value);
-    state.lifetimeCoins = Math.min(MAX_NUMBER, state.lifetimeCoins + value);
-    state.runCoinsEarned = Math.min(MAX_NUMBER, state.runCoinsEarned + value);
-    runtime.metrics.totalCoinsEarned = Math.min(
-      MAX_NUMBER,
-      runtime.metrics.totalCoinsEarned + value,
-    );
-    if (source) pushEvent(runtime, 'coins-earned', { amount: value, source });
-    return value;
-  }
-
-  function unlockFloorNodes(state, runtime) {
-    if (!state.restaurantUnlocked && state.currentFloor >= BALANCE.restaurantUnlockFloor) {
-      state.restaurantUnlocked = true;
-      state.restaurantLevel = Math.max(1, state.restaurantLevel);
-      addMemory(state, 'restaurant-open');
-      runtime.restaurantDeliveryCooldownMs = Math.min(
-        3500,
-        computeRestaurantDeliveryInterval(state),
-      );
-      pushEvent(runtime, 'support-unlocked', {
-        id: 'restaurant',
-        floor: BALANCE.restaurantUnlockFloor,
-      });
-    }
-    if (!state.roomUnlocked && state.currentFloor >= BALANCE.roomUnlockFloor) {
-      state.roomUnlocked = true;
-      state.roomLevel = Math.max(1, state.roomLevel);
-      state.checkpointFloor = BALANCE.roomUnlockFloor;
-      addMemory(state, 'room-open');
-      pushEvent(runtime, 'support-unlocked', {
-        id: 'room',
-        floor: BALANCE.roomUnlockFloor,
-      });
-    }
-  }
-
-  function announceNamedCatUnlocks(state, runtime, enteredFloor) {
-    for (const id of NAMED_CAT_ORDER) {
-      const definition = CATS[id];
-      if (definition.unlockFloor !== enteredFloor || id === 'mugi') continue;
-      pushEvent(runtime, 'named-cat-unlocked', {
-        id,
-        name: definition.name,
-        role: definition.role,
-        floor: enteredFloor,
-      });
-    }
-  }
-
-  function defeatEnemy(state, runtime) {
-    const defeated = runtime.enemy;
-    const clearedFloor = state.currentFloor;
-    const restaurantIncome = 1
-      + Math.max(0, state.restaurantLevel - 1) * BALANCE.restaurantIncomePerLevel;
-    const reward = Math.max(1, Math.floor(defeated.reward * restaurantIncome));
-    addCoins(state, runtime, reward, 'kill');
-
-    runtime.kills += 1;
-    runtime.metrics.totalKills += 1;
-    runtime.metrics.totalFloorsCleared += 1;
-    runtime.metrics.lastFloorClearMs = runtime.elapsedMs;
-    state.totalKills += 1;
-
-    pushEvent(runtime, 'enemy-defeated', {
-      floor: clearedFloor,
-      enemyId: defeated.id,
-      reward,
-      boss: defeated.isBoss,
-      wall: defeated.isWall,
-    });
-
-    if (clearedFloor === BALANCE.firstBossFloor) {
-      state.firstNightCleared = true;
-      state.bestFloor = FINAL_FLOOR;
-      state.runFloorPeak = FINAL_FLOOR;
-      addCoins(state, runtime, BALANCE.firstNightRewardCoins, 'first-boss');
-      addMemory(state, 'first-night');
-      // Completion is a reunion, not a frozen combat snapshot. Remove recovery
-      // reservations, collapse any impossible duplicate kind, and restore every
-      // member before the completed guard disables further room processing.
-      runtime.recoveryQueue.length = 0;
-      const retainedKinds = new Set();
-      runtime.units = runtime.units.filter(unit => {
-        if (!VICTORY_ROSTER.includes(unit.kind) || retainedKinds.has(unit.kind)) return false;
-        retainedKinds.add(unit.kind);
-        return true;
-      });
-      for (const kind of VICTORY_ROSTER) {
-        if (retainedKinds.has(kind)) continue;
-        const result = spawnSpecificCat(state, runtime, kind, 'completion');
-        if (result.ok) retainedKinds.add(kind);
-      }
-      state.completed = true;
-      runtime.pendingFloor = null;
-      runtime.transitionRemainingMs = 0;
-      runtime.transitionStage = null;
-      runtime.atWall = false;
-      runtime.phase = 'completed';
-      for (const unit of runtime.units) {
-        unit.phase = 'celebrating';
-        unit.progress = 1;
-        unit.hp = unit.maxHp;
-        unit.attackCooldownMs = 0;
-      }
-      pushEvent(runtime, 'floor-cleared', {
-        floor: clearedFloor,
-        nextFloor: null,
-        enemyId: defeated.id,
-        reward,
-        boss: true,
-        completed: true,
-      });
-      pushEvent(runtime, 'first-night-completed', {
-        floor: clearedFloor,
-        enemyId: defeated.id,
-        reward: reward + BALANCE.firstNightRewardCoins,
-      });
-      syncEnemyState(state, runtime);
-      return;
-    }
-
-    const nextFloor = Math.min(FINAL_FLOOR, clearedFloor + 1);
-    runtime.pendingFloor = nextFloor;
-    runtime.transitionRemainingMs = BALANCE.floorTransitionMs;
-    runtime.transitionStage = 'victory';
-    runtime.atWall = false;
-    runtime.phase = 'victory';
-    for (const unit of runtime.units) {
-      unit.phase = 'celebrating';
-      unit.attackCooldownMs = 0;
-    }
-    pushEvent(runtime, 'floor-cleared', {
-      floor: clearedFloor,
-      nextFloor,
-      enemyId: defeated.id,
-      reward,
-      boss: false,
-      completed: false,
-    });
-    pushEvent(runtime, 'floor-transition-started', {
-      fromFloor: clearedFloor,
-      toFloor: nextFloor,
-      stage: 'victory',
-      durationMs: BALANCE.floorTransitionMs,
-    });
-    syncEnemyState(state, runtime);
-  }
-
-  function enterPendingFloor(state, runtime) {
-    const nextFloor = runtime.pendingFloor;
-    if (!nextFloor || state.completed) return false;
-    const previousFloor = state.currentFloor;
-    state.currentFloor = Math.min(FINAL_FLOOR, nextFloor);
-    state.bestFloor = Math.max(state.bestFloor, state.currentFloor);
-    state.runFloorPeak = Math.max(state.runFloorPeak, state.currentFloor);
-    runtime.metrics.floorReachTimes[state.currentFloor] = runtime.elapsedMs;
-    runtime.pendingFloor = null;
-    runtime.transitionRemainingMs = 0;
-    runtime.transitionStage = null;
-    runtime.enemy = createEnemy(state);
-    runtime.enemyElapsedMs = 0;
-    runtime.atWall = false;
-    for (const unit of runtime.units) {
-      unit.phase = 'moving';
-      unit.progress = Math.min(0.18, unit.progress * 0.16);
-      unit.attackCooldownMs = 0;
-    }
-    unlockFloorNodes(state, runtime);
-    announceNamedCatUnlocks(state, runtime, state.currentFloor);
-    pushEvent(runtime, 'floor-entered', {
-      fromFloor: previousFloor,
-      floor: state.currentFloor,
-      enemyId: runtime.enemy.id,
-      enemyKind: runtime.enemy.kind,
-    });
-    syncEnemyState(state, runtime);
-    updateWallAndPhase(state, runtime);
-    return true;
-  }
-
-  function chooseEnemyTarget(runtime) {
-    const attacking = runtime.units.filter(unit => unit.phase === 'attacking' && unit.hp > 0);
-    const frontlines = attacking.filter(unit => unit.role === 'frontline');
-    const candidates = frontlines.length ? frontlines : attacking;
-    let target = null;
-    for (const unit of candidates) {
-      if (!target || unit.progress > target.progress || (
-        unit.progress === target.progress && unit.id < target.id
-      )) {
-        target = unit;
-      }
-    }
-    return target;
-  }
-
-  function removeDefeatedUnits(state, runtime) {
-    const survivors = [];
-    for (const unit of runtime.units) {
-      if (unit.hp > 0) {
-        survivors.push(unit);
-        continue;
-      }
-      runtime.metrics.totalUnitsDefeated += 1;
-      const recoveryMs = computeRoomRecoveryMs(state, unit.kind);
-      runtime.recoveryQueue.push({
-        originalUnitId: unit.id,
-        kind: unit.kind,
-        name: unit.name,
-        role: unit.role,
-        named: unit.named,
-        appearance: unit.appearance,
-        remainingMs: recoveryMs,
-        totalMs: recoveryMs,
-        readyEventSent: false,
-      });
-      pushEvent(runtime, 'unit-defeated', {
-        unitId: unit.id,
-        kind: unit.kind,
-        role: unit.role,
-      });
-      pushEvent(runtime, 'room-recovery-started', {
-        unitId: unit.id,
-        kind: unit.kind,
-        role: unit.role,
-        durationMs: recoveryMs,
-        roomActive: state.roomUnlocked,
-        roomLevel: state.roomLevel,
-      });
-    }
-    runtime.units = survivors;
-  }
-
-  function livePartyDps(runtime) {
-    return runtime.units.reduce((total, unit) => {
-      if (unit.phase !== 'attacking') return total;
-      return total + unit.attack * 1000 / unit.attackIntervalMs;
-    }, 0);
-  }
-
-  function applySupportPulse(runtime, sourceUnit) {
-    if (sourceUnit.role !== 'support') return null;
-    let healed = 0;
-    let cooldownReducedMs = 0;
-    for (const unit of runtime.units) {
-      if (unit.hp <= 0) continue;
-      const heal = Math.min(
-        unit.maxHp - unit.hp,
-        unit.maxHp * sourceUnit.supportHealFactor,
-      );
-      if (heal > 0) {
-        unit.hp += heal;
-        healed += heal;
-      }
-      if (unit.id !== sourceUnit.id && unit.phase === 'attacking') {
-        const reduction = Math.min(
-          Math.max(0, unit.attackCooldownMs),
-          sourceUnit.supportCooldownReductionMs,
-        );
-        unit.attackCooldownMs -= reduction;
-        cooldownReducedMs += reduction;
-      }
-    }
-    runtime.metrics.totalSupportPulses += 1;
-    pushEvent(runtime, 'support-pulse', {
-      unitId: sourceUnit.id,
-      kind: sourceUnit.kind,
-      healed,
-      cooldownReducedMs,
-    });
-    return { healed, cooldownReducedMs };
-  }
-
-  function updateRally(runtime, stepMs) {
-    const wasActive = runtime.rallyRemainingMs > 0;
-    const wasCharging = runtime.rallyCooldownMs > 0;
-    runtime.rallyRemainingMs = Math.max(0, runtime.rallyRemainingMs - stepMs);
-    runtime.rallyCooldownMs = Math.max(0, runtime.rallyCooldownMs - stepMs);
-    if (wasActive && runtime.rallyRemainingMs === 0) {
-      pushEvent(runtime, 'rally-ended', {
-        cooldownRemainingMs: runtime.rallyCooldownMs,
-      });
-      if (runtime.rallyCooldownMs > 0) {
-        pushEvent(runtime, 'rally-charging', {
-          remainingMs: runtime.rallyCooldownMs,
-        });
-      }
-    }
-    if (wasCharging && runtime.rallyCooldownMs === 0) {
-      pushEvent(runtime, 'rally-ready', {});
-    }
-  }
-
-  function updateRestaurantSupport(state, runtime, stepMs) {
-    runtime.restaurantBuffRemainingMs = Math.max(
-      0,
-      runtime.restaurantBuffRemainingMs - stepMs,
-    );
-    if (!state.restaurantUnlocked || state.completed) return;
-    if (runtime.restaurantDeliveryCooldownMs <= 0) {
-      runtime.restaurantDeliveryCooldownMs = computeRestaurantDeliveryInterval(state);
-    }
-    runtime.restaurantDeliveryCooldownMs -= stepMs;
-    while (runtime.restaurantDeliveryCooldownMs <= 0) {
-      runtime.restaurantDeliveryCooldownMs += computeRestaurantDeliveryInterval(state);
-      runtime.restaurantBuffRemainingMs = BALANCE.restaurantBuffDurationMs;
-      const coinAmount = Math.max(
-        1,
-        Math.floor(BALANCE.restaurantDeliveryCoinBase * Math.max(1, state.restaurantLevel)),
-      );
-      addCoins(state, runtime, coinAmount, 'restaurant-delivery');
-      runtime.metrics.totalRestaurantDeliveries += 1;
-      pushEvent(runtime, 'restaurant-delivery', {
-        floor: BALANCE.restaurantUnlockFloor,
-        level: state.restaurantLevel,
-        durationMs: BALANCE.restaurantBuffDurationMs,
-        attackSpeedFactor: BALANCE.restaurantAttackSpeedFactor,
-        coins: coinAmount,
-      });
-    }
-  }
-
-  function updateRecoveryQueue(state, runtime, stepMs) {
-    if (state.completed || runtime.recoveryQueue.length === 0) return;
-    const partyCapacity = computePartyCapacity(state);
-    for (const entry of runtime.recoveryQueue) {
-      entry.remainingMs = Math.max(0, entry.remainingMs - stepMs);
-    }
-    for (let index = runtime.recoveryQueue.length - 1; index >= 0; index -= 1) {
-      const entry = runtime.recoveryQueue[index];
-      if (entry.remainingMs > 0) continue;
-      if (runtime.units.length >= partyCapacity && entry.named) {
-        const helperIndex = runtime.units.map(unit => unit.named).lastIndexOf(false);
-        if (helperIndex >= 0) {
-          const [relieved] = runtime.units.splice(helperIndex, 1);
-          pushEvent(runtime, 'unit-relieved', {
-            unitId: relieved.id,
-            kind: relieved.kind,
-            reason: 'named-cat-return',
-          });
+    _tickBattle(dt) {
+      const m = this.metrics;
+      // 出現予約
+      for (let i = this.pendingSpawns.length - 1; i >= 0; i--) {
+        const s = this.pendingSpawns[i];
+        if (this.time >= s.at) {
+          this.pendingSpawns.splice(i, 1);
+          const e = this._makeEnemy(s.defId, s.lane, s.tag);
+          this.enemies.push(e);
+          this.emit('enemy-spawn', { uid: e.uid, defId: s.defId, tag: s.tag });
+          // ルナ解放直後の一撃演出 (FLOORS §4.2)
+          if (this.lunaSnipePending && s.defId === 'scrap_crow' && this.unlocked.luna) {
+            this.lunaSnipePending = false;
+            this._applyDamage(e, BALANCE.lunaSnipeDamage, { srcUid: 0, snipe: true });
+            this.emit('luna-snipe', { uid: e.uid });
+          }
         }
       }
-      if (runtime.units.length >= partyCapacity) {
-        if (!entry.readyEventSent) {
-          entry.readyEventSent = true;
-          pushEvent(runtime, 'room-recovery-ready', {
-            unitId: entry.originalUnitId,
-            kind: entry.kind,
-          });
+
+      const liveCats = this.cats.filter(c => !c.dead && c.faintT <= 0);
+      const liveEnemies = this.enemies.filter(e => !e.dead);
+      m.helperUpT += liveCats.filter(c => !c.named).length > 0 ? dt : 0;
+
+      for (const c of liveCats) this._tickCat(c, dt);
+      for (const e of liveEnemies) this._tickEnemy(e, dt);
+
+      // 気絶猫の復帰
+      for (const c of this.cats) {
+        if (c.named && c.faintT > 0) {
+          c.faintT -= dt * (this.hasShop('clinic') ? 1.4 : 1);
+          if (c.faintT <= 0) {
+            c.hp = Math.round(c.maxHp * BALANCE.cats.reviveHpRatio);
+            c.state = 'enter'; c.x = BALANCE.world.entryX;
+            this.emit('cat-revive', { uid: c.uid, defId: c.defId });
+          }
         }
-        continue;
       }
-      runtime.recoveryQueue.splice(index, 1);
-      const result = spawnSpecificCat(state, runtime, entry.kind, 'recovery');
-      if (!result.ok) {
-        runtime.recoveryQueue.splice(index, 0, entry);
-        continue;
+      // 死骸掃除
+      this.cats = this.cats.filter(c => !c.dead || c.named);
+      this.enemies = this.enemies.filter(e => !e.removeFlag);
+
+      // 敗北判定: 敵が入口突破
+      const breach = liveEnemies.some(e => e.x <= BALANCE.world.breachX && e.state !== 'enter');
+      if (breach) { this._onDefeat(); return; }
+      // 5F: トト危険表示
+      if (this.floor === 5) {
+        this.totoDanger = liveEnemies.some(e => e.x < 150);
       }
-      runtime.metrics.totalUnitsRecovered += 1;
-      pushEvent(runtime, 'room-recovery-completed', {
-        previousUnitId: entry.originalUnitId,
-        unitId: result.unit.id,
-        kind: entry.kind,
-        durationMs: entry.totalMs,
-        roomActive: state.roomUnlocked,
-        roomLevel: state.roomLevel,
-      });
-    }
-  }
 
-  function updateWallAndPhase(state, runtime) {
-    if (state.completed) {
-      runtime.atWall = false;
-      runtime.phase = 'completed';
-      return;
-    }
-    runtime.atWall = state.currentFloor === BALANCE.wallFloor
-      && runtime.enemyElapsedMs >= BALANCE.wallObserveMs
-      && runtime.enemy.hp > 0;
-    if (runtime.transitionRemainingMs > 0) runtime.phase = runtime.transitionStage || 'victory';
-    else if (runtime.atWall) runtime.phase = 'wall';
-    else if (runtime.units.some(unit => unit.phase === 'attacking')) runtime.phase = 'fighting';
-    else runtime.phase = 'climbing';
-  }
-
-  function simulateStep(state, runtime, stepMs) {
-    runtime.elapsedMs += stepMs;
-    runtime.metrics.totalElapsedMs += stepMs;
-    state.playTimeMs = Math.min(Number.MAX_SAFE_INTEGER, state.playTimeMs + stepMs);
-    runtime.manualDispatchCooldownMs = Math.max(0, runtime.manualDispatchCooldownMs - stepMs);
-    updateRally(runtime, stepMs);
-    updateRestaurantSupport(state, runtime, stepMs);
-    updateRecoveryQueue(state, runtime, stepMs);
-
-    if (state.completed) {
-      syncEnemyState(state, runtime);
-      updateWallAndPhase(state, runtime);
-      return;
+      // ウェーブ進行
+      if (liveEnemies.length === 0 && this.pendingSpawns.length === 0) {
+        const def = this.floorDef();
+        const waves = def.eliteChoice ? (this.hasShop('claw_forge') ? def.wavesAlt : def.waves) : def.waves;
+        if (this.waveIdx + 1 < waves.length) {
+          if (this.waveBreakT <= 0) {
+            this.waveBreakT = BALANCE.floors.waveInterval;
+            this.emit('wave-clear', { next: this.waveIdx + 2, total: waves.length });
+            // トトのウェーブ間全体小回復 (§4.3)
+            const toto = this.cats.find(c => c.defId === 'toto' && !c.dead && c.faintT <= 0);
+            if (toto) {
+              this.cats.forEach(c => { if (!c.dead && c.faintT <= 0) this._heal(c, Math.round(c.maxHp * 0.1)); });
+              this.emit('toto-waveheal', {});
+            }
+          }
+          this.waveBreakT -= dt;
+          if (this.waveBreakT <= 0) {
+            this.waveIdx++;
+            this._scheduleWave(waves[this.waveIdx], 0.2);
+            this.emit('wave-start', { wave: this.waveIdx + 1, total: waves.length });
+          }
+        } else {
+          this._onConquest();
+        }
+      }
     }
 
-    if (runtime.transitionRemainingMs > 0) {
-      const previousRemainingMs = runtime.transitionRemainingMs;
-      runtime.transitionRemainingMs = Math.max(0, runtime.transitionRemainingMs - stepMs);
-      if (
-        runtime.transitionStage === 'victory'
-        && previousRemainingMs > BALANCE.floorAscentMs
-        && runtime.transitionRemainingMs <= BALANCE.floorAscentMs
-      ) {
-        runtime.transitionStage = 'ascending';
-        for (const unit of runtime.units) unit.phase = 'ascending';
-        pushEvent(runtime, 'floor-transition-stage', {
-          fromFloor: state.currentFloor,
-          toFloor: runtime.pendingFloor,
-          stage: 'ascending',
-          durationMs: BALANCE.floorAscentMs,
+    /* ---------------- 猫の行動 ---------------- */
+    _tickCat(c, dt) {
+      if (c.flash > 0) c.flash -= dt;
+      if (c.kb > 0) c.kb = Math.max(0, c.kb - dt * 120);
+      if (c.missT > 0) c.missT -= dt;
+      if (c.buffT > 0) c.buffT -= dt;
+      c.stateT += dt;
+      if (c.attackCd > 0) c.attackCd -= dt;
+
+      const haste = (this.rallyT > 0 ? 1 + BALANCE.bell.rallyHaste : 1) * (c.hasteFood ? 1.15 : 1);
+
+      switch (c.state) {
+        case 'enter': {
+          // 入口から担当位置まで実際に走る
+          const stopX = c.named ? c.homeX : this._helperStopX(c);
+          c.x += c.speed * dt;
+          if (c.x >= stopX) { c.x = stopX; c.state = 'combat'; c.stateT = 0; }
+          break;
+        }
+        case 'combat': {
+          const target = this._catTarget(c);
+          if (!target) {
+            // 標的なし: 名前付きは担当位置へ戻る
+            const home = c.named ? c.homeX : this._helperStopX(c);
+            if (Math.abs(c.x - home) > 4) c.x += Math.sign(home - c.x) * c.speed * 0.6 * dt;
+            break;
+          }
+          c.targetUid = target.uid;
+          // 同じ敵に近接で群がる猫は縦列を組む (重なって判別不能にしない §3-3)
+          let queue = 0;
+          if (c.role === 'vanguard' || c.role === 'runner') {
+            queue = this.cats.filter(o => o !== c && !o.dead && o.faintT <= 0 &&
+              (o.role === 'vanguard' || o.role === 'runner') &&
+              o.targetUid === target.uid && o.x > c.x).length;
+          }
+          const reach = c.range + this._unitHalfW(target) + (c.uid % 3) * 14 + queue * 44;
+          const dist = target.x - c.x;
+          if (c.role === 'healer') { this._catAttackCycle(c, target, dt, haste); break; }
+          if (dist > reach) {
+            c.x += c.speed * dt; // 接敵まで走る (接触前に攻撃判定を出さない)
+          } else {
+            this._catAttackCycle(c, target, dt, haste);
+          }
+          break;
+        }
+        case 'windup': {
+          // 予備動作 (読める溜め)
+          const w = c.windup / haste;
+          if (c.stateT >= w) {
+            c.state = 'combat'; c.stateT = 0;
+            this._catStrike(c);
+          }
+          break;
+        }
+      }
+    }
+
+    _helperStopX(c) {
+      if (c.role === 'ranged') return 108 + c.lane * 12;
+      if (c.role === 'runner') return 150;
+      return 172 + c.lane * 8;
+    }
+
+    _unitHalfW() { return 30; } // スプライト半身幅。接敵しつつ判別不能に重ならない距離
+
+    _catTarget(c) {
+      const es = this.enemies.filter(e => !e.dead && e.state !== 'enter');
+      if (!es.length) return null;
+      if (c.role === 'healer') {
+        // 最もHP割合の低い味方
+        let best = null, ratio = 1.01;
+        this.cats.forEach(a => {
+          if (a.dead || a.faintT > 0) return;
+          const r = a.hp / a.maxHp;
+          if (r < ratio) { ratio = r; best = a; }
         });
+        return ratio < 0.999 ? best : null;
       }
-      if (runtime.transitionRemainingMs === 0) {
-        enterPendingFloor(state, runtime);
+      const hittable = es.filter(e => this._canHit(c, e));
+      if (!hittable.length) return null;
+      if (c.role === 'ranged') {
+        const fly = hittable.filter(e => e.flying);
+        if (fly.length) return fly.sort((a, b) => a.x - b.x)[0]; // 飛行優先
+        const rear = hittable.filter(e => e.role === 'support' || e.role === 'elite');
+        if (rear.length) return rear.sort((a, b) => b.x - a.x)[0];
+        return hittable.sort((a, b) => a.x - b.x)[0];
       }
-      syncEnemyState(state, runtime);
-      updateWallAndPhase(state, runtime);
-      return;
+      if (c.role === 'runner') {
+        // 前衛をすり抜け、最も危険度の高い後列へ
+        const rear = hittable.filter(e => e.role === 'support' || e.role === 'elite' || (e.tag === 'ledger'));
+        if (rear.length) return rear.sort((a, b) => b.x - a.x)[0];
+        return hittable.sort((a, b) => b.x - a.x)[0];
+      }
+      // vanguard: 最も近い (x最小)
+      return hittable.sort((a, b) => a.x - b.x)[0];
     }
 
-    runtime.autoDispatchCooldownMs -= stepMs;
-    if (runtime.autoDispatchCooldownMs <= 0) {
-      const interval = computeDispatchInterval(state);
-      if (runtime.units.length < computePartyCapacity(state)) {
-        const result = spawnCat(state, runtime, 'auto');
-        runtime.autoDispatchCooldownMs += result.ok ? interval : Math.min(250, interval);
+    _canHit(c, e) {
+      if (e.flying && !e.swooping) return c.canHitFlying === 'always';
+      if (e.flying && e.swooping) return c.canHitFlying === 'always' || c.canHitFlying === 'swoop';
+      return true;
+    }
+
+    _catAttackCycle(c, target, dt, haste) {
+      if (c.attackCd > 0) return;
+      c.state = 'windup'; c.stateT = 0;
+      c.targetUid = target.uid;
+      c.attackCd = c.interval / haste;
+      c.attackCount++;
+    }
+
+    _catStrike(c) {
+      const target = this.cats.find(u => u.uid === c.targetUid) || this.enemies.find(u => u.uid === c.targetUid);
+      if (!target || target.dead) return;
+      if (c.role === 'healer') {
+        // 包帯を投げる (弾着で回復)
+        this._spawnProjectile(c, target, 'bandage', c.heal);
+        return;
+      }
+      // 煙コウモリの照準乱れ
+      if (c.missT > 0 && Math.random() < 0.25) {
+        this.emit('miss', { uid: c.uid, targetUid: target.uid });
+        return;
+      }
+      const strong = c.attackCount % BALANCE.combat.strongEvery === 0;
+      let dmg = Math.round(c.atk * this.atkMult() * (strong ? BALANCE.combat.strongMult : 1));
+      if (c.forgeBuffT > 0) dmg = Math.round(dmg * 1.2);
+      if (c.projectile) {
+        this._spawnProjectile(c, target, c.projectile, dmg, strong);
       } else {
-        runtime.autoDispatchCooldownMs = Math.min(250, interval);
-      }
-    }
-
-    runtime.enemyElapsedMs += stepMs;
-    runtime.enemy.elapsedMs += stepMs;
-
-    for (const unit of runtime.units) {
-      if (unit.phase === 'moving') {
-        const rallyTravelFactor = runtime.rallyRemainingMs > 0
-          ? BALANCE.rallyTravelSpeedFactor
-          : 1;
-        unit.progress = Math.min(1, unit.progress + stepMs / (unit.travelMs * rallyTravelFactor));
-        if (unit.progress >= 1) {
-          unit.phase = 'attacking';
-          unit.attackCooldownMs = 0;
-          pushEvent(runtime, 'unit-engaged', { unitId: unit.id, kind: unit.kind });
+        this._applyDamage(target, dmg, { srcUid: c.uid, strong, melee: true, attacker: c });
+        // ムギの盾構え (§4.1) / コハクの詠唱停止 (§4.4)
+        if (c.defId === 'mugi' && c.attackCount % 4 === 0) { c.shieldUp = true; this.emit('shield-stance', { uid: c.uid }); }
+        if ((c.defId === 'kohaku' || c.role === 'runner') && (target.channelT > 0 || (target.boss && target.boss.sealT > 0))) {
+          target.channelT = 0;
+          if (target.boss) target.boss.sealT = 0;
+          if (target.boss && this.bellLockT > 0) this.bellLockT = 0;
+          this.emit('interrupt', { uid: c.uid, targetUid: target.uid });
+        }
+        // 盾破砕 (爪工房/煤払いの爪/ランナー)
+        if (target.shieldReduce > 0 && (this.hasShop('claw_forge') || this.relic === 'soot_claw' || c.role === 'runner')) {
+          if (target.shieldBroken <= 0) { target.shieldBroken = 8; this.emit('shield-break', { uid: target.uid }); }
         }
       }
     }
 
-    for (const unit of runtime.units) {
-      if (unit.phase !== 'attacking' || runtime.enemy.hp <= 0) continue;
-      const rallySpeedFactor = runtime.rallyRemainingMs > 0
-        ? BALANCE.rallyAttackSpeedFactor
-        : 1;
-      const restaurantSpeedFactor = runtime.restaurantBuffRemainingMs > 0
-        ? BALANCE.restaurantAttackSpeedFactor
-        : 1;
-      unit.attackCooldownMs -= stepMs / (rallySpeedFactor * restaurantSpeedFactor);
-      while (unit.attackCooldownMs <= 0 && runtime.enemy.hp > 0) {
-        const damage = Math.min(runtime.enemy.hp, unit.attack);
-        runtime.enemy.hp = Math.max(0, runtime.enemy.hp - unit.attack);
-        unit.attackCooldownMs += unit.attackIntervalMs;
-        runtime.metrics.totalAttacks += 1;
-        const hitCoins = coinsPerHit(state, state.currentFloor);
-        addCoins(state, runtime, hitCoins, null);
-        pushEvent(runtime, 'cat-hit', {
-          unitId: unit.id,
-          kind: unit.kind,
-          enemyId: runtime.enemy.id,
-          damage,
-          coins: hitCoins,
-          enemyHp: runtime.enemy.hp,
-        });
-        applySupportPulse(runtime, unit);
-        if (runtime.enemy.hp <= 0) {
-          defeatEnemy(state, runtime);
-          updateWallAndPhase(state, runtime);
-          return;
+    _spawnProjectile(src, target, kind, amount, strong) {
+      this.projectiles.push({
+        uid: UID++, kind, side: src.side,
+        x0: src.x, x1: target.x, t: 0,
+        dur: Math.max(0.18, Math.abs(target.x - src.x) / 480),
+        targetUid: target.uid, amount, strong: !!strong, srcUid: src.uid,
+        arc: kind === 'bandage' ? 26 : 34
+      });
+      this.emit('projectile-fire', { kind, srcUid: src.uid, targetUid: target.uid });
+    }
+
+    _tickProjectiles(dt) {
+      for (let i = this.projectiles.length - 1; i >= 0; i--) {
+        const p = this.projectiles[i];
+        p.t += dt / p.dur;
+        if (p.t >= 1) {
+          this.projectiles.splice(i, 1);
+          const target = this.cats.find(u => u.uid === p.targetUid) || this.enemies.find(u => u.uid === p.targetUid);
+          if (!target || target.dead) continue;
+          // 弾着時に初めて効果確定 (§6.2: 弾が届く前にHPを減らさない)
+          if (p.kind === 'bandage') {
+            this._heal(target, p.amount);
+            this.emit('heal-hit', { uid: target.uid, amount: p.amount });
+          } else {
+            this._applyDamage(target, p.amount, { srcUid: p.srcUid, strong: p.strong });
+          }
         }
       }
     }
 
-    if (runtime.enemy.regenPerSecond > 0 && runtime.enemy.hp > 0) {
-      runtime.enemy.hp = Math.min(
-        runtime.enemy.maxHp,
-        runtime.enemy.hp + runtime.enemy.regenPerSecond * stepMs / 1000,
-      );
-    }
+    /* ---------------- 敵の行動 ---------------- */
+    _tickEnemy(e, dt) {
+      if (e.flash > 0) e.flash -= dt;
+      if (e.kb > 0) e.kb = Math.max(0, e.kb - dt * 120);
+      if (e.shieldBroken > 0) e.shieldBroken -= dt;
+      e.stateT += dt;
+      if (e.attackCd > 0) e.attackCd -= dt;
 
-    const target = chooseEnemyTarget(runtime);
-    if (target) {
-      runtime.enemy.attackCooldownMs -= stepMs;
-      while (runtime.enemy.attackCooldownMs <= 0 && target.hp > 0) {
-        const damage = Math.min(target.hp, runtime.enemy.attack);
-        target.hp = Math.max(0, target.hp - runtime.enemy.attack);
-        runtime.enemy.attackCooldownMs += runtime.enemy.attackIntervalMs;
-        runtime.metrics.totalEnemyAttacks += 1;
-        pushEvent(runtime, 'enemy-hit', {
-          enemyId: runtime.enemy.id,
-          unitId: target.id,
-          damage,
-          unitHp: target.hp,
-        });
+      if (e.boss) { this._tickBoss(e, dt); return; }
+
+      switch (e.state) {
+        case 'enter':
+          e.x -= e.speed * dt;
+          if (e.x <= BALANCE.world.enemyEntryX - 20) { e.state = 'combat'; e.stateT = 0; }
+          break;
+        case 'combat': {
+          // 支援敵の詠唱/召集
+          this._tickEnemySpecial(e, dt);
+          const target = this._enemyTarget(e);
+          if (!target) { e.x -= e.speed * dt; break; } // 猫がいなければ入口へ
+          e.targetUid = target.uid;
+          // 敵側も前列に殺到せず縦列を組む
+          const equeue = this.enemies.filter(o => o !== e && !o.dead && !o.flying &&
+            o.targetUid === target.uid && o.x < e.x).length;
+          const reach = e.range + this._unitHalfW() + (e.uid % 3) * 14 + (e.flying ? 0 : equeue * 34);
+          const dist = e.x - target.x;
+          if (e.flying) {
+            // 飛行敵: 射程内で降下(swoop)して攻撃、それ以外は高度維持
+            if (dist <= reach) {
+              e.swooping = true;
+              if (e.attackCd <= 0) { e.state = 'windup'; e.stateT = 0; e.attackCd = e.interval; e.attackCount++; e.telegraph = e.attackCount % 3 === 0; }
+            } else {
+              e.swooping = false;
+              e.x -= e.speed * dt;
+            }
+          } else if (dist > reach) {
+            e.x -= e.speed * dt;
+          } else if (e.attackCd <= 0) {
+            e.state = 'windup'; e.stateT = 0; e.attackCd = e.interval; e.attackCount++;
+            e.telegraph = e.attackCount % 3 === 0; // 強攻撃は読める予備動作
+            if (e.telegraph) this.emit('telegraph', { uid: e.uid });
+          }
+          break;
+        }
+        case 'windup': {
+          const w = e.telegraph
+            ? Math.min(BALANCE.combat.telegraphMax, Math.max(BALANCE.combat.telegraphMin, e.windup * 1.8))
+            : e.windup;
+          if (e.stateT >= w) {
+            e.state = 'combat'; e.stateT = 0;
+            this._enemyStrike(e);
+          }
+          break;
+        }
       }
-      if (target.hp <= 0) removeDefeatedUnits(state, runtime);
-    } else {
-      runtime.enemy.attackCooldownMs = Math.min(
-        runtime.enemy.attackCooldownMs,
-        runtime.enemy.attackIntervalMs,
-      );
     }
 
-    syncEnemyState(state, runtime);
-    updateWallAndPhase(state, runtime);
-  }
-
-  function getMetrics(state, runtime) {
-    return {
-      partyDps: livePartyDps(runtime),
-      dispatchIntervalMs: computeDispatchInterval(state),
-      permanentMultiplier: permanentMultiplier(state),
-      enemyRegenPerSecond: runtime.enemy.regenPerSecond,
-      partyCapacity: computePartyCapacity(state),
-      visibleUnitCap: BALANCE.unitCap,
-      rallyActive: runtime.rallyRemainingMs > 0,
-      restaurantBuffActive: runtime.restaurantBuffRemainingMs > 0,
-      recoveryCount: runtime.recoveryQueue.length,
-      completed: state.completed,
-      currentFloor: state.currentFloor,
-      bestFloor: state.bestFloor,
-      runElapsedMs: runtime.elapsedMs,
-      runCoinsEarned: state.runCoinsEarned,
-      ...clone(runtime.metrics),
-    };
-  }
-
-  function summarizeRuntime(state, runtime) {
-    const partyCapacity = computePartyCapacity(state);
-    return {
-      elapsedMs: runtime.elapsedMs,
-      unitCount: runtime.units.length,
-      partyCapacity,
-      partyFull: runtime.units.length >= partyCapacity,
-      visibleUnitCap: BALANCE.unitCap,
-      autoDispatches: runtime.autoDispatches,
-      manualDispatches: runtime.manualDispatches,
-      kills: runtime.kills,
-      enemyHp: runtime.enemy.hp,
-      enemyMaxHp: runtime.enemy.maxHp,
-      atWall: runtime.atWall,
-      completed: state.completed,
-      phase: runtime.phase,
-      currentFloor: state.currentFloor,
-      floorTransitionMs: runtime.transitionRemainingMs,
-      transitionStage: runtime.transitionStage,
-      pendingFloor: runtime.pendingFloor,
-      autoDispatchCooldownMs: runtime.autoDispatchCooldownMs,
-      manualDispatchCooldownMs: runtime.manualDispatchCooldownMs,
-      rallyRemainingMs: runtime.rallyRemainingMs,
-      rallyCooldownMs: runtime.rallyCooldownMs,
-      rallyReady: runtime.rallyCooldownMs <= 0,
-      rallyCharge: runtime.rallyCooldownMs <= 0
-        ? 1
-        : Math.max(0, 1 - runtime.rallyCooldownMs / BALANCE.rallyCooldownMs),
-      restaurantBuffRemainingMs: runtime.restaurantBuffRemainingMs,
-      restaurantDeliveryCooldownMs: runtime.restaurantDeliveryCooldownMs,
-      recoveryCount: runtime.recoveryQueue.length,
-    };
-  }
-
-  function snapshotRuntime(state, runtime) {
-    return {
-      ...summarizeRuntime(state, runtime),
-      units: runtime.units.map(unit => ({ ...unit })),
-      recoveryQueue: runtime.recoveryQueue.map(entry => ({ ...entry })),
-      enemy: { ...runtime.enemy },
-      support: {
-        restaurant: {
-          unlocked: state.restaurantUnlocked,
-          level: state.restaurantLevel,
-          deliveryCooldownMs: runtime.restaurantDeliveryCooldownMs,
-          buffRemainingMs: runtime.restaurantBuffRemainingMs,
-          buffActive: runtime.restaurantBuffRemainingMs > 0,
-          attackSpeedFactor: BALANCE.restaurantAttackSpeedFactor,
-        },
-        room: {
-          unlocked: state.roomUnlocked,
-          level: state.roomLevel,
-          recoveryMs: computeRoomRecoveryMs(state),
-          recovering: runtime.recoveryQueue.map(entry => ({ ...entry })),
-        },
-      },
-      metrics: getMetrics(state, runtime),
-      events: runtime.events.map(event => ({ ...event })),
-    };
-  }
-
-  function simulate(state, runtime, milliseconds) {
-    const requestedMs = finiteNumber(milliseconds, 0, 0, MAX_NUMBER);
-    const simulatedRequestMs = Math.min(requestedMs, BALANCE.maxAdvanceMs);
-    runtime.carryMs += simulatedRequestMs;
-    let simulatedMs = 0;
-    while (runtime.carryMs >= BALANCE.fixedStepMs) {
-      simulateStep(state, runtime, BALANCE.fixedStepMs);
-      runtime.carryMs -= BALANCE.fixedStepMs;
-      simulatedMs += BALANCE.fixedStepMs;
-    }
-    syncEnemyState(state, runtime);
-    updateWallAndPhase(state, runtime);
-    return {
-      requestedMs,
-      simulatedMs,
-      truncated: requestedMs > BALANCE.maxAdvanceMs,
-      state: clone(state),
-      runtime: summarizeRuntime(state, runtime),
-      metrics: getMetrics(state, runtime),
-    };
-  }
-
-  function calculateDawnReward(state) {
-    const peak = Math.max(state.currentFloor, state.runFloorPeak);
-    if (peak < BALANCE.dawnUnlockFloor) return 0;
-    const progressReward = 1 + Math.floor((peak - BALANCE.dawnUnlockFloor) / 2);
-    const bossReward = Math.floor((peak - 1) / BALANCE.firstBossFloor);
-    return Math.max(1, progressReward + bossReward);
-  }
-
-  function previewDawn(state) {
-    const reward = calculateDawnReward(state);
-    const beforeMultiplier = permanentMultiplier(state);
-    const afterMultiplier = permanentMultiplier(state, reward);
-    return {
-      available: reward > 0,
-      reward,
-      unlockFloor: BALANCE.dawnUnlockFloor,
-      multiplierBefore: beforeMultiplier,
-      multiplierAfter: afterMultiplier,
-      lost: [
-        { id: 'floor', label: '現在階', value: state.currentFloor, nextValue: 1 },
-        { id: 'coins', label: '所持コイン', value: state.coins, nextValue: BALANCE.startingCoins },
-        { id: 'mugi-level', label: 'ムギの特訓', value: state.mugiLevel, nextValue: 1 },
-        { id: 'weapon-level', label: '猫パンチ', value: state.weaponLevel, nextValue: 1 },
-        { id: 'dispatch-level', label: '出撃口', value: state.dispatchLevel, nextValue: 1 },
-        { id: 'restaurant-level', label: '食堂のラン内強化', value: state.restaurantLevel, nextValue: 0 },
-        { id: 'restaurant-unlock', label: '食堂の解放', value: state.restaurantUnlocked ? 'OPEN' : 'LOCKED', nextValue: 'LOCKED' },
-      ],
-      kept: [
-        { id: 'best-floor', label: '最高階', value: state.bestFloor },
-        { id: 'room-level', label: '共同部屋', value: state.roomLevel },
-        { id: 'memories', label: '思い出', value: state.memories.length },
-      ],
-      gained: [
-        { id: 'dawn-shards', label: '夜明けのかけら', value: reward },
-        {
-          id: 'permanent-power',
-          label: '恒久強化',
-          value: afterMultiplier - beforeMultiplier,
-          nextValue: afterMultiplier,
-        },
-      ],
-    };
-  }
-
-  function resetRuntimeForDawn(state, runtime) {
-    const previousMetrics = runtime.metrics;
-    const totalDawns = previousMetrics.totalDawns + 1;
-    const replacement = createRuntime(state);
-    replacement.metrics = {
-      ...previousMetrics,
-      totalDawns,
-      floorReachTimes: { 1: 0 },
-      lastFloorClearMs: null,
-    };
-    replacement.events = [];
-    for (const key of Object.keys(runtime)) delete runtime[key];
-    Object.assign(runtime, replacement);
-  }
-
-  function performDawn(state, runtime) {
-    const preview = previewDawn(state);
-    if (!preview.available) {
-      return { ok: false, reason: 'locked', preview };
+    _tickEnemySpecial(e, dt) {
+      // 火花ヤモリ: 味方強化詠唱 (§6.6)
+      if (e.buffAlly) {
+        e.buffT += dt;
+        if (e.buffT >= e.buffAlly.every * 0.6 && e.channelT <= 0) e.channelT = 0.8;
+        if (e.channelT > 0) {
+          e.channelT -= dt;
+          if (e.channelT <= 0) {
+            const allies = this.enemies.filter(a => !a.dead && a.uid !== e.uid);
+            if (allies.length) {
+              const a = allies.sort((x, y) => x.x - y.x)[0];
+              a.buffedNext = true;
+              this.metrics.supportCasts++;
+              this.emit('enemy-buff', { srcUid: e.uid, targetUid: a.uid });
+            }
+            e.buffT = 0;
+          }
+        }
+      }
+      // 帳場フクロウ: 補充予約 (§7.1)
+      if (e.summon) {
+        e.summonT += dt;
+        if (e.summonT >= e.summon.every) {
+          e.summonT = 0;
+          const moles = this.enemies.filter(a => !a.dead && a.defId === e.summon.enemy).length;
+          if (moles < 2) {
+            const s = this._makeEnemy(e.summon.enemy, (e.lane + 1) % 3, 'reinforcement');
+            s.x = BALANCE.world.enemyEntryX + 10;
+            this.enemies.push(s);
+            this.metrics.supportCasts++;
+            this.emit('enemy-summon', { srcUid: e.uid, defId: e.summon.enemy });
+          }
+        }
+      }
     }
 
-    const reward = preview.reward;
-    state.dawnShards = Math.min(MAX_NUMBER, state.dawnShards + reward);
-    state.lifetimeShards = Math.min(MAX_NUMBER, state.lifetimeShards + reward);
-    state.ascensions += 1;
-    state.coins = BALANCE.startingCoins;
-    state.fish = BALANCE.startingFish;
-    state.currentFloor = 1;
-    state.completed = false;
-    state.pendingFloor = null;
-    state.floorTransitionRemainingMs = 0;
-    state.floorTransitionStage = null;
-    state.checkpointFloor = 1;
-    state.runFloorPeak = 1;
-    state.enemyFloor = 1;
-    state.enemyHp = null;
-    state.wallElapsedMs = 0;
-    state.mugiLevel = 1;
-    state.weaponLevel = 1;
-    state.dispatchLevel = 1;
-    state.restaurantLevel = 0;
-    state.restaurantUnlocked = false;
-    state.runCoinsEarned = 0;
-    state.runStartedAt = state.lastSeen;
-    state.tutorialStep = 'replay';
-    addMemory(state, 'first-dawn');
-
-    resetRuntimeForDawn(state, runtime);
-    pushEvent(runtime, 'dawn-complete', {
-      reward,
-      ascensions: state.ascensions,
-      permanentMultiplier: permanentMultiplier(state),
-    });
-    return {
-      ok: true,
-      reward,
-      preview,
-      state: clone(state),
-      runtime: summarizeRuntime(state, runtime),
-    };
-  }
-
-  function estimateOfflineCoinsPerSecond(state) {
-    const floorFactor = 0.16 + Math.max(1, state.bestFloor) * 0.075;
-    const restaurantFactor = 1
-      + Math.max(0, state.restaurantLevel - 1) * BALANCE.restaurantIncomePerLevel;
-    const dawnFactor = Math.sqrt(permanentMultiplier(state));
-    return floorFactor * restaurantFactor * dawnFactor;
-  }
-
-  function applyOfflineProgress(state, elapsedMilliseconds, now = null) {
-    const requestedMs = finiteNumber(elapsedMilliseconds, 0, 0, MAX_NUMBER);
-    const appliedMs = Math.min(requestedMs, BALANCE.offlineCapMs);
-    const wholeSeconds = Math.floor(appliedMs / 1000);
-    const rate = estimateOfflineCoinsPerSecond(state);
-    const coinsEarned = wholeSeconds < 5 ? 0 : Math.floor(wholeSeconds * rate);
-    if (coinsEarned > 0) {
-      state.coins = Math.min(MAX_NUMBER, state.coins + coinsEarned);
-      state.lifetimeCoins = Math.min(MAX_NUMBER, state.lifetimeCoins + coinsEarned);
-      state.runCoinsEarned = Math.min(MAX_NUMBER, state.runCoinsEarned + coinsEarned);
-      state.offlineCoinsEarned = Math.min(
-        MAX_NUMBER,
-        state.offlineCoinsEarned + coinsEarned,
-      );
-    }
-    if (now !== null) state.lastSeen = positiveTimestamp(now, state.lastSeen);
-    return {
-      requestedMs,
-      appliedMs,
-      capped: requestedMs > BALANCE.offlineCapMs,
-      seconds: wholeSeconds,
-      rate,
-      coinsEarned,
-      floorsAdvanced: 0,
-    };
-  }
-
-  function serializeState(state, runtime = null, now = null) {
-    if (runtime) syncEnemyState(state, runtime);
-    if (now !== null) state.lastSeen = positiveTimestamp(now, state.lastSeen);
-    return JSON.stringify(normalizeSchema2(state, state.lastSeen));
-  }
-
-  function createEngine(initialState = null, options = {}) {
-    const now = options.now ?? currentTime();
-    let state = normalizeState(initialState || createFreshState(now), now);
-    let runtime = createRuntime(state);
-
-    function reseed(patch = {}, seedNow = now) {
-      state = normalizeSchema2({
-        ...createFreshState(seedNow),
-        ...(patch || {}),
-        version: Data.VERSION,
-        gameplaySchema: Data.GAMEPLAY_SCHEMA,
-      }, seedNow);
-      runtime = createRuntime(state);
-      return clone(state);
+    _enemyTarget(e) {
+      const cs = this.cats.filter(c => !c.dead && c.faintT <= 0);
+      if (!cs.length) return null;
+      if (e.passThrough || (e.flying && e.role === 'flying')) {
+        // すり抜け/飛行: 最も後ろ (x最小) の猫を狙う
+        return cs.sort((a, b) => a.x - b.x)[0];
+      }
+      if (e.role === 'support' || (e.role === 'elite' && e.summon)) {
+        return cs.sort((a, b) => b.x - a.x)[0] || cs[0]; // 後列支援は最前の猫を牽制
+      }
+      return cs.sort((a, b) => b.x - a.x)[0]; // 最前列の猫
     }
 
-    return {
-      get state() {
-        return state;
-      },
-      get runtime() {
-        return runtime;
-      },
-      getState() {
-        return clone(state);
-      },
-      getRuntime() {
-        return snapshotRuntime(state, runtime);
-      },
-      getRuntimeSummary() {
-        return summarizeRuntime(state, runtime);
-      },
-      getMetrics() {
-        return getMetrics(state, runtime);
-      },
-      advance(milliseconds) {
-        return simulate(state, runtime, milliseconds);
-      },
-      simulate(milliseconds) {
-        return simulate(state, runtime, milliseconds);
-      },
-      dispatch() {
-        return dispatchCat(state, runtime);
-      },
-      upgrade(id) {
-        return buyUpgrade(state, runtime, id);
-      },
-      specialize(style) {
-        return setSpecialization(state, runtime, style);
-      },
-      previewDawn() {
-        return previewDawn(state);
-      },
-      dawn() {
-        return performDawn(state, runtime);
-      },
-      applyOffline(elapsedMilliseconds, offlineNow = null) {
-        return applyOfflineProgress(state, elapsedMilliseconds, offlineNow);
-      },
-      drainEvents() {
-        return drainEvents(runtime);
-      },
-      serialize(saveNow = null) {
-        return serializeState(state, runtime, saveNow);
-      },
-      seed(patch = {}, seedNow = now) {
-        return reseed(patch, seedNow);
-      },
-      reset(resetNow = now) {
-        return reseed({}, resetNow);
-      },
-    };
+    _enemyStrike(e) {
+      const target = this.cats.find(u => u.uid === e.targetUid);
+      if (!target || target.dead || target.faintT > 0) return;
+      if (e.projectile) {
+        const strong = !!e.telegraph;
+        this._spawnProjectile(e, target, e.projectile, Math.round(e.atk * (e.buffedNext ? 1.8 : 1) * (strong ? 1.5 : 1)), strong);
+        e.buffedNext = false;
+        if (e.debuff) this._applySmokeDebuff(e);
+        e.telegraph = false;
+        return;
+      }
+      const strong = !!e.telegraph;
+      let dmg = Math.round(e.atk * (e.buffedNext ? (e.buffAllyMult || 1.8) : 1) * (strong ? 1.5 : 1));
+      e.buffedNext = false;
+      e.telegraph = false;
+      // ムギの盾構えで強攻撃を軽減
+      if (target.shieldUp && strong) { dmg = Math.round(dmg * 0.35); target.shieldUp = false; this.emit('shield-block', { uid: target.uid }); }
+      this._damageCat(target, dmg, { strong, srcUid: e.uid });
+      // 黒羽番兵の押し戻し
+      if (e.pushback && e.attackCount % e.pushback.every === 0) {
+        this.cats.forEach(c => { if (!c.dead && c.faintT <= 0 && c.role !== 'healer') c.x = Math.max(BALANCE.world.entryX, c.x - e.pushback.amount); });
+        this.emit('pushback', { uid: e.uid });
+      }
+    }
+
+    _applySmokeDebuff(e) {
+      this.cats.forEach(c => { if (!c.dead && c.faintT <= 0) c.missT = e.debuff.duration; });
+      this.emit('smoke', { uid: e.uid, duration: e.debuff.duration });
+    }
+
+    /* ---------------- ボス (10F カゲツバサ 3形態) ---------------- */
+    _tickBoss(e, dt) {
+      const b = e.boss;
+      b.phaseT += dt;
+      const phaseDef = b.def.phases[b.phase];
+
+      if (e.state === 'boss-intro') {
+        if (e.stateT > 1.0) { e.state = 'combat'; e.stateT = 0; }
+        return;
+      }
+      if (b.invulnT > 0) { b.invulnT -= dt; return; }
+
+      // 形態移行判定: HP境界 + 最低時間 + 代表行動を1回見せる (§8.4)
+      const hpRatio = e.hp / e.maxHp;
+      if (b.phase < 2 && hpRatio <= phaseDef.hpTo && b.phaseT >= phaseDef.minTime && b.signatureSeen) {
+        b.phase++;
+        b.phaseT = 0; b.signatureSeen = false; b.invulnT = 1.3;
+        e.flying = (b.phase === 1);
+        e.swooping = false;
+        e.state = 'combat'; e.stateT = 0;
+        this.hitstop = BALANCE.combat.hitstopStrong;
+        this.emit('boss-phase', { phase: b.phase, def: b.def.phases[b.phase] });
+        return;
+      }
+
+      // 形態ごとの行動
+      if (b.phase === 0) {
+        e.flying = false;
+        this._bossMelee(e, dt, { steal: true });
+        if (b.phaseT > 3) b.signatureSeen = true;
+      } else if (b.phase === 1) {
+        e.flying = true;
+        // 着地窓: 9秒ごとに3秒着地 (対空なしでも詰まない §8.2)
+        b.landCycleT += dt;
+        const inWindow = (b.landCycleT % 8) < 4;
+        e.swooping = inWindow;
+        // カラス召集
+        b.summonT = (b.summonT || 0) + dt;
+        if (b.summonT > 7) {
+          b.summonT = 0;
+          const crows = this.enemies.filter(a => !a.dead && a.defId === 'scrap_crow').length;
+          if (crows < 2) {
+            const c = this._makeEnemy('scrap_crow', (e.lane + 2) % 3, 'bossAdd');
+            this.enemies.push(c);
+            this.emit('enemy-summon', { srcUid: e.uid, defId: 'scrap_crow' });
+          }
+        }
+        this._bossMelee(e, dt, {});
+        if (b.summonT === 0 || b.phaseT > 4) b.signatureSeen = true;
+      } else {
+        e.flying = false; e.swooping = false;
+        // 入口封鎖 (§8.3)
+        b.sealCycleT = (b.sealCycleT || 0) + dt;
+        if (b.sealCycleT > 12) {
+          b.sealCycleT = 0;
+          this.bellLockT = 4;
+          b.sealT = 4;
+          b.signatureSeen = true;
+          this.emit('entry-seal', { duration: 4 });
+        }
+        if (b.sealT > 0) b.sealT -= dt;
+        this._bossMelee(e, dt, {});
+        if (b.phaseT > 4) b.signatureSeen = true;
+      }
+    }
+
+    _bossMelee(e, dt, opts) {
+      const target = this._enemyTarget(e);
+      if (!target) return;
+      const reach = e.range + this._unitHalfW();
+      const dist = e.x - target.x;
+      if (dist > reach && !e.flying) { e.x -= e.speed * dt; return; }
+      if (e.flying && !e.swooping && dist > 200) { e.x -= e.speed * dt; return; }
+      if (e.attackCd > 0) return;
+      if (e.state !== 'windup') {
+        e.state = 'windup'; e.stateT = 0; e.attackCd = e.interval; e.attackCount++;
+        e.telegraph = e.attackCount % 3 === 0;
+        if (e.telegraph) this.emit('telegraph', { uid: e.uid, boss: true });
+      } else if (e.stateT >= (e.telegraph ? 0.7 : e.windup)) {
+        e.state = 'combat'; e.stateT = 0;
+        const strong = !!e.telegraph; e.telegraph = false;
+        let dmg = Math.round(e.atk * (strong ? 1.6 : 1));
+        if (target.shieldUp && strong) { dmg = Math.round(dmg * 0.35); target.shieldUp = false; this.emit('shield-block', { uid: target.uid }); }
+        this._damageCat(target, dmg, { strong, srcUid: e.uid, boss: true });
+        // 第1形態: 配送箱の没収を試みる
+        if (opts.steal && strong && this.deliveries.length) {
+          const d = this.deliveries[0];
+          d.arrive += 5;
+          this.emit('delivery-stolen', { shopId: d.shopId });
+        }
+      }
+    }
+
+    /* ---------------- ダメージ/回復 ---------------- */
+    _applyDamage(target, dmg, info) {
+      if (target.dead) return;
+      if (target.boss && target.boss.invulnT > 0) return;
+      let dealt = dmg;
+      let shielded = false;
+      if (target.shieldReduce > 0 && target.shieldBroken <= 0) {
+        let reduce = target.shieldReduce;
+        if (this.relic === 'soot_claw' || this.hasShop('claw_forge')) reduce *= 0.5;
+        dealt = Math.max(1, Math.round(dmg * (1 - reduce)));
+        shielded = dealt < dmg;
+        this.metrics.dmgShielded += dmg - dealt;
+      }
+      if (target.side === 'enemy' && target.boss && target.boss.phase === 2) {
+        dealt = Math.max(1, Math.round(dealt * 0.6)); // 第3形態の盾行動
+      }
+      target.hp -= dealt;
+      target.flash = 0.12;
+      target.kb = info.strong ? 14 : 7;
+      if (target.side === 'enemy') this.hitstop = info.strong ? BALANCE.combat.hitstopStrong : BALANCE.combat.hitstopWeak;
+      this.emit('hit', {
+        uid: target.uid, side: target.side, dmg: dealt, shielded,
+        strong: !!info.strong, melee: !!info.melee, x: target.x, snipe: !!info.snipe
+      });
+      if (target.hp <= 0) {
+        target.hp = 0;
+        if (target.side === 'enemy') this._killEnemy(target);
+        else this._faintCat(target);
+      }
+    }
+
+    _damageCat(c, dmg, info) {
+      if (c.dead || c.faintT > 0) return;
+      c.hp -= dmg;
+      c.flash = 0.12;
+      c.kb = info.strong ? 12 : 6;
+      this.metrics.catHpLost += dmg;
+      const src = this.enemies.find(e => e.uid === info.srcUid);
+      if (src && src.flying) this.metrics.dmgFlying += dmg;
+      this.emit('cat-hit', { uid: c.uid, dmg, strong: !!info.strong });
+      if (c.hp <= 0) { c.hp = 0; this._faintCat(c); }
+    }
+
+    _faintCat(c) {
+      if (c.named) {
+        c.faintT = BALANCE.cats.reviveTime;
+        c.state = 'faint'; c.x = Math.max(BALANCE.world.entryX, c.x - 40);
+        this.emit('cat-faint', { uid: c.uid, defId: c.defId });
+      } else {
+        c.dead = true;
+        this.emit('helper-down', { uid: c.uid, defId: c.defId });
+      }
+    }
+
+    _killEnemy(e) {
+      e.dead = true;
+      e.removeFlag = true;
+      this.floorKillOrder.push(e.tag || e.defId);
+      if (e.tag === 'ledger' && this.floor === 8 && this.floorKillOrder.length === 1) {
+        this.kohaku.ledgerFirst = true;
+        this.emit('ledger-first', {});
+      }
+      this.coins += e.reward;
+      this.emit('ko', { uid: e.uid, defId: e.defId, x: e.x, reward: e.reward, boss: !!e.boss });
+    }
+
+    _heal(c, amount) {
+      if (c.dead || c.faintT > 0) return;
+      const before = c.hp;
+      c.hp = Math.min(c.maxHp, c.hp + amount);
+      this.metrics.healed += c.hp - before;
+    }
+
+    /* ---------------- 配送 (§10.1) ---------------- */
+    _tickDeliveries(dt) {
+      // 各店舗の出荷タイマー
+      Object.keys(this.shops).forEach(f => {
+        if (!(f in this.shopTimers)) this.shopTimers[f] = BALANCE.deliveries.interval;
+        this.shopTimers[f] -= dt;
+        if (this.shopTimers[f] <= 0) {
+          let interval = BALANCE.deliveries.interval;
+          if (this.relic === 'warm_box') interval *= 0.65;
+          this.shopTimers[f] = interval;
+          const shopId = this.shops[f];
+          const from = parseInt(f, 10);
+          const to = Math.max(from + 1, this.floor);
+          const travel = 2 + Math.abs(to - from) * BALANCE.deliveries.travelPerFloor;
+          this.deliveries.push({
+            uid: UID++, shopId, fromFloor: from, toFloor: to,
+            depart: this.time, arrive: this.time + travel, travel
+          });
+          this.emit('delivery-depart', { shopId, fromFloor: from, toFloor: to, travel });
+        }
+      });
+      // 到着処理
+      for (let i = this.deliveries.length - 1; i >= 0; i--) {
+        const d = this.deliveries[i];
+        if (this.time >= d.arrive) {
+          this.deliveries.splice(i, 1);
+          this._onDeliveryArrive(d);
+        }
+      }
+    }
+
+    _onDeliveryArrive(d) {
+      const B = BALANCE.deliveries;
+      let effect = 1;
+      if (this.relic === 'warm_box') effect = 1.5;
+      const shop = SHOPS[d.shopId];
+      switch (d.shopId) {
+        case 'fish_diner':
+          this.cats.forEach(c => { if (!c.dead && c.faintT <= 0) this._heal(c, Math.round(c.maxHp * B.healRatio * effect)); });
+          this.cats.forEach(c => { c.hasteFood = true; });
+          setTimeoutSafe(this, 4, () => this.cats.forEach(c => { c.hasteFood = false; }));
+          break;
+        case 'claw_forge':
+          this.cats.forEach(c => { c.forgeBuffT = B.forgeBuffTime * effect; });
+          break;
+        case 'clinic': {
+          const hurt = this.cats.filter(c => !c.dead).sort((a, b) => (a.hp / a.maxHp) - (b.hp / b.maxHp))[0];
+          if (hurt) this._heal(hurt, Math.round(hurt.maxHp * B.clinicHeal * effect));
+          this.cats.forEach(c => { if (c.named && c.faintT > 0) c.faintT = Math.min(c.faintT, 2); });
+          break;
+        }
+        case 'guild':
+          this.bellCd = 0;
+          this.rallyT = Math.max(this.rallyT, 3 * effect);
+          break;
+      }
+      // ルナ解放進捗: 3F制圧後の到着を数える
+      if (this.maxFloorReached >= 3 && !this.unlocked.luna && this.lunaProgress < CATS.luna.unlock.need) {
+        this.lunaProgress++;
+        this.emit('luna-progress', { n: this.lunaProgress, need: CATS.luna.unlock.need });
+        if (this.lunaProgress >= CATS.luna.unlock.need) {
+          this.unlocked.luna = true;
+          this.lunaSnipePending = true;
+          this.emit('unlock-cat', { catId: 'luna', style: 'luna-pop' });
+        }
+      }
+      // コハク条件2: 前線への配送到着5回
+      if (this.maxFloorReached >= 3) {
+        this.kohaku.deliveries++;
+        if (this.kohaku.deliveries >= BALANCE.kohaku.deliveries) this.emit('kohaku-progress', { key: 'deliveries', n: this.kohaku.deliveries });
+      }
+      this.emit('delivery-arrive', { shopId: d.shopId, icon: shop.deliveryIcon, item: shop.deliveryItem, fromFloor: d.fromFloor });
+    }
+
+    /* ---------------- 制圧・登階 (§6.4) ---------------- */
+    _onConquest() {
+      const def = this.floorDef();
+      this.mode = 'conquest';
+      this.conquestT = 0;
+      this.conquestPhase = 'hold';
+      this.coins += def.coinReward;
+      // 猫全員を勝利保持へ
+      this.cats.forEach(c => { if (!c.dead && c.faintT <= 0) { c.state = 'hold'; c.stateT = 0; } });
+      this.emit('floor-clear', { floor: this.floor, reward: def.coinReward });
+
+      // 8F: コハク解放判定
+      if (this.floor === 8 && !this.unlocked.kohaku) {
+        this._updateKohakuShopCondition();
+        if (this.kohaku.shopKinds && this.kohaku.deliveries >= BALANCE.kohaku.deliveries && this.kohaku.ledgerFirst) {
+          this.unlocked.kohaku = true;
+          this.kohaku.unlocked = true;
+          this.emit('unlock-cat', { catId: 'kohaku', style: 'gate-burst' });
+        }
+      }
+      // 5F: トト救出
+      if (this.floor === 5 && !this.unlocked.toto) {
+        this.unlocked.toto = true;
+        this.emit('unlock-cat', { catId: 'toto', style: 'rescue' });
+      }
+    }
+
+    _tickConquest(dt) {
+      this.conquestT += dt;
+      const T = BALANCE.floors.conquestTime;
+      const W = BALANCE.world;
+      // フェーズ: hold(0〜0.45) → toStairs(0.45〜1.15) → climb(1.15〜T)
+      const phase = this.conquestT < T * 0.24 ? 'hold'
+        : this.conquestT < T * 0.6 ? 'toStairs' : 'climb';
+      if (phase !== this.conquestPhase) {
+        this.conquestPhase = phase;
+        this.emit('conquest-phase', { phase });
+      }
+      for (const c of this.cats) {
+        if (c.dead || c.faintT > 0) continue;
+        if (phase === 'toStairs') {
+          c.state = 'toStairs';
+          c.x = Math.min(W.stairsX, c.x + 200 * dt);
+        } else if (phase === 'climb') {
+          c.state = 'climb'; // 実際の上昇は app.js が stairsPath で描画
+          c.stateT += dt;
+        }
+      }
+      if (this.conquestT >= T) this._finishConquest();
+    }
+
+    _finishConquest() {
+      const def = this.floorDef();
+      // 制圧後の用途確定
+      if (def.after && def.after.type === 'shop-choice' && !this.shops[this.floor]) {
+        this.mode = 'choice';
+        this._choiceFloor = this.floor;
+        this.pendingChoice = { type: 'shop', floor: this.floor, candidates: def.after.candidates };
+        this.emit('shop-choice', { floor: this.floor, candidates: def.after.candidates });
+        return;
+      }
+      if (def.after && def.after.relic && !this.relic) {
+        this.mode = 'choice';
+        this.pendingChoice = { type: 'relic', floor: this.floor };
+        this.emit('relic-choice', {});
+        return;
+      }
+      this._advanceFloor();
+    }
+
+    _afterChoice() { this._advanceFloor(); }
+
+    _advanceFloor() {
+      if (this.floor >= 10) {
+        this.mode = 'cleared';
+        this.emit('district-clear', {});
+        return;
+      }
+      this.enterFloor(this.floor + 1);
+    }
+
+    /* ---------------- 敗北 (§15) ---------------- */
+    _onDefeat() {
+      this.mode = 'defeat';
+      if (this.floor >= 8) this.dawnNoticed = true;
+      const m = this.metrics;
+      const scores = [];
+      scores.push(['frontline', 40]);
+      if (m.dmgFlying > m.catHpLost * 0.4) scores.push(['antiair', m.dmgFlying]);
+      if (m.dmgShielded > 60) scores.push(['shield', m.dmgShielded]);
+      if (m.supportCasts >= 3) scores.push(['backline', m.supportCasts * 30]);
+      if (m.catHpLost > m.healed * 2 + 100) scores.push(['recovery', m.catHpLost - m.healed]);
+      if (m.helperUpT < m.totalT * 0.4) scores.push(['rotation', 50]);
+      scores.sort((a, b) => b[1] - a[1]);
+      this.defeatInfo = {
+        floor: this.floor,
+        causes: scores.slice(0, 2).map(s => DIAGNOSIS[s[0]])
+      };
+      this.emit('defeat', this.defeatInfo);
+    }
+
+    retryFloor() {
+      this.defeatInfo = null;
+      this.enterFloor(this.floor);
+      // 再戦時は名前付き猫を立て直す
+      this.cats.forEach(c => { if (c.named) { c.hp = c.maxHp; c.faintT = 0; c.dead = false; } });
+      this.emit('retry', { floor: this.floor });
+    }
+
+    // コハク条件用: 8Fへ再挑戦 (達成済み項目は保持)
+    replayFloor(n) {
+      this.enterFloor(n);
+      this.cats.forEach(c => { if (c.named) { c.hp = c.maxHp; c.faintT = 0; c.dead = false; } });
+      this.emit('retry', { floor: n });
+    }
+
+    /* ---------------- 外部参照用スナップショット ---------------- */
+    kohakuConditions() {
+      return [
+        { key: 'shops', label: `ショップを${BALANCE.kohaku.shopKinds}種類以上配置`, done: this.kohaku.shopKinds, progress: `${this.shopKinds()}/${BALANCE.kohaku.shopKinds}` },
+        { key: 'deliveries', label: `補給箱を${BALANCE.kohaku.deliveries}回到着`, done: this.kohaku.deliveries >= BALANCE.kohaku.deliveries, progress: `${Math.min(this.kohaku.deliveries, BALANCE.kohaku.deliveries)}/${BALANCE.kohaku.deliveries}` },
+        { key: 'ledger', label: '8Fで帳簿係を最初に倒す', done: this.kohaku.ledgerFirst, progress: this.kohaku.ledgerFirst ? '達成' : '未達' }
+      ];
+    }
   }
 
-  root.CatsTowerCore = Object.freeze({
-    createFreshState,
-    normalizeState,
-    migrateSchema1,
-    migrateLegacyV01,
-    restoreState,
-    deserializeState,
-    serializeState,
-    enemyDefinitionForFloor,
-    computeEnemyStats,
-    createEnemy,
-    permanentMultiplier,
-    computeDispatchInterval,
-    catDefinition,
-    unlockedNamedCats,
-    computePartyCapacity,
-    computeCatStats,
-    computeRestaurantDeliveryInterval,
-    computeRoomRecoveryMs,
-    coinsPerHit,
-    createRuntime,
-    summarizeRuntime,
-    snapshotRuntime,
-    getMetrics,
-    drainEvents,
-    spawnCat,
-    spawnSpecificCat,
-    dispatchCat,
-    getUpgradeCost,
-    buyUpgrade,
-    setSpecialization,
-    simulate,
-    calculateDawnReward,
-    previewDawn,
-    performDawn,
-    estimateOfflineCoinsPerSecond,
-    applyOfflineProgress,
-    createEngine,
-  });
+  // setTimeout をコアに持ち込まないための簡易遅延 (シム時間で実行)
+  function setTimeoutSafe(game, sec, fn) {
+    const item = { at: game.time + sec, fn };
+    if (!game._timers) {
+      game._timers = [];
+      const origUpdate = game.update.bind(game);
+      game.update = function (dt) {
+        origUpdate(dt);
+        for (let i = game._timers.length - 1; i >= 0; i--) {
+          if (game.time >= game._timers[i].at) { const t = game._timers.splice(i, 1)[0]; t.fn(); }
+        }
+      };
+    }
+    game._timers.push(item);
+  }
+
+  const EXPORT = { Game };
+  if (typeof module !== 'undefined' && module.exports) module.exports = EXPORT;
+  global.GAME_CORE = EXPORT;
 })(typeof window !== 'undefined' ? window : globalThis);
