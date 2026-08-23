@@ -129,3 +129,60 @@
 8. 現在の作業ツリー、GitHub `main`、固定Vercel Production
 
 `main`、Vercel deployment、1〜10F Preview Ready、100F Product Production Readyは別の状態です。ページが開く、buildが通る、deploymentがREADYというだけではProduction Readyにしません。
+
+## プロトタイプ (kimiブランチ)
+
+`kimi` ブランチのルートruntimeは、[`PROTOTYPE_SPEC.md`](./PROTOTYPE_SPEC.md) に基づく
+**1〜10F 戦闘プロトタイプ**の新規実装です。旧 v0.8.2 runtime は git 履歴
+(baseline checkpoint `727b8d0`) と `.github/baselines/` に保全されており、
+本ブランチの `index.html / styles.css / game-data.js / game-core.js / app.js /
+manifest.webmanifest / sw.js` は全て新規コードで置き換えられています。
+
+### 起動方法
+
+ビルド不要のバニラ HTML/CSS/JS です。静的サーバで配信するだけで動きます。
+
+```sh
+python3 -m http.server 8080
+# → http://localhost:8080/ をスマホ縦画面 (基準幅390px) で開く
+```
+
+- `?demo=1` を付けると自動運転 (呼び鈴・強化・店舗選択を自動実行) になり、
+  画面録画での検証に使えます。
+- 検証用に `window.__game` (game-core の Game インスタンス) を公開しています。
+- `node --check game-data.js game-core.js app.js sw.js` で構文検証できます。
+  `game-core.js` は描画非依存のため Node から `require` してバランス検証も可能です。
+
+### 旧版 (v0.8.2) との関係
+
+旧版の最大欠陥 (猫が1レーンに重なる、UI過剰、トースト文章依存、敵が単体HP差替えモデル)
+を踏まえ、プロトタイプでは次を満たすことを目標にしています。
+
+- 猫は入口から戦線まで実際に走り、接敵→予備動作→接触/弾着→ダメージ→反動→
+  ヒットストップ(50〜80ms) の順に目で追える戦闘
+- 3レーン+縦列形成でユニットが判別不能に重ならない配置
+- 複数敵の同時存在と、前衛/盾/飛行/遠距離/後列支援の役割差
+- 戦闘領域が画面高の55%以上、常駐UIは下部の呼び鈴・名簿・強化のみ
+- 制圧→報酬→猫が階段を登る→次階入場の視覚ループ (約2.0秒)
+- 制圧階の暖色化、店舗で働く猫、階をまたぐ配送アニメーション (塔閲覧モード)
+- 公開条件と進捗を示す猫名簿と、演出つきの猫解放 (ルナ/トト/コハク)
+- 敗北診断 (最大2件の主因と改善導線)
+
+### 画像アセット
+
+`assets/prototype/` 配下の透過PNG (猫7種・敵9種・背景3種・店舗4種) を参照します。
+アンカーメタデータ (`visibleBounds / footAnchor / headAnchor / contactAnchor /
+displayScale`) は `game-data.js` の `ASSETS` に定義してあり、画像実寸が変わっても
+ここだけ調整すればよい構造です (実測値は `assets/prototype/anchors.json` を転記済み)。
+画像が存在しない・読み込めない場合は、同一アンカー契約の手続きフォールバック描画
+(Canvas) で起動・プレイ可能です。音は WebAudio 簡易音で、命中・KO・コイン・制圧など
+視覚イベントと同フレームに鳴らします (右上でミュート可)。
+
+### 既知の未実装事項 (プロトタイプの OUT OF SCOPE)
+
+- セーブ/復元 (schema3)、夜明け、恒久祝福 (敗北画面に注記のみ)
+- 11F以降のプレイ (塔閲覧では輪郭のみ表示)
+- 本番用BGM/SE素材 (WebAudio仮音)、BGMとSEの個別音量
+- ショップ重複配置の効果逓減の細かい数値、店舗レベル
+- 煙コウモリの照準乱れなど一部デバフの表示強化
+- 物理iPhone実機検証、PWAインストール検証
