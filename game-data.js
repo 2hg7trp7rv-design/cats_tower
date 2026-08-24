@@ -161,7 +161,7 @@
     fieldCatSpeed: 55,        // 猫の移動速度 px/秒 (軽業のくつで増加)
     bossAttackInterval: 3.0,  // ボスが猫を気絶させる間隔 (損失なし・入口へ戻るだけ)
     addAttackInterval: 4.5,
-    maxFieldCats: 40,         // フィールド上の猫の上限 (描画は24体+×N)
+    maxFieldCats: 42,         // フィールド上の猫の上限 (描画は24体+×N)
     maxFieldEnemies: 3,       // ザコの同時出現上限 (1〜3体)
     prestigeUnlockFloor: 10,  // 転生解放: 10F制圧後 (maxFloor >= 10)
     offlineMaxHours: 8,       // オフライン収益 上限8h
@@ -206,8 +206,41 @@
     }
   };
 
+  /* ------------------------------------------------------------------ *
+   * 和風単位フォーマッタ fmt (4桁区切り・上位2グループ連結)
+   *   1万未満: 整数そのまま (例 "9999")
+   *   例: 123450000 → "1億2345万" / 582266×10^60 → "58不2266那"
+   *   単位: 万 億 兆 京 垓 秭 穣 溝 澗 正 載 極 恒(河沙) 阿(僧祇) 那(由他)
+   *         不(可思議) 無(量大数)
+   * ------------------------------------------------------------------ */
+  const W_UNITS = ['万', '億', '兆', '京', '垓', '秭', '穣', '溝', '澗', '正', '載', '極', '恒', '阿', '那', '不', '無'];
+  function fmt(n) {
+    if (!isFinite(n)) return '∞';
+    n = Math.floor(Number(n) || 0);
+    if (n < 0) return '-' + fmt(-n);
+    if (n < 10000) return String(n);
+    // 4桁ごとのグループに分解 (groups[0]=下位)
+    const groups = [];
+    while (n > 0) { groups.push(n % 10000); n = Math.floor(n / 10000); }
+    // 「無」より上の桁は最上位グループに畳み込む
+    const maxIdx = W_UNITS.length; // groups.length-1 の上限 (=16 → 単位「無」)
+    if (groups.length - 1 > maxIdx) {
+      let val = 0;
+      for (let i = groups.length - 1; i >= maxIdx; i--) val = val * 10000 + groups[i];
+      groups.length = maxIdx + 1;
+      groups[maxIdx] = val;
+    }
+    const top = groups.length - 1; // >= 1
+    let s = groups[top] + W_UNITS[top - 1];
+    if (top - 1 >= 1 && groups[top - 1] > 0) {
+      s += String(groups[top - 1]).padStart(4, '0') + W_UNITS[top - 2];
+    }
+    return s;
+  }
+
   const EXPORT = {
     JOBS, JOB_ORDER,
+    fmt,
     ELEMENTS, ELEMENT_CYCLE, floorElement,
     WEAPONS, WEAPON_ORDER, weaponAt, generatedWeapon,
     ITEMS, ITEM_ORDER,
