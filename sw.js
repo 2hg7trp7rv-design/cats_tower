@@ -1,7 +1,7 @@
 /* Cat's Tower — 商人サーガ風ドット絵版 Service Worker
  * シェル+新規素材(saga/フォント)を precache。画像は network-first
  * (後から追加・差替えされた画像が反映されるようにする)。 */
-const CACHE = 'cats-tower-saga-v2';
+const CACHE = 'cats-tower-saga-v3';
 const SHELL = [
   './',
   'index.html',

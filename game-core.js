@@ -172,7 +172,13 @@
     coinMult() { return (1 + 0.25 * (this.items.lucky_coin || 0)) * this.itemShopBonus(); }
     tapCount() { return 1 + Math.floor((this.items.bell_charm || 0) * this.itemShopBonus()); }
     autoSlots() { return 1 + (this.treasures.extra_slot ? 1 : 0); }
-    autoInterval() { return BALANCE.autoDeployBase; }
+    // 全ジョブの所持数合計 (所持数 = 同時に戦場に出る仲間の数)
+    totalOwned() { let s = 0; for (const id in this.jobs) s += this.jobs[id].owned; return s; }
+    // 実機FB: 所持数に意味を持たせる — 総所持数が多いほどオート出撃の連射が速くなる
+    // (Merchant Saga の「仲間数=攻撃回数」相当)。interval = base * 25/(25+totalOwned)、下限 0.25秒。
+    autoInterval() {
+      return Math.max(0.25, BALANCE.autoDeployBase * (25 / (25 + this.totalOwned())));
+    }
     get incomePerSec() {
       return this._d.income * (this.treasures.ledger ? 1.5 : 1);
     }
@@ -198,7 +204,23 @@
     get prestigeAvailable() { return this.maxFloor >= BALANCE.prestigeUnlockFloor; }
 
     /* ================= 招集 ================= */
-    _spawnCat() {
+    // 上限到達時のリサイクル対象を1体選ぶ:
+    //   1) state==='walk' の中で x 最大 (出口から最も遠い=前線直近) のもの
+    //   2) 無ければ state==='fight' の最古 (fieldCats は push 順=古い順)
+    //   3) それも無ければ最古の faint
+    _recycleVictim() {
+      let victim = null;
+      for (const c of this.fieldCats) {
+        if (c.state === 'walk' && (!victim || c.x > victim.x)) victim = c;
+      }
+      if (victim) return victim;
+      const fight = this.fieldCats.find(c => c.state === 'fight');
+      if (fight) return fight;
+      return this.fieldCats[0] || null; // 最古 (faint しか残っていないケース)
+    }
+    // recycle=true (タップ経由) のとき上限到達なら最も出口に近い/最古の猫を1体リサイクルして必ずスポーン。
+    // recycle=false (オート出撃) は従来どおり上限を尊重して null を返す。
+    _spawnCat(recycle) {
       // 雇用済みロースターから所持数で重み付け抽出
       const pool = [];
       for (const id of JOB_ORDER) {
@@ -207,18 +229,26 @@
       }
       if (!pool.length) return null;
       const jobId = pool[Math.floor(this._rand() * pool.length)];
-      if (this.catsOnScreen >= BALANCE.maxFieldCats) return null;
+      if (this.catsOnScreen >= BALANCE.maxFieldCats) {
+        if (!recycle) return null;
+        const victim = this._recycleVictim();
+        if (!victim) return null;
+        this.fieldCats = this.fieldCats.filter(c => c !== victim);
+        this.emit('cat-recycle', { uid: victim.uid, jobId: victim.jobId });
+      }
       const cat = { uid: UID++, jobId: jobId, x: 30, state: 'walk', atkT: 0, faint: 0 };
       this.fieldCats.push(cat);
       return cat;
     }
     // タップ招集: 0.12秒間隔上限。招集は無料。
+    // 実機FB: 敵HPリジェネ膠着で猫が帯に溜まるとタップが無反応になっていた。
+    // タップ経由は上限到達時にリサイクルして必ずスポーンし、常に視覚フィードバックを返す。
     tap() {
       if (this.tapCd > 0) return 0;
       this.tapCd = BALANCE.tapInterval;
       let n = 0;
       const count = this.tapCount();
-      for (let i = 0; i < count; i++) if (this._spawnCat()) n++;
+      for (let i = 0; i < count; i++) if (this._spawnCat(true)) n++;
       if (n > 0) this.emit('summon', { count: n });
       return n;
     }
