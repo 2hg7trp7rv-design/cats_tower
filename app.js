@@ -9,6 +9,19 @@
 (function () {
   'use strict';
 
+  /* iOSブラウザのURLバー開閉・履歴復元でVisual Viewportだけが移動すると、
+   * layout viewport基準のステージが上へずれて下端に同量の空白が出る。
+   * 実際に見えているVisual Viewportの上端と高さへルートを同期する。 */
+  const rootStyle = document.documentElement.style;
+  function syncVisualViewport() {
+    const visual = window.visualViewport;
+    const top = Math.round(visual ? visual.pageTop : (window.scrollY || 0));
+    const height = Math.max(1, Math.round((visual && visual.height) || window.innerHeight || document.documentElement.clientHeight));
+    rootStyle.setProperty('--app-top', top + 'px');
+    rootStyle.setProperty('--app-height', height + 'px');
+  }
+  syncVisualViewport();
+
   const DATA = window.GAME_DATA;
   const {
     JOBS, JOB_ORDER, weaponAt, ITEMS, ITEM_ORDER,
@@ -173,7 +186,23 @@
     view.w = BALANCE.world.width;
     view.h = ch / view.scale;
   }
-  window.addEventListener('resize', resize);
+  let viewportRaf = 0;
+  function queueViewportSync() {
+    if (viewportRaf) cancelAnimationFrame(viewportRaf);
+    viewportRaf = requestAnimationFrame(() => {
+      viewportRaf = 0;
+      syncVisualViewport();
+      resize();
+    });
+  }
+  window.addEventListener('resize', queueViewportSync, { passive: true });
+  window.addEventListener('orientationchange', queueViewportSync, { passive: true });
+  window.addEventListener('pageshow', queueViewportSync, { passive: true });
+  window.addEventListener('scroll', queueViewportSync, { passive: true });
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', queueViewportSync, { passive: true });
+    window.visualViewport.addEventListener('scroll', queueViewportSync, { passive: true });
+  }
 
   /* =====================================================================
    * エフェクト状態 (描画専用)
