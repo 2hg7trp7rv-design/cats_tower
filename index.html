@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#1b2030">
-<title>Cat's Tower — 放置クリッカー</title>
-<meta name="description" content="猫を招集して魔王城の塔を駆け上がる放置クリッカー。制圧した階に店を建て、夜明けで強くなる。">
+<title>Cat's Tower — 猫の商人サーガ</title>
+<meta name="description" content="猫の商人ムギが勇者ねこを雇って魔王城の塔を駆け上がる。制圧した階に武器屋・道具屋を建て、転生で強くなる。">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="assets/icons/icon-192.png">
 <link rel="stylesheet" href="styles.css">
@@ -20,7 +20,7 @@
         <span id="hud-floor">1F</span>
         <span class="hud-spacer"></span>
         <span id="hud-coins-wrap" title="コイン">💰<span id="hud-coins">0</span></span>
-        <span id="hud-sparkles-wrap" title="きらめき">✨<span id="hud-sparkles">0</span></span>
+        <span id="hud-sparkles-wrap" title="ルビー">💎<span id="hud-sparkles">0</span></span>
         <button id="btn-mute" class="hud-btn" aria-label="ミュート">🔊</button>
       </div>
       <div class="hud-row sub">
@@ -28,7 +28,7 @@
         <span id="hud-dps">DPS 0</span>
         <span class="hud-spacer"></span>
         <button id="btn-shop-pending" class="hud-btn accent" style="display:none">🏪 建店!</button>
-        <button id="btn-dawn" class="hud-btn dawn" disabled>🌅 夜明け</button>
+        <button id="btn-dawn" class="hud-btn dawn" disabled>🔄 転生</button>
       </div>
     </header>
 
@@ -40,17 +40,17 @@
 
     <!-- 招集大ボタン -->
     <div id="summon-area">
-      <button id="btn-summon" aria-label="にゃんこ招集">
+      <button id="btn-summon" aria-label="にゃんこ勇者招集">
         <span class="sum-icon">🐱</span>
-        <span class="sum-label">にゃんこ招集</span>
+        <span class="sum-label">にゃんこ勇者招集</span>
         <small id="summon-sub">タップで即招集 / 長押しで連打</small>
       </button>
     </div>
 
     <!-- 3店タブ + 塔 -->
     <nav id="tabs">
-      <button id="tab-agency" class="tab"><span class="ticon">🐾</span>派遣所</button>
-      <button id="tab-forge" class="tab"><span class="ticon">⚒️</span>かじ屋</button>
+      <button id="tab-agency" class="tab"><span class="ticon">🐾</span>人材派遣屋</button>
+      <button id="tab-forge" class="tab"><span class="ticon">⚔️</span>武器屋</button>
       <button id="tab-item" class="tab"><span class="ticon">🎒</span>道具屋</button>
       <button id="btn-tower" class="tab"><span class="ticon">🗼</span>塔</button>
     </nav>
@@ -58,17 +58,28 @@
     <!-- ボトムシート挿入先 -->
     <div id="sheets"></div>
 
-    <!-- 夜明けモーダル (確認 + 宝物庫) -->
+    <!-- 転生モーダル (確認 + 伝説の道具屋) -->
     <div id="modal-prestige" class="modal" hidden>
       <div class="modal-card">
-        <h3>🌅 夜明け</h3>
-        <p class="modal-sub">塔が夜明けを迎える。階・コイン・雇用・武器・道具・建店はリセットされ、<b>✨きらめき</b>を得る。</p>
+        <h3>🔄 転生</h3>
+        <p class="modal-sub">王様の恩恵で世界をやり直す。階・コイン・雇用・武器・道具・建店はリセットされ、<b>💎ルビー</b>を得る。</p>
         <p id="prestige-gain" class="prestige-gain"></p>
-        <h4>✨ 宝物庫 (永続パッシブ)</h4>
+        <h4>💎 伝説の道具屋 (永続パッシブ)</h4>
         <div id="treasure-list"></div>
         <div class="btn-col">
-          <button id="btn-do-prestige" class="primary">夜明けを迎える</button>
+          <button id="btn-do-prestige" class="primary">転生する</button>
           <button id="btn-close-prestige" class="ghost">閉じる</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- イントロ (開始時に1枚表示・スキップ可) -->
+    <div id="modal-intro" class="modal" hidden>
+      <div class="modal-card">
+        <h3>🐱 はじまり</h3>
+        <p id="intro-text" class="intro-text"></p>
+        <div class="btn-col">
+          <button id="btn-close-intro" class="primary">出発する</button>
         </div>
       </div>
     </div>
@@ -90,8 +101,8 @@
       <div id="title-inner">
         <div id="title-logo">🐱🗼</div>
         <h1>Cat's Tower</h1>
-        <p class="title-sub">放置クリッカー — 猫の商人と魔王城</p>
-        <p class="title-desc">猫を招集して塔を駆け上がれ。<br>制圧した階に店を建て、夜明けで強くなる。</p>
+        <p class="title-sub">猫の商人サーガ — ムギと魔王城の塔</p>
+        <p class="title-desc">にゃんこ勇者を招集して塔を駆け上がれ。<br>制圧した階に店を建て、転生で強くなる。</p>
         <button id="btn-start">はじめる</button>
         <p class="title-note">縦画面推奨 / 音が出ます (右上でミュート可)</p>
       </div>

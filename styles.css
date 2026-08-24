@@ -1,5 +1,5 @@
 /* =========================================================================
- * Cat's Tower — 放置クリッカー版 (IDLE_DESIGN.md §2 画面構成)
+ * Cat's Tower — 商人サーガ忠実版 (CLONE_DESIGN.md 準拠)
  * 390px 縦: 上部HUD / 戦闘Canvas / 招集大ボタン / 3店タブ+塔
  * ========================================================================= */
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -208,6 +208,12 @@ button.primary:disabled { opacity: 0.4; }
 .modal-card h4 { color: #9ad8ff; font-size: 13px; margin: 12px 0 6px; }
 .modal-sub { font-size: 11.5px; color: #b8b4a8; }
 .prestige-gain { text-align: center; font-size: 22px; font-weight: 900; color: #9ad8ff; margin: 12px 0; }
+.intro-text {
+  font-size: 13px; color: #e8e4d8; line-height: 1.9;
+  white-space: pre-line; text-align: left;
+  background: rgba(0, 0, 0, 0.25); border-radius: 10px;
+  padding: 12px 14px; margin: 8px 0;
+}
 
 /* ---------- タイトル ---------- */
 #title-screen {
