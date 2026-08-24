@@ -1,7 +1,7 @@
-/* Cat's Tower 放置クリッカー版 (kimiブランチ) Service Worker
- * シェルのみ cache-first。assets/prototype の画像は network-first
- * (後から追加された画像が反映されるようにする)。 */
-const CACHE = 'cats-tower-idle-v1';
+/* Cat's Tower — 商人サーガ風ドット絵版 Service Worker
+ * シェル+新規素材(saga/フォント)を precache。画像は network-first
+ * (後から追加・差替えされた画像が反映されるようにする)。 */
+const CACHE = 'cats-tower-saga-v2';
 const SHELL = [
   './',
   'index.html',
@@ -9,7 +9,29 @@ const SHELL = [
   'game-data.js',
   'game-core.js',
   'app.js',
-  'manifest.webmanifest'
+  'manifest.webmanifest',
+  // ドット絵フォント
+  'assets/fonts/DotGothic16-Regular.ttf',
+  // 商人サーガ風 自作素材
+  'assets/saga/bg_corridor.webp',
+  'assets/saga/bg_title.webp',
+  'assets/saga/castle_gate.webp',
+  'assets/saga/shop_agency.webp',
+  'assets/saga/shop_item.webp',
+  'assets/saga/shop_legend.webp',
+  'assets/saga/shop_weapon.webp',
+  'assets/saga/cat_gray_0.png',
+  'assets/saga/cat_gray_1.png',
+  'assets/saga/cat_gray_2.png',
+  'assets/saga/cat_gray_3.png',
+  'assets/saga/cat_black_0.png',
+  'assets/saga/cat_black_1.png',
+  'assets/saga/cat_black_2.png',
+  'assets/saga/cat_black_3.png',
+  'assets/saga/cat_calico_0.png',
+  'assets/saga/cat_calico_1.png',
+  'assets/saga/cat_calico_2.png',
+  'assets/saga/cat_calico_3.png'
 ];
 
 self.addEventListener('install', e => {
@@ -27,7 +49,7 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET' || url.origin !== location.origin) return;
-  if (url.pathname.startsWith('/assets/prototype/')) {
+  if (url.pathname.startsWith('/assets/')) {
     // 画像は network-first (追加・差替えを即反映)。失敗時はキャッシュ/404。
     e.respondWith(
       fetch(e.request)
