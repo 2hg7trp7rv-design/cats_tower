@@ -169,8 +169,8 @@
   function updateBattleProgressText() {
     const guardian = game.guardian;
     const isBoss = !!guardian;
-    const current = isBoss ? Math.max(0, Math.ceil(guardian.hp)) : game.kills;
-    const maximum = isBoss ? Math.max(1, Math.ceil(guardian.maxHp)) : game.killNeed;
+    const current = isBoss ? Math.max(0, Math.floor(guardian.hp)) : game.kills;
+    const maximum = isBoss ? Math.max(1, Math.floor(guardian.maxHp)) : game.killNeed;
     const attrMark = isBoss && guardian.attr && guardian.attr !== 'none' ? ELEMENTS[guardian.attr].mark : '';
     const text = isBoss
       ? '👑 BOSS ' + game.floor + 'F' + (attrMark ? ' ' + attrMark : '') + '  ' + fmt(guardian.hp) + ' / ' + fmt(guardian.maxHp)
