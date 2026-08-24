@@ -155,7 +155,7 @@
   const offCanvas = document.createElement('canvas');
   const offCtx = offCanvas.getContext('2d');
   let ctx = offCtx; // 描画関数はすべてオフスクリーンへ
-  const PIXEL_DIV = 2.5; // 低解像度化率 (幅=表示幅の約1/2.5)
+  const PIXEL_DIV = 1.6; // 低解像度化率 (幅=表示幅の約1/1.6。粒感は残しつつ階層アートを視認できる精細さに)
   let view = { w: 390, h: 300, scale: 1, dpr: 1 };
   const flipX = x => view.w - x; // 左右反転: 敵=左 / 猫=右から左へ進軍
   function groundY() { return view.h * 0.82; }
@@ -232,6 +232,8 @@
       : Math.sin(t * 2 + (opts.uid || 0)) * 1.2;
     ctx.translate(0, -bob);
     if (img) {
+      // 明るくなった背景上での視認性確保: 敵には薄い暗縁の発光を添える
+      if (opts.glow) { ctx.shadowColor = opts.glow; ctx.shadowBlur = 6; }
       const sm = spriteMetrics(img, meta, scale);
       ctx.drawImage(img, sm.dx, sm.dy, sm.w, sm.h);
     } else {
@@ -262,7 +264,11 @@
     if (img) {
       const s = Math.max(view.w / img.width, H / img.height);
       const dw = img.width * s, dh = img.height * s;
+      // 実機FB: 元アート(平均輝度≒29/255)が暗すぎて階層が認識できないため明度を持ち上げる。
+      // ctx.filter 非対応環境では無害に無視され従来表示にフォールバックする。
+      if ('filter' in ctx) ctx.filter = 'brightness(1.55) saturate(1.08)';
       ctx.drawImage(img, (view.w - dw) / 2, (H - dh) / 2, dw, dh);
+      if ('filter' in ctx) ctx.filter = 'none';
     } else {
       const grd = ctx.createLinearGradient(0, 0, 0, H);
       grd.addColorStop(0, '#2b2138'); grd.addColorStop(1, '#14101f');
@@ -338,7 +344,7 @@
       const y = gy + (e.kind === 'add' ? 14 : 4);
       drawShadow(ex, y, e.boss ? 34 : 18);
       const flyH = (e.sprite === 'smoke_bat' || e.sprite === 'scrap_crow') ? 26 + Math.sin(t * 3 + e.uid) * 4 : 0;
-      drawSprite('enemies', e.sprite, ex, y - flyH, 1, t, { uid: e.uid, walking: false, flip: true });
+      drawSprite('enemies', e.sprite, ex, y - flyH, 1, t, { uid: e.uid, walking: false, flip: true, glow: 'rgba(0,0,0,0.6)' });
       // 属性マーク (敵アイコン横) + 弱点/耐性の相性表示
       if (e.attr && e.attr !== 'none') {
         const el2 = ELEMENTS[e.attr];
@@ -478,13 +484,13 @@
         case 'floor-clear': {
           Audio2.clear();
           fx.flashT = 1;
-          showBanner(ev.boss ? '👑 ' + ev.floor + 'F ボス制圧!' : ev.floor + 'F 制圧!', 1.6, ev.boss);
+          showBanner(ev.boss ? '👑 ' + ev.floor + 'F ボス制圧! 空き階ができた' : ev.floor + 'F 制圧! 空き階になった — 塔リストから建店できる', 1.6, ev.boss);
           addDmgNum(view.w / 2, groundY() - 90, '+' + fmt(ev.coin) + '💰', '#ffd75a', true);
           for (let i = 0; i < 5; i++) fx.coins.push({ x0: view.w - 300 + i * 8, y0: groundY() - 60, t: -i * 0.09 });
           burst(view.w - 300, groundY() - 30, 16, '#ffd75a', 120, 0.7);
           if (!REDUCED) fx.shake = Math.max(fx.shake, ev.boss ? 7 : 3);
-          // 建店2択を提示 (武器屋・道具屋)
-          openPendingShopChoice();
+          // 実機FB: 建店2択シートは自動で開かない。保留件数をバッジ表示するだけ (手動: 🏪バッジ or 塔リストの空き階＋)
+          updateHud();
           break;
         }
         case 'floor-enter':
@@ -534,7 +540,10 @@
     dawn.disabled = !ok;
     dawn.classList.toggle('ready', ok);
     dawn.title = ok ? '💎' + game.prestigeGain() + ' ルビーを得られる' : '10F制圧で解放';
-    el('btn-shop-pending').style.display = game.pendingShopChoices.length ? '' : 'none';
+    const pendN = game.pendingShopChoices.length;
+    const pendBtn = el('btn-shop-pending');
+    pendBtn.style.display = pendN ? '' : 'none';
+    pendBtn.textContent = pendN ? '🏪 建店×' + pendN : '🏪 建店!'; // 保留件数をバッジ表示 (.accent の pulse アニメで軽く点滅)
     el('summon-sub').textContent = 'タップで' + game.tapCount() + '体招集 / 長押しで連打';
     renderTower();
   }
@@ -608,7 +617,7 @@
         (st ? '<button class="buy lvup" data-id="' + id + '" ' + (game.coins < lvCost ? 'disabled' : '') + '>Lv↑ ' + fmt(lvCost) + '</button>' : '') +
         '</div></div>';
     }).join('');
-    const sheet = openSheet('<h3>🐾 人材派遣屋</h3><p class="sheet-sub">合計Lv ' + totalLv + ' — 雇用した勇者ねこは恒久的に編成へ。Lvで攻撃力+25%。</p>' + rows +
+    const sheet = openSheet('<h3>🐾 人材派遣屋</h3><p class="sheet-sub">合計Lv ' + totalLv + ' — 雇用した勇者ねこは恒久的に編成へ。Lvで攻撃力+25%。<br>所持数 = 同時に戦場に出る仲間の数。多いほど連射が速くなる。</p>' + rows +
       '<button class="ghost close">閉じる</button>');
     wire(sheet, '.hire', b => { if (game.hireJob(b.dataset.id)) { updateHud(); openAgency(); } });
     wire(sheet, '.lvup', b => { if (game.levelUpJob(b.dataset.id)) { updateHud(); openAgency(); } });
@@ -703,7 +712,7 @@
     wire(sheet, '.pick-shop', b => {
       game.buildShop(ch.floor, b.dataset.id);
       closeSheets(); updateHud();
-      if (game.pendingShopChoices.length) openPendingShopChoice();
+      // 実機FB: 建てたら閉じるだけ。残りの保留件数はバッジ表示に任せ、連鎖で開かない
     });
     wire(sheet, '.skip', () => closeSheets());
   }
@@ -932,7 +941,7 @@
     function closeIntro() {
       el('modal-intro').hidden = true;
       Audio2.ui();
-      if (game.pendingShopChoices.length) openPendingShopChoice();
+      // 実機FB: イントロを閉じても建店シートは自動で開かない (バッジ/塔リストから手動で)
     }
     el('btn-close-intro').addEventListener('click', closeIntro);
     requestAnimationFrame(loop);
