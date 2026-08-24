@@ -1,10 +1,11 @@
 /* =========================================================================
- * Cat's Tower — 放置クリッカー版 (IDLE_DESIGN.md 準拠)
+ * Cat's Tower — 商人サーガ忠実版 (CLONE_DESIGN.md 準拠)
  * game-core.js : 秒ベースtickのシミュレーション (DOM/描画/音に依存しない)
  *
  *   - Node から require してバランス検証できる (module.exports)。
- *   - オート出撃・タップ招集・HP壁の敵・階進行・3店舗購入・建店・夜明け・
- *     オフライン収益・セーブ/ロード用シリアライズをすべてここで扱う。
+ *   - オート出撃・タップ招集・ザコ連続出現(撃破数制圧)・ボス階・属性相性・
+ *     人材派遣屋/武器屋/道具屋・建店2種・転生・オフライン収益・
+ *     セーブ/ロード用シリアライズをすべてここで扱う。
  *   - 画面へ出す出来事は this.events に {type, ...} で積み、app.js が拾う。
  * ========================================================================= */
 (function (global) {
@@ -15,8 +16,10 @@
     : global.GAME_DATA;
 
   const {
-    JOBS, JOB_ORDER, weaponAt, ITEMS, SHOP_ORDER, dinerIncome, sameShopFactor,
-    TREASURES, isBossFloor, guardianHp, addHp, floorCoins, guardianSprite, addSprite,
+    JOBS, JOB_ORDER, weaponAt, ITEMS, SHOP_ORDER, shopIncome, LEGACY_SHOP_MAP,
+    TREASURES, ELEMENTS, floorElement,
+    isBossFloor, killNeed, guardianHp, addHp, floorCoins, addCoins,
+    guardianSprite, addSprite,
     BALANCE
   } = DATA;
 
@@ -36,8 +39,8 @@
   class Game {
     constructor() {
       this.events = [];
-      this.sparkles = 0;
-      this.treasures = {};              // 宝物庫の購入済みフラグ (永続)
+      this.sparkles = 0;                // 💎ルビー (転生で得る永続通貨。キー名は互換のため維持)
+      this.treasures = {};              // 伝説の道具屋の購入済みフラグ (永続)
       this._rngSeed = (Date.now() % 2147483646) + 1;
       this._rand = mulberry32(this._rngSeed);
       this.lastSave = Date.now();
@@ -47,46 +50,62 @@
     emit(type, data) { this.events.push(Object.assign({ type }, data || {})); }
     drainEvents() { const e = this.events; this.events = []; return e; }
 
-    /* ================= 周回リセット (夜明けでも使用) ================= */
+    /* ================= 周回リセット (転生でも使用) ================= */
     resetRun() {
-      const startFloorBonus = this.treasures.shortcut ? 5 : 0; // 宝物庫: 開始階+5
+      const startFloorBonus = this.treasures.shortcut ? 5 : 0; // 伝説の道具屋: 開始階+5
       this.floor = 1 + startFloorBonus;
       this.maxFloor = this.floor - 1;   // 制圧済みの最大階
       const baseStartCoins = 25;
-      this.coins = baseStartCoins * (this.treasures.seed_money ? 3 : 1); // 宝物庫: 初期コイン×3
+      this.coins = baseStartCoins * (this.treasures.seed_money ? 3 : 1); // 伝説の道具屋: 初期コイン×3
       this.jobs = { warrior: { owned: 1, lv: 1 } }; // 最初の仲間 (操作なしで進行するため)
       this.weapons = {};                // id -> true (全所持が乗算)
       this.weaponCount = 0;
       this.items = {};                  // id -> 個数
-      this.shopsBuilt = {};             // 階 -> shopId
-      this.pendingShopChoices = [];     // [{floor, options:[shopId×3]}]
+      this.shopsBuilt = {};             // 階 -> shopId ('weapon' | 'item')
+      this.pendingShopChoices = [];     // [{floor, options:[shopId×2]}]
       this.bossKills = 0;               // この周回のボス撃破数
       this.time = 0;
       this.fieldCats = [];              // [{uid, jobId, x, state, atkT, faint}]
       this.autoTimer = 1.0;             // 最初のオート出撃まで
       this.tapCd = 0;
       this.incomeCarry = 0;             // 収益の端数
+      this._markDirty();
       this.spawnFloor(this.floor);
     }
 
-    /* ================= 階の生成 (§4.4) ================= */
+    /* ================= 階の生成 (§6: ザコ連続出現 / ボス階) ================= */
     spawnFloor(n) {
-      const gHp = guardianHp(n);
-      const boss = isBossFloor(n);
-      const addCount = Math.floor(this._rand() * 4); // 0〜3体
       this.enemies = [];
-      for (let i = 0; i < addCount; i++) {
-        const hp = addHp(n);
+      this.kills = 0;                       // この階の撃破数
+      this.killNeed = isBossFloor(n) ? 1 : killNeed(n); // 制圧に必要な撃破数
+      this.spawnedAdds = 0;
+      if (isBossFloor(n)) {
+        const hp = guardianHp(n);
         this.enemies.push({
-          uid: UID++, kind: 'add', sprite: addSprite(n, i),
-          hp: hp, maxHp: hp, x: 258 - i * 26, boss: false
+          uid: UID++, kind: 'guardian', sprite: guardianSprite(n),
+          hp: hp, maxHp: hp, x: 312, boss: true,
+          attr: floorElement(n), atkT: BALANCE.bossAttackInterval
         });
+      } else {
+        this._refillAdds(); // ザコを同時1〜3体まで出す
       }
-      this.enemies.push({
-        uid: UID++, kind: 'guardian', sprite: guardianSprite(n),
-        hp: gHp, maxHp: gHp, x: 312, boss: boss, atkT: BALANCE.guardianAttackInterval
-      });
-      this.emit('floor-enter', { floor: n, boss: boss });
+      this.emit('floor-enter', { floor: n, boss: isBossFloor(n), attr: floorElement(n) });
+    }
+
+    // ザコを同時上限(1〜3体)まで補充。規定数を超えては出さない。
+    _refillAdds() {
+      if (isBossFloor(this.floor)) return;
+      const cap = 1 + Math.floor(this._rand() * BALANCE.maxFieldEnemies); // 1〜3
+      while (this.enemies.length < cap && this.spawnedAdds < this.killNeed) {
+        const i = this.spawnedAdds;
+        const hp = addHp(this.floor);
+        this.enemies.push({
+          uid: UID++, kind: 'add', sprite: addSprite(this.floor, i),
+          hp: hp, maxHp: hp, x: 258 - (i % 3) * 26, boss: false,
+          attr: floorElement(this.floor)
+        });
+        this.spawnedAdds++;
+      }
     }
 
     get guardian() { return this.enemies.find(e => e.kind === 'guardian') || null; }
@@ -108,37 +127,54 @@
       const lv = (this.jobs[id] || { lv: 0 }).lv;
       return Math.ceil(JOBS[id].baseCost * 0.8 * Math.pow(1.22, lv));
     }
-    weaponMult() {
-      let m = 1;
-      for (let k = 1; k <= this.weaponCount; k++) m *= weaponAt(k).mult;
-      return m;
+    // 建設数 = 店ランク (§5)。派生値はキャッシュし、購入/建店/転生で無効化する。
+    get _d() {
+      if (!this._derived) this._recomputeDerived();
+      return this._derived;
     }
-    // 同種店ボーナス込みの効果係数合計 (建てた階の昇順で 1, 1.5, 2, 2...)
-    shopFactorSum(shopId) {
-      const floors = Object.keys(this.shopsBuilt).map(Number).filter(f => this.shopsBuilt[f] === shopId).sort((a, b) => a - b);
-      let s = 0;
-      floors.forEach((f, i) => { s += sameShopFactor(i + 1); });
-      return s;
+    _markDirty() { this._derived = null; }
+    _recomputeDerived() {
+      let wRank = 0, iRank = 0, income = 0;
+      for (const f of Object.keys(this.shopsBuilt)) {
+        const id = this.shopsBuilt[f];
+        if (id === 'weapon') { wRank++; income += shopIncome(Number(f)); }
+        else if (id === 'item') { iRank++; income += shopIncome(Number(f)); }
+        // 旧店種は無視
+      }
+      let weaponBase = 1;
+      const ownedAttrs = {};
+      for (let k = 1; k <= this.weaponCount; k++) {
+        const w = weaponAt(k);
+        weaponBase *= w.mult;
+        if (w.attr && w.attr !== 'none') ownedAttrs[w.attr] = true;
+      }
+      this._derived = { wRank, iRank, income, weaponBase, ownedAttrs };
     }
-    armoryMult() { return 1 + 0.15 * this.shopFactorSum('armory'); }
+    shopRank(shopId) { return shopId === 'weapon' ? this._d.wRank : shopId === 'item' ? this._d.iRank : 0; }
+    weaponRank() { return this._d.wRank; }
+    itemRank() { return this._d.iRank; }
+    // 同種ボーナス: 2件目以降 +10%/件 (§5)
+    weaponShopBonus() { return 1 + 0.1 * Math.max(0, this._d.wRank - 1); }
+    itemShopBonus() { return 1 + 0.1 * Math.max(0, this._d.iRank - 1); }
+    weaponMult() { return this._d.weaponBase * this.weaponShopBonus(); }
+    // 属性相性 (§3): 弱点属性の武器を1本でも所持で×1.5 / 耐性のみなら×0.5
+    elementMult(enemy) {
+      if (!enemy || !enemy.attr || enemy.attr === 'none') return 1;
+      const weak = ELEMENTS[enemy.attr].weak;
+      if (this._d.ownedAttrs[weak]) return 1.5;
+      if (this._d.ownedAttrs[enemy.attr]) return 0.5;
+      return 1;
+    }
     treasureAtkMult() { return this.treasures.war_drum ? 1.5 : 1; }
-    atkMult() { return this.weaponMult() * this.armoryMult() * this.treasureAtkMult(); }
-    speedMult() { return 1 + 0.08 * (this.items.energy_drink || 0); }
-    moveMult() { return 1 + 0.12 * (this.items.boots || 0); }
-    coinMult() { return 1 + 0.25 * (this.items.lucky_coin || 0); }
-    tapCount() { return 1 + (this.items.bell_charm || 0); }
+    atkMult() { return this.weaponMult() * this.treasureAtkMult(); }
+    speedMult() { return (1 + 0.08 * (this.items.energy_drink || 0)) * this.itemShopBonus(); }
+    moveMult() { return (1 + 0.12 * (this.items.boots || 0)) * this.itemShopBonus(); }
+    coinMult() { return (1 + 0.25 * (this.items.lucky_coin || 0)) * this.itemShopBonus(); }
+    tapCount() { return 1 + Math.floor((this.items.bell_charm || 0) * this.itemShopBonus()); }
     autoSlots() { return 1 + (this.treasures.extra_slot ? 1 : 0); }
-    autoInterval() {
-      const floors = Object.keys(this.shopsBuilt).map(Number).filter(f => this.shopsBuilt[f] === 'guild').sort((a, b) => a - b);
-      let iv = BALANCE.autoDeployBase;
-      floors.forEach((f, i) => { iv *= (1 - 0.12 * sameShopFactor(i + 1)); });
-      return iv;
-    }
+    autoInterval() { return BALANCE.autoDeployBase; }
     get incomePerSec() {
-      let s = 0;
-      const diners = Object.keys(this.shopsBuilt).map(Number).filter(f => this.shopsBuilt[f] === 'diner').sort((a, b) => a - b);
-      diners.forEach((f, i) => { s += dinerIncome(f) * sameShopFactor(i + 1); });
-      return s * (this.treasures.ledger ? 1.5 : 1);
+      return this._d.income * (this.treasures.ledger ? 1.5 : 1);
     }
     catDamage(jobId) {
       const j = this.jobs[jobId];
@@ -176,7 +212,7 @@
       this.fieldCats.push(cat);
       return cat;
     }
-    // タップ招集: 0.12秒間隔上限 (§5)。招集は無料。
+    // タップ招集: 0.12秒間隔上限。招集は無料。
     tap() {
       if (this.tapCd > 0) return 0;
       this.tapCd = BALANCE.tapInterval;
@@ -192,7 +228,7 @@
       this.time += dt;
       if (this.tapCd > 0) this.tapCd -= dt;
 
-      // オート出撃: 3秒ごと (宝物庫で+1枠 / 派遣支所で間隔短縮)
+      // オート出撃: 3秒ごと (伝説の道具屋で+1枠)
       this.autoTimer -= dt;
       const iv = this.autoInterval();
       while (this.autoTimer <= 0) {
@@ -202,7 +238,7 @@
         if (n > 0) this.emit('auto-spawn', { count: n });
       }
 
-      // 収益 (魚食堂): 1秒ごとにまとめてイベント
+      // 店の売上: 1秒ごとにまとめてイベント
       const inc = this.incomePerSec;
       if (inc > 0) {
         this.coins += inc * dt;
@@ -231,7 +267,7 @@
             c.atkT -= catIv;
             const tgt = this.nearestEnemy();
             if (!tgt) break;
-            const dmg = this.catDamage(c.jobId);
+            const dmg = this.catDamage(c.jobId) * this.elementMult(tgt);
             tgt.hp -= dmg;
             this.emit('hit', { uid: c.uid, jobId: c.jobId, dmg: dmg, x: tgt.x, boss: tgt.boss });
             if (tgt.hp <= 0) this._onEnemyDown(tgt);
@@ -242,14 +278,14 @@
       // 退場した気絶猫を除去
       this.fieldCats = this.fieldCats.filter(c => c.state !== 'faint' || c.x > 8);
 
-      // 守護者の反撃: 間合いに入った猫を気絶させるだけ (損失なし, §4.4)
+      // ボスの反撃: 間合いに入った猫を気絶させるだけ (損失なし)
       const g = this.guardian;
       if (g) {
         const fighters = this.fieldCats.filter(c => c.state !== 'faint' && c.x > g.x - 90);
         if (fighters.length) {
           g.atkT -= dt;
           if (g.atkT <= 0) {
-            g.atkT += BALANCE.guardianAttackInterval;
+            g.atkT += BALANCE.bossAttackInterval;
             const c = fighters[Math.floor(this._rand() * fighters.length)];
             c.state = 'faint';
             this.emit('cat-faint', { uid: c.uid, jobId: c.jobId });
@@ -260,28 +296,41 @@
 
     _onEnemyDown(e) {
       this.enemies = this.enemies.filter(x => x !== e);
+      this.kills++;
       if (e.kind === 'add') {
-        this.emit('add-down', { x: e.x });
+        const reward = addCoins(this.floor) * this.coinMult();
+        this.coins += reward;
+        this.emit('add-down', { x: e.x, kills: this.kills, killNeed: this.killNeed, coin: reward });
+        if (this.kills >= this.killNeed) { this._clearFloor(); return; }
+        this._refillAdds();
         return;
       }
-      // 守護者撃破 = 階制圧 (§4.4)
+      // ボス撃破 = 制圧 (§6)
+      this.bossKills++;
+      this._clearFloor();
+    }
+
+    // 制圧: 報酬・建店2択の提示・次階へ (§5/§6)
+    _clearFloor() {
       const n = this.floor;
       const boss = isBossFloor(n);
-      const reward = floorCoins(n) * this.coinMult();
+      // 報酬: ボス階は総量を撃破時に、通常階はザコ撃破で按分済みなので制圧ボーナスのみ
+      const reward = boss ? floorCoins(n) * this.coinMult() : 0;
       this.coins += reward;
-      if (boss) this.bossKills++;
+      // 表示用の獲得総額 (通常階はザコ撃破で按分済み)
+      const displayCoin = boss ? reward : floorCoins(n) * this.coinMult();
       this.maxFloor = Math.max(this.maxFloor, n);
-      // 残ったザコも一掃
-      for (const a of this.enemies.slice()) this.emit('add-down', { x: a.x });
+      // 残った敵を一掃
+      for (const a of this.enemies.slice()) this.emit('add-down', { x: a.x, kills: this.kills, killNeed: this.killNeed });
       this.enemies = [];
-      // 建店3択 (§4.5)
+      // 建店2択 (§5: 武器屋・道具屋)
       const opts = SHOP_ORDER.slice();
       for (let i = opts.length - 1; i > 0; i--) {
         const j = Math.floor(this._rand() * (i + 1));
         const t = opts[i]; opts[i] = opts[j]; opts[j] = t;
       }
-      this.pendingShopChoices.push({ floor: n, options: opts.slice(0, 3) });
-      this.emit('floor-clear', { floor: n, boss: boss, coin: reward });
+      this.pendingShopChoices.push({ floor: n, options: opts });
+      this.emit('floor-clear', { floor: n, boss: boss, coin: displayCoin });
       this.floor = n + 1;
       this.spawnFloor(this.floor);
     }
@@ -306,19 +355,29 @@
       this.emit('job-lvup', { jobId: id, lv: this.jobs[id].lv });
       return true;
     }
+    // 武器は武器屋を建設済みでのみ購入可 (§3)。解放は総購入数 or 武器屋ランク。
     nextWeapon() { return weaponAt(this.weaponCount + 1); }
+    isWeaponUnlocked(w) {
+      return this.weaponCount >= w.unlockCount || this.weaponRank() >= (w.unlockRank || Infinity);
+    }
     buyWeapon() {
+      if (this.weaponRank() < 1) return false; // 武器屋未建設
       const w = this.nextWeapon();
-      if (!w || this.coins < w.cost) return false;
+      if (!w || !this.isWeaponUnlocked(w)) return false;
+      if (this.coins < w.cost) return false;
       this.coins -= w.cost;
       this.weapons[w.id] = true;
       this.weaponCount++;
+      this._markDirty();
       this.emit('weapon-buy', { id: w.id });
       return true;
     }
     itemCost(id) { return Math.ceil(ITEMS[id].baseCost * Math.pow(ITEMS[id].costMult, this.items[id] || 0)); }
+    isItemUnlocked(id) { return this.itemRank() >= (ITEMS[id].unlockRank || 1); }
+    // 道具は道具屋を建設済みでのみ購入可 (§4)。品ぞろえは道具屋ランクで解放。
     buyItem(id) {
       if (!ITEMS[id]) return false;
+      if (this.itemRank() < 1 || !this.isItemUnlocked(id)) return false;
       const cost = this.itemCost(id);
       if (this.coins < cost) return false;
       this.coins -= cost;
@@ -331,6 +390,7 @@
     buildShop(floorN, shopId) {
       if (floorN > this.maxFloor || !SHOP_ORDER.includes(shopId)) return false;
       this.shopsBuilt[floorN] = shopId;
+      this._markDirty();
       this.pendingShopChoices = this.pendingShopChoices.filter(c => c.floor !== floorN);
       this.emit('shop-built', { floor: floorN, shopId: shopId });
       return true;
@@ -339,7 +399,7 @@
       this.pendingShopChoices = this.pendingShopChoices.filter(c => c.floor !== floorN);
     }
 
-    /* ================= 夜明け PRESTIGE (§4.6) ================= */
+    /* ================= 転生 PRESTIGE (§7) ================= */
     prestigeGain() {
       if (!this.prestigeAvailable) return 0;
       return Math.floor((this.maxFloor - 9) * 1.5 + this.bossKills);
@@ -347,7 +407,7 @@
     prestige() {
       if (!this.prestigeAvailable) return 0;
       const gain = this.prestigeGain();
-      this.sparkles += gain;
+      this.sparkles += gain; // 💎ルビー
       this.resetRun();
       this.emit('dawn', { gain: gain });
       return gain;
@@ -361,10 +421,8 @@
       return true;
     }
 
-    /* ================= オフライン収益 (§4.7) ================= */
-    offlineEfficiency() {
-      return Math.min(1, BALANCE.offlineEfficiency + 0.15 * this.shopFactorSum('bank'));
-    }
+    /* ================= オフライン収益 (§9) ================= */
+    offlineEfficiency() { return BALANCE.offlineEfficiency; }
     offlineGain(elapsedMs) {
       const sec = Math.min(BALANCE.offlineMaxHours * 3600, Math.max(0, elapsedMs / 1000));
       return sec * this.incomePerSec * this.offlineEfficiency();
@@ -414,8 +472,18 @@
       this.weapons = d.weapons || {};
       this.weaponCount = d.weaponCount || 0;
       this.items = d.items || {};
-      this.shopsBuilt = d.shopsBuilt || {};
-      this.pendingShopChoices = d.pendingShopChoices || [];
+      // 旧版セーブの店種は読み替え (武器蔵→武器屋、他→道具屋)
+      this.shopsBuilt = {};
+      for (const f of Object.keys(d.shopsBuilt || {})) {
+        const id = d.shopsBuilt[f];
+        this.shopsBuilt[f] = SHOP_ORDER.includes(id) ? id : (LEGACY_SHOP_MAP[id] || 'item');
+      }
+      this._markDirty();
+      // 旧版セーブの建店選択肢は2種フォーマットへ読み替え
+      this.pendingShopChoices = (d.pendingShopChoices || []).map(c => ({
+        floor: c.floor,
+        options: (c.options || []).map(o => (SHOP_ORDER.includes(o) ? o : (LEGACY_SHOP_MAP[o] || 'item')))
+      })).filter(c => c.options.length);
       this.bossKills = d.bossKills || 0;
       this.time = d.time || 0;
       this.spawnFloor(this.floor);
