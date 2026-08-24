@@ -1,49 +1,73 @@
 /* =========================================================================
- * Cat's Tower — 放置クリッカー版 (IDLE_DESIGN.md 準拠)
- * game-data.js : データ定義正本 (IDLE_DESIGN.md §4)
+ * Cat's Tower — 商人サーガ忠実版 (CLONE_DESIGN.md 準拠)
+ * game-data.js : データ定義正本 (CLONE_DESIGN.md §2〜§8)
  *
- * 職業5種 / 武器6種+自動生成 / 道具4種 / 建店4種 / 宝物庫 / 階・敵の数値式。
+ * 職業5種 / 武器6種+自動生成(属性つき) / 道具4種 / 建店2種(武器屋・道具屋) /
+ * 伝説の道具屋 / 階・敵の数値式(撃破数制圧)。
  * スプライト契約: visibleBounds は [x, y, w, h] 形式 (anchors.json と同一)。
  * ========================================================================= */
 (function (global) {
   'use strict';
 
   /* ------------------------------------------------------------------ *
-   * §4.1 職業 JOBS (ねこ派遣所)
+   * §2 職業 JOBS (人材派遣屋)
    * 雇用コスト: base × 1.16^owned / Lvアップコスト: base × 0.8 × 1.22^lv
    * レベルで攻撃力 +25%/Lv (Lv1 = base)
    * ------------------------------------------------------------------ */
   const JOBS = {
-    warrior:  { id: 'warrior',  name: 'むぎわら戦士', role: 'バランス',   unlockTotalLv: 0,   baseCost: 15,    baseAtk: 2,   interval: 1.0,  sprite: 'mugi',    desc: '最初の仲間。そこそこ強く、そこそこ速い。' },
-    mage:     { id: 'mage',     name: 'ねこ魔道士',   role: '高火力低速', unlockTotalLv: 10,  baseCost: 100,   baseAtk: 9,   interval: 1.6,  sprite: 'luna',    desc: '詠唱は遅いが一撃が重い。' },
-    archer:   { id: 'archer',   name: '弓かざし職人', role: '速攻',       unlockTotalLv: 30,  baseCost: 1100,  baseAtk: 22,  interval: 0.6,  sprite: 'slinger', desc: '矢をつまみ撃つ速射の名手。' },
-    guardian: { id: 'guardian', name: '盾持ち巨猫',   role: '高HP壁',     unlockTotalLv: 60,  baseCost: 12000, baseAtk: 65,  interval: 1.4,  sprite: 'toto',    desc: '巨体で押し込む、塔の守り手。' },
+    warrior:  { id: 'warrior',  name: '戦士ねこ',     role: 'バランス',   unlockTotalLv: 0,   baseCost: 15,    baseAtk: 2,   interval: 1.0,  sprite: 'mugi',    desc: '最初の仲間。そこそこ強く、そこそこ速い。' },
+    mage:     { id: 'mage',     name: '魔法使いねこ', role: '高火力低速', unlockTotalLv: 10,  baseCost: 100,   baseAtk: 9,   interval: 1.6,  sprite: 'luna',    desc: '詠唱は遅いが一撃が重い。' },
+    archer:   { id: 'archer',   name: '弓使いねこ',   role: '速攻',       unlockTotalLv: 30,  baseCost: 1100,  baseAtk: 22,  interval: 0.6,  sprite: 'slinger', desc: '矢をつまみ撃つ速射の名手。' },
+    guardian: { id: 'guardian', name: '騎士ねこ',     role: '高火力',     unlockTotalLv: 60,  baseCost: 12000, baseAtk: 65,   interval: 1.4,  sprite: 'toto',    desc: '巨体で押し込む、塔の守り手。' },
     ninja:    { id: 'ninja',    name: '忍者ねこ',     role: '超高速',     unlockTotalLv: 100, baseCost: 130000, baseAtk: 180, interval: 0.35, sprite: 'kohaku',  desc: '残像が見えるほどの連撃。' }
   };
   const JOB_ORDER = ['warrior', 'mage', 'archer', 'guardian', 'ninja'];
 
   /* ------------------------------------------------------------------ *
-   * §4.2 武器 WEAPONS (かじ屋)
-   * 所持武器はすべて乗算。総購入数到達で次を解放。6個目以降は自動生成。
+   * §3/§6 属性 ELEMENTS
+   * 敵は階ローテーションで属性を持つ。弱点属性の武器を1本でも所持で
+   * その敵への全ダメージ×1.5、耐性(同属性)のみなら×0.5。
+   * weak: 弱点属性 / mark: 敵アイコン横の属性マーク。
+   * ------------------------------------------------------------------ */
+  const ELEMENTS = {
+    none:    { id: 'none',    name: '無属性', mark: '',   weak: null },
+    fire:    { id: 'fire',    name: '炎',     mark: '🔥', weak: 'ice' },
+    ice:     { id: 'ice',     name: '氷',     mark: '❄️', weak: 'thunder' },
+    thunder: { id: 'thunder', name: '雷',     mark: '⚡', weak: 'fire' }
+  };
+  const ELEMENT_CYCLE = ['none', 'fire', 'ice', 'thunder'];
+  // 階ごとに なし→炎→氷→雷 をローテーション (10階ごとの地区色調と連動)
+  function floorElement(n) { return ELEMENT_CYCLE[(n - 1) % 4]; }
+
+  /* ------------------------------------------------------------------ *
+   * §3 武器 WEAPONS (武器屋) — 属性つき
+   * 所持武器はすべて乗算。総購入数到達(または武器屋ランク)で次を解放。
+   * 購入には制圧階への武器屋建設が必要 (建設数=武器屋ランク)。
+   * 6個目以降は自動生成 (属性は 炎→氷→雷 で循環)。
    * ------------------------------------------------------------------ */
   const WEAPONS = {
-    wooden_claw:    { id: 'wooden_claw',    name: '木の爪',   cost: 50,     mult: 1.5, unlockCount: 0, icon: '🪵' },
-    iron_claw:      { id: 'iron_claw',      name: '鉄の爪',   cost: 400,    mult: 2,   unlockCount: 1, icon: '⚙️' },
-    fire_sword:     { id: 'fire_sword',     name: '炎の剣',   cost: 3000,   mult: 2.5, unlockCount: 2, icon: '🔥' },
-    ice_spear:      { id: 'ice_spear',      name: '氷の槍',   cost: 25000,  mult: 3,   unlockCount: 3, icon: '❄️' },
-    thunder_hammer: { id: 'thunder_hammer', name: '雷の槌',   cost: 200000, mult: 4,   unlockCount: 4, icon: '⚡' }
+    wooden_claw:    { id: 'wooden_claw',    name: '木の剣', cost: 50,     mult: 1.5, unlockCount: 0, attr: 'none',    icon: '🗡️' },
+    iron_claw:      { id: 'iron_claw',      name: '鉄の剣', cost: 400,    mult: 2,   unlockCount: 1, attr: 'none',    icon: '⚔️', unlockRank: 2 },
+    fire_sword:     { id: 'fire_sword',     name: '炎の剣', cost: 3000,   mult: 2.5, unlockCount: 2, attr: 'fire',    icon: '🔥' },
+    ice_spear:      { id: 'ice_spear',      name: '氷の槍', cost: 25000,  mult: 3,   unlockCount: 3, attr: 'ice',     icon: '❄️' },
+    thunder_hammer: { id: 'thunder_hammer', name: '雷の槌', cost: 200000, mult: 4,   unlockCount: 4, attr: 'thunder', icon: '⚡' }
   };
   const WEAPON_ORDER = ['wooden_claw', 'iron_claw', 'fire_sword', 'ice_spear', 'thunder_hammer'];
 
   // 6個目 (k=6) 以降の自動生成ルール: コスト ×10刻み、倍率 ×5, ×6, ×7...
+  // 属性は 炎→氷→雷 で循環
+  const GEN_ATTRS = ['fire', 'ice', 'thunder'];
+  const GEN_NAMES = { fire: '聖なる', ice: '凍てつく', thunder: '轟く' };
   function generatedWeapon(k) { // k = 通算番号 (1始まり、k >= 6)
+    const attr = GEN_ATTRS[(k - 6) % 3];
     return {
       id: 'gen_weapon_' + k,
-      name: '古代の魔具 ' + (k - 5) + '号',
+      name: GEN_NAMES[attr] + '魔具 ' + (k - 5) + '号',
       cost: 200000 * Math.pow(10, k - 5),
       mult: k - 1,
       unlockCount: k - 1,
-      icon: '🗡️',
+      attr: attr,
+      icon: ELEMENTS[attr].mark,
       generated: true
     };
   }
@@ -54,34 +78,35 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * §4.3 道具 ITEMS (道具屋) — %バフ、繰り返し購入可
+   * §4 道具 ITEMS (道具屋) — %バフ、繰り返し購入可
+   * 購入には制圧階への道具屋建設が必要 (建設数=道具屋ランク)。
+   * unlockRank: 道具屋ランクがこの値以上で品ぞろえ解放。
    * ------------------------------------------------------------------ */
   const ITEMS = {
-    lucky_coin:   { id: 'lucky_coin',   name: '幸運の鈴',     desc: '獲得コイン +25%/個',  baseCost: 200,  costMult: 1.9, icon: '🔔' },
-    energy_drink: { id: 'energy_drink', name: '元気ドリンク', desc: '攻撃速度 +8%/個',     baseCost: 350,  costMult: 1.9, icon: '🥤' },
-    boots:        { id: 'boots',        name: '疾風のくつ',   desc: '移動速度 +12%/個',    baseCost: 500,  costMult: 2.0, icon: '👢' },
-    bell_charm:   { id: 'bell_charm',   name: '招集のお守り', desc: 'タップ招集数 +1/個',  baseCost: 1500, costMult: 3.0, icon: '🧿' }
+    lucky_coin:   { id: 'lucky_coin',   name: '金運のお守り', desc: '獲得コイン +25%/個',  baseCost: 200,  costMult: 1.9, icon: '🧧', unlockRank: 1 },
+    energy_drink: { id: 'energy_drink', name: '疾風の薬',     desc: '攻撃速度 +8%/個',     baseCost: 350,  costMult: 1.9, icon: '🧪', unlockRank: 2 },
+    boots:        { id: 'boots',        name: '軽業のくつ',   desc: '移動速度 +12%/個',    baseCost: 500,  costMult: 2.0, icon: '👢', unlockRank: 3 },
+    bell_charm:   { id: 'bell_charm',   name: '勇者の笛',     desc: 'タップ招集数 +1/個',  baseCost: 1500, costMult: 3.0, icon: '🎺', unlockRank: 4 }
   };
   const ITEM_ORDER = ['lucky_coin', 'energy_drink', 'boots', 'bell_charm'];
 
   /* ------------------------------------------------------------------ *
-   * §4.5 建店 SHOP_TYPES (制圧階への建店 3択)
-   * 同種店ボーナス: 2店目×1.5、3店目×2 (効果側)
+   * §5 建店 SHOP_TYPES (制圧階への建店 2種: 武器屋・道具屋)
+   * 建設数 = 店ランク。同種ボーナス: 2件目以降 対応効果 +10%/件。
+   * 各店は建てた階 × 2 コイン/秒の売上も生む (オフライン収益の元)。
    * ------------------------------------------------------------------ */
   const SHOP_TYPES = {
-    diner:  { id: 'diner',  name: '魚食堂',   icon: '🐟', desc: 'コイン/秒 +f(階)',      worker: 'guard'  },
-    armory: { id: 'armory', name: '武器蔵',   icon: '🛡️', desc: '全攻撃 +15%',          worker: 'runner' },
-    guild:  { id: 'guild',  name: '派遣支所', icon: '🐾', desc: 'オート出撃間隔 -12%',   worker: 'runner' },
-    bank:   { id: 'bank',   name: '金貨倉庫', icon: '🏦', desc: 'オフライン効率 +15%',   worker: 'guard'  }
+    weapon: { id: 'weapon', name: '武器屋', icon: '⚔️', desc: '武器の購入が可能に / 武器効果 同種+10%/件', worker: 'runner' },
+    item:   { id: 'item',   name: '道具屋', icon: '🎒', desc: '道具の購入が可能に / 道具効果 同種+10%/件', worker: 'guard' }
   };
-  const SHOP_ORDER = ['diner', 'armory', 'guild', 'bank'];
-  // 魚食堂の収益 f(階): 建てた階 × 2 コイン/秒
-  function dinerIncome(floorN) { return 2 * floorN; }
-  // 同種 n 店目 (1始まり) の効果係数: 1, 1.5, 2, 2, ...
-  function sameShopFactor(n) { return n <= 1 ? 1 : (n === 2 ? 1.5 : 2); }
+  const SHOP_ORDER = ['weapon', 'item'];
+  // 旧版(放置クリッカー版)セーブの店種読み替え: 武器蔵→武器屋、他→道具屋
+  const LEGACY_SHOP_MAP = { armory: 'weapon', diner: 'item', guild: 'item', bank: 'item' };
+  // 店の売上 f(階): 建てた階 × 2 コイン/秒 (旧魚食堂と同じ式)
+  function shopIncome(floorN) { return 2 * floorN; }
 
   /* ------------------------------------------------------------------ *
-   * §4.6 宝物庫 TREASURES (夜明けの✨で買う永続パッシブ)
+   * §7 伝説の道具屋 TREASURES (転生の💎ルビーで買う永続パッシブ)
    * ------------------------------------------------------------------ */
   const TREASURES = {
     seed_money:  { id: 'seed_money',  name: '開業資金',   cost: 3,  icon: '💰', desc: '初期コイン ×3' },
@@ -93,19 +118,23 @@
   const TREASURE_ORDER = ['seed_money', 'war_drum', 'ledger', 'extra_slot', 'shortcut'];
 
   /* ------------------------------------------------------------------ *
-   * §4.4 敵・階 FLOORS (数値式)
-   * 守護者HP: 20 × 1.28^(N-1)、ボス階(5,10,15...)は ×10 / 報酬 ×8
-   * ザコ 0〜3体 (HPは守護者の8%/体)
-   * 撃破コイン: 4 × 1.22^(N-1) (ボス×8)
+   * §6 敵・階 FLOORS (数値式)
+   * 通常階: ザコ連続出現 (同時1〜3体)。規定数 8+階×2 体撃破で制圧。
+   *   ザコ1体のHP/コインは階の総量を按分 (数値式は現行維持)。
+   * ボス階(5の倍数): ボス1体。HP ×10 / 報酬 ×8 / 王冠表示。
+   * 階HP(現行式): 20 × 1.28^(N-1) / 撃破コイン(現行式): 4 × 1.22^(N-1)
    * ------------------------------------------------------------------ */
   // 敵スプライト: 既存9体をローテーション (10階ごとに地区色調変更は描画側)
   const ENEMY_ROTATION = ['ash_mouse', 'soot_weasel', 'sack_mole', 'smoke_bat', 'spark_gecko', 'scrap_crow', 'ledger_owl'];
   const BOSS_SPRITES = ['blackwing_guard', 'kagetsubasa']; // 5,15,25..→0 / 10,20..→1
 
   function isBossFloor(n) { return n % 5 === 0; }
-  function guardianHp(n) { return 20 * Math.pow(1.28, n - 1) * (isBossFloor(n) ? 10 : 1); }
-  function addHp(n) { return guardianHp(n) * 0.08; }
-  function floorCoins(n) { return 4 * Math.pow(1.22, n - 1) * (isBossFloor(n) ? 8 : 1); }
+  function killNeed(n) { return 8 + n * 2; } // 通常階の撃破規定数
+  function floorHp(n) { return 20 * Math.pow(1.28, n - 1); } // 通常階の総HP
+  function guardianHp(n) { return floorHp(n) * (isBossFloor(n) ? 10 : 1); } // ボスHP
+  function addHp(n) { return floorHp(n) / killNeed(n); } // ザコ1体のHP (按分)
+  function floorCoins(n) { return 4 * Math.pow(1.22, n - 1) * (isBossFloor(n) ? 8 : 1); } // 階の総コイン
+  function addCoins(n) { return 4 * Math.pow(1.22, n - 1) / killNeed(n); } // ザコ1体のコイン (按分)
   function guardianSprite(n) {
     if (isBossFloor(n)) return BOSS_SPRITES[(Math.floor(n / 5) - 1) % 2 === 0 ? 0 : 1];
     return ENEMY_ROTATION[(n - 1) % ENEMY_ROTATION.length];
@@ -113,17 +142,28 @@
   function addSprite(n, i) { return ENEMY_ROTATION[(n + i) % ENEMY_ROTATION.length]; }
 
   /* ------------------------------------------------------------------ *
-   * バランス定数 (IDLE_DESIGN.md §4.6/§4.7/§5)
+   * §8 イントロ (開始時に1枚表示・スキップ可)
+   * ------------------------------------------------------------------ */
+  const INTRO_TEXT =
+    '魔王に城下町を追われた商人の猫「ムギ」。\n' +
+    'しかし商才だけは魔王城でも通用する——\n' +
+    '塔の1階に店を開き、勇者ねこたちを雇って\n' +
+    'てっぺんの魔王を目指す、生意気な商売が始まる。\n' +
+    '(ムギは戦いません。招集と経営で勇者を支えましょう)';
+
+  /* ------------------------------------------------------------------ *
+   * バランス定数 (CLONE_DESIGN.md §6/§7/§9)
    * ------------------------------------------------------------------ */
   const BALANCE = {
     world: { width: 390 },
-    autoDeployBase: 3,        // オート出撃: 3秒ごと (§5)
-    tapInterval: 0.12,        // タップ招集 0.12秒間隔上限 (§5)
-    fieldCatSpeed: 55,        // 猫の移動速度 px/秒 (疾風のくつで増加)
-    guardianAttackInterval: 3.0,  // 守護者が猫を気絶させる間隔 (損失なし・入口へ戻るだけ)
+    autoDeployBase: 3,        // オート出撃: 3秒ごと
+    tapInterval: 0.12,        // タップ招集 0.12秒間隔上限
+    fieldCatSpeed: 55,        // 猫の移動速度 px/秒 (軽業のくつで増加)
+    bossAttackInterval: 3.0,  // ボスが猫を気絶させる間隔 (損失なし・入口へ戻るだけ)
     addAttackInterval: 4.5,
     maxFieldCats: 40,         // フィールド上の猫の上限 (描画は24体+×N)
-    prestigeUnlockFloor: 10,  // 夜明け解放: 10F制圧後 (maxFloor >= 10)
+    maxFieldEnemies: 3,       // ザコの同時出現上限 (1〜3体)
+    prestigeUnlockFloor: 10,  // 転生解放: 10F制圧後 (maxFloor >= 10)
     offlineMaxHours: 8,       // オフライン収益 上限8h
     offlineEfficiency: 0.5,   // オフライン効率 50%
     autosaveSec: 5,           // オートセーブ 5秒間隔
@@ -168,12 +208,15 @@
 
   const EXPORT = {
     JOBS, JOB_ORDER,
+    ELEMENTS, ELEMENT_CYCLE, floorElement,
     WEAPONS, WEAPON_ORDER, weaponAt, generatedWeapon,
     ITEMS, ITEM_ORDER,
-    SHOP_TYPES, SHOP_ORDER, dinerIncome, sameShopFactor,
+    SHOP_TYPES, SHOP_ORDER, LEGACY_SHOP_MAP, shopIncome,
     TREASURES, TREASURE_ORDER,
     ENEMY_ROTATION, BOSS_SPRITES,
-    isBossFloor, guardianHp, addHp, floorCoins, guardianSprite, addSprite,
+    isBossFloor, killNeed, floorHp, guardianHp, addHp, floorCoins, addCoins,
+    guardianSprite, addSprite,
+    INTRO_TEXT,
     BALANCE, ASSETS
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = EXPORT;
