@@ -15,6 +15,7 @@
     SHOP_TYPES, SHOP_ORDER, TREASURES, TREASURE_ORDER,
     ELEMENTS, floorElement, isBossFloor, BALANCE, ASSETS
   } = DATA;
+  const fmt = DATA.fmt; // 和風単位 (game-data.js 正本)
   const SAVE_KEY = BALANCE.saveKey; // 'cats_tower_idle_v1'
 
   const game = new window.GAME_CORE.Game();
@@ -22,16 +23,7 @@
 
   const el = id => document.getElementById(id);
   const REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* ---------- 数値フォーマット ---------- */
-  function fmt(n) {
-    if (!isFinite(n)) return '∞';
-    if (n < 1000) return String(Math.floor(n));
-    const u = ['K', 'M', 'B', 'T', 'Q'];
-    let i = -1;
-    while (n >= 1000 && i < u.length - 1) { n /= 1000; i++; }
-    return n.toFixed(n < 10 ? 2 : n < 100 ? 1 : 0) + u[i];
-  }
+  const FONT = '"DotGothic16", "Hiragino Kaku Gothic ProN", sans-serif';
 
   /* =====================================================================
    * セーブ / ロード / オフライン収益
@@ -66,6 +58,7 @@
    * アセットローダ
    * =================================================================== */
   const Images = {};
+  const EXTRA_IMAGES = { 'bg.corridor': 'assets/saga/bg_corridor.webp' }; // バトル背景 (魔王城の廊下)
   function loadAssets() {
     const jobs = [];
     ['cats', 'enemies'].forEach(group => {
@@ -84,6 +77,14 @@
         img.onload = () => { Images['bg.' + id] = img; resolve(); };
         img.onerror = () => resolve();
         img.src = ASSETS.bg[id].src;
+      }));
+    });
+    Object.keys(EXTRA_IMAGES).forEach(key => {
+      jobs.push(new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => { Images[key] = img; resolve(); };
+        img.onerror = () => resolve();
+        img.src = EXTRA_IMAGES[key];
       }));
     });
     return Promise.all(jobs);
@@ -149,8 +150,14 @@
    * Canvas セットアップ
    * =================================================================== */
   const canvas = el('battle');
-  const ctx = canvas.getContext('2d');
+  const mainCtx = canvas.getContext('2d');
+  // オフスクリーン低解像度canvasに描画→拡大転送でドット絵化 (visual_spec B)
+  const offCanvas = document.createElement('canvas');
+  const offCtx = offCanvas.getContext('2d');
+  let ctx = offCtx; // 描画関数はすべてオフスクリーンへ
+  const PIXEL_DIV = 2.5; // 低解像度化率 (幅=表示幅の約1/2.5)
   let view = { w: 390, h: 300, scale: 1, dpr: 1 };
+  const flipX = x => view.w - x; // 左右反転: 敵=左 / 猫=右から左へ進軍
   function groundY() { return view.h * 0.82; }
 
   function resize() {
@@ -160,6 +167,8 @@
     view.dpr = Math.min(2.5, window.devicePixelRatio || 1);
     canvas.width = Math.round(cw * view.dpr);
     canvas.height = Math.round(ch * view.dpr);
+    offCanvas.width = Math.max(1, Math.round(cw / PIXEL_DIV));
+    offCanvas.height = Math.max(1, Math.round(ch / PIXEL_DIV));
     view.scale = cw / BALANCE.world.width;
     view.w = BALANCE.world.width;
     view.h = ch / view.scale;
@@ -218,6 +227,7 @@
     ctx.save();
     ctx.translate(x, y);
     if (opts.faint) ctx.rotate(-Math.PI / 2 * 0.85);
+    if (opts.flip) ctx.scale(-1, 1); // 左右反転 (進行方向に合わせる)
     const bob = opts.walking ? Math.abs(Math.sin(t * 10 + (opts.uid || 0))) * 3
       : Math.sin(t * 2 + (opts.uid || 0)) * 1.2;
     ctx.translate(0, -bob);
@@ -247,26 +257,22 @@
    * =================================================================== */
   function drawBackground() {
     const H = view.h, gy = groundY();
-    const district = Math.floor((game.floor - 1) / 10);
-    const img = getImg('bg', 'floor_ruined');
+    // 魔王城の廊下 (assets/saga/bg_corridor.webp)
+    const img = Images['bg.corridor'];
     if (img) {
-      ctx.save();
-      if (district > 0) ctx.filter = 'hue-rotate(' + ((district * 40) % 360) + 'deg)';
       const s = Math.max(view.w / img.width, H / img.height);
       const dw = img.width * s, dh = img.height * s;
       ctx.drawImage(img, (view.w - dw) / 2, (H - dh) / 2, dw, dh);
-      ctx.restore();
     } else {
-      const fb = ASSETS.bg.floor_ruined.fallback;
       const grd = ctx.createLinearGradient(0, 0, 0, H);
-      grd.addColorStop(0, fb.top); grd.addColorStop(1, fb.bottom);
+      grd.addColorStop(0, '#2b2138'); grd.addColorStop(1, '#14101f');
       ctx.fillStyle = grd; ctx.fillRect(0, 0, view.w, H);
       ctx.fillStyle = 'rgba(0,0,0,0.18)';
       for (let i = 0; i < 4; i++) ctx.fillRect(30 + i * 110, H * 0.08, 26, gy - H * 0.08);
     }
     // 床
     const g2 = ctx.createLinearGradient(0, gy, 0, H);
-    g2.addColorStop(0, '#3c3e48'); g2.addColorStop(1, '#26242e');
+    g2.addColorStop(0, '#3a2f4a'); g2.addColorStop(1, '#1e1830');
     ctx.fillStyle = g2;
     ctx.fillRect(0, gy, view.w, H - gy);
     ctx.fillStyle = 'rgba(255,255,255,0.07)';
@@ -276,7 +282,7 @@
       ctx.fillStyle = 'rgba(255,200,100,' + (fx.flashT * 0.25) + ')';
       ctx.fillRect(0, 0, view.w, H);
     }
-    // 入口 (左) と敵の出現口 (右)
+    // 敵の出現口 (左) と猫の入口 (右)
     drawEntrance(0, gy, 'left');
     drawEntrance(view.w, gy, 'right');
     // ボス階の警告色
@@ -309,82 +315,90 @@
     // Yずらしで重なり軽減
     const laneDy = c => (c.uid % 3) * 9;
     for (const c of drawList) {
+      const cx = flipX(c.x); // 猫は右から左へ進軍
       const y = gy + laneDy(c);
-      drawShadow(c.x, y, 14);
-      drawSprite('cats', JOBS[c.jobId].sprite, c.x, y, 1, t, {
-        uid: c.uid, walking: c.state === 'walk' || c.state === 'faint', faint: c.state === 'faint'
+      drawShadow(cx, y, 14);
+      drawSprite('cats', JOBS[c.jobId].sprite, cx, y, 1, t, {
+        uid: c.uid, walking: c.state === 'walk' || c.state === 'faint', faint: c.state === 'faint', flip: true
       });
     }
     if (excess > 0) {
       ctx.save();
-      ctx.font = 'bold 13px sans-serif';
+      ctx.font = '13px ' + FONT;
       ctx.textAlign = 'left';
       ctx.fillStyle = 'rgba(0,0,0,0.55)';
-      ctx.fillRect(4, gy - 84, 48, 20);
+      ctx.fillRect(view.w - 52, gy - 84, 48, 20);
       ctx.fillStyle = '#ffe9b0';
-      ctx.fillText('×' + excess, 10, gy - 70);
+      ctx.fillText('×' + excess, view.w - 46, gy - 70);
       ctx.restore();
     }
-    // 敵 (ザコ連続出現 / ボス1体)
+    // 敵 (ザコ連続出現 / ボス1体) — 左側に大きく
     for (const e of game.enemies) {
+      const ex = flipX(e.x);
       const y = gy + (e.kind === 'add' ? 14 : 4);
-      drawShadow(e.x, y, e.boss ? 34 : 18);
+      drawShadow(ex, y, e.boss ? 34 : 18);
       const flyH = (e.sprite === 'smoke_bat' || e.sprite === 'scrap_crow') ? 26 + Math.sin(t * 3 + e.uid) * 4 : 0;
-      drawSprite('enemies', e.sprite, e.x, y - flyH, 1, t, { uid: e.uid, walking: false });
+      drawSprite('enemies', e.sprite, ex, y - flyH, 1, t, { uid: e.uid, walking: false, flip: true });
       // 属性マーク (敵アイコン横) + 弱点/耐性の相性表示
       if (e.attr && e.attr !== 'none') {
         const el2 = ELEMENTS[e.attr];
         const em = game.elementMult(e);
         const mark = el2.mark + (em > 1 ? '⭕弱点' : em < 1 ? '▲耐性' : '');
         ctx.save();
-        ctx.font = 'bold 11px sans-serif';
+        ctx.font = '11px ' + FONT;
         ctx.textAlign = 'center';
-        ctx.fillStyle = em > 1 ? '#ffd25a' : em < 1 ? '#8ab0d8' : '#e8e4d8';
-        ctx.strokeStyle = 'rgba(0,0,0,0.7)'; ctx.lineWidth = 3;
+        ctx.fillStyle = em > 1 ? '#ffd75a' : em < 1 ? '#8ab0d8' : '#e8e4f0';
+        ctx.strokeStyle = 'rgba(10,8,26,0.9)'; ctx.lineWidth = 3;
         const my = y - flyH - (e.boss ? 128 : 56);
-        ctx.strokeText(mark, e.x, my);
-        ctx.fillText(mark, e.x, my);
+        ctx.strokeText(mark, ex, my);
+        ctx.fillText(mark, ex, my);
         ctx.restore();
       }
       // ザコの小HPバー
       if (e.kind === 'add') {
         const w = 30, r = Math.max(0, e.hp / e.maxHp);
         ctx.fillStyle = 'rgba(0,0,0,0.55)';
-        ctx.fillRect(e.x - w / 2 - 1, y - flyH - 46, w + 2, 5);
+        ctx.fillRect(ex - w / 2 - 1, y - flyH - 46, w + 2, 5);
         ctx.fillStyle = '#e05a4a';
-        ctx.fillRect(e.x - w / 2, y - flyH - 45, w * r, 3);
+        ctx.fillRect(ex - w / 2, y - flyH - 45, w * r, 3);
       }
     }
     // ボスHPバー / 通常階は撃破カウンタ (画面上部に大きく)
     const g = game.guardian;
     const w = view.w - 40, x = 20, y = 12;
     ctx.save();
+    ctx.textAlign = 'center';
     if (g) {
+      // ボスHPバー: 太め (高さ2倍) + 大きな王冠テキスト
       const r = Math.max(0, g.hp / g.maxHp);
-      ctx.fillStyle = 'rgba(0,0,0,0.6)';
-      ctx.fillRect(x - 2, y - 2, w + 4, 16);
+      ctx.fillStyle = 'rgba(0,0,0,0.65)';
+      ctx.fillRect(x - 2, y - 2, w + 4, 28);
       const grd = ctx.createLinearGradient(x, 0, x + w, 0);
       grd.addColorStop(0, '#c04ae0'); grd.addColorStop(1, '#e05a4a');
       ctx.fillStyle = grd;
-      ctx.fillRect(x, y, w * r, 12);
-      ctx.font = 'bold 10px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#fff';
+      ctx.fillRect(x, y, w * r, 24);
+      ctx.font = '15px ' + FONT;
+      ctx.strokeStyle = '#141030'; ctx.lineWidth = 4;
       const attrMark = (g.attr && g.attr !== 'none') ? ELEMENTS[g.attr].mark : '';
-      ctx.fillText('👑 BOSS ' + game.floor + 'F ' + attrMark + '  ' + fmt(g.hp) + ' / ' + fmt(g.maxHp), view.w / 2, y + 10);
+      const bossTxt = '👑 BOSS ' + game.floor + 'F ' + attrMark + '  ' + fmt(g.hp) + ' / ' + fmt(g.maxHp);
+      ctx.strokeText(bossTxt, view.w / 2, y + 18);
+      ctx.fillStyle = '#fff';
+      ctx.fillText(bossTxt, view.w / 2, y + 18);
     } else {
-      // 撃破 N/M (制圧までの進捗バー)
+      // 撃破 N/M (制圧までの進捗バー) — 白+濃紺アウトラインで視認性確保
       const r = Math.min(1, game.kills / game.killNeed);
-      ctx.fillStyle = 'rgba(0,0,0,0.6)';
-      ctx.fillRect(x - 2, y - 2, w + 4, 16);
+      ctx.fillStyle = 'rgba(0,0,0,0.65)';
+      ctx.fillRect(x - 2, y - 2, w + 4, 20);
       const grd = ctx.createLinearGradient(x, 0, x + w, 0);
       grd.addColorStop(0, '#e05a4a'); grd.addColorStop(1, '#e09a3a');
       ctx.fillStyle = grd;
-      ctx.fillRect(x, y, w * r, 12);
-      ctx.font = 'bold 10px sans-serif';
-      ctx.textAlign = 'center';
+      ctx.fillRect(x, y, w * r, 16);
+      ctx.font = '13px ' + FONT;
+      ctx.strokeStyle = '#141030'; ctx.lineWidth = 4;
+      const cntTxt = game.floor + 'F  撃破 ' + game.kills + '/' + game.killNeed;
+      ctx.strokeText(cntTxt, view.w / 2, y + 12);
       ctx.fillStyle = '#fff';
-      ctx.fillText(game.floor + 'F  撃破 ' + game.kills + '/' + game.killNeed, view.w / 2, y + 10);
+      ctx.fillText(cntTxt, view.w / 2, y + 12);
     }
     ctx.restore();
   }
@@ -412,8 +426,8 @@
       if (d.t > 0.9) { fx.dmg.splice(i, 1); continue; }
       const p = d.t / 0.9;
       ctx.globalAlpha = 1 - p * p;
-      ctx.font = (d.strong ? 'bold 18px' : 'bold 13px') + ' sans-serif';
-      ctx.strokeStyle = 'rgba(0,0,0,0.7)'; ctx.lineWidth = 3;
+      ctx.font = (d.strong ? '24px ' : '17px ') + FONT; // 大きめ白ドット数字
+      ctx.strokeStyle = '#141030'; ctx.lineWidth = 4; // 濃紺アウトライン
       const y = d.y - p * 30;
       ctx.strokeText(d.txt, d.x, y);
       ctx.fillStyle = d.color;
@@ -429,7 +443,7 @@
       const e = 1 - Math.pow(1 - c.t, 2);
       const x = c.x0 + (target.x - c.x0) * e;
       const y = c.y0 + (target.y - c.y0) * e - Math.sin(c.t * Math.PI) * 30;
-      ctx.fillStyle = '#ffd25a';
+      ctx.fillStyle = '#ffd75a';
       ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fill();
     }
   }
@@ -448,7 +462,7 @@
         case 'summon':
         case 'auto-spawn':
           if (ev.type === 'summon') Audio2.summon();
-          burst(30, groundY() - 10, 6, 'rgba(190,175,150,0.8)', 50, 0.4);
+          burst(view.w - 30, groundY() - 10, 6, 'rgba(190,175,150,0.8)', 50, 0.4);
           break;
         case 'hit':
           fx.pendingDmg += ev.dmg;
@@ -458,16 +472,16 @@
           Audio2.faint();
           break;
         case 'add-down':
-          burst(ev.x, groundY() - 16, 8, '#c9c2b8', 90, 0.5);
-          if (ev.coin) addDmgNum(ev.x, groundY() - 60, '+' + fmt(ev.coin), '#ffd25a', false);
+          burst(flipX(ev.x), groundY() - 16, 8, '#c9c2b8', 90, 0.5);
+          if (Math.floor(ev.coin) >= 1) addDmgNum(flipX(ev.x), groundY() - 60, '+' + fmt(ev.coin), '#ffd75a', false); // 「+0」フロートは出さない
           break;
         case 'floor-clear': {
           Audio2.clear();
           fx.flashT = 1;
           showBanner(ev.boss ? '👑 ' + ev.floor + 'F ボス制圧!' : ev.floor + 'F 制圧!', 1.6, ev.boss);
-          addDmgNum(view.w / 2, groundY() - 90, '+' + fmt(ev.coin) + '💰', '#ffd25a', true);
-          for (let i = 0; i < 5; i++) fx.coins.push({ x0: 300 + i * 8, y0: groundY() - 60, t: -i * 0.09 });
-          burst(300, groundY() - 30, 16, '#ffd25a', 120, 0.7);
+          addDmgNum(view.w / 2, groundY() - 90, '+' + fmt(ev.coin) + '💰', '#ffd75a', true);
+          for (let i = 0; i < 5; i++) fx.coins.push({ x0: view.w - 300 + i * 8, y0: groundY() - 60, t: -i * 0.09 });
+          burst(view.w - 300, groundY() - 30, 16, '#ffd75a', 120, 0.7);
           if (!REDUCED) fx.shake = Math.max(fx.shake, ev.boss ? 7 : 3);
           // 建店2択を提示 (武器屋・道具屋)
           openPendingShopChoice();
@@ -509,10 +523,12 @@
   function updateHud() {
     const attr = floorElement(game.floor);
     el('hud-floor').textContent = game.floor + 'F' + (attr !== 'none' ? ' ' + ELEMENTS[attr].mark : '') + (isBossFloor(game.floor) ? ' 👑' : '');
-    el('hud-coins').textContent = fmt(game.coins);
+    el('hud-coins').textContent = fmt(game.coins) + 'G';
     el('hud-sparkles').textContent = fmt(game.sparkles);
     el('hud-income').textContent = '収益 +' + fmt(game.incomePerSec) + '/秒';
-    el('hud-dps').textContent = 'DPS ' + fmt(game.dps);
+    el('hud-dps').textContent = '攻撃力:' + fmt(game.dps);
+    const lastWeapon = game.weaponCount > 0 ? weaponAt(game.weaponCount) : null;
+    el('hud-weapon').textContent = 'E:' + (lastWeapon ? lastWeapon.name : '—');
     const dawn = el('btn-dawn');
     const ok = game.prestigeAvailable;
     dawn.disabled = !ok;
@@ -520,6 +536,7 @@
     dawn.title = ok ? '💎' + game.prestigeGain() + ' ルビーを得られる' : '10F制圧で解放';
     el('btn-shop-pending').style.display = game.pendingShopChoices.length ? '' : 'none';
     el('summon-sub').textContent = 'タップで' + game.tapCount() + '体招集 / 長押しで連打';
+    renderTower();
   }
 
   /* =====================================================================
@@ -691,28 +708,115 @@
     wire(sheet, '.skip', () => closeSheets());
   }
 
-  /* ---------- 塔リスト (制圧階 + 再配置) ---------- */
-  function openTower() {
-    let rows = '';
-    rows += '<div class="tower-row current"><span class="fl">' + game.floor + 'F</span><span>⚔️ 攻略中…</span></div>';
-    for (let n = game.maxFloor; n >= 1; n--) {
-      const cur = game.shopsBuilt[n];
-      const picks = SHOP_ORDER.map(id =>
-        '<button data-f="' + n + '" data-id="' + id + '" class="' + (cur === id ? 'on' : '') + '" title="' + SHOP_TYPES[id].name + '">' + SHOP_TYPES[id].icon + '</button>'
-      ).join('');
-      rows += '<div class="tower-row"><span class="fl">' + n + 'F' + (isBossFloor(n) ? '👑' : '') + '</span>' +
-        '<span class="shop-pick">' + picks + '</span></div>';
+  /* ---------- 店舗タワー (常時表示・縦スクロール, visual_spec A) ---------- */
+  const SHOP_STRIP_BG = { weapon: 'assets/saga/shop_weapon.webp', item: 'assets/saga/shop_item.webp' };
+  const CAT_VARIANTS = ['gray', 'black', 'calico'];
+  let towerSig = null;
+
+  function catImgsHtml(seed, count) {
+    let out = '';
+    for (let i = 0; i < count; i++) {
+      const v = CAT_VARIANTS[(seed + i) % CAT_VARIANTS.length];
+      const dur = 7 + ((seed + i) % 3) * 2.5;
+      const delay = -(((seed * 1.7 + i * 2.9) % 8)).toFixed(1);
+      out += '<span class="tf-cat" style="--dur:' + dur + 's;--delay:' + delay + 's">' +
+        '<img src="assets/saga/cat_' + v + '_0.png" data-v="' + v + '" data-pose="0" alt=""></span>';
     }
-    const sheet = openSheet('<h3>🗼 塔 — 制圧階リスト</h3>' +
-      '<p class="sheet-sub">制圧済み ' + game.maxFloor + 'F / 店はタップで建て替え自由。武器屋=武器購入+武器効果強化, 道具屋=道具購入+道具効果強化。各店は売上も生む。</p>' +
-      (rows || '<p class="sheet-sub">まだ制圧した階がない。</p>') +
-      '<button class="ghost close">閉じる</button>');
-    wire(sheet, '.shop-pick button', b => {
-      game.buildShop(parseInt(b.dataset.f, 10), b.dataset.id);
-      closeSheets(); openTower(); updateHud();
-    });
-    wire(sheet, '.close', closeSheets);
+    return out;
   }
+  function towerBarHtml(name, info, plusId, plusCls, plusAttrs) {
+    return '<div class="tf-bar"><span class="tf-name">' + name + '</span>' +
+      (info ? '<span class="tf-info">' + info + '</span>' : '') +
+      '<button class="tf-plus' + (plusCls ? ' ' + plusCls : '') + '"' +
+      (plusId ? ' id="' + plusId + '"' : '') + (plusAttrs || '') + '>＋</button></div>';
+  }
+  function towerStripHtml(bg, seed, cats) {
+    return '<div class="tf-shop" style="background-image:url(\'' + bg + '\')">' + catImgsHtml(seed, cats) + '</div>';
+  }
+
+  function renderTower() {
+    const sig = [game.maxFloor, game.totalJobLv(), JSON.stringify(game.shopsBuilt),
+      game.pendingShopChoices.length, game.prestigeAvailable].join('|');
+    if (sig === towerSig) return;
+    towerSig = sig;
+    const parts = [];
+    let forgeIdUsed = false, itemIdUsed = false;
+    // 🐾 人材派遣屋 (常駐)
+    const agencyCats = Math.min(3, 1 + Math.floor(game.totalJobLv() / 15));
+    parts.push('<div class="tower-floor" data-kind="agency">' +
+      towerBarHtml('🐾 人材派遣屋', '合計Lv' + game.totalJobLv(), 'tab-agency') +
+      towerStripHtml('assets/saga/shop_agency.webp', 1, agencyCats) + '</div>');
+    // 💎 伝説の道具屋 (転生解放後)
+    if (game.maxFloor >= BALANCE.prestigeUnlockFloor) {
+      parts.push('<div class="tower-floor" data-kind="legend">' +
+        towerBarHtml('💎 伝説の道具屋', '永続パッシブ', null, 'gold js-legend') +
+        towerStripHtml('assets/saga/shop_legend.webp', 2, 2) + '</div>');
+    }
+    // 制圧階 (新しいもの=高い階が上)
+    for (let n = game.maxFloor; n >= 1; n--) {
+      const shopId = game.shopsBuilt[n];
+      if (shopId && SHOP_TYPES[shopId]) {
+        const s = SHOP_TYPES[shopId];
+        let plusId = null;
+        if (shopId === 'weapon' && !forgeIdUsed) { plusId = 'tab-forge'; forgeIdUsed = true; }
+        if (shopId === 'item' && !itemIdUsed) { plusId = 'tab-item'; itemIdUsed = true; }
+        parts.push('<div class="tower-floor" data-floor="' + n + '">' +
+          towerBarHtml(s.icon + ' ' + s.name + ' ' + n + 'F', '売上+' + fmt(DATA.shopIncome(n)) + '/秒',
+            plusId, 'js-shop', ' data-shop="' + shopId + '"') +
+          towerStripHtml(SHOP_STRIP_BG[shopId] || SHOP_STRIP_BG.item, n, 2) + '</div>');
+      } else {
+        parts.push('<div class="tower-floor" data-floor="' + n + '">' +
+          towerBarHtml((isBossFloor(n) ? '👑 ' : '') + n + 'F 空き階', '建店できます',
+            null, 'js-vacant', ' data-f="' + n + '"') +
+          '<div class="tf-shop vacant"><span class="tf-vacant-label">空き階</span></div>' +
+          '</div>');
+      }
+    }
+    // 最下部: 城門
+    parts.push('<div class="tf-gate" style="background-image:url(\'assets/saga/castle_gate.webp\')"></div>');
+    el('tower-list').innerHTML = parts.join('');
+  }
+
+  // 塔パネルの「＋」配線 (id互換: tab-agency/tab-forge/tab-item)
+  el('tower-list').addEventListener('click', e => {
+    const b = e.target.closest('.tf-plus');
+    if (!b) return;
+    Audio2.init(); Audio2.resume(); Audio2.ui();
+    if (b.id === 'tab-agency') { openAgency(); return; }
+    if (b.id === 'tab-forge') { openForge(); return; }
+    if (b.id === 'tab-item') { openItemShop(); return; }
+    if (b.classList.contains('js-legend')) {
+      renderPrestigeModal();
+      el('modal-prestige').hidden = false;
+      return;
+    }
+    if (b.classList.contains('js-shop')) {
+      if (b.dataset.shop === 'weapon') openForge(); else openItemShop();
+      return;
+    }
+    if (b.classList.contains('js-vacant')) {
+      const f = parseInt(b.dataset.f, 10);
+      const idx = game.pendingShopChoices.findIndex(c => c.floor === f);
+      if (idx > 0) {
+        const c = game.pendingShopChoices.splice(idx, 1)[0];
+        game.pendingShopChoices.unshift(c);
+      } else if (idx < 0) {
+        // フォールバック (旧セーブ等で選択肢が無い空き階)
+        game.pendingShopChoices.unshift({ floor: f, options: SHOP_ORDER.slice() });
+      }
+      if (game.pendingShopChoices.length) openPendingShopChoice();
+    }
+  });
+
+  // 店内で働く猫の歩行ポーズ切替 (0↔1)
+  setInterval(() => {
+    if (REDUCED) return;
+    document.querySelectorAll('#tower-list .tf-cat img').forEach(img => {
+      const p = img.dataset.pose === '0' ? '1' : '0';
+      img.dataset.pose = p;
+      img.src = 'assets/saga/cat_' + img.dataset.v + '_' + p + '.png';
+    });
+  }, 450);
 
   /* ---------- 転生モーダル (+伝説の道具屋) ---------- */
   function renderPrestigeModal() {
@@ -752,11 +856,7 @@
     if (game.buyTreasure(b.dataset.id)) { Audio2.buy(); renderPrestigeModal(); updateHud(); }
   });
 
-  /* ---------- タブ配線 ---------- */
-  el('tab-agency').addEventListener('click', () => { Audio2.init(); Audio2.ui(); openAgency(); });
-  el('tab-forge').addEventListener('click', () => { Audio2.init(); Audio2.ui(); openForge(); });
-  el('tab-item').addEventListener('click', () => { Audio2.init(); Audio2.ui(); openItemShop(); });
-  el('btn-tower').addEventListener('click', () => { Audio2.init(); Audio2.ui(); openTower(); });
+  /* ---------- 塔・HUDボタン配線 ---------- */
   el('btn-shop-pending').addEventListener('click', () => { Audio2.ui(); openPendingShopChoice(); });
   el('btn-mute').addEventListener('click', () => {
     Audio2.init();
@@ -780,7 +880,7 @@
     fx.pendingDmgT += dt;
     if (fx.pendingDmgT >= 0.3 && fx.pendingDmg > 0) {
       const g = game.nearestEnemy();
-      addDmgNum((g ? g.x : 300) + (Math.random() - 0.5) * 30, groundY() - 70 - Math.random() * 20,
+      addDmgNum((g ? flipX(g.x) : 90) + (Math.random() - 0.5) * 30, groundY() - 70 - Math.random() * 20,
         fmt(fx.pendingDmg), '#fff', false);
       fx.pendingDmg = 0; fx.pendingDmgT = 0;
     }
@@ -792,7 +892,10 @@
   }
 
   function render(t, dt) {
-    ctx.setTransform(view.dpr * view.scale, 0, 0, view.dpr * view.scale, 0, 0);
+    // 1) オフスクリーン低解像度canvasへシーン描画
+    const s = offCanvas.width / view.w;
+    ctx = offCtx;
+    ctx.setTransform(s, 0, 0, s, 0, 0);
     ctx.clearRect(0, 0, view.w, view.h);
     ctx.save();
     if (fx.shake > 0 && !REDUCED) ctx.translate((Math.random() - 0.5) * fx.shake, (Math.random() - 0.5) * fx.shake);
@@ -800,13 +903,22 @@
     drawUnits(t);
     drawFx(dt);
     ctx.restore();
+    // 2) メインcanvasへスムージングなしで拡大転送 (ドット絵化)
+    mainCtx.setTransform(1, 0, 0, 1, 0, 0);
+    mainCtx.imageSmoothingEnabled = false;
+    mainCtx.clearRect(0, 0, canvas.width, canvas.height);
+    mainCtx.drawImage(offCanvas, 0, 0, canvas.width, canvas.height);
   }
 
   // HUDは0.25秒ごとに更新
   setInterval(updateHud, 250);
 
   /* ---------- 起動 ---------- */
-  loadAssets().then(() => {
+  // DotGothic16 を読み込んでから描画開始 (canvasテキストもドットフォント)
+  const fontReady = (document.fonts && document.fonts.load)
+    ? document.fonts.load('16px DotGothic16').catch(() => {})
+    : Promise.resolve();
+  Promise.all([loadAssets(), fontReady]).then(() => {
     resize();
     load();
     updateHud();
