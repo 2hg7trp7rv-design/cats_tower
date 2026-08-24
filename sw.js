@@ -1,7 +1,7 @@
-/* Cat's Tower 戦闘プロトタイプ (kimiブランチ) Service Worker
+/* Cat's Tower 放置クリッカー版 (kimiブランチ) Service Worker
  * シェルのみ cache-first。assets/prototype の画像は network-first
  * (後から追加された画像が反映されるようにする)。 */
-const CACHE = 'ct-proto-kimi-1';
+const CACHE = 'cats-tower-idle-v1';
 const SHELL = [
   './',
   'index.html',
