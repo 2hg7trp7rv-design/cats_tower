@@ -484,7 +484,7 @@
         case 'floor-clear': {
           Audio2.clear();
           fx.flashT = 1;
-          showBanner(ev.boss ? '👑 ' + ev.floor + 'F ボス制圧! 空き階ができた' : ev.floor + 'F 制圧! 空き階になった — 塔リストから建店できる', 1.6, ev.boss);
+          showBanner(ev.boss ? '👑 ' + ev.floor + 'F ボス制圧! 空き階OPEN' : ev.floor + 'F 制圧! 空き階OPEN — 塔から建店', 1.6, ev.boss);
           addDmgNum(view.w / 2, groundY() - 90, '+' + fmt(ev.coin) + '💰', '#ffd75a', true);
           for (let i = 0; i < 5; i++) fx.coins.push({ x0: view.w - 300 + i * 8, y0: groundY() - 60, t: -i * 0.09 });
           burst(view.w - 300, groundY() - 30, 16, '#ffd75a', 120, 0.7);
