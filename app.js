@@ -164,6 +164,27 @@
    * =================================================================== */
   const canvas = el('battle');
   const mainCtx = canvas.getContext('2d');
+  const battleProgressText = el('battle-progress-text');
+  let battleProgressKey = '';
+  function updateBattleProgressText() {
+    const guardian = game.guardian;
+    const isBoss = !!guardian;
+    const current = isBoss ? Math.max(0, Math.ceil(guardian.hp)) : game.kills;
+    const maximum = isBoss ? Math.max(1, Math.ceil(guardian.maxHp)) : game.killNeed;
+    const attrMark = isBoss && guardian.attr && guardian.attr !== 'none' ? ELEMENTS[guardian.attr].mark : '';
+    const text = isBoss
+      ? '👑 BOSS ' + game.floor + 'F' + (attrMark ? ' ' + attrMark : '') + '  ' + fmt(guardian.hp) + ' / ' + fmt(guardian.maxHp)
+      : game.floor + 'F  撃破 ' + game.kills + '/' + game.killNeed;
+    const key = (isBoss ? 'boss|' : 'normal|') + current + '|' + maximum + '|' + text;
+    if (key === battleProgressKey) return;
+    battleProgressKey = key;
+    battleProgressText.textContent = text;
+    battleProgressText.classList.toggle('boss', isBoss);
+    battleProgressText.setAttribute('aria-valuemin', '0');
+    battleProgressText.setAttribute('aria-valuenow', String(current));
+    battleProgressText.setAttribute('aria-valuemax', String(maximum));
+    battleProgressText.setAttribute('aria-valuetext', text);
+  }
   // オフスクリーン低解像度canvasに描画→拡大転送でドット絵化 (visual_spec B)
   const offCanvas = document.createElement('canvas');
   const offCtx = offCanvas.getContext('2d');
@@ -402,9 +423,8 @@
     const g = game.guardian;
     const w = view.w - 40, x = 20, y = 12;
     ctx.save();
-    ctx.textAlign = 'center';
     if (g) {
-      // ボスHPバー: 太め (高さ2倍) + 大きな王冠テキスト
+      // ボスHPバー: 文字は低解像度化を避けるためDOMレイヤーへ分離
       const r = Math.max(0, g.hp / g.maxHp);
       ctx.fillStyle = 'rgba(0,0,0,0.65)';
       ctx.fillRect(x - 2, y - 2, w + 4, 28);
@@ -412,15 +432,8 @@
       grd.addColorStop(0, '#c04ae0'); grd.addColorStop(1, '#e05a4a');
       ctx.fillStyle = grd;
       ctx.fillRect(x, y, w * r, 24);
-      ctx.font = '15px ' + FONT;
-      ctx.strokeStyle = '#141030'; ctx.lineWidth = 4;
-      const attrMark = (g.attr && g.attr !== 'none') ? ELEMENTS[g.attr].mark : '';
-      const bossTxt = '👑 BOSS ' + game.floor + 'F ' + attrMark + '  ' + fmt(g.hp) + ' / ' + fmt(g.maxHp);
-      ctx.strokeText(bossTxt, view.w / 2, y + 18);
-      ctx.fillStyle = '#fff';
-      ctx.fillText(bossTxt, view.w / 2, y + 18);
     } else {
-      // 撃破 N/M (制圧までの進捗バー) — 白+濃紺アウトラインで視認性確保
+      // 撃破 N/M の進捗バー: 文字はDOMレイヤーで高解像度表示
       const r = Math.min(1, game.kills / game.killNeed);
       ctx.fillStyle = 'rgba(0,0,0,0.65)';
       ctx.fillRect(x - 2, y - 2, w + 4, 20);
@@ -428,12 +441,6 @@
       grd.addColorStop(0, '#e05a4a'); grd.addColorStop(1, '#e09a3a');
       ctx.fillStyle = grd;
       ctx.fillRect(x, y, w * r, 16);
-      ctx.font = '13px ' + FONT;
-      ctx.strokeStyle = '#141030'; ctx.lineWidth = 4;
-      const cntTxt = game.floor + 'F  撃破 ' + game.kills + '/' + game.killNeed;
-      ctx.strokeText(cntTxt, view.w / 2, y + 12);
-      ctx.fillStyle = '#fff';
-      ctx.fillText(cntTxt, view.w / 2, y + 12);
     }
     ctx.restore();
   }
@@ -946,6 +953,7 @@
     mainCtx.imageSmoothingEnabled = false;
     mainCtx.clearRect(0, 0, canvas.width, canvas.height);
     mainCtx.drawImage(offCanvas, 0, 0, canvas.width, canvas.height);
+    updateBattleProgressText();
   }
 
   // HUDは0.25秒ごとに更新
