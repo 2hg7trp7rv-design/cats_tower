@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "chatgpt-project-governance",
+  "round": 1,
+  "date": "2026-08-26",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "status": "PASS",
+  "scopeStatus": {
+    "governancePackage": "PASS",
+    "chatGPTProjectCreatedInUserAccount": "NOT_PERFORMED_USER_UI_REQUIRED",
+    "newCustomGPTCreated": "BLOCKED_ON_PERSONAL_PRO_ACCOUNT",
+    "gameplaySpecificationChanged": false,
+    "runtimeChanged": false
+  },
+  "artifacts": [
+    "AI_PROJECT_POLICY.json",
+    "CHATGPT_PROJECT_INSTRUCTIONS.md",
+    "CHATGPT_PROJECT_BOOTSTRAP.md",
+    "CUSTOM_GPT_CONFIGURATION.md",
+    "scripts/verify-kimi-workspace.mjs",
+    "tests/governance/verify-kimi-workspace.test.mjs",
+    "quality-reviews/chatgpt-project-governance/acceptance.json",
+    "quality-reviews/chatgpt-project-governance/round-001.json"
+  ],
+  "independentCritique": {
+    "goal": "Reject the governance package if it can drift to another branch, declare completion from file presence, misstate ChatGPT availability, or delegate ordinary QA to the user.",
+    "comparisons": [
+      "AGENTS.md branch lock and authorized execution sequence",
+      "QUALITY_GATE.md G1-G5 and three-role separation",
+      "OpenAI official Projects, GPT creation, and GPT memory documentation current on 2026-08-26"
+    ],
+    "result": "PASS_AFTER_REPAIR"
+  },
+  "findingsAndRepairs": [
+    {
+      "id": "F1",
+      "severity": "HIGH",
+      "finding": "The first branch guard resolved the Git repository from the caller's current working directory. Calling the script by absolute path from outside the repository incorrectly returned BLOCKED even when the script belonged to the correct kimi checkout.",
+      "repair": "Resolve the repository with git -C from the script's own directory, then change to the verified repository root.",
+      "repairCommit": "0844395b3c38a391303a93046bc0e88640392098",
+      "regression": "PASS"
+    },
+    {
+      "id": "F2",
+      "severity": "HIGH",
+      "finding": "Dirty-tree diagnostic details used the key status and overwrote the canonical BLOCKED status with an array, which could cause a handoff or automation consumer to misclassify the result.",
+      "repair": "Make fixed status fields override diagnostic details and rename the dirty-tree diagnostic to workingTree.",
+      "repairCommit": "03ce550c341e8f094a9bfaed9b5c4041e165338f",
+      "regression": "PASS"
+    },
+    {
+      "id": "F3",
+      "severity": "LOW",
+      "finding": "The first regression test used a dynamic import solely to obtain writeFileSync, adding avoidable asynchronous complexity.",
+      "repair": "Use a static node:fs import and synchronous write.",
+      "repairCommit": "330f613c461d9607930ea527cc92c1c1bb2f5e4b",
+      "regression": "PASS"
+    }
+  ],
+  "machineEvidence": {
+    "nodeSyntax": {
+      "scripts/verify-kimi-workspace.mjs": "PASS",
+      "tests/governance/verify-kimi-workspace.test.mjs": "PASS"
+    },
+    "jsonParse": {
+      "AI_PROJECT_POLICY.json": "PASS",
+      "quality-reviews/chatgpt-project-governance/acceptance.json": "PASS"
+    },
+    "exactBlobChecks": {
+      "scripts/verify-kimi-workspace.mjs": "d147ca5067065426b1d7a82473882054e899999c",
+      "tests/governance/verify-kimi-workspace.test.mjs": "a760e8692da4bcb9f13712c9039816ce2b48f85a",
+      "AI_PROJECT_POLICY.json": "b2067c7a55d4ecef7d7b07bd921ec45a68393f46"
+    },
+    "regressionCases": [
+      {
+        "case": "correct repository, kimi branch, origin/kimi upstream, clean tree, invoked outside repository",
+        "expected": "PASS",
+        "actual": "PASS"
+      },
+      {
+        "case": "wrong branch main",
+        "expected": "BLOCKED exit 2",
+        "actual": "BLOCKED exit 2"
+      },
+      {
+        "case": "dirty working tree with valid JSON",
+        "expected": "BLOCKED exit 2 with workingTree diagnostics",
+        "actual": "BLOCKED exit 2 with workingTree diagnostics"
+      },
+      {
+        "case": "wrong origin repository",
+        "expected": "BLOCKED exit 2",
+        "actual": "BLOCKED exit 2"
+      },
+      {
+        "case": "malformed policy JSON",
+        "expected": "BLOCKED exit 2",
+        "actual": "BLOCKED exit 2"
+      },
+      {
+        "case": "policy branch changed from kimi to main",
+        "expected": "BLOCKED exit 2",
+        "actual": "BLOCKED exit 2"
+      }
+    ],
+    "regressionSuiteResult": "verify-kimi-workspace regression suite: PASS"
+  },
+  "requirements": [
+    { "id": "R1", "verdict": "PASS" },
+    { "id": "R2", "verdict": "PASS" },
+    { "id": "R3", "verdict": "PASS" },
+    { "id": "R4", "verdict": "PASS" },
+    { "id": "R5", "verdict": "PASS" },
+    { "id": "R6", "verdict": "PASS" },
+    { "id": "R7", "verdict": "PASS" },
+    { "id": "R8", "verdict": "PASS" }
+  ],
+  "gates": {
+    "G1": "PASS",
+    "G2": "PASS",
+    "G3": "PASS",
+    "G4": "PASS_AFTER_REPAIR",
+    "G5": "PASS_FOR_GOVERNANCE_PACKAGE"
+  },
+  "limitations": [
+    "The files and guard do not change GitHub server-side branch protection or repository rulesets.",
+    "The current connected tools cannot create a ChatGPT Project inside the user's account UI.",
+    "OpenAI currently does not allow a new Custom GPT to be created on a personal Pro account; the configuration is prepared for an eligible workspace or an editable existing GPT.",
+    "No physical iPhone evidence is required for this governance-document artifact, and no game runtime quality is certified by this round."
+  ],
+  "finalJudge": {
+    "verdict": "PASS",
+    "reason": "R1-R8 and applicable G1-G5 checks pass after two functional defects and one maintainability issue were repaired and regression-tested. PASS applies only to the governance configuration package, not to account-side Project or Custom GPT activation and not to the game product."
+  }
+}
