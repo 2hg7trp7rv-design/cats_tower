@@ -7,6 +7,8 @@ import { fileURLToPath } from 'node:url';
 
 const EXPECTED_REPOSITORY = '2hg7trp7rv-design/cats_tower';
 const EXPECTED_BRANCH = 'kimi';
+const scriptPath = fileURLToPath(import.meta.url);
+const scriptDirectory = dirname(scriptPath);
 
 function runGit(args, options = {}) {
   try {
@@ -66,9 +68,12 @@ function readPolicy(repoRoot) {
 
 let repoRoot;
 try {
-  repoRoot = runGit(['rev-parse', '--show-toplevel']);
+  repoRoot = runGit(['-C', scriptDirectory, 'rev-parse', '--show-toplevel']);
 } catch (error) {
-  fail('Current directory is not inside a Git repository.', { error: error.message });
+  fail('The script is not located inside a Git repository.', {
+    scriptDirectory,
+    error: error.message,
+  });
 }
 
 process.chdir(repoRoot);
@@ -170,7 +175,6 @@ if (dirty && process.env.CATS_TOWER_ALLOW_DIRTY !== '1') {
   });
 }
 
-const scriptPath = fileURLToPath(import.meta.url);
 const output = {
   ok: true,
   status: 'PASS',
@@ -180,7 +184,7 @@ const output = {
   head,
   clean: !dirty,
   policyFile: resolve(repoRoot, 'AI_PROJECT_POLICY.json'),
-  script: resolve(dirname(scriptPath), 'verify-kimi-workspace.mjs'),
+  script: resolve(scriptDirectory, 'verify-kimi-workspace.mjs'),
   message: 'Repository and branch preflight passed. This does not certify product completion.',
 };
 
