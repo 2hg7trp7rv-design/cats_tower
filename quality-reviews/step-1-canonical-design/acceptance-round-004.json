@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-canonical-design",
+  "acceptanceRevision": 4,
+  "date": "2026-08-25",
+  "requirements": "acceptance-round-003.json together with all non-conflicting base requirements",
+  "verdict": "PASS",
+  "advanceAllowed": true,
+  "scope": "canonical product contract, Floors 1-10 contract, executable 100F simulation candidate, schema, validator, operating-document consistency, and change boundary",
+  "sealedContract": {
+    "candidatePath": "simulation/candidate-v1.json",
+    "candidateRawSha256": "b3c3c55fed4727dacbf41548b75f766a9f8d35c9d9d193e8f2dc82ab6b77af46",
+    "candidateNormalizedExecutableSha256": "69eea0bfc0b6b39c9fad2589f711b0f114c67f2d90f0aae0d46fbcd58e81b4a5",
+    "schemaPath": "simulation/candidate.schema.json",
+    "schemaRawSha256": "1a43fcd099b8d4cd0db0a8227c3172981327be534175d0f3ae653f0117191c4b",
+    "validatorPath": "simulation/validate-candidate.mjs",
+    "validatorRawSha256": "060b18ce1aeb29252dd38b63b6a7c13b345e5c61b0af96c55234ea193ce0051d"
+  },
+  "machineChecks": {
+    "candidateValidator": "PASS",
+    "candidateValidatorCommand": "node simulation/validate-candidate.mjs",
+    "sourceDependencyDigestCount": 8,
+    "sourceDependencyDigestMismatches": 0,
+    "strictJsonParseErrors": 0,
+    "duplicateJsonKeys": 0,
+    "gitDiffCheck": "PASS",
+    "activeBranch": "kimi",
+    "otherLocalOrRemoteBranchesCreated": 0,
+    "runtimeOrAssetFilesChanged": 0
+  },
+  "independentCritiques": [
+    {
+      "role": "mathematical-and-state-contract-critic",
+      "preSealCandidateRawSha256": "193e309420d667ee704d525b73ccfe1d32cbc5538233eb1ff64f5ddcea6ca188",
+      "postSealCandidateRawSha256": "b3c3c55fed4727dacbf41548b75f766a9f8d35c9d9d193e8f2dc82ab6b77af46",
+      "verdict": "PASS",
+      "unresolvedP0": 0,
+      "unresolvedP1": 0
+    },
+    {
+      "role": "adversarial-cross-document-and-boundary-critic",
+      "preSealCandidateRawSha256": "193e309420d667ee704d525b73ccfe1d32cbc5538233eb1ff64f5ddcea6ca188",
+      "postSealCandidateRawSha256": "b3c3c55fed4727dacbf41548b75f766a9f8d35c9d9d193e8f2dc82ab6b77af46",
+      "verdict": "PASS",
+      "unresolvedP0": 0,
+      "unresolvedP1": 0
+    },
+    {
+      "role": "independent-formula-ledger-and-clock-critic",
+      "preSealCandidateRawSha256": "193e309420d667ee704d525b73ccfe1d32cbc5538233eb1ff64f5ddcea6ca188",
+      "postSealCandidateRawSha256": "b3c3c55fed4727dacbf41548b75f766a9f8d35c9d9d193e8f2dc82ab6b77af46",
+      "verdict": "PASS",
+      "unresolvedP0": 0,
+      "unresolvedP1": 0
+    }
+  ],
+  "sealDelta": {
+    "candidateMeaningChangedAfterThreeCriticReview": false,
+    "candidateChanges": "six sourceDependencyDigests.files values only",
+    "schemaChanged": false,
+    "validatorChanges": "expected normalized executable-contract digest only",
+    "postSealRecheckPassedByAllThreeCritics": true
+  },
+  "frozenNow": [
+    "product boundaries and prohibited mechanics",
+    "state transitions, clocks, ledgers, deterministic ordering, rollback, persistence and stop semantics",
+    "100-floor abstract content model and Floors 1-10 exact content contract",
+    "purchase, combat, Dawn, offline, build and armament formula definitions",
+    "simulation populations, schedules, seeds, acceptance equations and rejection thresholds",
+    "nine canonical screen responsibilities and physical-device gate ownership"
+  ],
+  "notYetValidated": [
+    "SIMULATION_CANDIDATE numeric balance coefficients",
+    "100-floor completion, purchase, combat, Dawn and 24-hour offline outputs",
+    "three builds times 1000 holdout outcomes",
+    "nine final screen mockups",
+    "Floors 1-10 new runtime",
+    "physical iPhone Safari, standalone PWA and ChatGPT in-app-browser behavior"
+  ],
+  "nextAuthorizedStep": "simulate-100f-purchases-combat-dawn-and-24h-offline",
+  "step3MayStart": false,
+  "physicalIPhoneVerified": false
+}

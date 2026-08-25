@@ -1,8 +1,10 @@
 # Cat's Tower — 完成判定の必須ループ
 
-更新日: 2026-08-23
+更新日: 2026-08-25
 
-工程状態: 工程1A=PASS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
+工程状態: 工程1A=PASS / 承認済み6工程のStep 1=IN_PROGRESS（正本仕様固定の独立検収中） / Step 2以降=NOT_STARTED
+
+ユーザー承認済みの以後の順序は、①修正版の正本仕様固定、②全100F購入・戦闘・夜明け・24時間放置シミュレーション、③3ビルド各1,000パターン検証、④9画面完成見本、⑤1〜10Fだけ実装、⑥物理iPhoneの3分（180秒）ボス戦＋10分（600秒）連続試験とする。後工程の証拠を前工程の合格理由に流用しない。Step 5の合格は非物理端末の実装Acceptanceだけを意味し、Gate Cまたは1〜10F Preview Readyの合格ではない。Step 6を同一`kimi` commitと対象Vercel URLで完了した後にだけGate Cの物理端末要件を判定できる。11F以降の実装はこの6工程の許可に含まれない。
 
 1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `PASS`
 

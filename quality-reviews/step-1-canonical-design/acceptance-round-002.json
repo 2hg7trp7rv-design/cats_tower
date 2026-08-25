@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-canonical-design",
+  "acceptanceRevision": 2,
+  "date": "2026-08-25",
+  "supersedes": "acceptance.json together with round-001.json",
+  "baseRequirementsRemainRequired": true,
+  "clarificationsOverrideConflictingBasePhrases": true,
+  "revisionReason": "Round 1 proved that prose-level alignment was insufficient: active machine state, gate ownership, reciprocal math, and a runnable simulation input contract must also agree before the canonical freeze can pass.",
+  "clarifications": [
+    "Acceptance R4 applies to unvalidated balance, economy and pacing hypotheses; fixed accessibility, safety and performance gates are not simulation candidates.",
+    "The active user sequence is Step 1 through Step 6. Engineering history may be retained only under an explicitly historical and inactive key.",
+    "Step 5 completes implementation plus automated and browser acceptance. Step 6 owns physical-iPhone evidence and only then may the full product-slice gate pass.",
+    "Same-maximum depth contributes zero Dawn currency and an empty new-reward-ID set yields zero. A genuinely unclaimed one-time achievement may award once at the same maximum without creating a repeat farm."
+  ],
+  "additionalRequirements": [
+    {
+      "id": "R11",
+      "condition": "PROJECT_STATUS exposes exactly the active six steps under its active preparation key; any retired ten-step record is explicitly historical and inactive."
+    },
+    {
+      "id": "R12",
+      "condition": "A parsed, versioned simulation/candidate-v1.json defines every input required for purchases, combat, survival, shops, Dawn, offline progress, personas, decisions, rounding and seeds, and changing it invalidates all downstream simulation results."
+    },
+    {
+      "id": "R13",
+      "condition": "Step 5 cannot claim the physical-device portion of Gate C; Step 6 runs the 180-second boss and 600-second soak on the same commit and deployment, and a failure returns the work to Step 5."
+    },
+    {
+      "id": "R14",
+      "condition": "All active documents and machine state agree on S01-S09, 24-hour offline cap, guarded post-Dawn known-floor re-clear, 1.6-2.0 second transitions, 48/56 CSS-pixel touch targets, 8-pixel gaps, 400-450 millisecond hold threshold and 150-200 millisecond repeat interval."
+    },
+    {
+      "id": "R15",
+      "condition": "Auto-dispatch begins immediately after the first tutorial tap is accepted; the initial interaction does not require repeat tapping to secure the first kill."
+    },
+    {
+      "id": "R16",
+      "condition": "Dawn return-time and composite-speed ranges are mathematical reciprocals, and D10_pre and Net10 state their comparison points and denominators without an unsupported center value."
+    },
+    {
+      "id": "R17",
+      "condition": "Offline U cannot be changed by equipped build, current coins, opened menu or a last-second loadout change; it is clamped and persisted on economy changes and visibility transitions."
+    },
+    {
+      "id": "R18",
+      "condition": "Build and armament acceptance uses exact percentile formulas, switching-frequency and dominance rejection tests, compatible boss TTK bands, and a defensive rather than attack-only Guardian conversion."
+    },
+    {
+      "id": "R19",
+      "condition": "The authoritative stable-ID registry includes cats, helpers, enemies, elites, boss, shops, support facilities, armaments and Dawn branches, with one namespace separator policy and read-only aliases."
+    },
+    {
+      "id": "R20",
+      "condition": "Three independent critics re-check the corrected worktree and report no unresolved P0 or P1 blocker before Step 1 is marked PASS."
+    }
+  ],
+  "newFailureConditions": [
+    "the simulator must invent a missing rate, count, cost, effect, policy or random distribution",
+    "a Step 5 completion claim depends on Step 6 physical evidence",
+    "an active machine-readable field contradicts the Markdown source of truth",
+    "a reset-speed statement is not reciprocal to its stated return-time range",
+    "an offline reward reference can be raised by a last-second state change",
+    "a weapon family is the dominant answer or switching becomes mandatory per-floor busywork"
+  ]
+}

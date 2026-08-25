@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-canonical-design",
+  "round": 1,
+  "date": "2026-08-25",
+  "verdict": "FAIL",
+  "completedMistakenForDone": "The draft aligned the product principles but had not aligned the machine-readable state or supplied enough inputs to execute the next simulation.",
+  "omittedChecks": [
+    "cross-document extraction of every active numeric contract",
+    "construction of a runnable 100F state-machine input",
+    "dependency analysis between implementation and physical-device gates",
+    "reciprocal check between re-clear speed and prior-maximum return time"
+  ],
+  "humanExpectationGap": "A canonical specification must let the next phase run without inventing missing rules and must not contradict itself in the files an automated worker reads first.",
+  "rootCause": [
+    "old workflow and status fields were partially preserved as if active",
+    "product targets were documented before the simulation input interface",
+    "gate ownership was not mapped to the user's exact six-step order"
+  ],
+  "reconstruction": [
+    "rename the active artifact and workflow to Step 1",
+    "make the retired ten-step workflow explicitly historical and inactive",
+    "add a versioned simulation candidate manifest and input contract",
+    "split Step 5 nonphysical implementation acceptance from Step 6 physical completion",
+    "unify screens, IDs, offline, motion, input, timing and auto-dispatch contracts",
+    "correct D10 and Dawn reciprocal math and harden offline and armament rejection tests"
+  ],
+  "reused": [
+    "two-currency product boundary",
+    "same-maximum Dawn permanent reward zero",
+    "one-slot deterministic three-family armament",
+    "S01-S09 information architecture in MASTER and FLOORS",
+    "external evidence ledger and its limitations"
+  ],
+  "mustBeRevalidated": true
+}

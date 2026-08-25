@@ -1,0 +1,513 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cats-tower.invalid/simulation/candidate.schema.json",
+  "title": "Cat's Tower deterministic simulation candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "candidateId",
+    "algorithmVersion",
+    "schemaPath",
+    "status",
+    "createdAt",
+    "sourceSpecs",
+    "sourceDependencyDigests",
+    "manifestChangePolicy",
+    "fixedProductContractPointers",
+    "calibrationMutationPolicy",
+    "rounding",
+    "formulaRules",
+    "clockModel",
+    "returnSchedules",
+    "personas",
+    "curves",
+    "initialState",
+    "stopPolicy",
+    "effectComposition",
+    "districtProgression",
+    "floorRoleModifiers",
+    "floorOverrides",
+    "catBaselines",
+    "helperBaselines",
+    "enemyModel",
+    "combatRules",
+    "shopModel",
+    "supportModel",
+    "relicModel",
+    "dawn",
+    "offline",
+    "builds",
+    "weapons",
+    "decisionPolicies",
+    "timingTargets",
+    "survival",
+    "seedPolicy",
+    "driftMeasurement",
+    "acceptance"
+  ],
+  "properties": {
+    "schemaVersion": {"const": 2},
+    "candidateId": {"type": "string", "minLength": 1},
+    "algorithmVersion": {"type": "string", "minLength": 1},
+    "schemaPath": {"const": "simulation/candidate.schema.json"},
+    "status": {"const": "SIMULATION_CANDIDATE"},
+    "createdAt": {"type": "string", "format": "date"},
+    "sourceSpecs": {"type": "array", "minItems": 6, "maxItems": 6, "items": {"type": "string", "minLength": 1}},
+    "sourceDependencyDigests": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "files", "invalidationRule"],
+      "properties": {
+        "algorithm": {"const": "sha256-raw-bytes-lowercase-hex"},
+        "files": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["MASTER_SPEC.md", "FLOORS_1_10_DESIGN.md", "PROJECT_STATUS.json", "quality-reviews/step-1-canonical-design/acceptance.json", "quality-reviews/step-1-canonical-design/acceptance-round-002.json", "quality-reviews/step-1-canonical-design/acceptance-round-003.json", "simulation/candidate.schema.json", "simulation/validate-candidate.mjs"],
+          "properties": {
+            "MASTER_SPEC.md": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"},
+            "FLOORS_1_10_DESIGN.md": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"},
+            "PROJECT_STATUS.json": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"},
+            "quality-reviews/step-1-canonical-design/acceptance.json": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"},
+            "quality-reviews/step-1-canonical-design/acceptance-round-002.json": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"},
+            "quality-reviews/step-1-canonical-design/acceptance-round-003.json": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"},
+            "simulation/candidate.schema.json": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"},
+            "simulation/validate-candidate.mjs": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"}
+          }
+        },
+        "invalidationRule": {"type": "string", "minLength": 1}
+      }
+    },
+    "fixedProductContractPointers": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "manifestChangePolicy": {
+      "type": "object",
+      "required": ["anyByteChangeInvalidatesAllBalanceResults", "schemaValidationRequiredBeforeEveryRun", "unknownOrMissingInputIsFatal"],
+      "properties": {
+        "anyByteChangeInvalidatesAllBalanceResults": {"const": true},
+        "schemaValidationRequiredBeforeEveryRun": {"const": true},
+        "unknownOrMissingInputIsFatal": {"const": true}
+      }
+    },
+    "calibrationMutationPolicy": {
+      "type": "object",
+      "required": ["step2Only", "step3MutationAllowed", "numericLeafOnly", "allowedRoots", "allowedNumericPointerPatterns", "immutableNumericPointerPatterns", "pointerMatchRule", "calibratableNumericDomainRules", "numericDomainClassificationRule", "inclusiveRangeBindings", "nonBindingPriorRangeRules", "rangeBindingRule", "immutableRegardlessOfRoot", "mutationTransaction"],
+      "properties": {
+        "step2Only": {"const": true},
+        "step3MutationAllowed": {"const": false},
+        "numericLeafOnly": {"const": true},
+        "allowedRoots": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "allowedNumericPointerPatterns": {"type": "array", "minItems": 10, "items": {"type": "string"}},
+        "immutableNumericPointerPatterns": {"type": "array", "minItems": 5, "items": {"type": "string"}},
+        "pointerMatchRule": {"type": "string", "minLength": 1},
+        "calibratableNumericDomainRules": {"type": "array", "minItems": 5, "items": {"type": "object", "required": ["domainKey", "pointerPatterns", "numberType"], "properties": {"domainKey": {"type": "string", "minLength": 1}, "pointerPatterns": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "numberType": {"enum": ["number", "integer"]}, "minimumInclusive": {"type": "number"}, "minimumExclusive": {"type": "number"}, "maximumInclusive": {"type": "number"}}, "additionalProperties": false}},
+        "numericDomainClassificationRule": {"type": "string", "minLength": 1},
+        "inclusiveRangeBindings": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["valuePointer", "rangePointer"], "properties": {"valuePointer": {"type": "string", "pattern": "^/"}, "rangePointer": {"type": "string", "pattern": "^/"}}, "additionalProperties": false}},
+        "nonBindingPriorRangeRules": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["valuePointer", "rangePointer", "rule"], "properties": {"valuePointer": {"type": "string", "pattern": "^/"}, "rangePointer": {"type": "string", "pattern": "^/"}, "rule": {"type": "string", "minLength": 1}}, "additionalProperties": false}},
+        "rangeBindingRule": {"type": "string", "minLength": 1},
+        "immutableRegardlessOfRoot": {"type": "string", "minLength": 1},
+        "mutationTransaction": {"type": "string", "minLength": 1}
+      }
+    },
+    "rounding": {
+      "type": "object",
+      "required": ["currency", "hpAndDamageInternalDecimals", "displayValues", "timeInternalMilliseconds", "derivedEventTime", "percentiles", "ties", "ratioDivisionByZero", "nonFiniteResult", "maximumSafeIntegerPolicy"]
+    },
+    "curves": {
+      "type": "object",
+      "required": ["enemyEhp", "enemyReward", "enemyAttack", "catLevel", "shopLevel"],
+      "properties": {
+        "enemyEhp": {"type": "object", "required": ["formulaId", "floorGrowthInitial", "floorGrowthRange", "baseInitial", "baseRange"]},
+        "enemyReward": {"type": "object", "required": ["formulaId", "floorGrowthInitial", "floorGrowthRange", "baseInitial", "baseRange"]},
+        "enemyAttack": {"type": "object", "required": ["formulaId", "baseHitDamageInitial", "baseHitDamageRange", "attackGrowthInitial", "attackGrowthPriorRange"]},
+        "catLevel": {"type": "object", "required": ["nextCostFormulaId", "attackFormulaId", "hpFormulaId", "costGrowthInitial", "attackGrowthInitial", "hpGrowthInitial", "milestoneInitial", "milestoneAppliesOnLevels", "maximumLevel"]},
+        "shopLevel": {"type": "object", "required": ["nextCostFormulaId", "effectiveLevelFormulaId", "placementCost", "costBaseMultiplierInitial", "costGrowthInitial", "effectDiminishingAfterLevel", "effectPerLevelMultiplierAfterDiminishing", "maximumLevelPerPlacement"]}
+      }
+    },
+    "returnSchedules": {
+      "type": "object",
+      "required": ["dayLengthSeconds", "personaBindingRule", "foregroundInterruptionResumeRule", "floorTransitionInterruptionRule", "deferredOfflineSettlementBoundaryRule", "postSettlementAttemptEntryRule", "deferredSettlementClockRule", "interruptionDurablePhaseRule", "offlineResumeCombatRecompositionRule", "minimumFollowingForegroundBudgetMs", "maximumDeferredForegroundResumeMs", "deferredResumeConsumesFollowingForegroundRule", "active", "standard", "passive", "continuousFirstTen", "explicitOfflineCases"],
+      "properties": {
+        "dayLengthSeconds": {"const": 86400},
+        "minimumFollowingForegroundBudgetMs": {"const": 210000},
+        "maximumDeferredForegroundResumeMs": {"const": 16800},
+        "active": {"$ref": "#/$defs/daySchedule"},
+        "standard": {"$ref": "#/$defs/daySchedule"},
+        "passive": {"$ref": "#/$defs/daySchedule"}
+      }
+    },
+    "personas": {
+      "type": "object",
+      "required": ["persona.active", "persona.baseline", "persona.passive", "buildComparisonPersonaId", "buildComparisonScheduleId", "extremeComparison"]
+    },
+    "formulaRules": {
+      "type": "object",
+      "required": ["numericFormulaAuthority", "operationOrder", "primitiveDefinitions", "algorithmOperands", "algorithmDefinitions"],
+      "properties": {
+        "primitiveDefinitions": {"type": "object", "minProperties": 1},
+        "algorithmOperands": {"type": "object", "minProperties": 1},
+        "algorithmDefinitions": {"type": "object", "minProperties": 1}
+      }
+    },
+    "clockModel": {
+      "type": "object",
+      "required": ["fixedStepMs", "foregroundFixedStepIncomeCommitRule", "persistedStateRevisionRule", "postClearDraftRevisionRule", "simulationScheduleKeys", "simulationSaveIdRegex", "scenarioIdentityBindings", "saveIdConstruction", "monotonicClockLifecycle", "localClockTrustBoundary", "scenarioMeasurementClockInitialState", "scenarioMeasurementClockRule", "gameplayExecutionClockRule", "diagnosticHorizonClockRule", "foregroundProgressionTime", "wallClockElapsedTime", "sameTimestampOrder"],
+      "properties": {
+        "fixedStepMs": {"type": "integer", "minimum": 1},
+        "scenarioMeasurementClockInitialState": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["resultWallElapsedMs", "resultForegroundElapsedMs"],
+          "properties": {
+            "resultWallElapsedMs": {"const": 0},
+            "resultForegroundElapsedMs": {"const": 0}
+          }
+        },
+        "scenarioMeasurementClockRule": {"type": "string", "minLength": 1},
+        "gameplayExecutionClockRule": {"type": "string", "minLength": 1},
+        "diagnosticHorizonClockRule": {"type": "string", "minLength": 1},
+        "foregroundProgressionTime": {"type": "string", "minLength": 1},
+        "wallClockElapsedTime": {"type": "string", "minLength": 1}
+      }
+    },
+    "effectComposition": {
+      "type": "object",
+      "required": ["effectivePowerEvaluationHorizonSeconds", "effectivePowerReferenceTrace", "effectivePowerReferenceEnemyReservoirRule", "effectivePowerReferenceSegmentBoundaryRule", "effectiveOutgoingDpsDefinition", "predictedTtkSecondsDefinition", "collapseSecondsForScalarDefinition", "survivalMarginScalar", "effectivePowerScalar", "guardianRawDamageBudgetFormulaId", "guardianSurvivalMarginFormulaId", "armamentRawSurvivalProcedure", "incomingConditionalMitigationRule", "shopAdditiveBonusSlotRule", "outgoingAtomicDamageMechanicBindings", "projectileDamageSnapshotRule", "incomingAtomicDamageMechanicBindings", "enemyProjectileDamageSnapshotRule", "healingAtomicRule", "utilityProjectionWindowSeconds", "utilitySurvivalFormulaId", "utilityCategoryDefinitions", "utilityCategoryEvaluationRule", "boundedDecisionProjectionProcedure", "maximumHpMutationRule"],
+      "properties": {
+        "utilityProjectionWindowSeconds": {"type": "integer", "minimum": 1},
+        "utilityCategoryDefinitions": {
+          "type": "object",
+          "required": ["catPower", "helperPower", "commerce", "survival"]
+        }
+      }
+    },
+    "stopPolicy": {
+      "type": "object",
+      "required": ["successCondition", "maximumWallClockSeconds", "maximumForegroundSeconds", "maximumFloorAttempts", "maximumDawnExecutions", "maximumEconomyTransactions", "maximumCombatEvents", "economyTransactionCountingRule", "combatEventCountingRule", "stopCounterLifecycleRule", "shieldAndChargeEventCountingRule", "sameTimestampCombatLimitPreflightRule", "playerInputCombatLimitPreflightRule", "scheduleSegmentBoundaryRule", "limitBoundaryRule", "limitReachedResult", "incompleteScenariosRemainInPercentilesAs", "floor100TerminalRule"]
+    },
+    "districtProgression": {
+      "type": "object",
+      "required": ["districts", "relicChoicesPerX9", "newCatRunState", "catUnlockRule", "armamentUnlockAndTierRule", "districtSealRule", "dawnUnlockRule", "commercialSlotRule", "unlockEvaluationOrder"],
+      "properties": {
+        "districts": {"type": "array", "minItems": 10, "maxItems": 10}
+      }
+    },
+    "floorRoleModifiers": {
+      "type": "object",
+      "required": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+    },
+    "floorOverrides": {
+      "type": "object",
+      "required": ["1", "8", "9", "10", "100", "applicationRule"],
+      "properties": {
+        "1": {"type": "object", "required": ["enemyCount", "armorShare", "flyingShare"]},
+        "8": {
+          "type": "object",
+          "required": ["enemyCount", "encounterId", "namedObjectiveWaveOneBased", "namedObjectiveWaveEntities", "namedObjectiveAllocationRule", "objectiveSuccessEventId", "objectiveEventCommit", "reinforcementReservation"],
+          "properties": {
+            "namedObjectiveWaveEntities": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "object", "required": ["id", "threat", "withinWaveEhpShare"]}},
+            "reinforcementReservation": {"type": "object", "required": ["activeWaveOneBased", "casterEntity", "reserveTarget", "firstCastMs", "repeatIntervalMs", "arrivalDelayMs", "restoreInitialWaveEhpFraction", "maximumSuccessfulArrivals", "maximumPendingArrivals", "deliveryWorkDelayPerSuccessfulArrivalMs", "deliveryWorkDelayCapMs", "attemptStateInitialization", "castRule", "arrivalRule", "sameTimestampCancellation", "hudDisclosure"]}
+          }
+        },
+        "9": {"type": "object", "required": ["variantSelection", "variants"]},
+        "10": {
+          "type": "object",
+          "required": ["firstDistrictBossMechanics"],
+          "properties": {
+            "firstDistrictBossMechanics": {
+              "type": "object",
+              "required": ["bossEntity", "phaseGateEpsilonEhp", "representativeActionGate", "phaseOne", "phaseTwo", "phaseThree", "phaseLifecycle", "sameTimestampRule"],
+              "properties": {
+                "phaseTwo": {"type": "object", "required": ["representativeAction", "firstDesiredImpactMs", "repeatImpactIntervalMs", "sourceAndDamageRule", "cadenceOwnershipRule", "projectileRule", "landingWindows"]}
+              }
+            }
+          }
+        },
+        "100": {
+          "type": "object",
+          "required": ["hp", "attack", "enemyCount", "waves", "waveEhpShares", "bossPhaseOverrideId", "bossHeavyFirstImpactMs", "bossHeavyIntervalMs", "bossTelegraphMs", "fourPhaseMechanics"],
+          "properties": {
+            "waves": {"const": 4},
+            "waveEhpShares": {"type": "array", "minItems": 4, "maxItems": 4},
+            "fourPhaseMechanics": {"type": "object", "required": ["phaseLabels", "phaseOneGround", "phaseTwoFlying", "phaseThreeShopLockdown", "phaseThreeEntryExitTimerAndCapacityTransaction", "phaseFourBerserkNormalIntervalMultiplier", "phaseFourBerserkHeavyIntervalMultiplier", "phaseFourBerserkDamageMultiplier", "phaseFourBerserk", "stateLifecycle"]}
+          }
+        },
+        "applicationRule": {"type": "string", "minLength": 1}
+      }
+    },
+    "catBaselines": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cat.mugi", "cat.luna", "cat.toto", "cat.kohaku", "cat.d02.rescued", "cat.d03.rescued", "cat.d04.rescued", "cat.d05.rescued", "cat.d06.rescued", "cat.d07.rescued", "cat.d08.rescued", "cat.d09.rescued"],
+      "properties": {
+        "cat.mugi": {"$ref": "#/$defs/catBaseline"},
+        "cat.luna": {"$ref": "#/$defs/catBaseline"},
+        "cat.toto": {"$ref": "#/$defs/catBaseline"},
+        "cat.kohaku": {"$ref": "#/$defs/catBaseline"},
+        "cat.d02.rescued": {"$ref": "#/$defs/catBaseline"},
+        "cat.d03.rescued": {"$ref": "#/$defs/catBaseline"},
+        "cat.d04.rescued": {"$ref": "#/$defs/catBaseline"},
+        "cat.d05.rescued": {"$ref": "#/$defs/catBaseline"},
+        "cat.d06.rescued": {"$ref": "#/$defs/catBaseline"},
+        "cat.d07.rescued": {"$ref": "#/$defs/catBaseline"},
+        "cat.d08.rescued": {"$ref": "#/$defs/catBaseline"},
+        "cat.d09.rescued": {"$ref": "#/$defs/catBaseline"}
+      }
+    },
+    "helperBaselines": {
+      "type": "object",
+      "required": ["autoDispatch", "helper.guard", "helper.slinger", "helper.runner", "helperUpgrade"],
+      "properties": {
+        "autoDispatch": {"type": "object", "required": ["startsAfterFirstTutorialTapAccepted", "dispatchBaseWeightsByBuild", "partyWeightAdjustments", "shopWeightAdjustmentsPerPlacementBeforeDuplicateFactor", "dispatchWeightSelection", "initialTutorialTapRule", "unlockedFloorAttemptRule", "manualCommandRule", "queueRule"]}
+      }
+    },
+    "enemyModel": {
+      "type": "object",
+      "required": ["relativeFloorRoleKey", "relativeFloorRoleApplication", "waveEnemyCountAllocation", "bossPhaseEnemyCountRule", "threatEnemyCountAllocation", "targeting", "normalAttackScheduleRule", "normalProjectileLaunchRule", "normalAttackTargetLifecycle", "projectileTargetLock", "attackKindCycleRule", "attackKindCycleRebuild", "enemyProjectileTravelMs", "bossTelegraphMsInitial", "bossHeavyFirstImpactMs", "bossHeavyIntervalMs", "eliteHeavyAppliesOnRelativeFloors", "eliteHeavyFirstDistrictOwner", "eliteHeavyFirstImpactMs", "eliteHeavyIntervalMs", "heavyScheduleRule", "bossPhaseOverrides", "genericFirstClearBossPhaseGate", "firstDistrictWaveRosters", "firstDistrictEntityEhpAllocation", "firstDistrictMechanics", "recommendedBandSurvival"],
+      "properties": {
+        "enemyProjectileTravelMs": {"type": "integer", "minimum": 1},
+        "bossTelegraphMsInitial": {"type": "integer", "minimum": 1},
+        "targeting": {"type": "object", "required": ["algorithm", "heavyTarget", "heavyTargetLockRule", "eligibleActors", "koActorMayBeTargeted"]},
+        "bossPhaseOverrides": {"type": "object", "required": ["standardThreePhase", "floor100FourPhase"]},
+        "genericFirstClearBossPhaseGate": {"type": "object", "required": ["scope", "phaseGateEpsilonEhp", "standardThreePhaseRepresentatives", "floor100FourPhaseRepresentatives", "projectileRepresentativeScheduling", "clampAndRelease", "sameTimestampRule"]},
+        "firstDistrictWaveRosters": {"type": "object", "required": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "authorityRule"]},
+        "firstDistrictEntityEhpAllocation": {"type": "object", "required": ["instanceExpansion", "matrixAllocation", "targetSelection", "koRule", "f8NamedException", "f10BossException", "invariant"]},
+        "recommendedBandSurvival": {"type": "object", "required": ["frontlinerNormalHitsToKoRange", "backlinerNormalHitsToKoRange", "bossUnavoidableHeavyHitFrontlinerMaxHpFractionRange", "fullHpToZeroFromAnyAtomicNormalHitAllowed", "fullHpToZeroFromAnyAtomicProjectileHitAllowed", "fullHpToZeroFromAnyAtomicEliteHeavyHitAllowed", "fullHpToZeroFromAnyAtomicBossHeavyHitAllowed", "combineHitsInsideMsForBurstMetricOnly", "atomicOneHitUsesEventIdNotTimeWindow"]}
+      }
+    },
+    "combatRules": {
+      "type": "object",
+      "required": ["floorClearSurvivorHealMaxHpFraction", "floorClearKoReviveMaxHpFraction", "floorClearSurvivorHealMaximumWithShop", "floorClearRecovery", "defeatPresentationMs", "retryFullHealFraction", "retryRequiresConcreteStateChange", "retryState", "failureBoundaryOrder", "floorClearCommitOrder", "floorClearUSnapshotRule", "postBossBoundaryOrder", "floor100TerminalOverride", "effectiveContactTravelRule", "retargetTravelRule", "rangedImpactRule", "alliedPrimaryTargetLifecycleRule", "alliedKoLifecycle", "waveGapStateTransition", "waveGapSkillLifecycle", "namedObjectiveTargetRule", "secondaryTargetRule", "attemptDeadlineRule", "healingCapacityReservation", "finiteChargeAndCounterReservation", "positiveEhpDeltaReservation", "sameTimestampDamageCommit", "mutualZeroResolutionRule", "koEventIdentityRule", "skillTimerScheduleRule", "controlAndRallySkillOrderRule", "skillCategoryMapping", "partyMaximumNamedCats", "partyRequiredFrontlineShareThreshold", "partySelectionHpTransaction", "partySelectionEvaluationRule", "simultaneousEventOrder", "helperLifecycle"],
+      "properties": {
+        "floorClearCommitOrder": {"type": "array", "minItems": 20, "maxItems": 20},
+        "helperLifecycle": {"type": "object", "required": ["manualDispatch", "helperSpawnHealth", "fullQueueConversionCommit", "storedChargeOwnershipAndPersistence", "guardChargeConsumption", "guardConversionShieldState", "slingerChargeConsumption", "runnerChargeConsumption", "sameTickDeliveryContributorRule"]}
+      }
+    },
+    "shopModel": {
+      "type": "object",
+      "required": ["maximumPlacements", "placementFloorRewardOperandRule", "liveIncomeFormulaId", "liveIncomeAccrualFormulaId", "liveIncomeAccrual", "maximumAdditiveBonusPerStatFromAllShops", "continuousEffectCapRule", "shopStatComposition", "adjacency", "selection", "effectChannelSemantics", "shops"],
+      "properties": {
+        "maximumPlacements": {"const": 40},
+        "adjacency": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["commercialSlotsAreAdjacentWhenFloorDifference", "differentShopTypeBonusPerLink", "sameShopTypeBonusPerLink", "maximumLinksPerPlacement", "placementLinkMultiplierFormulaId", "linkMultiplierApplicationRule", "bonusAppliesTo", "discreteThresholdRule", "supportLinkWhenFloorDifference", "supportLinkBonusPerLink", "maximumSupportLinksPerPlacement", "linkBonusesAddThenMultiplyPlacementContribution"],
+          "properties": {
+            "commercialSlotsAreAdjacentWhenFloorDifference": {"type": "integer", "minimum": 1},
+            "differentShopTypeBonusPerLink": {"type": "number", "minimum": 0},
+            "sameShopTypeBonusPerLink": {"type": "number", "minimum": 0},
+            "maximumLinksPerPlacement": {"type": "integer", "minimum": 1},
+            "placementLinkMultiplierFormulaId": {"const": "placement-link-multiplier"},
+            "linkMultiplierApplicationRule": {"type": "string", "minLength": 1},
+            "bonusAppliesTo": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "string"}},
+            "discreteThresholdRule": {"type": "string", "minLength": 1},
+            "supportLinkWhenFloorDifference": {"type": "integer", "minimum": 1},
+            "supportLinkBonusPerLink": {"type": "number", "minimum": 0},
+            "maximumSupportLinksPerPlacement": {"type": "integer", "minimum": 1},
+            "linkBonusesAddThenMultiplyPlacementContribution": {"const": true}
+          }
+        },
+        "shops": {"type": "object", "minProperties": 10, "maxProperties": 10}
+      }
+    },
+    "supportModel": {
+      "type": "object",
+      "required": ["activationRule", "effectChannelSemantics", "firstDistrictScriptedDelivery", "support.training-ground", "support.rest-nest", "support.supply-lift", "support.request-board"],
+      "properties": {
+        "support.supply-lift": {"type": "object", "required": ["deliveryWorkUnitRule", "deliveryWorkRequiredMs", "deliveryWorkProgress"]}
+      }
+    },
+    "relicModel": {
+      "type": "object",
+      "required": ["selectionFloorRelative", "selectedInstanceShape", "selectionCommit", "selectionPolicy", "effectChannelSemantics", "relics"],
+      "properties": {"relics": {"type": "object", "minProperties": 3, "maxProperties": 3}}
+    },
+    "dawn": {
+      "type": "object",
+      "required": ["claimedLedgerSet", "executionOrder", "rewardLedger", "maximumBranchLevel", "nodeCostsByLevel", "branchSpendPolicy", "branches", "reset", "sameMaximumCatchup", "decisionPolicy", "firstReturnToPriorMaximumTimeFractionTarget", "firstReturnToPriorMaximumEvaluationProcedure", "compositeReclearSpeedTargetDerived", "expectedDawnsToFloor100", "standardDawnsToFloor100", "dawnCountToFloor100Procedure"],
+      "properties": {
+        "rewardLedger": {"type": "object", "required": ["milestones", "bosses", "achievements", "achievementCommitBoundaryRule", "maximumUniqueRewardIds", "maximumTotalShards", "transaction"]},
+        "nodeCostsByLevel": {"type": "array", "minItems": 5, "maxItems": 5},
+        "branchSpendPolicy": {"type": "object", "required": ["primaryBranch", "buyPreferredNodeWhileAffordable", "afterPrimaryCapChooseHighestMarginalEffectivePower", "secondaryBranchEarlyTerminalRule", "secondaryLoopRule", "maximumNodeCommitsPerDawn", "loopLimitReached", "unspentShardsAllowed", "respecChangesSpendButNeverReawardsShards"]},
+        "branches": {"type": "object", "required": ["dawn.combat", "dawn.reinforcement", "dawn.commerce"]},
+        "decisionPolicy": {"type": "object", "required": ["evaluationSchedule", "comparisonFloorRule", "predictedTtkSamplingRule", "progressDawnRequiresNewRewardId", "manualComparisonMaySuggestButNeverAutoExecute", "manualComparisonCheckpoint", "projectionProcedure", "projectionUnresolvedChoiceRule", "progressDawnExecutionRule", "zeroGainRecoveryExecutionRule"]}
+      }
+    },
+    "offline": {
+      "type": "object",
+      "required": ["capSeconds", "offlineCoinDeltaFormulaId", "settlement", "uIndex", "firstRun", "postDawnKnownFloorReclear", "acceptanceReferenceSnapshot", "acceptancePurchaseCountsStatisticRule", "repeatedCycleCases", "counterfactualSkipRejectFloors", "counterfactualAnchorConstruction", "counterfactualSkipTest"],
+      "properties": {
+        "capSeconds": {"const": 86400},
+        "settlement": {"type": "object", "required": ["hideTransaction", "hideAndPagehideCoalescing", "offlineEventIdConstruction", "offlineEventId", "elapsedSeconds", "baseOfflineCoinCalculation", "incomeAndReclearConcurrency", "eventAlreadyInProfileSettledIdsPays", "transactionOrder", "atomicCommitRule", "crashRecovery", "purchasesDuringTheSameOfflineIntervalAffectItsIncome", "clockRollbackMayIncreaseReward"]},
+        "uIndex": {"type": "object", "required": ["policyVersion", "fixedCombatReference", "fixedReinforcementReference", "fixedCommerceReference", "inputs", "forbiddenInputs", "referenceFormulaId", "rewardingDawnGrowth", "roleNeutralRewardFormulaId", "clampLowerMultiplier", "clampUpperMultiplier", "monotonicFormulaId", "snapshotShape", "snapshotCommitRule", "scalarMirrorRule", "persistOn", "legitimateProgressMayDecreaseU"]},
+        "postDawnKnownFloorReclear": {"type": "object", "required": ["enabled", "enabledWhenCompletedDawnCountAtLeast", "progressLedger", "missingGuardCandidateSentinel", "missingGuardCandidateRule", "guardOperandDerivations", "maximumClearableFloorFormula", "maximumClearableFloorClamp", "boundaryIsInclusive", "mayCrossMaximumClearableFloor", "normalBaseSeconds", "bossBaseSeconds", "powerRatioClamp", "secondsFormulaId", "currentEffectivePowerOperandRule", "minimumSecondsPerFloor", "rewardMultiplier", "rewardFormulaId", "processOrder", "partiallyActiveForegroundAttempt", "reclearMayChooseNewShopRelicOrArmament", "reclearMayAwardFirstClearOrDawnRewardId", "noRecordedFirstClearPower"]}
+      }
+    },
+    "builds": {
+      "type": "object",
+      "required": ["combat", "reinforcement", "commerce", "comparison"],
+      "properties": {
+        "comparison": {"type": "object", "required": ["scenarioPersonaId", "scenarioScheduleId", "pairedCommonSeedsRequired", "completionMetric", "medianSpreadFormula", "medianSpreadMaximum", "robustSpreadFormula", "robustSpreadMaximum", "extremeSpreadFormula", "extremeSpreadMaximum", "sameWallClockScheduleRequiredForBuildComparison", "unfinishedScenarioTime", "infinityDividedByInfinity", "minimumCompletionRatePerBuild"]}
+      }
+    },
+    "initialState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["run", "profile", "system"],
+      "properties": {
+        "run": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["currentFloor", "highestFloorThisRun", "coins", "liveIncomeAccruedFraction", "selectedBuildFromScenario", "party", "maximumNamedCatsInParty", "catLevels", "helperLevel", "shopPlacements", "shopLevelsArePerPlacementNotPerType", "selectedRelicInstances", "supportActivationLevels", "districtSealStacks", "equippedArmament", "armamentTier", "armamentLockRemainingClears", "activeCatchupForMaximumFloor", "deliveryCount", "deliveryWorkRemainingMs", "storedHelperConversionCharges", "foregroundStagnationMs", "sameCauseDefeatCount", "lastDefeatCauseSignature", "pendingArmamentSwitchAchievementFamily", "pendingInitialTutorialGuard", "helperRequestOrdinal", "helperSpawnOrdinal", "combatEventOrdinal", "clearedFloorsThisRun", "rewardedFloorsThisRun", "health"],
+          "properties": {
+            "currentFloor": {"const": 1}, "highestFloorThisRun": {"const": 0}, "coins": {"const": 0}, "liveIncomeAccruedFraction": {"const": 0}, "selectedBuildFromScenario": {"const": true},
+            "party": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "maximumNamedCatsInParty": {"type": "integer", "minimum": 1}, "catLevels": {"type": "object"}, "helperLevel": {"const": 0},
+            "shopPlacements": {"type": "array", "maxItems": 0}, "shopLevelsArePerPlacementNotPerType": {"const": true}, "selectedRelicInstances": {"type": "array", "maxItems": 0}, "supportActivationLevels": {"type": "object"},
+            "districtSealStacks": {"const": 0}, "equippedArmament": {"type": "null"}, "armamentTier": {"const": 0}, "armamentLockRemainingClears": {"const": 0}, "activeCatchupForMaximumFloor": {"type": "null"},
+            "deliveryCount": {"const": 0}, "deliveryWorkRemainingMs": {"type": "null"}, "storedHelperConversionCharges": {"type": "object"}, "foregroundStagnationMs": {"const": 0}, "sameCauseDefeatCount": {"const": 0},
+            "lastDefeatCauseSignature": {"type": "null"}, "pendingArmamentSwitchAchievementFamily": {"type": "null"}, "pendingInitialTutorialGuard": {"const": false}, "helperRequestOrdinal": {"const": 0}, "helperSpawnOrdinal": {"const": 0}, "combatEventOrdinal": {"const": 0},
+            "clearedFloorsThisRun": {"type": "array", "maxItems": 0}, "rewardedFloorsThisRun": {"type": "array", "maxItems": 0}, "health": {"type": "string"}
+          }
+        },
+        "profile": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["highestReachedFloor", "dawnShards", "completedDawnCount", "rewardingDawnCount", "claimedDawnRewardIds", "dawnBranchLevels", "unlockedCats", "unlockedShops", "unlockedArmaments", "unlockedArmamentTier", "retainedShopBlueprint", "firstClearedBossIds", "completedAchievementIds", "completedEventIds", "recordedFirstClearEffectivePowerByFloor", "dawnUnlocked", "districtSealStacks", "completedFirstTimeDecisionFloors", "completedArmamentTutorialFloors", "autoDispatchUnlocked", "lastPersistedU", "lastPersistedUSnapshot", "settledOfflineEventIds", "lastDawnMaximumFloor", "zeroGainRecoveryDawnHighestFloors"],
+          "properties": {
+            "highestReachedFloor": {"const": 0}, "dawnShards": {"const": 0}, "completedDawnCount": {"const": 0}, "rewardingDawnCount": {"const": 0},
+            "claimedDawnRewardIds": {"type": "array"}, "dawnBranchLevels": {"type": "object"}, "unlockedCats": {"type": "array", "minItems": 1}, "unlockedShops": {"type": "array"}, "unlockedArmaments": {"type": "array"}, "unlockedArmamentTier": {"const": 0},
+            "retainedShopBlueprint": {"type": "array"}, "firstClearedBossIds": {"type": "array"}, "completedAchievementIds": {"type": "array"}, "completedEventIds": {"type": "array"}, "recordedFirstClearEffectivePowerByFloor": {"type": "object"},
+            "dawnUnlocked": {"const": false}, "districtSealStacks": {"const": 0}, "completedFirstTimeDecisionFloors": {"type": "array"}, "completedArmamentTutorialFloors": {"type": "array", "maxItems": 0}, "autoDispatchUnlocked": {"const": false}, "lastPersistedU": {"const": 0},
+            "lastPersistedUSnapshot": {"$ref": "#/$defs/uSnapshot"}, "settledOfflineEventIds": {"type": "array"}, "lastDawnMaximumFloor": {"type": "null"}, "zeroGainRecoveryDawnHighestFloors": {"type": "array"}
+          }
+        },
+        "system": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["saveId", "monotonicHiddenSequence", "pendingOfflineEvent", "lastCommittedOfflineSequence", "lastAcceptedWallClockUnixMs", "monotonicClockMs", "foregroundClockMs", "manualCommandAnchorForegroundMs", "floorAttemptOrdinal", "stateRevision", "purchaseEvaluationOrdinal", "dawnEvaluationCheckpointOrdinal", "lastDawnEvaluationCheckpointOrdinal", "committedEconomyCount", "committedCombatEventCount", "frozenForegroundContext"],
+          "properties": {
+            "saveId": {"type": "string", "minLength": 1}, "monotonicHiddenSequence": {"const": 0}, "pendingOfflineEvent": {"type": "null"}, "lastCommittedOfflineSequence": {"const": 0},
+            "lastAcceptedWallClockUnixMs": {"type": "null"},
+            "monotonicClockMs": {"const": 0}, "foregroundClockMs": {"const": 0}, "manualCommandAnchorForegroundMs": {"type": "null"}, "floorAttemptOrdinal": {"const": 0}, "stateRevision": {"const": 0}, "purchaseEvaluationOrdinal": {"const": 0},
+            "dawnEvaluationCheckpointOrdinal": {"const": 0}, "lastDawnEvaluationCheckpointOrdinal": {"type": "null"}, "committedEconomyCount": {"const": 0}, "committedCombatEventCount": {"const": 0}, "frozenForegroundContext": {"type": "null"}
+          }
+        }
+      }
+    },
+    "weapons": {
+      "type": "object",
+      "required": ["normalSwitchLockMeaning", "automaticInitialEquipLockRule", "minimumPredictedTtkImprovementForRoutineSwitch", "bossTtkBandsSeconds", "recommendedSelectedX0BossTtkSeconds", "rejection"],
+      "properties": {
+        "rejection": {
+          "type": "object",
+          "required": ["maximumSingleFamilySelectionShare", "minimumMedianSwitchesToFloor100", "maximumMedianSwitchesToFloor100", "mixedTradeoffMinimumPassingShare", "maximumRawSurvivalSignMismatchShare", "maximumRecommendationDirectionInversions", "maximumDisplayedTtkDirectionInversions", "maximumStateFaithfulSurvivalSignInversions", "comparisonEpsilon", "evaluationProcedure"],
+          "properties": {
+            "evaluationProcedure": {"type": "object", "required": ["stages", "naturalDecisionCorpus", "selectionShareAggregation", "switchAggregation", "roleBalancedThreatVectors", "bossReferenceCorpus", "bossBandClassMatrix", "bossBandAggregation", "recommendedNaturalBossTtkAggregation", "universalFastestPredicate", "paretoRule", "mixedTradeoffAggregation", "rawSurvivalSignCalibration", "stateFaithfulSurvivalCalibration", "displayedTtkDirectionEvaluation", "recommendationDirectionEvaluation", "recommendationDirectionAggregation", "sameStateGuarantee"]}
+          }
+        }
+      }
+    },
+    "decisionPolicies": {
+      "type": "object",
+      "required": ["purchase", "shopPlacement", "shopReconfiguration", "armament", "failure"],
+      "properties": {
+        "purchase": {"type": "object", "required": ["evaluationPointsInOrder", "purchaseReferenceFloorRule", "evaluationOrdinalRule", "candidateKeyConstruction", "utilityFormulaId", "purchaseUtilityOperandRule"]},
+        "shopReconfiguration": {"type": "object", "required": ["availability", "preBossCostFormulaId", "freePeriodRule", "candidateTransitions", "commit"]},
+        "armament": {"type": "object", "required": ["evaluationCheckpoints", "routineTtkImprovementFormula", "routineAcceptance", "overrideAcceptance", "acceptedFamilyChangeCommit"]},
+        "failure": {"type": "object", "required": ["diagnosisPredicates", "healingDeficitCounterfactualRule", "floorEightDiagnosisOverride", "diagnosisSelection", "defeatCauseSignature", "suggestionProbeRule"]}
+      }
+    },
+    "timingTargets": {
+      "type": "object",
+      "required": ["floorCombatBandsAreP50Targets", "floorCombatBandCohort", "firstTenTotalP50Minutes", "firstTenTotalP90MinutesMaximum", "firstTimeDecisionSecondsByRelativeFloor", "firstTimeDecisionCheckpointByRelativeFloor", "firstTimeDecisionScope", "firstTimeDecisionActionByAbsoluteFloor", "firstTimeDecisionDraw", "laterChoiceDecisionSeconds", "laterChoiceDecisionRule", "f1TutorialDecisionCommit", "transitionCountForFirstTen", "recordSeparately", "firstDawnForegroundMinutes", "firstDawnFloorRange", "firstDawnMeasurementProcedure", "firstHundredForegroundHours", "firstHundredWallClockDays", "progressionTimingCohorts", "distributionStatisticRules", "reclearNormalSeconds", "reclearKnownBossSeconds", "reclearBandCohort"],
+      "properties": {
+        "firstHundredWallClockDays": {
+          "type": "object",
+          "required": ["active", "standard", "passive", "hardCalendarGate", "simulationP50Gate", "gateInterpretation"],
+          "properties": {
+            "hardCalendarGate": {"const": false},
+            "simulationP50Gate": {"const": true},
+            "passive": {"const": "diagnostic-only-no-hard-range"}
+          }
+        }
+      }
+    },
+    "survival": {"type": "object", "required": ["oneHitCheck", "conditionalMitigationRule", "successRule", "failureRule", "mandatoryOneHitGateTiming", "recommendedBandEvaluationProcedure"]},
+    "driftMeasurement": {"type": "object", "required": ["probeFloorMapping", "schedule", "anchorState", "coinOnlyExit", "totalExit"]},
+    "acceptance": {"type": "object", "required": ["d10Pre", "net10", "driftAcceptanceAggregation", "activeToPassiveThreeMinuteEffectivePowerRatioOnStandardSchedule", "activeToPassiveThreeMinuteProcedure", "activeToPassiveEarlyTerminalRule", "minimumCompletionRatePerBuild"]},
+    "seedPolicy": {
+      "type": "object",
+      "required": ["prng", "entityKeyConstruction", "calibrationSeedsInclusive", "holdoutCommonSeedsInclusive", "holdoutScenariosPerBuild", "commonRandomNumbersAcrossBuilds", "scenarioVariance"],
+      "properties": {
+        "calibrationSeedsInclusive": {"const": [1, 200]},
+        "holdoutCommonSeedsInclusive": {"const": [100000, 100999]},
+        "holdoutScenariosPerBuild": {"const": 1000},
+        "commonRandomNumbersAcrossBuilds": {"const": true}
+      }
+    }
+  },
+  "$defs": {
+    "catBaseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unlockFloor", "unlockCondition", "baseCost", "baseAttack", "baseHp", "attackIntervalMs", "attackIntervalRangeMs", "contactTravelMs", "attackDelivery", "frontlineShare", "targetPriority", "attackMultiplierByThreat", "skill"],
+      "properties": {
+        "unlockFloor": {"type": "integer", "minimum": 1},
+        "unlockCondition": {"type": "object", "minProperties": 1},
+        "baseCost": {"type": "number", "minimum": 0},
+        "baseAttack": {"type": "number", "minimum": 0},
+        "baseHp": {"type": "number", "minimum": 0},
+        "attackIntervalMs": {"type": "integer", "minimum": 1},
+        "attackIntervalRangeMs": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 1}},
+        "contactTravelMs": {"type": "integer", "minimum": 0},
+        "projectileTravelMs": {"type": "integer", "minimum": 1},
+        "attackDelivery": {"enum": ["melee", "projectile"]},
+        "frontlineShare": {"type": "number", "minimum": 0, "maximum": 1},
+        "targetPriority": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"enum": ["armor", "flying", "neutral"]}},
+        "attackMultiplierByThreat": {
+          "type": "object", "additionalProperties": false, "required": ["armor", "flying", "neutral"],
+          "properties": {"armor": {"type": "number", "minimum": 0}, "flying": {"type": "number", "minimum": 0}, "neutral": {"type": "number", "minimum": 0}}
+        },
+        "skill": {"type": "object", "minProperties": 2}
+      }
+    },
+    "uSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policyVersion", "highestReachedFloor", "rewardingDawnCount", "fixedReferences", "projectedReferenceValues", "unclampedMedian", "roleNeutralClampLower", "roleNeutralClampUpper", "clampedU"],
+      "properties": {
+        "policyVersion": {"const": 2},
+        "highestReachedFloor": {"type": "integer", "minimum": 0},
+        "rewardingDawnCount": {"type": "integer", "minimum": 0},
+        "fixedReferences": {
+          "type": "object", "additionalProperties": false, "required": ["combat", "reinforcement", "commerce"],
+          "properties": {
+            "combat": {"type": "object", "additionalProperties": false, "required": ["key", "value"], "properties": {"key": {"const": "fixedCombatReference"}, "value": {"type": "number", "minimum": 0}}},
+            "reinforcement": {"type": "object", "additionalProperties": false, "required": ["key", "value"], "properties": {"key": {"const": "fixedReinforcementReference"}, "value": {"type": "number", "minimum": 0}}},
+            "commerce": {"type": "object", "additionalProperties": false, "required": ["key", "value"], "properties": {"key": {"const": "fixedCommerceReference"}, "value": {"type": "number", "minimum": 0}}}
+          }
+        },
+        "projectedReferenceValues": {"type": "object", "additionalProperties": false, "required": ["combat", "reinforcement", "commerce"], "properties": {"combat": {"type": "number", "minimum": 0}, "reinforcement": {"type": "number", "minimum": 0}, "commerce": {"type": "number", "minimum": 0}}},
+        "unclampedMedian": {"type": "number", "minimum": 0}, "roleNeutralClampLower": {"type": "number", "minimum": 0}, "roleNeutralClampUpper": {"type": "number", "minimum": 0}, "clampedU": {"type": "number", "minimum": 0}
+      }
+    },
+    "daySchedule": {
+      "type": "object",
+      "required": ["personaId", "sessionsPerDay", "foregroundSecondsPerSession", "segments", "assertTotalSeconds"],
+      "properties": {
+        "segments": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["type", "seconds"],
+            "properties": {
+              "type": {"enum": ["foreground", "offline"]},
+              "seconds": {"type": "integer", "minimum": 0}
+            }
+          }
+        },
+        "assertTotalSeconds": {"const": 86400}
+      }
+    }
+  }
+}

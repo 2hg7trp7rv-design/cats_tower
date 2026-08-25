@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-canonical-design",
+  "acceptanceRevision": 3,
+  "date": "2026-08-25",
+  "supersedes": "acceptance-round-002.json together with round-002.json",
+  "baseRequirementsRemainRequired": true,
+  "clarificationsOverrideConflictingEarlierPhrases": true,
+  "additionalRequirements": [
+    {"id": "R21", "condition": "candidate-v1.json schemaVersion 2 validates against candidate.schema.json and validate-candidate.mjs passes all cross-field assertions before every simulation run."},
+    {"id": "R22", "condition": "active, standard and passive day schedules are ordered and each totals exactly 86400 seconds; the first-ten continuous schedule is separate."},
+    {"id": "R23", "condition": "all three builds use the same paired holdout seeds 100000-100999, keyed order-independent PRNG draws, and a manifest-defined distribution mapping."},
+    {"id": "R24", "condition": "the abstract 100F model defines 12 cats, 10 districts and bosses, all shop unlock floors, support activations, X9 relic effects, armament tiers and the four-phase F100 override without authorizing 11F runtime production."},
+    {"id": "R25", "condition": "combat uses individual actor HP, exact wave and threat allocation, targeting, projectile and heavy cadence, skills, helpers, recovery and every atomic one-hit rejection class; the simulator may not use pooled HP for pass/fail."},
+    {"id": "R26", "condition": "initial state, purchase candidates, reserve, utility, tie order, effect composition, shop duplicate and adjacency rules, retries, limits and non-finite handling are executable without invented values."},
+    {"id": "R27", "condition": "Dawn uses 33 exact reward IDs totaling at most 43 shards, one claimed set and atomic set-difference commit; a zero-gain recovery Dawn never increments rewardingDawnCount or increases U."},
+    {"id": "R28", "condition": "offline U is role-neutral and nondecreasing, settlement is idempotent, commerce composition is capped, known re-clear time/reward/boundaries are exact, and all three repeated-cycle tests are defined."},
+    {"id": "R29", "condition": "D10_pre and Net10 use the declared structural probe, exact entry/coin-only/total states and one scalar effective-power definition; any undefined or non-finite probe fails."},
+    {"id": "R30", "condition": "a new round of three independent critics reports no unresolved P0 or P1 blocker, all machine checks pass, and no runtime or asset file changes are present."}
+  ],
+  "failureConditions": [
+    "any day schedule differs from 86400 seconds",
+    "a build receives a different holdout seed set",
+    "an ID used by machine state is absent from the stable registry",
+    "a formula ID lacks declared operands",
+    "F1 does not contain one tutorial enemy or F100 does not contain four phases",
+    "U decreases after legitimate floor or rewarding-Dawn progress",
+    "a zero-reward Dawn increases U",
+    "an atomic one-hit class is omitted",
+    "a critic must invent a numeric or state rule to implement Step 2"
+  ]
+}

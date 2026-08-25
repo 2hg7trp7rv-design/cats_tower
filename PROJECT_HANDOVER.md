@@ -1,16 +1,16 @@
 # Cat's Tower 引き継ぎ書
 
-更新日: 2026-08-23
+更新日: 2026-08-25
 
 Repository: `2hg7trp7rv-design/cats_tower`
 
-Canonical branch: `main`
+Canonical branch: `kimi`
 
-文書作業branch: `codex/restart-step-1-round7`
+変更・文書branch: `kimi`（他ブランチの作成・切替・書込み、PR作成は禁止）
 
 固定Vercel URL: <https://cats-tau-dusky.vercel.app/>
 
-工程状態: 工程1A=PASS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
+工程状態: 工程1A=PASS / 正本仕様固定=PASS / 100Fシミュレーション以降=NOT_STARTED
 
 工程1A正式名称: V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint
 
@@ -20,32 +20,39 @@ Canonical branch: `main`
 
 製品方針は、V0.8.2の10F完結版から「1つの塔・100F」へ変更された。
 
-ただし、100F分の素材やデータを一括生成しない。最初に1〜10Fを完全な商品スライスとして作り、実移動、接敵、複数敵、ショップ選択、猫解放、塔スクロール、夜明け、保存、物理iPhone QAを合格させる。11F以降はその後に10F単位で制作する。
+ただし、100F分の素材やデータを一括生成しない。最初に1〜10Fを完全な商品スライスとして作り、実移動、接敵、複数敵、ショップ選択、猫解放、塔スクロール、夜明け、保存、物理iPhone QAを合格させる。今回承認された6工程の実装対象は1〜10Fだけであり、11F以降の制作は現在の許可に含まれない。
 
-工程1A・V0.8.2 deployed browser-runtime source + deployment-input byte checkpointはRound 6の外部artifact監査でHTTP 415となり、`IN_PROGRESS`へ戻した。その間のゲームruntime変更は0件である。Round 7 completion sealが合格するまで工程2へ進まず、工程2と工程3の旧成果物は`PENDING_REVALIDATION`の候補として保持する。
+工程1A・V0.8.2 deployed browser-runtime source + deployment-input byte checkpointはRound 7 completion sealまで合格し、`PASS`である。6工程中のStep 1「修正版の正本仕様固定」も、`quality-reviews/step-1-canonical-design/acceptance-round-003.json`の条件、3者独立反証、機械封印に合格し`PASS`となった。完成証跡は`acceptance-round-004.json`であり、Round 1・2の不合格記録は上書きしない。この工程でのゲームruntime変更は0件である。
 
 ## 2. 文書の権限
 
-仕様の優先順位:
+一列の曖昧な優先順位は使わず、対象scopeごとに権限を固定する。
 
-1. `MASTER_SPEC.md`
-2. `QUALITY_GATE.md`
-3. `AGENTS.md`
-4. `PROJECT_STATUS.json`
-5. `PROJECT_HANDOVER.md`
-6. `README.md`
-7. コード、テスト、コメント
+| scope | 唯一の権威 | 下位資料の扱い |
+|---|---|---|
+| 製品境界、状態遷移、操作・保存・表示・禁止事項 | `MASTER_SPEC.md` | 全文書・実装はこれに従う |
+| 1〜10Fの階別・敵別・施設別詳細 | `FLOORS_1_10_DESIGN.md` | `MASTER_SPEC.md`へ従う下位正本。競合時は停止 |
+| 安定IDと読取専用alias | `PROJECT_STATUS.json.stableIdRegistry` / `stableIdMigrationAliases` | 本文のID表は説明用参照 |
+| S01〜S09と各required stateの完全な集合 | `PROJECT_STATUS.json.canonicalScreens` | 他文書の画面表は要約であり、状態を削れない |
+| 工程1の合否条件・完成証跡 | `quality-reviews/step-1-canonical-design/acceptance-round-003.json` / `acceptance-round-004.json` | Round 1・2は不合格履歴 |
+| 工程2・3の数値・式・実行入力 | `simulation/candidate-v1.json` | schemaとvalidatorに合格した同一digestだけを使用 |
+| candidateの構造・事前検査 | `simulation/candidate.schema.json` / `simulation/validate-candidate.mjs` | 未検証入力でsimulationを開始しない |
+| QA gateと端末判定 | `QUALITY_GATE.md` | 物理iPhoneは工程6だけが判定可能 |
+| repository作業規則 | `AGENTS.md` | 製品仕様や数値を上書きしない |
+| 進捗案内 | 本書 / `README.md` | 上記権威を要約し、独自仕様を追加しない |
+
+scope内で権威同士が競合した場合は、都合のよい方を選ばず後工程を停止して同じ変更で解消する。現行コード、古いテスト、コメントは正本ではない。
 
 旧文書、現行コード、古いテストに「10F終了」「11F禁止」「3F食堂・5F共同部屋固定」「ショップ不要」と書かれていても、新製品仕様としては失効している。現行V0.8.2の挙動を説明する履歴としてのみ扱う。
 
 ## 3. 工程1A・V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint
 
-V0.8.2はコード修正前の検証済み比較・復旧checkpointである。GitHubの現在の`origin/main`、V0.8.2 baseline commit、履歴上のdeployment、現在の固定Productionは別々に扱う。
+V0.8.2はコード修正前の検証済み比較・復旧checkpointである。GitHubの現在の`origin/kimi`、V0.8.2 baseline commit、履歴上のdeployment、現在の固定Productionは別々に扱う。
 
 | 項目 | 値 |
 |---|---|
-| 工程1A状態 | 冒頭の工程状態を正本とする。Round 7 completion seal前は工程2着手禁止 |
-| Round 7開始時の`origin/main` | `88daf9c912fa726e019915e5d7bfed94f0a47158` |
+| 工程1A状態 | `PASS`（Round 7 completion seal合格済み） |
+| 正本仕様固定開始時の`origin/kimi` | `212151b16af957d198c013aa0917014611712760` |
 | baseline候補commit | `727b8d00c281e7539117da5ded7309ea01c7e516` |
 | baseline GitHub | <https://github.com/2hg7trp7rv-design/cats_tower/commit/727b8d00c281e7539117da5ded7309ea01c7e516> |
 | 履歴上のbaseline deployment | `dpl_4YVfqsWrzkSUmzQLZMzcTHLVzTe1` / `727b8d0` / `READY` |
@@ -59,7 +66,7 @@ V0.8.2はコード修正前の検証済み比較・復旧checkpointである。G
 | 1〜10F Preview Ready | false |
 | 100F Product Production Ready | false |
 
-remote archive branch `archive/v0.8.2-legacy-baseline`はbaseline候補commitを指す。fresh recovery Previewでは非HTML 15経路が直接一致し、各HTMLはbaseline bytesの直後にdeployment-bound Vercel Preview Toolbar suffixが1回だけ追加された。Round 6はC3/main CIまで成功したがexternal audit run `32590920047`がC3 artifact取得時にHTTP 415で失敗したため、Round 6全体は`FAIL`である。Round 7は修正版transportとcompletion sealを別pathで追加し、成功前の`PASS`を禁止する。C1公開後はC1のAcceptance・検証器・workflowを唯一の信頼基点として凍結し、全後続状態をdetached C1検証器から監査する。外部artifact監査は対象main-push runと同じcommitのrelative reusable workflowとして実行し、別のdefault-branch workflowの差替えを完成根拠にしない。
+remote archive branch `archive/v0.8.2-legacy-baseline`はbaseline候補commitを指す読取り専用の履歴参照であり、作成・更新・削除対象ではない。fresh recovery Previewでは非HTML 15経路が直接一致し、各HTMLはbaseline bytesの直後にdeployment-bound Vercel Preview Toolbar suffixが1回だけ追加された。Round 6は統合CIまで成功したがexternal audit run `32590920047`がC3 artifact取得時にHTTP 415で失敗したため、Round 6全体は`FAIL`である。Round 7は修正版transportとcompletion sealを別pathで追加し、成功前の`PASS`を禁止し、最終的に合格した。C1公開後はC1のAcceptance・検証器・workflowを唯一の信頼基点として凍結し、全後続状態をdetached C1検証器から監査する。外部artifact監査は対象push runと同じcommitのrelative reusable workflowとして実行し、別のworkflowへの差替えを完成根拠にしない。
 
 ## 4. 新しい製品定義
 
@@ -106,7 +113,7 @@ remote archive branch `archive/v0.8.2-legacy-baseline`はbaseline候補commitを
 - 3択の夜明けと配置図の自動復元
 - 戦闘途中を含む保存・再読込
 
-1〜10FがGate Cに合格しても11F制作は始めない。制作へ参加していない初見テスター10人以上を含むGate D1合格後に11〜20Fだけを許可し、以後も地区ごとのGate合格で次の10Fだけを許可する。
+1〜10FがGate Cに合格しても、今回の6工程から11F以降へ進まない。将来の拡張は本工程完了後の別Acceptanceと別承認を必要とし、現時点の制作許可として扱わない。
 
 ## 7. 操作と動きの基準
 
@@ -116,14 +123,14 @@ remote archive branch `archive/v0.8.2-legacy-baseline`はbaseline候補commitを
 - 接敵前・弾着前ダメージ: 0
 - 命中、HP、音、反動: ±50ms以内
 - ヒットストップ: 50〜80ms目安
-- 階移動: 1.6〜2.2秒目安
+- 階移動: 1.6〜2.0秒
 - 足裏と床、状態切替、影中心: 2 CSS px以内
 - 意図しない同役割の体格差: ±15%以内
-- 主要tap領域: 44×44pt以上
+- 主要tap領域: 48×48 CSS px以上、重要操作56×56 CSS px以上、隣接間隔8 CSS px以上
 - 増援50回で誤スクロール0、スクロール50回で誤増援0
 - Gate Cでは呼び鈴、足音、命中、被弾、KO、配送、階段、制圧、夜明け、ボスに制作用音が必要。oscillatorだけの仮音は不合格
 
-短押しは増援1回、400ms以上の長押しは任意の連続呼び込み。指を離す、スクロール判定距離を越える、停止画面へ入る、のいずれかで必ず終了する。
+短押しは増援1回、400〜450msで長押しを開始し、その後150〜200ms間隔で任意の連続呼び込み。指を離す、スクロール判定距離を越える、停止画面へ入る、のいずれかで必ず終了する。
 
 個別CSS座標で高低差を隠さず、階側の`floorGroundY`と素材側の`footAnchor`を同じワールド座標へ結びつける。
 
@@ -144,7 +151,25 @@ remote archive branch `archive/v0.8.2-legacy-baseline`はbaseline候補commitを
 
 支援施設は訓練場、休憩巣、物資昇降機、依頼掲示板。
 
-店の選択は可逆。同一店舗は逓減し、隣接効果を持つ。地区ボス撃破後は地区内を無料再配置できる。夜明け後も店舗種類と配置図を保持し、再制圧時に自動復元する。毎周40店舗を手動で置き直させない。
+店の選択は可逆。同一店舗は逓減し、隣接効果を持つ。地区ボスを今周撃破してから次の夜明けまでは地区内を無料再配置でき、変更配置の今周レベルは0へ戻る。夜明け後も店舗種類と配置図を保持し、再制圧時に自動復元する。毎周40店舗を手動で置き直させない。
+
+保存と仕様の正規安定IDは`PROJECT_STATUS.json.stableIdRegistry`だけを機械可読正本とし、旧IDの読込み変換は`PROJECT_STATUS.json.stableIdMigrationAliases`だけを権威とする。registry内の`shops`と`supportFacilities`を含む全namespaceで、登録外IDを新規保存へ書かない。区切りはregistry規則どおりハイフンで統一し、旧候補の下線付きIDや用途名IDは読込み時だけ単方向変換する。
+
+| 旧候補ID | 正規ID |
+|---|---|
+| `shop.guild`, `shop.staff_reception` | `shop.staff-reception` |
+| `shop.fish_diner` | `shop.fish-diner` |
+| `shop.claw_forge` | `shop.claw-forge` |
+| `shop.toy_workshop` | `shop.toy-workshop` |
+| `shop.clinic`, `shop.cat_clinic` | `shop.cat-clinic` |
+| `shop.delivery_warehouse` | `shop.delivery-warehouse` |
+| `shop.lantern_store` | `shop.lantern-store` |
+| `shop.nap_inn` | `shop.nap-inn` |
+| `shop.curio_gallery` | `shop.curio-gallery` |
+| `support.training_ground` | `support.training-ground` |
+| `support.rest_nest` | `support.rest-nest` |
+| `support.freight_lift`, `support.supply_lift` | `support.supply-lift` |
+| `support.request_board` | `support.request-board` |
 
 ## 9. 猫と敵
 
@@ -157,6 +182,8 @@ remote archive branch `archive/v0.8.2-legacy-baseline`はbaseline候補commitを
 猫は個別レベル、役割、固有スキル、施設適性、動作、アンカーを持つ。解放条件は常に公開し、ガチャや隠し乱数にしない。
 
 敵は、突進、盾、遠距離、回復、召喚、飛行、潜伏、分裂、反射、状態異常、自爆、レーン移動、店舗妨害、増援封鎖、模倣を行動群として持つ。色、HP、倍率だけの違いは別種として数えない。
+
+1〜10Fの猫、一時増援、通常敵、エリート、ボス、壁遭遇、塔共通武装、Dawn branchを含む全namespaceの正規IDは、`PROJECT_STATUS.json.stableIdRegistry`だけを機械可読の権威とする。`FLOORS_1_10_DESIGN.md`の各見出しは役割・表示・挙動を説明する人間向け参照である。新規保存・event・telemetryは登録済み正規IDだけを書き、表示名や配列位置をIDにしない。
 
 ## 10. 夜明けと刺激
 
@@ -209,9 +236,10 @@ remote archive branch `archive/v0.8.2-legacy-baseline`はbaseline候補commitを
 - 表示名や配列番号ではなく安定IDを使う。
 - 戦闘中のHP、位置、増援、施設、階移動を復元する。
 - revisionと保存世代を持ち、古いタブの上書きを防ぐ。
-- オフラインで階制圧、ボス、猫解放、店選択を進めない。
+- 安全な放置収益は24時間を上限とする。初周オフラインで未見階制圧、ボス、猫解放、店選択を進めない。
+- 夜明け後だけ既知階の再制圧を圧縮できる。上限は、前回最高階の90%、次の未解決X9、未選択分岐、未見ボス境界のうち最も低い地点で、結果と停止理由を復帰時に表示する。
 
-詳細フィールドは準備工程8で確定する。コードへ先行追加しない。
+詳細フィールドはStep 5の実装開始前に、正本仕様と実装Acceptanceの一部として確定する。コードへ先行追加しない。
 
 ## 14. 量産と停止条件
 
@@ -266,29 +294,47 @@ Gate B前の総量上限は、名前付き猫2、一時増援1、通常敵2、�
 
 ## 16. 次に行うこと
 
-工程1Aのdeployed browser-runtime source + deployment-input byte checkpointのlive状態は冒頭の工程状態を正本とする。completion sealが`PASS`するまで工程2へ進まない。物理iPhoneは後続の製品QAまで未検証として分離する。
+次は全100Fの購入・戦闘・夜明け・24時間放置シミュレーションを開始する。実行前に`simulation/validate-candidate.mjs`を通し、同一digestの`simulation/candidate-v1.json`だけを使用する。工程2の合格前に3ビルド各1,000パターン検証へ進まない。
 
-工程1Aのlive状態は冒頭の工程状態を正本とする。工程2の`MASTER_SPEC.md`と工程3の`FLOORS_1_10_DESIGN.md`は削除せず候補として保持し、工程4以降とゲーム本体コード修正は`NOT_STARTED`のままとする。
+物理iPhone試験は第6工程であり、それまでは`NOT_VERIFIED`とする。ゲーム本体コード修正も第5工程まで`NOT_STARTED`とする。
 
-## 17. コード修正前の全順序
+## 17. 承認済み実行順序
 
-1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `PASS`
-2. 100F正本仕様書 — `PENDING_REVALIDATION`
-3. 1〜10F完全設計 — `PENDING_REVALIDATION`
-4. 9画面の完成見本 — `NOT_STARTED`
-5. 動きの絵コンテ — `NOT_STARTED`
-6. アートバイブル — `NOT_STARTED`
-7. 少数の試験素材 — `NOT_STARTED`
-8. 保存・100Fデータ設計 — `NOT_STARTED`
-9. QA合格表 — `NOT_STARTED`
-10. コード修正 — `NOT_STARTED`
+前提checkpoint: V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `PASS`
+
+1. 上記修正版を正本仕様へ固定 — `PASS`
+2. 全100Fの購入・戦闘・夜明け・24時間放置シミュレーション — `NOT_STARTED`
+3. 戦闘・増援・商業の3ビルドを各1,000パターン検証 — `NOT_STARTED`
+4. 合格仕様を9画面の完成見本へ反映 — `NOT_STARTED`
+5. 1〜10Fだけ実装 — `NOT_STARTED`。非物理端末の実装Acceptanceを対象とし、この時点ではGate CまたはPreview Readyを合格扱いにしない
+6. 物理iPhoneで3分（180秒）ボス戦と10分（600秒）連続試験 — `NOT_STARTED`。同一commit・対象Vercel URLで物理端末要件を完了して初めてGate Cを判定できる
+
+順序の入替え、後工程の先行実施、11F以降の実装は不可。動きの絵コンテ、アートバイブル、試験素材、保存設計、QA合格表は、対応する工程の受入条件と成果物へ統合する。
+
+### 17.1 正本9画面
+
+次表は人間向けの状態要約である。required stateの完全かつ順序付きの集合は`PROJECT_STATUS.json.canonicalScreens`だけを権威とし、表に省略されたstateも工程4の完成見本から削除しない。
+
+| ID | 画面 | 同一画面に含める状態の要約 |
+|---|---|---|
+| `S01` | title / resume | 新規開始、保存再開、音、縦画面safe-area |
+| `S02` | battle / follow | 1F tutorial、通常戦闘、複数敵、配送、戦闘復帰 |
+| `S03` | tower browse | 制圧済み・現在・未見、地区rail、戦闘継続、virtualize |
+| `S04` | floor clear / slot variant | KO、報酬、階段、商業階の空きslot・今決める／後で決める、支援階clear、猫救出clear |
+| `S05` | shop reconfigure | 4候補、予測効果、配送、重複逓減、変更前比較 |
+| `S06` | cat roster | 4匹の公開条件、進捗、編成、役割、一括level購入、生活preview |
+| `S07` | upgrades / build / armament | 3build、3武装、予測TTK・生存・収益、推薦購入、敗北診断sheet |
+| `S08` | F10 boss variant | 3形態HP、予告、撃破数、現在／最大HP、最大効果密度、対空判断 |
+| `S09` | district result / Dawn | 10F結果、無料再配置、失う／残る／得る、3branch、前後比較、100F完了状態 |
+
+S08はS02のボスvariantだが性能・可読性の完成見本として1画面を割り当てる。S09は地区結果、Dawn確認、100F完了を同一責務の状態として持ち、暗黙の10枚目を追加しない。
 
 ## 18. 完了報告で分離する状態
 
 必ず次を別々に報告する。
 
-- local branch / commit
-- GitHub branch / PR / `main`
+- local `kimi` / commit
+- GitHub `origin/kimi`（PRなし）
 - Vercel Preview / Production
 - deployment READY / runtime一致
 - browser自動QA / 通常motion / 物理実機

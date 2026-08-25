@@ -2,7 +2,7 @@
 
 このファイルはリポジトリ全体に適用する。会話履歴や古いversion名だけで判断せず、正本仕様、GitHub、Vercel、runtime、QA証拠を分離して確認する。
 
-工程状態: 工程1A=PASS / 工程2=PENDING_REVALIDATION / 工程3=PENDING_REVALIDATION / 工程4以降=NOT_STARTED
+工程状態: 工程1A=PASS / 正本仕様固定=PASS / 100Fシミュレーション以降=NOT_STARTED
 
 工程1A正式名称: V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint
 
@@ -21,21 +21,21 @@
 5. `PROJECT_HANDOVER.md`
 6. `README.md`
 7. 現在の`git status`と`git diff`
-8. GitHub `main`
+8. GitHub `kimi`
 9. 固定Vercel Production
 
 仕様が競合した場合は`MASTER_SPEC.md`を優先し、矛盾を残したまま実装しない。
 
 ## 現在の状態
 
-2026-08-23時点:
+2026-08-25時点:
 
 - 100F最終方針: 承認済み
-- 準備工程: 工程1A・V0.8.2 deployed browser-runtime source + deployment-input byte checkpointのlive状態は冒頭の工程状態を正本とする。Round 7外部監査とcompletion seal合格前の工程2着手は禁止する
-- 工程2・3: 旧成果物は保持するが`PENDING_REVALIDATION`
+- 準備工程: 工程1A・V0.8.2 deployed browser-runtime source + deployment-input byte checkpointは`PASS`
+- 正本仕様固定: 3者独立反証と機械封印に合格し`PASS`
 - コード修正: 未開始
 - 現行公開版: V0.8.2 legacy baseline
-- Round 7開始時の`origin/main`: `88daf9c912fa726e019915e5d7bfed94f0a47158`
+- 作業開始時の`origin/kimi`: `212151b16af957d198c013aa0917014611712760`
 - V0.8.2配信runtime source基準commit: `727b8d00c281e7539117da5ded7309ea01c7e516`
 - 保存点commit: <https://github.com/2hg7trp7rv-design/cats_tower/commit/727b8d00c281e7539117da5ded7309ea01c7e516>
 - 固定URL: <https://cats-tau-dusky.vercel.app/>
@@ -43,6 +43,25 @@
 - 100F Product Production Ready: false
 
 現行V0.8.2が10Fで終わることは「現状の事実」であり、新版の要件ではない。新版は1塔100Fで設計する。
+
+## 承認済み実行順序
+
+次の6工程は入れ替えない。各工程を`QUALITY_GATE.md`で合格にしてから次へ進む。
+
+1. 上記修正版を正本仕様へ固定
+2. 全100Fの購入・戦闘・夜明け・24時間放置シミュレーション
+3. 戦闘・増援・商業の3ビルドを各1,000パターン検証
+4. 合格仕様を9画面の完成見本へ反映
+5. 1〜10Fのみ実装
+6. 物理iPhoneで3分ボス戦と10分連続試験
+
+後工程の先行実装、11F以降の実装、実機未試験の合格扱いを禁止する。
+
+## ブランチ固定
+
+- 正本、文書、変更の対象は既存の`kimi`だけとする。
+- 別ブランチを作成・切替・書込みしない。PRや別ブランチへのmergeを作業手順に含めない。
+- 保管用の既存参照が履歴に残っていても、読取り専用とし、作成・更新・削除しない。
 
 ## 最上位プロダクト定義
 
@@ -91,7 +110,7 @@ Cat's Towerは、猫を呼んで塔を奪還し、制圧した部屋で猫が暮
 - 塔スクロール、戦闘帰還、ショップ配置、猫解放、夜明け
 - 戦闘途中と配置状態を含む保存・復元
 
-Gate C合格だけでは11Fを作らない。初見テスター10人以上を含むGate D1合格後に11〜20Fだけを許可し、以後も地区ごとのGate合格で次の10Fだけを許可する。
+今回承認された6工程に11F以降の実装許可は含まれない。将来の拡張条件は本6工程の完了後に別途定義・承認し、現在の作業へ混在させない。
 
 ## 入力と動き
 
@@ -100,12 +119,14 @@ Gate C合格だけでは11Fを作らない。初見テスター10人以上を含
 - 猫の通常移動時間: 650〜1,000ms
 - 命中、HP、音、反動: ±50ms以内
 - ヒットストップ: 50〜80ms目安
-- 階移動: 1.6〜2.2秒目安
+- 階移動: 1.6〜2.0秒
 - 強攻撃の予備動作: 400〜800ms目安
-- 主要tap領域: 44×44pt以上
+- 主要tap領域: 48×48 CSS px以上
+- 破壊的・進行確定など重要操作: 56×56 CSS px以上
+- 隣接tap領域の間隔: 8 CSS px以上
 - 増援50回で誤スクロール0、スクロール50回で誤増援0
 
-短押しは増援1回、400ms以上の長押しは任意の連続呼び込みとする。指を離す、スクロール判定距離を越える、停止画面へ入る、のいずれかで必ず終了する。攻略へ長押しを必須にしない。
+短押しは増援1回、400〜450msで長押しを開始し、その後150〜200ms間隔で任意の連続呼び込みとする。指を離す、スクロール判定距離を越える、停止画面へ入る、のいずれかで必ず終了する。攻略へ長押しを必須にしない。
 
 数値バランスは後で調整してよいが、因果が見えなくなるほど短縮しない。
 
@@ -173,8 +194,10 @@ Gate C合格だけでは11Fを作らない。初見テスター10人以上を含
 - future schemaを古いコードで上書きしない。
 - profile、run、tower、runtime、systemを分離する。
 - 猫、敵、階、店舗、遺物は安定IDで参照する。
+- 1〜10Fの猫、一時増援、通常敵、エリート、ボス、壁遭遇、塔共通武装、Dawn branchは`PROJECT_STATUS.json`の`stableIdRegistry`だけを正規出力へ使う。
 - 戦闘途中の猫、敵、HP、位置、増援列、施設、階移動を復元する。
-- オフラインで階、ボス、猫解放、店舗選択を自動実行しない。
+- 初周オフラインで未見階、ボス、猫解放、店舗選択を自動実行しない。安全収益の上限は24時間とする。
+- 夜明け後に限り既知階の再制圧を圧縮してよい。clear可能な最終階は、`floor(前回最高階×0.90)`と、次の未解決X9・未選択分岐・未見bossそれぞれの一つ手前のうち最も低い階とする。存在しないblockerは除外し、停止理由を復帰画面へ表示する。
 
 ## V0.8.2からの再利用境界
 
@@ -211,7 +234,7 @@ Gate C合格だけでは11Fを作らない。初見テスター10人以上を含
 
 Gate B前の総量上限は、名前付き猫2、一時増援1、通常敵2、エリート1、形態変化を試すボス1、背景1階、ショップ1。Gate B前の第2batchは禁止。Gate Cまでは1〜10F必須数を総量上限とする。
 
-Gate Cでは375×667、390×844、430×932をChromium / WebKitで確認し、物理iPhoneの30秒戦闘で中央値55fps以上、p95 frame time 32ms以下、100ms超停止0、中核入力p95 100ms以内、cold転送4.0MB以下を合格条件にする。
+工程5では375×667、390×844、430×932をChromium / WebKitで確認し、1〜10Fの非物理端末実装Acceptanceへ合格させる。この時点ではGate C、1〜10F Preview Ready、物理iPhone確認を合格扱いにしない。工程6で同一`kimi` commitと対象Vercel URLを物理iPhone上で、3分（180秒）のボス戦と10分（600秒）の連続試験に通し、中央値55fps以上、p95 frame time 32ms以下、100ms超停止0、中核入力p95 100ms以内、cold転送4.0MB以下を満たした場合だけGate Cの物理端末要件を完了できる。
 
 ## QAと停止条件
 
@@ -232,29 +255,18 @@ Gate Cでは375×667、390×844、430×932をChromium / WebKitで確認し、物
 
 ## GitHub / Vercel手順
 
-1. 作業開始前に`main`、固定Production、作業ツリーを照合する。
-2. 既定branchを直接編集せず、目的が一つの短命feature branchを作る。
-3. 変更を狭いcommitへまとめ、Draft PRで差分と未確認を示す。
+1. 作業開始前に`origin/kimi`、固定Production、作業ツリーを照合する。
+2. 作業ツリーが`kimi`であることを確認し、他のブランチを作成・切替しない。
+3. 変更を狭いcommitへまとめ、未確認とGate状態をcommitと検証証拠に残す。PRは作成しない。
 4. 構文、JSON、通常導線、該当QAを完了する。
-5. 合格後だけ`main`へ反映する。
-6. Vercel deploymentの`githubCommitSha`と`main` HEADを照合する。
+5. 合格した変更だけ`origin/kimi`へ反映する。
+6. Vercel deploymentの`githubCommitSha`と`origin/kimi` HEADを照合する。
 7. 固定URLのruntimeを確認する。
 8. deploy成功とProduction Readyを分離して報告する。
 
-## 準備工程
+## 作業工程
 
-コード修正前に次を順番に完了する。
-
-1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `PASS`
-2. 100F正本仕様書 — `PENDING_REVALIDATION`
-3. 1〜10F完全設計 — `PENDING_REVALIDATION`（`FLOORS_1_10_DESIGN.md`）
-4. 9画面の完成見本 — `NOT_STARTED`（旧ワイヤーフレーム候補は不合格のまま保持）
-5. 動きの絵コンテ — `NOT_STARTED`
-6. アートバイブル — `NOT_STARTED`
-7. 少数の試験素材 — `NOT_STARTED`
-8. 保存・100Fデータ設計 — `NOT_STARTED`
-9. QA合格表 — `NOT_STARTED`
-10. コード修正 — `NOT_STARTED`
+工程1Aのcheckpointは`PASS`済みの前提とし、その後は「承認済み実行順序」の6工程だけを順番に実行する。動きの絵コンテ、アートバイブル、試験素材、保存設計、QA合格表は、独立した先行工程に戻さず、対応する6工程の受入条件と成果物に統合する。
 
 工程1Aの合格対象は旧版の配信runtime sourceとdeployment inputsのbyte checkpointである。V0.8.2に存在しない実ユーザーsaveの外部backupは`UNAVAILABLE_IN_V082`、物理iPhone standalone PWAは`NOT_VERIFIED`として分離し、工程1Aの成果へ含めたように表現しない。
 
@@ -280,7 +292,7 @@ Gate Cでは375×667、390×844、430×932をChromium / WebKitで確認し、物
 
 1. 変更ファイル
 2. 変更しなかった領域
-3. branch、commit、PR
+3. branch、commit（PRは作成しない）
 4. GitHub反映状態
 5. 固定Vercel URL
 6. deploymentとruntime commit

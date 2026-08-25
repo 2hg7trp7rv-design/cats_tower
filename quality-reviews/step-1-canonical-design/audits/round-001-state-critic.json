@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-canonical-design",
+  "round": 1,
+  "role": "independent-state-and-workflow-critic",
+  "date": "2026-08-25",
+  "target": "all active canonical and operating documents",
+  "independentOfAuthors": true,
+  "verdict": "FAIL",
+  "materialFindings": [
+    "The active canonical freeze was still called engineering Steps 2 and 3 instead of authorized Step 1.",
+    "The Step 5 and Step 6 completion conditions formed a circular gate.",
+    "PROJECT_STATUS used an old nine-screen list with no S08 boss screen.",
+    "PROJECT_STATUS retained an eight-hour offline cap and no post-Dawn known-floor re-clear.",
+    "Movement, touch, hold and physical-test values drifted between active documents.",
+    "The active-looking preparation array retained the retired ten-step workflow.",
+    "Machine-readable stable-ID registries omitted cats, helpers, enemies, elites, boss, armaments and Dawn branches."
+  ],
+  "passedChecks": [
+    "HEAD and origin/kimi both resolved to 212151b16af957d198c013aa0917014611712760 before the draft commit",
+    "no active main, PR, merge, or other writable-branch instruction remained",
+    "archive references were historical and read-only",
+    "aliases were unique and every alias target was canonical",
+    "physical iPhone was not claimed verified"
+  ]
+}

@@ -1,0 +1,197 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-canonical-design",
+  "acceptanceRevision": 4,
+  "createdAt": "2026-08-25",
+  "completedAt": "2026-08-25",
+  "status": "PASS",
+  "requirementsRevision": "quality-reviews/step-1-canonical-design/acceptance-round-003.json",
+  "completionEvidence": "quality-reviews/step-1-canonical-design/acceptance-round-004.json",
+  "sealedExecutableContractDigest": "69eea0bfc0b6b39c9fad2589f711b0f114c67f2d90f0aae0d46fbcd58e81b4a5",
+  "independentCritique": {
+    "requiredCount": 3,
+    "passedCount": 3,
+    "unresolvedP0": 0,
+    "unresolvedP1": 0
+  },
+  "scopeName": "Cat's Tower canonical product and Floors 1-10 design contract",
+  "authorizedOrder": [
+    "freeze the revised canonical specification",
+    "simulate purchase, combat, Dawn, and 24-hour offline progression through 100F",
+    "validate 1,000 patterns for each of three builds",
+    "reflect accepted results in nine final screen mockups",
+    "implement only Floors 1-10",
+    "run a physical-iPhone three-minute boss test and ten-minute continuous soak test"
+  ],
+  "scope": [
+    "MASTER_SPEC.md as the product-level source of truth",
+    "FLOORS_1_10_DESIGN.md as the implementation-ready first-district contract",
+    "AGENTS.md, PROJECT_STATUS.json, PROJECT_HANDOVER.md, and README.md as consistent operating documents",
+    "stable IDs, game loops, currencies, Dawn, armament, offline progress, controls, performance targets, and nine-screen information architecture",
+    "simulation hypotheses and measurable rejection thresholds for the next two phases"
+  ],
+  "explicitExclusions": [
+    {
+      "id": "final-balance-coefficients",
+      "reason": "Numeric coefficients remain SIMULATION_CANDIDATE until the 100F and 3x1,000 validations pass."
+    },
+    {
+      "id": "final-screen-art",
+      "reason": "The nine final mockups are the fourth authorized phase and must consume validated balance results."
+    },
+    {
+      "id": "runtime-implementation",
+      "reason": "Floors 1-10 implementation is the fifth authorized phase; no game runtime is modified in this artifact."
+    },
+    {
+      "id": "physical-iphone-approval",
+      "reason": "A physical iPhone and user-accessible deployment are required in the sixth authorized phase. Emulation cannot substitute for it."
+    },
+    {
+      "id": "forced-ads-gacha-and-premium-currency",
+      "reason": "These are intentionally excluded from the core product because they do not improve the validated combat/progression loop and would confound early retention tests."
+    }
+  ],
+  "comparisonEvidence": [
+    {
+      "id": "mobile-benchmarks-2026",
+      "source": "https://www.gameanalytics.com/reports/2026-mobile-pc-gaming-benchmarks",
+      "use": "short-session and first-5-to-15-minute value targets",
+      "boundary": "cross-genre market benchmarks, not Cat's Tower balance proof"
+    },
+    {
+      "id": "idle-math-part-i",
+      "source": "https://www.kongregate.com/en/pages/the-math-of-idle-games-part-i",
+      "use": "exponential cost-production relationships, milestone bumps, and bulk-buy formulas",
+      "boundary": "modeling framework, not a prescribed coefficient set"
+    },
+    {
+      "id": "idle-math-part-iii",
+      "source": "https://www.kongregate.com/en/pages/the-math-of-idle-games-part-iii",
+      "use": "prestige anti-farming behavior and reset-curve risks",
+      "boundary": "comparative design analysis, not live telemetry"
+    },
+    {
+      "id": "tap-titans-2-prestige",
+      "source": "https://gamehive.helpshift.com/hc/en/3-tap-titans-2/faq/75-should-i-prestige-when/",
+      "use": "official example of stage-dependent permanent reward and faster re-clear",
+      "boundary": "reference mechanic only; its economy is not copied"
+    },
+    {
+      "id": "idle-miner-automation",
+      "source": "https://idleminertycoon.com/",
+      "use": "official example of automated production and short-or-long session positioning",
+      "boundary": "feature reference only; advertisements and live-ops are excluded"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "R1",
+      "gate": "G1",
+      "condition": "Every operating document names the existing kimi branch as the only canonical and writable branch; no document instructs contributors to create another branch or merge to main."
+    },
+    {
+      "id": "R2",
+      "gate": "G1",
+      "condition": "All documents preserve the user's exact six-phase order and do not mark a later phase complete before its evidence exists."
+    },
+    {
+      "id": "R3",
+      "gate": "G1",
+      "condition": "MASTER_SPEC and FLOORS_1_10_DESIGN agree on currencies, Dawn anti-farming, armament families, offline rules, input behavior, floor roles, stable IDs, and the nine canonical screens."
+    },
+    {
+      "id": "R4",
+      "gate": "G4",
+      "condition": "Every unvalidated number is visibly labeled SIMULATION_CANDIDATE and paired with a target range or a rejection threshold; no candidate is represented as proven balance."
+    },
+    {
+      "id": "R5",
+      "gate": "G3",
+      "condition": "The first session promises visible value inside five minutes, 1-10F in six to eight active minutes, one-touch combat response, early automation, and no mandatory repetitive tapping."
+    },
+    {
+      "id": "R6",
+      "gate": "G4",
+      "condition": "The progression contract avoids same-maximum Dawn farming, unbounded build multipliers, opaque formulas, one-hit-death baselines, forced advertisements, random-stat equipment, and idle income that skips multiple unseen districts."
+    },
+    {
+      "id": "R7",
+      "gate": "G5",
+      "condition": "The nine-screen architecture covers title/resume, battle/follow, tower browse, floor clear/shop slot, shop reconfiguration, cat roster, upgrades/build/armament with diagnosis, 10F boss, and district result/Dawn states without adding an undisclosed tenth screen."
+    },
+    {
+      "id": "R8",
+      "gate": "G5",
+      "condition": "The physical-device gate explicitly requires real iPhone Safari, standalone PWA, and ChatGPT in-app browser checks where available, including a three-minute maximum-effect boss run and a ten-minute continuous soak; it remains NOT_VERIFIED now."
+    },
+    {
+      "id": "R9",
+      "gate": "G2",
+      "condition": "PROJECT_STATUS.json parses successfully; Markdown contains no unresolved placeholder or contradictory status; repository runtime and asset bytes remain unchanged in this artifact."
+    },
+    {
+      "id": "R10",
+      "gate": "G4",
+      "condition": "An independent critic searches for cross-document contradictions, impossible timing, exploitable loops, and claims unsupported by the cited evidence, and all material findings are resolved before PASS."
+    }
+  ],
+  "quantitativeHypotheses": {
+    "status": "SIMULATION_CANDIDATE",
+    "floorEnemyEhpGrowth": 1.16,
+    "floorRewardGrowth": 1.15,
+    "catUpgradeCostGrowth": 1.14,
+    "catAttackGrowth": 1.09,
+    "catHpGrowth": 1.09,
+    "tenLevelMilestoneMultiplier": 1.2,
+    "tenFloorDifficultyRatioTarget": {
+      "min": 1.35,
+      "max": 1.55,
+      "hardRejectAbove": 1.6
+    },
+    "firstDistrictActiveMinutes": {
+      "min": 6,
+      "max": 8
+    },
+    "firstDawnNaturalMinutes": {
+      "min": 12,
+      "max": 20
+    },
+    "first100FActiveHours": {
+      "min": 2.5,
+      "max": 4
+    },
+    "first100FElapsedDays": {
+      "engagedMin": 7,
+      "medianMax": 18,
+      "hardCalendarGate": false,
+      "simulationMedianGate": true,
+      "interpretation": "No runtime date/login gate; natural active and standard completion medians remain Gate S balance targets."
+    },
+    "expectedDawnsTo100F": {
+      "min": 3,
+      "standard": 4,
+      "max": 5
+    },
+    "buildMedianCompletionSpreadMax": 1.25,
+    "validBuildFastestSlowestMax": 1.35,
+    "extremeActiveIdleCompletionRatioMax": 1.6
+  },
+  "verificationEnvironment": [
+    "git diff and repository-wide contradiction search on branch kimi",
+    "strict JSON parsing for all modified JSON files",
+    "independent document critic with no authorship role",
+    "runtime and asset byte-change exclusion through git diff path inspection",
+    "physical iPhone deferred explicitly to authorized phase six"
+  ],
+  "failureConditions": [
+    "any branch other than kimi is created, selected, or named as writable/canonical",
+    "a simulation candidate is presented as validated",
+    "stable IDs differ between canonical documents without an explicit migration alias",
+    "same-maximum Dawn yields permanent currency",
+    "24-hour offline progress can clear unseen bosses or bypass two districts",
+    "a core action requires sustained high-frequency tapping or repeated level-one purchases",
+    "the nine-screen list omits a required user decision or silently expands to ten screens",
+    "physical iPhone validation is claimed from emulation or screenshots"
+  ]
+}

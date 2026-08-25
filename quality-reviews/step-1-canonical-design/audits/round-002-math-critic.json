@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "reviewRound": 2,
+  "reviewer": "canonical_round2_math",
+  "reviewType": "independent-math-and-manifest",
+  "date": "2026-08-25",
+  "verdict": "FAIL",
+  "blockingFindings": [
+    "holdout seeds were disjoint by build instead of paired, and PRNG mapping and draw isolation were unspecified",
+    "return schedules added foreground time on top of 86400 offline seconds",
+    "D10_pre and Net10 had no executable snapshot and counterfactual denominator procedure",
+    "initial purchase state, composition order, retry state and helper selection were incomplete",
+    "pooled survival could hide individual one-hit failures and F1 damage yielded 20 to 51 hits instead of the target bands",
+    "weapon mixed-threat application, tier effects and switch measurement were ambiguous",
+    "Dawn ledger IDs and commerce-to-power comparison were incomplete",
+    "role-modified offline clamp caused U to fall about 45.2 percent from F10 to F11",
+    "known-floor re-clear and repeated settlement semantics were incomplete",
+    "non-finite percentile behavior, completion rate and exact Dawn reciprocal handling were incomplete"
+  ],
+  "verifiedArithmetic": {
+    "enemyEhpTenFloorRatioAt1_16": 4.411435,
+    "waveSharesSumToOne": true,
+    "buildWeightsSumToOne": true,
+    "dawnBranchLevelGainsMatchCaps": true,
+    "offlineCapSeconds": 86400
+  }
+}

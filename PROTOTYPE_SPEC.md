@@ -1,5 +1,8 @@
 # Cat's Tower — 戦闘プロトタイプ仕様 (kimi ブランチ)
 
+> **文書状態: LEGACY_SUPERSEDED（2026-08-25）**
+> これは旧プロトタイプの履歴資料であり、現行Step 5の実装契約ではない。`MASTER_SPEC.md`、`FLOORS_1_10_DESIGN.md`、`PROJECT_STATUS.json`、`simulation/candidate-v1.json`により置換済みで、本文の44pt、1.6〜2.2秒、仮音許可、対象外機能、ファイル上書き指示を新規実装へ使用してはならない。
+
 本仕様は `MASTER_SPEC.md` (100F正本) と `FLOORS_1_10_DESIGN.md` (1〜10F完全設計) を上位仕様とし、
 **戦闘プロトタイプの実装契約と合格条件だけ**を固定する。上位仕様と矛盾した場合は上位仕様が正しい。
 

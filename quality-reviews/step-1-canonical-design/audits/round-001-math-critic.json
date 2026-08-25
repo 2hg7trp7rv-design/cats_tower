@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-canonical-design",
+  "round": 1,
+  "role": "independent-math-and-economy-critic",
+  "date": "2026-08-25",
+  "target": "MASTER_SPEC.md and FLOORS_1_10_DESIGN.md canonical draft",
+  "independentOfAuthors": true,
+  "verdict": "FAIL",
+  "materialFindings": [
+    "A prior-maximum return time of 35-50% requires composite re-clear speed 2.00-2.86x, not 1.8-2.2x.",
+    "The stated D10 center was not derivable because the standard purchase power denominator was undefined.",
+    "The next simulation required a versioned manifest for cats, helpers, enemies, shops, Dawn, decisions, personas, rounding and seeds.",
+    "First-district combat, transition and decision time needed separate distribution targets.",
+    "Foreground progression, touch-active time and wall-clock time were conflated.",
+    "Dawn needed an objective execution policy and a set-difference permanent reward ledger.",
+    "The offline U index needed deterministic, build-independent, clamped inputs and repeated-return tests.",
+    "Build spread formulas, recommended-band one-hit scope, and next-level cost semantics needed exact definitions.",
+    "Weapon 1.40/1.00/0.80 modifiers needed compatible TTK bands and a separate defensive Guardian formula."
+  ],
+  "verifiedCalculations": {
+    "enemyEhpTenFloorMultiplierAt1Point16": 4.411,
+    "twentyFourHourStandardOfflineBudgetInU": 6,
+    "eightHourStandardOfflineBudgetInU": 2,
+    "twentyFourHourCommerceOfflineBudgetInU": 8.7
+  }
+}
