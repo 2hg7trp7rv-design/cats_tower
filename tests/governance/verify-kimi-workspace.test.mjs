@@ -9,6 +9,7 @@ import {
   mkdtempSync,
   readFileSync,
   rmSync,
+  writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, resolve } from 'node:path';
@@ -114,16 +115,14 @@ try {
   expectBlocked(runGuard(testRepository), 'not valid JSON');
   git(testRepository, ['checkout', '--', 'AI_PROJECT_POLICY.json']);
 
-  const originalPolicy = JSON.parse(
+  const alteredPolicy = JSON.parse(
     readFileSync(resolve(testRepository, 'AI_PROJECT_POLICY.json'), 'utf8'),
   );
-  originalPolicy.repository.allowedBranch = 'main';
-  await import('node:fs').then(({ writeFileSync }) =>
-    writeFileSync(
-      resolve(testRepository, 'AI_PROJECT_POLICY.json'),
-      `${JSON.stringify(originalPolicy, null, 2)}\n`,
-      'utf8',
-    ),
+  alteredPolicy.repository.allowedBranch = 'main';
+  writeFileSync(
+    resolve(testRepository, 'AI_PROJECT_POLICY.json'),
+    `${JSON.stringify(alteredPolicy, null, 2)}\n`,
+    'utf8',
   );
   expectBlocked(runGuard(testRepository), 'does not match');
 
