@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-canonical-design-active-change-control",
+  "createdAt": "2026-08-26",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS",
+  "advanceAllowed": false,
+  "trigger": "User-directed integration of the hero-plus-merchant large-idle-game proposal and twenty supplied concept/reference images into the existing canonical product.",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "baseCommit": "49f9414524e320d08a2b4515506504d82138205f",
+  "baseTree": "d2a213fb1c88b409e4d1b1eadf217dd89b2ca562",
+  "previousCompletionEvidence": {
+    "path": "quality-reviews/step-1-canonical-design/acceptance-round-005.json",
+    "verdict": "PASS",
+    "roleNow": "immutable historical baseline and evidence of the pre-change contract",
+    "mayAuthorizeStep2WhileThisFileIsActive": false
+  },
+  "activeAcceptance": "quality-reviews/step-1-hero-merchant-large-idle-integration/acceptance.json",
+  "initialDiffAudit": "quality-reviews/step-1-hero-merchant-large-idle-integration/round-001-diff-audit.md",
+  "scopeReopened": [
+    "one-line product identity and player role",
+    "hero-versus-cat protagonist boundary",
+    "battle-and-commerce information architecture",
+    "S01-S09 responsibility allocation",
+    "currency and unlock classification",
+    "shop and armament depth boundaries",
+    "100F overview presentation",
+    "offline return presentation",
+    "simulation candidate and validator dependency impact",
+    "workflow mirrors and completion evidence"
+  ],
+  "baselineContractsPreservedUnlessExplicitlyRevisedAndResealed": [
+    "only the existing kimi branch is writable",
+    "one continuous tower from 1F through 100F",
+    "first production scope is Floors 1-10 only",
+    "cats visibly travel, contact enemies, and perform attacks",
+    "tap deals zero direct damage",
+    "two spendable currencies only",
+    "public deterministic cat unlocks",
+    "nine canonical screens",
+    "no forced advertisements, gacha, premium currency, random-stat equipment, or mandatory shop chores",
+    "six-step execution order",
+    "physical iPhone remains NOT_VERIFIED"
+  ],
+  "blockedSteps": [
+    {
+      "step": 2,
+      "name": "simulate-100f-purchases-combat-dawn-and-24h-offline",
+      "reason": "The semantic input contract may change."
+    },
+    {
+      "step": 3,
+      "name": "validate-three-builds-one-thousand-patterns-each",
+      "reason": "It depends on a newly sealed Step 2 executable contract."
+    },
+    {
+      "step": 4,
+      "name": "nine-final-screen-mockups",
+      "reason": "The supplied concepts are not accepted mockups and screen responsibilities are under review."
+    },
+    {
+      "step": 5,
+      "name": "implement-floors-1-through-10",
+      "reason": "Implementation may not consume an unsealed product contract."
+    },
+    {
+      "step": 6,
+      "name": "physical-iphone-validation",
+      "reason": "No eligible implementation or deployment exists."
+    }
+  ],
+  "closureRequirements": [
+    "Resolve every HM1-HM16 requirement in the active acceptance.",
+    "Update all affected canonical and workflow documents consistently.",
+    "Update candidate, schema, validators, and input contract if any executable semantic changes.",
+    "Run strict JSON and repository contradiction checks.",
+    "Complete three independent critiques with zero unresolved P0/P1.",
+    "Create new completion evidence bound to the exact kimi commit and tree."
+  ],
+  "writeBoundaryForThisRound": {
+    "documentationAndReviewArtifactsOnly": true,
+    "runtimeChanged": false,
+    "assetChanged": false,
+    "candidateChanged": false,
+    "vercelChanged": false,
+    "productionChanged": false
+  },
+  "nextAuthorizedAction": "Canonical redline and dependency-closure design for the accepted/converted/rejected proposal elements."
+}

@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-hero-merchant-large-idle-integration-handover-round-001",
+  "createdAt": "2026-08-26",
+  "chat": "00_統括・工程管理",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "auditBaseCommit": "49f9414524e320d08a2b4515506504d82138205f",
+  "phase": "Step 1 difference audit and change-control opening",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS",
+  "advanceAllowed": false,
+  "vercel": {
+    "handled": false,
+    "url": null,
+    "reason": "Documentation-only change-control round; no eligible runtime or deployment."
+  },
+  "completedThisRound": [
+    "Re-read the live kimi repository, canonical specification, quality gate, operating policy, status, handover, Floors 1-10 design, Step 1 Acceptance, and Round 5 completion evidence.",
+    "Inspected all twenty user-provided concept and explanation images.",
+    "Classified proposal elements as adopt, transform, reject, or defer.",
+    "Established the proposed hero-plus-merchant coexistence model: player as cat adventuring merchant company leader; named cats as visible adventuring heroes.",
+    "Mapped the proposed concept responsibilities into S01-S09 without accepting a tenth canonical screen.",
+    "Opened an active Step 1 change control and blocked Steps 2-6.",
+    "Created a new Acceptance Matrix for the integration."
+  ],
+  "keyDecisions": [
+    "The existing specification already contains the core merchant and large-idle loops; the integration target is clearer product identity and decision quality, not indiscriminate feature accumulation.",
+    "Gacha, premium currency, random-stat equipment, manual collection/restock, daily/login/season/ranking systems, premium timer acceleration, and a separate town economy are rejected from the current core.",
+    "The continuous living tower remains the progression topology; the strategy map can only be an S03 overview state.",
+    "Round 5 remains immutable historical baseline evidence but cannot authorize Step 2 while the active change control is IN_PROGRESS."
+  ],
+  "filesCreated": [
+    "quality-reviews/step-1-canonical-design/active-change-control.json",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/acceptance.json",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/round-001-diff-audit.md",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/handover-round-001.json"
+  ],
+  "filesIntentionallyUnchanged": [
+    "MASTER_SPEC.md",
+    "FLOORS_1_10_DESIGN.md",
+    "QUALITY_GATE.md",
+    "PROJECT_STATUS.json",
+    "PROJECT_HANDOVER.md",
+    "simulation/candidate-v1.json",
+    "simulation/candidate.schema.json",
+    "simulation/validate-candidate.mjs",
+    "runtime files",
+    "assets",
+    "Vercel configuration"
+  ],
+  "unresolvedP0": 0,
+  "unresolvedP1": [
+    "Workflow mirrors still need to be changed from the pre-change Step 1 PASS/advance state to the active integration IN_PROGRESS state.",
+    "The hero/cat/player-role wording is a proposed resolution and has not yet passed independent critique.",
+    "The battle-versus-commerce information-density boundary requires canonical redline and mobile-size comparison.",
+    "Executable candidate/schema/validator impact has not yet been closed."
+  ],
+  "notVerified": [
+    "No final mockup was produced.",
+    "No runtime behavior was inspected as evidence for the proposed integration.",
+    "No Vercel deployment was created or checked for this round.",
+    "No physical iPhone evidence exists.",
+    "No balance coefficient was validated."
+  ],
+  "nextAuthorizedChat": "01_正本仕様・競合調査",
+  "nextAuthorizedWork": [
+    "Write the canonical redline for product identity, player role, world boundary, and exclusions.",
+    "Finalize the S01-S09 responsibility map and navigation constraints.",
+    "Determine exact candidate/schema/validator dependency changes.",
+    "Update workflow mirrors consistently to IN_PROGRESS.",
+    "Run independent product, economy, and mobile-UI critiques.",
+    "Reseal Step 1 only after all P0/P1 findings are zero."
+  ]
+}

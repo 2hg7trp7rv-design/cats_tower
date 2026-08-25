@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-hero-merchant-large-idle-integration",
+  "acceptanceRevision": 1,
+  "createdAt": "2026-08-26",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS",
+  "advanceAllowed": false,
+  "scopeName": "Integrate the hero-plus-merchant large-idle-game proposal into the Cat's Tower canonical product without breaking the cat-led identity, nine-screen contract, deterministic economy, or six-step evidence order.",
+  "governance": {
+    "repository": "2hg7trp7rv-design/cats_tower",
+    "writableBranch": "kimi",
+    "auditBaseCommit": "49f9414524e320d08a2b4515506504d82138205f",
+    "auditBaseTree": "d2a213fb1c88b409e4d1b1eadf217dd89b2ca562",
+    "previousCanonicalCompletionEvidence": "quality-reviews/step-1-canonical-design/acceptance-round-005.json",
+    "previousCanonicalSealRole": "historical baseline for comparison; it does not authorize Step 2 while this change control is open",
+    "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control.json",
+    "runtimeOrAssetWritesAuthorized": false,
+    "vercelDeploymentAuthorized": false,
+    "otherBranchWritesAuthorized": false
+  },
+  "authoritativeInputs": [
+    "MASTER_SPEC.md",
+    "FLOORS_1_10_DESIGN.md",
+    "QUALITY_GATE.md",
+    "AGENTS.md",
+    "AI_PROJECT_POLICY.json",
+    "PROJECT_STATUS.json",
+    "PROJECT_HANDOVER.md",
+    "simulation/INPUT_CONTRACT.md",
+    "simulation/candidate-v1.json",
+    "quality-reviews/step-1-canonical-design/acceptance.json",
+    "quality-reviews/step-1-canonical-design/acceptance-round-005.json",
+    "the twenty user-provided images supplied to the 00_統括・工程管理 chat on 2026-08-26"
+  ],
+  "acceptanceMatrix": [
+    {
+      "id": "HM1",
+      "gate": "G1",
+      "condition": "The revised one-line product identity makes the hero and merchant fantasies simultaneously legible while preserving cats as the visible protagonists and the player as the leader of a cat adventuring merchant company.",
+      "evidenceRequired": [
+        "MASTER_SPEC product sentence",
+        "player-role contract",
+        "first-five-minute comprehension check"
+      ]
+    },
+    {
+      "id": "HM2",
+      "gate": "G1",
+      "condition": "No generic human hero, external kingdom, or parallel adventure lobby displaces the one-tower cat-led product identity.",
+      "evidenceRequired": [
+        "world-boundary redline",
+        "screen-responsibility map",
+        "independent originality critique"
+      ]
+    },
+    {
+      "id": "HM3",
+      "gate": "G4",
+      "condition": "Combat, reinforcement, commerce, delivery, offline progress, and Dawn form one closed progression economy; no proposed subsystem becomes an isolated second game.",
+      "evidenceRequired": [
+        "resource-flow diagram",
+        "state-transition table",
+        "sink/source audit"
+      ]
+    },
+    {
+      "id": "HM4",
+      "gate": "G4",
+      "condition": "Spendable currencies remain current-run coin and permanent Dawn shard only. Reputation, blueprints, district badges, achievements, and restoration progress remain non-spendable state or unlock flags.",
+      "evidenceRequired": [
+        "currency registry diff",
+        "save-schema field classification",
+        "UI label audit"
+      ]
+    },
+    {
+      "id": "HM5",
+      "gate": "G4",
+      "condition": "Gacha, pity, duplicate shards, premium gems, paid timer acceleration, random-stat equipment, inventory dismantling loops, forced advertisements, energy gates, and mandatory daily retention chores remain excluded from the core product.",
+      "evidenceRequired": [
+        "explicit exclusion list in canonical spec",
+        "candidate/schema absence check",
+        "screen-state absence check"
+      ]
+    },
+    {
+      "id": "HM6",
+      "gate": "G5",
+      "condition": "The ten supplied concept families are mapped into the existing S01-S09 responsibilities without creating an undisclosed tenth canonical screen or five permanently competing navigation roots.",
+      "evidenceRequired": [
+        "concept-to-screen responsibility matrix",
+        "nine-screen registry validation",
+        "mobile navigation critique"
+      ]
+    },
+    {
+      "id": "HM7",
+      "gate": "G5",
+      "condition": "The battle screen keeps one dominant action and a readable frontline. Commerce support is visible through compact status and deliveries rather than a permanently expanded management dashboard covering the battle.",
+      "evidenceRequired": [
+        "390x844 information hierarchy",
+        "320x667 stress layout",
+        "five-second comprehension critique"
+      ]
+    },
+    {
+      "id": "HM8",
+      "gate": "G3",
+      "condition": "Auto battle begins early, active input is optional optimization, and no collect-all, restock, repeated level-one purchase, long hold, or high-frequency tap routine is required for baseline progress.",
+      "evidenceRequired": [
+        "input contract redline",
+        "first-session action count budget",
+        "failure-path audit"
+      ]
+    },
+    {
+      "id": "HM9",
+      "gate": "G4",
+      "condition": "The 100-floor macro presentation remains a continuous living tower with district landmarks. A discrete node-map topology may be used only as a visual summary if it does not replace floor browsing or alter progression semantics.",
+      "evidenceRequired": [
+        "S03 interaction contract",
+        "floor-state continuity audit",
+        "save-state compatibility analysis"
+      ]
+    },
+    {
+      "id": "HM10",
+      "gate": "G4",
+      "condition": "Merchant management is converted into deterministic, auto-running shop placement, leveling, adjacency, and visible delivery effects. Manual collection, stock refill, restart timers, and opaque chain multipliers are prohibited.",
+      "evidenceRequired": [
+        "shop state machine",
+        "offline boundary table",
+        "exploit and chore critique"
+      ]
+    },
+    {
+      "id": "HM11",
+      "gate": "G4",
+      "condition": "Formation depth uses the existing named-cat and temporary-helper model. The first production district does not become a forty-character rarity collector or a five-slot generic hero party.",
+      "evidenceRequired": [
+        "roster cap check",
+        "first-ten content budget",
+        "role readability matrix"
+      ]
+    },
+    {
+      "id": "HM12",
+      "gate": "G4",
+      "condition": "Forge depth is expressed through the existing one-at-a-time tower-wide armament families, deterministic tiers, and disclosed matchup forecasts; there is no random-stat item inventory.",
+      "evidenceRequired": [
+        "armament contract redline",
+        "stable-ID impact check",
+        "save-schema impact check"
+      ]
+    },
+    {
+      "id": "HM13",
+      "gate": "G1",
+      "condition": "Kingdom restoration is either rejected or translated into visual restoration of conquered tower districts. It must not add a separate town-building economy or timer layer to the current six-step scope.",
+      "evidenceRequired": [
+        "world-scope decision",
+        "screen and economy impact audit"
+      ]
+    },
+    {
+      "id": "HM14",
+      "gate": "G4",
+      "condition": "Every changed executable semantic is propagated to candidate-v1.json, its schema, validators, input contract, deterministic simulator requirements, and a new Step 1 seal before Step 2 starts.",
+      "evidenceRequired": [
+        "semantic dependency closure",
+        "validator passes",
+        "new executable contract digest"
+      ]
+    },
+    {
+      "id": "HM15",
+      "gate": "G2",
+      "condition": "The active workflow status clearly blocks Steps 2-6 until this integration is resealed, while preserving Round 5 as immutable historical evidence rather than rewriting it.",
+      "evidenceRequired": [
+        "active change-control artifact",
+        "consistent operating-document status",
+        "repository-wide contradiction search"
+      ]
+    },
+    {
+      "id": "HM16",
+      "gate": "G4",
+      "condition": "At least three independent critics separately attack product identity, economy/simulation closure, and mobile UI density; all unresolved P0 and P1 findings are zero before PASS.",
+      "evidenceRequired": [
+        "three critic artifacts",
+        "final judge artifact"
+      ]
+    }
+  ],
+  "fixedDecisionsForThisRound": [
+    "The current Round 5 canonical specification is the comparison baseline, not disposable legacy.",
+    "The integration is a Step 1 semantic change and therefore blocks Step 2.",
+    "The supplied screens are design proposals and audit inputs, not approved final mockups or production assets.",
+    "No runtime, asset, Vercel, branch, or production change is part of Round 1."
+  ],
+  "questionsToResolveBeforeCanonicalRedlineCanPass": [
+    {
+      "id": "Q1",
+      "question": "How is the hero fantasy named and shown without introducing a generic protagonist who displaces the cats?",
+      "proposedResolution": "The player is the cat adventuring merchant company leader; the named cats are the visible adventurers and battle heroes."
+    },
+    {
+      "id": "Q2",
+      "question": "How much merchant information remains visible during battle?",
+      "proposedResolution": "Compact delivery/support status stays on S02; detailed production, placement, and comparison remains in S05/S07."
+    },
+    {
+      "id": "Q3",
+      "question": "Does the 100F strategy-map proposal change topology?",
+      "proposedResolution": "No. Preserve the continuous tower; use district landmarks and a compressed overview only as an S03 state."
+    },
+    {
+      "id": "Q4",
+      "question": "Which proposed long-tail systems enter the current product?",
+      "proposedResolution": "None of gacha, random equipment, town timers, dailies, seasons, ranking, premium acceleration, or social live operations enter the current six-step scope."
+    }
+  ],
+  "failureConditions": [
+    "Step 2 begins before the integration has a new Step 1 PASS seal.",
+    "A tenth canonical screen is introduced without explicit scope revision.",
+    "Cats cease to be the visible protagonists.",
+    "A third spendable currency or premium acceleration is introduced.",
+    "The battle screen permanently exposes the full merchant dashboard.",
+    "A proposed feature is accepted solely because it appeared in a polished concept image.",
+    "Runtime, asset, or Vercel work begins during this documentation-only round.",
+    "Any write targets a branch other than kimi."
+  ],
+  "verificationEnvironment": [
+    "live GitHub kimi branch at the exact recorded base commit",
+    "repository source-of-truth and Step 1 evidence review",
+    "manual inspection of all twenty supplied images",
+    "2026-08-26 external benchmark and reference-product verification",
+    "JSON parse validation for new machine-readable artifacts",
+    "independent negative review before promotion"
+  ],
+  "currentRound": {
+    "artifact": "quality-reviews/step-1-hero-merchant-large-idle-integration/round-001-diff-audit.md",
+    "status": "IN_PROGRESS",
+    "advanceAllowed": false
+  },
+  "nextAuthorizedWork": "Produce the canonical redline for product identity, world boundary, nine-screen responsibility mapping, economy exclusions, and simulation dependency impact; then run three independent critiques."
+}
