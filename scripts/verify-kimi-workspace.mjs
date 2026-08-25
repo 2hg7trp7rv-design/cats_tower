@@ -40,11 +40,11 @@ function normalizeRepository(remoteUrl) {
 
 function fail(message, details = {}) {
   const output = {
+    ...details,
     ok: false,
     status: 'BLOCKED',
     policy: 'fail-closed',
     message,
-    ...details,
   };
   process.stderr.write(`${JSON.stringify(output, null, 2)}\n`);
   process.exit(2);
@@ -170,7 +170,7 @@ const dirty = statusLines.length > 0;
 if (dirty && process.env.CATS_TOWER_ALLOW_DIRTY !== '1') {
   fail('Working tree is not clean. Inspect the pending changes before starting another task.', {
     head,
-    status: statusLines.split('\n'),
+    workingTree: statusLines.split('\n'),
     override: 'Set CATS_TOWER_ALLOW_DIRTY=1 only while intentionally validating current uncommitted work.',
   });
 }
