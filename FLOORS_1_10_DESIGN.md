@@ -863,7 +863,7 @@ schema3の完全field定義は工程5の実装開始前に独立reviewする。�
 
 ## 19. 現行受入条件
 
-本書の現行受入条件は`quality-reviews/step-1-canonical-design/acceptance-round-003.json`、最終完成証跡は`quality-reviews/step-1-canonical-design/acceptance-round-004.json`とし、Round 1・2の不合格記録を履歴として保持する。外部比較の根拠と限界は`quality-reviews/step-1-canonical-design/research-evidence.md`に分離し、資料を引用しただけで数値を合格にしない。
+本書の現行受入条件は`quality-reviews/step-1-canonical-design/acceptance-round-003.json`、最終完成証跡は`quality-reviews/step-1-canonical-design/acceptance-round-005.json`とし、Round 1・2の不合格記録と、状態表記・holdout封印範囲の見落としを記録したRound 4を履歴として保持する。外部比較の根拠と限界は`quality-reviews/step-1-canonical-design/research-evidence.md`に分離し、資料を引用しただけで数値を合格にしない。
 
 ### 19.1 工程1で固定する契約
 
@@ -902,4 +902,4 @@ schema3の完全field定義は工程5の実装開始前に独立reviewする。�
 | 1〜10F runtime | 未実装 | 工程4合格後の工程5 |
 | 物理iPhone | `NOT_VERIFIED` | 工程6のSafari/PWA/in-app 3分+10分記録 |
 
-工程2は購入を含む100F state machineとして実行し、工程3は戦闘、増援、商業の各buildについて1,000のseedと購入方針を保存する。中央値が合っていてもp10/p90、停止率、操作回数、同じ選択への収束、放置境界違反が不合格なら候補係数を戻して再実行する。
+工程2は購入を含む100F state machineとして実行し、calibration seedだけで候補係数を変更する。工程2合格時はcandidate、`simulation/engine`全regular fileの完全集合、run plan、result schema・validator、Node version、raw・summary・Acceptanceのdigestをstrict schemaの一方向sealへ固定する。工程3は戦闘、増援、商業の各buildについて、そのsealと一致し、candidateから未観測の一回限りのholdout bankを各1,000 seedで実行し、購入方針と最初の有効なAcceptance判定を保存する。seed単位結果、集計、判定または診断を一つでもprocess外へ実体化したbankは使用済みとなる。同じ登録済みsessionは完走してよいが、部分出力後のcrash・欠落・invalid result・判定未生成から同じbankを再開しない。期待した3,000 identityの完全一致、strict schema、独立再集計、dataset・summary・Acceptance digestの一致がない判定は無効である。中央値が合っていてもp10/p90、停止率、操作回数、同じ選択への収束、放置境界違反が不合格ならStep 1へ戻り、calibrationと全bank履歴に非交差の未観測bankで再封印し、更新candidateのStep 2を全件再実行する。bank名だけを変えた同一・重複rangeの再利用、使用済みbankを見た係数調整や昇格判定のやり直しは禁止し、そのbankは診断専用とする。同一digestのbyte-equivalence検査、または結果を一切露出しなかった基盤障害の復旧だけを例外とする。bank lifecycleはcanonical JSONL追記専用ledgerでpreflightする。

@@ -32,7 +32,7 @@
 | 1〜10Fの階別・敵別・施設別詳細 | `FLOORS_1_10_DESIGN.md`（本書へ従う下位正本） |
 | 安定IDと読取専用alias | `PROJECT_STATUS.json.stableIdRegistry` / `stableIdMigrationAliases` |
 | S01〜S09と各required stateの完全な集合 | `PROJECT_STATUS.json.canonicalScreens` |
-| 工程1の合否条件・完成証跡 | `quality-reviews/step-1-canonical-design/acceptance-round-003.json` / `acceptance-round-004.json` |
+| 工程1の合否条件・完成証跡 | `quality-reviews/step-1-canonical-design/acceptance-round-003.json` / `acceptance-round-005.json` |
 | 工程2・3の数値・式・実行入力 | schema・validatorに合格した同一digestの`simulation/candidate-v1.json` |
 | candidate構造と事前検査 | `simulation/candidate.schema.json` / `simulation/validate-candidate.mjs` |
 | QA gateと物理端末判定 | `QUALITY_GATE.md` |
@@ -77,7 +77,7 @@ scope内の正本が競合した場合は実装・simulationを停止し、同�
 
 ### 0.3 工程1の固定と数値合格を分ける
 
-工程1の現行受入条件は[`quality-reviews/step-1-canonical-design/acceptance-round-003.json`](./quality-reviews/step-1-canonical-design/acceptance-round-003.json)、最終完成証跡は[`acceptance-round-004.json`](./quality-reviews/step-1-canonical-design/acceptance-round-004.json)である。Round 1・2の不合格記録は履歴として保持する。工程1で固定したのは、製品境界、状態遷移、計測定義、入力・保存・表示契約、禁止事項、候補manifest schema、後工程の合否式までである。候補HP、攻撃、価格、報酬、時間、Dawn、放置、build、武装の値は工程1の文書一致だけでは合格にしない。
+工程1の現行受入条件は[`quality-reviews/step-1-canonical-design/acceptance-round-003.json`](./quality-reviews/step-1-canonical-design/acceptance-round-003.json)、最終完成証跡は[`acceptance-round-005.json`](./quality-reviews/step-1-canonical-design/acceptance-round-005.json)である。Round 1・2の不合格記録と、状態表記・holdout封印範囲の見落としを記録したRound 4は履歴として保持する。工程1で固定したのは、製品境界、状態遷移、計測定義、入力・保存・表示契約、禁止事項、候補manifest schema、後工程の合否式までである。候補HP、攻撃、価格、報酬、時間、Dawn、放置、build、武装の値は工程1の文書一致だけでは合格にしない。
 
 数値balanceの合格は、工程2・3で同一`candidateId`の出力がGate Sを満たした時だけである。したがって「仕様として固定」と「balanceとして採用」を同じ`PASS`で表現せず、工程1の完了後も`SIMULATION_CANDIDATE`は候補のまま残す。
 
@@ -208,6 +208,14 @@ Gate Cは1〜10Fの商品スライスの技術・実機合格であり、それ�
 ### 4.2 100F数値モデルの初期仮説
 
 工程2・3が読む唯一の候補入力は、現存する版付きmanifest [`simulation/candidate-v1.json`](./simulation/candidate-v1.json) とする。工程2開始前にparse、schema、状態を検証して凍結し、不存在、parse失敗、未凍結、schema不一致の状態ではシミュレーションを開始しない。仕様書へ候補係数を複製せず、出力には`candidateId`と入力file hashを必ず残す。
+
+工程3のholdoutは、candidateが一度も参照していない一回限りのbankでなければならない。seed単位結果、集計値、Acceptance判定または診断を一つでもprocess外へ実体化した時点で、そのbank全体を観測済み・使用済みとする。最初の有効なAcceptance判定を権威とし、同一digestのbyte-equivalence確認、または結果を一切露出しなかった基盤障害の復旧以外では同じbankを再実行しない。使用済みbankを見てcandidateまたはsimulator semanticsを変更した場合、Step 3の成否にかかわらずStep 1へ戻り、重複しない未観測bankを登録して再封印し、Step 2を全件再実行してからStep 3を行う。使用済みbankは診断専用であり、candidateの再調整や昇格判定へ使わない。
+
+一つの登録済み消費sessionは、最初の出力でbankを使用済みにした後も中断せず完走してよいが、部分出力後のcrash、欠落、schema不一致または有効判定未生成から同じbankを再開・再実行してはならない。その場合もStep 1へ戻って新bankを使う。有効判定は、同一candidate raw digest、Step 2 sealの`simulatorSourceTreeSha256`と同一のsimulator raw digest、期待した3,000のbuild×seed identityが欠落・重複なく揃い、全raw recordが固定result schemaへ合格し、独立再集計とdataset・summary・Acceptance digestが一致した最初の一件だけとする。使用履歴は追記専用ledgerへ、開始、結果未露出の基盤失敗、最初の出力、最終判定の順で記録する。ledgerはUTF-8のcanonical JSONL、sequence 1始まり、64桁zero genesis、直前`recordSha256` link、raw-ledger compare-and-append revisionを使用し、全bank IDの履歴に対してcalibration range、観測済み・finalize済み・未解決rangeとの重複、bank IDとrangeの再割当を拒否する。
+
+candidateが直接digest固定する実行依存は、`candidate.schema.json`、`validate-candidate.mjs`、`executable-seal.schema.json`、`validate-executable-seal.mjs`のraw bytesと、`PROJECT_STATUS.json`内の`canonicalScreens`、`stableIdMigrationAliases`、`stableIdRegistry`のcanonical JSON selectionだけとする。工程状態、引継ぎ、README、Acceptance案内などのworkflow mirrorはRound 5のreviewed-content commit/treeと完成証跡で別に固定し、Step 2の`NOT_STARTED→IN_PROGRESS→PASS`更新だけでbalance結果を自己失効させない。ただし製品・simulationの意味仕様を変えた場合は、mirrorだけの編集と偽らず新candidateを作りStep 1へ戻す。
+
+Step 2合格時には、candidate、simulator source tree、run plan、result schema・validator、Node version、raw dataset、summary、Acceptanceのdigestをstrict schemaの`simulation/results/step-2/executable-seal.json`へ固定する。source treeは`simulation/engine`配下のregular non-symlink fileを再帰列挙した完全集合とrun planの一覧を一致させ、pathとraw digestのcanonical arrayから算出する。未列挙local code/data、computed dynamic import、`eval`、`Function`、native addonを禁止する。Step 3はholdout draw前にseal raw bytes、全field、source集合とdigestを一致させ、Step 3出力やworkflow mirrorからこの一方向sealを変更しない。
 
 manifestは少なくとも次のtop-level fieldを機械可読で持つ。
 
@@ -991,6 +999,8 @@ S08は別ゲームモードではなく戦闘追従のボス構成を検査す�
 2. 戦闘・精鋭型、増援・数型、商業・配送型を各1,000パターン、合計3,000パターン実行する。
 3. seed、購入方針、能動操作率、放置時間、夜明け階、結果、失敗理由を機械可読データへ残す。
 4. 最小、中央値、p90、最大を、100F時間、各地区時間、敗北数、夜明け数、購入数、放置収益、操作数で比較する。
+
+Step 2のcalibration seedだけが候補係数を変更できる。Step 3は未観測holdout bankに対する一回限りの昇格判定であり、その出力を見た再調整は禁止する。Step 3が不合格、部分出力後に有効判定を作れない、または出力後にcandidate・simulator semanticsを変更する場合はStep 1へ戻り、重複しない未観測bank、更新candidate、更新schema・validatorを再封印し、Step 2を最初から通す。使用済みbankの再計算結果は診断にだけ使い、昇格判定を置き換えない。Step 3開始前にはStep 2 executable sealとholdout lifecycle ledgerのpreflightを通す。
 
 合格条件:
 

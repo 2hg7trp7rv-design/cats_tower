@@ -1,7 +1,7 @@
 {
-  "schemaVersion": 2,
-  "candidateId": "cats-tower-simulation-candidate-v1-r3",
-  "algorithmVersion": "ct-sim-contract-1",
+  "schemaVersion": 4,
+  "candidateId": "cats-tower-simulation-candidate-v1-r5",
+  "algorithmVersion": "ct-sim-contract-3",
   "schemaPath": "simulation/candidate.schema.json",
   "status": "SIMULATION_CANDIDATE",
   "createdAt": "2026-08-25",
@@ -14,18 +14,34 @@
     "quality-reviews/step-1-canonical-design/acceptance-round-003.json"
   ],
   "sourceDependencyDigests": {
-    "algorithm": "sha256-raw-bytes-lowercase-hex",
-    "files": {
-      "MASTER_SPEC.md": "76dcecf576d82ef9023fa4600664837ce9ef7543ffdc7009ad4436b4bab20478",
-      "FLOORS_1_10_DESIGN.md": "5bec06ab8bb49683b5b8abe0aae716b50821c4ea9b7f819ad795eae36250c9c5",
-      "PROJECT_STATUS.json": "0eb14ea112796cf6b8f4215dd16e70efe91bf9023c37d44f72eef2e050127083",
-      "quality-reviews/step-1-canonical-design/acceptance.json": "b759cfae1fe1b4d196e0a5fd56b9336f82575e2adbd4514c74639023ebcbe458",
-      "quality-reviews/step-1-canonical-design/acceptance-round-002.json": "33c0d1b9aed1589782551bfc2a723efe9a16d817b787144398bfc1c87f0bb8e6",
-      "quality-reviews/step-1-canonical-design/acceptance-round-003.json": "3c1378939738de93569833e0cc0f8827d38f44d285a5d50dec81d4cf1ca54b1a",
-      "simulation/candidate.schema.json": "1a43fcd099b8d4cd0db0a8227c3172981327be534175d0f3ae653f0117191c4b",
-      "simulation/validate-candidate.mjs": "060b18ce1aeb29252dd38b63b6a7c13b345e5c61b0af96c55234ea193ce0051d"
+    "rawFileAlgorithm": "sha256-raw-bytes-lowercase-hex",
+    "canonicalJsonSelectionAlgorithm": "sha256-utf8-json-stringify-object-in-selectedTopLevelKeys-order",
+    "rawFiles": {
+      "simulation/executable-seal.schema.json": "58803423e4a099acb784dec70d743de3bbedf9d40bbddcb8732d82326bab816c",
+      "simulation/validate-executable-seal.mjs": "e0d360c6c0d458ab50ac16ce7cbabc4744d39647a5fd4f5738706efc6a6b6ead",
+      "simulation/candidate.schema.json": "cb245c535cfb037ec6c736c27c21ac493b537a772c91bf7d9b389d71ef4d5a20",
+      "simulation/validate-candidate.mjs": "48594f5670a3737e9713d4cbabb2d5b855fa945b68a53fc6f25df20cefd00509"
     },
-    "invalidationRule": "before every Step 2 or Step 3 run, compute SHA-256 over the exact raw bytes of every listed repository-root-relative file and require lowercase-hex equality; any missing file, extra file, mismatch or validator/schema change invalidates every earlier result and aborts before scenario execution"
+    "jsonSelections": {
+      "PROJECT_STATUS.json": {
+        "selectedTopLevelKeys": ["canonicalScreens", "stableIdMigrationAliases", "stableIdRegistry"],
+        "digest": "82e090f700d0faa6735c9b4c47d327433e9512329390a90bef446d9fc920c22d"
+      }
+    },
+    "workflowMirrorsExcludedFromBalanceResultInvalidation": [
+      "MASTER_SPEC.md",
+      "FLOORS_1_10_DESIGN.md",
+      "PROJECT_STATUS.json outside selectedTopLevelKeys",
+      "quality-reviews/step-1-canonical-design/acceptance.json",
+      "quality-reviews/step-1-canonical-design/acceptance-round-002.json",
+      "quality-reviews/step-1-canonical-design/acceptance-round-003.json",
+      "QUALITY_GATE.md",
+      "AGENTS.md",
+      "PROJECT_HANDOVER.md",
+      "README.md",
+      "simulation/INPUT_CONTRACT.md"
+    ],
+    "invalidationRule": "before every Step 2 or Step 3 run, verify the exact raw-file set and canonical JSON selection set, recompute each declared digest and require lowercase-hex equality. A missing, extra or mismatched executable dependency or selected semantic registry value invalidates earlier balance results and aborts before scenario execution. Workflow-mirror bytes may advance phase status without changing the candidate; any semantic specification change still requires a new candidateId, candidate digest and Step 1 re-seal"
   },
   "manifestChangePolicy": {
     "anyByteChangeInvalidatesAllBalanceResults": true,
@@ -33,7 +49,36 @@
     "finalCoefficientsRequireStep2AndStep3Pass": true,
     "runtimeImplementationMayNotTreatTheseValuesAsFinal": true,
     "schemaValidationRequiredBeforeEveryRun": true,
-    "unknownOrMissingInputIsFatal": true
+    "unknownOrMissingInputIsFatal": true,
+    "workflowMirrorByteChangeAloneInvalidatesBalanceResults": false,
+    "workflowStateMayAdvanceWithoutCandidateByteChange": true,
+    "semanticSpecificationChangeRequiresNewCandidateAndStep1Reseal": true,
+    "step2ToStep3ExecutableSealContract": {
+      "path": "simulation/results/step-2/executable-seal.json",
+      "schemaPath": "simulation/executable-seal.schema.json",
+      "validatorPath": "simulation/validate-executable-seal.mjs",
+      "requiredFields": ["schemaVersion", "candidateRawSha256", "candidateNormalizedExecutableSha256", "simulatorSourceTreeSha256", "simulatorSourceFileCount", "runPlanRawSha256", "resultSchemaRawSha256", "resultValidatorRawSha256", "nodeVersion", "step2RawDatasetSha256", "step2SummarySha256", "step2AcceptanceSha256", "step2Verdict"],
+      "sealRawFileRule": "the seal must pass validateExecutableSealBytes: one strict JSON object, exactly the required fields in the declared order, two-space indentation, UTF-8 without BOM, one final LF, lowercase SHA-256 fields, no duplicate or extra key, schemaVersion=1 and step2Verdict=PASS",
+      "sourceTreeContract": {
+        "sourceListLocation": "simulation/run-plan.json#/simulatorSourceFiles",
+        "fixedSourceRoots": ["simulation/engine"],
+        "sourcePathPattern": "^[A-Za-z0-9._/-]+$",
+        "sourcePathRule": "each entry is a unique repository-relative POSIX path beneath exactly one fixedSourceRoots directory and names an existing regular non-symlink file; absolute paths, dot or dot-dot segments, backslashes and empty segments are forbidden",
+        "coverageRule": "immediately before every Step 2 or Step 3 run, recursively enumerate every regular non-symlink file beneath fixedSourceRoots without following directory symlinks and require exact set equality with simulatorSourceFiles; a missing, extra, unreadable, symlinked or non-regular entry aborts",
+        "moduleLoadingRule": "all simulator entrypoints, static imports and local data dependencies must resolve inside simulatorSourceFiles; dynamic import with a computed specifier, eval, Function construction, native addon loading and execution of unlisted local code are forbidden",
+        "externalLocalInputRule": "the only readable repository-local inputs outside fixedSourceRoots are candidate-v1.json, run-plan.json, result.schema.json, the Step 2 executable seal, the Step 3 lifecycle ledger and declared result/output files; result validation code and every helper it imports live under fixedSourceRoots and are therefore covered by the tree digest",
+        "orderingRule": "simulatorSourceFiles is nonempty and strictly ascending by unsigned UTF-8 byte sequence; because sourcePathPattern is ASCII-only this is bytewise ASCII order",
+        "entryRule": "for each listed path construct exactly the two-element JSON array [path,sha256RawBytesLowercaseHex] in that order",
+        "treePreimageRule": "construct the JSON array of entries in simulatorSourceFiles order using UTF-8 JSON.stringify with no whitespace, BOM or trailing LF",
+        "treeDigestAlgorithm": "sha256-utf8-json-stringify-array-of-path-and-raw-sha256",
+        "fileCountRule": "simulatorSourceFileCount equals simulatorSourceFiles.length",
+        "holdoutSimulatorDigestRule": "every Step 3 lifecycle record simulatorRawSha256 equals this seal's simulatorSourceTreeSha256 exactly; simulatorRawSha256 is an alias for the sealed source-tree digest and never a digest of one file"
+      },
+      "creationRule": "after Step 2 has one valid PASS verdict, atomically write this seal from the exact executable and result artifacts that produced it; the seal is downstream evidence, not a candidate dependency, so creating it and advancing workflow mirrors do not alter the candidate raw digest",
+      "step3PreflightRule": "before holdout-bank ledger preflight, validate the seal's strict raw bytes and schema, recompute the candidate raw and normalized digests, source-tree digest and count from the sealed run plan, result schema and validator raw digests and exact Node version, then require every value and step2Verdict PASS to match; any missing, extra, reordered, mismatched or invalid value aborts before a holdout draw",
+      "mismatchAction": "return-to-step-1-for-semantic-changes-or-step-2-for-byte-identical-infrastructure-recovery-never-start-step-3",
+      "oneWayAuthorityRule": "Step 3 consumes this immutable Step 2 seal; Step 3 output and workflow-mirror changes never rewrite or replace it"
+    }
   },
   "fixedProductContractPointers": [
     "$.offline.capSeconds",
@@ -262,7 +307,7 @@
     ],
     "rangeBindingRule": "each inclusiveRangeBindings value is calibratable, each range is immutable, both pointers must resolve, the range must contain exactly two finite ascending numbers, and the current or mutated value must stay between them inclusive. nonBindingPriorRangeRules are the only named exceptions and may not be silently promoted to acceptance bounds",
     "immutableRegardlessOfRoot": "every string, boolean, null, object key, array length, canonical ID, state-field shape, state transition, formula algorithm/operand, event order, PRNG/schedule/persona procedure, acceptance threshold/statistic procedure, fixedProductContractPointer and schema rule is immutable in Steps 2 and 3",
-    "mutationTransaction": "each accepted Step 2 numeric change creates a new candidateId and digest and invalidates all earlier Step 2 results; Step 3 starts only from a frozen passing digest and any later byte change restarts all paired holdout runs"
+    "mutationTransaction": "each accepted Step 2 numeric change creates a new candidateId and digest and invalidates all earlier Step 2 results. Step 3 starts only from a frozen passing digest and an unobserved holdout bank. One registered immutable-candidate consumption session may finish after its first output spends the bank, but may not mutate the candidate. Once any seed-level or aggregate Step 3 result from that bank is materialized or observed, a later candidate or simulator-semantics change may not reuse that spent bank for promotion: return to Step 1, register a disjoint unobserved bank, re-seal, and rerun all of Step 2 before Step 3. A same-digest rerun is limited to byte-equivalence verification or infrastructure recovery that exposed no result, and never replaces the first valid acceptance verdict. Partial materialization followed by failure spends the bank even when no valid verdict exists"
   },
   "rounding": {
     "currency": "round-half-up-to-integer-after-each-transaction",
@@ -2441,10 +2486,71 @@
     },
     "calibrationSeedsInclusive": [1, 200],
     "holdoutCommonSeedsInclusive": [100000, 100999],
+    "preHoldoutDiagnosticSeedRule": "before Step 3, every seeded scenario, fixture, probe and diagnostic must use only calibrationSeedsInclusive; drawing any other seed is a fatal exposure and requires Step 1 re-seal with a holdout range disjoint from that exposed seed and all lifecycle-ledger history",
+    "holdoutRangeDisjointRule": "holdoutCommonSeedsInclusive must not intersect calibrationSeedsInclusive; Step 3 preflight must also reject intersection with every observed, finalized or unresolved inclusive seed range anywhere in the lifecycle ledger regardless of bankId, while an exactly adjacent non-overlapping range is permitted",
     "holdoutScenariosPerBuild": 1000,
     "holdoutBuilds": ["combat", "reinforcement", "commerce"],
     "commonRandomNumbersAcrossBuilds": true,
     "holdoutSeedsMayTuneManifest": false,
+    "holdoutReusePolicy": {
+      "bankId": "holdout-bank-001",
+      "seedRangePath": "$.seedPolicy.holdoutCommonSeedsInclusive",
+      "observationDefinition": "the bank becomes observed when any seed-level result, aggregate statistic, acceptance verdict or diagnostic derived from one or more bank seeds is materialized outside the running process",
+      "observationMakesBankSpent": true,
+      "sameDigestRerunPurposes": [
+        "byte-equivalence",
+        "no-output-infrastructure-recovery"
+      ],
+      "singleConsumptionSessionMayContinueAfterBankBecomesSpent": true,
+      "candidateMutationInsideConsumptionSessionAllowed": false,
+      "firstValidAcceptanceVerdictIsAuthoritative": true,
+      "acceptanceVerdictValidityRule": "a verdict is valid only when one immutable candidate raw digest and one immutable simulator raw digest produced the exact 3000 expected build-by-seed scenario identities, every seed-level record passes the sealed result schema with no missing or duplicate identity, aggregate values are independently recomputed from that exact raw dataset, and one acceptance record containing the dataset, summary and verdict digests is finalized exactly once",
+      "observedBankMayTuneManifest": false,
+      "changedCandidateMayReuseSpentBankForPromotion": false,
+      "failureAction": "return-to-step-1-with-disjoint-unobserved-bank-and-rerun-step-2-before-step-3",
+      "partialMaterializationWithoutValidVerdictAction": "mark-bank-spent-and-return-to-step-1-with-disjoint-unobserved-bank-and-rerun-step-2-before-step-3",
+      "spentBankUse": "diagnostic-only-never-promotion",
+      "expectedScenarioIdentityContract": {
+        "buildOrderPath": "$.seedPolicy.holdoutBuilds",
+        "seedRangePath": "$.seedPolicy.holdoutCommonSeedsInclusive",
+        "identityFieldOrder": ["build", "seed"],
+        "enumerationRule": "enumerate every build in holdoutBuilds order and, within each build, every integer seed from the inclusive start through end in ascending order, producing exactly the object {build,seed} with fields in identityFieldOrder and no other field",
+        "preimageRule": "UTF-8 JSON.stringify of the exact 3000-element identity array with no whitespace, BOM or trailing LF",
+        "digestAlgorithm": "sha256-utf8-json-stringify-identity-array",
+        "expectedDigestForCurrentBank": "78700a7b086ce1e8e2edbbfb99cb2ea2fc7f8ab66f7419eaf37d4506849a11c6"
+      },
+      "lifecycleLedgerContract": {
+        "path": "simulation/results/step-3/holdout-bank-ledger.jsonl",
+        "format": "append-only-one-strict-json-object-per-line",
+        "bankIdentityFields": ["bankId", "seedStartInclusive", "seedEndInclusive"],
+        "recordTypes": ["CONSUMPTION_STARTED", "NO_OUTPUT_INFRASTRUCTURE_FAILURE", "OUTPUT_OBSERVED", "VERDICT_FINALIZED"],
+        "hashAlgorithm": "sha256-utf8-canonical-payload-lowercase-hex",
+        "sequenceStartsAt": 1,
+        "sequenceIncrement": 1,
+        "genesisPreviousRecordSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "emptyLedgerRevisionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "canonicalPayloadFieldOrder": ["sequence", "type", "attemptId", "bankId", "seedStartInclusive", "seedEndInclusive", "candidateRawSha256", "simulatorRawSha256", "step2ExecutableSealRawSha256", "expectedScenarioIdentitySha256", "expectedScenarioCount", "exposedDerivedOutputCount", "failureCode", "firstOutputKind", "rawDatasetSha256", "summarySha256", "acceptanceSha256", "verdict", "eventAt", "previousRecordSha256"],
+        "recordContracts": {
+          "CONSUMPTION_STARTED": {"exactFields": ["sequence", "type", "attemptId", "bankId", "seedStartInclusive", "seedEndInclusive", "candidateRawSha256", "simulatorRawSha256", "step2ExecutableSealRawSha256", "expectedScenarioIdentitySha256", "expectedScenarioCount", "eventAt", "previousRecordSha256", "recordSha256"]},
+          "NO_OUTPUT_INFRASTRUCTURE_FAILURE": {"exactFields": ["sequence", "type", "attemptId", "bankId", "seedStartInclusive", "seedEndInclusive", "candidateRawSha256", "simulatorRawSha256", "step2ExecutableSealRawSha256", "exposedDerivedOutputCount", "failureCode", "eventAt", "previousRecordSha256", "recordSha256"]},
+          "OUTPUT_OBSERVED": {"exactFields": ["sequence", "type", "attemptId", "bankId", "seedStartInclusive", "seedEndInclusive", "candidateRawSha256", "simulatorRawSha256", "step2ExecutableSealRawSha256", "exposedDerivedOutputCount", "firstOutputKind", "eventAt", "previousRecordSha256", "recordSha256"]},
+          "VERDICT_FINALIZED": {"exactFields": ["sequence", "type", "attemptId", "bankId", "seedStartInclusive", "seedEndInclusive", "candidateRawSha256", "simulatorRawSha256", "step2ExecutableSealRawSha256", "rawDatasetSha256", "summarySha256", "acceptanceSha256", "verdict", "eventAt", "previousRecordSha256", "recordSha256"]}
+        },
+        "valueDomainRule": "sequence, seed bounds, expectedScenarioCount and exposedDerivedOutputCount are safe nonnegative integers; every Sha256 field is 64 lowercase hexadecimal characters; attemptId matches ^holdout-bank-[0-9]{3}-attempt-[0-9]{6}$; eventAt is canonical UTC YYYY-MM-DDTHH:mm:ss.sssZ; failureCode is infrastructure-zero-derived-output; firstOutputKind is one of seed-record, aggregate, diagnostic or verdict; verdict is PASS or FAIL; bank identity, candidate digest, simulator digest and Step 2 seal digest remain byte-identical throughout one attempt",
+        "canonicalizationRule": "select the record type's exactFields except recordSha256, require those fields and no others, then create a new object by taking present names in canonicalPayloadFieldOrder order; encode exactly UTF-8 JSON.stringify of that object with no whitespace, BOM or trailing LF; all strings are already restricted by valueDomainRule so no implementation-specific normalization is allowed",
+        "recordHashPayloadRule": "recordSha256 is excluded from its own payload and equals lowercase SHA-256 of the exact canonical payload bytes; previousRecordSha256 remains included in that payload",
+        "physicalLineRule": "the physical record is UTF-8 JSON.stringify of a new object containing the canonical payload fields in order followed by recordSha256 as the final field, then exactly one LF; blank lines, CR, BOM, duplicate keys, alternate key order, whitespace and an unterminated last line are invalid",
+        "previousLinkRule": "the first record has sequence=1 and previousRecordSha256=genesisPreviousRecordSha256; each later record has sequence exactly prior sequence+1 and previousRecordSha256 exactly equal to the immediately prior record's recordSha256, never a raw-line digest",
+        "ledgerRevisionRule": "the compare-and-append revision is lowercase SHA-256 of all current raw ledger bytes; an absent or zero-byte ledger has emptyLedgerRevisionSha256; an append must atomically compare the previously read revision and replace it with exactly prior bytes plus one validated physicalLineRule record",
+        "concurrencyRule": "preflight and the CONSUMPTION_STARTED append form one exclusive compare-and-append transaction using ledgerRevisionRule; a concurrent start or revision mismatch fails before any holdout draw",
+        "preflightRule": "before the first holdout draw, validate every historical record and scan the entire ledger across all bank IDs; reject if the requested inclusive seed range intersects any range with OUTPUT_OBSERVED or VERDICT_FINALIZED, intersects any unresolved CONSUMPTION_STARTED range, reassigns a historical bankId to different bounds, or assigns any historical bounds to another bankId; allow retry of the exact same bank identity only after its matching NO_OUTPUT_INFRASTRUCTURE_FAILURE proves zero derived outputs were exposed and candidateRawSha256, simulatorRawSha256 and step2ExecutableSealRawSha256 are unchanged; adjacent non-overlapping ranges are disjoint and allowed",
+        "startRule": "append CONSUMPTION_STARTED before the first holdout draw with its exact record contract; candidateRawSha256 equals the preflighted candidate raw digest, simulatorRawSha256 equals the Step 2 executable seal simulatorSourceTreeSha256, step2ExecutableSealRawSha256 equals the raw seal file digest, expectedScenarioIdentitySha256 follows expectedScenarioIdentityContract, expectedScenarioCount=3000 and eventAt is the append timestamp; the candidate is immutable for the entire attempt",
+        "observationRule": "append exactly one OUTPUT_OBSERVED atomically no later than the first external materialization of any seed-derived value with exposedDerivedOutputCount>=1; that record spends the entire bank while allowing only the same registered consumption session to finish",
+        "verdictRule": "append exactly one VERDICT_FINALIZED after strict validation of all 3000 identities and independent aggregate recomputation, recording rawDatasetSha256, summarySha256, acceptanceSha256 and verdict",
+        "crashRule": "after OUTPUT_OBSERVED, any crash, partial dataset, invalid dataset or missing valid verdict permanently bars that bank from promotion and invokes partialMaterializationWithoutValidVerdictAction",
+        "tamperRule": "deletion, rewrite, truncation, broken sequence or hash link, duplicate record type within an attempt, duplicate finalization, bankId reassignment, overlapping observed or unresolved seed range, identity mismatch or non-append mutation is a fatal acceptance failure"
+      }
+    },
     "scenarioVariance": {
       "executionPowerMultiplier": {"streamId": "execution", "range": [0.94, 1.06], "key": "seedPolicy.entityKeyConstruction.executionScenario", "ordinal": 0, "appliesTo": "all outgoing damage events after deterministic effects"},
       "purchaseUtilityNoise": {"streamId": "purchase", "range": [-0.08, 0.08], "key": "seedPolicy.entityKeyConstruction.purchase", "ordinal": "system.purchaseEvaluationOrdinal"},

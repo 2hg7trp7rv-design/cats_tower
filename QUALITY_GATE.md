@@ -2,9 +2,13 @@
 
 更新日: 2026-08-25
 
-工程状態: 工程1A=PASS / 承認済み6工程のStep 1=IN_PROGRESS（正本仕様固定の独立検収中） / Step 2以降=NOT_STARTED
+工程状態: 工程1A=PASS / 承認済み6工程のStep 1=PASS（正本仕様固定完了） / Step 2以降=NOT_STARTED
 
 ユーザー承認済みの以後の順序は、①修正版の正本仕様固定、②全100F購入・戦闘・夜明け・24時間放置シミュレーション、③3ビルド各1,000パターン検証、④9画面完成見本、⑤1〜10Fだけ実装、⑥物理iPhoneの3分（180秒）ボス戦＋10分（600秒）連続試験とする。後工程の証拠を前工程の合格理由に流用しない。Step 5の合格は非物理端末の実装Acceptanceだけを意味し、Gate Cまたは1〜10F Preview Readyの合格ではない。Step 6を同一`kimi` commitと対象Vercel URLで完了した後にだけGate Cの物理端末要件を判定できる。11F以降の実装はこの6工程の許可に含まれない。
+
+Step 3のholdout bankは一回限りの昇格判定資源とする。seed単位結果、集計、判定または診断を一つでも外部へ実体化した時点で観測済み・使用済みとなる。同じ登録済み実行は完走してよいが、途中停止後の再開・再実行はしない。部分出力後に有効判定を作れなかった場合もbankは使用済みである。使用済みbankを見てcandidateまたはsimulator semanticsを変更した場合はStep 1へ戻り、重複しない未観測bankを登録して再封印し、Step 2を全件再実行してからStep 3へ進む。同一digestのbyte-equivalence検査、または結果を一切露出しなかった基盤障害からの復旧以外に同じbankを再実行せず、最初の有効なAcceptance判定を権威とする。bank使用履歴は`simulation/results/step-3/holdout-bank-ledger.jsonl`へcanonical JSONL hash chainで追記だけを行う。preflightと開始recordの追加は排他的なcompare-and-appendとし、calibration range、全bank履歴の観測済み・未解決rangeとの重複、bank ID/rangeの再割当、並行開始、削除、上書き、切詰め、chain断裂、重複record/finalizeを不合格にする。
+
+Step 2が`PASS`した時点で、candidate、`simulation/engine`の完全file closure、run plan、result schema・validator、Node version、raw dataset、summary、Acceptanceのdigestをstrict schemaの`simulation/results/step-2/executable-seal.json`へ一方向に固定する。Step 3はholdout draw前にseal raw bytesと全file集合・全項目の一致を確認し、Step 3出力や進捗文書からこのsealを書き換えない。進捗状態だけを更新する文書はbalance実行入力ではなく、変更だけでStep 2結果を失効させない。意味仕様を変えた場合は新candidateとStep 1再封印を必須とする。
 
 1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `PASS`
 

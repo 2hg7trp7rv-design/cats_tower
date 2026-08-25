@@ -42,7 +42,8 @@ const normalizeExecutableContract = (value, path = []) => {
   if (typeof value === 'number') return canCalibrate(rfc6901Pointer(path)) ? '<calibratable-number>' : value;
   if (typeof value === 'string') {
     if (path.length === 1 && (path[0] === 'candidateId' || path[0] === 'createdAt')) return `<${path[0]}>`;
-    if (path[0] === 'sourceDependencyDigests' && path[1] === 'files' && path.length === 3) return '<sha256>';
+    if (path[0] === 'sourceDependencyDigests' && path[1] === 'rawFiles' && path.length === 3) return '<sha256>';
+    if (path[0] === 'sourceDependencyDigests' && path[1] === 'jsonSelections' && path.length === 4 && path[3] === 'digest') return '<sha256>';
     return value;
   }
   if (value === null || typeof value === 'boolean') return value;
@@ -52,7 +53,7 @@ const normalizeExecutableContract = (value, path = []) => {
   return normalized;
 };
 const executableContractDigest = (value) => sha256(Buffer.from(JSON.stringify(normalizeExecutableContract(value))));
-const expectedExecutableContractDigest = '69eea0bfc0b6b39c9fad2589f711b0f114c67f2d90f0aae0d46fbcd58e81b4a5';
+const expectedExecutableContractDigest = '1f490f9ddec31c8ea699baff81ae4aec95e4c5127396d66e6319fc0d0089a379';
 const resolveLocalRef = (ref) => {
   if (!ref.startsWith('#/')) throw new Error(`unsupported non-local schema ref: ${ref}`);
   return ref.slice(2).split('/').reduce(
@@ -107,7 +108,8 @@ const validateSchema = (value, rule, path = '$') => {
 
 validateSchema(candidate, schema);
 
-if (executableContractDigest(candidate) !== expectedExecutableContractDigest) fail('candidate executable shape or immutable nonnumeric contract differs from the sealed contract');
+const actualExecutableContractDigest = executableContractDigest(candidate);
+if (actualExecutableContractDigest !== expectedExecutableContractDigest) fail('candidate executable shape or immutable nonnumeric contract differs from the sealed contract');
 const missingDynamicFieldFixture = structuredClone(candidate);
 delete missingDynamicFieldFixture.weapons['armament.breaker'].incomingDamageMultiplier;
 if (executableContractDigest(missingDynamicFieldFixture) === expectedExecutableContractDigest) fail('negative fixture did not reject a missing dynamic-collection field');
@@ -494,28 +496,126 @@ const inspectNumericLeaves = (value, path = '$', requireNonnegative = false) => 
 };
 inspectNumericLeaves(candidate);
 
-const dependencyPaths = [
+const rawDependencyPaths = [
+  'simulation/candidate.schema.json',
+  'simulation/executable-seal.schema.json',
+  'simulation/validate-candidate.mjs',
+  'simulation/validate-executable-seal.mjs'
+];
+const declaredRawDependencies = candidate.sourceDependencyDigests?.rawFiles ?? {};
+if (!sameJson(exactSortedKeys(declaredRawDependencies), [...rawDependencyPaths].sort())) fail('raw executable dependency file set must be exact');
+for (const dependencyPath of rawDependencyPaths) {
+  const declaredDigest = declaredRawDependencies[dependencyPath];
+  if (typeof declaredDigest !== 'string' || !/^[0-9a-f]{64}$/.test(declaredDigest)) {
+    fail(`raw executable dependency digest is not lowercase raw-byte SHA-256: ${dependencyPath}`);
+    continue;
+  }
+  const actualDigest = sha256(readFileSync(resolve(root, dependencyPath)));
+  if (declaredDigest !== actualDigest) fail(`raw executable dependency digest mismatch: ${dependencyPath}`);
+}
+const expectedExecutableSealFields = [
+  'schemaVersion',
+  'candidateRawSha256',
+  'candidateNormalizedExecutableSha256',
+  'simulatorSourceTreeSha256',
+  'simulatorSourceFileCount',
+  'runPlanRawSha256',
+  'resultSchemaRawSha256',
+  'resultValidatorRawSha256',
+  'nodeVersion',
+  'step2RawDatasetSha256',
+  'step2SummarySha256',
+  'step2AcceptanceSha256',
+  'step2Verdict'
+];
+const executableSealContract = candidate.manifestChangePolicy.step2ToStep3ExecutableSealContract;
+if (executableSealContract.path !== 'simulation/results/step-2/executable-seal.json'
+  || executableSealContract.schemaPath !== 'simulation/executable-seal.schema.json'
+  || executableSealContract.validatorPath !== 'simulation/validate-executable-seal.mjs'
+  || !sameJson(executableSealContract.requiredFields, expectedExecutableSealFields)) fail('Step 2 executable seal paths or strict field set differ from the sealed contract');
+const sourceTreeContract = executableSealContract.sourceTreeContract;
+if (sourceTreeContract.sourceListLocation !== 'simulation/run-plan.json#/simulatorSourceFiles'
+  || !sameJson(sourceTreeContract.fixedSourceRoots, ['simulation/engine'])
+  || sourceTreeContract.sourcePathPattern !== '^[A-Za-z0-9._/-]+$'
+  || sourceTreeContract.treeDigestAlgorithm !== 'sha256-utf8-json-stringify-array-of-path-and-raw-sha256'
+  || !sourceTreeContract.coverageRule.includes('require exact set equality with simulatorSourceFiles')
+  || !sourceTreeContract.moduleLoadingRule.includes('dynamic import with a computed specifier')
+  || !sourceTreeContract.externalLocalInputRule.includes('result validation code and every helper it imports live under fixedSourceRoots')
+  || !sourceTreeContract.holdoutSimulatorDigestRule.includes("simulatorRawSha256 equals this seal's simulatorSourceTreeSha256 exactly")) fail('simulator source-tree or holdout digest identity contract differs from the sealed rule');
+const sourceTreeDigestFixture = (entries) => {
+  const errors = [];
+  const seen = new Set();
+  let previousPath = null;
+  for (const [path, digest] of entries) {
+    if (!/^[A-Za-z0-9._/-]+$/.test(path)
+      || path.startsWith('/')
+      || !path.startsWith('simulation/engine/')
+      || path.includes('\\')
+      || path.split('/').some((segment) => segment === '' || segment === '.' || segment === '..')
+      || path.startsWith('simulation/results/')) errors.push('invalid-path');
+    if (seen.has(path)) errors.push('duplicate-path');
+    if (previousPath !== null && !(Buffer.compare(Buffer.from(previousPath), Buffer.from(path)) < 0)) errors.push('unsorted-path');
+    if (!/^[0-9a-f]{64}$/.test(digest)) errors.push('invalid-digest');
+    seen.add(path);
+    previousPath = path;
+  }
+  if (entries.length === 0) errors.push('empty-source-tree');
+  return {errors, digest: sha256(Buffer.from(JSON.stringify(entries), 'utf8'))};
+};
+const sourceEntryA = ['simulation/engine/a.mjs', '1'.repeat(64)];
+const sourceEntryB = ['simulation/engine/b.mjs', '2'.repeat(64)];
+const validSourceTree = sourceTreeDigestFixture([sourceEntryA, sourceEntryB]);
+const sourceTreeCoverageFixture = (actualEntries, declaredEntries) => {
+  const actualPaths = actualEntries.filter((entry) => entry.kind === 'regular' && !entry.symlink).map((entry) => entry.path).sort();
+  if (actualEntries.some((entry) => entry.symlink || entry.kind !== 'regular')) return false;
+  return sameJson(actualPaths, [...declaredEntries].sort());
+};
+if (validSourceTree.errors.length !== 0
+  || validSourceTree.digest !== sha256(Buffer.from(JSON.stringify([sourceEntryA, sourceEntryB]), 'utf8'))
+  || sourceTreeDigestFixture([sourceEntryB, sourceEntryA]).errors.length === 0
+  || sourceTreeDigestFixture([['simulation/engine/../escape.mjs', '1'.repeat(64)]]).errors.length === 0
+  || sourceTreeDigestFixture([sourceEntryA, sourceEntryA]).errors.length === 0
+  || sourceTreeDigestFixture([]).errors.length === 0
+  || sourceTreeDigestFixture([sourceEntryA, ['simulation/engine/b.mjs', '3'.repeat(64)]]).digest === validSourceTree.digest
+  || !sourceTreeCoverageFixture([{path: sourceEntryA[0], kind: 'regular', symlink: false}, {path: sourceEntryB[0], kind: 'regular', symlink: false}], [sourceEntryA[0], sourceEntryB[0]])
+  || sourceTreeCoverageFixture([{path: sourceEntryA[0], kind: 'regular', symlink: false}, {path: sourceEntryB[0], kind: 'regular', symlink: false}], [sourceEntryA[0]])
+  || sourceTreeCoverageFixture([{path: sourceEntryA[0], kind: 'regular', symlink: true}], [sourceEntryA[0]])) fail('simulator source-tree fixtures do not uniquely bind paths, ordering, coverage and raw-byte digests');
+const expectedSourceSpecs = [
   'MASTER_SPEC.md',
   'FLOORS_1_10_DESIGN.md',
   'PROJECT_STATUS.json',
   'quality-reviews/step-1-canonical-design/acceptance.json',
   'quality-reviews/step-1-canonical-design/acceptance-round-002.json',
-  'quality-reviews/step-1-canonical-design/acceptance-round-003.json',
-  'simulation/candidate.schema.json',
-  'simulation/validate-candidate.mjs'
+  'quality-reviews/step-1-canonical-design/acceptance-round-003.json'
 ];
-const declaredDependencies = candidate.sourceDependencyDigests?.files ?? {};
-if (!sameJson(exactSortedKeys(declaredDependencies), [...dependencyPaths].sort())) fail('source dependency file set must be exact');
-for (const dependencyPath of dependencyPaths) {
-  const declaredDigest = declaredDependencies[dependencyPath];
-  if (typeof declaredDigest !== 'string' || !/^[0-9a-f]{64}$/.test(declaredDigest)) {
-    fail(`source dependency digest is not lowercase raw-byte SHA-256: ${dependencyPath}`);
-    continue;
-  }
-  const actualDigest = sha256(readFileSync(resolve(root, dependencyPath)));
-  if (declaredDigest !== actualDigest) fail(`source dependency digest mismatch: ${dependencyPath}`);
-}
-if (!sameJson(candidate.sourceSpecs, dependencyPaths.slice(0, 6))) fail('sourceSpecs must be the exact canonical product and transitive acceptance sources');
+if (!sameJson(candidate.sourceSpecs, expectedSourceSpecs)) fail('sourceSpecs must be the exact canonical product and transitive acceptance provenance sources');
+const expectedWorkflowMirrors = [
+  'MASTER_SPEC.md',
+  'FLOORS_1_10_DESIGN.md',
+  'PROJECT_STATUS.json outside selectedTopLevelKeys',
+  'quality-reviews/step-1-canonical-design/acceptance.json',
+  'quality-reviews/step-1-canonical-design/acceptance-round-002.json',
+  'quality-reviews/step-1-canonical-design/acceptance-round-003.json',
+  'QUALITY_GATE.md',
+  'AGENTS.md',
+  'PROJECT_HANDOVER.md',
+  'README.md',
+  'simulation/INPUT_CONTRACT.md'
+];
+if (!sameJson(candidate.sourceDependencyDigests.workflowMirrorsExcludedFromBalanceResultInvalidation, expectedWorkflowMirrors)) fail('workflow-mirror exclusion set differs from the sealed one-way dependency boundary');
+const statusSelectionContract = candidate.sourceDependencyDigests?.jsonSelections?.['PROJECT_STATUS.json'];
+const expectedStatusSelectionKeys = ['canonicalScreens', 'stableIdMigrationAliases', 'stableIdRegistry'];
+if (!sameJson(exactSortedKeys(candidate.sourceDependencyDigests?.jsonSelections ?? {}), ['PROJECT_STATUS.json'])) fail('canonical JSON selection dependency file set must be exact');
+if (!sameJson(statusSelectionContract?.selectedTopLevelKeys, expectedStatusSelectionKeys)) fail('PROJECT_STATUS semantic selection keys differ from the sealed set');
+const selectStatusSemantics = (source) => Object.fromEntries(expectedStatusSelectionKeys.map((key) => [key, source[key]]));
+const statusSelectionDigest = sha256(Buffer.from(JSON.stringify(selectStatusSemantics(status))));
+if (statusSelectionContract?.digest !== statusSelectionDigest) fail('PROJECT_STATUS selected semantic digest mismatch');
+const workflowStatusFixture = structuredClone(status);
+workflowStatusFixture.currentCanonicalization.status = workflowStatusFixture.currentCanonicalization.status === 'PASS' ? 'IN_PROGRESS' : 'PASS';
+if (sha256(Buffer.from(JSON.stringify(selectStatusSemantics(workflowStatusFixture)))) !== statusSelectionDigest) fail('workflow status mutation unexpectedly changed the selected semantic registry digest');
+const semanticStatusFixture = structuredClone(status);
+semanticStatusFixture.canonicalScreens[0].id = 'S00';
+if (sha256(Buffer.from(JSON.stringify(selectStatusSemantics(semanticStatusFixture)))) === statusSelectionDigest) fail('selected semantic registry mutation did not invalidate its digest');
 
 if (new Set(candidate.fixedProductContractPointers ?? []).size !== (candidate.fixedProductContractPointers ?? []).length) fail('fixed product contract pointers must be unique');
 for (const pointer of candidate.fixedProductContractPointers ?? []) {
@@ -537,7 +637,7 @@ for (const pointer of candidate.fixedProductContractPointers ?? []) {
 for (const key of schema.required) {
   if (!Object.hasOwn(candidate, key)) fail(`missing top-level field: ${key}`);
 }
-if (candidate.schemaVersion !== 2) fail('schemaVersion must equal 2');
+if (candidate.schemaVersion !== 4) fail('schemaVersion must equal 4');
 if (candidate.status !== 'SIMULATION_CANDIDATE') fail('status must remain SIMULATION_CANDIDATE before Step 2 and Step 3 pass');
 if (candidate.offline.capSeconds !== 86400) fail('offline cap must equal 86400 seconds');
 if (!candidate.stopPolicy.economyTransactionCountingRule.includes('do not count it') || !candidate.stopPolicy.economyTransactionCountingRule.includes('It never triggers a purchase by itself')) fail('live-income fixed steps must not exhaust the bounded economy-transaction counter');
@@ -2135,8 +2235,223 @@ if (new Set(rewardEntries.map((entry) => entry.id)).size !== 33) fail('Dawn rewa
 if (rewardEntries.reduce((sum, entry) => sum + entry.shards, 0) !== 43) fail('Dawn reward ledger must total 43 shards');
 
 const [holdoutStart, holdoutEnd] = candidate.seedPolicy.holdoutCommonSeedsInclusive;
+const [calibrationStart, calibrationEnd] = candidate.seedPolicy.calibrationSeedsInclusive;
 if (holdoutStart !== 100000 || holdoutEnd !== 100999 || holdoutEnd - holdoutStart + 1 !== 1000) fail('holdout seed range must be paired 100000-100999');
+if (!(calibrationEnd < holdoutStart || holdoutEnd < calibrationStart)) fail('holdout seed range intersects calibration seeds');
+if (!candidate.seedPolicy.preHoldoutDiagnosticSeedRule.includes('every seeded scenario, fixture, probe and diagnostic must use only calibrationSeedsInclusive')
+  || !candidate.seedPolicy.holdoutRangeDisjointRule.includes('regardless of bankId')) fail('pre-holdout diagnostic or disjoint-range rule differs from the sealed contract');
 if (!candidate.seedPolicy.commonRandomNumbersAcrossBuilds) fail('holdout builds must use common random numbers');
+if (candidate.seedPolicy.holdoutSeedsMayTuneManifest !== false) fail('holdout seeds may not tune the manifest');
+const expectedHoldoutReusePolicy = {
+  bankId: 'holdout-bank-001',
+  seedRangePath: '$.seedPolicy.holdoutCommonSeedsInclusive',
+  observationDefinition: 'the bank becomes observed when any seed-level result, aggregate statistic, acceptance verdict or diagnostic derived from one or more bank seeds is materialized outside the running process',
+  observationMakesBankSpent: true,
+  sameDigestRerunPurposes: ['byte-equivalence', 'no-output-infrastructure-recovery'],
+  singleConsumptionSessionMayContinueAfterBankBecomesSpent: true,
+  candidateMutationInsideConsumptionSessionAllowed: false,
+  firstValidAcceptanceVerdictIsAuthoritative: true,
+  acceptanceVerdictValidityRule: 'a verdict is valid only when one immutable candidate raw digest and one immutable simulator raw digest produced the exact 3000 expected build-by-seed scenario identities, every seed-level record passes the sealed result schema with no missing or duplicate identity, aggregate values are independently recomputed from that exact raw dataset, and one acceptance record containing the dataset, summary and verdict digests is finalized exactly once',
+  observedBankMayTuneManifest: false,
+  changedCandidateMayReuseSpentBankForPromotion: false,
+  failureAction: 'return-to-step-1-with-disjoint-unobserved-bank-and-rerun-step-2-before-step-3',
+  partialMaterializationWithoutValidVerdictAction: 'mark-bank-spent-and-return-to-step-1-with-disjoint-unobserved-bank-and-rerun-step-2-before-step-3',
+  spentBankUse: 'diagnostic-only-never-promotion',
+  expectedScenarioIdentityContract: {
+    buildOrderPath: '$.seedPolicy.holdoutBuilds',
+    seedRangePath: '$.seedPolicy.holdoutCommonSeedsInclusive',
+    identityFieldOrder: ['build', 'seed'],
+    enumerationRule: 'enumerate every build in holdoutBuilds order and, within each build, every integer seed from the inclusive start through end in ascending order, producing exactly the object {build,seed} with fields in identityFieldOrder and no other field',
+    preimageRule: 'UTF-8 JSON.stringify of the exact 3000-element identity array with no whitespace, BOM or trailing LF',
+    digestAlgorithm: 'sha256-utf8-json-stringify-identity-array',
+    expectedDigestForCurrentBank: '78700a7b086ce1e8e2edbbfb99cb2ea2fc7f8ab66f7419eaf37d4506849a11c6'
+  },
+  lifecycleLedgerContract: {
+    path: 'simulation/results/step-3/holdout-bank-ledger.jsonl',
+    format: 'append-only-one-strict-json-object-per-line',
+    bankIdentityFields: ['bankId', 'seedStartInclusive', 'seedEndInclusive'],
+    recordTypes: ['CONSUMPTION_STARTED', 'NO_OUTPUT_INFRASTRUCTURE_FAILURE', 'OUTPUT_OBSERVED', 'VERDICT_FINALIZED'],
+    hashAlgorithm: 'sha256-utf8-canonical-payload-lowercase-hex',
+    sequenceStartsAt: 1,
+    sequenceIncrement: 1,
+    genesisPreviousRecordSha256: '0'.repeat(64),
+    emptyLedgerRevisionSha256: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+    canonicalPayloadFieldOrder: ['sequence', 'type', 'attemptId', 'bankId', 'seedStartInclusive', 'seedEndInclusive', 'candidateRawSha256', 'simulatorRawSha256', 'step2ExecutableSealRawSha256', 'expectedScenarioIdentitySha256', 'expectedScenarioCount', 'exposedDerivedOutputCount', 'failureCode', 'firstOutputKind', 'rawDatasetSha256', 'summarySha256', 'acceptanceSha256', 'verdict', 'eventAt', 'previousRecordSha256'],
+    recordContracts: {
+      CONSUMPTION_STARTED: {exactFields: ['sequence', 'type', 'attemptId', 'bankId', 'seedStartInclusive', 'seedEndInclusive', 'candidateRawSha256', 'simulatorRawSha256', 'step2ExecutableSealRawSha256', 'expectedScenarioIdentitySha256', 'expectedScenarioCount', 'eventAt', 'previousRecordSha256', 'recordSha256']},
+      NO_OUTPUT_INFRASTRUCTURE_FAILURE: {exactFields: ['sequence', 'type', 'attemptId', 'bankId', 'seedStartInclusive', 'seedEndInclusive', 'candidateRawSha256', 'simulatorRawSha256', 'step2ExecutableSealRawSha256', 'exposedDerivedOutputCount', 'failureCode', 'eventAt', 'previousRecordSha256', 'recordSha256']},
+      OUTPUT_OBSERVED: {exactFields: ['sequence', 'type', 'attemptId', 'bankId', 'seedStartInclusive', 'seedEndInclusive', 'candidateRawSha256', 'simulatorRawSha256', 'step2ExecutableSealRawSha256', 'exposedDerivedOutputCount', 'firstOutputKind', 'eventAt', 'previousRecordSha256', 'recordSha256']},
+      VERDICT_FINALIZED: {exactFields: ['sequence', 'type', 'attemptId', 'bankId', 'seedStartInclusive', 'seedEndInclusive', 'candidateRawSha256', 'simulatorRawSha256', 'step2ExecutableSealRawSha256', 'rawDatasetSha256', 'summarySha256', 'acceptanceSha256', 'verdict', 'eventAt', 'previousRecordSha256', 'recordSha256']}
+    },
+    valueDomainRule: 'sequence, seed bounds, expectedScenarioCount and exposedDerivedOutputCount are safe nonnegative integers; every Sha256 field is 64 lowercase hexadecimal characters; attemptId matches ^holdout-bank-[0-9]{3}-attempt-[0-9]{6}$; eventAt is canonical UTC YYYY-MM-DDTHH:mm:ss.sssZ; failureCode is infrastructure-zero-derived-output; firstOutputKind is one of seed-record, aggregate, diagnostic or verdict; verdict is PASS or FAIL; bank identity, candidate digest, simulator digest and Step 2 seal digest remain byte-identical throughout one attempt',
+    canonicalizationRule: "select the record type's exactFields except recordSha256, require those fields and no others, then create a new object by taking present names in canonicalPayloadFieldOrder order; encode exactly UTF-8 JSON.stringify of that object with no whitespace, BOM or trailing LF; all strings are already restricted by valueDomainRule so no implementation-specific normalization is allowed",
+    recordHashPayloadRule: 'recordSha256 is excluded from its own payload and equals lowercase SHA-256 of the exact canonical payload bytes; previousRecordSha256 remains included in that payload',
+    physicalLineRule: 'the physical record is UTF-8 JSON.stringify of a new object containing the canonical payload fields in order followed by recordSha256 as the final field, then exactly one LF; blank lines, CR, BOM, duplicate keys, alternate key order, whitespace and an unterminated last line are invalid',
+    previousLinkRule: 'the first record has sequence=1 and previousRecordSha256=genesisPreviousRecordSha256; each later record has sequence exactly prior sequence+1 and previousRecordSha256 exactly equal to the immediately prior record\'s recordSha256, never a raw-line digest',
+    ledgerRevisionRule: 'the compare-and-append revision is lowercase SHA-256 of all current raw ledger bytes; an absent or zero-byte ledger has emptyLedgerRevisionSha256; an append must atomically compare the previously read revision and replace it with exactly prior bytes plus one validated physicalLineRule record',
+    concurrencyRule: 'preflight and the CONSUMPTION_STARTED append form one exclusive compare-and-append transaction using ledgerRevisionRule; a concurrent start or revision mismatch fails before any holdout draw',
+    preflightRule: 'before the first holdout draw, validate every historical record and scan the entire ledger across all bank IDs; reject if the requested inclusive seed range intersects any range with OUTPUT_OBSERVED or VERDICT_FINALIZED, intersects any unresolved CONSUMPTION_STARTED range, reassigns a historical bankId to different bounds, or assigns any historical bounds to another bankId; allow retry of the exact same bank identity only after its matching NO_OUTPUT_INFRASTRUCTURE_FAILURE proves zero derived outputs were exposed and candidateRawSha256, simulatorRawSha256 and step2ExecutableSealRawSha256 are unchanged; adjacent non-overlapping ranges are disjoint and allowed',
+    startRule: 'append CONSUMPTION_STARTED before the first holdout draw with its exact record contract; candidateRawSha256 equals the preflighted candidate raw digest, simulatorRawSha256 equals the Step 2 executable seal simulatorSourceTreeSha256, step2ExecutableSealRawSha256 equals the raw seal file digest, expectedScenarioIdentitySha256 follows expectedScenarioIdentityContract, expectedScenarioCount=3000 and eventAt is the append timestamp; the candidate is immutable for the entire attempt',
+    observationRule: 'append exactly one OUTPUT_OBSERVED atomically no later than the first external materialization of any seed-derived value with exposedDerivedOutputCount>=1; that record spends the entire bank while allowing only the same registered consumption session to finish',
+    verdictRule: 'append exactly one VERDICT_FINALIZED after strict validation of all 3000 identities and independent aggregate recomputation, recording rawDatasetSha256, summarySha256, acceptanceSha256 and verdict',
+    crashRule: 'after OUTPUT_OBSERVED, any crash, partial dataset, invalid dataset or missing valid verdict permanently bars that bank from promotion and invokes partialMaterializationWithoutValidVerdictAction',
+    tamperRule: 'deletion, rewrite, truncation, broken sequence or hash link, duplicate record type within an attempt, duplicate finalization, bankId reassignment, overlapping observed or unresolved seed range, identity mismatch or non-append mutation is a fatal acceptance failure'
+  }
+};
+if (!sameJson(candidate.seedPolicy.holdoutReusePolicy, expectedHoldoutReusePolicy)) fail('holdout bank reuse policy differs from the sealed one-use contract');
+const spentBankMutationFixture = structuredClone(candidate);
+spentBankMutationFixture.seedPolicy.holdoutReusePolicy.changedCandidateMayReuseSpentBankForPromotion = true;
+if (executableContractDigest(spentBankMutationFixture) === expectedExecutableContractDigest) fail('negative fixture did not reject spent holdout-bank reuse');
+const ledgerContract = candidate.seedPolicy.holdoutReusePolicy.lifecycleLedgerContract;
+const canonicalLedgerPayload = (record) => {
+  const exactFields = ledgerContract.recordContracts[record.type]?.exactFields;
+  if (!exactFields || !sameJson(Object.keys(record), exactFields)) return null;
+  const payload = {};
+  for (const field of ledgerContract.canonicalPayloadFieldOrder) if (field !== 'recordSha256' && Object.hasOwn(record, field)) payload[field] = record[field];
+  return payload;
+};
+const ledgerRecordErrors = (record, index, previousRecord) => {
+  const errors = [];
+  const payload = canonicalLedgerPayload(record);
+  if (!payload) return ['field-set-or-order'];
+  if (record.sequence !== index + ledgerContract.sequenceStartsAt) errors.push('sequence');
+  const expectedPrevious = previousRecord?.recordSha256 ?? ledgerContract.genesisPreviousRecordSha256;
+  if (record.previousRecordSha256 !== expectedPrevious) errors.push('previous-link');
+  if (record.recordSha256 !== sha256(Buffer.from(JSON.stringify(payload), 'utf8'))) errors.push('record-hash');
+  if (!/^holdout-bank-[0-9]{3}-attempt-[0-9]{6}$/.test(record.attemptId)) errors.push('attempt-id');
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(record.eventAt)) errors.push('event-at');
+  for (const [key, value] of Object.entries(record)) if (key.endsWith('Sha256') && !/^[0-9a-f]{64}$/.test(value)) errors.push('digest');
+  if (record.type === 'CONSUMPTION_STARTED' && record.expectedScenarioCount !== 3000) errors.push('scenario-count');
+  if (record.type === 'NO_OUTPUT_INFRASTRUCTURE_FAILURE' && (record.exposedDerivedOutputCount !== 0 || record.failureCode !== 'infrastructure-zero-derived-output')) errors.push('invalid-zero-output-failure');
+  if (record.type === 'OUTPUT_OBSERVED' && (!(record.exposedDerivedOutputCount >= 1) || !['seed-record', 'aggregate', 'diagnostic', 'verdict'].includes(record.firstOutputKind))) errors.push('invalid-observation');
+  if (record.type === 'VERDICT_FINALIZED' && !['PASS', 'FAIL'].includes(record.verdict)) errors.push('invalid-verdict');
+  return errors;
+};
+const ledgerPhysicalLine = (record) => `${JSON.stringify(record)}\n`;
+const ledgerLifecycleErrors = (records) => {
+  const errors = [];
+  const attempts = new Map();
+  for (const record of records) {
+    if (record.type === 'CONSUMPTION_STARTED') {
+      if (attempts.has(record.attemptId)) {
+        errors.push('duplicate-start');
+        continue;
+      }
+      attempts.set(record.attemptId, {state: 'started', seenTypes: new Set([record.type]), identity: [record.bankId, record.seedStartInclusive, record.seedEndInclusive, record.candidateRawSha256, record.simulatorRawSha256, record.step2ExecutableSealRawSha256]});
+      continue;
+    }
+    const attempt = attempts.get(record.attemptId);
+    if (!attempt) {
+      errors.push('event-before-start');
+      continue;
+    }
+    const identity = [record.bankId, record.seedStartInclusive, record.seedEndInclusive, record.candidateRawSha256, record.simulatorRawSha256, record.step2ExecutableSealRawSha256];
+    if (!sameJson(identity, attempt.identity)) errors.push('attempt-identity-drift');
+    if (attempt.seenTypes.has(record.type)) errors.push('duplicate-record-type');
+    attempt.seenTypes.add(record.type);
+    if (record.type === 'NO_OUTPUT_INFRASTRUCTURE_FAILURE') {
+      if (attempt.state !== 'started') errors.push('invalid-zero-output-transition');
+      attempt.state = 'closed-zero-output';
+    } else if (record.type === 'OUTPUT_OBSERVED') {
+      if (attempt.state !== 'started') errors.push('invalid-observation-transition');
+      attempt.state = 'observed';
+    } else if (record.type === 'VERDICT_FINALIZED') {
+      if (attempt.state !== 'observed') errors.push('invalid-verdict-transition');
+      attempt.state = 'finalized';
+    }
+  }
+  return errors;
+};
+const validateLedgerBytesFixture = (bytes) => {
+  if (bytes.length === 0) return [];
+  if (!bytes.endsWith('\n') || bytes.includes('\r') || bytes.startsWith('\uFEFF')) return ['physical-format'];
+  const lines = bytes.slice(0, -1).split('\n');
+  const errors = [];
+  const records = [];
+  let previous = null;
+  lines.forEach((line, index) => {
+    let record;
+    try { record = JSON.parse(line); } catch { errors.push('json'); return; }
+    if (ledgerPhysicalLine(record) !== `${line}\n`) errors.push('noncanonical-line');
+    errors.push(...ledgerRecordErrors(record, index, previous));
+    records.push(record);
+    previous = record;
+  });
+  errors.push(...ledgerLifecycleErrors(records));
+  return errors;
+};
+const baseLedgerFields = {
+  attemptId: 'holdout-bank-001-attempt-000001',
+  bankId: 'holdout-bank-001',
+  seedStartInclusive: 100000,
+  seedEndInclusive: 100999,
+  candidateRawSha256: '1'.repeat(64),
+  simulatorRawSha256: '2'.repeat(64),
+  step2ExecutableSealRawSha256: '3'.repeat(64)
+};
+const makeLedgerRecord = (type, sequence, previousRecord, typeFields) => {
+  const unordered = {...baseLedgerFields, ...typeFields, sequence, type, eventAt: `2026-08-25T00:00:0${sequence}.000Z`, previousRecordSha256: previousRecord?.recordSha256 ?? '0'.repeat(64)};
+  const payload = {};
+  for (const field of ledgerContract.canonicalPayloadFieldOrder) if (Object.hasOwn(unordered, field)) payload[field] = unordered[field];
+  const record = {...payload, recordSha256: sha256(Buffer.from(JSON.stringify(payload), 'utf8'))};
+  return record;
+};
+const chainStart = makeLedgerRecord('CONSUMPTION_STARTED', 1, null, {expectedScenarioIdentitySha256: '4'.repeat(64), expectedScenarioCount: 3000});
+const chainObserved = makeLedgerRecord('OUTPUT_OBSERVED', 2, chainStart, {exposedDerivedOutputCount: 1, firstOutputKind: 'seed-record'});
+const chainFinal = makeLedgerRecord('VERDICT_FINALIZED', 3, chainObserved, {rawDatasetSha256: '5'.repeat(64), summarySha256: '6'.repeat(64), acceptanceSha256: '7'.repeat(64), verdict: 'PASS'});
+const chainNoOutput = makeLedgerRecord('NO_OUTPUT_INFRASTRUCTURE_FAILURE', 2, chainStart, {exposedDerivedOutputCount: 0, failureCode: 'infrastructure-zero-derived-output'});
+const validLedgerBytes = ledgerPhysicalLine(chainStart) + ledgerPhysicalLine(chainObserved) + ledgerPhysicalLine(chainFinal);
+const validZeroOutputLedgerBytes = ledgerPhysicalLine(chainStart) + ledgerPhysicalLine(chainNoOutput);
+const sequenceGap = structuredClone(chainObserved);
+sequenceGap.sequence = 3;
+const wrongPrevious = structuredClone(chainObserved);
+wrongPrevious.previousRecordSha256 = '9'.repeat(64);
+const payloadTamper = structuredClone(chainObserved);
+payloadTamper.exposedDerivedOutputCount = 2;
+const unknownField = {...chainObserved, unknown: true};
+const duplicateJsonKeyLine = ledgerPhysicalLine(chainStart) + `{"sequence":2,"sequence":2}\n`;
+if (validateLedgerBytesFixture(validLedgerBytes).length !== 0
+  || validateLedgerBytesFixture(validZeroOutputLedgerBytes).length !== 0
+  || ledgerRecordErrors(sequenceGap, 1, chainStart).length === 0
+  || ledgerRecordErrors(wrongPrevious, 1, chainStart).length === 0
+  || ledgerRecordErrors(payloadTamper, 1, chainStart).length === 0
+  || ledgerRecordErrors(unknownField, 1, chainStart).length === 0
+  || ledgerLifecycleErrors([chainStart, chainObserved, chainObserved]).length === 0
+  || ledgerLifecycleErrors([chainStart, chainFinal]).length === 0
+  || ledgerLifecycleErrors([chainStart, chainNoOutput, chainObserved]).length === 0
+  || validateLedgerBytesFixture(duplicateJsonKeyLine).length === 0
+  || validateLedgerBytesFixture(validLedgerBytes.slice(0, -1)).length === 0) fail('holdout ledger canonical bytes, sequence, hash link or tamper fixtures are not strict');
+const rangesIntersect = (left, right) => left[0] <= right[1] && right[0] <= left[1];
+const holdoutPreflightFixture = (history, request) => {
+  if (rangesIntersect([calibrationStart, calibrationEnd], request.range)) return false;
+  const sameBankRecords = history.filter((entry) => entry.bankId === request.bankId);
+  if (sameBankRecords.some((entry) => !sameJson(entry.range, request.range))) return false;
+  for (const entry of history) {
+    if (!rangesIntersect(entry.range, request.range)) continue;
+    if (entry.state === 'observed' || entry.state === 'finalized' || entry.state === 'unresolved') return false;
+    if (entry.state === 'zero-output-failure' && (entry.bankId !== request.bankId || !sameJson(entry.range, request.range)
+      || entry.candidateRawSha256 !== request.candidateRawSha256 || entry.simulatorRawSha256 !== request.simulatorRawSha256
+      || entry.step2ExecutableSealRawSha256 !== request.step2ExecutableSealRawSha256)) return false;
+  }
+  return true;
+};
+const requestBank1 = {bankId: 'holdout-bank-001', range: [100000, 100999], candidateRawSha256: '1', simulatorRawSha256: '2', step2ExecutableSealRawSha256: '3'};
+const spentHistory = [{...requestBank1, state: 'finalized'}];
+const failedHistory = [{...requestBank1, state: 'zero-output-failure'}];
+if (holdoutPreflightFixture(spentHistory, {...requestBank1, bankId: 'holdout-bank-002'})
+  || holdoutPreflightFixture(spentHistory, {...requestBank1, bankId: 'holdout-bank-002', range: [100999, 101998]})
+  || !holdoutPreflightFixture(spentHistory, {...requestBank1, bankId: 'holdout-bank-002', range: [101000, 101999]})
+  || holdoutPreflightFixture([{...requestBank1, state: 'unresolved'}], {...requestBank1, bankId: 'holdout-bank-002'})
+  || holdoutPreflightFixture(failedHistory, {...requestBank1, simulatorRawSha256: 'changed'})
+  || !holdoutPreflightFixture(failedHistory, requestBank1)
+  || holdoutPreflightFixture([], {...requestBank1, bankId: 'holdout-bank-002', range: [200, 1199]})) fail('holdout preflight permits calibration, spent, overlapping, reassigned or mismatched zero-output seed reuse');
+const expectedScenarioIdentities = candidate.seedPolicy.holdoutBuilds.flatMap((build) => Array.from(
+  {length: holdoutEnd - holdoutStart + 1},
+  (_, index) => ({build, seed: holdoutStart + index})
+));
+const expectedScenarioIdentitySha256 = sha256(Buffer.from(JSON.stringify(expectedScenarioIdentities), 'utf8'));
+if (expectedScenarioIdentities.length !== 3000
+  || expectedScenarioIdentitySha256 !== candidate.seedPolicy.holdoutReusePolicy.expectedScenarioIdentityContract.expectedDigestForCurrentBank) fail('holdout expected scenario identity digest is not the exact paired 3000-scenario set');
 
 const uFor = (floor, rewardingDawns) => {
   if (floor === 0) return 0;
@@ -2223,12 +2538,13 @@ if (!candidate.dawn.decisionPolicy.manualComparisonCheckpoint.includes('never ex
 
 const digest = createHash('sha256').update(candidateBytes).digest('hex');
 if (failures.length) {
-  console.error(JSON.stringify({ verdict: 'FAIL', digest, failures }, null, 2));
+  console.error(JSON.stringify({ verdict: 'FAIL', digest, normalizedExecutableDigest: actualExecutableContractDigest, failures }, null, 2));
   process.exit(1);
 }
 console.log(JSON.stringify({
   verdict: 'PASS',
   candidateId: candidate.candidateId,
   digest,
+  normalizedExecutableDigest: actualExecutableContractDigest,
   counts: { cats: 12, districts: 10, shops: 10, relics: 3, dawnRewardIds: 33, holdoutPerBuild: 1000 }
 }, null, 2));

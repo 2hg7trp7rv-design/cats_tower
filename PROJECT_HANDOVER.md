@@ -22,7 +22,7 @@ Canonical branch: `kimi`
 
 ただし、100F分の素材やデータを一括生成しない。最初に1〜10Fを完全な商品スライスとして作り、実移動、接敵、複数敵、ショップ選択、猫解放、塔スクロール、夜明け、保存、物理iPhone QAを合格させる。今回承認された6工程の実装対象は1〜10Fだけであり、11F以降の制作は現在の許可に含まれない。
 
-工程1A・V0.8.2 deployed browser-runtime source + deployment-input byte checkpointはRound 7 completion sealまで合格し、`PASS`である。6工程中のStep 1「修正版の正本仕様固定」も、`quality-reviews/step-1-canonical-design/acceptance-round-003.json`の条件、3者独立反証、機械封印に合格し`PASS`となった。完成証跡は`acceptance-round-004.json`であり、Round 1・2の不合格記録は上書きしない。この工程でのゲームruntime変更は0件である。
+工程1A・V0.8.2 deployed browser-runtime source + deployment-input byte checkpointはRound 7 completion sealまで合格し、`PASS`である。6工程中のStep 1「修正版の正本仕様固定」も、`quality-reviews/step-1-canonical-design/acceptance-round-003.json`の条件、3者独立反証、機械封印に合格し`PASS`となった。完成証跡は`acceptance-round-005.json`である。Round 4で見逃した`QUALITY_GATE.md`の状態矛盾と観測済みholdoutの再利用余地をRound 5で是正し、Round 1・2の不合格記録とRound 4を上書きせず履歴として残す。この工程でのゲームruntime変更は0件である。
 
 ## 2. 文書の権限
 
@@ -34,7 +34,7 @@ Canonical branch: `kimi`
 | 1〜10Fの階別・敵別・施設別詳細 | `FLOORS_1_10_DESIGN.md` | `MASTER_SPEC.md`へ従う下位正本。競合時は停止 |
 | 安定IDと読取専用alias | `PROJECT_STATUS.json.stableIdRegistry` / `stableIdMigrationAliases` | 本文のID表は説明用参照 |
 | S01〜S09と各required stateの完全な集合 | `PROJECT_STATUS.json.canonicalScreens` | 他文書の画面表は要約であり、状態を削れない |
-| 工程1の合否条件・完成証跡 | `quality-reviews/step-1-canonical-design/acceptance-round-003.json` / `acceptance-round-004.json` | Round 1・2は不合格履歴 |
+| 工程1の合否条件・完成証跡 | `quality-reviews/step-1-canonical-design/acceptance-round-003.json` / `acceptance-round-005.json` | Round 1・2は不合格履歴、Round 4は是正前履歴 |
 | 工程2・3の数値・式・実行入力 | `simulation/candidate-v1.json` | schemaとvalidatorに合格した同一digestだけを使用 |
 | candidateの構造・事前検査 | `simulation/candidate.schema.json` / `simulation/validate-candidate.mjs` | 未検証入力でsimulationを開始しない |
 | QA gateと端末判定 | `QUALITY_GATE.md` | 物理iPhoneは工程6だけが判定可能 |
@@ -294,7 +294,7 @@ Gate B前の総量上限は、名前付き猫2、一時増援1、通常敵2、�
 
 ## 16. 次に行うこと
 
-次は全100Fの購入・戦闘・夜明け・24時間放置シミュレーションを開始する。実行前に`simulation/validate-candidate.mjs`を通し、同一digestの`simulation/candidate-v1.json`だけを使用する。工程2の合格前に3ビルド各1,000パターン検証へ進まない。
+次は全100Fの購入・戦闘・夜明け・24時間放置シミュレーションを開始する。実行前に`simulation/validate-candidate.mjs`を通し、同一digestの`simulation/candidate-v1.json`だけを使用する。工程2のcalibration seedだけが候補調整に使え、工程2の合格前に3ビルド各1,000パターン検証へ進まない。工程2合格時はcandidate、`simulation/engine`の完全file closure、run plan、result schema・validator、Node version、raw dataset、summary、Acceptance digestをstrict schemaの一方向sealへ固定する。工程3のholdout bankは未観測の一回限りとし、canonical JSONL追記専用ledgerで全bank IDのseed range使用履歴をpreflightする。出力を見た再調整、使用済みまたは重複rangeをbank名だけ変えた再昇格、最初の有効判定の差替えを禁止し、部分出力後に有効判定を作れない場合も同じbankを再開しない。不合格またはcandidate・simulator semantics変更時はStep 1へ戻り、calibrationと全履歴に非交差の未観測bankを登録して再封印し、Step 2を全件再実行する。工程状態を示すworkflow mirrorの更新だけではcandidateとStep 2結果を失効させない。
 
 物理iPhone試験は第6工程であり、それまでは`NOT_VERIFIED`とする。ゲーム本体コード修正も第5工程まで`NOT_STARTED`とする。
 

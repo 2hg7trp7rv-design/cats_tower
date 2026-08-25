@@ -137,10 +137,29 @@
   },
   "currentCanonicalization": {
     "status": "PASS",
-    "acceptance": "quality-reviews/step-1-canonical-design/acceptance-round-004.json",
+    "acceptance": "quality-reviews/step-1-canonical-design/acceptance-round-005.json",
     "independentCritiqueRequired": true,
     "independentCritiquePassed": true,
-    "mayAdvanceToHundredFloorSimulation": true
+    "mayAdvanceToHundredFloorSimulation": true,
+    "holdoutPromotionPolicy": {
+      "oneUseBankRequired": true,
+      "observedBankMayTuneCandidate": false,
+      "changedCandidateMayReuseObservedBankForPromotion": false,
+      "failureReturnsToStep": 1,
+      "requiresDisjointUnobservedBank": true,
+      "rerunStep2BeforeStep3": true,
+      "partialOutputWithoutVerdictSpendsBank": true,
+      "validVerdictRequiresExactScenarioCount": 3000,
+      "preHoldoutDiagnosticsUseCalibrationSeedsOnly": true,
+      "rejectOverlappingRangeAcrossAllBankIds": true,
+      "rejectBankIdOrRangeReassignment": true,
+      "ledgerCanonicalization": "candidate-v1.json#/seedPolicy/holdoutReusePolicy/lifecycleLedgerContract",
+      "lifecycleLedger": "simulation/results/step-3/holdout-bank-ledger.jsonl",
+      "step2ExecutableSeal": "simulation/results/step-2/executable-seal.json",
+      "step2ExecutableSealSchema": "simulation/executable-seal.schema.json",
+      "step2ExecutableSealValidator": "simulation/validate-executable-seal.mjs",
+      "simulatorFixedSourceRoot": "simulation/engine"
+    }
   },
   "legacyBaseline": {
     "version": "0.8.2",

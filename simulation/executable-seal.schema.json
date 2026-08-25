@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cats-tower.invalid/simulation/executable-seal.schema.json",
+  "title": "Cat's Tower Step 2 executable seal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "candidateRawSha256",
+    "candidateNormalizedExecutableSha256",
+    "simulatorSourceTreeSha256",
+    "simulatorSourceFileCount",
+    "runPlanRawSha256",
+    "resultSchemaRawSha256",
+    "resultValidatorRawSha256",
+    "nodeVersion",
+    "step2RawDatasetSha256",
+    "step2SummarySha256",
+    "step2AcceptanceSha256",
+    "step2Verdict"
+  ],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "candidateRawSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "candidateNormalizedExecutableSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "simulatorSourceTreeSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "simulatorSourceFileCount": {"type": "integer", "minimum": 1},
+    "runPlanRawSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "resultSchemaRawSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "resultValidatorRawSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "nodeVersion": {"type": "string", "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "step2RawDatasetSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "step2SummarySha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "step2AcceptanceSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "step2Verdict": {"const": "PASS"}
+  }
+}

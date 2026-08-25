@@ -26,7 +26,9 @@ Cat's Towerは、猫を呼んで100Fの塔を奪還し、制圧した部屋の�
 6. [`FLOORS_1_10_DESIGN.md`](./FLOORS_1_10_DESIGN.md) — 最初の商品スライス
 7. [`simulation/INPUT_CONTRACT.md`](./simulation/INPUT_CONTRACT.md) / [`simulation/candidate-v1.json`](./simulation/candidate-v1.json) — 次工程で反証する機械可読の候補入力
 
-現行の受入条件は[`quality-reviews/step-1-canonical-design/acceptance-round-003.json`](./quality-reviews/step-1-canonical-design/acceptance-round-003.json)、3者独立反証と最終封印の完成証跡は[`acceptance-round-004.json`](./quality-reviews/step-1-canonical-design/acceptance-round-004.json)です。Round 1・2の不合格記録も同じディレクトリに残しています。
+現行の受入条件は[`quality-reviews/step-1-canonical-design/acceptance-round-003.json`](./quality-reviews/step-1-canonical-design/acceptance-round-003.json)、3者独立反証と是正再封印の完成証跡は[`acceptance-round-005.json`](./quality-reviews/step-1-canonical-design/acceptance-round-005.json)です。Round 1・2の不合格記録と、状態表記・holdout封印範囲を見直したRound 4も同じディレクトリに履歴として残しています。
+
+工程3のholdout seed群は一回限りです。結果を見てcandidateを調整した場合、または部分出力後に有効判定を作れなかった場合は、同じまたは重複するseed範囲をbank名だけ変えて再利用せず、Step 1へ戻って未観測bankを再封印し、Step 2からやり直します。工程2合格時のcandidate・完全なsimulator file closure・run plan・result schema/validator・出力digestはstrict schemaの一方向sealへ固定し、工程3前にraw bytesと全file集合を再検査します。
 
 ## 承認済み実行順序
 

@@ -47,7 +47,7 @@
     "acceptance"
   ],
   "properties": {
-    "schemaVersion": {"const": 2},
+    "schemaVersion": {"const": 4},
     "candidateId": {"type": "string", "minLength": 1},
     "algorithmVersion": {"type": "string", "minLength": 1},
     "schemaPath": {"const": "simulation/candidate.schema.json"},
@@ -57,35 +57,88 @@
     "sourceDependencyDigests": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["algorithm", "files", "invalidationRule"],
+      "required": ["rawFileAlgorithm", "canonicalJsonSelectionAlgorithm", "rawFiles", "jsonSelections", "workflowMirrorsExcludedFromBalanceResultInvalidation", "invalidationRule"],
       "properties": {
-        "algorithm": {"const": "sha256-raw-bytes-lowercase-hex"},
-        "files": {
+        "rawFileAlgorithm": {"const": "sha256-raw-bytes-lowercase-hex"},
+        "canonicalJsonSelectionAlgorithm": {"const": "sha256-utf8-json-stringify-object-in-selectedTopLevelKeys-order"},
+        "rawFiles": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["MASTER_SPEC.md", "FLOORS_1_10_DESIGN.md", "PROJECT_STATUS.json", "quality-reviews/step-1-canonical-design/acceptance.json", "quality-reviews/step-1-canonical-design/acceptance-round-002.json", "quality-reviews/step-1-canonical-design/acceptance-round-003.json", "simulation/candidate.schema.json", "simulation/validate-candidate.mjs"],
+          "required": ["simulation/candidate.schema.json", "simulation/executable-seal.schema.json", "simulation/validate-candidate.mjs", "simulation/validate-executable-seal.mjs"],
           "properties": {
-            "MASTER_SPEC.md": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"},
-            "FLOORS_1_10_DESIGN.md": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"},
-            "PROJECT_STATUS.json": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"},
-            "quality-reviews/step-1-canonical-design/acceptance.json": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"},
-            "quality-reviews/step-1-canonical-design/acceptance-round-002.json": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"},
-            "quality-reviews/step-1-canonical-design/acceptance-round-003.json": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"},
             "simulation/candidate.schema.json": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"},
-            "simulation/validate-candidate.mjs": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"}
+            "simulation/executable-seal.schema.json": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"},
+            "simulation/validate-candidate.mjs": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"},
+            "simulation/validate-executable-seal.mjs": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"}
           }
         },
+        "jsonSelections": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["PROJECT_STATUS.json"],
+          "properties": {
+            "PROJECT_STATUS.json": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["selectedTopLevelKeys", "digest"],
+              "properties": {
+                "selectedTopLevelKeys": {"const": ["canonicalScreens", "stableIdMigrationAliases", "stableIdRegistry"]},
+                "digest": {"type": "string", "minLength": 64, "pattern": "^[0-9a-f]{64}$"}
+              }
+            }
+          }
+        },
+        "workflowMirrorsExcludedFromBalanceResultInvalidation": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
         "invalidationRule": {"type": "string", "minLength": 1}
       }
     },
     "fixedProductContractPointers": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
     "manifestChangePolicy": {
       "type": "object",
-      "required": ["anyByteChangeInvalidatesAllBalanceResults", "schemaValidationRequiredBeforeEveryRun", "unknownOrMissingInputIsFatal"],
+      "required": ["anyByteChangeInvalidatesAllBalanceResults", "schemaValidationRequiredBeforeEveryRun", "unknownOrMissingInputIsFatal", "workflowMirrorByteChangeAloneInvalidatesBalanceResults", "workflowStateMayAdvanceWithoutCandidateByteChange", "semanticSpecificationChangeRequiresNewCandidateAndStep1Reseal", "step2ToStep3ExecutableSealContract"],
       "properties": {
         "anyByteChangeInvalidatesAllBalanceResults": {"const": true},
         "schemaValidationRequiredBeforeEveryRun": {"const": true},
-        "unknownOrMissingInputIsFatal": {"const": true}
+        "unknownOrMissingInputIsFatal": {"const": true},
+        "workflowMirrorByteChangeAloneInvalidatesBalanceResults": {"const": false},
+        "workflowStateMayAdvanceWithoutCandidateByteChange": {"const": true},
+        "semanticSpecificationChangeRequiresNewCandidateAndStep1Reseal": {"const": true},
+        "step2ToStep3ExecutableSealContract": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "schemaPath", "validatorPath", "requiredFields", "sealRawFileRule", "sourceTreeContract", "creationRule", "step3PreflightRule", "mismatchAction", "oneWayAuthorityRule"],
+          "properties": {
+            "path": {"const": "simulation/results/step-2/executable-seal.json"},
+            "schemaPath": {"const": "simulation/executable-seal.schema.json"},
+            "validatorPath": {"const": "simulation/validate-executable-seal.mjs"},
+            "requiredFields": {"const": ["schemaVersion", "candidateRawSha256", "candidateNormalizedExecutableSha256", "simulatorSourceTreeSha256", "simulatorSourceFileCount", "runPlanRawSha256", "resultSchemaRawSha256", "resultValidatorRawSha256", "nodeVersion", "step2RawDatasetSha256", "step2SummarySha256", "step2AcceptanceSha256", "step2Verdict"]},
+            "sealRawFileRule": {"type": "string", "minLength": 1},
+            "sourceTreeContract": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["sourceListLocation", "fixedSourceRoots", "sourcePathPattern", "sourcePathRule", "coverageRule", "moduleLoadingRule", "externalLocalInputRule", "orderingRule", "entryRule", "treePreimageRule", "treeDigestAlgorithm", "fileCountRule", "holdoutSimulatorDigestRule"],
+              "properties": {
+                "sourceListLocation": {"const": "simulation/run-plan.json#/simulatorSourceFiles"},
+                "fixedSourceRoots": {"const": ["simulation/engine"]},
+                "sourcePathPattern": {"const": "^[A-Za-z0-9._/-]+$"},
+                "sourcePathRule": {"type": "string", "minLength": 1},
+                "coverageRule": {"type": "string", "minLength": 1},
+                "moduleLoadingRule": {"type": "string", "minLength": 1},
+                "externalLocalInputRule": {"type": "string", "minLength": 1},
+                "orderingRule": {"type": "string", "minLength": 1},
+                "entryRule": {"type": "string", "minLength": 1},
+                "treePreimageRule": {"type": "string", "minLength": 1},
+                "treeDigestAlgorithm": {"const": "sha256-utf8-json-stringify-array-of-path-and-raw-sha256"},
+                "fileCountRule": {"type": "string", "minLength": 1},
+                "holdoutSimulatorDigestRule": {"type": "string", "minLength": 1}
+              }
+            },
+            "creationRule": {"type": "string", "minLength": 1},
+            "step3PreflightRule": {"type": "string", "minLength": 1},
+            "mismatchAction": {"const": "return-to-step-1-for-semantic-changes-or-step-2-for-byte-identical-infrastructure-recovery-never-start-step-3"},
+            "oneWayAuthorityRule": {"type": "string", "minLength": 1}
+          }
+        }
       }
     },
     "calibrationMutationPolicy": {
@@ -436,11 +489,90 @@
     "acceptance": {"type": "object", "required": ["d10Pre", "net10", "driftAcceptanceAggregation", "activeToPassiveThreeMinuteEffectivePowerRatioOnStandardSchedule", "activeToPassiveThreeMinuteProcedure", "activeToPassiveEarlyTerminalRule", "minimumCompletionRatePerBuild"]},
     "seedPolicy": {
       "type": "object",
-      "required": ["prng", "entityKeyConstruction", "calibrationSeedsInclusive", "holdoutCommonSeedsInclusive", "holdoutScenariosPerBuild", "commonRandomNumbersAcrossBuilds", "scenarioVariance"],
+      "required": ["prng", "entityKeyConstruction", "calibrationSeedsInclusive", "holdoutCommonSeedsInclusive", "preHoldoutDiagnosticSeedRule", "holdoutRangeDisjointRule", "holdoutScenariosPerBuild", "holdoutSeedsMayTuneManifest", "holdoutReusePolicy", "commonRandomNumbersAcrossBuilds", "scenarioVariance"],
       "properties": {
         "calibrationSeedsInclusive": {"const": [1, 200]},
         "holdoutCommonSeedsInclusive": {"const": [100000, 100999]},
+        "preHoldoutDiagnosticSeedRule": {"type": "string", "minLength": 1},
+        "holdoutRangeDisjointRule": {"type": "string", "minLength": 1},
         "holdoutScenariosPerBuild": {"const": 1000},
+        "holdoutSeedsMayTuneManifest": {"const": false},
+        "holdoutReusePolicy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["bankId", "seedRangePath", "observationDefinition", "observationMakesBankSpent", "sameDigestRerunPurposes", "singleConsumptionSessionMayContinueAfterBankBecomesSpent", "candidateMutationInsideConsumptionSessionAllowed", "firstValidAcceptanceVerdictIsAuthoritative", "acceptanceVerdictValidityRule", "observedBankMayTuneManifest", "changedCandidateMayReuseSpentBankForPromotion", "failureAction", "partialMaterializationWithoutValidVerdictAction", "spentBankUse", "expectedScenarioIdentityContract", "lifecycleLedgerContract"],
+          "properties": {
+            "bankId": {"const": "holdout-bank-001"},
+            "seedRangePath": {"const": "$.seedPolicy.holdoutCommonSeedsInclusive"},
+            "observationDefinition": {"type": "string", "minLength": 1},
+            "observationMakesBankSpent": {"const": true},
+            "sameDigestRerunPurposes": {"const": ["byte-equivalence", "no-output-infrastructure-recovery"]},
+            "singleConsumptionSessionMayContinueAfterBankBecomesSpent": {"const": true},
+            "candidateMutationInsideConsumptionSessionAllowed": {"const": false},
+            "firstValidAcceptanceVerdictIsAuthoritative": {"const": true},
+            "acceptanceVerdictValidityRule": {"type": "string", "minLength": 1},
+            "observedBankMayTuneManifest": {"const": false},
+            "changedCandidateMayReuseSpentBankForPromotion": {"const": false},
+            "failureAction": {"const": "return-to-step-1-with-disjoint-unobserved-bank-and-rerun-step-2-before-step-3"},
+            "partialMaterializationWithoutValidVerdictAction": {"const": "mark-bank-spent-and-return-to-step-1-with-disjoint-unobserved-bank-and-rerun-step-2-before-step-3"},
+            "spentBankUse": {"const": "diagnostic-only-never-promotion"},
+            "expectedScenarioIdentityContract": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["buildOrderPath", "seedRangePath", "identityFieldOrder", "enumerationRule", "preimageRule", "digestAlgorithm", "expectedDigestForCurrentBank"],
+              "properties": {
+                "buildOrderPath": {"const": "$.seedPolicy.holdoutBuilds"},
+                "seedRangePath": {"const": "$.seedPolicy.holdoutCommonSeedsInclusive"},
+                "identityFieldOrder": {"const": ["build", "seed"]},
+                "enumerationRule": {"type": "string", "minLength": 1},
+                "preimageRule": {"type": "string", "minLength": 1},
+                "digestAlgorithm": {"const": "sha256-utf8-json-stringify-identity-array"},
+                "expectedDigestForCurrentBank": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+              }
+            },
+            "lifecycleLedgerContract": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["path", "format", "bankIdentityFields", "recordTypes", "hashAlgorithm", "sequenceStartsAt", "sequenceIncrement", "genesisPreviousRecordSha256", "emptyLedgerRevisionSha256", "canonicalPayloadFieldOrder", "recordContracts", "valueDomainRule", "canonicalizationRule", "recordHashPayloadRule", "physicalLineRule", "previousLinkRule", "ledgerRevisionRule", "concurrencyRule", "preflightRule", "startRule", "observationRule", "verdictRule", "crashRule", "tamperRule"],
+              "properties": {
+                "path": {"const": "simulation/results/step-3/holdout-bank-ledger.jsonl"},
+                "format": {"const": "append-only-one-strict-json-object-per-line"},
+                "bankIdentityFields": {"const": ["bankId", "seedStartInclusive", "seedEndInclusive"]},
+                "recordTypes": {"const": ["CONSUMPTION_STARTED", "NO_OUTPUT_INFRASTRUCTURE_FAILURE", "OUTPUT_OBSERVED", "VERDICT_FINALIZED"]},
+                "hashAlgorithm": {"const": "sha256-utf8-canonical-payload-lowercase-hex"},
+                "sequenceStartsAt": {"const": 1},
+                "sequenceIncrement": {"const": 1},
+                "genesisPreviousRecordSha256": {"const": "0000000000000000000000000000000000000000000000000000000000000000"},
+                "emptyLedgerRevisionSha256": {"const": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+                "canonicalPayloadFieldOrder": {"const": ["sequence", "type", "attemptId", "bankId", "seedStartInclusive", "seedEndInclusive", "candidateRawSha256", "simulatorRawSha256", "step2ExecutableSealRawSha256", "expectedScenarioIdentitySha256", "expectedScenarioCount", "exposedDerivedOutputCount", "failureCode", "firstOutputKind", "rawDatasetSha256", "summarySha256", "acceptanceSha256", "verdict", "eventAt", "previousRecordSha256"]},
+                "recordContracts": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["CONSUMPTION_STARTED", "NO_OUTPUT_INFRASTRUCTURE_FAILURE", "OUTPUT_OBSERVED", "VERDICT_FINALIZED"],
+                  "properties": {
+                    "CONSUMPTION_STARTED": {"type": "object", "additionalProperties": false, "required": ["exactFields"], "properties": {"exactFields": {"const": ["sequence", "type", "attemptId", "bankId", "seedStartInclusive", "seedEndInclusive", "candidateRawSha256", "simulatorRawSha256", "step2ExecutableSealRawSha256", "expectedScenarioIdentitySha256", "expectedScenarioCount", "eventAt", "previousRecordSha256", "recordSha256"]}}},
+                    "NO_OUTPUT_INFRASTRUCTURE_FAILURE": {"type": "object", "additionalProperties": false, "required": ["exactFields"], "properties": {"exactFields": {"const": ["sequence", "type", "attemptId", "bankId", "seedStartInclusive", "seedEndInclusive", "candidateRawSha256", "simulatorRawSha256", "step2ExecutableSealRawSha256", "exposedDerivedOutputCount", "failureCode", "eventAt", "previousRecordSha256", "recordSha256"]}}},
+                    "OUTPUT_OBSERVED": {"type": "object", "additionalProperties": false, "required": ["exactFields"], "properties": {"exactFields": {"const": ["sequence", "type", "attemptId", "bankId", "seedStartInclusive", "seedEndInclusive", "candidateRawSha256", "simulatorRawSha256", "step2ExecutableSealRawSha256", "exposedDerivedOutputCount", "firstOutputKind", "eventAt", "previousRecordSha256", "recordSha256"]}}},
+                    "VERDICT_FINALIZED": {"type": "object", "additionalProperties": false, "required": ["exactFields"], "properties": {"exactFields": {"const": ["sequence", "type", "attemptId", "bankId", "seedStartInclusive", "seedEndInclusive", "candidateRawSha256", "simulatorRawSha256", "step2ExecutableSealRawSha256", "rawDatasetSha256", "summarySha256", "acceptanceSha256", "verdict", "eventAt", "previousRecordSha256", "recordSha256"]}}}
+                  }
+                },
+                "valueDomainRule": {"type": "string", "minLength": 1},
+                "canonicalizationRule": {"type": "string", "minLength": 1},
+                "recordHashPayloadRule": {"type": "string", "minLength": 1},
+                "physicalLineRule": {"type": "string", "minLength": 1},
+                "previousLinkRule": {"type": "string", "minLength": 1},
+                "ledgerRevisionRule": {"type": "string", "minLength": 1},
+                "concurrencyRule": {"type": "string", "minLength": 1},
+                "preflightRule": {"type": "string", "minLength": 1},
+                "startRule": {"type": "string", "minLength": 1},
+                "observationRule": {"type": "string", "minLength": 1},
+                "verdictRule": {"type": "string", "minLength": 1},
+                "crashRule": {"type": "string", "minLength": 1},
+                "tamperRule": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        },
         "commonRandomNumbersAcrossBuilds": {"const": true}
       }
     }
