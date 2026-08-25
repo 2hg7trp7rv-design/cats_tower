@@ -7,7 +7,9 @@ Repository: `2hg7trp7rv-design/cats_tower`
 Branch: `kimi`  
 監査基準commit: `49f9414524e320d08a2b4515506504d82138205f`  
 監査基準tree: `d2a213fb1c88b409e4d1b1eadf217dd89b2ca562`  
-旧Step 1完成証拠: `quality-reviews/step-1-canonical-design/acceptance-round-005.json`
+旧Step 1完成証拠: `quality-reviews/step-1-canonical-design/acceptance-round-005.json`  
+Round 001監査内容commit: `ebd8560a33aad528965c2c8a8f5da0db431b7c39`  
+自動Vercel preview: `dpl_2V2FMR7goG2BkacuvbHXNMofnzsg` / `READY` / target `null`
 
 ## 1. 結論
 
@@ -212,12 +214,30 @@ P0は現時点で0件。ただしP1が残っているためPASSは禁止する�
 
 これらは設計原則の参考であり、Cat's Towerの係数、継続率、収益性、画面構成を証明しない。広告、課金、live-opsを含む他作品の現在機能も、自動的な採用根拠にはならない。
 
-## 11. Round 001で変更しないもの
+## 11. 自動Vercel deployment確認
+
+documentation commitを`kimi`へ反映した結果、Vercel Git連携が自動でpreviewを作成した。ChatGPT側からdeploy、promote、alias変更は実行していない。
+
+| 項目 | 確認値 |
+|---|---|
+| Deployment | `dpl_2V2FMR7goG2BkacuvbHXNMofnzsg` |
+| URL | `https://catstower-27djc076z-shinyaaas-projects.vercel.app/` |
+| Branch alias | `https://catstower-git-kimi-shinyaaas-projects.vercel.app/` |
+| State | `READY` |
+| Target | `null` |
+| Git branch | `kimi` |
+| Git commit | `ebd8560a33aad528965c2c8a8f5da0db431b7c39` |
+| Commit一致 | 確認済み |
+| Production切替 | 未実施 |
+
+この`READY`はbuild/deploymentが完了した証拠に限定する。画面品質、操作感、ゲーム挙動、simulation整合、Production Ready、物理iPhoneを証明しない。したがってRound 001の`IN_PROGRESS`判定は変わらない。
+
+## 12. Round 001で変更しないもの
 
 - runtime code
 - `assets/`
 - service worker
-- Vercel設定・deployment・production alias
+- Vercel設定またはproduction aliasの手動変更
 - `simulation/candidate-v1.json`
 - schema・validator
 - stable ID registry
@@ -226,7 +246,7 @@ P0は現時点で0件。ただしP1が残っているためPASSは禁止する�
 
 このroundは差分の分類と進行停止を固定する文書監査であり、正本統合の完了ではない。
 
-## 12. 次の許可工程
+## 13. 次の許可工程
 
 次に許可するのは、Step 1内の以下だけである。
 

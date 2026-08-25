@@ -83,8 +83,25 @@
     "runtimeChanged": false,
     "assetChanged": false,
     "candidateChanged": false,
-    "vercelChanged": false,
-    "productionChanged": false
+    "vercelConfigurationChanged": false,
+    "manualVercelActionPerformed": false,
+    "automaticGitDeploymentObserved": true,
+    "productionAliasChanged": false
   },
-  "nextAuthorizedAction": "Canonical redline and dependency-closure design for the accepted/converted/rejected proposal elements."
+  "nextAuthorizedAction": "Canonical redline and dependency-closure design for the accepted/converted/rejected proposal elements.",
+  "automaticDeploymentRecord": {
+    "id": "dpl_2V2FMR7goG2BkacuvbHXNMofnzsg",
+    "url": "https://catstower-27djc076z-shinyaaas-projects.vercel.app/",
+    "branchAlias": "https://catstower-git-kimi-shinyaaas-projects.vercel.app/",
+    "state": "READY",
+    "target": null,
+    "githubCommit": "ebd8560a33aad528965c2c8a8f5da0db431b7c39",
+    "githubBranch": "kimi",
+    "commitMatchVerified": true,
+    "source": "automatic Vercel Git integration after the documentation commit",
+    "manualDeploymentActionPerformed": false,
+    "productionAliasChanged": false,
+    "usedAsCompletionEvidence": false,
+    "evidenceMeaning": "READY confirms the automatic build/deployment completed; it does not verify gameplay, visuals, interaction quality, production readiness, or physical iPhone behavior."
+  }
 }

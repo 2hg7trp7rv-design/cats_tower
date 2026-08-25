@@ -6,14 +6,27 @@
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "auditBaseCommit": "49f9414524e320d08a2b4515506504d82138205f",
+  "auditContentCommit": "ebd8560a33aad528965c2c8a8f5da0db431b7c39",
   "phase": "Step 1 difference audit and change-control opening",
   "status": "IN_PROGRESS",
   "verdict": "IN_PROGRESS",
   "advanceAllowed": false,
   "vercel": {
-    "handled": false,
-    "url": null,
-    "reason": "Documentation-only change-control round; no eligible runtime or deployment."
+    "handledByChat": false,
+    "automaticGitDeploymentObserved": true,
+    "id": "dpl_2V2FMR7goG2BkacuvbHXNMofnzsg",
+    "url": "https://catstower-27djc076z-shinyaaas-projects.vercel.app/",
+    "branchAlias": "https://catstower-git-kimi-shinyaaas-projects.vercel.app/",
+    "state": "READY",
+    "target": null,
+    "githubCommit": "ebd8560a33aad528965c2c8a8f5da0db431b7c39",
+    "githubBranch": "kimi",
+    "commitMatchVerified": true,
+    "manualPromotionOrProductionAliasChange": false,
+    "usedAsProductOrQualityEvidence": false,
+    "browserAcceptancePerformed": false,
+    "evidenceMeaning": "READY confirms build/deployment completion only. It is not a visual, interaction, gameplay, or production-quality PASS.",
+    "recordingNote": "A later documentation-only commit that records this verification may itself trigger another automatic preview; that later preview is not Round 001 quality evidence unless separately audited."
   },
   "completedThisRound": [
     "Re-read the live kimi repository, canonical specification, quality gate, operating policy, status, handover, Floors 1-10 design, Step 1 Acceptance, and Round 5 completion evidence.",
@@ -22,7 +35,8 @@
     "Established the proposed hero-plus-merchant coexistence model: player as cat adventuring merchant company leader; named cats as visible adventuring heroes.",
     "Mapped the proposed concept responsibilities into S01-S09 without accepting a tenth canonical screen.",
     "Opened an active Step 1 change control and blocked Steps 2-6.",
-    "Created a new Acceptance Matrix for the integration."
+    "Created a new Acceptance Matrix for the integration.",
+    "Verified that the automatic Vercel preview is READY and exactly bound to audit content commit ebd8560a33aad528965c2c8a8f5da0db431b7c39; no manual promotion or production alias change was performed."
   ],
   "keyDecisions": [
     "The existing specification already contains the core merchant and large-idle loops; the integration target is clearer product identity and decision quality, not indiscriminate feature accumulation.",
@@ -33,6 +47,11 @@
   "filesCreated": [
     "quality-reviews/step-1-canonical-design/active-change-control.json",
     "quality-reviews/step-1-hero-merchant-large-idle-integration/acceptance.json",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/round-001-diff-audit.md",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/handover-round-001.json"
+  ],
+  "filesUpdatedAfterAutomaticDeploymentVerification": [
+    "quality-reviews/step-1-canonical-design/active-change-control.json",
     "quality-reviews/step-1-hero-merchant-large-idle-integration/round-001-diff-audit.md",
     "quality-reviews/step-1-hero-merchant-large-idle-integration/handover-round-001.json"
   ],
@@ -58,8 +77,8 @@
   ],
   "notVerified": [
     "No final mockup was produced.",
-    "No runtime behavior was inspected as evidence for the proposed integration.",
-    "No Vercel deployment was created or checked for this round.",
+    "No runtime behavior was accepted as evidence for the proposed integration.",
+    "The automatic Vercel preview was not used for browser-level visual or interaction acceptance.",
     "No physical iPhone evidence exists.",
     "No balance coefficient was validated."
   ],
