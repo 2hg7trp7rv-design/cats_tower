@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-canonical-design-round-005-completion-evidence",
+  "acceptanceRevision": 5,
+  "createdAt": "2026-08-25",
+  "status": "PASS",
+  "verdict": "PASS",
+  "advanceAllowed": true,
+  "supersedesAsCurrentEvidence": "quality-reviews/step-1-canonical-design/acceptance-round-004.json",
+  "requirementsAuthority": "quality-reviews/step-1-canonical-design/acceptance.json",
+  "reviewedContentSeal": {
+    "branch": "kimi",
+    "commit": "7dc09a7df5d39e8c189583cf29ad89f95cad9db8",
+    "tree": "52d54e240c002f42332eb97d1ad0ebb69322d590",
+    "parentCommit": "677d403a59189b21ff6ae318d2a5e65480131e77",
+    "changedPathCount": 13,
+    "runtimeOrAssetChangedPathCount": 0,
+    "round005EvidenceFileIsInReviewedTree": false,
+    "twoStageBindingRule": "the authoritative evidence commit is the commit that adds this exact file as its sole path change with reviewedContentSeal.commit as its parent; Git binds this otherwise self-referential evidence file to that commit and tree"
+  },
+  "correctionsFromRound004": [
+    "Round 4 missed that QUALITY_GATE.md still named Step 1 IN_PROGRESS while the active status mirrors named Step 1 PASS.",
+    "Round 4 did not close whether a partially observed or failed Step 3 holdout bank could be reused for promotion.",
+    "An interim design that raw-hashed mutable workflow status documents was rejected because ordinary Step 2 status updates would self-invalidate Step 2 results.",
+    "The final boundary raw-hashes four immutable schema and validator files, canonically hashes only the selected PROJECT_STATUS semantic registries, and separately binds workflow mirrors to the reviewed content commit and hashes below.",
+    "The holdout lifecycle now has exact canonical JSONL bytes, record hashing, zero genesis, sequence, prior-record link, raw-ledger compare-and-append, strict transitions, full-history range overlap checks and bank ID/range anti-reassignment rules.",
+    "The Step 2 executable seal now has a strict schema and validator, a fixed simulator source root, complete recursive file-closure equality, a deterministic source-tree digest and an exact Step 3 simulator-digest identity rule."
+  ],
+  "sealedExecutableInputs": {
+    "candidatePath": "simulation/candidate-v1.json",
+    "candidateId": "cats-tower-simulation-candidate-v1-r5",
+    "candidateRawSha256": "8963639cbcd066ceaf6e7e76488c0e90a2823059b8d50bd14cda5bfcbd5259f1",
+    "candidateNormalizedExecutableSha256": "1f490f9ddec31c8ea699baff81ae4aec95e4c5127396d66e6319fc0d0089a379",
+    "rawDependencies": [
+      {
+        "path": "simulation/candidate.schema.json",
+        "sha256": "cb245c535cfb037ec6c736c27c21ac493b537a772c91bf7d9b389d71ef4d5a20"
+      },
+      {
+        "path": "simulation/executable-seal.schema.json",
+        "sha256": "58803423e4a099acb784dec70d743de3bbedf9d40bbddcb8732d82326bab816c"
+      },
+      {
+        "path": "simulation/validate-candidate.mjs",
+        "sha256": "48594f5670a3737e9713d4cbabb2d5b855fa945b68a53fc6f25df20cefd00509"
+      },
+      {
+        "path": "simulation/validate-executable-seal.mjs",
+        "sha256": "e0d360c6c0d458ab50ac16ce7cbabc4744d39647a5fd4f5738706efc6a6b6ead"
+      }
+    ],
+    "projectStatusSemanticSelection": {
+      "path": "PROJECT_STATUS.json",
+      "selectedTopLevelKeys": [
+        "canonicalScreens",
+        "stableIdMigrationAliases",
+        "stableIdRegistry"
+      ],
+      "sha256": "82e090f700d0faa6735c9b4c47d327433e9512329390a90bef446d9fc920c22d"
+    },
+    "holdoutExpectedScenarioIdentitySha256": "78700a7b086ce1e8e2edbbfb99cb2ea2fc7f8ab66f7419eaf37d4506849a11c6"
+  },
+  "workflowMirrorEvidence": [
+    {
+      "path": "MASTER_SPEC.md",
+      "rawSha256": "4cf629cb59b8c7a917e494e3226a1ff3c6d18bf1f6d239f8a4454d13dd2acb1b",
+      "gitBlob": "9252ba7c0f9a3c92ad5f12bbe8721df2f56c6dbf"
+    },
+    {
+      "path": "FLOORS_1_10_DESIGN.md",
+      "rawSha256": "4ba25e016bd5cd38303f55715b0e90249d6a6be59788787a2163698783878119",
+      "gitBlob": "fe7c1cf0e432f024bc9995e16ccc04fbd059128a"
+    },
+    {
+      "path": "PROJECT_STATUS.json",
+      "rawSha256": "237a4e2e8a8a04adb9c8ce8ff1f8e98210adc38542d06dfd2de012f0e6e64269",
+      "gitBlob": "48d3cbbfe55c8d0fef02fb7c4fe49d5590adecb8"
+    },
+    {
+      "path": "quality-reviews/step-1-canonical-design/acceptance.json",
+      "rawSha256": "6b4b29a3236734682e0b9ad874aeda198f607e812ef638a24ad9cb44d61b21eb",
+      "gitBlob": "dc22c0268749f4aa53727ef987e51f291f77c0dd"
+    },
+    {
+      "path": "quality-reviews/step-1-canonical-design/acceptance-round-002.json",
+      "rawSha256": "33c0d1b9aed1589782551bfc2a723efe9a16d817b787144398bfc1c87f0bb8e6",
+      "gitBlob": "91aa2dced21ec18d4f17e08c8c3920e78f6e9c6a"
+    },
+    {
+      "path": "quality-reviews/step-1-canonical-design/acceptance-round-003.json",
+      "rawSha256": "3c1378939738de93569833e0cc0f8827d38f44d285a5d50dec81d4cf1ca54b1a",
+      "gitBlob": "76875c9c92c8ac50b2a5845d184577cb37bcc2d6"
+    },
+    {
+      "path": "QUALITY_GATE.md",
+      "rawSha256": "fbc659322bfff05972956dd074b3864e3c997afbdf33d4ebe8917a8ccfa1dca1",
+      "gitBlob": "34b2f3cba18a6eb1f50340b56326fa81f2bca2f0"
+    },
+    {
+      "path": "AGENTS.md",
+      "rawSha256": "666359bf340bb475a46d66e772cf0f31203144e511fc6aeff435b845ca979842",
+      "gitBlob": "9f1658209ecce3f7cf08d7a69ca5cd9b539e0e74"
+    },
+    {
+      "path": "PROJECT_HANDOVER.md",
+      "rawSha256": "ee06b16c2d817f980764eff2d22dbe5492536bab5977f1e34a245fdcc68bf925",
+      "gitBlob": "c13cc58d97b6c9166acd49869e8b7034a80503a0"
+    },
+    {
+      "path": "README.md",
+      "rawSha256": "730fe3ad405155892b9390eec702af34526c3513297141d2406584c923d8f214",
+      "gitBlob": "f2a7560a629ebf991cabdf0f65a04ede66611cbf"
+    },
+    {
+      "path": "simulation/INPUT_CONTRACT.md",
+      "rawSha256": "b75f183463244461b496b518255c76ac65e86bd990b8d0f513d32ccccdb0d37e",
+      "gitBlob": "cf3726c3283392d3dbe30a1281689638c56de481"
+    }
+  ],
+  "machineChecks": {
+    "candidateValidator": "PASS",
+    "executableSealValidatorFixtures": "PASS",
+    "candidateSchemaVersion": 4,
+    "candidateRawDependencyMismatchCount": 0,
+    "projectStatusSelectionMismatchCount": 0,
+    "workflowStatusMutationLeavesSelectionDigestUnchanged": true,
+    "selectedSemanticMutationChangesSelectionDigest": true,
+    "holdoutScenarioIdentityCount": 3000,
+    "ledgerSequenceHashCasAndLifecycleFixtures": "PASS",
+    "ledgerOverlapReassignmentAndCalibrationFixtures": "PASS",
+    "sourceTreeOrderingCoverageAndMutationFixtures": "PASS",
+    "strictJsonFileCountBeforeEvidenceFile": 68,
+    "strictJsonParseErrorCount": 0,
+    "duplicateJsonKeyCount": 0,
+    "gitDiffCheck": "PASS",
+    "activeLocalBranch": "kimi",
+    "localBranchCount": 1,
+    "remoteTrackingBranchCount": 1,
+    "runtimeOrAssetChangedPathCount": 0
+  },
+  "independentCritiques": [
+    {
+      "role": "formula-and-architecture-auditor",
+      "verdict": "PASS",
+      "unresolvedP0": 0,
+      "unresolvedP1": 0,
+      "editedFiles": 0
+    },
+    {
+      "role": "state-machine-and-transaction-auditor",
+      "verdict": "PASS",
+      "unresolvedP0": 0,
+      "unresolvedP1": 0,
+      "editedFiles": 0
+    },
+    {
+      "role": "outputs-reproducibility-auditor",
+      "verdict": "PASS",
+      "unresolvedP0": 0,
+      "unresolvedP1": 0,
+      "editedFiles": 0
+    }
+  ],
+  "phaseStateAfterThisEvidence": {
+    "step1": "PASS",
+    "step2": "NOT_STARTED",
+    "step3": "NOT_STARTED",
+    "step4": "NOT_STARTED",
+    "step5": "NOT_STARTED",
+    "step6": "NOT_STARTED"
+  },
+  "limits": {
+    "candidateCoefficientsValidatedByHundredFloorSimulation": false,
+    "threeBuildHoldoutConsumed": false,
+    "nineFinalMockupsCompleted": false,
+    "floorsOneThroughTenImplementedFromThisCandidate": false,
+    "physicalIPhoneVerified": false
+  },
+  "nextAuthorizedStep": "simulate-100f-purchases-combat-dawn-and-24h-offline"
+}
