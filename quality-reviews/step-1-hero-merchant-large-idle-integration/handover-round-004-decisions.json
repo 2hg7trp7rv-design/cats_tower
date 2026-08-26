@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-hero-merchant-large-idle-integration-handover-round-004-decisions",
+  "createdAt": "2026-08-26",
+  "chat": "00_統括・工程管理",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "baseHead": "7d08ddf720e0f4bc4745aacffcec34f736ac68fc",
+  "phase": "Step 1 Round 4 user decision lock",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS",
+  "advanceAllowed": false,
+  "decisionLock": "quality-reviews/step-1-hero-merchant-large-idle-integration/user-decision-lock-round-004.json",
+  "resolved": [
+    "ticket-funded mass draws with ruby protected for evolution",
+    "N/R retain endgame specialist value",
+    "UR remains counterable",
+    "at least twenty additional effective duplicates to full skill cap",
+    "first reset in 20-35 minutes",
+    "reset starts from Floor 1 with rapid re-clear",
+    "rewarded ads only in the initial product",
+    "limited combat content requires rerun, exchange and pity carryover",
+    "first-day SSR character and SR-or-better weapon guarantee",
+    "no initial PvP or competitive ranking rewards"
+  ],
+  "remainingUserDecisions": ["D1", "D2", "D3", "D5", "D6", "D7", "D9-rest", "D12", "D13", "D14", "D16", "D17"],
+  "risk": {
+    "level": "P1",
+    "topic": "twenty-plus duplicate depth",
+    "requiredResponse": "Keep base copies complete, use diminishing returns, provide deterministic catch-up and prove p50/p90/p99 acquisition and spend distributions before PASS."
+  },
+  "writes": {
+    "documentationAndReviewOnly": true,
+    "runtimeChanged": false,
+    "assetChanged": false,
+    "candidateChanged": false,
+    "backendChanged": false,
+    "paymentOrAdConfigurationChanged": false,
+    "productionChanged": false
+  },
+  "verificationLimits": {
+    "canonicalRedlineComplete": false,
+    "duplicateEconomySimulated": false,
+    "gachaProbabilityValidated": false,
+    "resetSatisfactionPlaytested": false,
+    "runtimeImplemented": false,
+    "backendImplemented": false,
+    "physicalIPhoneVerified": false
+  },
+  "nextAuthorizedWork": "Resolve the remaining user-owned decisions. Do not start Step 2."
+}
