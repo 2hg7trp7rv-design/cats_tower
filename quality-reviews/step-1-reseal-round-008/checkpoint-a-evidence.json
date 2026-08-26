@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-route-01-0-checkpoint-a-evidence",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "scope": "Route 01-0 post-00 governance recovery checkpoint only",
+  "base": {
+    "commit": "6d7724f1f71fa99d0e9b119ef437ebb902187858",
+    "tree": "02220ef93b6ff0b902e6735298681aab400608a3"
+  },
+  "content": {
+    "commit": "77df8b720733e4af6e22220e39950d2e9ff25df4",
+    "tree": "86a1137169f25f5abb8a7d1fa4315b9d100564c5",
+    "parentMatchesBase": true,
+    "aheadBy": 1,
+    "behindBy": 0,
+    "message": "docs: recover Round 008 preseal governance checkpoint",
+    "changedPaths": [
+      "AI_PROJECT_POLICY.json",
+      "MASTER_SPEC.md",
+      "PROJECT_HANDOVER.md",
+      "PROJECT_STATUS.json",
+      "README.md",
+      "canonical/SCREEN_STATE_REGISTRY.json",
+      "canonical/STABLE_ID_REGISTRY.json",
+      "canonical/STATE_TRANSITION_CONTRACT.json",
+      "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-008.json",
+      "quality-reviews/step-1-reseal-round-008/acceptance-matrix.json",
+      "quality-reviews/step-1-reseal-round-008/external-stale-artifacts.json",
+      "quality-reviews/step-1-reseal-round-008/zero-zero-postcheck.json"
+    ],
+    "changedPathCount": 12,
+    "changedPathSetExact": true,
+    "fileBlobs": {
+      "AI_PROJECT_POLICY.json": "649e35e7c6c9f36a0e487f0c77218f4149e83a4c",
+      "MASTER_SPEC.md": "217e9fecf0581a6a61fd96e9aa72760682a3fb06",
+      "PROJECT_HANDOVER.md": "7c66849f4e314955e764b8d34a24d9cbea6e9a60",
+      "PROJECT_STATUS.json": "22d3da9bad47f11d9bd97432af26cb0d537e28d2",
+      "README.md": "b8c387046a1900b208216fdf51f267b17deb1ca1",
+      "canonical/SCREEN_STATE_REGISTRY.json": "4e98f2a35d22d5f472313b3c6050bddae2eef88a",
+      "canonical/STABLE_ID_REGISTRY.json": "c63b25db86093371bb8a9fa11d0d594a8cd4d7f2",
+      "canonical/STATE_TRANSITION_CONTRACT.json": "61c309dbed3ace80066581478b2fe9393f9f4a9a",
+      "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-008.json": "653a044c449a29ade6fadf6f23961b3eebe5ce4f",
+      "quality-reviews/step-1-reseal-round-008/acceptance-matrix.json": "b9cb728521e909839f274314abdd08beb655959e",
+      "quality-reviews/step-1-reseal-round-008/external-stale-artifacts.json": "34c0a8b2ececd12f6ddb6cd86ad5e81230c3e251",
+      "quality-reviews/step-1-reseal-round-008/zero-zero-postcheck.json": "8acaf167b18ec8be1f5ebc942a9f0394e9f67e44"
+    }
+  },
+  "verification": {
+    "acceptanceMatrixReadBeforeContentWrite": true,
+    "strictJsonParse": {
+      "result": "PASS",
+      "fileCount": 9
+    },
+    "masterSpecRemoteContentReview": "PASS",
+    "branchFastForwardOnly": true,
+    "forcePush": false,
+    "otherBranchWrite": false,
+    "pullRequestOperation": false,
+    "historicalRound006Or007EvidenceChanged": false,
+    "runtimeChanged": false,
+    "assetsChanged": false,
+    "candidateChanged": false,
+    "schemaChanged": false,
+    "validatorChanged": false,
+    "simulatorChanged": false,
+    "backendChanged": false,
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "productionAliasChanged": false,
+    "sealCreated": false
+  },
+  "deployment": {
+    "id": "dpl_2bYyqA6NnSEazsxF8yToZQU5aSjp",
+    "url": "https://catstower-ejm2c5mk0-shinyaaas-projects.vercel.app",
+    "state": "READY",
+    "target": null,
+    "githubCommit": "77df8b720733e4af6e22220e39950d2e9ff25df4",
+    "githubBranch": "kimi",
+    "commitMatch": true,
+    "branchMatch": true,
+    "branchAlias": "https://catstower-git-kimi-shinyaaas-projects.vercel.app",
+    "combinedStatusContext": "Vercel",
+    "combinedStatusState": "success",
+    "readyMeaning": "Documentation build/deployment only; not Step 1 quality PASS"
+  },
+  "productionBaseline": {
+    "id": "dpl_A2sPMt2c6LHSCMEWZj6jP2Yre4MR",
+    "url": "https://catstower-37xl959dh-shinyaaas-projects.vercel.app",
+    "state": "READY",
+    "target": "production",
+    "githubCommit": "88daf9c912fa726e019915e5d7bfed94f0a47158",
+    "githubBranch": "main",
+    "aliases": [
+      "https://cats-tau-dusky.vercel.app",
+      "https://catstower-shinyaaas-projects.vercel.app",
+      "https://catstower-git-main-shinyaaas-projects.vercel.app"
+    ],
+    "changedByCheckpoint": false
+  },
+  "acceptanceResults": [
+    {
+      "id": "R010-01",
+      "result": "PASS",
+      "evidence": "Only existing kimi was fast-forwarded; no PR/merge/rebase/force-push."
+    },
+    {
+      "id": "R010-02",
+      "result": "PASS",
+      "evidence": "Round 006 and 007 remain scoped immutable historical PASS and do not authorize Step 2."
+    },
+    {
+      "id": "R010-03",
+      "result": "PASS",
+      "evidence": "MASTER_SPEC, status, README and handover state Step 1 IN_PROGRESS; Step 2-6 BLOCKED."
+    },
+    {
+      "id": "R010-04",
+      "result": "PASS",
+      "evidence": "MASTER_SPEC, PROJECT_STATUS, addendum, policy and handover agree on 01 continuation."
+    },
+    {
+      "id": "R010-05",
+      "result": "PASS",
+      "evidence": "All three canonical registries are PRESEAL_DRAFT and mayAuthorizeStep2=false."
+    },
+    {
+      "id": "R010-06",
+      "result": "PASS",
+      "evidence": "Missing closure, policy gate and seal files are explicitly PLANNED_NOT_CREATED/NOT_CREATED."
+    },
+    {
+      "id": "R010-07",
+      "result": "PASS",
+      "evidence": "PR #8 is recorded as stale external non-authority; no PR operation occurred."
+    },
+    {
+      "id": "R010-08",
+      "result": "PASS",
+      "evidence": "AI_PROJECT_POLICY source order now follows user decision, Project source, active change control, seal, then lower canon."
+    },
+    {
+      "id": "R010-09",
+      "result": "PASS",
+      "evidence": "No runtime, asset, V1 executable, backend, provider or Production path changed."
+    },
+    {
+      "id": "R010-10",
+      "result": "PASS",
+      "evidence": "Content commit is direct child of exact base and changed exactly 12 declared paths."
+    },
+    {
+      "id": "R010-11",
+      "result": "PASS",
+      "evidence": "Exact content Preview is READY with kimi/commit match; Production baseline unchanged."
+    },
+    {
+      "id": "R010-12",
+      "result": "PASS",
+      "evidence": "This evidence commit is designed as the direct child of content; checkpoint P0/P1 is zero after live verification."
+    }
+  ],
+  "roles": {
+    "creator": "Produced the declared 12-path governance recovery content.",
+    "independentCritic": "Compared live pre-repair authority, exact diff, missing-path claims, stale PR metadata and forbidden boundaries; found no unresolved checkpoint P0/P1 after repair.",
+    "checkpointJudge": "PASS for Route 01-0 checkpoint only; refuses Step 1 PASS and Step 2 authorization."
+  },
+  "verdicts": {
+    "route010Checkpoint": "PASS",
+    "historical00": "SCOPED_PASS",
+    "overallStep1": "IN_PROGRESS",
+    "step2Allowed": false,
+    "previewReady": false,
+    "productReady": false,
+    "physicalIPhoneVerified": false,
+    "unresolvedP0ForCheckpoint": 0,
+    "unresolvedP1ForCheckpoint": 0
+  },
+  "nextAuthorizedChat": "01_正本仕様・競合調査",
+  "nextAuthorizedWork": "Route 01-1 repository-wide Acceptance expansion and contradiction inventory",
+  "evidenceBoundary": "This checkpoint repairs authority and status drift only. It does not complete the repository-wide redline, research, FLOORS_1_10, Step 2 closure, policy gates, eleven critiques or Round 008 seal."
+}
