@@ -1,10 +1,12 @@
 {
-  "schemaVersion": 1,
-  "artifactId": "cats-tower-stable-id-registry-v1",
-  "asOf": "2026-08-26",
+  "schemaVersion": 2,
+  "artifactId": "cats-tower-stable-id-registry-v2-preseal",
+  "asOf": "2026-08-27",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
-  "authority": "CANONICAL",
+  "authority": "PRESEAL_DRAFT",
+  "step1SealRequired": true,
+  "mayAuthorizeStep2": false,
   "format": {
     "pattern": "^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+$",
     "displayNameIsId": false,
@@ -12,111 +14,513 @@
     "aliasWriteAllowed": false
   },
   "rarities": [
-    {"id": "rarity.n", "code": "N", "rank": 0},
-    {"id": "rarity.r", "code": "R", "rank": 1},
-    {"id": "rarity.rr", "code": "RR", "rank": 2},
-    {"id": "rarity.sr", "code": "SR", "rank": 3},
-    {"id": "rarity.ssr", "code": "SSR", "rank": 4},
-    {"id": "rarity.ur", "code": "UR", "rank": 5}
+    {
+      "id": "rarity.n",
+      "code": "N",
+      "rank": 0
+    },
+    {
+      "id": "rarity.r",
+      "code": "R",
+      "rank": 1
+    },
+    {
+      "id": "rarity.rr",
+      "code": "RR",
+      "rank": 2
+    },
+    {
+      "id": "rarity.sr",
+      "code": "SR",
+      "rank": 3
+    },
+    {
+      "id": "rarity.ssr",
+      "code": "SSR",
+      "rank": 4
+    },
+    {
+      "id": "rarity.ur",
+      "code": "UR",
+      "rank": 5
+    }
   ],
   "characters": [
-    {"id": "character.launch.001", "slot": 1, "status": "ACTIVE_RESERVED", "displayName": "ムギ", "acquisition": "DETERMINISTIC_NON_GACHA"},
-    {"id": "character.launch.002", "slot": 2, "status": "ACTIVE_RESERVED", "displayName": "ルナ", "acquisition": "DETERMINISTIC_NON_GACHA"},
-    {"id": "character.launch.003", "slot": 3, "status": "ACTIVE_RESERVED", "displayName": "トト", "acquisition": "DETERMINISTIC_NON_GACHA"},
-    {"id": "character.launch.004", "slot": 4, "status": "ACTIVE_RESERVED", "displayName": "コハク", "acquisition": "DETERMINISTIC_NON_GACHA"},
-    {"id": "character.launch.005", "slot": 5, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.006", "slot": 6, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.007", "slot": 7, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.008", "slot": 8, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.009", "slot": 9, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.010", "slot": 10, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.011", "slot": 11, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.012", "slot": 12, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.013", "slot": 13, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.014", "slot": 14, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.015", "slot": 15, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.016", "slot": 16, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.017", "slot": 17, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.018", "slot": 18, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.019", "slot": 19, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.020", "slot": 20, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.021", "slot": 21, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.022", "slot": 22, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.023", "slot": 23, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"},
-    {"id": "character.launch.024", "slot": 24, "status": "ACTIVE_RESERVED", "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"}
+    {
+      "id": "character.launch.001",
+      "slot": 1,
+      "status": "ACTIVE_RESERVED",
+      "displayName": "ムギ",
+      "acquisition": "DETERMINISTIC_NON_GACHA"
+    },
+    {
+      "id": "character.launch.002",
+      "slot": 2,
+      "status": "ACTIVE_RESERVED",
+      "displayName": "ルナ",
+      "acquisition": "DETERMINISTIC_NON_GACHA"
+    },
+    {
+      "id": "character.launch.003",
+      "slot": 3,
+      "status": "ACTIVE_RESERVED",
+      "displayName": "トト",
+      "acquisition": "DETERMINISTIC_NON_GACHA"
+    },
+    {
+      "id": "character.launch.004",
+      "slot": 4,
+      "status": "ACTIVE_RESERVED",
+      "displayName": "コハク",
+      "acquisition": "DETERMINISTIC_NON_GACHA"
+    },
+    {
+      "id": "character.launch.005",
+      "slot": 5,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.006",
+      "slot": 6,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.007",
+      "slot": 7,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.008",
+      "slot": 8,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.009",
+      "slot": 9,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.010",
+      "slot": 10,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.011",
+      "slot": 11,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.012",
+      "slot": 12,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.013",
+      "slot": 13,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.014",
+      "slot": 14,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.015",
+      "slot": 15,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.016",
+      "slot": 16,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.017",
+      "slot": 17,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.018",
+      "slot": 18,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.019",
+      "slot": 19,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.020",
+      "slot": 20,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.021",
+      "slot": 21,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.022",
+      "slot": 22,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.023",
+      "slot": 23,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    },
+    {
+      "id": "character.launch.024",
+      "slot": 24,
+      "status": "ACTIVE_RESERVED",
+      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    }
   ],
   "weapons": [
-    {"id": "weapon.launch.001", "slot": 1, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.002", "slot": 2, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.003", "slot": 3, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.004", "slot": 4, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.005", "slot": 5, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.006", "slot": 6, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.007", "slot": 7, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.008", "slot": 8, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.009", "slot": 9, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.010", "slot": 10, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.011", "slot": 11, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.012", "slot": 12, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.013", "slot": 13, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.014", "slot": 14, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.015", "slot": 15, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.016", "slot": 16, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.017", "slot": 17, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.018", "slot": 18, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.019", "slot": 19, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.020", "slot": 20, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.021", "slot": 21, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.022", "slot": 22, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.023", "slot": 23, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.024", "slot": 24, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.025", "slot": 25, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.026", "slot": 26, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.027", "slot": 27, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.028", "slot": 28, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.029", "slot": 29, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.030", "slot": 30, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.031", "slot": 31, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.032", "slot": 32, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.033", "slot": 33, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.034", "slot": 34, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.035", "slot": 35, "status": "ACTIVE_RESERVED"},
-    {"id": "weapon.launch.036", "slot": 36, "status": "ACTIVE_RESERVED"}
+    {
+      "id": "weapon.launch.001",
+      "slot": 1,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.002",
+      "slot": 2,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.003",
+      "slot": 3,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.004",
+      "slot": 4,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.005",
+      "slot": 5,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.006",
+      "slot": 6,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.007",
+      "slot": 7,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.008",
+      "slot": 8,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.009",
+      "slot": 9,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.010",
+      "slot": 10,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.011",
+      "slot": 11,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.012",
+      "slot": 12,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.013",
+      "slot": 13,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.014",
+      "slot": 14,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.015",
+      "slot": 15,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.016",
+      "slot": 16,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.017",
+      "slot": 17,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.018",
+      "slot": 18,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.019",
+      "slot": 19,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.020",
+      "slot": 20,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.021",
+      "slot": 21,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.022",
+      "slot": 22,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.023",
+      "slot": 23,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.024",
+      "slot": 24,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.025",
+      "slot": 25,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.026",
+      "slot": 26,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.027",
+      "slot": 27,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.028",
+      "slot": 28,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.029",
+      "slot": 29,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.030",
+      "slot": 30,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.031",
+      "slot": 31,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.032",
+      "slot": 32,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.033",
+      "slot": 33,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.034",
+      "slot": 34,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.035",
+      "slot": 35,
+      "status": "ACTIVE_RESERVED"
+    },
+    {
+      "id": "weapon.launch.036",
+      "slot": 36,
+      "status": "ACTIVE_RESERVED"
+    }
   ],
   "namespaces": {
-    "evolution": ["evolution.character.stage"],
-    "characterMastery": ["mastery.character.track", "mastery.character.node", "mastery.character.overflow"],
-    "weaponMastery": ["mastery.weapon.track", "mastery.weapon.node", "mastery.weapon.overflow"],
-    "wallet": ["wallet.ruby.paid", "wallet.ruby.free.reset", "wallet.ruby.free.ad", "wallet.ruby.free.other", "wallet.coin.run"],
-    "tickets": ["ticket.character.standard", "ticket.weapon.standard", "ticket.pickup.character", "ticket.pickup.weapon"],
-    "banner": ["banner.character.standard", "banner.weapon.standard", "banner.character.featured", "banner.weapon.featured"],
-    "pity": ["pity.character.standard", "pity.weapon.standard", "pity.character.featured", "pity.weapon.featured", "guarantee.featured.character", "guarantee.featured.weapon"],
-    "exchange": ["exchange.character.selector", "exchange.weapon.selector", "exchange.character.fragment", "exchange.weapon.fragment", "exchange.banner.medal"],
-    "duplicateOverflow": ["overflow.character.mastery", "overflow.weapon.mastery"],
-    "productCatalog": ["product.ruby.pack", "product.monthly.entitlement", "product.starter.bundle"],
-    "entitlement": ["entitlement.monthly", "entitlement.no_ads_optional_future"],
-    "loginCampaign": ["login.newcomer", "login.monthly", "login.returner"],
-    "rewardClaim": ["reward.claim.login", "reward.claim.inbox", "reward.claim.milestone"],
-    "advertisementReward": ["ad.reward.daily.draw", "ad.reward.offline_boost"],
-    "reset": ["reset.tower_return"],
-    "tower": ["tower.district", "tower.cycle", "tower.milestone", "tower.modifier", "tower.boss"],
-    "transaction": ["transaction.wallet", "transaction.draw", "transaction.payment", "transaction.reset", "transaction.claim", "transaction.ad"],
-    "audit": ["audit.rng", "audit.payment", "audit.reward", "audit.migration", "audit.security"]
+    "evolution": [
+      "evolution.character.stage"
+    ],
+    "characterMastery": [
+      "mastery.character.track",
+      "mastery.character.node",
+      "mastery.character.overflow"
+    ],
+    "weaponMastery": [
+      "mastery.weapon.track",
+      "mastery.weapon.node",
+      "mastery.weapon.overflow"
+    ],
+    "wallet": [
+      "wallet.ruby.paid",
+      "wallet.ruby.free.reset",
+      "wallet.ruby.free.ad",
+      "wallet.ruby.free.other",
+      "wallet.coin.run"
+    ],
+    "tickets": [
+      "ticket.character.standard",
+      "ticket.weapon.standard",
+      "ticket.pickup.character",
+      "ticket.pickup.weapon"
+    ],
+    "banner": [
+      "banner.character.standard",
+      "banner.weapon.standard",
+      "banner.character.featured",
+      "banner.weapon.featured"
+    ],
+    "pity": [
+      "pity.character.standard",
+      "pity.weapon.standard",
+      "pity.character.featured",
+      "pity.weapon.featured",
+      "guarantee.featured.character",
+      "guarantee.featured.weapon"
+    ],
+    "exchange": [
+      "exchange.character.selector",
+      "exchange.weapon.selector",
+      "exchange.character.fragment",
+      "exchange.weapon.fragment",
+      "exchange.banner.medal"
+    ],
+    "duplicateOverflow": [
+      "overflow.character.mastery",
+      "overflow.weapon.mastery"
+    ],
+    "productCatalog": [
+      "product.ruby.pack",
+      "product.monthly.entitlement",
+      "product.starter.bundle"
+    ],
+    "entitlement": [
+      "entitlement.monthly"
+    ],
+    "loginCampaign": [
+      "login.newcomer",
+      "login.monthly",
+      "login.returner"
+    ],
+    "rewardClaim": [
+      "reward.claim.login",
+      "reward.claim.inbox",
+      "reward.claim.milestone"
+    ],
+    "advertisementReward": [
+      "ad.reward.daily.draw",
+      "ad.reward.offline_boost"
+    ],
+    "reset": [
+      "reset.tower_return"
+    ],
+    "tower": [
+      "tower.district",
+      "tower.cycle",
+      "tower.milestone",
+      "tower.modifier",
+      "tower.boss"
+    ],
+    "transaction": [
+      "transaction.wallet",
+      "transaction.draw",
+      "transaction.payment",
+      "transaction.reset",
+      "transaction.claim",
+      "transaction.ad"
+    ],
+    "audit": [
+      "audit.rng",
+      "audit.payment",
+      "audit.reward",
+      "audit.migration",
+      "audit.security"
+    ]
   },
   "migrationAliases": [
-    {"alias": "cat.mugi", "canonical": "character.launch.001", "mode": "READ_ONLY"},
-    {"alias": "cat.luna", "canonical": "character.launch.002", "mode": "READ_ONLY"},
-    {"alias": "cat.toto", "canonical": "character.launch.003", "mode": "READ_ONLY"},
-    {"alias": "cat.kohaku", "canonical": "character.launch.004", "mode": "READ_ONLY"},
-    {"alias": "dawn", "canonical": "reset.tower_return", "mode": "READ_ONLY"},
-    {"alias": "dawn.reset", "canonical": "reset.tower_return", "mode": "READ_ONLY"},
-    {"alias": "currency.dawn_shard", "canonical": "wallet.ruby.free.reset", "mode": "READ_ONLY_REVIEW_REQUIRED"}
+    {
+      "alias": "cat.mugi",
+      "canonical": "character.launch.001",
+      "mode": "READ_ONLY"
+    },
+    {
+      "alias": "cat.luna",
+      "canonical": "character.launch.002",
+      "mode": "READ_ONLY"
+    },
+    {
+      "alias": "cat.toto",
+      "canonical": "character.launch.003",
+      "mode": "READ_ONLY"
+    },
+    {
+      "alias": "cat.kohaku",
+      "canonical": "character.launch.004",
+      "mode": "READ_ONLY"
+    },
+    {
+      "alias": "dawn",
+      "canonical": "reset.tower_return",
+      "mode": "READ_ONLY_REVIEW_REQUIRED"
+    },
+    {
+      "alias": "dawn.reset",
+      "canonical": "reset.tower_return",
+      "mode": "READ_ONLY_REVIEW_REQUIRED"
+    },
+    {
+      "alias": "currency.dawn_shard",
+      "canonical": "wallet.ruby.free.reset",
+      "mode": "READ_ONLY_PROVENANCE_REVIEW_REQUIRED"
+    }
   ],
   "invariants": [
     "IDs never depend on display name",
     "24 character slots and 36 weapon slots are stable reservations",
     "aliases are accepted only on migration input",
     "new writes never emit dawn.*",
-    "retired IDs are not reused"
+    "legacy currency migration preserves source provenance",
+    "retired IDs are not reused",
+    "this registry cannot authorize Step 2 until the Round 008 seal validates it"
   ]
 }

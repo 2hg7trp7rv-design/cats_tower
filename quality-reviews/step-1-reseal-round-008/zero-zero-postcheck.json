@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-zero-zero-postcheck",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "baseHead": "6d7724f1f71fa99d0e9b119ef437ebb902187858",
+  "baseTree": "02220ef93b6ff0b902e6735298681aab400608a3",
+  "historicalResults": [
+    {
+      "scope": "00 Round 006 core authority sync",
+      "status": "SCOPED_PASS",
+      "evidence": "quality-reviews/step-1-hero-merchant-large-idle-integration/core-authority-sync-evidence-round-006.json",
+      "currentAuthorizationBoundary": "Does not approve later Round 008 bytes or Step 2."
+    },
+    {
+      "scope": "00 Round 007 live entrypoint containment",
+      "status": "SCOPED_PASS",
+      "evidence": "quality-reviews/step-1-hero-merchant-large-idle-integration/entrypoint-containment-evidence-round-007.json",
+      "currentAuthorizationBoundary": "Does not approve repository-wide Step 1 or later partial 01 commits."
+    }
+  ],
+  "post00Drift": [
+    {
+      "severity": "P1",
+      "finding": "MASTER_SPEC claims conditional Step 1 PASS and routes to 02 although no seal exists and status mirrors remain IN_PROGRESS."
+    },
+    {
+      "severity": "P1",
+      "finding": "MASTER_SPEC treats missing STEP2 dependency closure and policy gate files as existing authorities."
+    },
+    {
+      "severity": "P1",
+      "finding": "Three newly added canonical registries self-label CANONICAL before independent critiques and seal."
+    },
+    {
+      "severity": "P1",
+      "finding": "PROJECT_STATUS still identifies chat 00 and does not record partial 01 work."
+    },
+    {
+      "severity": "P1",
+      "finding": "AI_PROJECT_POLICY places unsealed MASTER_SPEC above active change control."
+    },
+    {
+      "severity": "P1",
+      "finding": "Open draft PR #8 carries superseded 1:1 clone framing while following current kimi head."
+    }
+  ],
+  "repairDisposition": "All six findings are included in Route 01-0 content changes or external-stale-artifact containment.",
+  "preRepairVerdict": "IN_PROGRESS",
+  "step2Allowed": false
+}

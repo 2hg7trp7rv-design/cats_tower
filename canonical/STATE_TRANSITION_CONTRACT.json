@@ -1,9 +1,19 @@
 {
-  "schemaVersion": 1,
-  "artifactId": "cats-tower-state-transition-contract-v1",
-  "asOf": "2026-08-26",
-  "authority": "CANONICAL",
-  "globalStates": ["READY", "PENDING", "COMMITTED", "PENDING_RECONCILIATION", "REJECTED", "COMPENSATING", "RECOVERED"],
+  "schemaVersion": 2,
+  "artifactId": "cats-tower-state-transition-contract-v2-preseal",
+  "asOf": "2026-08-27",
+  "authority": "PRESEAL_DRAFT",
+  "step1SealRequired": true,
+  "mayAuthorizeStep2": false,
+  "globalStates": [
+    "READY",
+    "PENDING",
+    "COMMITTED",
+    "PENDING_RECONCILIATION",
+    "REJECTED",
+    "COMPENSATING",
+    "RECOVERED"
+  ],
   "globalRules": {
     "serverAuthority": true,
     "idempotencyRequired": true,
@@ -17,74 +27,188 @@
       "id": "transition.draw.v1",
       "entity": "draw",
       "initial": "READY",
-      "happyPath": ["CLIENT_CONFIRM", "REQUEST_ACCEPTED", "RNG_COMMITTED", "LEDGER_COMMITTED", "RESULT_AVAILABLE"],
+      "happyPath": [
+        "CLIENT_CONFIRM",
+        "REQUEST_ACCEPTED",
+        "RNG_COMMITTED",
+        "LEDGER_COMMITTED",
+        "RESULT_AVAILABLE"
+      ],
       "idempotency": "clientRequestId unique per account/banner; duplicate returns same result",
-      "failureAndRecovery": ["timeout->PENDING_RECONCILIATION", "reload->query transaction", "multiple tab->same request dedupe", "banner ended before accept->REJECTED"],
-      "compensation": ["partial after RNG commit resumes ledger commit; never reroll"]
+      "failureAndRecovery": [
+        "timeout->PENDING_RECONCILIATION",
+        "reload->query transaction",
+        "multiple tab->same request dedupe",
+        "banner ended before accept->REJECTED"
+      ],
+      "compensation": [
+        "partial after RNG commit resumes ledger commit; never reroll"
+      ]
     },
     {
       "id": "transition.payment.v1",
       "entity": "payment",
       "initial": "CATALOG_READY",
-      "happyPath": ["PURCHASE_STARTED", "STORE_RECEIPT_RECEIVED", "SERVER_VERIFIED", "ENTITLEMENT_OR_WALLET_APPLIED", "ACKNOWLEDGED"],
+      "happyPath": [
+        "PURCHASE_STARTED",
+        "STORE_RECEIPT_RECEIVED",
+        "SERVER_VERIFIED",
+        "ENTITLEMENT_OR_WALLET_APPLIED",
+        "ACKNOWLEDGED"
+      ],
       "idempotency": "store transaction ID unique",
-      "failureAndRecovery": ["network loss->server reconciliation", "duplicate webhook->no duplicate grant", "refund/revocation->ledger or entitlement adjustment", "restore->rebuild entitlements"],
-      "compensation": ["negative balance or suspended entitlement is explicit; support path"]
+      "failureAndRecovery": [
+        "network loss->server reconciliation",
+        "duplicate webhook->no duplicate grant",
+        "refund/revocation->ledger or entitlement adjustment",
+        "restore->rebuild entitlements"
+      ],
+      "compensation": [
+        "negative balance or suspended entitlement is explicit; support path"
+      ]
     },
     {
       "id": "transition.rewarded_ad.v1",
       "entity": "ad reward",
       "initial": "AVAILABLE",
-      "happyPath": ["CONSENT_CHECKED", "AD_STARTED", "NETWORK_CALLBACK", "SERVER_VERIFIED", "REWARD_GRANTED"],
+      "happyPath": [
+        "CONSENT_CHECKED",
+        "AD_STARTED",
+        "NETWORK_CALLBACK",
+        "SERVER_VERIFIED",
+        "REWARD_GRANTED"
+      ],
       "idempotency": "ad impression or receipt ID unique",
-      "failureAndRecovery": ["callback replay->same grant", "client close->NO_REWARD unless verified", "offline->not available", "partial->reconcile receipt"],
-      "compensation": ["fraud rejection with audit ID; no punitive hidden debit"]
+      "failureAndRecovery": [
+        "callback replay->same grant",
+        "client close->NO_REWARD unless verified",
+        "offline->not available",
+        "partial->reconcile receipt"
+      ],
+      "compensation": [
+        "fraud rejection with audit ID; no punitive hidden debit"
+      ]
     },
     {
       "id": "transition.login_claim.v1",
       "entity": "login claim",
       "initial": "ELIGIBLE",
-      "happyPath": ["CLAIM_REQUESTED", "SERVER_ELIGIBILITY_LOCKED", "GRANT_COMMITTED", "HISTORY_WRITTEN"],
+      "happyPath": [
+        "CLAIM_REQUESTED",
+        "SERVER_ELIGIBILITY_LOCKED",
+        "GRANT_COMMITTED",
+        "HISTORY_WRITTEN"
+      ],
       "idempotency": "campaign+period+account unique",
-      "failureAndRecovery": ["retry/reload->same result", "multiple tabs->one grant", "campaign expired before lock->REJECTED"],
-      "compensation": ["history repair from transaction log"]
+      "failureAndRecovery": [
+        "retry/reload->same result",
+        "multiple tabs->one grant",
+        "campaign expired before lock->REJECTED"
+      ],
+      "compensation": [
+        "history repair from transaction log"
+      ]
     },
     {
       "id": "transition.reset.v1",
       "entity": "tower return",
       "initial": "ELIGIBLE",
-      "happyPath": ["PREVIEW_ISSUED", "CONFIRMED", "RUN_ARCHIVED", "RUBY_GRANTED", "NEW_RUN_CREATED", "CLIENT_RESUMED"],
+      "happyPath": [
+        "PREVIEW_ISSUED",
+        "CONFIRMED",
+        "RUN_ARCHIVED",
+        "RUBY_GRANTED",
+        "NEW_RUN_CREATED",
+        "CLIENT_RESUMED"
+      ],
       "idempotency": "reset request ID unique; best-floor anti-farm snapshot immutable",
-      "failureAndRecovery": ["timeout->PENDING_RECONCILIATION", "reload->resume transaction", "multiple tabs->single accepted", "partial->resume at committed step"],
-      "compensation": ["never roll back granted ruby without audit; support repair"]
+      "failureAndRecovery": [
+        "timeout->PENDING_RECONCILIATION",
+        "reload->resume transaction",
+        "multiple tabs->single accepted",
+        "partial->resume at committed step"
+      ],
+      "compensation": [
+        "never roll back granted ruby without audit; support repair"
+      ]
     },
     {
       "id": "transition.evolution.v1",
       "entity": "evolution",
       "initial": "ELIGIBLE",
-      "happyPath": ["COST_QUOTED", "CONFIRMED", "RUBY_DEBITED", "STAGE_APPLIED", "HISTORY_WRITTEN"],
+      "happyPath": [
+        "COST_QUOTED",
+        "CONFIRMED",
+        "RUBY_DEBITED",
+        "STAGE_APPLIED",
+        "HISTORY_WRITTEN"
+      ],
       "idempotency": "character+target stage+request unique",
-      "failureAndRecovery": ["insufficient balance->REJECTED", "partial->resume after debit", "refund does not retroactively remove free evolution without policy"],
-      "compensation": ["ledger-driven repair"]
+      "failureAndRecovery": [
+        "insufficient balance->REJECTED",
+        "partial->resume after debit",
+        "refund does not retroactively remove free evolution without policy"
+      ],
+      "compensation": [
+        "ledger-driven repair"
+      ]
     },
     {
       "id": "transition.mastery_exchange.v1",
       "entity": "mastery/exchange",
       "initial": "READY",
-      "happyPath": ["QUOTE", "CONFIRM", "RESOURCE_DEBIT", "NODE_OR_ITEM_GRANT", "OVERFLOW_CONVERT"],
+      "happyPath": [
+        "QUOTE",
+        "CONFIRM",
+        "RESOURCE_DEBIT",
+        "NODE_OR_ITEM_GRANT",
+        "OVERFLOW_CONVERT"
+      ],
       "idempotency": "request ID and quote version unique",
-      "failureAndRecovery": ["stale quote->REQUOTE", "retry->same transaction", "max mastery->overflow"],
-      "compensation": ["resource debit and grant atomic or resumable"]
+      "failureAndRecovery": [
+        "stale quote->REQUOTE",
+        "retry->same transaction",
+        "max mastery->overflow"
+      ],
+      "compensation": [
+        "resource debit and grant atomic or resumable"
+      ]
     },
     {
       "id": "transition.account_link.v1",
       "entity": "account link",
       "initial": "GUEST_READY",
-      "happyPath": ["AUTHENTICATED", "SERVER_SNAPSHOT_FETCHED", "CONFLICT_PRESENTED", "MERGE_POLICY_APPLIED", "BOUND"],
+      "happyPath": [
+        "AUTHENTICATED",
+        "SERVER_SNAPSHOT_FETCHED",
+        "CONFLICT_PRESENTED",
+        "MERGE_POLICY_APPLIED",
+        "BOUND"
+      ],
       "idempotency": "link operation ID unique",
-      "failureAndRecovery": ["cancel->guest unchanged", "network loss->resume", "multiple devices->server lock"],
-      "compensation": ["raw guest backup retained; no duplicate premium grant"]
+      "failureAndRecovery": [
+        "cancel->guest unchanged",
+        "network loss->resume",
+        "multiple devices->server lock"
+      ],
+      "compensation": [
+        "raw guest backup retained; no duplicate premium grant"
+      ]
     }
   ],
-  "requiredFixtures": ["normal", "duplicate request", "reload after accept", "multiple tab race", "network timeout before/after commit", "partial completion", "refund", "revocation", "restore", "older client", "migration alias", "fraud/replay"]
+  "requiredFixtures": [
+    "normal",
+    "duplicate request",
+    "reload after accept",
+    "multiple tab race",
+    "network timeout before/after commit",
+    "partial completion",
+    "refund",
+    "revocation",
+    "restore",
+    "older client",
+    "migration alias",
+    "fraud/replay"
+  ],
+  "presealInvariant": "This contract cannot authorize Step 2 until the Round 008 seal validates it."
 }

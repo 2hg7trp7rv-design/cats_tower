@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 1,
-  "updatedDate": "2026-08-26",
+  "schemaVersion": 2,
+  "updatedDate": "2026-08-27",
   "project": "Cat's Tower",
   "repository": {
     "fullName": "2hg7trp7rv-design/cats_tower",
@@ -20,81 +20,96 @@
     },
     "beforeEveryWrite": [
       "verify repository full name",
-      "verify current or explicit target branch is exactly kimi",
-      "fetch the latest kimi head",
-      "read canonical governance and status files",
-      "inspect pending differences and task acceptance",
-      "stop with BLOCKED when any verification is unavailable or contradictory"
+      "verify target branch is exactly kimi",
+      "fetch latest kimi head and tree",
+      "read project instructions and active change control before lower canon",
+      "inspect task Acceptance and pending differences",
+      "stop with BLOCKED when verification is unavailable or contradictory"
     ],
     "requiredExplicitWriteArgument": "branch=kimi"
   },
   "sourceOfTruthOrder": [
+    "latest explicit user product decision",
+    "CHATGPT_PROJECT_INSTRUCTIONS1.md",
+    "active change-control",
+    "latest active-change-control addendum",
+    "latest user-decision-lock",
+    "validated live Step 1 seal",
     "MASTER_SPEC.md",
+    "PROJECT_STATUS.json",
     "QUALITY_GATE.md",
     "AGENTS.md",
-    "AI_PROJECT_POLICY.json",
-    "PROJECT_STATUS.json",
-    "PROJECT_HANDOVER.md",
-    "task-specific acceptance and evidence under quality-reviews",
-    "live GitHub kimi branch state",
-    "verified Vercel deployment tied to the same commit",
-    "project chats and uploaded references"
+    "task Acceptance, critics, judge, handover and deployment evidence",
+    "lower canonical documents and Step 2 executable contract",
+    "historical Acceptance/PASS/audits and legacy runtime",
+    "chat history, uploaded references and competitor materials"
   ],
+  "currentPhase": {
+    "step": 1,
+    "name": "canonical-integration-and-reseal",
+    "status": "IN_PROGRESS",
+    "checkpoint": "round-008-route-01-0-governance-recovery",
+    "step2Allowed": false,
+    "physicalIPhone": "NOT_VERIFIED"
+  },
+  "presealRule": {
+    "internalCanonicalLabelCannotAuthorizeStep2": true,
+    "requiredLiveSeal": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
+    "missingSealStatus": "IN_PROGRESS",
+    "vercelReadyAloneIsPass": false
+  },
+  "historicalEvidenceRule": {
+    "pastPassesRemainImmutable": true,
+    "pastScopedPassCannotAuthorizeChangedCurrentScope": true,
+    "oldCandidateAndWorkflowSuccessCannotAuthorizeCurrentStep2": true
+  },
   "sessionPreflight": [
     "identify the exact task and current authorized step",
     "verify repository and kimi branch",
-    "read the source-of-truth files in order",
-    "verify the latest commit and deployment relationship",
-    "define or load the task acceptance matrix",
-    "state IN_PROGRESS, BLOCKED, or PASS from evidence rather than assumption"
+    "read project source then active change control before sealed or lower canon",
+    "verify latest commit/tree and deployment relationship",
+    "define or load Acceptance Matrix before modification",
+    "state IN_PROGRESS, BLOCKED or PASS from evidence"
   ],
   "productionLoop": [
-    "define expected user-visible outcome, comparison target, failure conditions, and test environment",
-    "research material facts and current references when required",
+    "define expected result, comparison target, failure conditions, environment and evidence",
+    "research material facts from current primary sources",
     "produce the artifact",
-    "inspect the actual artifact at the user's viewport and normal speed",
-    "audit code architecture, data integrity, performance, save compatibility, accessibility, and maintainability",
-    "audit interaction feel, responsiveness, readability, feedback, error recovery, and continuity",
-    "run an independent critic whose goal is to reject the artifact",
-    "repair accepted findings and repeat all affected checks",
-    "run regression and bind evidence to an exact kimi commit and deployment",
-    "allow the final judge to issue PASS only when every applicable gate passes"
+    "inspect the actual artifact where applicable",
+    "audit code, data, economy, probability, backend, privacy and maintainability",
+    "run independent critics that attempt rejection",
+    "repair accepted findings",
+    "run regression",
+    "bind evidence to exact kimi commit/tree/deployment",
+    "allow final judge PASS only after all gates pass"
   ],
   "completionContract": {
     "insufficientByThemselves": [
-      "required code exists",
-      "required assets exist",
-      "files are present",
+      "files exist",
       "build succeeds",
-      "automated tests pass",
+      "tests pass",
       "deployment is READY",
-      "the screen resembles the mockup in source code",
-      "the implementation was generated without errors"
+      "source resembles a mockup",
+      "sandbox provider responds"
     ],
     "requiredGates": [
       "G1 requirement compliance",
       "G2 actual artifact quality",
-      "G3 human expectation and five-second comprehension",
-      "G4 comparison and adversarial rejection review",
-      "G5 normal end-to-end use, failure, resume, save, and target-environment evidence"
+      "G3 human expectation",
+      "G4 comparison and adversarial rejection",
+      "G5 normal end-to-end use and recovery",
+      "G6 canonical and phase consistency",
+      "G7 economy probability and long-term progression",
+      "G8 server payment ads privacy",
+      "G9 mobile and physical-device evidence where applicable"
     ],
-    "additionalGameEvidence": [
-      "final-size visual review on target iPhone viewport",
-      "normal-speed interaction review",
-      "input responsiveness and accidental-input testing",
-      "continuous-play and boss-session testing",
-      "save, resume, offline reward, and migration testing",
-      "performance, memory, battery, and thermal observations where physically measurable",
-      "comparison against the approved visual reference and strong commercial competitors"
-    ],
-    "physicalEvidenceRule": "Never claim physical iPhone approval, touch feel, battery, thermal, haptics, or production readiness without evidence from the exact tested commit and URL.",
-    "userRejectionRule": "Any user rejection invalidates the previous PASS for the rejected scope and returns it to IN_PROGRESS.",
+    "userRejectionRule": "Any user rejection returns the rejected scope to IN_PROGRESS.",
     "passAuthority": "Only the final judge may issue PASS after creator and independent critic evidence is complete."
   },
   "roles": {
-    "creator": "Builds against the acceptance matrix and does not self-certify completion.",
-    "independentCritic": "Attempts to reject the result using user expectations, strong comparisons, edge cases, and actual output.",
-    "finalJudge": "Ignores effort and checks only whether the exact artifact is safe to present as complete."
+    "creator": "Produces against Acceptance and does not self-certify.",
+    "independentCritic": "Attempts to reject using product expectations, comparisons and edge cases.",
+    "finalJudge": "Ignores effort and checks only exact evidence."
   },
   "userBoundary": {
     "chatgptOwns": [
@@ -104,31 +119,34 @@
       "assets",
       "tests",
       "deployment inspection",
-      "visual inspection available through tools",
       "defect discovery",
       "repair",
       "regression",
-      "handoff records"
+      "handover"
     ],
     "userIsOnlyNeededFor": [
-      "a genuine preference tie that changes product direction",
-      "credentials or permissions unavailable to ChatGPT",
-      "destructive, paid, publishing, or public-scope approval",
-      "physical iPhone actions and subjective feel evidence that tools cannot perform"
+      "genuine product-direction preference tie",
+      "credentials or contracts unavailable to ChatGPT",
+      "destructive, paid, publishing or public-scope approval",
+      "physical iPhone evidence unavailable to tools"
     ],
-    "forbiddenDelegation": "Do not ask the user to write code, diagnose ordinary defects, compare routine screenshots, or act as the default QA department."
+    "forbiddenDelegation": "Do not ask the user to write code, diagnose ordinary defects or act as default QA."
   },
   "reporting": {
     "requiredFields": [
       "repository",
       "branch",
-      "commit",
-      "deployment URL when applicable",
+      "content commit",
+      "evidence commit",
+      "tree",
+      "deployment URL/ID/target/commit match when applicable",
       "authorized step",
       "status",
-      "evidence completed",
-      "internal findings and repairs",
-      "unverified or excluded items"
+      "evidence",
+      "repairs",
+      "unverified/excluded items",
+      "Production change",
+      "physical iPhone state"
     ],
     "forbiddenClaimsWithoutPass": [
       "完成",

@@ -1,20 +1,42 @@
 # Cat's Tower 統合正本仕様書
 
-文書状態: **STEP 1 PASS — ROUND 008 SEAL ACTIVATED WHEN SEAL FILE EXISTS**  
-基準日: **2026-08-26**  
+文書状態: **STEP 1 IN_PROGRESS — ROUND 008 PRESEAL**  
+更新日: **2026-08-27**  
 Repository: `2hg7trp7rv-design/cats_tower`  
-書込みbranch: 既存の`kimi`のみ  
+書込みbranch: **既存の`kimi`のみ**  
+現在チャット: **`01_正本仕様・競合調査`**  
+次に許可されるチャット: **`01_正本仕様・競合調査`の継続**  
+Step 2〜6: **BLOCKED**  
 最初の実装slice: **1F〜10F**  
 塔の高さ: **プレイヤーから見て上限なし**  
 物理iPhone: **NOT_VERIFIED**
 
-本書はCat's Towerの製品境界、用語、状態遷移、画面責務、経済・確率・保存・サーバー権威、品質工程を定義する最上位正本である。有限100F・非ガチャ・独立Dawn・9画面・localStorage恒久経済を前提にした旧仕様と旧PASSは、Git履歴上の過去証拠であり、現行製品やStep 2開始を単独では承認しない。
+本書はCat's Towerの製品境界、用語、状態遷移、画面責務、経済・確率・保存・サーバー権威、品質工程を定義するStep 1正本候補である。有限100F・非ガチャ・独立Dawn・9画面・localStorage恒久経済を前提にした旧仕様と旧PASSはGit履歴上の過去証拠であり、現行製品やStep 2開始を承認しない。
 
-## 0. 権威と封印
+## 0. 権威、00の扱い、Round 008封印
 
-同一scopeで競合する場合の優先順位は、ユーザーの最新明示決定、live `kimi`のactive change controlと最新decision lock、Round 008 sealで結合された本書・`PROJECT_STATUS.json`・`canonical/*`、現行Acceptance/critic/judge/evidence、下位設計・Step 2契約・runtime、過去証拠の順とする。
+同一scopeで競合する場合は、次の順で解決する。
 
-Round 008のStep 1 PASSは、`quality-reviews/step-1-reseal-round-008/seal-round-008.json`がlive `kimi`に存在し、指定content commit/tree、Vercel preview、検証結果と一致するときに有効になる。seal前のcontent commitは`PRESEAL_PASS`であり、Step 2を開始しない。
+1. ユーザーの最新の明示的な製品決定
+2. `CHATGPT_PROJECT_INSTRUCTIONS1.md`
+3. live `kimi`のactive change-control、最新addendum、user-decision-lock
+4. live `kimi`に存在し、exact commit/tree/deployment/evidenceへ結合された新Step 1 seal
+5. seal対象の本書、`PROJECT_STATUS.json`、`canonical/*`
+6. 現行Acceptance、critic、judge、handover、deployment evidence
+7. 下位正本、Step 2契約、runtime
+8. 過去の正本、旧PASS、参考資料
+
+00 Round 006の中核3ファイル同期とRound 007のlive entrypoint containmentは、それぞれの当時scopeに限る履歴`SCOPED_PASS`として維持する。00の証拠は現在の未封印Round 008ファイルを承認しない。
+
+現在の`canonical/STABLE_ID_REGISTRY.json`、`canonical/SCREEN_STATE_REGISTRY.json`、`canonical/STATE_TRANSITION_CONTRACT.json`は**PRESEAL_DRAFT**である。内部内容は独立批評とrepository-wide矛盾監査の対象であり、新Step 1 sealが存在するまでStep 2を許可しない。
+
+次は未作成であり、存在済み正本として参照してはならない。
+
+- `canonical/STEP2_DEPENDENCY_CLOSURE.json` — `PLANNED_NOT_CREATED`
+- `canonical/POLICY_RELEASE_GATES.json` — `PLANNED_NOT_CREATED`
+- `quality-reviews/step-1-reseal-round-008/seal-round-008.json` — `NOT_CREATED`
+
+seal前のcontent commitを`PASS`または`PRESEAL_PASS`とは呼ばない。状態語は`IN_PROGRESS`とする。
 
 ## 1. 製品定義
 
@@ -54,7 +76,7 @@ Round 008のStep 1 PASSは、`quality-reviews/step-1-reseal-round-008/seal-round
 
 ## 4. 一つの強くてニューゲーム「塔還り」
 
-canonical IDは`reset.tower_return`。表示名「塔還り」はrelease前に商標・類似名称確認を行う。
+canonical ID候補は`reset.tower_return`。表示名「塔還り」とIDは**PRESEAL_DRAFT**であり、Step 1批評とrelease前の商標・類似名称確認を通す。
 
 - reset systemは一つだけ。旧Dawnは統合・改名・廃止し、新規writeでは使用しない。
 - reset後は1Fから開始。
@@ -89,7 +111,7 @@ masteryは、初回入手だけで役割・基本skillを使える機能完成�
 
 ## 7. ruby、login、課金、広告
 
-ruby sourceは課金、新記録または一度限り節目を伴う塔還り、任意rewarded ad。内部ledgerはpaid、reset free、ad free、other freeを分離する。
+ruby sourceは課金、新記録または一度限り節目を伴う塔還り、任意rewarded ad。内部ledgerはpaid、reset free、ad free、other freeを分離する。有償rubyは失効させず、返金、取消、復元、消費順序を監査可能にする。
 
 必須surfaceはcharacter gacha、weapon gacha、newcomer/monthly/returner login、payment、rewarded opt-in ad。初期広告はrewarded adだけで、強制interstitialと常設bannerを入れない。
 
@@ -120,41 +142,43 @@ server writeは`transaction.*`と`audit.*`を持ち、before/after、source/reas
 | S11 | ruby store / products / payment / rewarded ads / entitlement |
 | S12 | newcomer+monthly+returner login / inbox / claim history |
 
-完全なrequired stateは`canonical/SCREEN_STATE_REGISTRY.json`に固定する。purchase、draw、claim、ad、resetはnormal、loading、pending、success、failure、retry、reload recovery、multiple-tab conflict、refund/revocation/restoreを必要に応じて持つ。
+required state候補は`canonical/SCREEN_STATE_REGISTRY.json`へ置くが、Round 008 sealまではPRESEAL_DRAFTである。purchase、draw、claim、ad、resetはnormal、loading、pending、success、failure、retry、reload recovery、multiple-tab conflict、refund/revocation/restoreを必要に応じて持つ。
 
 ## 10. stable ID、migration、状態遷移
 
-`canonical/STABLE_ID_REGISTRY.json`、`canonical/STATE_TRANSITION_CONTRACT.json`を正本とする。IDはlowercase ASCII namespace + stable slug/serial。display nameをpersistence keyにせず、aliasはread-only migration input。旧`dawn.*`は`reset.tower_return`へのmigration aliasとし、新規write不可。character 24枠、weapon 36枠はstable IDを予約し、表示名未確定でも再利用しない。
+`canonical/STABLE_ID_REGISTRY.json`と`canonical/STATE_TRANSITION_CONTRACT.json`はPRESEAL_DRAFTである。IDはlowercase ASCII namespace + stable slug/serial。display nameをpersistence keyにせず、aliasはread-only migration input。旧`dawn.*`は新規write不可。character 24枠、weapon 36枠はstable IDを予約し、表示名未確定でも再利用しない。
 
 少なくともdraw、payment、ad reward、login claim、reset、evolution、mastery/exchange、account linkについて正常系、retry、reload、multiple tab、通信失敗、partial completion、refund、revocation、restoreを定義する。timeoutは失敗確定ではなく`PENDING_RECONCILIATION`、partial completionはtransaction IDでresume/compensateし、RNGをrerollしない。
 
 ## 11. 1〜10F slice
 
-下位正本は`FLOORS_1_10_DESIGN.md`。最低scopeは無料確定4 characters（ムギ、ルナ、トト、コハクのmigration aliasを維持）、temporary support 3 role以上、normal enemy 6、elite 2、district wall 1、3-phase boss 1、selectable shop 4、support 2、movement/contact/multiple enemies/hit sync/stair、coin level、最初の塔還り、最初のruby進化、beginner character/weapon gacha surface、mid-battle/placement/party/pity/claimの復旧境界。
+`FLOORS_1_10_DESIGN.md`は現在`PENDING_REVALIDATION`であり、まだ下位正本へ再昇格していない。最低scopeは無料確定4 characters、一時支援3 role以上、normal enemy 6、elite 2、district wall 1、3-phase boss 1、selectable shop 4、support 2、movement/contact/multiple enemies/hit sync/stair、coin level、最初の塔還り、最初のruby進化、beginner character/weapon gacha surface、mid-battle/placement/party/pity/claimの復旧境界である。
 
 ## 12. Step 1 / Step 2責務境界
 
 Step 1はproduct boundary、ID、state、screen、trust boundary、prohibition、policy gates、field/enum/invariant/fixture/migration/validator requirements、Acceptance Matrix、contradiction inventory、independent critiquesを固定する。
 
-Step 2はnew candidate/schema/validator/simulator/result schema/run plan/fixtures/executable sealとexact HP/damage/cost/drop/rate/soft pity/exchange/evolution/mastery/offline/reset formulas、deterministic PRNG/keying、large-number arithmeticを実装する。既存V1 candidate/schema/validator/simulatorを現行入力として実行しない。詳細は`canonical/STEP2_DEPENDENCY_CLOSURE.json`。
+Step 2はnew candidate/schema/validator/simulator/result schema/run plan/fixtures/executable sealとexact HP/damage/cost/drop/rate/soft pity/exchange/evolution/mastery/offline/reset formulas、deterministic PRNG/keying、large-number arithmeticを実装する。既存V1 candidate/schema/validator/simulatorを現行入力として実行しない。
+
+`canonical/STEP2_DEPENDENCY_CLOSURE.json`はRoute 01-5で作成する予定であり、現在は存在しない。存在するまでStep 2は開始禁止。
 
 validation minimumは`3 gameplay builds × 5 personas × 1,000 seeds = 15,000 scenarios以上`。personasはno-ad F2P、rewarded-ad F2P、monthly、controlled payer、high-spend stress。horizonsは1〜10F、first 100F、1,000F、10,000F相当、repeated resets。別枠でgacha/mastery Monte Carlo、transaction state、large-number serializationを行う。
 
 ## 13. platform・国内release gate
 
-`canonical/POLICY_RELEASE_GATES.json`を正本とする。Apple/Googleのdigital goods payment、random item odds、restore/refund/revocation、account deletion、privacy/data safety、ads/tracking、日本のcard matching禁止、前払式支払手段該当性、未成年購入保護、個人情報・SDK・国外移転をrelease gateとする。Step 1はlegal conclusionを出さず、release前に専門家確認する。
+`canonical/POLICY_RELEASE_GATES.json`はRoute 01-2〜01-3で作成する予定であり、現在は存在しない。Apple/Googleのdigital goods payment、random item odds、restore/refund/revocation、account deletion、privacy/data safety、ads/tracking、日本のcard matching禁止、前払式支払手段該当性、未成年購入保護、個人情報・SDK・国外移転を調査対象とする。Step 1はlegal conclusionを出さず、release前に専門家確認する。
 
-## 14. quality gateと工程
+## 14. quality gateと現在工程
 
 Step 1 PASS条件は、current authorityの旧有限100F・非ガチャ主張0、canonical/mirror一致、S01〜S12/stable IDs/state transitions/Step2 closure完成、policy gates記録、11独立批評のunresolved P0/P1=0、history不変、runtime/assets/V1/backend/Production不変、exact content commit/tree/deployment/evidence commitのseal結合である。
 
 Vercel `READY`はbuild/deploymentだけを意味し、runtime品質、経済、policy適合、physical iPhoneを証明しない。
 
-1. Step 1 正本統合・再封印 — **PASS after Round 008 seal activation**
-2. Step 2 実行可能contractとsimulation — **READY_TO_START after seal**
-3. Step 3 大量検証 — BLOCKED
-4. Step 4 S01〜S12完成見本 — BLOCKED
-5. Step 5 1〜10F + backend実装 — BLOCKED
-6. Step 6 physical iPhone / billing / ad / PWA検証 — BLOCKED
+1. Step 1 正本統合・再封印 — **IN_PROGRESS**
+2. Step 2 実行可能contractとsimulation — **BLOCKED**
+3. Step 3 大量検証 — **BLOCKED**
+4. Step 4 S01〜S12完成見本 — **BLOCKED**
+5. Step 5 1〜10F + backend実装 — **BLOCKED**
+6. Step 6 physical iPhone / billing / ad / PWA検証 — **BLOCKED**
 
-次に許可されるチャットは`02_実行可能仕様・シミュレーション`。Step 2はV1の延命ではなくV2 dependency closureの実装から開始する。
+次に許可されるのは`01_正本仕様・競合調査`の継続である。Route 01-0完了後はRoute 01-1のAcceptance Matrix拡張とrepository-wide contradiction inventoryへ進む。新Step 1 sealがlive `kimi`に存在し検証されるまで、`02`を開始しない。

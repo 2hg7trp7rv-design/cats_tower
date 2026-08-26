@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-canonical-design-active-change-control-addendum-round-008",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "parentChangeControl": "quality-reviews/step-1-canonical-design/active-change-control.json",
+  "previousAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-007.json",
+  "baseHead": "6d7724f1f71fa99d0e9b119ef437ebb902187858",
+  "baseTree": "02220ef93b6ff0b902e6735298681aab400608a3",
+  "trigger": "Four partial 01 commits added a rewritten MASTER_SPEC and three canonical registries without updating status mirrors, completing required dependency files, running independent critiques, or creating a seal.",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS",
+  "advanceAllowed": false,
+  "decision": "Preserve 00 scoped passes, do not roll back partial 01 work, and repair governance/state drift as Route 01-0 before repository-wide redline and research.",
+  "route010Scope": {
+    "update": [
+      "MASTER_SPEC.md",
+      "PROJECT_STATUS.json",
+      "AI_PROJECT_POLICY.json",
+      "PROJECT_HANDOVER.md",
+      "README.md",
+      "canonical/STABLE_ID_REGISTRY.json",
+      "canonical/SCREEN_STATE_REGISTRY.json",
+      "canonical/STATE_TRANSITION_CONTRACT.json"
+    ],
+    "create": [
+      "quality-reviews/step-1-reseal-round-008/acceptance-matrix.json",
+      "quality-reviews/step-1-reseal-round-008/zero-zero-postcheck.json",
+      "quality-reviews/step-1-reseal-round-008/external-stale-artifacts.json"
+    ],
+    "demoteToPresealDraft": [
+      "canonical/STABLE_ID_REGISTRY.json",
+      "canonical/SCREEN_STATE_REGISTRY.json",
+      "canonical/STATE_TRANSITION_CONTRACT.json"
+    ]
+  },
+  "authorityCorrections": [
+    "Step 1 remains IN_PROGRESS; Step 2-6 remain BLOCKED.",
+    "The next authorized chat remains 01_正本仕様・競合調査.",
+    "No missing file is authority merely because MASTER_SPEC references it.",
+    "No internal CANONICAL label bypasses the Round 008 seal.",
+    "PR #8 is stale external non-authority and is not operated in this checkpoint."
+  ],
+  "notCompletedByRoute010": [
+    "repository-wide contradiction inventory",
+    "competitive/platform/Japan policy research",
+    "complete FLOORS_1_10_DESIGN redline",
+    "STEP2 dependency closure",
+    "policy release gates",
+    "eleven independent critiques",
+    "new Step 1 PASS seal"
+  ],
+  "writeBoundary": {
+    "documentationAndStatusOnly": true,
+    "runtimeChanged": false,
+    "assetChanged": false,
+    "candidateChanged": false,
+    "schemaChanged": false,
+    "validatorChanged": false,
+    "simulatorChanged": false,
+    "backendChanged": false,
+    "paymentProviderConfigured": false,
+    "adNetworkConfigured": false,
+    "productionAliasChanged": false
+  },
+  "acceptancePath": "quality-reviews/step-1-reseal-round-008/acceptance-matrix.json",
+  "postcheckPath": "quality-reviews/step-1-reseal-round-008/zero-zero-postcheck.json",
+  "externalStaleArtifactsPath": "quality-reviews/step-1-reseal-round-008/external-stale-artifacts.json",
+  "checkpointEvidencePath": "quality-reviews/step-1-reseal-round-008/checkpoint-a-evidence.json",
+  "nextAuthorizedChat": "01_正本仕様・競合調査",
+  "nextAuthorizedWork": "Route 01-1 repository-wide Acceptance expansion and contradiction inventory after Route 01-0 evidence.",
+  "step2Allowed": false,
+  "physicalIPhoneVerified": false
+}

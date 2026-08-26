@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-route-01-0-acceptance",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "baseHead": "6d7724f1f71fa99d0e9b119ef437ebb902187858",
+  "baseTree": "02220ef93b6ff0b902e6735298681aab400608a3",
+  "status": "ACTIVE_BEFORE_CONTENT_CHANGE",
+  "scope": "Repair post-00 / partial-01 governance drift before repository-wide redline work.",
+  "requirements": [
+    {
+      "id": "R010-01",
+      "requirement": "Operate only on existing kimi; no branch, PR, merge, rebase or force push.",
+      "failure": "Any other branch or PR workflow is used."
+    },
+    {
+      "id": "R010-02",
+      "requirement": "Preserve Round 006 and Round 007 evidence byte-for-byte as historical scoped PASS.",
+      "failure": "Historical Acceptance/PASS/evidence is edited or used to authorize current Step 2."
+    },
+    {
+      "id": "R010-03",
+      "requirement": "All active entrypoints state Step 1 IN_PROGRESS and Step 2-6 BLOCKED.",
+      "failure": "Any live entrypoint says current Step 1 PASS or routes to 02 before a live seal."
+    },
+    {
+      "id": "R010-04",
+      "requirement": "MASTER_SPEC, PROJECT_STATUS, active addendum, policy and handover agree on 01 continuation.",
+      "failure": "Phase/status/next chat differs."
+    },
+    {
+      "id": "R010-05",
+      "requirement": "Existing canonical registries are PRESEAL_DRAFT and may not authorize Step 2.",
+      "failure": "An internal CANONICAL label bypasses the seal."
+    },
+    {
+      "id": "R010-06",
+      "requirement": "Missing closure/policy/seal files are marked PLANNED_NOT_CREATED or NOT_CREATED.",
+      "failure": "A missing path is presented as an existing authority."
+    },
+    {
+      "id": "R010-07",
+      "requirement": "PR #8 is recorded as stale external non-authority without updating, closing or merging it.",
+      "failure": "PR metadata is treated as current product authority or a prohibited PR operation occurs."
+    },
+    {
+      "id": "R010-08",
+      "requirement": "AI_PROJECT_POLICY source order follows user decision, Project source, active change control, seal, then lower canon.",
+      "failure": "Unsealed MASTER_SPEC outranks active change control."
+    },
+    {
+      "id": "R010-09",
+      "requirement": "Runtime, assets, V1 candidate/schema/validator/simulator, backend, payment, ads and Production remain unchanged.",
+      "failure": "Any forbidden path or external configuration changes."
+    },
+    {
+      "id": "R010-10",
+      "requirement": "Content commit is a direct descendant of baseHead and changes only declared documentation/status paths.",
+      "failure": "Unrelated path or non-fast-forward write."
+    },
+    {
+      "id": "R010-11",
+      "requirement": "Vercel Preview is READY and tied to exact content commit/kimi; READY is not quality PASS.",
+      "failure": "Deployment commit/branch mismatch or Production alias change."
+    },
+    {
+      "id": "R010-12",
+      "requirement": "Evidence commit directly follows content commit and records exact commit/tree/deployment/changed paths; checkpoint unresolved P0/P1=0.",
+      "failure": "Evidence is not exact or any checkpoint P0/P1 remains."
+    }
+  ],
+  "declaredContentPaths": [
+    "MASTER_SPEC.md",
+    "PROJECT_STATUS.json",
+    "AI_PROJECT_POLICY.json",
+    "PROJECT_HANDOVER.md",
+    "README.md",
+    "canonical/STABLE_ID_REGISTRY.json",
+    "canonical/SCREEN_STATE_REGISTRY.json",
+    "canonical/STATE_TRANSITION_CONTRACT.json",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-008.json",
+    "quality-reviews/step-1-reseal-round-008/acceptance-matrix.json",
+    "quality-reviews/step-1-reseal-round-008/zero-zero-postcheck.json",
+    "quality-reviews/step-1-reseal-round-008/external-stale-artifacts.json"
+  ],
+  "evidencePath": "quality-reviews/step-1-reseal-round-008/checkpoint-a-evidence.json",
+  "step1SealPath": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
+  "step1SealCreatedByThisCheckpoint": false
+}

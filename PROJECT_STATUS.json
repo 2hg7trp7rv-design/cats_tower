@@ -1,6 +1,6 @@
 {
-  "statusDocumentSchemaVersion": 6,
-  "updatedDate": "2026-08-26",
+  "statusDocumentSchemaVersion": 7,
+  "updatedDate": "2026-08-27",
   "project": "Cat's Tower",
   "canonicalRepository": "2hg7trp7rv-design/cats_tower",
   "canonicalBranch": "kimi",
@@ -24,47 +24,123 @@
     "simultaneousActivationAllowed": false
   },
   "projectStage": "preproduction",
-  "currentChat": "00_統括・工程管理",
+  "currentChat": "01_正本仕様・競合調査",
   "currentStep": 1,
   "currentStepName": "canonical-integration-and-reseal",
   "currentStepStatus": "IN_PROGRESS",
+  "currentCheckpoint": "round-008-route-01-0-governance-recovery",
+  "advanceAllowed": false,
+  "step2Allowed": false,
   "codeChangesStartedForRedesignedProduct": false,
   "firstTenPreviewReady": false,
   "unboundedProductReady": false,
   "productionUrl": "https://cats-tau-dusky.vercel.app/",
   "productionChangedByCurrentWork": false,
   "physicalIPhoneVerified": false,
-  "zeroZeroCoreAuthoritySync": {
-    "status": "PASS",
-    "scope": [
-      "MASTER_SPEC.md",
-      "PROJECT_STATUS.json",
-      "quality-reviews/step-1-canonical-design/active-change-control.json"
-    ],
-    "meaning": "The three central authorities now agree on the reopened product boundary and next action. This does not seal all lower canonical documents.",
-    "baseHeadBeforeSync": "57a912c96d07f3516685f567ddde86496fe004f2",
-    "evidencePath": "quality-reviews/step-1-hero-merchant-large-idle-integration/core-authority-sync-evidence-round-006.json"
+  "route01Start": {
+    "baseHead": "6d7724f1f71fa99d0e9b119ef437ebb902187858",
+    "baseTree": "02220ef93b6ff0b902e6735298681aab400608a3",
+    "reason": "00 scoped passes remain valid, but four partial 01 commits created preseal governance drift that must be repaired before repository-wide redline work.",
+    "acceptance": "quality-reviews/step-1-reseal-round-008/acceptance-matrix.json",
+    "postcheck": "quality-reviews/step-1-reseal-round-008/zero-zero-postcheck.json",
+    "externalStaleArtifacts": "quality-reviews/step-1-reseal-round-008/external-stale-artifacts.json",
+    "activeAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-008.json",
+    "status": "IN_PROGRESS_PENDING_CHECKPOINT_EVIDENCE"
+  },
+  "historicalScopedPasses": {
+    "round006CoreAuthoritySync": {
+      "status": "SCOPED_PASS",
+      "evidence": "quality-reviews/step-1-hero-merchant-large-idle-integration/core-authority-sync-evidence-round-006.json",
+      "mayAuthorizeCurrentStep2": false
+    },
+    "round007EntrypointContainment": {
+      "status": "SCOPED_PASS",
+      "evidence": "quality-reviews/step-1-hero-merchant-large-idle-integration/entrypoint-containment-evidence-round-007.json",
+      "mayAuthorizeCurrentStep2": false
+    }
   },
   "currentCanonicalization": {
     "status": "IN_PROGRESS",
-    "advanceAllowed": false,
-    "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control.json",
-    "historicalFinite100FPass": {
-      "acceptance": "quality-reviews/step-1-canonical-design/acceptance-round-005.json",
-      "verdict": "PASS",
-      "roleNow": "immutable historical evidence for the superseded finite-100F no-gacha design",
-      "mayAuthorizeCurrentStep2": false
-    },
     "allUserProductDecisionsResolved": true,
-    "canonicalCoreSynchronized": true,
+    "newStep1SealExists": false,
+    "repositoryWideContradictionInventoryComplete": false,
     "allLowerDocumentsRedlined": false,
+    "competitiveAndPolicyResearchComplete": false,
+    "step2DependencyClosureComplete": false,
     "independentCritiquesComplete": false,
-    "newStep1SealExists": false
+    "unresolvedP0": 0,
+    "unresolvedP1": "NOT_YET_FINALIZED"
+  },
+  "canonicalArtifacts": {
+    "MASTER_SPEC.md": "PRESEAL_DRAFT",
+    "canonical/STABLE_ID_REGISTRY.json": "PRESEAL_DRAFT",
+    "canonical/SCREEN_STATE_REGISTRY.json": "PRESEAL_DRAFT",
+    "canonical/STATE_TRANSITION_CONTRACT.json": "PRESEAL_DRAFT",
+    "FLOORS_1_10_DESIGN.md": "PENDING_REVALIDATION",
+    "canonical/STEP2_DEPENDENCY_CLOSURE.json": "PLANNED_NOT_CREATED",
+    "canonical/POLICY_RELEASE_GATES.json": "PLANNED_NOT_CREATED",
+    "quality-reviews/step-1-reseal-round-008/seal-round-008.json": "NOT_CREATED"
+  },
+  "approvedProductBoundary": {
+    "genre": "mobile-portrait-idle-incremental-rpg",
+    "playerVisibleTowerMaximum": null,
+    "floor100Role": "first-major-milestone-not-ending",
+    "floor101Exists": true,
+    "playableSpecies": [
+      "cat",
+      "catfolk"
+    ],
+    "activeNamedPartySize": 4,
+    "temporaryReinforcementSeparateFromParty": true,
+    "merchantChairmanIdentityAllowed": false,
+    "directTapDamage": 0,
+    "singleStrongNewGameResetRequired": true,
+    "coinLevelCap": null,
+    "evolutionEligibilityEveryLevels": 100,
+    "rarities": [
+      "N",
+      "R",
+      "RR",
+      "SR",
+      "SSR",
+      "UR"
+    ],
+    "catalogTargets": {
+      "characters": 24,
+      "weapons": 36
+    },
+    "characterAndWeaponGachaSeparated": true,
+    "hardPityTarget": 100,
+    "featuredGuaranteeTarget": 200,
+    "minimumAdditionalEffectiveCopiesForFullMastery": 20,
+    "canonicalScreens": [
+      "S01",
+      "S02",
+      "S03",
+      "S04",
+      "S05",
+      "S06",
+      "S07",
+      "S08",
+      "S09",
+      "S10",
+      "S11",
+      "S12"
+    ],
+    "serverAuthoritativePermanentEconomy": true
+  },
+  "externalStaleArtifacts": {
+    "pullRequest8": {
+      "state": "OPEN_DRAFT",
+      "classification": "STALE_EXTERNAL_NON_AUTHORITY",
+      "mayAuthorizeWork": false,
+      "mayAuthorizeCompletion": false,
+      "actionInThisCheckpoint": "DO_NOT_UPDATE_CLOSE_OR_MERGE"
+    }
   },
   "authorizedExecutionSequence": {
     "strict": true,
     "allowReordering": false,
-    "allowLaterPhaseWorkBeforePriorPass": false,
     "steps": [
       {
         "order": 1,
@@ -78,7 +154,7 @@
       },
       {
         "order": 3,
-        "name": "large-scale-build-persona-probability-validation",
+        "name": "large-scale-validation",
         "status": "BLOCKED"
       },
       {
@@ -88,7 +164,7 @@
       },
       {
         "order": 5,
-        "name": "floors-1-through-10-and-required-backend-implementation",
+        "name": "floors-1-through-10-and-backend-implementation",
         "status": "BLOCKED"
       },
       {
@@ -99,742 +175,35 @@
     ]
   },
   "nextAuthorizedChat": "01_正本仕様・競合調査",
-  "nextAction": "start-01-consolidated-canonical-redline-competitive-research-and-step1-reseal",
-  "pendingRevalidationDocuments": [
-    "FLOORS_1_10_DESIGN.md",
-    "QUALITY_GATE.md",
-    "PROJECT_HANDOVER.md",
-    "README.md",
-    "AGENTS.md",
-    "AI_PROJECT_POLICY.json",
-    "CHATGPT_PROJECT_BOOTSTRAP.md",
-    "simulation/INPUT_CONTRACT.md",
-    "simulation/candidate-v1.json",
-    "simulation/candidate.schema.json",
-    "simulation/validate-candidate.mjs",
-    ".github/workflows/verify-main.yml",
-    ".github/workflows/verify-step-1-artifacts.yml"
-  ],
-  "approvedRequirements": {
-    "genre": "mobile-portrait-idle-incremental-rpg",
-    "oneLine": "raise cat and catfolk adventurers, use living tower shops and deliveries to support combat, climb without a player-visible maximum, and reset from Floor 1 to re-clear faster and reach a new record",
-    "playerVisibleTowerMaximum": null,
-    "floor100Role": "first-major-saga-and-progression-milestone-not-ending",
-    "floor101Exists": true,
-    "initialProductionFloorMinimum": 1,
-    "initialProductionFloorMaximum": 10,
-    "directTapDamage": 0,
-    "playableSpecies": [
-      "cat",
-      "catfolk"
+  "nextAction": "complete-route-01-0-evidence-then-start-route-01-1-repository-wide-acceptance-and-contradiction-inventory",
+  "writeBoundary": {
+    "allowed": [
+      "Step 1 canonical documentation",
+      "status mirrors",
+      "research",
+      "dependency specifications",
+      "quality evidence"
     ],
-    "activeNamedPartySize": 4,
-    "temporaryReinforcementSeparateFromParty": true,
-    "merchantChairmanIdentityAllowed": false,
-    "shopsAndDeliveriesSupportCombatRequired": true,
-    "actualCatTravelAndContactRequired": true,
-    "multipleEnemiesRequired": true,
-    "offlineProgressRequired": true,
-    "singleStrongNewGameResetRequired": true,
-    "dawnMayExistAsSeparateReset": false,
-    "gachaRequired": true,
-    "loginBonusRequired": true,
-    "paymentsRequired": true,
-    "rewardedAdsRequired": true,
-    "forcedAdsAllowedInInitialProduct": false,
-    "bannerAdsAllowedInInitialProduct": false,
-    "pvpAllowedInInitialProduct": false,
-    "competitiveRankingRewardsAllowedInInitialProduct": false,
-    "guildCompetitionAllowedInInitialProduct": false,
-    "battlePassAllowedInInitialProduct": false
-  },
-  "towerModel": {
-    "playerVisibleMaximumFloor": null,
-    "districtSizeFloors": 10,
-    "majorCycleSizeFloors": 100,
-    "floor100IsEnding": false,
-    "floor101AndBeyond": "REQUIRED",
-    "generation": "data-driven districts, cycles, modifier pools, bosses, reward bands, and repetition controls",
-    "largeNumberContractRequired": true,
-    "javascriptNumberAsUnboundedAuthorityAllowed": false,
-    "serialization": "canonical arbitrary-precision integer or normalized decimal string"
-  },
-  "districtPattern": {
-    "x1": "entrance-and-supply",
-    "x2": "shop",
-    "x3": "support",
-    "x4": "shop",
-    "x5": "cat-rescue-or-character-progression",
-    "x6": "shop-and-multi-wave",
-    "x7": "support-and-special-event",
-    "x8": "shop-and-district-wall",
-    "x9": "elite-and-choice",
-    "x0": "multi-phase-boss-and-district-hub",
-    "status": "BASE_PATTERN_PENDING_01_REVALIDATION"
-  },
-  "firstTenFloorMinimumScope": {
-    "storyCriticalCoreCats": [
-      "cat.mugi",
-      "cat.luna",
-      "cat.toto",
-      "cat.kohaku"
-    ],
-    "storyCriticalCoreCatsHaveFreeDeterministicPath": true,
-    "temporaryHelperRolesMinimum": 3,
-    "normalEnemies": 6,
-    "eliteEnemies": 2,
-    "districtWallEncounters": 1,
-    "threePhaseBosses": 1,
-    "selectableShops": 4,
-    "supportFacilities": 2,
-    "continuousTowerBrowsing": true,
-    "shopPlacementAndReconfiguration": true,
-    "actualMovementContactAndStairClimb": true,
-    "firstValidResetIncluded": true,
-    "firstResetFreeRubyFundsFirstEvolution": true,
-    "beginnerCharacterAndWeaponGachaStatesIncluded": true,
-    "firstDayGuarantee": {
-      "characterMinimumRarity": "SSR",
-      "weaponMinimumRarity": "SR"
-    },
-    "midCombatSaveRestoreBoundaryRequired": true
-  },
-  "catalogTargets": {
-    "fullInitialProductCharacters": 24,
-    "fullInitialProductWeapons": 36,
-    "firstTenUsesSmallerHonestSubset": true,
-    "oneWeaponPerActiveCharacter": true,
-    "randomSubstatMazeInInitialProduct": false
-  },
-  "rarityRegistry": {
-    "ordered": [
-      "N",
-      "R",
-      "RR",
-      "SR",
-      "SSR",
-      "UR"
-    ],
-    "baseRarityPromotesThroughEvolution": false,
-    "deterministicNonGachaRarities": [
-      "N",
-      "R"
-    ],
-    "gachaRouteRarities": [
-      "RR",
-      "SR",
-      "SSR",
-      "UR"
-    ],
-    "nAndRMustRetainEndgameUtility": true,
-    "urMayDominateEveryRole": false
-  },
-  "characterProgression": {
-    "coinLeveling": true,
-    "levelCap": null,
-    "evolutionEligibilityEveryLevels": 100,
-    "evolutionCurrency": "currency.ruby",
-    "levelingBlockedByUnevolvedMilestone": false,
-    "delayedEvolutionCatchUpRequired": true,
-    "firstEvolutionPaidByFirstResetFreeRuby": true,
-    "evolutionVisuals": "minor FX/UI/visual change every 100 levels; bespoke art at major milestones"
-  },
-  "duplicateMastery": {
-    "appliesTo": [
-      "character",
-      "weapon"
-    ],
-    "firstCopyFunctionalCompletionRequired": true,
-    "minimumAdditionalEffectiveCopiesForFullMastery": 20,
-    "fullMasteryIsOptionalLongTermChase": true,
-    "ordinaryPveBalancedAroundFullMastery": false,
-    "diminishingMarginalPowerRequired": true,
-    "deterministicCatchUpRequired": [
-      "selector",
-      "exchange",
-      "universal-fragment",
-      "rerun",
-      "pity-carryover"
-    ],
-    "overflowMayBeDiscarded": false,
-    "simulationBreakpoints": [
-      0,
-      1,
-      3,
-      5,
-      10,
-      15,
-      20,
-      "final-cap"
+    "forbidden": [
+      "runtime",
+      "assets",
+      "candidate",
+      "schema",
+      "validator",
+      "simulator",
+      "backend",
+      "payment provider",
+      "ad network",
+      "Production alias"
     ]
   },
-  "gacha": {
-    "characterAndWeaponPoolsSeparated": true,
-    "routineCharacterCurrency": "ticket.character",
-    "routineWeaponCurrency": "ticket.weapon",
-    "pickupTicketAllowed": true,
-    "rubyPriority": "mandatory evolution first; optional pickup or premium supplement second",
-    "routineMassDrawsMayConsumeMandatoryEvolutionBudget": false,
-    "hardRarityPityTarget": 100,
-    "featuredPickupGuaranteeTarget": 200,
-    "compatibleBannerCarryoverRequired": true,
-    "visibleCountersRequired": true,
-    "deterministicExchangeRequired": true,
-    "drawHistoryRequired": true,
-    "completeGachaAllowed": false,
-    "limitedCombatContentRequiresRerunOrDeterministicRecovery": true,
-    "firstDayGuarantee": {
-      "SSRCharacter": 1,
-      "SRorBetterWeapon": 1
-    }
-  },
-  "rewardCadenceCandidates": {
-    "status": "SIMULATION_CANDIDATE",
-    "firstTenMinutesCombinedPulls": [
-      50,
-      100
-    ],
-    "firstHourCombinedPulls": [
-      150,
-      250
-    ],
-    "firstSevenDaysCombinedPulls": [
-      500,
-      800
-    ],
-    "steadyNoAdCombinedPullsPerDay": [
-      40,
-      60
-    ],
-    "optionalAdAdditionalPullsPerDay": {
-      "target": 20,
-      "hardCap": 40
-    },
-    "bulkDrawSizes": [
-      10,
-      50,
-      100
-    ],
-    "firstTimeAnimationThenSkippable": true,
-    "newPlayerVisiblePowerGainSecondsMaximumTarget": 45,
-    "steadySessionVisiblePowerGainSecondsMaximumTarget": 120
-  },
-  "currencyRegistry": {
-    "coin": {
-      "id": "currency.coin",
-      "lifetime": "run",
-      "authority": "run/server-verifiable"
-    },
-    "ruby": {
-      "displayId": "currency.ruby",
-      "lifetime": "profile",
-      "authority": "server",
-      "internalLedgers": [
-        "paid",
-        "free-reset",
-        "free-ad",
-        "free-other"
-      ],
-      "purchasedRubyExpires": false
-    },
-    "characterTicket": {
-      "id": "ticket.character",
-      "authority": "server"
-    },
-    "weaponTicket": {
-      "id": "ticket.weapon",
-      "authority": "server"
-    },
-    "pickupTicket": {
-      "id": "ticket.pickup",
-      "authority": "server"
-    },
-    "exchangeAndMastery": {
-      "authority": "server",
-      "exactIds": "PENDING_01_REGISTRY"
-    }
-  },
-  "strongNewGame": {
-    "singleSystem": true,
-    "formalName": "PENDING_ORIGINAL_CATS_TOWER_NAME",
-    "oldDawnDisposition": "merge-rename-or-remove",
-    "restartFloor": 1,
-    "firstValidResetForegroundMinutes": [
-      20,
-      35
-    ],
-    "knownFloorFastForwardRequired": true,
-    "savedFormationAndShopAutomationRestoreRequired": true,
-    "sameMaximumRepeatRuby": 0,
-    "lossKeepGainPreviewRequired": true,
-    "resetRewardsServerAuthoritative": true
-  },
-  "monetization": {
-    "loginTracks": [
-      "newcomer",
-      "monthly",
-      "returner"
-    ],
-    "loginUsesServerTime": true,
-    "missedDayResetsEntireTrack": false,
-    "initialAds": "rewarded-opt-in-only",
-    "forcedInterstitialInitial": false,
-    "bannerInitial": false,
-    "adRewardsServerVerified": true,
-    "initialProductCatalog": [
-      "ruby-pack",
-      "one-time-starter-pack",
-      "monthly-pass",
-      "cosmetic-style-pack",
-      "disclosed-ticket-pack"
-    ],
-    "noAdF2PMandatoryEvolutionCoverage": 1.0,
-    "noAdF2PFeaturedURGuaranteeDays": [
-      30,
-      45
-    ],
-    "monthlyPassProgressionMultiplierTarget": [
-      1.5,
-      2.0
-    ],
-    "highSpendStressMultiplierTarget": [
-      3.0,
-      5.0
-    ],
-    "payOnlyStoryFloorsAllowed": false,
-    "payOnlyResetAllowed": false,
-    "initialLiveOperations": [
-      "permanent-content",
-      "pickup-banner",
-      "login-event"
-    ]
-  },
-  "serverAuthority": {
-    "required": true,
-    "serverOwned": [
-      "account-and-guest-linking",
-      "paid-and-free-ruby",
-      "tickets-and-exchange",
-      "product-catalog-version",
-      "payment-receipt-webhook-refund-revocation-restore",
-      "gacha-result-random-audit-id-pity-history",
-      "character-and-weapon-acquisition",
-      "duplicate-mastery-overflow",
-      "evolution-stages",
-      "reset-reward-and-highest-floor",
-      "login-claims",
-      "ad-reward-receipts",
-      "entitlements"
-    ],
-    "clientMayMintPermanentEconomy": false,
-    "idempotencyRequired": true,
-    "immutableTransactionIdRequired": true,
-    "replayRaceMultiTabTestsRequired": true
-  },
-  "canonicalScreens": [
-    {
-      "id": "S01",
-      "name": "title-resume-account",
-      "requiredStates": [
-        "new-game",
-        "saved-resume",
-        "account-link",
-        "migration-recovery"
-      ]
-    },
-    {
-      "id": "S02",
-      "name": "battle-follow",
-      "requiredStates": [
-        "tutorial",
-        "normal-battle",
-        "multiple-enemies",
-        "elite",
-        "delivery",
-        "communication-recovery"
-      ]
-    },
-    {
-      "id": "S03",
-      "name": "unbounded-tower",
-      "requiredStates": [
-        "current-best-floor",
-        "ten-floor-district",
-        "hundred-floor-cycle",
-        "next-milestone",
-        "virtualized-browse"
-      ]
-    },
-    {
-      "id": "S04",
-      "name": "floor-clear-placement",
-      "requiredStates": [
-        "reward",
-        "stair",
-        "shop",
-        "support",
-        "rescue",
-        "choose-later"
-      ]
-    },
-    {
-      "id": "S05",
-      "name": "shop-delivery",
-      "requiredStates": [
-        "placement",
-        "comparison",
-        "adjacency",
-        "reconfigure",
-        "delivery-forecast"
-      ]
-    },
-    {
-      "id": "S06",
-      "name": "character",
-      "requiredStates": [
-        "rarity",
-        "coin-level",
-        "evolution",
-        "character-mastery",
-        "party",
-        "living-preview"
-      ]
-    },
-    {
-      "id": "S07",
-      "name": "weapon-build",
-      "requiredStates": [
-        "equipment",
-        "weapon-mastery",
-        "build-comparison",
-        "bulk-upgrade",
-        "defeat-diagnosis"
-      ]
-    },
-    {
-      "id": "S08",
-      "name": "boss-variant",
-      "requiredStates": [
-        "intro",
-        "phases",
-        "telegraph",
-        "break",
-        "failure",
-        "reward"
-      ]
-    },
-    {
-      "id": "S09",
-      "name": "strong-new-game",
-      "requiredStates": [
-        "lose-keep-gain",
-        "ruby",
-        "reclear-forecast",
-        "confirm",
-        "retry-safe"
-      ]
-    },
-    {
-      "id": "S10",
-      "name": "recruit-gacha",
-      "requiredStates": [
-        "character-banner",
-        "weapon-banner",
-        "odds",
-        "pity",
-        "exchange",
-        "history",
-        "result-recovery"
-      ]
-    },
-    {
-      "id": "S11",
-      "name": "store-ruby-ads",
-      "requiredStates": [
-        "paid-free-display",
-        "products",
-        "purchase-pending",
-        "refund-restore",
-        "rewarded-ad",
-        "entitlements"
-      ]
-    },
-    {
-      "id": "S12",
-      "name": "login-inbox",
-      "requiredStates": [
-        "newcomer",
-        "monthly",
-        "returner",
-        "claim",
-        "already-claimed",
-        "history"
-      ]
-    }
-  ],
-  "stableIdRegistry": {
-    "namespaceRules": {
-      "format": "lowercase ASCII namespace plus dot-separated lowercase slug segments",
-      "canonicalIdRegexCandidate": "^(cat|helper|enemy|elite|boss|weapon|shop|support|currency|ticket|rarity|banner|product|entitlement|reset|mastery|achievement|district|cycle|relic|reward|event)(\\.[a-z0-9]+(?:[-_][a-z0-9]+)*)+$",
-      "canonicalWriteMustUseRegisteredId": true,
-      "aliasesAreReadOnlyMigrationInputs": true,
-      "displayNamesAreNeverPersistenceIds": true
-    },
-    "cats": [
-      {
-        "id": "cat.mugi",
-        "displayName": "ムギ",
-        "role": "frontline-control"
-      },
-      {
-        "id": "cat.luna",
-        "displayName": "ルナ",
-        "role": "ranged-anti-air"
-      },
-      {
-        "id": "cat.toto",
-        "displayName": "トト",
-        "role": "support-healing"
-      },
-      {
-        "id": "cat.kohaku",
-        "displayName": "コハク",
-        "role": "runner-backline-disruption"
-      }
-    ],
-    "helpers": [
-      {
-        "id": "helper.guard",
-        "role": "frontline"
-      },
-      {
-        "id": "helper.slinger",
-        "role": "ranged"
-      },
-      {
-        "id": "helper.runner",
-        "role": "runner"
-      }
-    ],
-    "normalEnemies": [
-      {
-        "id": "enemy.ash_mouse"
-      },
-      {
-        "id": "enemy.soot_weasel"
-      },
-      {
-        "id": "enemy.sack_mole"
-      },
-      {
-        "id": "enemy.scrap_crow"
-      },
-      {
-        "id": "enemy.smoke_bat"
-      },
-      {
-        "id": "enemy.spark_gecko"
-      }
-    ],
-    "eliteEnemies": [
-      {
-        "id": "elite.ledger_owl"
-      },
-      {
-        "id": "elite.blackwing_guard"
-      }
-    ],
-    "bosses": [
-      {
-        "id": "boss.d01.kagetsubasa"
-      }
-    ],
-    "shops": [
-      {
-        "id": "shop.staff-reception"
-      },
-      {
-        "id": "shop.fish-diner"
-      },
-      {
-        "id": "shop.claw-forge"
-      },
-      {
-        "id": "shop.toy-workshop"
-      },
-      {
-        "id": "shop.cat-clinic"
-      },
-      {
-        "id": "shop.delivery-warehouse"
-      },
-      {
-        "id": "shop.observatory"
-      },
-      {
-        "id": "shop.lantern-store"
-      },
-      {
-        "id": "shop.nap-inn"
-      },
-      {
-        "id": "shop.curio-gallery"
-      }
-    ],
-    "supportFacilities": [
-      {
-        "id": "support.training-ground"
-      },
-      {
-        "id": "support.rest-nest"
-      },
-      {
-        "id": "support.supply-lift"
-      },
-      {
-        "id": "support.request-board"
-      }
-    ],
-    "pending01Registry": [
-      "20 additional character IDs",
-      "36 weapon IDs",
-      "banner IDs",
-      "reset ID",
-      "mastery and exchange IDs"
-    ]
-  },
-  "stableIdMigrationAliases": {
-    "shop.guild": "shop.staff-reception",
-    "shop.staff_reception": "shop.staff-reception",
-    "shop.fish_diner": "shop.fish-diner",
-    "shop.claw_forge": "shop.claw-forge",
-    "shop.toy_workshop": "shop.toy-workshop",
-    "shop.clinic": "shop.cat-clinic",
-    "shop.cat_clinic": "shop.cat-clinic",
-    "shop.delivery_warehouse": "shop.delivery-warehouse",
-    "shop.lantern_store": "shop.lantern-store",
-    "shop.nap_inn": "shop.nap-inn",
-    "shop.curio_gallery": "shop.curio-gallery",
-    "support.training_ground": "support.training-ground",
-    "support.rest_nest": "support.rest-nest",
-    "support.freight_lift": "support.supply-lift",
-    "support.supply_lift": "support.supply-lift",
-    "support.request_board": "support.request-board",
-    "currency.dawn-shard": "currency.ruby",
-    "dawn.combat": "reset.pending-original.combat-path",
-    "dawn.reinforcement": "reset.pending-original.reinforcement-path",
-    "dawn.commerce": "reset.pending-original.commerce-path"
-  },
-  "saveDirection": {
-    "legacyLocalKey": "cats-tower-v080",
-    "targetLocalCacheKeyCandidate": "cats-tower-v100",
-    "targetGameplaySchema": "PENDING_STEP2",
-    "legacyRawBackupRequired": true,
-    "migrationMustBeIdempotent": true,
-    "localAndServerAuthoritySeparated": true,
-    "savePartitions": [
-      "local-preferences",
-      "local-run-cache",
-      "server-profile",
-      "server-wallet",
-      "server-entitlements",
-      "server-audit"
-    ],
-    "offlineCapHoursCandidate": 24,
-    "offlineMayChooseUnseenBranch": false,
-    "offlineMayMintPaidOrPermanentEconomy": false,
-    "postResetKnownFloorReclearAllowed": true
-  },
-  "simulationRequirements": {
-    "minimumGameplayBuilds": 3,
-    "personas": [
-      "no-ad-f2p",
-      "rewarded-ad-f2p",
-      "monthly-pass",
-      "controlled-payer",
-      "high-spend-stress"
-    ],
-    "seedsPerBuildPersona": 1000,
-    "minimumScenarioCount": 15000,
-    "horizons": [
-      "1-10F",
-      "100F",
-      "1000F",
-      "10000F-or-mathematical-equivalent",
-      "repeated-resets"
-    ],
-    "separateMonteCarloRequired": true,
-    "separateStateTransitionTestsRequired": true,
-    "requiredProbabilityChecks": [
-      "p50",
-      "p90",
-      "p99",
-      "hard-pity-100",
-      "featured-guarantee-200",
-      "carryover",
-      "duplicate-tail"
-    ],
-    "requiredEconomyChecks": [
-      "mandatory-evolution-coverage",
-      "30-45-day-featured-UR",
-      "paid-acceleration-bounds",
-      "N-R-long-term-viability",
-      "UR-non-universal-dominance"
-    ]
-  },
-  "qualityAndPerformance": {
-    "viewports": [
-      "320x667",
-      "375x667",
-      "390x844",
-      "430x932"
-    ],
-    "normalMotionRequired": true,
-    "reducedMotionRequired": true,
-    "primaryInputP95MsMaximumTarget": 100,
-    "medianFpsMinimumTarget": 55,
-    "p95FrameTimeMsMaximumTarget": 32,
-    "stallsOver100MsAllowedTarget": 0,
-    "physicalIPhoneBossBattleSeconds": 180,
-    "physicalIPhoneContinuousSoakSeconds": 600,
-    "hundredBulkDrawStateRequired": true,
-    "allFloorsInDomAllowed": false,
-    "offscreenAnimationAllowed": false,
-    "physicalIPhoneEvidenceRequiredForFinalDevicePass": true
-  },
-  "legacyBaseline": {
-    "version": "0.8.2",
-    "commit": "727b8d00c281e7539117da5ded7309ea01c7e516",
-    "role": "historical runtime recovery and comparison baseline only",
-    "productionReady": false,
-    "physicalIPhoneStandalonePwaApproval": "NOT_VERIFIED"
-  },
-  "supersededHistoricalClaims": [
-    "finite 1F-100F final product",
-    "101F prohibition",
-    "100F product ending",
-    "gacha forbidden",
-    "premium currency forbidden",
-    "login bonus forbidden",
-    "in-game advertising forbidden",
-    "two spendable currencies only",
-    "exactly nine canonical screens",
-    "Dawn as separate unchanged reset",
-    "three thousand scenarios sufficient",
-    "local-only save sufficient for paid economy"
-  ],
   "verification": {
-    "coreAuthorityFilesSynchronized": true,
-    "jsonStrictParse": "PASS",
-    "oldProjectInstructionsDeletedFromLiveKimi": true,
-    "newProjectInstructionsActive": true,
-    "masterSpecFiniteCapRemoved": true,
-    "projectStatusOldPassAuthorityRemoved": true,
-    "activeChangeControlProjectSourceUpdated": true,
     "runtimeChanged": false,
     "assetsChanged": false,
     "candidateChanged": false,
     "schemaChanged": false,
+    "validatorChanged": false,
+    "simulatorChanged": false,
     "backendChanged": false,
     "paymentProviderConfigured": false,
     "adNetworkConfigured": false,

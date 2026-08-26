@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-external-stale-artifacts",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "artifacts": [
+    {
+      "type": "pull_request",
+      "number": 8,
+      "state": "OPEN",
+      "draft": true,
+      "base": "main",
+      "head": "kimi",
+      "observedHead": "6d7724f1f71fa99d0e9b119ef437ebb902187858",
+      "title": "商人サーガ忠実版 (猫キャラ差し替え) — 放置クリッカー完全リビルド",
+      "classification": "STALE_EXTERNAL_NON_AUTHORITY",
+      "supersededSignals": [
+        "1:1 clone framing",
+        "merchant Mugi does not fight",
+        "tap/long-press summon loop",
+        "Dawn-like reset framing",
+        "CLONE_DESIGN as active authority"
+      ],
+      "rules": [
+        "PR body, title, merge status and preview metadata may not authorize current product or phase.",
+        "Do not update, close, merge or otherwise operate the PR in this checkpoint.",
+        "Do not use PR workflow as the project development path.",
+        "A Vercel preview carrying githubPrId=8 is still evaluated by exact commit and branch only."
+      ]
+    }
+  ],
+  "unresolvedExternalAction": "None required for Route 01-0; repository containment is sufficient. Any future close/update requires separate explicit authorization and policy reconciliation."
+}
