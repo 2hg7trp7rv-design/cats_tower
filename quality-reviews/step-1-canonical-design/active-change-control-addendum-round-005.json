@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-canonical-design-active-change-control-addendum-round-005",
+  "createdAt": "2026-08-26",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "parentHead": "d862c332d35028ab4e41c172c7f4532f51ec4d3a",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS",
+  "advanceAllowed": false,
+  "decisionAuthority": "quality-reviews/step-1-hero-merchant-large-idle-integration/user-decision-lock-round-005.json",
+  "changes": [
+    "All remaining Round 4 user-owned product decisions are resolved.",
+    "Twenty-plus duplicate progression is explicitly classified as optional long-term mastery rather than baseline ownership completion.",
+    "Playable roster is cats and catfolk; active party size is four.",
+    "Launch target is 24 characters and 36 weapons, with a smaller honest Floors 1-10 subset.",
+    "First reset free ruby pays the first evolution.",
+    "Base rarity remains fixed; evolution and duplicate mastery are separate.",
+    "Pity target is 100 draws with featured pickup guarantee at 200 and compatible carryover.",
+    "Each active character equips one weapon.",
+    "No-ad F2P featured-UR guarantee target is 30-45 days.",
+    "Paid acceleration is bounded to monthly 1.5x-2x and high-spend 3x-5x candidate ranges.",
+    "Initial live operations remain lightweight.",
+    "Reset receives an original Cat's Tower name and replaces or absorbs Dawn."
+  ],
+  "closureImpact": {
+    "userDecisionRegisterResolved": true,
+    "canonicalRedlineComplete": false,
+    "candidateSchemaValidatorUpdated": false,
+    "independentCritiquesComplete": false,
+    "step1Resealed": false,
+    "step2Allowed": false
+  },
+  "writeBoundary": {
+    "documentationAndReviewOnly": true,
+    "runtimeChanged": false,
+    "assetChanged": false,
+    "candidateChanged": false,
+    "backendChanged": false,
+    "productionChanged": false
+  },
+  "nextAuthorizedAction": "Consolidated canonical redline across product identity, unbounded tower, reset, ruby, evolution, rarity, duplicate mastery, party, weapons, gacha, monetization, screens, backend trust boundary, and simulation dependencies."
+}

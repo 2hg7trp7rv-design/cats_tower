@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-hero-merchant-large-idle-integration-user-decision-lock-round-005",
+  "createdAt": "2026-08-26",
+  "chat": "00_統括・工程管理",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "baseHead": "d862c332d35028ab4e41c172c7f4532f51ec4d3a",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS",
+  "advanceAllowed": false,
+  "sourceAnswer": {
+    "duplicateProgressionIntent": "Twenty-plus duplicates are intentionally a long-term endgame mastery chase, consistent with the user's intended Chinese-style idle-game reference set.",
+    "decisions": [
+      "D1B",
+      "D2A",
+      "D3B",
+      "D5B",
+      "D6A",
+      "D7A",
+      "D9B",
+      "D12A",
+      "D13A",
+      "D14B",
+      "D16A",
+      "D17A"
+    ]
+  },
+  "duplicateMasteryDecision": {
+    "required": true,
+    "minimumAdditionalEffectiveCopiesForFullMastery": 20,
+    "productRole": "long-term endgame mastery for selected favorite characters and weapons, not a baseline completion requirement for every owned item",
+    "completionLines": {
+      "functionalCompletion": "The first copy contains the complete advertised role and is usable in normal progression.",
+      "competitiveBreakpoints": "Early duplicate milestones provide visible but bounded improvements; exact breakpoints are simulation-dependent.",
+      "fullMastery": "Twenty or more effective duplicate copies or equivalent deterministic resources complete the long-term skill track."
+    },
+    "mandatoryGuardrails": [
+      "No main-story floor, reset access, evolution access, required combat role, or advertised core skill requires full mastery.",
+      "The largest functional gains occur before the final mastery stages; later stages use diminishing marginal power.",
+      "Selectors, exchange currency, universal fragments, reruns, pity carryover, and overflow conversion provide deterministic progress.",
+      "Full mastery is not treated as the expected state of the full roster for free-to-play or monthly-pass players.",
+      "Simulation must report time and spend to first copy, useful breakpoint, and full mastery separately.",
+      "The UI must label full mastery as long-term mastery rather than unfinished basic ownership."
+    ],
+    "rejectionCondition": "If a base copy feels incomplete or ordinary progression is balanced around twenty-plus duplicates, the system fails even though the long-term mastery chase itself remains required."
+  },
+  "decisions": [
+    {
+      "id": "D1",
+      "answer": "B",
+      "topic": "playable-species-boundary",
+      "lockedDecision": "Playable characters are cats and catfolk. Generic humans and unrelated fantasy species are excluded from the initial playable roster."
+    },
+    {
+      "id": "D2",
+      "answer": "A",
+      "topic": "simultaneous-party-size",
+      "lockedDecision": "The active named party contains four characters. Temporary reinforcements remain a separate support layer and do not increase the persistent named-party size."
+    },
+    {
+      "id": "D3",
+      "answer": "B",
+      "topic": "launch-collection-size",
+      "lockedDecision": "The full initial product target is 24 characters and 36 weapons. Floors 1-10 implement a deliberately smaller subset and may not pretend the full catalog is complete."
+    },
+    {
+      "id": "D5",
+      "answer": "B",
+      "topic": "first-evolution-payment-model",
+      "lockedDecision": "The first evolution is paid with free ruby granted by the first valid strong-new-game reset. It is not a zero-cost tutorial evolution and does not require purchase or advertisement."
+    },
+    {
+      "id": "D6",
+      "answer": "A",
+      "topic": "evolution-visual-cadence",
+      "lockedDecision": "Every 100-level evolution receives clear effects, UI change, and minor visual variation; bespoke full character art is reserved for larger milestones."
+    },
+    {
+      "id": "D7",
+      "answer": "A",
+      "topic": "base-rarity-promotion",
+      "lockedDecision": "N/R/RR/SR/SSR/UR is a fixed base-rarity identity. Evolution and duplicate skill mastery are separate axes and do not relabel an N unit as UR."
+    },
+    {
+      "id": "D9",
+      "answer": "B",
+      "topic": "pity-and-pickup-guarantee",
+      "lockedDecision": "The design target is a 100-draw hard rarity pity and a 200-draw featured pickup guarantee, with compatible banner-class carryover, visible counters, and deterministic exchange. Exact rates remain subject to probability simulation."
+    },
+    {
+      "id": "D12",
+      "answer": "A",
+      "topic": "weapon-slot-model",
+      "lockedDecision": "Each active character equips one weapon. Weapons have no randomized substat maze in the initial product."
+    },
+    {
+      "id": "D13",
+      "answer": "A",
+      "topic": "free-no-ad-featured-UR-guarantee",
+      "lockedDecision": "A consistent free-to-play player who watches no advertisements can reach one featured-UR guarantee within a target window of 30 to 45 days."
+    },
+    {
+      "id": "D14",
+      "answer": "B",
+      "topic": "paid-acceleration-ceiling",
+      "lockedDecision": "Monthly-pass players target approximately 1.5x to 2x progression speed; high-spend stress personas are bounded to approximately 3x to 5x. Spending may not create unbounded power independent of tower and reset progression."
+    },
+    {
+      "id": "D16",
+      "answer": "A",
+      "topic": "initial-live-operations-density",
+      "lockedDecision": "Initial live operations are lightweight: permanent content, pickup banners, and login events. Battle pass and dense overlapping limited events are deferred."
+    },
+    {
+      "id": "D17",
+      "answer": "A",
+      "topic": "formal-reset-name",
+      "lockedDecision": "The reset receives an original Cat's Tower name. Dawn is merged, renamed, or removed so that only one reset system and one confirmation flow exist."
+    }
+  ],
+  "allRound4UserOwnedDecisionsResolved": true,
+  "remainingNamingWork": [
+    "Choose the final original name and narrative presentation for the reset.",
+    "Name ticket classes, mastery currency, and major evolution-art milestones."
+  ],
+  "simulationRequiredBeforePass": [
+    "Base copy versus early breakpoint versus full-mastery power curves.",
+    "F2P no-ad, rewarded-ad, monthly-pass, controlled payer, and high-spend time-to-first-copy, time-to-breakpoint, and time-to-full-mastery distributions.",
+    "100/200 pity and pickup probability conformance.",
+    "Thirty-to-forty-five-day featured-UR guarantee feasibility.",
+    "Twenty-plus duplicate mastery with selectors, exchange, universal fragments, reruns, pity carryover, and overflow.",
+    "Four-character party and one-weapon-per-character balance.",
+    "First-reset ruby covering the first evolution without purchase or advertisement."
+  ],
+  "writes": {
+    "documentationAndReviewOnly": true,
+    "runtimeChanged": false,
+    "assetChanged": false,
+    "candidateChanged": false,
+    "backendChanged": false,
+    "productionChanged": false
+  },
+  "nextAuthorizedWork": "Produce the consolidated canonical redline and dependency-closure plan. Do not start Step 2 until the redline, critiques, contradiction checks, and new Step 1 seal pass."
+}
