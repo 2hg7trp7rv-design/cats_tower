@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-route-01-1-kickoff-evidence",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "scope": "Route 01-1 kickoff and IN_PROGRESS evidence only",
+  "base": {
+    "commit": "ea5a060c23b7e4a18bc179b4289beb8f1502f4a6",
+    "tree": "dbd72c34ab33b811ac93d284451e5b3a049d0e9e"
+  },
+  "content": {
+    "commit": "e0a55ef3975b5da9acf65919e49a04a7099cd13a",
+    "tree": "cf0f47afe4f3b2e0786d35d8733b215a35c2f887",
+    "parentMatchesBase": true,
+    "aheadBy": 1,
+    "behindBy": 0,
+    "message": "docs: open Round 008 Route 01-1 contradiction inventory",
+    "changedPaths": [
+      "PROJECT_HANDOVER.md",
+      "PROJECT_STATUS.json",
+      "README.md",
+      "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-009.json",
+      "quality-reviews/step-1-reseal-round-008/contradiction-inventory.json",
+      "quality-reviews/step-1-reseal-round-008/route-01-1-acceptance.json"
+    ],
+    "changedPathCount": 6,
+    "changedPathSetExact": true
+  },
+  "deployment": {
+    "id": "dpl_6eTfLVdNK4CGSR7xvpKkT11nVdDW",
+    "url": "https://catstower-cdza2dghk-shinyaaas-projects.vercel.app",
+    "state": "READY",
+    "target": null,
+    "githubCommit": "e0a55ef3975b5da9acf65919e49a04a7099cd13a",
+    "githubBranch": "kimi",
+    "commitMatch": true,
+    "branchMatch": true,
+    "branchAlias": "https://catstower-git-kimi-shinyaaas-projects.vercel.app",
+    "combinedStatusContext": "Vercel",
+    "combinedStatusState": "success",
+    "readyMeaning": "Documentation deployment only; Route 01-1 and Step 1 remain IN_PROGRESS"
+  },
+  "verification": {
+    "route010EvidenceVerified": true,
+    "acceptanceCreatedBeforeInventoryCompletion": true,
+    "inventoryStatus": "IN_PROGRESS",
+    "initialOpenP1Count": 8,
+    "currentAuthorityContradictionCount": "NOT_YET_FINALIZED",
+    "unclassifiedMatchCount": "NOT_YET_FINALIZED",
+    "runtimeChanged": false,
+    "assetsChanged": false,
+    "candidateChanged": false,
+    "schemaChanged": false,
+    "validatorChanged": false,
+    "simulatorChanged": false,
+    "backendChanged": false,
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "productionAliasChanged": false,
+    "pullRequestOperation": false
+  },
+  "verdicts": {
+    "route010Checkpoint": "PASS",
+    "route011Kickoff": "PASS",
+    "route011Completion": "IN_PROGRESS",
+    "overallStep1": "IN_PROGRESS",
+    "step2Allowed": false,
+    "unresolvedP0ForRoute011": 0,
+    "unresolvedP1ForRoute011": 8,
+    "physicalIPhoneVerified": false
+  },
+  "nextAuthorizedChat": "01_正本仕様・競合調査",
+  "nextAuthorizedWork": "Continue exact tree enumeration, direct current-authority reads, claim-family match classification and C1/C2 repair; do not issue zero proof yet.",
+  "evidenceBoundary": "This evidence proves Route 01-1 was opened correctly from the Route 01-0 evidence commit. It is not Route 01-1 PASS, Step 1 PASS or Step 2 authorization."
+}
