@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-hero-merchant-large-idle-integration-deployment-evidence-round-002",
+  "createdAt": "2026-08-26",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "contentCommit": "4012250a16c3546c1474ef284476818ba27444fa",
+  "contentTree": "c22a7c36ff7bd49de8ddeaa04e91f3175eaf3614",
+  "parentCommit": "e0c81edbb320dc65878d2ca9c83850aa7352145b",
+  "commitMessage": "docs: require gacha payments login rewards and ads",
+  "changedPaths": [
+    "quality-reviews/step-1-canonical-design/active-change-control.json",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/monetization-acceptance-round-002.json",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/round-002-monetization-direction.md",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/handover-round-002.json"
+  ],
+  "runtimeOrAssetChangedPathCount": 0,
+  "candidateSchemaValidatorChangedPathCount": 0,
+  "deployment": {
+    "id": "dpl_BeHjeA1ymj8zkLZwHMGhtwdke672",
+    "url": "https://catstower-765fnk05u-shinyaaas-projects.vercel.app/",
+    "branchAlias": "https://catstower-git-kimi-shinyaaas-projects.vercel.app/",
+    "state": "READY",
+    "target": null,
+    "githubCommit": "4012250a16c3546c1474ef284476818ba27444fa",
+    "githubBranch": "kimi",
+    "commitMatchVerified": true,
+    "automaticGitDeployment": true,
+    "manualDeploymentActionPerformed": false,
+    "productionAliasChanged": false
+  },
+  "evidenceBoundary": {
+    "status": "IN_PROGRESS",
+    "advanceAllowed": false,
+    "usedAsCompletionEvidence": false,
+    "physicalIPhoneVerified": false,
+    "firstTenPreviewReady": false,
+    "hundredFloorProductReady": false,
+    "meaning": "The READY deployment proves only that the documentation commit was built and deployed. It does not prove gameplay, gacha, billing, login rewards, advertisements, backend security, production readiness, or physical-device quality."
+  }
+}
