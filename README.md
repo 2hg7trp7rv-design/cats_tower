@@ -1,6 +1,6 @@
 # Cat's Tower
 
-猫と猫人の冒険者を育て、店舗と配送から戦闘支援を受け、上限のない塔を登り、一つの強くてニューゲームで1Fから前回より速く再攻略する放置インクリメンタルRPGです。
+猫と猫人を育成し、店舗と配送から戦闘支援を受け、上限のない塔を登る放置インクリメンタルRPGです。
 
 ## 現在地
 
@@ -8,39 +8,56 @@
 - 書込みbranch: 既存`kimi`のみ
 - Step 1: **IN_PROGRESS**
 - Route 01-0 governance recovery: **PASS**
-- Route 01-1 contradiction inventory: **PASS after checkpoint-c evidence**
+- Route 01-1 repository contradiction inventory: **PASS**
+- Route 01-2 competitor/platform/Japan research: **IN_PROGRESS**
 - Step 2〜6: **BLOCKED**
 - 新Step 1 seal: **NOT_CREATED**
 - 物理iPhone: **NOT_VERIFIED**
-- Production: legacy runtime、今回変更なし
+- Production: legacy runtime、今回変更しない
 
-## 情報源
+## Route 01-1結果
 
-1. 最新ユーザー決定
-2. `CHATGPT_PROJECT_INSTRUCTIONS1.md`
-3. active change-control、最新addendum、decision lock
-4. 検証済みStep 1 seal
-5. seal対象正本・status
-6. Acceptance/critic/judge/evidence
-7. 下位正本・Step 2 contract・runtime
-8. 過去PASS・legacy・参考資料
+- content: `a6211855428a54240bf48b586fc08cc85db0d6eb`
+- evidence: `68cb3f6a4689869538340f5f1a186bed3efac7e2`
+- current-authority superseded assertion: `0`
+- unclassified path/match: `0 / 0`
+- Route 01-1 P0/P1: `0 / 0`
 
-## Route 01-1 evidence set
+Evidence:
 
-- `quality-reviews/step-1-reseal-round-008/route-01-1-acceptance.json`
-- `quality-reviews/step-1-reseal-round-008/path-classification.json`
-- `quality-reviews/step-1-reseal-round-008/claim-match-register.json`
-- `quality-reviews/step-1-reseal-round-008/current-authority-zero-proof.json`
-- `quality-reviews/step-1-reseal-round-008/contradiction-inventory.json`
 - `quality-reviews/step-1-reseal-round-008/checkpoint-c-evidence.json`
 
-全path分類、旧主張13 family、current-authority assertion 0、unclassified 0をcheckpoint-cへ結合する。過去証拠は変更しない。
+## Route 01-2
+
+調査基準は2026-08-26。公式、store listing、platform policy、日本の一次資料、業界分析、user review、Cat's Towerへの推論を分離する。
+
+対象:
+
+- 商人サーガ
+- 魔王「世界の半分あげるって言っちゃった」
+- キノコ伝説
+- AFK Journey
+- Go Go Muffin
+- Capybara Go
+- Apple、Google Play、日本国内rule、privacy、未成年者保護
+
+Acceptance:
+
+- `quality-reviews/step-1-reseal-round-008/route-01-2-acceptance.json`
+
+予定成果物:
+
+- `quality-reviews/step-1-reseal-round-008/source-register-route-01-2.json`
+- `quality-reviews/step-1-reseal-round-008/competitive-research.md`
+- `quality-reviews/step-1-reseal-round-008/platform-policy-audit.md`
+- `canonical/POLICY_RELEASE_GATES.json`
+- `quality-reviews/step-1-reseal-round-008/checkpoint-d-evidence.json`
 
 ## preseal
 
-`MASTER_SPEC.md`と3 registryは`PRESEAL_DRAFT`。`FLOORS_1_10_DESIGN.md`は`PENDING_REVALIDATION`。Step 2 closure、policy gate、sealは未作成。これらが揃うまでStep 2を開始しない。
+`MASTER_SPEC.md`と3 registryは`PRESEAL_DRAFT`。`FLOORS_1_10_DESIGN.md`は`PENDING_REVALIDATION`。Step 2 closureとStep 1 sealは未作成。Vercel `READY`、旧PASS、旧workflow成功からStep 2を開始しない。
 
-## next
+## write boundary
 
-次は同じ`01_正本仕様・競合調査`でRoute 01-2の競合・Apple/Google・日本国内policy調査を行う。runtime、assets、V1 executable、backend、provider、Productionはまだ変更しない。
+runtime、assets、V1 candidate/schema/validator/simulator、backend、payment/ad provider、PR、Production aliasは変更しない。
 

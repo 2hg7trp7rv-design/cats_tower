@@ -1,92 +1,75 @@
 {
-  "statusDocumentSchemaVersion": 7,
+  "statusDocumentSchemaVersion": 8,
   "updatedDate": "2026-08-27",
   "project": "Cat's Tower",
   "canonicalRepository": "2hg7trp7rv-design/cats_tower",
   "canonicalBranch": "kimi",
-  "documentationBranch": "kimi",
-  "modificationBranch": "kimi",
   "branchPolicy": {
     "onlyExistingKimiMayBeModified": true,
-    "createOtherBranchAllowed": false,
-    "switchToOtherBranchAllowed": false,
     "pullRequestWorkflowAllowed": false,
-    "mergeToOtherBranchAllowed": false,
-    "forcePushAllowed": false
+    "mergeRebaseCherryPickForcePushAllowed": false
   },
-  "productSourceOfTruth": "MASTER_SPEC.md",
-  "completionQualityGate": "QUALITY_GATE.md",
   "activeProjectInstructions": {
     "path": "CHATGPT_PROJECT_INSTRUCTIONS1.md",
     "status": "ACTIVE_COMPLETE_REPLACEMENT",
-    "oldPath": "CHATGPT_PROJECT_INSTRUCTIONS.md",
-    "oldPathStatus": "DELETED_FROM_LIVE_KIMI",
-    "simultaneousActivationAllowed": false
+    "oldPathStatus": "DELETED_FROM_LIVE_KIMI"
   },
-  "projectStage": "preproduction",
   "currentChat": "01_正本仕様・競合調査",
   "currentStep": 1,
   "currentStepName": "canonical-integration-and-reseal",
   "currentStepStatus": "IN_PROGRESS",
-  "currentCheckpoint": "round-008-route-01-1-repository-wide-acceptance-and-contradiction-inventory",
+  "currentCheckpoint": "round-008-route-01-2-competitive-platform-japan-research",
   "advanceAllowed": false,
   "step2Allowed": false,
-  "codeChangesStartedForRedesignedProduct": false,
   "firstTenPreviewReady": false,
   "unboundedProductReady": false,
-  "productionUrl": "https://cats-tau-dusky.vercel.app/",
-  "productionChangedByCurrentWork": false,
   "physicalIPhoneVerified": false,
-  "route01Start": {
-    "baseHead": "6d7724f1f71fa99d0e9b119ef437ebb902187858",
-    "baseTree": "02220ef93b6ff0b902e6735298681aab400608a3",
-    "reason": "00 scoped passes remain valid, but four partial 01 commits created preseal governance drift that must be repaired before repository-wide redline work.",
-    "acceptance": "quality-reviews/step-1-reseal-round-008/acceptance-matrix.json",
-    "postcheck": "quality-reviews/step-1-reseal-round-008/zero-zero-postcheck.json",
-    "externalStaleArtifacts": "quality-reviews/step-1-reseal-round-008/external-stale-artifacts.json",
-    "activeAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-008.json",
-    "status": "PASS",
-    "checkpointEvidence": "quality-reviews/step-1-reseal-round-008/checkpoint-a-evidence.json",
-    "contentCommit": "77df8b720733e4af6e22220e39950d2e9ff25df4",
-    "contentTree": "86a1137169f25f5abb8a7d1fa4315b9d100564c5",
-    "evidenceCommit": "ea5a060c23b7e4a18bc179b4289beb8f1502f4a6",
-    "evidenceTree": "dbd72c34ab33b811ac93d284451e5b3a049d0e9e",
-    "contentDeployment": {
-      "id": "dpl_2bYyqA6NnSEazsxF8yToZQU5aSjp",
-      "url": "https://catstower-ejm2c5mk0-shinyaaas-projects.vercel.app",
-      "state": "READY",
-      "target": null
+  "productionChangedByCurrentWork": false,
+  "completedCheckpoints": {
+    "route010": {
+      "status": "PASS",
+      "contentCommit": "77df8b720733e4af6e22220e39950d2e9ff25df4",
+      "evidenceCommit": "ea5a060c23b7e4a18bc179b4289beb8f1502f4a6"
     },
-    "evidenceDeployment": {
-      "id": "dpl_xVkczHkpj2smFRHQ9Tdk5Egq1QfG",
-      "url": "https://catstower-hoia3kcf9-shinyaaas-projects.vercel.app",
-      "state": "READY",
-      "target": null
+    "route011": {
+      "status": "PASS",
+      "contentCommit": "a6211855428a54240bf48b586fc08cc85db0d6eb",
+      "contentTree": "e6569c6f94222279db061a9f56558140694c7551",
+      "evidenceCommit": "68cb3f6a4689869538340f5f1a186bed3efac7e2",
+      "evidenceTree": "95d05a27ce739c3f1e525348c13a6955baf5b721",
+      "currentAuthoritySupersededAssertionCount": 0,
+      "unclassifiedPathCount": 0,
+      "unclassifiedMatchCount": 0,
+      "unresolvedP0": 0,
+      "unresolvedP1": 0
     }
   },
-  "historicalScopedPasses": {
-    "round006CoreAuthoritySync": {
-      "status": "SCOPED_PASS",
-      "evidence": "quality-reviews/step-1-hero-merchant-large-idle-integration/core-authority-sync-evidence-round-006.json",
-      "mayAuthorizeCurrentStep2": false
-    },
-    "round007EntrypointContainment": {
-      "status": "SCOPED_PASS",
-      "evidence": "quality-reviews/step-1-hero-merchant-large-idle-integration/entrypoint-containment-evidence-round-007.json",
-      "mayAuthorizeCurrentStep2": false
-    }
+  "activeCheckpoint": {
+    "id": "route012",
+    "status": "IN_PROGRESS",
+    "baseHead": "68cb3f6a4689869538340f5f1a186bed3efac7e2",
+    "baseTree": "95d05a27ce739c3f1e525348c13a6955baf5b721",
+    "researchCutoff": "2026-08-26T23:59:59+09:00",
+    "acceptance": "quality-reviews/step-1-reseal-round-008/route-01-2-acceptance.json",
+    "activeAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-011.json",
+    "requiredOutputs": [
+      "quality-reviews/step-1-reseal-round-008/source-register-route-01-2.json",
+      "quality-reviews/step-1-reseal-round-008/competitive-research.md",
+      "quality-reviews/step-1-reseal-round-008/platform-policy-audit.md",
+      "canonical/POLICY_RELEASE_GATES.json",
+      "quality-reviews/step-1-reseal-round-008/checkpoint-d-evidence.json"
+    ]
   },
   "currentCanonicalization": {
     "status": "IN_PROGRESS",
-    "allUserProductDecisionsResolved": true,
     "newStep1SealExists": false,
-    "repositoryWideContradictionInventoryComplete": false,
-    "allLowerDocumentsRedlined": false,
+    "repositoryWideContradictionInventoryComplete": true,
     "competitiveAndPolicyResearchComplete": false,
+    "allLowerDocumentsRedlined": false,
     "step2DependencyClosureComplete": false,
     "independentCritiquesComplete": false,
     "unresolvedP0": 0,
-    "unresolvedP1": "NOT_YET_FINALIZED"
+    "unresolvedP1": "DOWNSTREAM_NOT_YET_FINALIZED"
   },
   "canonicalArtifacts": {
     "MASTER_SPEC.md": "PRESEAL_DRAFT",
@@ -94,147 +77,43 @@
     "canonical/SCREEN_STATE_REGISTRY.json": "PRESEAL_DRAFT",
     "canonical/STATE_TRANSITION_CONTRACT.json": "PRESEAL_DRAFT",
     "FLOORS_1_10_DESIGN.md": "PENDING_REVALIDATION",
+    "canonical/POLICY_RELEASE_GATES.json": "PLANNED_ROUTE_01_2",
     "canonical/STEP2_DEPENDENCY_CLOSURE.json": "PLANNED_NOT_CREATED",
-    "canonical/POLICY_RELEASE_GATES.json": "PLANNED_NOT_CREATED",
     "quality-reviews/step-1-reseal-round-008/seal-round-008.json": "NOT_CREATED"
   },
   "approvedProductBoundary": {
-    "genre": "mobile-portrait-idle-incremental-rpg",
     "playerVisibleTowerMaximum": null,
     "floor100Role": "first-major-milestone-not-ending",
     "floor101Exists": true,
-    "playableSpecies": [
-      "cat",
-      "catfolk"
-    ],
+    "playableSpecies": ["cat", "catfolk"],
     "activeNamedPartySize": 4,
     "temporaryReinforcementSeparateFromParty": true,
     "merchantChairmanIdentityAllowed": false,
     "directTapDamage": 0,
-    "singleStrongNewGameResetRequired": true,
+    "singleResetRequired": true,
     "coinLevelCap": null,
     "evolutionEligibilityEveryLevels": 100,
-    "rarities": [
-      "N",
-      "R",
-      "RR",
-      "SR",
-      "SSR",
-      "UR"
-    ],
-    "catalogTargets": {
-      "characters": 24,
-      "weapons": 36
-    },
+    "rarities": ["N", "R", "RR", "SR", "SSR", "UR"],
+    "catalogTargets": {"characters": 24, "weapons": 36},
     "characterAndWeaponGachaSeparated": true,
     "hardPityTarget": 100,
     "featuredGuaranteeTarget": 200,
     "minimumAdditionalEffectiveCopiesForFullMastery": 20,
-    "canonicalScreens": [
-      "S01",
-      "S02",
-      "S03",
-      "S04",
-      "S05",
-      "S06",
-      "S07",
-      "S08",
-      "S09",
-      "S10",
-      "S11",
-      "S12"
-    ],
+    "canonicalScreenCount": 12,
     "serverAuthoritativePermanentEconomy": true
   },
-  "externalStaleArtifacts": {
-    "pullRequest8": {
-      "state": "OPEN_DRAFT",
-      "classification": "STALE_EXTERNAL_NON_AUTHORITY",
-      "mayAuthorizeWork": false,
-      "mayAuthorizeCompletion": false,
-      "actionInThisCheckpoint": "DO_NOT_UPDATE_CLOSE_OR_MERGE"
-    }
-  },
-  "authorizedExecutionSequence": {
-    "strict": true,
-    "allowReordering": false,
-    "steps": [
-      {
-        "order": 1,
-        "name": "canonical-integration-and-reseal",
-        "status": "IN_PROGRESS"
-      },
-      {
-        "order": 2,
-        "name": "executable-contract-and-simulation",
-        "status": "BLOCKED"
-      },
-      {
-        "order": 3,
-        "name": "large-scale-validation",
-        "status": "BLOCKED"
-      },
-      {
-        "order": 4,
-        "name": "twelve-screen-final-mockups",
-        "status": "BLOCKED"
-      },
-      {
-        "order": 5,
-        "name": "floors-1-through-10-and-backend-implementation",
-        "status": "BLOCKED"
-      },
-      {
-        "order": 6,
-        "name": "physical-iphone-validation",
-        "status": "BLOCKED"
-      }
-    ]
+  "authorizedExecutionSequence": [
+    {"order": 1, "name": "canonical-integration-and-reseal", "status": "IN_PROGRESS"},
+    {"order": 2, "name": "executable-contract-and-simulation", "status": "BLOCKED"},
+    {"order": 3, "name": "large-scale-validation", "status": "BLOCKED"},
+    {"order": 4, "name": "twelve-screen-final-mockups", "status": "BLOCKED"},
+    {"order": 5, "name": "floors-1-through-10-and-backend-implementation", "status": "BLOCKED"},
+    {"order": 6, "name": "physical-iphone-validation", "status": "BLOCKED"}
+  ],
+  "writeBoundary": {
+    "allowed": ["Step 1 documentation", "research", "preseal policy registry", "status mirrors", "quality evidence"],
+    "forbidden": ["runtime", "assets", "V1 candidate/schema/validator/simulator", "backend", "payment provider", "ad network", "PR operation", "Production alias"]
   },
   "nextAuthorizedChat": "01_正本仕様・競合調査",
-  "nextAction": "complete-route-01-1-repository-wide-contradiction-inventory-and-current-authority-zero-proof",
-  "writeBoundary": {
-    "allowed": [
-      "Step 1 canonical documentation",
-      "status mirrors",
-      "research",
-      "dependency specifications",
-      "quality evidence"
-    ],
-    "forbidden": [
-      "runtime",
-      "assets",
-      "candidate",
-      "schema",
-      "validator",
-      "simulator",
-      "backend",
-      "payment provider",
-      "ad network",
-      "Production alias"
-    ]
-  },
-  "verification": {
-    "runtimeChanged": false,
-    "assetsChanged": false,
-    "candidateChanged": false,
-    "schemaChanged": false,
-    "validatorChanged": false,
-    "simulatorChanged": false,
-    "backendChanged": false,
-    "paymentProviderConfigured": false,
-    "adNetworkConfigured": false,
-    "productionAliasChanged": false,
-    "physicalIPhoneVerified": false
-  },
-  "route011": {
-    "status": "IN_PROGRESS",
-    "baseHead": "ea5a060c23b7e4a18bc179b4289beb8f1502f4a6",
-    "baseTree": "dbd72c34ab33b811ac93d284451e5b3a049d0e9e",
-    "acceptance": "quality-reviews/step-1-reseal-round-008/route-01-1-acceptance.json",
-    "inventory": "quality-reviews/step-1-reseal-round-008/contradiction-inventory.json",
-    "activeAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-009.json",
-    "currentAuthorityContradictionCount": "NOT_YET_FINALIZED",
-    "unclassifiedMatchCount": "NOT_YET_FINALIZED"
-  }
+  "nextAction": "complete-route-01-2-research-and-policy-release-gates"
 }

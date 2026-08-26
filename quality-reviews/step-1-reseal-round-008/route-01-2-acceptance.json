@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-route-01-2-acceptance",
+  "createdAt": "2026-08-27",
+  "researchCutoff": "2026-08-26T23:59:59+09:00",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "baseHead": "68cb3f6a4689869538340f5f1a186bed3efac7e2",
+  "baseTree": "95d05a27ce739c3f1e525348c13a6955baf5b721",
+  "status": "ACTIVE_IN_PROGRESS",
+  "purpose": "Research competitor structures and current Apple, Google and Japanese release constraints, then convert supported findings into Cat's Tower-specific adoption rules and a preseal release-gate registry.",
+  "sourceClasses": {
+    "OFFICIAL_DEVELOPER": "developer or publisher first-party site, announcement or help",
+    "STORE_LISTING": "Apple App Store or Google Play listing and version history",
+    "PLATFORM_POLICY": "official Apple or Google policy/documentation",
+    "JAPAN_PRIMARY": "Japanese regulator, ministry, authority or statutory guidance",
+    "INDUSTRY_ANALYSIS": "named third-party market or design analysis; contextual only",
+    "USER_REVIEW": "store/community review; dissatisfaction hypothesis, not verified fact",
+    "INFERENCE": "Cat's Tower interpretation derived from cited evidence; explicitly labeled"
+  },
+  "competitors": [
+    "商人サーガ 魔王城でお店開けって言われた",
+    "魔王 世界の半分あげるって言っちゃった",
+    "キノコ伝説 勇者と魔法のランプ",
+    "AFK Journey",
+    "Go Go Muffin",
+    "Capybara Go"
+  ],
+  "comparisonDimensions": [
+    "reset cadence and reclear acceleration",
+    "mass-draw supply routes",
+    "premium-currency use competition",
+    "duplicate progression",
+    "pity, pickup, exchange, rerun and carryover",
+    "long-term low-rarity value",
+    "advertisement dependence",
+    "paid acceleration and pressure",
+    "daily, login and live-operations density",
+    "mobile information density",
+    "long-term churn causes",
+    "controversy and negative-review hypotheses",
+    "abstract structures to adopt",
+    "structures to reject or transform",
+    "copy-prohibited expression, UI, names, formulas, rates and prices"
+  ],
+  "platformScope": {
+    "Apple": [
+      "App Review Guidelines",
+      "in-app purchase for digital goods",
+      "randomized-item odds disclosure",
+      "purchased currency non-expiry",
+      "restore, refund and revocation handling",
+      "advertising and tracking consent",
+      "privacy policy and SDK responsibility",
+      "account deletion"
+    ],
+    "GooglePlay": [
+      "Payments policy and Play Billing",
+      "randomized-item probability disclosure",
+      "pending purchase and backend verification",
+      "acknowledgement, refund, revocation and restore",
+      "ads and disruptive-ad restrictions",
+      "User Data and Data Safety",
+      "account and data deletion",
+      "families or minor-protection implications when applicable"
+    ],
+    "Japan": [
+      "景品表示法 and card matching or complete-gacha concerns",
+      "資金決済法 and prepaid payment instrument considerations",
+      "service-termination refund considerations",
+      "minor purchase protection",
+      "privacy, consent, SDK and cross-border transfer considerations"
+    ]
+  },
+  "outputs": [
+    "quality-reviews/step-1-reseal-round-008/source-register-route-01-2.json",
+    "quality-reviews/step-1-reseal-round-008/competitive-research.md",
+    "quality-reviews/step-1-reseal-round-008/platform-policy-audit.md",
+    "canonical/POLICY_RELEASE_GATES.json",
+    "quality-reviews/step-1-reseal-round-008/checkpoint-d-evidence.json"
+  ],
+  "acceptance": [
+    {"id": "R012-01", "requirement": "Every material finding has source class, publisher, title, observed date, publication or update date when available, and URL."},
+    {"id": "R012-02", "requirement": "Official/store/platform/regulator facts are never merged with user-review or inference claims."},
+    {"id": "R012-03", "requirement": "All six competitors are covered, and unsupported pity, rate, price or reset details are marked NOT_PUBLICLY_VERIFIED rather than guessed."},
+    {"id": "R012-04", "requirement": "All comparison dimensions receive supported findings or an explicit evidence gap."},
+    {"id": "R012-05", "requirement": "Adoption, rejection and transformation decisions preserve Cat's Tower product boundary and do not copy protected expression or exact live-service values."},
+    {"id": "R012-06", "requirement": "Apple and Google release gates use current first-party policy or documentation."},
+    {"id": "R012-07", "requirement": "Japanese card-matching, prepaid-payment, privacy and minor-protection considerations use primary public sources where available."},
+    {"id": "R012-08", "requirement": "Legal conclusions are not asserted; expert review and submission-time policy refresh are explicit gates."},
+    {"id": "R012-09", "requirement": "POLICY_RELEASE_GATES.json is PRESEAL_DRAFT, machine-readable, testable and cannot authorize Step 2."},
+    {"id": "R012-10", "requirement": "No runtime, asset, V1 executable, backend, provider, PR or Production operation occurs."},
+    {"id": "R012-11", "requirement": "Route-specific independent critic and checkpoint judge leave unresolved P0/P1 at zero before PASS."},
+    {"id": "R012-12", "requirement": "Exact content/evidence commits, trees, paths and matching kimi Preview deployments are recorded."}
+  ],
+  "failureConditions": [
+    "review anecdotes presented as verified game mechanics",
+    "current policy inferred from memory",
+    "unsupported exact probability, price, reward or pity copied from competitors",
+    "raw competitor UI, naming, image, animation or formula treated as a production specification",
+    "legal advice or guaranteed store approval claimed",
+    "missing source silently filled",
+    "forbidden repository or Production change"
+  ],
+  "step2Allowed": false
+}
