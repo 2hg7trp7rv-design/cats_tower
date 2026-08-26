@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-contradiction-inventory",
+  "updatedAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "baseHead": "ea5a060c23b7e4a18bc179b4289beb8f1502f4a6",
+  "baseTree": "dbd72c34ab33b811ac93d284451e5b3a049d0e9e",
+  "status": "IN_PROGRESS",
+  "method": {
+    "treeEnumeration": "Git recursive tree API at exact base tree",
+    "contentInspection": "direct UTF-8 reads by Git blob or contents API",
+    "codeSearchAuthority": false,
+    "reason": "The repository code-search index is not relied upon for zero proof.",
+    "binaryDisposition": "classified by path/type and not decoded as text"
+  },
+  "pathGroups": [
+    {
+      "group": "current-authority",
+      "class": "C1/C2",
+      "paths": [
+        "CHATGPT_PROJECT_INSTRUCTIONS1.md",
+        "MASTER_SPEC.md",
+        "PROJECT_STATUS.json",
+        "QUALITY_GATE.md",
+        "AGENTS.md",
+        "AI_PROJECT_POLICY.json",
+        "PROJECT_HANDOVER.md",
+        "README.md",
+        "CHATGPT_PROJECT_BOOTSTRAP.md",
+        "CUSTOM_GPT_CONFIGURATION.md",
+        "canonical/**",
+        "quality-reviews/step-1-canonical-design/active-change-control*.json",
+        "quality-reviews/step-1-hero-merchant-large-idle-integration/user-decision-lock-*.json"
+      ]
+    },
+    {
+      "group": "active-lower-and-mirrors",
+      "class": "C2/C3",
+      "paths": [
+        "FLOORS_1_10_DESIGN.md",
+        "simulation/INPUT_CONTRACT.md",
+        "simulation/CURRENT_STATUS.json",
+        ".github/workflows/CURRENT_STATUS.md"
+      ]
+    },
+    {
+      "group": "superseded-step2-executable",
+      "class": "C3",
+      "paths": [
+        "simulation/candidate-v1.json",
+        "simulation/candidate.schema.json",
+        "simulation/validate-candidate.mjs",
+        "simulation/executable-seal.schema.json",
+        "simulation/validate-executable-seal.mjs",
+        ".github/workflows/verify-main.yml",
+        ".github/workflows/verify-step-1-artifacts.yml"
+      ]
+    },
+    {
+      "group": "legacy-runtime-and-tests",
+      "class": "C4",
+      "paths": [
+        "app.js",
+        "game-core.js",
+        "game-data.js",
+        "index.html",
+        "styles.css",
+        "manifest.webmanifest",
+        "sw.js",
+        "vercel.json",
+        "assets/**",
+        "tests/**",
+        "scripts/**"
+      ]
+    },
+    {
+      "group": "explicit-history",
+      "class": "C5",
+      "paths": [
+        "BASELINE_V082.md",
+        "CLONE_DESIGN.md",
+        "IDLE_DESIGN.md",
+        "PROTOTYPE_SPEC.md",
+        ".github/baselines/**",
+        "quality-reviews/step-1-legacy-baseline/**",
+        "quality-reviews/step-1-legacy-baseline-round-007/**",
+        "quality-reviews/step-1-canonical-design/acceptance*.json",
+        "quality-reviews/step-1-canonical-design/audits/**",
+        "quality-reviews/step-1-hero-merchant-large-idle-integration/*acceptance*.json",
+        "quality-reviews/step-1-hero-merchant-large-idle-integration/deployment-evidence-*.json"
+      ]
+    },
+    {
+      "group": "current-prohibition-and-invalidation-text",
+      "class": "C6",
+      "paths": [
+        "current authority sections that quote superseded claims only to prohibit or invalidate them"
+      ]
+    }
+  ],
+  "initialFindings": [
+    {
+      "severity": "P1",
+      "class": "C2",
+      "path": "QUALITY_GATE.md",
+      "finding": "Still describes the pre-Route01-0 status and must be synchronized to Round 008 before seal.",
+      "status": "OPEN"
+    },
+    {
+      "severity": "P1",
+      "class": "C2",
+      "path": "AGENTS.md",
+      "finding": "Correct broad phase routing but lacks Round 008 preseal artifact and exact checkpoint references.",
+      "status": "OPEN"
+    },
+    {
+      "severity": "P1",
+      "class": "C2",
+      "path": "CHATGPT_PROJECT_BOOTSTRAP.md",
+      "finding": "Must route new chats through the live Round 008 preseal state rather than the pre-01 handover.",
+      "status": "OPEN"
+    },
+    {
+      "severity": "P1",
+      "class": "C2",
+      "path": "CUSTOM_GPT_CONFIGURATION.md",
+      "finding": "Must identify canonical registries as PRESEAL_DRAFT and deny internal CANONICAL labels until seal.",
+      "status": "OPEN"
+    },
+    {
+      "severity": "P1",
+      "class": "C1",
+      "path": "FLOORS_1_10_DESIGN.md",
+      "finding": "Remains PENDING_REVALIDATION and requires complete current slice redline.",
+      "status": "OPEN"
+    },
+    {
+      "severity": "P1",
+      "class": "C3",
+      "path": "canonical/STEP2_DEPENDENCY_CLOSURE.json",
+      "finding": "Required closure does not exist yet.",
+      "status": "OPEN"
+    },
+    {
+      "severity": "P1",
+      "class": "C1",
+      "path": "canonical/POLICY_RELEASE_GATES.json",
+      "finding": "Required platform/Japan release gate file does not exist yet.",
+      "status": "OPEN"
+    },
+    {
+      "severity": "P1",
+      "class": "C3",
+      "path": "simulation and workflow mirrors",
+      "finding": "Old executable contract remains correctly blocked but still requires exact path-by-path disposition and new closure.",
+      "status": "OPEN"
+    }
+  ],
+  "currentAuthorityContradictionCount": "NOT_YET_FINALIZED",
+  "unclassifiedMatchCount": "NOT_YET_FINALIZED",
+  "pathsClassifiedCompletely": false,
+  "matchesClassifiedCompletely": false,
+  "historicalBytesChanged": false,
+  "forbiddenPathsChanged": false,
+  "step2Allowed": false,
+  "nextAction": "Enumerate exact tree paths, read every active/current-authority text, record all claim-family matches, then repair C1/C2 findings before zero proof."
+}

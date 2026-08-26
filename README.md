@@ -7,7 +7,7 @@ Cat's Towerは、猫と猫人の冒険者を育て、塔内の店舗と配送か
 - Repository: `2hg7trp7rv-design/cats_tower`
 - 書込み可能branch: 既存の`kimi`のみ
 - 現在工程: **Step 1 正本統合・再封印 — IN_PROGRESS**
-- 現在checkpoint: **Round 008 Route 01-0**
+- 現在checkpoint: **Round 008 Route 01-1**
 - 00中核権威同期: **SCOPED_PASS**
 - 00 live entrypoint containment: **SCOPED_PASS**
 - 新Step 1 seal: **NOT_CREATED**
@@ -46,6 +46,17 @@ Cat's Towerは、猫と猫人の冒険者を育て、塔内の店舗と配送か
 - `quality-reviews/step-1-reseal-round-008/seal-round-008.json`
 
 存在しないファイルやPRESEAL_DRAFTはStep 2を許可しません。
+
+## Route 01-0 checkpoint evidence
+
+- Content commit: `77df8b720733e4af6e22220e39950d2e9ff25df4`
+- Content tree: `86a1137169f25f5abb8a7d1fa4315b9d100564c5`
+- Evidence commit: `ea5a060c23b7e4a18bc179b4289beb8f1502f4a6`
+- Evidence tree: `dbd72c34ab33b811ac93d284451e5b3a049d0e9e`
+- Content Preview: `dpl_2bYyqA6NnSEazsxF8yToZQU5aSjp` / `READY` / target `null`
+- Evidence Preview: `dpl_xVkczHkpj2smFRHQ9Tdk5Egq1QfG` / `READY` / target `null`
+- checkpoint unresolved P0/P1: `0 / 0`
+- Step 1全体: `IN_PROGRESS`; Step 2: `BLOCKED`
 
 ## 現行製品の要点
 

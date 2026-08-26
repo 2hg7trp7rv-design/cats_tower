@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-route-01-1-acceptance",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "baseHead": "ea5a060c23b7e4a18bc179b4289beb8f1502f4a6",
+  "baseTree": "dbd72c34ab33b811ac93d284451e5b3a049d0e9e",
+  "status": "ACTIVE_IN_PROGRESS",
+  "purpose": "Classify every live kimi path and every old-claim occurrence before lower-canonical redline and research.",
+  "claimFamilies": [
+    "finite 1F-100F final product",
+    "Floor 101 prohibited",
+    "100F product ending",
+    "gacha/premium ruby/login/payment/ads forbidden",
+    "exactly two spendable currencies",
+    "Dawn remains independent reset",
+    "exactly nine canonical screens",
+    "all characters deterministic and no character/weapon gacha",
+    "no duplicate mastery",
+    "exactly 3,000 scenarios sufficient",
+    "localStorage alone owns permanent economy",
+    "merchant chairman/company-management protagonist",
+    "old PASS or Vercel READY authorizes current Step 2/Product Ready"
+  ],
+  "classifications": {
+    "C1": "current canon; correction required before seal",
+    "C2": "active status/entry/workflow mirror; correction required",
+    "C3": "Step 2 executable transition dependency; blocked historical input",
+    "C4": "legacy runtime/test/implementation gap; Step 5 or later",
+    "C5": "explicit historical evidence or superseded reference; preserve bytes",
+    "C6": "false positive, prohibition, or invalidation statement; retain"
+  },
+  "scanUniverse": {
+    "source": "exact recursive tree of baseTree plus direct UTF-8 file reads",
+    "include": [
+      "root docs and JSON",
+      "canonical/**",
+      "simulation/**",
+      ".github/workflows/**",
+      "tests/**",
+      "scripts/**",
+      "quality-reviews/**",
+      "text metadata under assets/**"
+    ],
+    "excludeFromTextSearchButClassifyByPath": [
+      "binary images",
+      "font binaries"
+    ],
+    "codeSearchMaySubstituteForDirectRead": false
+  },
+  "acceptance": [
+    {
+      "id": "R011-01",
+      "requirement": "Every live path is assigned one primary class or an explicit binary/non-text disposition."
+    },
+    {
+      "id": "R011-02",
+      "requirement": "Every claim-family match records path, exact text or digest pointer, class, active/historical authority and required action."
+    },
+    {
+      "id": "R011-03",
+      "requirement": "Unclassified text matches equal zero."
+    },
+    {
+      "id": "R011-04",
+      "requirement": "Current-authority superseded claims equal zero before Route 01-1 PASS."
+    },
+    {
+      "id": "R011-05",
+      "requirement": "Historical Acceptance/PASS/audit/deployment evidence remains byte-identical."
+    },
+    {
+      "id": "R011-06",
+      "requirement": "Missing referenced files are NOT_CREATED/PLANNED_NOT_CREATED and are never treated as authority."
+    },
+    {
+      "id": "R011-07",
+      "requirement": "Old candidate/schema/validator/workflow/runtime are classified without executing or promoting them."
+    },
+    {
+      "id": "R011-08",
+      "requirement": "PR #8 and preview metadata are external stale non-authority, with no PR operation."
+    },
+    {
+      "id": "R011-09",
+      "requirement": "No runtime, asset, V1 executable, backend, provider or Production change occurs."
+    },
+    {
+      "id": "R011-10",
+      "requirement": "Exact content/evidence commit-tree-deployment records bind the completed inventory checkpoint."
+    }
+  ],
+  "failureConditions": [
+    "sampling presented as repository-wide proof",
+    "incomplete index presented as zero proof",
+    "historical evidence rewritten",
+    "old executable run",
+    "unclassified match",
+    "current authority contradiction left unresolved",
+    "forbidden path change"
+  ],
+  "inventoryPath": "quality-reviews/step-1-reseal-round-008/contradiction-inventory.json",
+  "evidencePath": "quality-reviews/step-1-reseal-round-008/checkpoint-b-evidence.json",
+  "step2Allowed": false
+}

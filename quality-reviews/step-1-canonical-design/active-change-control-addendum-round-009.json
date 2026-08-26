@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-canonical-design-active-change-control-addendum-round-009",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "parentChangeControl": "quality-reviews/step-1-canonical-design/active-change-control.json",
+  "previousAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-008.json",
+  "baseHead": "ea5a060c23b7e4a18bc179b4289beb8f1502f4a6",
+  "baseTree": "dbd72c34ab33b811ac93d284451e5b3a049d0e9e",
+  "trigger": "Route 01-0 governance recovery passed and its exact content/evidence commits and Preview deployments are bound. Start Route 01-1 repository-wide Acceptance expansion and contradiction inventory.",
+  "status": "IN_PROGRESS",
+  "advanceAllowed": false,
+  "step2Allowed": false,
+  "route010": {
+    "status": "PASS",
+    "contentCommit": "77df8b720733e4af6e22220e39950d2e9ff25df4",
+    "evidenceCommit": "ea5a060c23b7e4a18bc179b4289beb8f1502f4a6",
+    "unresolvedP0": 0,
+    "unresolvedP1": 0
+  },
+  "route011": {
+    "status": "IN_PROGRESS",
+    "acceptance": "quality-reviews/step-1-reseal-round-008/route-01-1-acceptance.json",
+    "inventory": "quality-reviews/step-1-reseal-round-008/contradiction-inventory.json",
+    "requiredExit": [
+      "all paths classified",
+      "all claim matches classified",
+      "unclassified matches 0",
+      "current-authority contradictions 0",
+      "history unchanged",
+      "exact checkpoint evidence"
+    ]
+  },
+  "allowedWrites": [
+    "Step 1 documentation",
+    "status mirrors",
+    "current canonical drafts",
+    "inventory/research/dependency/quality evidence"
+  ],
+  "forbiddenWrites": [
+    "runtime",
+    "assets",
+    "V1 candidate/schema/validator/simulator",
+    "backend",
+    "payment provider",
+    "ad network",
+    "Production alias",
+    "other branch",
+    "PR operation"
+  ],
+  "nextAuthorizedChat": "01_正本仕様・競合調査",
+  "nextAuthorizedWork": "Complete Route 01-1 and then continue Route 01-2 competitive/platform/Japan research.",
+  "sealCreated": false,
+  "physicalIPhoneVerified": false
+}
