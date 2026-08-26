@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-hero-merchant-large-idle-integration-core-authority-sync-round-006",
+  "createdAt": "2026-08-26",
+  "chat": "00_統括・工程管理",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "scope": "three-file core-authority synchronization after ChatGPT Project instructions replacement",
+  "baseHead": "57a912c96d07f3516685f567ddde86496fe004f2",
+  "contentCommits": [
+    {
+      "sha": "6c1c47048b6d2f62d09702c96b42cc8d23fb6695",
+      "message": "docs: replace finite 100F master authority with unbounded integrated spec"
+    },
+    {
+      "sha": "05f87de95a219cfb4ba184423d88b8fcabdaca0c",
+      "message": "docs: reopen project status for unbounded monetized design"
+    },
+    {
+      "sha": "a57a3aef3404c4e99c07f0da0b6470759717f8e9",
+      "message": "docs: synchronize active change control after project instruction replacement"
+    }
+  ],
+  "contentHead": "a57a3aef3404c4e99c07f0da0b6470759717f8e9",
+  "contentTree": "3e49cb3174ea3acd068397ba8bdfd0c9529dc4ab",
+  "changedPaths": [
+    "MASTER_SPEC.md",
+    "PROJECT_STATUS.json",
+    "quality-reviews/step-1-canonical-design/active-change-control.json"
+  ],
+  "fileEvidence": {
+    "MASTER_SPEC.md": {
+      "bytes": 32640,
+      "lines": 859,
+      "gitBlobSha": "6f81edb5d169ac35d81f6279d25dc51519449629",
+      "sha256": "ade5fa5e7329694e0e7509b5af186c6b14e7fe02d68d3de4f08dad6ff09f954d"
+    },
+    "PROJECT_STATUS.json": {
+      "bytes": 23225,
+      "lines": 845,
+      "gitBlobSha": "d660165a90e9bc0746da916c611a9ce992a59210",
+      "sha256": "f17ed62a36ea3d51b2d47005e09d5d7549e01155d8bf8700330ae11163289bdd"
+    },
+    "quality-reviews/step-1-canonical-design/active-change-control.json": {
+      "bytes": 10098,
+      "lines": 226,
+      "gitBlobSha": "44bb25610edd58b720005ce721661f564942c987",
+      "sha256": "36e4c1a86eb749beae4dd8a6b2d94dbae996d5530b12ff4af11accde882cad9f"
+    }
+  },
+  "comparison": {
+    "status": "ahead",
+    "aheadBy": 3,
+    "behindBy": 0,
+    "changedPathCount": 3,
+    "runtimeOrAssetChangedPathCount": 0,
+    "candidateSchemaValidatorChangedPathCount": 0,
+    "backendOrConfigurationChangedPathCount": 0
+  },
+  "audit": {
+    "strictJsonParse": {
+      "PROJECT_STATUS.json": "PASS",
+      "active-change-control.json": "PASS"
+    },
+    "gitBlobMatchesGeneratedBytes": true,
+    "crossFileChecksRun": 45,
+    "crossFileChecksPassed": 45,
+    "crossFileChecksFailed": 0,
+    "requiredChecks": [
+      "Step 1 is IN_PROGRESS and Step 2-6 are blocked in both JSON authorities",
+      "next authorized chat is 01_正本仕様・競合調査 in all three files",
+      "tower has no player-visible maximum and 100F is a milestone rather than ending",
+      "101F and beyond are required progression",
+      "gacha, login bonuses, payments, rewarded ads, ruby evolution, rarity, weapons, and duplicate mastery are current requirements",
+      "S01-S12 is the exact canonical screen registry",
+      "historical finite-100F PASS may not authorize current Step 2",
+      "CHATGPT_PROJECT_INSTRUCTIONS1.md is active and the old Project source is deleted",
+      "minimum validation matrix is 15,000 scenarios plus separate Monte Carlo",
+      "no exact obsolete active claims remain in the three target files",
+      "historical mentions are explicitly marked historical, superseded, or prohibited"
+    ],
+    "unresolvedP0ForThisScope": 0,
+    "unresolvedP1ForThisScope": 0
+  },
+  "deployment": {
+    "id": "dpl_GEUp5es84Y284yemVo5eBPbRovLx",
+    "url": "https://catstower-d78weo6vo-shinyaaas-projects.vercel.app/",
+    "branchAlias": "https://catstower-git-kimi-shinyaaas-projects.vercel.app/",
+    "state": "READY",
+    "target": null,
+    "githubCommit": "a57a3aef3404c4e99c07f0da0b6470759717f8e9",
+    "githubBranch": "kimi",
+    "commitMatchVerified": true,
+    "automaticGitDeployment": true,
+    "manualDeploymentActionPerformed": false,
+    "productionAliasChanged": false,
+    "combinedStatusContext": "Vercel",
+    "combinedStatusState": "success"
+  },
+  "verdicts": {
+    "projectInstructionsReplacement": "PASS",
+    "zeroZeroCoreAuthoritySync": "PASS",
+    "masterSpecCoreAuthority": "PASS",
+    "projectStatusCoreAuthority": "PASS",
+    "activeChangeControlCoreAuthority": "PASS",
+    "repositoryWideStep1Integration": "IN_PROGRESS",
+    "step2Allowed": false,
+    "physicalIPhoneVerified": false
+  },
+  "nextAuthorizedChat": "01_正本仕様・競合調査",
+  "nextAuthorizedWork": "Repository-wide contradiction inventory, lower-canonical redline, competitive and policy research, dependency closure, independent critiques, and new Step 1 exact commit/tree-bound seal.",
+  "twoStageBindingRule": "This evidence file is added in the commit whose parent is contentHead. It binds the audited three-file content tree and its READY preview without claiming that the redesigned game or the full Step 1 repository integration is complete.",
+  "evidenceBoundary": "PASS is limited to the 00 three-file core-authority synchronization. Lower canonical documents, simulation contracts, runtime, backend, policy implementation, and physical-device quality remain unverified or pending 01 and later steps."
+}
