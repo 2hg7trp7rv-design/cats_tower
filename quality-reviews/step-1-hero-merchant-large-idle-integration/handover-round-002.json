@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-hero-merchant-large-idle-integration-handover-round-002",
+  "createdAt": "2026-08-26",
+  "chat": "00_統括・工程管理",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "startHead": "e0c81edbb320dc65878d2ca9c83850aa7352145b",
+  "phase": "Step 1 monetization directive and acceptance expansion",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS",
+  "advanceAllowed": false,
+  "userDirective": [
+    "gacha required",
+    "login bonuses required",
+    "payment systems required",
+    "in-game advertising required"
+  ],
+  "decisions": [
+    "Round 001 monetization exclusions are superseded.",
+    "The first four story-critical cats remain deterministic and free.",
+    "Optional recruitable cats and alternate styles may be gacha rewards.",
+    "Complete-gacha is prohibited.",
+    "Paid/free premium balances require a server-authoritative ledger.",
+    "Rewarded ads are required; limited natural-break interstitials remain a reviewed candidate.",
+    "The canonical information architecture is reopened from nine to twelve screens.",
+    "The minimum simulation matrix expands from 3,000 to 12,000 scenarios plus separate gacha-tail testing."
+  ],
+  "newArtifacts": [
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/monetization-acceptance-round-002.json",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/round-002-monetization-direction.md",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/handover-round-002.json"
+  ],
+  "updatedArtifacts": [
+    "quality-reviews/step-1-canonical-design/active-change-control.json"
+  ],
+  "unchanged": [
+    "runtime",
+    "assets",
+    "candidate-v1.json",
+    "candidate schema and validators",
+    "Vercel configuration",
+    "payment provider configuration",
+    "advertisement network configuration",
+    "Production alias"
+  ],
+  "requiredNextWork": [
+    "canonical redline across MASTER_SPEC and all workflow mirrors",
+    "currency and product registry",
+    "twelve-screen registry and navigation contract",
+    "backend trust boundary and account model",
+    "payment, refund, restore, and entitlement contract",
+    "gacha odds, pity, duplicate, history, and audit contract",
+    "login ledger and server-time contract",
+    "advertisement placement, cap, reward, consent, and removal contract",
+    "candidate/schema/validator dependency closure",
+    "expanded 12,000-scenario and gacha statistical run plan",
+    "five independent critiques and final judge"
+  ],
+  "physicalIPhone": "NOT_VERIFIED",
+  "productionReady": false,
+  "firstTenPreviewReady": false,
+  "nextAuthorizedAction": "01_正本仕様・競合調査でmonetized canonical redlineを作成し、Step 1を再封印する。"
+}

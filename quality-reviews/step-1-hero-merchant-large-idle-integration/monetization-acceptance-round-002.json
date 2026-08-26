@@ -1,0 +1,333 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-hero-merchant-large-idle-integration-monetization",
+  "acceptanceRevision": 2,
+  "createdAt": "2026-08-26",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS",
+  "advanceAllowed": false,
+  "supersedes": [
+    "acceptance.json HM4 two-currency-only clause",
+    "acceptance.json HM5 monetization-exclusion clause",
+    "acceptance.json HM6 exact-nine-screen clause",
+    "acceptance.json HM11 no-character-collector clause",
+    "acceptance.json Q4 long-tail-system exclusion"
+  ],
+  "directive": "The final product must include gacha, login bonuses, payment systems, and in-game advertising.",
+  "governance": {
+    "repository": "2hg7trp7rv-design/cats_tower",
+    "writableBranch": "kimi",
+    "baseHead": "e0c81edbb320dc65878d2ca9c83850aa7352145b",
+    "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control.json",
+    "runtimeOrAssetWritesAuthorized": false,
+    "backendOrPaymentConfigurationAuthorized": false,
+    "productionChangeAuthorized": false
+  },
+  "productDecision": {
+    "requiredSystems": [
+      "server-authoritative cat-adventurer and style gacha",
+      "new-player, monthly, and returner login bonuses",
+      "premium-currency purchases and fixed-price offers",
+      "rewarded advertisements and tightly capped natural-break interstitial advertisements",
+      "advertisement-removal purchase"
+    ],
+    "preservedFreeAccess": [
+      "the first four story-critical cats remain deterministic and free",
+      "the main 1F-100F story remains completable without purchase",
+      "each required combat role has at least one non-gacha acquisition path",
+      "advertisements are not required to start, resume, fight, save, or clear a floor"
+    ],
+    "deferredUntilSeparateEvidence": [
+      "PvP",
+      "ranked competitive rewards",
+      "guild monetization",
+      "real-money trading",
+      "paid randomized equipment stats",
+      "complete-gacha collection rewards",
+      "casino simulation",
+      "unbounded pay-to-skip timers"
+    ]
+  },
+  "acceptanceMatrix": [
+    {
+      "id": "M1",
+      "gate": "G1",
+      "condition": "Gacha, login bonuses, payments, and in-game advertising are explicit required product systems in all affected canonical documents.",
+      "evidenceRequired": [
+        "canonical redline",
+        "status-mirror consistency",
+        "repository contradiction search"
+      ]
+    },
+    {
+      "id": "M2",
+      "gate": "G3",
+      "condition": "Monetization does not displace the cat-led hero-and-merchant fantasy; the battle, living tower, shops, and deliveries remain the first five-minute value proposition.",
+      "evidenceRequired": [
+        "first-five-minute flow",
+        "five-second comprehension review",
+        "independent product critic"
+      ]
+    },
+    {
+      "id": "M3",
+      "gate": "G1",
+      "condition": "The gacha sells optional recruitable adventurer cats and/or alternate combat styles with clearly defined roles; it does not sell unknown mixed junk pools or required story access.",
+      "evidenceRequired": [
+        "banner taxonomy",
+        "reward catalog",
+        "role-coverage table"
+      ]
+    },
+    {
+      "id": "M4",
+      "gate": "G4",
+      "condition": "Mugi, Luna, Toto, Kohaku, and every role required to clear the first district have deterministic non-paid acquisition paths.",
+      "evidenceRequired": [
+        "free acquisition map",
+        "first-ten clear simulation",
+        "paywall audit"
+      ]
+    },
+    {
+      "id": "M5",
+      "gate": "G4",
+      "condition": "Every paid randomized purchase shows per-item or unambiguous type odds, pity progress, duplicate conversion, banner end rules, and draw history before purchase.",
+      "evidenceRequired": [
+        "gacha disclosure contract",
+        "odds table",
+        "history and pity UI states"
+      ]
+    },
+    {
+      "id": "M6",
+      "gate": "G4",
+      "condition": "Complete-gacha and any reward that requires collecting a paid randomized combination are prohibited; duplicate progression is capped, disclosed, and not required for baseline usability.",
+      "evidenceRequired": [
+        "collection-reward audit",
+        "duplicate economy",
+        "legal-policy critique"
+      ]
+    },
+    {
+      "id": "M7",
+      "gate": "G2",
+      "condition": "Paid draws, premium balances, login claims, ad rewards, and entitlements are server-authoritative, idempotent, auditable, and impossible to mint through local clock, reload, replay, multiple tabs, or modified client code.",
+      "evidenceRequired": [
+        "backend trust boundary",
+        "transaction ledger",
+        "replay and race tests"
+      ]
+    },
+    {
+      "id": "M8",
+      "gate": "G4",
+      "condition": "The wallet separates run coin, Dawn shard, free premium currency, paid premium currency, and non-currency tickets/entitlements; paid currency does not expire and all conversions are disclosed.",
+      "evidenceRequired": [
+        "currency registry",
+        "paid/free ledger schema",
+        "expiry and refund rules"
+      ]
+    },
+    {
+      "id": "M9",
+      "gate": "G2",
+      "condition": "Web, iOS, and Android payment channels use a provider adapter with server receipt validation, webhook idempotency, restore, refund, revocation, and region-specific product availability.",
+      "evidenceRequired": [
+        "payment architecture",
+        "receipt fixtures",
+        "refund and restore tests"
+      ]
+    },
+    {
+      "id": "M10",
+      "gate": "G3",
+      "condition": "The initial paid catalog is limited to premium-currency packs, a one-time starter pack, a monthly pass, cosmetic or style packs, and ad removal; each offer shows exact contents and value without fake discounts.",
+      "evidenceRequired": [
+        "product catalog",
+        "price/value disclosure",
+        "dark-pattern critique"
+      ]
+    },
+    {
+      "id": "M11",
+      "gate": "G5",
+      "condition": "Login bonuses use server time, claim exactly once, do not reset a player's entire streak after a missed day, and include separate newcomer, monthly, and returner tracks.",
+      "evidenceRequired": [
+        "login ledger",
+        "timezone and clock tests",
+        "missed-day flow"
+      ]
+    },
+    {
+      "id": "M12",
+      "gate": "G5",
+      "condition": "Rewarded advertisements require explicit opt-in. Interstitials, if retained after UX review, appear only at natural breaks, have a strict frequency cap, and never interrupt battle, loading-before-action, gacha reveal, purchase, or save recovery.",
+      "evidenceRequired": [
+        "ad placement map",
+        "frequency state machine",
+        "unexpected-ad tests"
+      ]
+    },
+    {
+      "id": "M13",
+      "gate": "G4",
+      "condition": "Ad rewards are finite, disclosed, server-verified, and simulated as an economy persona. Ad removal disables forced/banner formats while leaving optional rewarded ads available by user choice.",
+      "evidenceRequired": [
+        "ad reward table",
+        "server callback verification",
+        "ad-removal entitlement tests"
+      ]
+    },
+    {
+      "id": "M14",
+      "gate": "G1",
+      "condition": "Age rating, minors' purchase controls, consent, personalized-ad restrictions, privacy disclosures, inappropriate-ad reporting, and parental protections are explicit release gates.",
+      "evidenceRequired": [
+        "age/privacy matrix",
+        "minor account states",
+        "platform-policy review"
+      ]
+    },
+    {
+      "id": "M15",
+      "gate": "G5",
+      "condition": "The information architecture expands honestly from nine gameplay screens to twelve canonical screens: the existing S01-S09 plus S10 Recruit/Gacha, S11 Store/Ads, and S12 Login/Rewards/Inbox. Monetization is not hidden inside unrelated screens.",
+      "evidenceRequired": [
+        "canonicalScreens registry diff",
+        "navigation map",
+        "320x667 and 390x844 density critique"
+      ]
+    },
+    {
+      "id": "M16",
+      "gate": "G2",
+      "condition": "Save schema and account migration distinguish local gameplay state from server-owned wallet and entitlements, support guest-to-account linking, and prevent rollback or duplicate grants.",
+      "evidenceRequired": [
+        "schema redline",
+        "migration plan",
+        "guest-link and rollback tests"
+      ]
+    },
+    {
+      "id": "M17",
+      "gate": "G4",
+      "condition": "Balance validation expands to at least three gameplay builds multiplied by four monetization personas with 1,000 seeds each, plus a separate high-volume gacha-tail Monte Carlo and probability conformance suite.",
+      "evidenceRequired": [
+        "12,000-scenario run plan",
+        "gacha statistical test plan",
+        "candidate/schema dependency closure"
+      ]
+    },
+    {
+      "id": "M18",
+      "gate": "G4",
+      "condition": "The free-to-play no-ad persona can clear 100F within the accepted product time envelope; spending and ads accelerate or diversify but do not become a hidden mandatory gate.",
+      "evidenceRequired": [
+        "F2P no-ad completion distribution",
+        "payer acceleration comparison",
+        "wall and exploit audit"
+      ]
+    },
+    {
+      "id": "M19",
+      "gate": "G2",
+      "condition": "Purchase, draw, login, ad, refund, and entitlement events have privacy-minimized analytics, customer-support lookup, immutable audit IDs, and reconciliation reports.",
+      "evidenceRequired": [
+        "event schema",
+        "support workflow",
+        "reconciliation test"
+      ]
+    },
+    {
+      "id": "M20",
+      "gate": "G4",
+      "condition": "Independent critics separately attack monetization ethics and UX, probability/economy, platform policy and Japanese regulation, backend security and fraud, and mobile information density; unresolved P0/P1 must be zero before PASS.",
+      "evidenceRequired": [
+        "five critic artifacts",
+        "repair rounds",
+        "final judge artifact"
+      ]
+    }
+  ],
+  "initialMonetizationHypotheses": {
+    "status": "DESIGN_CANDIDATE_NOT_VALIDATED",
+    "gacha": {
+      "storyCriticalCatsInPaidPoolOnly": false,
+      "separateCharacterOrStyleBannerFromItemOffers": true,
+      "hardPityRequired": true,
+      "pityCarryoverWithinBannerClassRequired": true,
+      "tenDrawMinimumRarityGuaranteeCandidate": true,
+      "duplicateWasteAllowed": false,
+      "exactRates": "UNSET_UNTIL_PROBABILITY_AND_ECONOMY_SIMULATION"
+    },
+    "loginBonus": {
+      "newPlayerTrack": true,
+      "monthlyTrack": true,
+      "returnerTrack": true,
+      "fullStreakResetAfterMiss": false,
+      "serverTimeRequired": true
+    },
+    "payments": {
+      "premiumCurrencyPacks": true,
+      "starterPack": true,
+      "monthlyPass": true,
+      "adRemoval": true,
+      "battlePass": "DEFERRED_UNTIL_LIVE_OPERATION_SCOPE",
+      "randomStatEquipmentSales": false
+    },
+    "ads": {
+      "rewardedOptIn": true,
+      "battleInterruptingInterstitial": false,
+      "naturalBreakInterstitial": "CANDIDATE_SUBJECT_TO_UX_AND_POLICY_REVIEW",
+      "bannerOnBattleScreen": false,
+      "dailyRewardCaps": "UNSET_UNTIL_SIMULATION"
+    }
+  },
+  "policyResearch": [
+    {
+      "authority": "Apple App Review Guidelines",
+      "checked": "2026-08-26",
+      "relevance": "IAP for digital goods, non-expiring purchased currency, loot-box odds disclosure, ad placement and reporting."
+    },
+    {
+      "authority": "Google Play Developer Program Policies",
+      "checked": "2026-08-26",
+      "relevance": "Play Billing, randomized-item odds disclosure, unexpected interstitial restrictions, rewarded-ad exception."
+    },
+    {
+      "authority": "Consumer Affairs Agency",
+      "checked": "2026-08-26",
+      "relevance": "Online-game items and prohibition risk for card-matching or complete-gacha structures."
+    },
+    {
+      "authority": "Japan Online Game Association",
+      "checked": "2026-08-26",
+      "relevance": "Random-item sales display and operation guidelines."
+    },
+    {
+      "authority": "Financial Services Agency",
+      "checked": "2026-08-26",
+      "relevance": "Potential prepaid payment instrument obligations for purchased game currency."
+    }
+  ],
+  "failureConditions": [
+    "Any paid draw or premium balance is generated client-side.",
+    "A story-critical first-district role is available only through paid randomness.",
+    "Odds, pity, duplicate conversion, or banner rules are hidden or ambiguous.",
+    "Complete-gacha or paid randomized combination rewards are introduced.",
+    "A missed login resets all accumulated monthly progress.",
+    "An ad interrupts active combat or appears before the action a user just selected.",
+    "Paid and free premium balances are merged without an auditable ledger.",
+    "A payment, refund, webhook, ad callback, or login claim can grant twice.",
+    "The nine-screen registry remains unchanged while three monetization surfaces are hidden elsewhere.",
+    "Step 2 starts before the expanded executable contract is sealed.",
+    "Any write targets a branch other than kimi."
+  ],
+  "currentRound": {
+    "artifact": "quality-reviews/step-1-hero-merchant-large-idle-integration/round-002-monetization-direction.md",
+    "status": "IN_PROGRESS",
+    "advanceAllowed": false
+  },
+  "nextAuthorizedWork": "Produce the canonical redline, backend trust boundary, currency registry, twelve-screen responsibility map, product catalog, probability contract, and expanded simulation dependency closure."
+}

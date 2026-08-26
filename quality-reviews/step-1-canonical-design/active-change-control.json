@@ -1,107 +1,168 @@
 {
   "schemaVersion": 1,
   "artifactId": "step-1-canonical-design-active-change-control",
+  "revision": 2,
   "createdAt": "2026-08-26",
+  "updatedAt": "2026-08-26",
   "status": "IN_PROGRESS",
   "verdict": "IN_PROGRESS",
   "advanceAllowed": false,
-  "trigger": "User-directed integration of the hero-plus-merchant large-idle-game proposal and twenty supplied concept/reference images into the existing canonical product.",
+  "trigger": "User-directed integration of the hero-plus-merchant large-idle-game proposal, followed by an explicit 2026-08-26 directive that gacha, login bonuses, payment systems, and in-game advertising are required product systems.",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "baseCommit": "49f9414524e320d08a2b4515506504d82138205f",
   "baseTree": "d2a213fb1c88b409e4d1b1eadf217dd89b2ca562",
+  "changeControlHeadBeforeRevision2": "e0c81edbb320dc65878d2ca9c83850aa7352145b",
   "previousCompletionEvidence": {
     "path": "quality-reviews/step-1-canonical-design/acceptance-round-005.json",
     "verdict": "PASS",
     "roleNow": "immutable historical baseline and evidence of the pre-change contract",
     "mayAuthorizeStep2WhileThisFileIsActive": false
   },
-  "activeAcceptance": "quality-reviews/step-1-hero-merchant-large-idle-integration/acceptance.json",
-  "initialDiffAudit": "quality-reviews/step-1-hero-merchant-large-idle-integration/round-001-diff-audit.md",
+  "activeAcceptances": [
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/acceptance.json",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/monetization-acceptance-round-002.json"
+  ],
+  "auditRounds": [
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/round-001-diff-audit.md",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/round-002-monetization-direction.md"
+  ],
+  "supersededClausesWithinAcceptanceRevision1": [
+    {
+      "id": "HM4",
+      "supersededPart": "Spendable currencies remain current-run coin and permanent Dawn shard only.",
+      "replacementAuthority": "monetization-acceptance-round-002.json M8"
+    },
+    {
+      "id": "HM5",
+      "supersededPart": "Gacha, premium currency, forced advertisements, and retention systems remain excluded.",
+      "replacementAuthority": "monetization-acceptance-round-002.json M1-M14"
+    },
+    {
+      "id": "HM6",
+      "supersededPart": "No tenth canonical screen may exist.",
+      "replacementAuthority": "monetization-acceptance-round-002.json M15"
+    },
+    {
+      "id": "HM11",
+      "supersededPart": "The product may not become a character collector.",
+      "replacementAuthority": "monetization-acceptance-round-002.json M3-M6; story-critical cats remain deterministic while optional recruitable cats and styles may use gacha"
+    },
+    {
+      "id": "Q4",
+      "supersededPart": "Gacha, dailies, premium acceleration, and live-operation systems do not enter the product.",
+      "replacementAuthority": "the user's explicit 2026-08-26 directive and monetization-acceptance-round-002.json"
+    }
+  ],
   "scopeReopened": [
     "one-line product identity and player role",
     "hero-versus-cat protagonist boundary",
     "battle-and-commerce information architecture",
-    "S01-S09 responsibility allocation",
-    "currency and unlock classification",
+    "canonical screen count and service-surface responsibility allocation",
+    "currency registry and paid-versus-free balance separation",
+    "gacha catalog, odds, pity, duplicate handling, history, and auditability",
+    "login-bonus cadence, server-time authority, returner rewards, and claim idempotency",
+    "payment products, platform billing adapters, receipt validation, refunds, and entitlement restoration",
+    "rewarded advertising, limited interstitial policy, frequency caps, ad removal, and reward verification",
+    "minor protection, age rating, privacy, consent, and non-personalized advertising",
+    "account, server-authoritative wallet, transaction ledger, backend database, and anti-fraud boundary",
     "shop and armament depth boundaries",
     "100F overview presentation",
-    "offline return presentation",
-    "simulation candidate and validator dependency impact",
+    "offline return presentation and monetized multipliers",
+    "simulation candidate, schema, validator, and run-matrix dependency impact",
     "workflow mirrors and completion evidence"
   ],
   "baselineContractsPreservedUnlessExplicitlyRevisedAndResealed": [
     "only the existing kimi branch is writable",
     "one continuous tower from 1F through 100F",
     "first production scope is Floors 1-10 only",
-    "cats visibly travel, contact enemies, and perform attacks",
+    "cats remain the visible protagonists and visibly travel, contact enemies, and perform attacks",
     "tap deals zero direct damage",
-    "two spendable currencies only",
-    "public deterministic cat unlocks",
-    "nine canonical screens",
-    "no forced advertisements, gacha, premium currency, random-stat equipment, or mandatory shop chores",
-    "six-step execution order",
+    "story-critical onboarding cats remain obtainable without paid gacha",
+    "no complete-gacha or paid random collection-completion reward",
+    "paid draws and premium balances may not be client-authoritative",
+    "no advertisement may interrupt active combat, a purchase confirmation, or a gacha result reveal",
+    "six-step execution order remains blocked at Step 1 until resealed",
     "physical iPhone remains NOT_VERIFIED"
+  ],
+  "explicitlyInvalidatedBaselineContracts": [
+    "two spendable currencies only",
+    "all cats use public deterministic unlocks",
+    "exactly nine canonical screens",
+    "no gacha",
+    "no premium currency",
+    "no login bonus",
+    "no payment systems",
+    "no in-game advertising",
+    "three thousand scenarios are sufficient for monetized balance validation",
+    "local-only browser save is sufficient for paid entitlements"
   ],
   "blockedSteps": [
     {
       "step": 2,
       "name": "simulate-100f-purchases-combat-dawn-and-24h-offline",
-      "reason": "The semantic input contract may change."
+      "reason": "The executable economy, wallet, gacha, login, advertisement, and payer-persona contract will change."
     },
     {
       "step": 3,
       "name": "validate-three-builds-one-thousand-patterns-each",
-      "reason": "It depends on a newly sealed Step 2 executable contract."
+      "reason": "The current 3,000-scenario matrix is insufficient after adding payer and advertisement personas."
     },
     {
       "step": 4,
-      "name": "nine-final-screen-mockups",
-      "reason": "The supplied concepts are not accepted mockups and screen responsibilities are under review."
+      "name": "final-screen-mockups",
+      "reason": "The canonical screen count and monetization service surfaces are under revision."
     },
     {
       "step": 5,
-      "name": "implement-floors-1-through-10",
-      "reason": "Implementation may not consume an unsealed product contract."
+      "name": "implement-floors-one-through-ten",
+      "reason": "Implementation may not consume an unsealed paid-economy or backend contract."
     },
     {
       "step": 6,
       "name": "physical-iphone-validation",
-      "reason": "No eligible implementation or deployment exists."
+      "reason": "No eligible monetized implementation, billing channel, ad configuration, or deployment exists."
     }
   ],
   "closureRequirements": [
-    "Resolve every HM1-HM16 requirement in the active acceptance.",
-    "Update all affected canonical and workflow documents consistently.",
-    "Update candidate, schema, validators, and input contract if any executable semantic changes.",
-    "Run strict JSON and repository contradiction checks.",
-    "Complete three independent critiques with zero unresolved P0/P1.",
-    "Create new completion evidence bound to the exact kimi commit and tree."
+    "Resolve every non-superseded HM1-HM16 requirement and every M1-M20 monetization requirement.",
+    "Update MASTER_SPEC.md, FLOORS_1_10_DESIGN.md, QUALITY_GATE.md, PROJECT_STATUS.json, PROJECT_HANDOVER.md, README.md, and affected governance mirrors consistently.",
+    "Define the authoritative wallet, product catalog, entitlement ledger, gacha audit log, login claim ledger, advertisement reward receipt, and account boundary.",
+    "Update candidate-v1.json, its schema, validators, input contract, result schema, simulator, and run plan for monetized semantics.",
+    "Expand the canonical screen registry honestly instead of hiding monetization inside unrelated sheets.",
+    "Run strict JSON, repository contradiction, probability, ledger-idempotency, payment-refund, advertisement-reward, and save-migration checks.",
+    "Complete independent product, economy/probability, platform-policy/privacy, backend-security, and mobile-UX critiques with zero unresolved P0/P1.",
+    "Create new completion evidence bound to the exact kimi commit and tree before Step 2 may start."
   ],
-  "writeBoundaryForThisRound": {
+  "writeBoundaryForRevision2": {
     "documentationAndReviewArtifactsOnly": true,
     "runtimeChanged": false,
     "assetChanged": false,
     "candidateChanged": false,
+    "backendChanged": false,
+    "paymentProviderConfigured": false,
+    "adNetworkConfigured": false,
     "vercelConfigurationChanged": false,
     "manualVercelActionPerformed": false,
-    "automaticGitDeploymentObserved": true,
     "productionAliasChanged": false
   },
-  "nextAuthorizedAction": "Canonical redline and dependency-closure design for the accepted/converted/rejected proposal elements.",
-  "automaticDeploymentRecord": {
-    "id": "dpl_2V2FMR7goG2BkacuvbHXNMofnzsg",
-    "url": "https://catstower-27djc076z-shinyaaas-projects.vercel.app/",
-    "branchAlias": "https://catstower-git-kimi-shinyaaas-projects.vercel.app/",
+  "nextAuthorizedAction": "Canonical redline and dependency-closure design for gacha, login bonuses, payments, advertising, premium wallet, backend authority, twelve-screen information architecture, and expanded simulation.",
+  "policyResearchCheckedDate": "2026-08-26",
+  "policyResearchAuthorities": [
+    "Apple App Review Guidelines 3.1.1 and 2.5.18",
+    "Google Play Developer Program Payments and Ads policies",
+    "Consumer Affairs Agency guidance on card matching and online-game items",
+    "Japan Online Game Association random-item sales guidelines",
+    "Japan Financial Services Agency prepaid payment instrument rules"
+  ],
+  "previousAutomaticDeploymentRecord": {
+    "id": "dpl_DHN1BZA6VspZean7v4kopWidtN7w",
+    "url": "https://catstower-rh4h3embl-shinyaaas-projects.vercel.app/",
     "state": "READY",
     "target": null,
-    "githubCommit": "ebd8560a33aad528965c2c8a8f5da0db431b7c39",
+    "githubCommit": "e0c81edbb320dc65878d2ca9c83850aa7352145b",
     "githubBranch": "kimi",
-    "commitMatchVerified": true,
-    "source": "automatic Vercel Git integration after the documentation commit",
-    "manualDeploymentActionPerformed": false,
-    "productionAliasChanged": false,
     "usedAsCompletionEvidence": false,
-    "evidenceMeaning": "READY confirms the automatic build/deployment completed; it does not verify gameplay, visuals, interaction quality, production readiness, or physical iPhone behavior."
+    "evidenceMeaning": "READY only confirmed the documentation deployment; it did not verify gameplay or monetization."
   }
 }
