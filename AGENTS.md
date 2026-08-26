@@ -1,304 +1,148 @@
 # Cat's Tower repository instructions
 
-このファイルはリポジトリ全体に適用する。会話履歴や古いversion名だけで判断せず、正本仕様、GitHub、Vercel、runtime、QA証拠を分離して確認する。
+更新日: **2026-08-26**  
+Repository: `2hg7trp7rv-design/cats_tower`  
+書込み可能branch: **既存の`kimi`のみ**  
+現在工程: **Step 1 正本統合・再封印 — IN_PROGRESS**  
+次の許可チャット: **`01_正本仕様・競合調査`**  
+Step 2〜6: **BLOCKED**
+
+このファイルはrepository全体に適用する。会話履歴、旧PASS、legacy runtime、古いcandidate、古いworkflow成功を現行製品の許可として扱わない。
+
+## 1. branch hard lock
+
+- 書込みは既存の`kimi`だけ
+- branch作成、別branch切替・書込み・削除、PR、merge、rebase、cherry-pick、force-pushは禁止
+- 書込みツールでは毎回`branch=kimi`を明示
+- repositoryまたはlive `kimi`を確認できない場合は`BLOCKED`
+- Production alias、課金商品公開、広告network有効化、データ削除等はユーザーの明示承認なしに実行しない
+
+## 2. 情報源の優先順位
+
+同一scopeで競合した場合は次の順で扱う。
+
+1. ユーザーの最新の明示的な製品決定
+2. `CHATGPT_PROJECT_INSTRUCTIONS1.md`
+3. active change-control、最新addendum、user-decision-lock
+4. `MASTER_SPEC.md`
+5. `PROJECT_STATUS.json`、`QUALITY_GATE.md`、本書
+6. 下位正本、handover、README、bootstrap
+7. Step 2以降のcandidate、schema、validator、workflow
+8. 過去PASS、legacy runtime、過去チャット、参考画像
+
+過去証拠は改変しない。ただし、現行工程・現行製品を許可しない。
+
+## 3. 作業開始手順
+
+1. live `kimi`のHEADとtreeを取得
+2. `CHATGPT_PROJECT_INSTRUCTIONS1.md`を読む
+3. active change-controlと最新のdecision・handover・evidenceを読む
+4. `MASTER_SPEC.md`、`PROJECT_STATUS.json`、`QUALITY_GATE.md`、本書を読む
+5. 対象の下位正本、schema、validator、workflow、runtimeを読む
+6. 現在許可された工程とwrite boundaryを確認
+7. Acceptance Matrixを作成
+8. 変更対象、依存先、失敗条件、証拠形式を固定
+
+矛盾を見つけた場合、都合のよい方を選ばず後工程を停止し、同じ変更管理で解消する。
+
+## 4. 現行製品の非交渉条件
+
+- プレイアブルは猫と猫人
+- 常設の名前付き編成は4体。一時増援は別layer
+- 商人要素は店舗、収益、配送、募集、再投資として戦闘を支援し、商会会長を主役にしない
+- 塔はプレイヤーから見て上限なし
+- 100Fは最初の大型節目。101F以降も継続
+- tapによる直接damageは0
+- auto battleとoffline progressを基礎にする
+- resetは一つだけ。旧Dawnは統合・改名・廃止
+- reset後は1Fから高速再攻略
+- コインlevelは無制限、100levelごとにruby進化資格
+- 進化しなくてもlevelを継続可能
+- rarityは`N < R < RR < SR < SSR < UR`
+- N・Rは確定非ガチャ経路と長期用途を持つ
+- character gachaとweapon gachaを分離
+- routine mass drawはcharacter/weapon ticket主体
+- 100 hard pity、200 featured guaranteeを設計目標とする
+- 初回入手で機能完成。20体分以上は任意の長期完全熟練
+- 新規・月間・復帰login、payment、rewarded opt-in adを持つ
+- 初期版にforced interstitial、banner ad、PvP、競争報酬、guild競争、battle passを入れない
+- canonical screenはS01〜S12
+- 恒久wallet、draw、pity、取得、duplicate、evolution、login、ad、payment、entitlementはserver authority
+- 最低検証は3build×5persona×各1,000seed以上と別枠Monte Carlo
+
+## 5. 旧仕様の扱い
+
+次を現行要件として案内してはならない。
+
+- 1F〜100Fが最終商品
+- 101F禁止
+- ガチャ・有償通貨・login・広告禁止
+- Dawnを独立resetとして維持
+- 9画面固定
+- 3,000scenarioだけで十分
+- localStorageだけで恒久経済を管理
+- 旧Step 1 PASSからStep 2開始を許可
+
+これらが残るファイルは、明示的にhistory、legacy、superseded、または`PENDING_REVALIDATION`と分類する。
+
+## 6. 現在許可される作業
+
+### 00で許可
+
+- live entry pointの現行化
+- 旧仕様を現行権威から外すfail-closed処理
+- 状態mirror、handover、bootstrap、quality gateの同期
+- 監査証拠の作成
+
+### 01で許可
+
+- repository-wide contradiction inventory
+- 下位正本redline
+- 競合・platform policy調査
+- stable ID、状態遷移、backend trust boundary
+- Step 2 dependency closure
+- 独立批評と新Step 1 seal
 
-工程状態: 工程1A=PASS / 正本仕様固定=PASS / 100Fシミュレーション以降=NOT_STARTED
+### 現在禁止
 
-工程1A正式名称: V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint
+- 旧candidateでsimulationを開始
+- candidate、schema、validator、simulatorを現行製品の実行契約として昇格
+- runtime、asset、backend、payment provider、ad networkの実装開始
+- Production alias変更
+- Step 2以降のPASS宣言
 
-工程1A対象外: whole-repository backup / player-save backup / physical-iPhone approval / Production alias switch
+## 7. legacy simulationとworkflow
 
-## 完成判定の絶対規則
+`simulation/candidate-v1.json`、`candidate.schema.json`、`validate-candidate.mjs`、旧run plan、旧workflowは、有限100F・Dawn・3,000scenario契約を含む歴史的入力である。
 
-すべての成果物は`QUALITY_GATE.md`の①期待定義→②制作→③実物自己検収→④反証・完成判定を通す。作成、build、テスト、deploymentの成功だけでは完成にしない。G1〜G5の一つでも不合格なら、ユーザーへ完成報告せず`IN_PROGRESS`へ戻して期待定義から再構成する。通常の欠陥確認をユーザーへ検品として戻さない。
+- 01が意味仕様とdependency closureを固定するまで実行禁止
+- 旧workflowが成功しても現行Step 1またはStep 2を許可しない
+- 新しいcandidateは新candidateIdと新digestを必要とする
+- 旧holdout bank、旧seal、旧resultは新製品の昇格判定に再利用しない
 
-## 作業開始時の必読順
+## 8. 完成判定
 
-1. `MASTER_SPEC.md`
-2. `QUALITY_GATE.md`
-3. `AGENTS.md`
-4. `PROJECT_STATUS.json`
-5. `PROJECT_HANDOVER.md`
-6. `README.md`
-7. 現在の`git status`と`git diff`
-8. GitHub `kimi`
-9. 固定Vercel Production
+`QUALITY_GATE.md`のG1〜G9、独立批評、回帰、exact commit/tree/deployment証拠を通す。build、test、Vercel `READY`だけで完成にしない。未解決P0/P1が一つでもあれば`IN_PROGRESS`。
 
-仕様が競合した場合は`MASTER_SPEC.md`を優先し、矛盾を残したまま実装しない。
-
-## 現在の状態
+## 9. 実物・コード・経済監査
 
-2026-08-25時点:
+最低限、以下を確認する。
 
-- 100F最終方針: 承認済み
-- 準備工程: 工程1A・V0.8.2 deployed browser-runtime source + deployment-input byte checkpointは`PASS`
-- 正本仕様固定: 3者独立反証と機械封印に合格し`PASS`
-- コード修正: 未開始
-- 現行公開版: V0.8.2 legacy baseline
-- 作業開始時の`origin/kimi`: `212151b16af957d198c013aa0917014611712760`
-- V0.8.2配信runtime source基準commit: `727b8d00c281e7539117da5ded7309ea01c7e516`
-- 保存点commit: <https://github.com/2hg7trp7rv-design/cats_tower/commit/727b8d00c281e7539117da5ded7309ea01c7e516>
-- 固定URL: <https://cats-tau-dusky.vercel.app/>
-- 1〜10F Preview Ready: false
-- 100F Product Production Ready: false
+- 320×667、375×667、390×844のmobile density
+- 猫の移動、接敵、弾着、damage、hit reactionの因果
+- 戦闘、塔、店舗、編成、キャラ、武器、進化、reset、gacha、store、loginの通常・異常導線
+- 大数、rounding、serialize、save migration
+- paid/free ruby、transaction ID、idempotency、race、refund、restore
+- probability、pity、carryover、duplicate、overflow
+- no-ad F2P、ad F2P、monthly、payer、high-spend stress
+- privacy、未成年者保護、広告同意、account deletion
 
-現行V0.8.2が10Fで終わることは「現状の事実」であり、新版の要件ではない。新版は1塔100Fで設計する。
+物理iPhone証拠なしに触覚、発熱、電池、実tap、PWA復帰を確認済みとしない。
 
-## 承認済み実行順序
+## 10. ユーザー境界
 
-次の6工程は入れ替えない。各工程を`QUALITY_GATE.md`で合格にしてから次へ進む。
+通常の欠陥発見、修正、比較、コード作業をユーザーへ戻さない。ユーザー確認は、製品方針を大きく変える同等案、固有権限、外部契約、破壊的操作、物理端末証拠に限定する。
 
-1. 上記修正版を正本仕様へ固定
-2. 全100Fの購入・戦闘・夜明け・24時間放置シミュレーション
-3. 戦闘・増援・商業の3ビルドを各1,000パターン検証
-4. 合格仕様を9画面の完成見本へ反映
-5. 1〜10Fのみ実装
-6. 物理iPhoneで3分ボス戦と10分連続試験
+## 11. 報告
 
-後工程の先行実装、11F以降の実装、実機未試験の合格扱いを禁止する。
-
-## ブランチ固定
-
-- 正本、文書、変更の対象は既存の`kimi`だけとする。
-- 別ブランチを作成・切替・書込みしない。PRや別ブランチへのmergeを作業手順に含めない。
-- 保管用の既存参照が履歴に残っていても、読取り専用とし、作成・更新・削除しない。
-
-## 最上位プロダクト定義
-
-Cat's Towerは、猫を呼んで塔を奪還し、制圧した部屋で猫が暮らし、選んだ店と物資配送が上階の戦闘を支える、スマートフォン縦画面専用の100F放置インクリメンタルRPGである。
-
-非交渉条件:
-
-1. 1つの塔は1F〜100F。101Fは作らない。
-2. 最初に完成させるのは1〜10Fだけ。
-3. 1〜10Fが商品品質Gateに合格するまで11F以降を量産しない。
-4. タップによる直接ダメージは0。
-5. タップは増援、予約、号令など意味のある反応へ変換する。
-6. 猫は入口から接敵地点まで実座標で移動する。
-7. 接敵・弾着前にダメージを出さない。
-8. 制圧後は猫が階段を登り、次階へ入る。
-9. 制圧済み・現在・未制圧階を連続スクロールできる。
-10. 制圧商業階ではプレイヤーがショップを選び、後から再配置できる。
-11. 猫は公開条件で解放し、ガチャや隠し乱数にしない。
-12. 複数敵と異なる行動役割を扱う。
-13. 制圧階には猫、店、配送、回復などの生活が残る。
-14. 物理iPhone未確認をProduction Readyにしない。
-
-## 100F構造
-
-10地区×10Fで構成する。
-
-1. 1〜10F 灰かぶり入口市場
-2. 11〜20F 焔の大厨房
-3. 21〜30F 水没貯水区
-4. 31〜40F 歯車工房
-5. 41〜50F 苔庭温室
-6. 51〜60F 亡霊書庫
-7. 61〜70F 雷鳴鳥舎
-8. 71〜80F 氷結宝物庫
-9. 81〜90F 月鏡宮
-10. 91〜100F 黒羽王座
-
-各地区の用途は`X1`入口、`X2`店、`X3`支援、`X4`店、`X5`猫、`X6`店、`X7`支援、`X8`店と壁、`X9`エリートと遺物、`X0`ボスと拠点を基本とする。
-
-## 1〜10Fの合格前スコープ
-
-- 名前付き猫4匹。ムギ、ルナ、トト＋公開条件の1匹
-- 一時増援3役割以上
-- 通常敵6種、エリート2種、追加敵種に数えない壁遭遇1件、3段階ボス1体
-- ショップ4種、支援施設2種
-- 塔スクロール、戦闘帰還、ショップ配置、猫解放、夜明け
-- 戦闘途中と配置状態を含む保存・復元
-
-今回承認された6工程に11F以降の実装許可は含まれない。将来の拡張条件は本6工程の完了後に別途定義・承認し、現在の作業へ混在させない。
-
-## 入力と動き
-
-- 中核入力の一次反応: 100ms以内を内部目標
-- 猫の移動距離: 戦闘幅の30〜45%
-- 猫の通常移動時間: 650〜1,000ms
-- 命中、HP、音、反動: ±50ms以内
-- ヒットストップ: 50〜80ms目安
-- 階移動: 1.6〜2.0秒
-- 強攻撃の予備動作: 400〜800ms目安
-- 主要tap領域: 48×48 CSS px以上
-- 破壊的・進行確定など重要操作: 56×56 CSS px以上
-- 隣接tap領域の間隔: 8 CSS px以上
-- 増援50回で誤スクロール0、スクロール50回で誤増援0
-
-短押しは増援1回、400〜450msで長押しを開始し、その後150〜200ms間隔で任意の連続呼び込みとする。指を離す、スクロール判定距離を越える、停止画面へ入る、のいずれかで必ず終了する。攻略へ長押しを必須にしない。
-
-数値バランスは後で調整してよいが、因果が見えなくなるほど短縮しない。
-
-## 床、足裏、影の契約
-
-階とキャラクターは共通ワールド座標を使う。
-
-- 階: `floorGroundY`、入口、役割位置、敵入口、階段経路
-- 素材: 可視境界、足裏、頭頂、影、接触点、frame時間、表示倍率
-- 足裏と床の誤差: 2 CSS px以内
-- 状態切替時の足裏ジャンプ: 2 CSS px以内
-- 影中心の誤差: 2 CSS px以内
-- 意図しない体格差: ±15%以内
-
-個別の`top`や`transform`を追加して症状だけ隠さない。透明余白の不一致は素材manifestで修正する。
-
-## 塔スクロール
-
-- 戦闘追従と塔閲覧を分ける。
-- 塔閲覧中も戦闘は継続する。
-- 閲覧中に自動で現在階へ戻さない。
-- 固定HUDと「戦闘へ ○F」で現在階へ戻せる。
-- 右側に10F単位の地区レールを持つ。
-- 全100階をDOMへ置かない。
-- 同時描画は9〜13階以内。
-- 画面外animationを停止する。
-- `touch-action: pan-y`を基本にする。
-
-## ショップ、猫、敵
-
-最終ショップは、人材受付所、魚食堂、爪工房、おもちゃ工房、ねこ診療所、配送倉庫、星見観測所、灯火店、昼寝宿、珍品館の10種。
-
-- 同一店舗の重複効果は逓減させる。
-- 隣接効果と物理的な配送演出を持つ。
-- 夜明け後も店舗種類と配置図を保持する。
-- 地区ボス後は地区内を無料再配置できる。
-- 毎周40店舗を手動再配置させない。
-
-100F商品版の上限は名前付き猫12匹、通常敵30種、エリート10種、地区ボス9体、最終ボス1体。色替えや倍率だけの違いを別種として数えず、完成前に上限を増やさない。X8の壁は既存敵、環境障害、modifierで作る遭遇であり、51種目や地区別の追加キャラクター素材にしない。
-
-## 夜明け
-
-夜明けは、失うもの、残るもの、得るもの、前後比較を実行前に表示する。
-
-失うもの:
-
-- 現在階、今周コイン、今周猫レベル
-- 店舗の今周レベル、一時遺物、今周状態
-
-残るもの:
-
-- 解放猫、店舗設計図、配置図
-- ボス遺物、最高階、図鑑、物語、恒久強化
-
-最初の1〜10Fでは巨大な恒久ツリーを作らず、戦闘・増援・商業の違いが分かる3択で検証する。
-
-## 保存
-
-- 現行保存は`cats-tower-v080` / `gameplaySchema: 2`。
-- 新版はschema3を先に設計し、schema2へ無計画に追加しない。
-- schema3の正規キーは`cats-tower-v100`。旧`cats-tower-v080`へ書き込まない。
-- schema2原文は`cats-tower-v080-schema2-raw-backup`へ移行前にバックアップする。
-- 移行はcopy・idempotentとし、失敗時はschema3へ昇格しない。
-- 旧10Fクリアを100Fクリアへ変換しない。
-- future schemaを古いコードで上書きしない。
-- profile、run、tower、runtime、systemを分離する。
-- 猫、敵、階、店舗、遺物は安定IDで参照する。
-- 1〜10Fの猫、一時増援、通常敵、エリート、ボス、壁遭遇、塔共通武装、Dawn branchは`PROJECT_STATUS.json`の`stableIdRegistry`だけを正規出力へ使う。
-- 戦闘途中の猫、敵、HP、位置、増援列、施設、階移動を復元する。
-- 初周オフラインで未見階、ボス、猫解放、店舗選択を自動実行しない。安全収益の上限は24時間とする。
-- 夜明け後に限り既知階の再制圧を圧縮してよい。clear可能な最終階は、`floor(前回最高階×0.90)`と、次の未解決X9・未選択分岐・未見bossそれぞれの一つ手前のうち最も低い階とする。存在しないblockerは除外し、停止理由を復帰画面へ表示する。
-
-## V0.8.2からの再利用境界
-
-再利用候補:
-
-- 固定ステップ更新
-- イベントバス
-- future schema保護
-- オフライン上限
-- PWAとQAの基礎
-
-置き換え必須:
-
-- 6枠固定座標
-- 単体敵モデル
-- 10F上限
-- 全猫共通レベル
-- 固定3F食堂・5F共同部屋だけの施設構造
-- 常時3層だけの塔UI
-- 旧素材規格の混在
-- CSS末尾の上書き方式
-
-旧版UI/CSS/定数/保存処理を新版の通常ロジックへ混在させない。移行処理は専用moduleへ隔離する。
-
-## 性能と素材
-
-- 初回はアプリ殻、共通UI、地区1素材だけを読む。
-- 地区素材は遅延取得する。
-- 100F素材を一括precacheしない。
-- 通常プレイ55〜60fpsを物理端末で目標にする。
-- 画面外のDOM、animation、timer、event listenerを増やし続けない。
-- 素材はbatchで作る。猫2、通常敵5、エリート2、ボス1、店2、背景1地区が一回の上限。
-- 前batchの実機、アンカー、animation、容量が不合格なら次を作らない。
-
-Gate B前の総量上限は、名前付き猫2、一時増援1、通常敵2、エリート1、形態変化を試すボス1、背景1階、ショップ1。Gate B前の第2batchは禁止。Gate Cまでは1〜10F必須数を総量上限とする。
-
-工程5では375×667、390×844、430×932をChromium / WebKitで確認し、1〜10Fの非物理端末実装Acceptanceへ合格させる。この時点ではGate C、1〜10F Preview Ready、物理iPhone確認を合格扱いにしない。工程6で同一`kimi` commitと対象Vercel URLを物理iPhone上で、3分（180秒）のボス戦と10分（600秒）の連続試験に通し、中央値55fps以上、p95 frame time 32ms以下、100ms超停止0、中核入力p95 100ms以内、cold転送4.0MB以下を満たした場合だけGate Cの物理端末要件を完了できる。
-
-## QAと停止条件
-
-工程状態は`NOT_STARTED`、`PENDING_REVALIDATION`、`IN_PROGRESS`、`BLOCKED`、`PASS`だけを使う。`PENDING_REVALIDATION`は旧成果物が残っているが、現在の完成Gateでは未判定であることを示す。
-
-次を見つけたら新規機能・階・素材の制作を止める。
-
-- 正本と実装の矛盾
-- 保存破損または移行失敗
-- P0・P1不具合
-- 性能予算超過
-- 実機の重大入力不良
-- 足裏、体格、命中の基準超過
-
-最後に合格したcommitを記録し、根本原因、回帰テスト、実機再検証を完了してから同じGateをやり直す。
-
-テスト成功だけで完成にしない。通常プレイヤー導線、通常motion、保存、失敗状態、制作用音、実機録画、Vercel上の対象commitを証拠にする。1〜10F Preview Readyと100F Product Production Readyを混同しない。Product Readyには同一commit・deploymentでPreview Gateの再合格を必須とする。
-
-## GitHub / Vercel手順
-
-1. 作業開始前に`origin/kimi`、固定Production、作業ツリーを照合する。
-2. 作業ツリーが`kimi`であることを確認し、他のブランチを作成・切替しない。
-3. 変更を狭いcommitへまとめ、未確認とGate状態をcommitと検証証拠に残す。PRは作成しない。
-4. 構文、JSON、通常導線、該当QAを完了する。
-5. 合格した変更だけ`origin/kimi`へ反映する。
-6. Vercel deploymentの`githubCommitSha`と`origin/kimi` HEADを照合する。
-7. 固定URLのruntimeを確認する。
-8. deploy成功とProduction Readyを分離して報告する。
-
-## 作業工程
-
-工程1Aのcheckpointは`PASS`済みの前提とし、その後は「承認済み実行順序」の6工程だけを順番に実行する。動きの絵コンテ、アートバイブル、試験素材、保存設計、QA合格表は、独立した先行工程に戻さず、対応する6工程の受入条件と成果物に統合する。
-
-工程1Aの合格対象は旧版の配信runtime sourceとdeployment inputsのbyte checkpointである。V0.8.2に存在しない実ユーザーsaveの外部backupは`UNAVAILABLE_IN_V082`、物理iPhone standalone PWAは`NOT_VERIFIED`として分離し、工程1Aの成果へ含めたように表現しない。
-
-## 戻してはいけないもの
-
-- 旧V0.9.x
-- 店舗管理だけが主役のV0.8.0
-- R1 plushをcanonical artにすること
-- 静止カードだけの塔
-- 同じ猫の大量重ね表示
-- タップ直接ダメージ
-- 満員時の無反応
-- 接敵前の攻撃
-- 撃破と次敵出現の同時処理
-- 色替え敵の量産
-- 全100階DOM
-- シート裏で重要進行
-- 強制広告、ガチャ、スタミナ
-- 実機未確認なのに確認済みと書くこと
-- deploy成功だけでProduction Readyと書くこと
-
-## 完了報告の必須項目
-
-1. 変更ファイル
-2. 変更しなかった領域
-3. branch、commit（PRは作成しない）
-4. GitHub反映状態
-5. 固定Vercel URL
-6. deploymentとruntime commit
-7. 構文・JSON・リンク検査
-8. 対象viewportとbrowser
-9. 通常motion、reduced-motion、実機確認
-10. 保存・移行確認
-11. 目視で残る問題
-12. 1〜10F Preview Ready判定と100F Product Production Ready判定
+repository、branch、base/content/evidence commit、tree、changed paths、deployment、工程、判定、P0/P1、Production変更、物理iPhone状態、次の許可工程を記録する。
