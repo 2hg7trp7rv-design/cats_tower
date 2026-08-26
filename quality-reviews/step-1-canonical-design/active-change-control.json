@@ -1,154 +1,115 @@
 {
   "schemaVersion": 1,
   "artifactId": "step-1-canonical-design-active-change-control",
-  "revision": 3,
+  "revision": 4,
   "createdAt": "2026-08-26",
   "updatedAt": "2026-08-26",
   "status": "IN_PROGRESS",
   "verdict": "IN_PROGRESS",
   "advanceAllowed": false,
-  "trigger": "User-directed integration of the hero-plus-merchant large-idle-game proposal; the explicit requirement for gacha, login bonuses, payments, and in-game advertising; and the subsequent 2026-08-26 direction to make the tower product-unbounded, replace the merchant-company-leader identity with a cat-adventurer focus, add a strong-new-game reset, ruby evolution every 100 character levels without a level cap, duplicate-based character and weapon skill levels, weapon gacha, and the N/R/RR/SR/SSR/UR rarity ladder.",
+  "trigger": "User-directed redesign requiring an unbounded tower, one strong-new-game reset, ruby evolution every 100 character levels without a level cap, duplicate-based character and weapon skill levels, character and weapon gacha, N/R/RR/SR/SSR/UR rarities, login bonuses, payments, advertisements, Legend-of-Mushroom-like ruby accessibility and frequent-draw reward cadence, plus the rapid reset/re-clear satisfaction associated with Merchant Saga and Maou Half World.",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "baseCommit": "49f9414524e320d08a2b4515506504d82138205f",
   "baseTree": "d2a213fb1c88b409e4d1b1eadf217dd89b2ca562",
-  "changeControlHeadBeforeRevision3": "2eeec8511d7cac7459af3672d04f101f23d4c8bd",
+  "changeControlHeadBeforeRevision4": "36177b3b65165ca4c472a85fcc70e7a8bec886f6",
   "previousCompletionEvidence": {
     "path": "quality-reviews/step-1-canonical-design/acceptance-round-005.json",
     "verdict": "PASS",
-    "roleNow": "immutable historical baseline for the superseded finite-100F, two-currency, no-gacha contract",
+    "roleNow": "immutable historical evidence for the superseded finite-100F, no-gacha product",
     "mayAuthorizeStep2WhileThisFileIsActive": false
   },
   "activeAcceptances": [
     "quality-reviews/step-1-hero-merchant-large-idle-integration/acceptance.json",
     "quality-reviews/step-1-hero-merchant-large-idle-integration/monetization-acceptance-round-002.json",
-    "quality-reviews/step-1-hero-merchant-large-idle-integration/progression-acceptance-round-003.json"
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/progression-acceptance-round-003.json",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/reward-cadence-acceptance-round-004.json"
   ],
   "auditRounds": [
     "quality-reviews/step-1-hero-merchant-large-idle-integration/round-001-diff-audit.md",
     "quality-reviews/step-1-hero-merchant-large-idle-integration/round-002-monetization-direction.md",
-    "quality-reviews/step-1-hero-merchant-large-idle-integration/round-003-infinite-tower-prestige-evolution.md"
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/round-003-infinite-tower-prestige-evolution.md",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/round-004-reward-cadence-and-user-decisions.md"
   ],
-  "supersededClauses": [
+  "round4Clarifications": [
     {
-      "authority": "MASTER_SPEC.md and all mirrors",
-      "supersededPart": "The tower ends at 100F, 101F does not exist, and 100F Product Ready is the final product boundary.",
-      "replacementAuthority": "progression-acceptance-round-003.json P1-P4"
+      "topic": "Legend of Mushroom parity",
+      "decision": "Treat 'same difficulty' as a measurable effort, purchasing-power and reward-cadence target. Do not claim exact currency parity because the reference is a changing live service and no stable authoritative daily ruby table is public."
     },
     {
-      "authority": "acceptance.json HM1/HM2 and round-001 proposed resolution",
-      "supersededPart": "The player is the leader of a cat adventuring merchant company and the merchant-company identity is the main product frame.",
-      "replacementAuthority": "progression-acceptance-round-003.json P5-P6"
+      "topic": "Ruby versus high-volume draws",
+      "decision": "Routine high-volume character and weapon pulls should use abundant free tickets. Ruby remains a hard currency for evolution and selected premium or pickup pulls, avoiding a direct mandatory-evolution tax."
     },
     {
-      "authority": "MASTER_SPEC.md Dawn contract",
-      "supersededPart": "Dawn is the independently named finite-100F prestige economy with Dawn shards.",
-      "replacementAuthority": "progression-acceptance-round-003.json P7-P10; one strong-new-game reset is designed and Dawn must be merged, renamed, or removed rather than duplicated"
-    },
-    {
-      "authority": "monetization-acceptance-round-002.json M3",
-      "supersededPart": "The initial gacha is limited to recruitable cats and/or styles.",
-      "replacementAuthority": "progression-acceptance-round-003.json P16-P20; separate character and weapon gacha routes are required"
-    },
-    {
-      "authority": "monetization-acceptance-round-002.json M8",
-      "supersededPart": "Dawn shard and generic premium currency remain separate top-level progression currencies.",
-      "replacementAuthority": "progression-acceptance-round-003.json P9-P10; ruby becomes the required evolution/reset/monetization currency with paid/free sub-ledgers, subject to canonical redline"
-    },
-    {
-      "authority": "monetization-acceptance-round-002.json M17/M18",
-      "supersededPart": "A 100F completion matrix and 12,000 scenarios are sufficient long-term balance proof.",
-      "replacementAuthority": "progression-acceptance-round-003.json P24; unbounded-floor, repeated-reset, rarity, evolution, duplicate, and gacha-tail horizons are required"
+      "topic": "Dopamine wording",
+      "decision": "Design and validate reward cadence, anticipation, reveal, progress visibility and reset satisfaction. Do not make clinical dopamine claims."
     }
   ],
   "scopeReopened": [
-    "one-line product identity and player role without a merchant-company-chairman frame",
-    "unbounded tower topology, floor numbering, generated content cycles, and long-run numeric representation",
-    "the role of the first 100 floors as an early saga rather than the product endpoint",
-    "strong-new-game reset naming, unlock timing, loss/retention matrix, replay acceleration, and anti-farm reward formula",
-    "whether Dawn is merged, renamed, or removed and whether Dawn shards are retired",
-    "ruby paid/free ledger, reset rewards, ad rewards, purchases, spending priority, refund handling, and non-expiry",
-    "character coin levels beyond 100 and evolution eligibility at each 100-level milestone",
-    "delayed and catch-up evolution behavior when level exceeds an unevolved milestone",
-    "character duplicate conversion, character skill levels, caps, overflow, and baseline usability",
-    "weapon gacha, weapon duplicate conversion, weapon skill levels, caps, overflow, and baseline usability",
-    "rarity registry N/R/RR/SR/SSR/UR and acquisition-route guarantees",
-    "N/R deterministic availability and endgame viability",
-    "RR-UR gacha, pity, exchange, and disclosure rules",
-    "S03/S06/S07/S09/S10/S11/S12 screen responsibilities",
-    "server-owned collection, wallet, duplicate, evolution, reset, and audit ledgers",
-    "infinite-horizon simulation, BigInt/decimal-string safety, and repeated-reset exploit checks",
-    "workflow mirrors, ChatGPT Project source MD, and new completion evidence"
+    "new-player, daily, reset, event and advertisement ruby inflow",
+    "ruby purchasing power for evolution and premium draws",
+    "free character-ticket and weapon-ticket supply",
+    "first-ten-minute, first-hour, first-seven-day and steady-state pull cadence",
+    "meaningful outcome frequency and duplicate overflow",
+    "featured pity and free no-ad monthly coverage",
+    "first reset timing, mature reset timing and previous-maximum re-clear ratio",
+    "bulk level-up, known-floor fast-forward and automation restoration",
+    "playable species, party size, launch roster size, weapon slot model, rarity promotion, UR permanence, pity, duplicate cap, ad policy, F2P UR timing, paid acceleration, social systems, live-ops and reset naming",
+    "all affected canonical documents, simulator contracts and ChatGPT Project source MD"
   ],
-  "baselineContractsPreservedUnlessExplicitlyRevisedAndResealed": [
+  "preservedContracts": [
     "only the existing kimi branch is writable",
-    "the first implementation slice remains Floors 1-10 until a new authorized sequence says otherwise",
-    "cats remain the visible protagonists and visibly travel, contact enemies, and perform attacks",
+    "the first implementation slice remains Floors 1-10 until a newly sealed order changes it",
+    "cats remain the visible protagonists unless the user explicitly changes that product boundary",
     "tap deals zero direct damage",
-    "combat, shops, deliveries, idle progress, reset, gacha, and evolution must remain one understandable progression system",
-    "paid draws, premium balances, duplicate conversion, reset rewards, and ad rewards may not be client-authoritative",
-    "paid and free ruby balances are internally distinct and auditable",
-    "no complete-gacha or paid randomized collection-completion reward",
-    "no advertisement may interrupt active combat, purchase confirmation, save recovery, or gacha result reveal",
-    "the base copy of a character or weapon must be usable before duplicate skill upgrades",
-    "all combat roles needed for normal progression must have a non-gacha N or R route",
+    "paid and free ruby balances remain internally separated and auditable",
+    "paid draws, reset rewards, ad rewards, duplicate conversion and pity are server-authoritative",
+    "the free no-ad path must cover mandatory progression and evolution",
+    "N and R provide deterministic acquisition routes for all required combat roles",
+    "a base character or weapon is usable before duplicate skill upgrades",
+    "same-maximum reset farming grants no new ruby",
     "Steps 2-6 remain blocked until Step 1 is resealed",
     "physical iPhone remains NOT_VERIFIED"
-  ],
-  "explicitlyInvalidatedBaselineContracts": [
-    "the tower has a fixed 100F maximum",
-    "101F does not exist",
-    "100F completion is the end of the product",
-    "the player is primarily a merchant-company chairman",
-    "Dawn and Dawn shards remain unchanged",
-    "character progression has no ruby evolution every 100 levels",
-    "all named cats are acquired only through deterministic public unlocks",
-    "weapons have no gacha acquisition route",
-    "duplicate character or weapon acquisition does not raise skill levels",
-    "rarity is not N/R/RR/SR/SSR/UR",
-    "100F-only balance validation is sufficient",
-    "the current ChatGPT Project instruction MD is current for product-boundary decisions"
   ],
   "blockedSteps": [
     {
       "step": 2,
-      "name": "simulate-purchases-combat-reset-offline-gacha-evolution-and-unbounded-progression",
-      "reason": "The executable tower, reset, ruby, evolution, duplicate, rarity, weapon-gacha, and infinite-horizon contract is not sealed."
+      "name": "simulate-unbounded-progression-reset-ruby-gacha-evolution-and-offline",
+      "reason": "The user-owned product decisions, reward cadence and executable economy are not sealed."
     },
     {
       "step": 3,
-      "name": "validate-builds-monetization-personas-rarity-and-reset-patterns",
-      "reason": "The prior fixed 3-build/100F matrix is no longer the complete promotion population."
+      "name": "validate-builds-personas-rarity-reset-and-gacha",
+      "reason": "The promotion population and thresholds are not yet frozen."
     },
     {
       "step": 4,
       "name": "final-screen-mockups",
-      "reason": "S03, S06, S07, S09, S10, S11, and S12 responsibilities are under revision."
+      "reason": "Party, weapon, gacha, evolution, reset, store and reward responsibilities remain under decision."
     },
     {
       "step": 5,
       "name": "implement-first-production-slice",
-      "reason": "Implementation may not consume an unsealed unbounded-floor and paid-progression contract."
+      "reason": "Implementation may not consume an unsealed economy."
     },
     {
       "step": 6,
       "name": "physical-iphone-validation",
-      "reason": "No eligible implementation, backend, billing, ad, gacha, reset, or evolution build exists."
+      "reason": "No eligible implementation exists."
     }
   ],
   "closureRequirements": [
-    "Resolve every non-superseded HM and M requirement plus every P1-P26 progression requirement.",
-    "Update MASTER_SPEC.md, FLOORS_1_10_DESIGN.md, QUALITY_GATE.md, PROJECT_STATUS.json, PROJECT_HANDOVER.md, README.md, and affected governance mirrors consistently.",
-    "Replace the finite-100F endpoint with an unbounded product contract while preserving an implementation-realistic generated cycle and finite test horizons.",
-    "Define exactly one strong-new-game reset and an explicit loss/retention matrix; do not leave Dawn and reset as overlapping systems.",
-    "Define ruby as paid/free auditable balances with reset, ad, and purchase sources; prove free reset rubies can support required evolution without purchase or ads.",
-    "Define level/evolution/skill/duplicate/rarity/weapon-gacha state machines, caps, overflow, and migrations.",
-    "Update candidate-v1.json, its schema, validators, input contract, result schema, simulator, and run plan for unbounded progression and monetized collection semantics.",
-    "Run strict JSON, repository contradiction, arbitrary-precision, reset-idempotency, ruby-ledger, duplicate-overflow, gacha-probability, refund, and save-migration checks.",
-    "Complete independent product-identity, infinite-economy, probability/duplicate, platform-policy, backend-security, and mobile-UX critiques with zero unresolved P0/P1.",
-    "Create new completion evidence bound to the exact kimi commit and tree before Step 2 may start."
+    "Resolve all non-superseded HM, M and P requirements plus RC1-RC22.",
+    "Resolve the Round 4 user-decision register or explicitly accept every recommended default.",
+    "Convert reference-game intent into measurable Cat's Tower targets without copying unstable live-service numbers.",
+    "Prove the free no-ad core roster can pay all mandatory evolution costs at target pace.",
+    "Prove high-volume pulls remain meaningful and do not consume the same budget required for progression.",
+    "Prove the reset loop gives visible re-clear acceleration without same-floor ruby farming or manual purchase repetition.",
+    "Update canonical documents, candidate, schema, validators, simulator, result schema and workflow mirrors consistently.",
+    "Complete independent reward-UX, economy, probability, backend, platform-policy and mobile-density critiques with zero unresolved P0/P1.",
+    "Create exact commit/tree-bound completion evidence before Step 2."
   ],
-  "writeBoundaryForRevision3": {
+  "writeBoundaryForRevision4": {
     "documentationAndReviewArtifactsOnly": true,
     "runtimeChanged": false,
     "assetChanged": false,
@@ -160,26 +121,16 @@
     "manualVercelActionPerformed": false,
     "productionAliasChanged": false
   },
-  "nextAuthorizedAction": "Continue collecting user product changes, then produce one consolidated canonical redline for unbounded tower progression, strong-new-game reset, ruby evolution, duplicate skills, character and weapon gacha, rarity acquisition, screens, backend ledgers, and expanded simulation.",
+  "nextAuthorizedAction": "Receive the user's Round 4 decisions, then produce one consolidated canonical redline and dependency-closure plan.",
   "researchCheckedDate": "2026-08-26",
   "referenceBoundary": {
-    "KinokoLegend": "Use only the abstract patterns of automated progression, gacha-supported equipment/companions, skills, and evolution. Do not copy UI, art, probability tables, names, progression gates, or live-ops structure.",
-    "MerchantSaga": "Use only repeated tower climbing, ally/shop support, fast reinvestment, ruby/reset cadence, and the lesson that excessive forced ads and repetitive bulk leveling are failure modes.",
-    "MaouHalfWorld": "Use the abstract Soul Reverse/prestige idea that reset converts progress into permanent strength; do not copy terminology, formulas, content, or presentation."
+    "LegendOfMushroom": "Use abundant free-entry draws, multiple acquisition channels, bulk opening and constant visible progress as cadence references. Do not copy UI, names, exact live-service currency amounts, probability tables, rate-level gating, excessive progression verticals or competitive pay pressure.",
+    "MerchantSaga": "Use fast reinvestment, repeated tower climbing and visible maximum-floor gains after reset. Reject intrusive ads and thousands of manual level-up operations.",
+    "MaouHalfWorld": "Use the abstract reset-for-permanent-strength and rapid re-clear pattern. Reject ambiguous loss boundaries and ad-dominant progress."
   },
   "projectSourceMdStatus": {
     "uploadedSource": "CHATGPT_PROJECT_INSTRUCTIONS.md",
     "status": "STALE_FOR_REOPENED_PRODUCT_SCOPE",
-    "handling": "Do not replace it repeatedly while the user is still supplying changes. After the direction set stabilizes, create the next numbered consolidated MD and remove the older active Project source."
-  },
-  "previousAutomaticDeploymentRecord": {
-    "id": "dpl_F14pTfMYEGZwiht7kQBAhqgrBYkE",
-    "url": "https://catstower-lbers9yuf-shinyaaas-projects.vercel.app/",
-    "state": "READY",
-    "target": null,
-    "githubCommit": "2eeec8511d7cac7459af3672d04f101f23d4c8bd",
-    "githubBranch": "kimi",
-    "usedAsCompletionEvidence": false,
-    "evidenceMeaning": "READY only confirmed the documentation deployment; it did not verify gameplay or the reopened progression systems."
+    "handling": "Use it for governance only while user changes are still being collected. Create one next-numbered consolidated Project MD after the product direction stabilizes."
   }
 }
