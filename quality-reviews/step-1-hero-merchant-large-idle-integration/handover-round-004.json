@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-hero-merchant-large-idle-integration-handover-round-004",
+  "createdAt": "2026-08-26",
+  "chat": "00_統括・工程管理",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "baseHead": "36177b3b65165ca4c472a85fcc70e7a8bec886f6",
+  "phase": "Step 1 reward cadence and user-owned product decisions",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS",
+  "advanceAllowed": false,
+  "recordedDirection": [
+    "Legend-of-Mushroom-like ruby accessibility is converted to measurable effort and purchasing-power targets rather than an exact live-service amount copy.",
+    "Frequent-draw excitement is delivered mainly through abundant character and weapon tickets, not by consuming the same ruby budget required for evolution.",
+    "Merchant Saga and Maou Half World contribute reset and re-clear cadence references, while manual bulk-upgrade friction, intrusive ads and ambiguous reset loss are rejected.",
+    "Seventeen product decisions remain user-owned; recommended defaults are recorded."
+  ],
+  "candidateTargets": {
+    "firstTenMinutesCombinedPulls": "50-100",
+    "firstHourCombinedPulls": "150-250",
+    "firstSevenDaysCombinedPulls": "500-800",
+    "steadyNoAdCombinedPullsPerDay": "40-60",
+    "optionalAdAdditionalPullsPerDay": "target 20, hard cap 40",
+    "firstResetMinutes": "20-60, target 35",
+    "matureResetMinutes": "5-25, target 12",
+    "sameMaximumRepeatRuby": 0,
+    "mandatoryCoreEvolutionCoverageNoAd": "100%"
+  },
+  "userDecisionArtifact": "quality-reviews/step-1-hero-merchant-large-idle-integration/reward-cadence-acceptance-round-004.json#/userDecisionRegister",
+  "recommendedResponseShortcut": "The user may answer '推奨案で全部進める' or override only selected decision IDs such as D2=5体, D10=低頻度interstitial.",
+  "writes": {
+    "documentationAndReviewOnly": true,
+    "runtimeChanged": false,
+    "assetChanged": false,
+    "candidateChanged": false,
+    "backendChanged": false,
+    "paymentOrAdConfigurationChanged": false
+  },
+  "verificationLimits": {
+    "exactReferenceRubyParityVerified": false,
+    "rewardCadenceSimulated": false,
+    "resetSatisfactionPlaytested": false,
+    "gachaProbabilityValidated": false,
+    "runtimeImplemented": false,
+    "backendImplemented": false,
+    "physicalIPhoneVerified": false
+  },
+  "nextAuthorizedWork": "Receive D1-D17 decisions, consolidate the canonical redline, update executable contracts, and run independent critiques. Do not start Step 2."
+}

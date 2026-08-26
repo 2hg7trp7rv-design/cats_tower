@@ -1,0 +1,214 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-hero-merchant-large-idle-integration-reward-cadence",
+  "acceptanceRevision": 4,
+  "createdAt": "2026-08-26",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS",
+  "advanceAllowed": false,
+  "directive": "Match the perceived accessibility of Legend of Mushroom's premium resources and frequent free-draw cadence, while combining the rapid reset and re-clear satisfaction of Merchant Saga and Maou Half World.",
+  "governance": {
+    "repository": "2hg7trp7rv-design/cats_tower",
+    "writableBranch": "kimi",
+    "baseHead": "36177b3b65165ca4c472a85fcc70e7a8bec886f6",
+    "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control.json",
+    "runtimeOrAssetWritesAuthorized": false,
+    "candidateOrBackendWritesAuthorized": false,
+    "productionChangeAuthorized": false
+  },
+  "interpretation": {
+    "exactParityClaimAllowed": false,
+    "reason": "The reference is a changing live service and public sources do not expose a stable authoritative daily premium-currency budget.",
+    "targetDimensions": [
+      "minutes to first meaningful ruby grant",
+      "ruby earned per first reset and per new maximum-floor band",
+      "30-day free no-ad mandatory-evolution coverage",
+      "30-day free no-ad featured-pity coverage",
+      "first-10-minute, first-hour, first-seven-day and steady daily free-ticket pulls",
+      "time between visible high-value or collection-progress outcomes",
+      "previous-maximum re-clear ratio after reset"
+    ]
+  },
+  "designCandidate": {
+    "status": "DESIGN_CANDIDATE_REQUIRES_USER_DECISIONS_AND_SIMULATION",
+    "economyLayers": {
+      "ruby": "hard currency with paid/free source sub-ledgers; required for evolution and optionally convertible to pickup tickets",
+      "characterTickets": "primary abundant route for routine character draws",
+      "weaponTickets": "primary abundant route for routine weapon draws",
+      "pickupTickets": "scarcer banner-class tickets with carryover-compatible pity",
+      "coin": "run-local bulk level-up currency"
+    },
+    "freeDrawCadence": {
+      "firstTenMinutesCombinedPulls": {
+        "min": 50,
+        "target": 100,
+        "hardRejectBelow": 30
+      },
+      "firstHourCombinedPulls": {
+        "min": 150,
+        "target": 250,
+        "maxBeforeMeaninglessnessReview": 400
+      },
+      "firstSevenDaysCombinedPulls": {
+        "min": 500,
+        "target": 800,
+        "maxBeforeMeaninglessnessReview": 1400
+      },
+      "steadyNoAdCombinedPullsPerDay": {
+        "min": 40,
+        "target": 60,
+        "maxBeforeMeaninglessnessReview": 100
+      },
+      "optionalAdAdditionalCombinedPullsPerDay": {
+        "target": 20,
+        "hardCap": 40
+      },
+      "bulkDrawSizesRequired": [
+        10,
+        50,
+        100
+      ],
+      "firstTimeAnimationThenSkippable": true
+    },
+    "rubyCoverage": {
+      "firstEvolution": "guaranteed free through tutorial or first reset; user decision required",
+      "mandatoryCoreEvolutionCoverageNoAd": 1.0,
+      "resetAsPrimaryRenewableFreeRubyShareTarget": {
+        "min": 0.5,
+        "max": 0.75
+      },
+      "adShareOfThirtyDayFreeRubyHardCap": 0.2,
+      "purchaseRequiredForMandatoryEvolution": false,
+      "featuredPityThirtyDayFreeNoAdCoverageCandidate": {
+        "min": 0.5,
+        "target": 0.75,
+        "max": 1.0
+      }
+    },
+    "resetSatisfaction": {
+      "firstResetForegroundMinutes": {
+        "min": 20,
+        "target": 35,
+        "max": 60
+      },
+      "firstResetPreviousMaximumReclearTimeRatio": {
+        "min": 0.25,
+        "target": 0.4,
+        "max": 0.55
+      },
+      "matureResetPreviousMaximumReclearTimeRatio": {
+        "min": 0.1,
+        "target": 0.2,
+        "max": 0.35
+      },
+      "matureResetActiveCycleMinutes": {
+        "min": 5,
+        "target": 12,
+        "max": 25
+      },
+      "sameMaximumRepeatRuby": 0,
+      "bulkLevelUpRequired": [
+        "x10",
+        "x100",
+        "milestone",
+        "MAX",
+        "recommended"
+      ],
+      "knownFloorFastForwardRequired": true
+    },
+    "meaningfulOutcomeCadence": {
+      "newPlayerVisiblePowerGainSecondsTargetMax": 45,
+      "steadySessionVisiblePowerGainSecondsTargetMax": 120,
+      "tenPullMinimumOutcome": "at least one disclosed R-or-better or equivalent skill-progress result",
+      "fiftyPullMinimumOutcome": "visible guaranteed RR-or-better or a pity/selection milestone",
+      "manualItemByItemDisposalRequired": false
+    }
+  },
+  "acceptanceMatrix": [
+    {"id":"RC1","gate":"G1","condition":"Canonical documents describe the reference target as experiential accessibility and cadence, not an unverifiable exact currency copy."},
+    {"id":"RC2","gate":"G4","condition":"Ruby, character tickets, weapon tickets and pickup tickets have separate roles and server-authoritative ledgers."},
+    {"id":"RC3","gate":"G4","condition":"Routine high-volume pulls are primarily ticket-funded; mandatory evolution is not forced to compete with hundreds of routine ruby pulls."},
+    {"id":"RC4","gate":"G4","condition":"The first evolution is reachable without purchase or advertisement before its absence becomes a practical wall."},
+    {"id":"RC5","gate":"G4","condition":"The free no-ad path covers 100% of mandatory core-roster evolution at the accepted pace."},
+    {"id":"RC6","gate":"G4","condition":"Strong-new-game reset is the primary renewable free-ruby source and same-maximum repeat resets grant zero new ruby."},
+    {"id":"RC7","gate":"G3","condition":"First-ten-minute, first-hour, first-seven-day and steady daily pull counts meet sealed ranges without deceptive presentation."},
+    {"id":"RC8","gate":"G3","condition":"High draw volume supports x10, x50 and x100, skip, duplicate auto-conversion and no item-by-item disposal."},
+    {"id":"RC9","gate":"G4","condition":"Each batch has a disclosed meaningful-progress floor; thousands of effectively zero-value pulls are rejected."},
+    {"id":"RC10","gate":"G4","condition":"Character and weapon pity, pickup guarantee, carryover, exchange, duplicate caps and overflow are visible and statistically validated."},
+    {"id":"RC11","gate":"G4","condition":"N and R retain endgame-relevant specialist, reset-start, low-cost or shop/delivery utility."},
+    {"id":"RC12","gate":"G4","condition":"A base character or weapon performs its advertised role before duplicate skill upgrades."},
+    {"id":"RC13","gate":"G3","condition":"First-reset, mature-reset and previous-maximum re-clear timing meet sealed satisfaction targets."},
+    {"id":"RC14","gate":"G3","condition":"Reset restores automation, bulk purchase mode, known formation and known shop configuration where allowed."},
+    {"id":"RC15","gate":"G5","condition":"Reset preview explicitly states lost, retained and earned state; ambiguous reset behavior is a hard failure."},
+    {"id":"RC16","gate":"G5","condition":"Reward presentation creates frequent visible progress without covering combat or requiring prolonged opening sessions."},
+    {"id":"RC17","gate":"G4","condition":"Optional ads stay within the sealed share of ruby and pulls; no-ad players remain on the target curve."},
+    {"id":"RC18","gate":"G2","condition":"Ruby grants, reset rewards, ads, draws, duplicate conversion, pity and overflow are idempotent and replay-safe."},
+    {"id":"RC19","gate":"G4","condition":"Simulation covers no-ad F2P, ad F2P, pass, controlled payer and stress personas across repeated resets and long-floor horizons."},
+    {"id":"RC20","gate":"G2","condition":"Telemetry measures reward sources and outcomes with immutable audit IDs and privacy minimization."},
+    {"id":"RC21","gate":"G1","condition":"Every user-owned decision is answered or its recommended default is explicitly accepted before canonical closure."},
+    {"id":"RC22","gate":"G4","condition":"Independent critics attack reward cadence, monetization pressure, probability meaning, reset satisfaction, backend fraud and mobile density; unresolved P0/P1 equals zero."}
+  ],
+  "userDecisionRegister": [
+    {"id":"D1","decision":"プレイアブルの種族","recommendedDefault":"全員を猫・猫人に統一","options":["猫のみ","猫人を含む","他種族も含む"],"status":"AWAITING_USER_OR_DEFAULT_ACCEPTANCE"},
+    {"id":"D2","decision":"同時編成人数","recommendedDefault":"名前付き猫4体＋一時増援","options":["4体","5体","6体"],"status":"AWAITING_USER_OR_DEFAULT_ACCEPTANCE"},
+    {"id":"D3","decision":"フル製品の初期収集規模","recommendedDefault":"24キャラ・36武器。1〜10F実装は縮小subset","options":["18キャラ・24武器","24キャラ・36武器","36キャラ・60武器"],"status":"AWAITING_USER_OR_DEFAULT_ACCEPTANCE"},
+    {"id":"D4","decision":"ルビーと大量ガチャの関係","recommendedDefault":"日常大量ガチャはキャラ券・武器券、ルビーは進化＋pickup券","options":["券を分離","全ガチャをルビー","ルビーはガチャに使わない"],"status":"AWAITING_USER_OR_DEFAULT_ACCEPTANCE"},
+    {"id":"D5","decision":"最初の進化費用","recommendedDefault":"主役猫の初回進化だけ保証無料","options":["初回無料","初回リセット報酬で賄う","最初からルビー必須"],"status":"AWAITING_USER_OR_DEFAULT_ACCEPTANCE"},
+    {"id":"D6","decision":"100レベル進化の見た目","recommendedDefault":"数値進化は100ごと、専用アートは大節目だけ","options":["節目だけ専用アート","100ごとに全変更","見た目変更なし"],"status":"AWAITING_USER_OR_DEFAULT_ACCEPTANCE"},
+    {"id":"D7","decision":"基礎レアリティ昇格","recommendedDefault":"N/Rの表記は固定。進化・スキルで長期運用可能","options":["固定","NからURまで昇格","覚醒レアリティを別追加"],"status":"AWAITING_USER_OR_DEFAULT_ACCEPTANCE"},
+    {"id":"D8","decision":"URの限定性","recommendedDefault":"pickup後に恒常入り。期間限定は外見中心","options":["恒常入り","戦力URを期間限定","初期URなし"],"status":"AWAITING_USER_OR_DEFAULT_ACCEPTANCE"},
+    {"id":"D9","decision":"天井と重複圧","recommendedDefault":"100回天井、200回pickup保証、同系統へ引継ぎ、有効重複5段階","options":["80/160・5重複","100/200・5重複","200/400・10重複以上"],"status":"AWAITING_USER_OR_DEFAULT_ACCEPTANCE"},
+    {"id":"D10","decision":"広告方針","recommendedDefault":"初期はリワード広告のみ","options":["リワードのみ","自然区切りの低頻度強制広告","高頻度強制広告"],"status":"AWAITING_USER_OR_DEFAULT_ACCEPTANCE"},
+    {"id":"D11","decision":"リセット周期","recommendedDefault":"初回35分目標、成熟12分目標","options":["短い","推奨中間","長い"],"status":"AWAITING_USER_OR_DEFAULT_ACCEPTANCE"},
+    {"id":"D12","decision":"武器装備方式","recommendedDefault":"アクティブ猫1体につき武器1個。ランダムsubstatなし","options":["キャラ個別","編成共通1個","編成共通3枠"],"status":"AWAITING_USER_OR_DEFAULT_ACCEPTANCE"},
+    {"id":"D13","decision":"無課金UR保証","recommendedDefault":"広告なしF2Pでも30〜45日でfeatured天井1回","options":["30〜45日","60〜90日","無課金保証なし"],"status":"AWAITING_USER_OR_DEFAULT_ACCEPTANCE"},
+    {"id":"D14","decision":"課金加速の上限","recommendedDefault":"月額層1.5〜2倍、高額層3〜5倍を上限候補","options":["低い","推奨中間","上限なし"],"status":"AWAITING_USER_OR_DEFAULT_ACCEPTANCE"},
+    {"id":"D15","decision":"対人・社会機能","recommendedDefault":"初期製品ではPvP・ランキング・ギルドを延期","options":["延期","非同期ランキングのみ","初期からギルド/PvP"],"status":"AWAITING_USER_OR_DEFAULT_ACCEPTANCE"},
+    {"id":"D16","decision":"ライブ運営密度","recommendedDefault":"恒常＋pickup＋ログインイベント。バトルパスは後回し","options":["軽量","初期からバトルパス","限定イベント多用"],"status":"AWAITING_USER_OR_DEFAULT_ACCEPTANCE"},
+    {"id":"D17","decision":"リセット正式名称","recommendedDefault":"Cat's Tower独自名にしDawnを統合・廃止","options":["独自名","Dawnを維持","強くてニューゲームと直書き"],"status":"AWAITING_USER_OR_DEFAULT_ACCEPTANCE"}
+  ],
+  "researchEvidence": [
+    {
+      "source": "https://www.deconstructoroffun.com/blog/2024/4/15/the-magic-of-legend-of-mushroom",
+      "checked": "2026-08-26",
+      "supportedUse": "hundreds of free pulls, tickets/gems/ads, duplicate-driven skill and companion leveling, and the risk that extreme pull volume becomes meaningless",
+      "boundary": "industry analysis, not an authoritative current Japanese-server currency table"
+    },
+    {
+      "source": "https://apps.apple.com/jp/app/id6473767344",
+      "checked": "2026-08-26",
+      "supportedUse": "current marketing emphasizes a large pull count, auto progression, equipment rewards, evolution and companion recruitment",
+      "boundary": "marketing copy does not prove equal pull value or immediate delivery"
+    },
+    {
+      "source": "https://apps.apple.com/jp/app/id1198096385",
+      "checked": "2026-08-26",
+      "supportedUse": "repeated tower climbing, ally/shop support, fast leveling and player-reported reset satisfaction; also evidence that manual bulk upgrades and intrusive ads are failure modes",
+      "boundary": "reviews are qualitative observations and not copied formulas"
+    },
+    {
+      "source": "https://apps.apple.com/jp/app/id1160690385",
+      "checked": "2026-08-26",
+      "supportedUse": "abstract reset-for-strength and rapid re-clear reference",
+      "boundary": "do not copy terminology, reset formula or ambiguous loss behavior"
+    }
+  ],
+  "failureConditions": [
+    "Exact reference-game ruby parity is claimed without a measured reference window.",
+    "Routine high-volume pulls consume the same ruby budget needed for mandatory evolution.",
+    "A free no-ad core roster cannot afford mandatory evolution at target pace.",
+    "The first reset exceeds the accepted maximum or produces no obvious re-clear acceleration.",
+    "The same maximum floor can mint new ruby repeatedly.",
+    "Hundreds of pulls require item-by-item disposal or produce no visible progress.",
+    "Duplicate skill growth is uncapped or the base copy is functionally incomplete.",
+    "Forced advertisements become the dominant source of progress.",
+    "A user-owned decision is silently selected against the recorded recommendation.",
+    "Step 2 starts before the consolidated canonical and executable contract is sealed."
+  ],
+  "currentRound": {
+    "artifact": "quality-reviews/step-1-hero-merchant-large-idle-integration/round-004-reward-cadence-and-user-decisions.md",
+    "status": "IN_PROGRESS",
+    "advanceAllowed": false
+  },
+  "nextAuthorizedWork": "Receive the user's D1-D17 choices or explicit acceptance of recommended defaults, then produce the consolidated canonical redline."
+}
