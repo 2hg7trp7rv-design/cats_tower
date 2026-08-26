@@ -8,7 +8,7 @@ Cat's Towerは、猫と猫人の冒険者を育て、塔内の店舗と配送か
 - 書込み可能branch: 既存の`kimi`のみ
 - 現在工程: **Step 1 正本統合・再封印 — IN_PROGRESS**
 - 00中核権威同期: **PASS**
-- live entry point同期: **IN_PROGRESS / この変更で再監査**
+- 00 live entry point同期: **PASS**
 - Step 2〜6: **BLOCKED**
 - 最初の実装slice: 1F〜10F
 - 1〜10F Preview Ready: `false`
