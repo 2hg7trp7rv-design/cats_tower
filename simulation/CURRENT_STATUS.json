@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "updatedDate": "2026-08-26",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "currentStep": 1,
+  "currentStepName": "canonical-integration-and-reseal",
+  "status": "BLOCKED_SUPERSEDED_INPUT",
+  "advanceAllowed": false,
+  "nextAuthorizedChat": "01_正本仕様・競合調査",
+  "reason": "The existing simulation executable contract belongs to the superseded finite-100F, Dawn, no-gacha, three-build-only product and does not cover the current unbounded monetized design.",
+  "historicalBaselineCommit": "d3f617fcd9b992a83ec95214a93ad2ce1a2682af",
+  "historicalArtifacts": [
+    "simulation/candidate-v1.json",
+    "simulation/candidate.schema.json",
+    "simulation/validate-candidate.mjs",
+    "simulation/run-plan.json",
+    "simulation/result.schema.json",
+    "simulation/executable-seal.schema.json",
+    "simulation/validate-executable-seal.mjs",
+    "simulation/engine",
+    "simulation/results/step-2",
+    "simulation/results/step-3"
+  ],
+  "historicalArtifactsMayAuthorizeCurrentProduct": false,
+  "historicalWorkflowSuccessMayAuthorizeCurrentStep2": false,
+  "oldCandidateMayBeExecutedForPromotion": false,
+  "oldHoldoutBankMayBeReusedForPromotion": false,
+  "newStep1SealRequiredBeforeStep2": true,
+  "newCandidateRequirements": {
+    "newCandidateIdRequired": true,
+    "newSchemaVersionRequired": true,
+    "newAlgorithmVersionRequired": true,
+    "unboundedTowerRequired": true,
+    "largeNumberContractRequired": true,
+    "singleResetRequired": true,
+    "rubyEvolutionRequired": true,
+    "rarityRegistryRequired": true,
+    "characterAndWeaponGachaRequired": true,
+    "duplicateMasteryRequired": true,
+    "loginPaymentAdsRequired": true,
+    "serverAuthorityRequired": true,
+    "twelveScreenStateCoverageRequired": true
+  },
+  "minimumLaterValidation": {
+    "gameplayBuilds": 3,
+    "personas": 5,
+    "seedsPerBuildPersona": 1000,
+    "minimumScenarioCount": 15000,
+    "separateMonteCarloRequired": true,
+    "separateStateTransitionTestsRequired": true,
+    "horizons": [
+      "1-10F",
+      "100F-milestone",
+      "1000F",
+      "10000F-or-mathematical-equivalent",
+      "repeated-resets"
+    ]
+  },
+  "writeBoundary": {
+    "thisFileIsStatusOnly": true,
+    "candidateChangedByThisContainment": false,
+    "schemaChangedByThisContainment": false,
+    "validatorChangedByThisContainment": false,
+    "simulatorChangedByThisContainment": false,
+    "runtimeChanged": false,
+    "backendChanged": false,
+    "productionChanged": false
+  }
+}
