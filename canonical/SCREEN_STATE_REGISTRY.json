@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-screen-state-registry-v1",
+  "asOf": "2026-08-26",
+  "authority": "CANONICAL",
+  "screenCount": 12,
+  "screens": [
+    {
+      "id": "S01",
+      "name": "title-resume-account",
+      "responsibilities": ["new game", "resume", "account link", "migration recovery"],
+      "requiredState": ["accountMode", "saveSchema", "serverSession", "migrationStatus"],
+      "uiStates": ["READY", "LOADING", "OFFLINE", "RETRYABLE_ERROR", "FATAL_RECOVERY", "LINK_PENDING", "CONFLICT", "RECOVERED"],
+      "serverOwnedState": ["account binding", "entitlement restore"]
+    },
+    {
+      "id": "S02",
+      "name": "battle-follow",
+      "responsibilities": ["auto battle", "movement/contact", "telegraph", "support arrival"],
+      "requiredState": ["floorId", "party4", "temporarySupport", "enemyWave", "autoState", "offlineCatchup"],
+      "uiStates": ["READY", "LOADING", "OFFLINE", "RETRYABLE_ERROR", "FATAL_RECOVERY", "PAUSED", "DEFEAT", "BACKGROUND_RECONCILE"],
+      "serverOwnedState": ["validated battle settlement when rewards are permanent"]
+    },
+    {
+      "id": "S03",
+      "name": "unbounded-tower",
+      "responsibilities": ["current/best floor", "10F district", "100F cycle", "next milestone", "browse"],
+      "requiredState": ["currentFloor", "bestFloor", "districtId", "cycleId", "nextMilestone", "knownFloorRange"],
+      "uiStates": ["READY", "LOADING", "OFFLINE", "RETRYABLE_ERROR", "FATAL_RECOVERY", "BROWSE_KNOWN", "UNSEEN_LOCKED"],
+      "serverOwnedState": ["best floor", "milestone claims"]
+    },
+    {
+      "id": "S04",
+      "name": "floor-clear-choice",
+      "responsibilities": ["clear reward", "stairs", "shop/support/rescue choice"],
+      "requiredState": ["settlementId", "rewardPreview", "choiceSet", "nextFloor"],
+      "uiStates": ["READY", "LOADING", "OFFLINE", "RETRYABLE_ERROR", "FATAL_RECOVERY", "SETTLEMENT_PENDING", "CHOICE_PENDING", "CHOICE_COMMITTED"],
+      "serverOwnedState": ["settlement", "one-time choice"]
+    },
+    {
+      "id": "S05",
+      "name": "shop-delivery",
+      "responsibilities": ["placement", "income", "delivery", "automation", "reconfigure"],
+      "requiredState": ["shopLayout", "deliveryQueue", "automationRules", "projectedCombatSupport"],
+      "uiStates": ["READY", "LOADING", "OFFLINE", "RETRYABLE_ERROR", "FATAL_RECOVERY", "EDITING", "SYNC_CONFLICT", "RESTORED"],
+      "serverOwnedState": ["premium or permanent unlocks only"]
+    },
+    {
+      "id": "S06",
+      "name": "character",
+      "responsibilities": ["rarity", "coin level", "evolution", "mastery", "party"],
+      "requiredState": ["characterId", "rarityId", "levelBigInt", "evolutionEligibility", "evolutionStage", "masteryTrack", "partySlot"],
+      "uiStates": ["READY", "LOADING", "OFFLINE", "RETRYABLE_ERROR", "FATAL_RECOVERY", "EVOLUTION_PENDING", "MASTERY_PENDING", "CONFLICT_RELOAD"],
+      "serverOwnedState": ["ownership", "evolution", "mastery", "ruby debit"]
+    },
+    {
+      "id": "S07",
+      "name": "weapon",
+      "responsibilities": ["rarity", "equip", "weapon mastery", "build"],
+      "requiredState": ["weaponId", "rarityId", "owner", "equippedBy", "masteryTrack", "buildImpact"],
+      "uiStates": ["READY", "LOADING", "OFFLINE", "RETRYABLE_ERROR", "FATAL_RECOVERY", "EQUIP_CONFLICT", "MASTERY_PENDING"],
+      "serverOwnedState": ["ownership", "mastery", "overflow"]
+    },
+    {
+      "id": "S08",
+      "name": "boss",
+      "responsibilities": ["phase", "telegraph", "break", "failure", "retry"],
+      "requiredState": ["bossId", "phase", "breakGauge", "dangerAction", "failureDiagnosis", "retryCost"],
+      "uiStates": ["READY", "LOADING", "OFFLINE", "RETRYABLE_ERROR", "FATAL_RECOVERY", "BREAK", "VICTORY_PENDING", "DEFEAT"],
+      "serverOwnedState": ["boss milestone settlement"]
+    },
+    {
+      "id": "S09",
+      "name": "tower-return",
+      "responsibilities": ["lose/keep/gain", "ruby", "re-clear forecast", "confirm"],
+      "requiredState": ["resetId", "eligibility", "losses", "retained", "rubyGrant", "forecast", "idempotencyKey"],
+      "uiStates": ["READY", "LOADING", "OFFLINE", "RETRYABLE_ERROR", "FATAL_RECOVERY", "INELIGIBLE", "CONFIRMING", "PENDING_RECONCILIATION", "COMPLETED"],
+      "serverOwnedState": ["best floor", "reset reward", "ruby ledger", "reset count"]
+    },
+    {
+      "id": "S10",
+      "name": "recruit-gacha",
+      "responsibilities": ["character/weapon banners", "odds", "pity", "exchange", "history"],
+      "requiredState": ["bannerId", "bannerClass", "rateTableVersion", "pityCounter", "featuredGuarantee", "ticketBalance", "exchangeBalance", "drawHistory"],
+      "uiStates": ["READY", "LOADING", "OFFLINE", "RETRYABLE_ERROR", "FATAL_RECOVERY", "DRAW_CONFIRM", "DRAW_PENDING", "RESULT_RECOVERY", "BANNER_ENDED"],
+      "serverOwnedState": ["RNG result", "pity", "ownership", "duplicates", "history"]
+    },
+    {
+      "id": "S11",
+      "name": "store-ruby-ads",
+      "responsibilities": ["wallet ledgers", "products", "payment", "rewarded ads", "entitlement"],
+      "requiredState": ["walletSubLedgers", "catalogVersion", "products", "purchaseState", "adAvailability", "entitlements"],
+      "uiStates": ["READY", "LOADING", "OFFLINE", "RETRYABLE_ERROR", "FATAL_RECOVERY", "PURCHASE_PENDING", "PURCHASE_RECONCILIATION", "REFUND", "REVOCATION", "RESTORE", "AD_PENDING"],
+      "serverOwnedState": ["wallet", "catalog", "receipts", "entitlements", "ad receipts"]
+    },
+    {
+      "id": "S12",
+      "name": "login-inbox",
+      "responsibilities": ["newcomer/monthly/returner", "inbox", "claim history"],
+      "requiredState": ["campaigns", "eligibility", "claimable", "inbox", "claimHistory"],
+      "uiStates": ["READY", "LOADING", "OFFLINE", "RETRYABLE_ERROR", "FATAL_RECOVERY", "CLAIM_PENDING", "DUPLICATE_REQUEST", "EXPIRED", "RECOVERED"],
+      "serverOwnedState": ["eligibility", "claim history", "grants"]
+    }
+  ],
+  "globalInvariants": [
+    "exactly S01-S12",
+    "all permanent-economy writes surface pending and reconciliation states",
+    "no tap damage state",
+    "mobile first 320x667 minimum review",
+    "purchase/draw/reset never infer success from timeout"
+  ]
+}
