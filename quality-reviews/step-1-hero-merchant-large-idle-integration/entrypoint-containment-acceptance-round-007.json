@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-hero-merchant-large-idle-integration-entrypoint-containment-acceptance-round-007",
+  "createdAt": "2026-08-26",
+  "chat": "00_統括・工程管理",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "baseHead": "d3f617fcd9b992a83ec95214a93ad2ce1a2682af",
+  "purpose": "Remove superseded finite-100F and no-gacha routing from live entry points before starting 01, while keeping executable redesign work in 01 and Step 2.",
+  "status": "IN_PROGRESS_UNTIL_EVIDENCE",
+  "scope": {
+    "mustSynchronize": [
+      "QUALITY_GATE.md",
+      "AGENTS.md",
+      "README.md",
+      "PROJECT_HANDOVER.md",
+      "CHATGPT_PROJECT_BOOTSTRAP.md",
+      "CUSTOM_GPT_CONFIGURATION.md"
+    ],
+    "mustDemotePendingRedline": [
+      "FLOORS_1_10_DESIGN.md"
+    ],
+    "mustFailClosed": [
+      "simulation/INPUT_CONTRACT.md",
+      "simulation/CURRENT_STATUS.json",
+      ".github/workflows/CURRENT_STATUS.md"
+    ],
+    "mustNotRewriteIn00": [
+      "simulation/candidate-v1.json",
+      "simulation/candidate.schema.json",
+      "simulation/validate-candidate.mjs",
+      "simulation/engine",
+      ".github/workflows/verify-main.yml",
+      ".github/workflows/verify-step-1-artifacts.yml",
+      "runtime",
+      "assets",
+      "backend",
+      "payment provider configuration",
+      "advertisement network configuration",
+      "Production alias"
+    ]
+  },
+  "acceptance": [
+    {
+      "id": "E1",
+      "requirement": "Every synchronized live entry point states Step 1 IN_PROGRESS, Step 2-6 BLOCKED and 01_正本仕様・競合調査 as the next authorized chat."
+    },
+    {
+      "id": "E2",
+      "requirement": "No synchronized live entry point presents finite 1F-100F, Floor 101 prohibition, no-gacha, Dawn-only, nine-screen, local-only economy or exactly-3000-scenario rules as current authority."
+    },
+    {
+      "id": "E3",
+      "requirement": "Current product routing includes unbounded tower, 100F milestone, character and weapon gacha, ruby evolution, duplicate mastery, login, payments, rewarded ads, twelve screens and server authority."
+    },
+    {
+      "id": "E4",
+      "requirement": "FLOORS_1_10_DESIGN.md is PENDING_REVALIDATION and cannot authorize implementation or simulation before 01."
+    },
+    {
+      "id": "E5",
+      "requirement": "The old simulation contract and workflows are explicitly historical-only and fail closed for current-product promotion."
+    },
+    {
+      "id": "E6",
+      "requirement": "Historical commits and evidence remain immutable and discoverable."
+    },
+    {
+      "id": "E7",
+      "requirement": "No candidate, schema, validator, simulator, runtime, asset, backend, provider configuration or Production change occurs."
+    },
+    {
+      "id": "E8",
+      "requirement": "Updated JSON status artifacts parse strictly and all changed files are bound to an exact content commit and tree."
+    },
+    {
+      "id": "E9",
+      "requirement": "Vercel READY, when present, is treated only as documentation deployment evidence and never as game or Step 1 completion."
+    },
+    {
+      "id": "E10",
+      "requirement": "Unresolved P0 and P1 for the 00 entrypoint-containment scope are zero."
+    }
+  ],
+  "failureConditions": [
+    "Any synchronized entry point still directs a new chat to the old 100F simulation or nine-screen flow.",
+    "Any old executable artifact is silently treated as compatible with the redesigned product.",
+    "FLOORS_1_10_DESIGN.md retains PASS authority before its 01 redline.",
+    "Old workflow success can authorize current Step 1 or Step 2.",
+    "Historical evidence is deleted or rewritten.",
+    "Runtime, assets, executable candidate, backend or Production changes are mixed into this containment scope."
+  ],
+  "completionEvidencePath": "quality-reviews/step-1-hero-merchant-large-idle-integration/entrypoint-containment-evidence-round-007.json"
+}
