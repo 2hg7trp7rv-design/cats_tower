@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-canonical-design-active-change-control-addendum-round-007",
+  "createdAt": "2026-08-26",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "parentChangeControl": "quality-reviews/step-1-canonical-design/active-change-control.json",
+  "baseHead": "d3f617fcd9b992a83ec95214a93ad2ce1a2682af",
+  "trigger": "A separate project chat demonstrated that live entry points still routed agents toward the superseded finite-100F, no-gacha product after the core-authority sync.",
+  "status": "IN_PROGRESS_UNTIL_EVIDENCE",
+  "decision": "Containment belongs to 00 because entry points determine which authority and phase a new chat follows. Full lower-canonical redline and executable redesign remain assigned to 01 and Step 2.",
+  "containmentScope": {
+    "synchronizedEntryPoints": [
+      "QUALITY_GATE.md",
+      "AGENTS.md",
+      "README.md",
+      "PROJECT_HANDOVER.md",
+      "CHATGPT_PROJECT_BOOTSTRAP.md",
+      "CUSTOM_GPT_CONFIGURATION.md"
+    ],
+    "demotedLowerCanonical": [
+      "FLOORS_1_10_DESIGN.md"
+    ],
+    "failClosedRouting": [
+      "simulation/INPUT_CONTRACT.md",
+      "simulation/CURRENT_STATUS.json",
+      ".github/workflows/CURRENT_STATUS.md"
+    ]
+  },
+  "currentAuthorityResult": [
+    "New chats are routed to Step 1 IN_PROGRESS and 01_正本仕様・競合調査.",
+    "Finite 100F, Floor 101 prohibition, no-gacha, Dawn-only, nine-screen, local-only and exactly-3000 rules are no longer current entrypoint authority.",
+    "The first-ten design is explicitly PENDING_REVALIDATION rather than PASS.",
+    "Old candidate, schema, validator, simulator, holdout and workflows are historical-only for the redesigned product.",
+    "Historical commits and evidence remain immutable."
+  ],
+  "notCompletedByThisAddendum": [
+    "repository-wide contradiction inventory",
+    "complete FLOORS_1_10_DESIGN redline",
+    "stable ID and migration registry closure",
+    "backend state-machine closure",
+    "new candidate/schema/validator/simulator",
+    "workflow YAML redesign",
+    "independent Step 1 critiques",
+    "new Step 1 PASS seal"
+  ],
+  "writeBoundary": {
+    "documentationAndStatusOnly": true,
+    "candidateChanged": false,
+    "schemaChanged": false,
+    "validatorChanged": false,
+    "simulatorChanged": false,
+    "workflowYamlChanged": false,
+    "runtimeChanged": false,
+    "assetChanged": false,
+    "backendChanged": false,
+    "paymentProviderConfigured": false,
+    "adNetworkConfigured": false,
+    "productionAliasChanged": false
+  },
+  "acceptancePath": "quality-reviews/step-1-hero-merchant-large-idle-integration/entrypoint-containment-acceptance-round-007.json",
+  "evidencePath": "quality-reviews/step-1-hero-merchant-large-idle-integration/entrypoint-containment-evidence-round-007.json",
+  "nextAuthorizedChat": "01_正本仕様・競合調査",
+  "step2Allowed": false,
+  "physicalIPhoneVerified": false
+}
