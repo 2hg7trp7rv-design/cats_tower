@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-hero-merchant-large-idle-integration-entrypoint-containment-evidence-round-007",
+  "createdAt": "2026-08-26",
+  "chat": "00_統括・工程管理",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "baseHead": "d3f617fcd9b992a83ec95214a93ad2ce1a2682af",
+  "contentHead": "71a0e50c6eddb43be6cced4f137b210ad3cfb4e6",
+  "contentTree": "c72149611b5e532bb7deacd13db04f3b290f842d",
+  "contentCommitMessage": "docs: mark 00 live entrypoint sync ready for evidence",
+  "changedPaths": [
+    ".github/workflows/CURRENT_STATUS.md",
+    "AGENTS.md",
+    "CHATGPT_PROJECT_BOOTSTRAP.md",
+    "CUSTOM_GPT_CONFIGURATION.md",
+    "FLOORS_1_10_DESIGN.md",
+    "PROJECT_HANDOVER.md",
+    "QUALITY_GATE.md",
+    "README.md",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-007.json",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/entrypoint-containment-acceptance-round-007.json",
+    "simulation/CURRENT_STATUS.json",
+    "simulation/INPUT_CONTRACT.md"
+  ],
+  "comparison": {
+    "status": "ahead",
+    "aheadByBeforeEvidence": 13,
+    "behindBy": 0,
+    "changedPathCount": 12,
+    "candidateChanged": false,
+    "schemaChanged": false,
+    "validatorChanged": false,
+    "simulatorChanged": false,
+    "workflowYamlChanged": false,
+    "runtimeChanged": false,
+    "assetChanged": false,
+    "backendChanged": false,
+    "providerConfigurationChanged": false,
+    "productionAliasChanged": false
+  },
+  "acceptanceResults": [
+    {
+      "id": "E1",
+      "result": "PASS",
+      "evidence": "Updated live entry points state Step 1 IN_PROGRESS, Step 2-6 BLOCKED and 01_正本仕様・競合調査 next."
+    },
+    {
+      "id": "E2",
+      "result": "PASS",
+      "evidence": "Finite-100F, Floor-101 prohibition, no-gacha, Dawn-only, nine-screen, local-only and 3,000-only rules remain only in explicit historical, prohibited or fail-closed context within the changed entry points."
+    },
+    {
+      "id": "E3",
+      "result": "PASS",
+      "evidence": "Updated entry points route to unbounded tower, 100F milestone, gacha, ruby evolution, duplicate mastery, login, payments, rewarded ads, twelve screens, server authority and 15,000-plus later validation."
+    },
+    {
+      "id": "E4",
+      "result": "PASS",
+      "evidence": "FLOORS_1_10_DESIGN.md is PENDING_REVALIDATION and NOT_AUTHORIZED_FOR_IMPLEMENTATION_OR_SIMULATION."
+    },
+    {
+      "id": "E5",
+      "result": "PASS",
+      "evidence": "simulation/INPUT_CONTRACT.md and simulation/CURRENT_STATUS.json block old executable promotion; workflow CURRENT_STATUS demotes legacy workflow success."
+    },
+    {
+      "id": "E6",
+      "result": "PASS",
+      "evidence": "Historical commits and acceptance evidence were not modified or deleted; old detail remains recoverable at the base commit."
+    },
+    {
+      "id": "E7",
+      "result": "PASS",
+      "evidence": "Git compare shows no candidate, schema, validator, simulator, workflow YAML, runtime, asset, backend, provider or Production changes."
+    },
+    {
+      "id": "E8",
+      "result": "PASS",
+      "evidence": "New JSON artifacts were generated as strict JSON, written successfully, fetched from live kimi and matched the expected fields and returned Git blob identities."
+    },
+    {
+      "id": "E9",
+      "result": "PASS",
+      "evidence": "Documentation preview is READY and explicitly excluded as game or Step 1 completion evidence."
+    },
+    {
+      "id": "E10",
+      "result": "PASS",
+      "evidence": "No unresolved P0 or P1 remains inside the 00 entrypoint-containment scope."
+    }
+  ],
+  "adversarialReview": {
+    "initialChallenge": "Leaving stale entry points for 01 was considered acceptable because the core master and status had already changed.",
+    "rejection": "That approach was rejected because new chats read QUALITY_GATE, AGENTS, README, handover and bootstrap before reaching lower change-control details, creating a real regression path to the old product.",
+    "repair": "Synchronize routing documents now, demote the first-ten design and fail closed the old simulation/workflow inputs without implementing the new executable contract.",
+    "remainingBoundary": "Repository-wide lower-canonical redline, executable semantics and new Step 1 seal remain 01 and Step 2 work."
+  },
+  "deployment": {
+    "id": "dpl_8twkQBPiY7H1vo4V28ck5eADAeGw",
+    "url": "https://catstower-rnslgbs5w-shinyaaas-projects.vercel.app/",
+    "branchAlias": "https://catstower-git-kimi-shinyaaas-projects.vercel.app/",
+    "state": "READY",
+    "target": null,
+    "githubCommit": "71a0e50c6eddb43be6cced4f137b210ad3cfb4e6",
+    "githubBranch": "kimi",
+    "commitMatchVerified": true,
+    "combinedStatusContext": "Vercel",
+    "combinedStatusState": "success",
+    "automaticGitDeployment": true,
+    "manualDeploymentActionPerformed": false,
+    "productionAliasChanged": false
+  },
+  "verdicts": {
+    "zeroZeroEntrypointContainment": "PASS",
+    "liveEntrypointOldProductRouting": "REMOVED_OR_FAIL_CLOSED",
+    "projectInstructionsReplacement": "PASS",
+    "coreAuthoritySync": "PASS",
+    "repositoryWideStep1Integration": "IN_PROGRESS",
+    "newStep1SealExists": false,
+    "step2Allowed": false,
+    "runtimeImplemented": false,
+    "backendImplemented": false,
+    "physicalIPhoneVerified": false
+  },
+  "nextAuthorizedChat": "01_正本仕様・競合調査",
+  "evidenceBoundary": "PASS is limited to the 00 live-entrypoint containment and routing correction. It does not certify the complete repository-wide Step 1 redline, balance, gameplay, backend, platform-policy implementation or physical-device quality.",
+  "twoStageBindingRule": "This evidence file is added in the commit whose parent is contentHead and therefore binds the exact content tree and READY documentation preview without claiming current Step 1 completion."
+}
