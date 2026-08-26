@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-hero-merchant-large-idle-integration-deployment-evidence-round-005",
+  "createdAt": "2026-08-26",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "contentCommit": "8c31ab2eea8d4b8bf50b3261cc109f8f8f50599f",
+  "contentTree": "1ab5201351ab8b5609c19bd5dae65390945d79f5",
+  "parentCommit": "d862c332d35028ab4e41c172c7f4532f51ec4d3a",
+  "commitMessage": "docs: lock remaining product decisions and duplicate mastery",
+  "changedPaths": [
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/user-decision-lock-round-005.json",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-005.json",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/handover-round-005.json"
+  ],
+  "deployment": {
+    "id": "dpl_AzyR8vyyhzFbBF1ZMZ2dVzNngXMJ",
+    "url": "https://catstower-5j1tx0el4-shinyaaas-projects.vercel.app/",
+    "branchAlias": "https://catstower-git-kimi-shinyaaas-projects.vercel.app/",
+    "state": "READY",
+    "target": null,
+    "githubCommit": "8c31ab2eea8d4b8bf50b3261cc109f8f8f50599f",
+    "githubBranch": "kimi",
+    "commitMatchVerified": true,
+    "automaticGitDeployment": true,
+    "manualDeploymentActionPerformed": false,
+    "productionAliasChanged": false
+  },
+  "twoStageBindingRule": "The authoritative evidence commit is the commit that adds this exact file as its sole path change with contentCommit as its parent.",
+  "evidenceBoundary": {
+    "status": "IN_PROGRESS",
+    "advanceAllowed": false,
+    "usedAsCompletionEvidence": false,
+    "userDecisionsRecorded": true,
+    "canonicalRedlineComplete": false,
+    "duplicateMasteryBalanced": false,
+    "runtimeImplemented": false,
+    "backendImplemented": false,
+    "physicalIPhoneVerified": false,
+    "meaning": "READY proves only that the documentation commit built and deployed. It does not validate twenty-plus duplicate mastery, pity, UR timing, reset satisfaction, gameplay, monetization, or device quality."
+  }
+}
