@@ -1,0 +1,470 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-hero-merchant-large-idle-integration-progression",
+  "acceptanceRevision": 3,
+  "createdAt": "2026-08-26",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS",
+  "advanceAllowed": false,
+  "supersedes": [
+    "finite-100F product maximum and 101F prohibition",
+    "100F as the final product endpoint",
+    "merchant-company-leader as the primary player identity",
+    "Dawn as an unchanged standalone reset with Dawn-shard currency",
+    "character-only/style-only gacha boundary",
+    "absence of weapon gacha and duplicate-based weapon skills",
+    "absence of duplicate-based character skills",
+    "absence of N/R/RR/SR/SSR/UR rarity",
+    "100F-only completion as sufficient balance evidence"
+  ],
+  "directive": "The tower has no player-visible maximum; the product includes a strong-new-game reset; merchant-saga elements remain only as supporting mechanics rather than a merchant-chairman identity; characters level with coins beyond level 100, become eligible for ruby evolution every 100 levels, and may continue leveling without evolving; ruby is obtained through purchases, strong-new-game reset, and rewarded advertisements; duplicate characters and weapons raise their respective skill progression; weapons have a gacha route; and both characters and weapons use N/R/RR/SR/SSR/UR rarity, with N/R obtainable without gacha and RR-UR obtained through the gacha route.",
+  "governance": {
+    "repository": "2hg7trp7rv-design/cats_tower",
+    "writableBranch": "kimi",
+    "baseHead": "2eeec8511d7cac7459af3672d04f101f23d4c8bd",
+    "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control.json",
+    "runtimeOrAssetWritesAuthorized": false,
+    "candidateSchemaValidatorWritesAuthorized": false,
+    "backendOrPaymentConfigurationAuthorized": false,
+    "productionChangeAuthorized": false
+  },
+  "productDecision": {
+    "tower": {
+      "playerVisibleMaximumFloor": null,
+      "interpretation": "No authored or product-visible hard cap. Implementation uses repeatable generated cycles and arbitrary-precision floor identifiers; it does not prebuild infinite unique content.",
+      "firstProductionSlice": [
+        1,
+        10
+      ],
+      "firstSagaMilestoneFloorCandidate": 100,
+      "floor100IsProductEnding": false
+    },
+    "identity": {
+      "visibleProtagonists": "named and recruited cats",
+      "playerRole": "the player guides and develops the cat adventurers; no merchant-company-chairman avatar or corporate-management framing is required",
+      "merchantElements": "shops, income, delivery, recruitment, and reinvestment remain as supporting progression mechanics inside the tower"
+    },
+    "reset": {
+      "required": true,
+      "workingName": "強くてニューゲーム / 転生",
+      "singleResetSystemRequired": true,
+      "dawnMustBe": "merged, renamed, or removed; overlapping reset currencies and screens are prohibited",
+      "rubyRewardRequired": true,
+      "sameHighestFloorFarmAllowed": false
+    },
+    "ruby": {
+      "sources": [
+        "purchase",
+        "strong-new-game reset rewards",
+        "rewarded advertisements"
+      ],
+      "paidAndFreeLedgersSeparate": true,
+      "paidRubyExpires": false,
+      "evolutionUseRequired": true,
+      "gachaUse": "CANDIDATE; ruby and/or tickets may be used, but exact spend routing must be simulated",
+      "freeResetRouteMustSupportRequiredEvolution": true
+    },
+    "characterProgression": {
+      "coinLeveling": true,
+      "levelCap": null,
+      "evolutionEligibilityEveryLevels": 100,
+      "levelingBlockedByUnevolvedMilestone": false,
+      "delayedEvolutionCatchUpRequired": true,
+      "duplicateBasedSkillProgression": true,
+      "baseCopyUsableWithoutDuplicates": true
+    },
+    "weaponProgression": {
+      "gachaRouteRequired": true,
+      "duplicateBasedSkillProgression": true,
+      "baseCopyUsableWithoutDuplicates": true
+    },
+    "rarity": {
+      "orderedRegistry": [
+        "N",
+        "R",
+        "RR",
+        "SR",
+        "SSR",
+        "UR"
+      ],
+      "nonGachaAcquisitionRequired": [
+        "N",
+        "R"
+      ],
+      "gachaRoute": [
+        "RR",
+        "SR",
+        "SSR",
+        "UR"
+      ],
+      "mixedCharacterWeaponPoolAllowed": false
+    }
+  },
+  "acceptanceMatrix": [
+    {
+      "id": "P1",
+      "gate": "G1",
+      "condition": "All affected canonical documents remove the fixed 100F maximum, the 101F prohibition, and any claim that 100F is the final product endpoint.",
+      "evidenceRequired": [
+        "MASTER_SPEC redline",
+        "status-mirror consistency",
+        "repository contradiction search"
+      ]
+    },
+    {
+      "id": "P2",
+      "gate": "G2",
+      "condition": "The implementation contract represents floor identifiers and progression values without unsafe JavaScript Number assumptions. No reachable floor, reset count, cost, damage, or reward can silently lose integer precision, become NaN, or become Infinity.",
+      "evidenceRequired": [
+        "arbitrary-precision representation decision",
+        "serialization schema",
+        "overflow and precision fixtures"
+      ]
+    },
+    {
+      "id": "P3",
+      "gate": "G4",
+      "condition": "Unbounded height is produced by a repeatable data-driven structure, not by pretending to author infinitely many unique floors. The contract defines district cycles, milestone bosses, modifier pools, repetition control, and content-variation limits.",
+      "evidenceRequired": [
+        "floor-generation state machine",
+        "10-floor and 100-floor cycle contract",
+        "repetition and novelty audit"
+      ]
+    },
+    {
+      "id": "P4",
+      "gate": "G3",
+      "condition": "Floor 100 is a major early saga milestone with a clear reward and continuation reveal, but not an ending screen. The player understands within the result flow that the tower continues indefinitely.",
+      "evidenceRequired": [
+        "S03/S09 continuation state",
+        "100F milestone copy",
+        "five-second comprehension critique"
+      ]
+    },
+    {
+      "id": "P5",
+      "gate": "G1",
+      "condition": "The merchant-company-chairman identity is removed. Cats remain the visible heroes; the player guides their climb and development without a mandatory merchant avatar, company title, or corporate-management fantasy.",
+      "evidenceRequired": [
+        "one-line product identity",
+        "player-role redline",
+        "S01/S02/S06 copy audit"
+      ]
+    },
+    {
+      "id": "P6",
+      "gate": "G4",
+      "condition": "Merchant Saga-derived elements are limited to abstract mechanics such as shops, ally recruitment, income, reinvestment, and reset cadence. These mechanics support combat and do not create a separate company-management game.",
+      "evidenceRequired": [
+        "resource-flow diagram",
+        "screen responsibility map",
+        "independent originality critique"
+      ]
+    },
+    {
+      "id": "P7",
+      "gate": "G1",
+      "condition": "The product has exactly one strong-new-game reset. Dawn must be merged into it, renamed as it, or removed; two parallel prestige systems, currencies, or confirmation flows are not allowed.",
+      "evidenceRequired": [
+        "reset naming decision",
+        "Dawn migration redline",
+        "currency and screen deletion/merge list"
+      ]
+    },
+    {
+      "id": "P8",
+      "gate": "G5",
+      "condition": "Before reset, the UI shows a complete loss/retention/reward matrix. Reset loses current floor, run coin, run levels, temporary effects, and run shop levels; it preserves account purchases, ruby balances, acquired characters, acquired weapons, rarity, skill progress, evolution stages, collection, and permanent unlocks unless a later canonical decision explicitly changes an item.",
+      "evidenceRequired": [
+        "reset preview contract",
+        "save-partition matrix",
+        "reload and duplicate-submit tests"
+      ]
+    },
+    {
+      "id": "P9",
+      "gate": "G4",
+      "condition": "Strong-new-game ruby rewards are server-authoritative and based on new record progress and/or one-time milestones. Repeating the same maximum floor cannot mint additional permanent ruby unless an explicitly disclosed independent one-time objective was newly completed.",
+      "evidenceRequired": [
+        "ruby reward ledger",
+        "anti-farm formula",
+        "same-floor repetition simulation"
+      ]
+    },
+    {
+      "id": "P10",
+      "gate": "G2",
+      "condition": "Ruby obtained through purchase, reset, and rewarded ads uses separate paid/free sub-ledgers, immutable transaction IDs, idempotent grants, disclosed spend order, refund/revocation handling, and no client-side minting. Purchased ruby does not expire.",
+      "evidenceRequired": [
+        "wallet schema",
+        "purchase/reset/ad source ledger",
+        "refund, replay, race, and multi-tab tests"
+      ]
+    },
+    {
+      "id": "P11",
+      "gate": "G1",
+      "condition": "Characters level with run coin and may continue above levels 100, 200, 300, and later milestones without buying the corresponding evolution. Evolution eligibility is determined independently from level progression.",
+      "evidenceRequired": [
+        "character progression state machine",
+        "level 99/100/101/199/200/201 fixtures",
+        "UI lock-state audit"
+      ]
+    },
+    {
+      "id": "P12",
+      "gate": "G5",
+      "condition": "A character at level L may purchase up to floor(L/100) evolution stages. Skipped stages remain available and can be bought later in order; a level 350 character with one evolution can complete the second and third evolutions without lowering level or replaying milestones.",
+      "evidenceRequired": [
+        "delayed-evolution transaction rules",
+        "catch-up UI states",
+        "reload and partial-purchase tests"
+      ]
+    },
+    {
+      "id": "P13",
+      "gate": "G4",
+      "condition": "Evolution is meaningful but is not a hidden paid or ad gate. The free no-ad reset route produces enough ruby for the accepted baseline evolution cadence, and a player may continue climbing while an evolution is pending.",
+      "evidenceRequired": [
+        "free-ruby income distribution",
+        "evolution cost distribution",
+        "F2P no-ad progression comparison"
+      ]
+    },
+    {
+      "id": "P14",
+      "gate": "G4",
+      "condition": "Duplicate character acquisition converts into character-specific skill progress or an equivalently disclosed deterministic resource. Skill levels have a hard cap, required amounts are visible, the base copy contains the complete core role, and duplicates improve rather than unlock baseline usability.",
+      "evidenceRequired": [
+        "character duplicate conversion table",
+        "skill cap and curve",
+        "base-copy versus max-skill combat comparison"
+      ]
+    },
+    {
+      "id": "P15",
+      "gate": "G4",
+      "condition": "Duplicate weapon acquisition follows the same principles as characters: deterministic weapon-specific skill progress, disclosed requirements, hard cap, usable base copy, and a defined overflow conversion after maximum skill.",
+      "evidenceRequired": [
+        "weapon duplicate conversion table",
+        "weapon skill cap and curve",
+        "overflow transaction tests"
+      ]
+    },
+    {
+      "id": "P16",
+      "gate": "G1",
+      "condition": "Character gacha and weapon gacha are separate catalog and probability surfaces. A draw cannot ambiguously return either category from one mixed pool unless the user selected a clearly labeled special mixed banner that independently passes a later acceptance.",
+      "evidenceRequired": [
+        "banner taxonomy",
+        "S10 navigation",
+        "probability disclosure audit"
+      ]
+    },
+    {
+      "id": "P17",
+      "gate": "G1",
+      "condition": "The exact ordered rarity registry for characters and weapons is N, R, RR, SR, SSR, UR. Display names, colors, odds, IDs, sorting, pity, and duplicate values all use this single registry.",
+      "evidenceRequired": [
+        "stable rarity registry",
+        "schema enum",
+        "UI and telemetry consistency check"
+      ]
+    },
+    {
+      "id": "P18",
+      "gate": "G4",
+      "condition": "N and R characters and weapons have deterministic non-gacha acquisition paths through story, floor rewards, shops, reset exchange, login rewards, or other disclosed gameplay. Every role needed for normal tower progression is represented by at least one N or R option.",
+      "evidenceRequired": [
+        "free acquisition map",
+        "role coverage matrix",
+        "no-gacha progression simulation"
+      ]
+    },
+    {
+      "id": "P19",
+      "gate": "G4",
+      "condition": "RR, SR, SSR, and UR use the gacha route, including its pity or exchange output. Main-story continuation, reset access, evolution access, and required combat mechanics cannot require a specific RR-UR result.",
+      "evidenceRequired": [
+        "gacha-only rarity catalog",
+        "pity/exchange contract",
+        "story paywall audit"
+      ]
+    },
+    {
+      "id": "P20",
+      "gate": "G4",
+      "condition": "Rarity, evolution, level, and duplicate skill multipliers have separate budgets. A high-rarity base copy, a low-rarity evolved unit, and a duplicate-maxed unit must have explainable trade-offs; multiplicative stacking may not make N/R mathematically irrelevant after early onboarding.",
+      "evidenceRequired": [
+        "power-budget decomposition",
+        "rarity/evolution/duplicate cross-matrix",
+        "N/R long-run viability report"
+      ]
+    },
+    {
+      "id": "P21",
+      "gate": "G4",
+      "condition": "Maximum skill duplicates and evolution stages are capped or asymptotically controlled. No paid player can create unbounded multiplicative power independent of floor/reset progression, and no duplicate overflow is silently discarded.",
+      "evidenceRequired": [
+        "cap and overflow rules",
+        "whale-persona stress simulation",
+        "currency and fragment sink audit"
+      ]
+    },
+    {
+      "id": "P22",
+      "gate": "G5",
+      "condition": "The twelve-screen architecture remains sufficient: S03 shows the unbounded tower and cycle landmarks; S06 handles character rarity, coin level, evolution, and character skill; S07 handles weapon rarity and weapon skill; S09 handles strong-new-game reset; S10 separates character and weapon gacha; S11 handles ruby/store/ads; S12 handles login and reward claims.",
+      "evidenceRequired": [
+        "canonicalScreens registry redline",
+        "screen responsibility matrix",
+        "320x667 and 390x844 density critique"
+      ]
+    },
+    {
+      "id": "P23",
+      "gate": "G2",
+      "condition": "Server-owned state includes ruby paid/free balances, reset ledger, character and weapon acquisition, rarity, duplicate progress, skill levels, evolution stages, pity, and transaction history. Local save may cache but cannot authoritatively roll back or mint these fields.",
+      "evidenceRequired": [
+        "backend trust boundary",
+        "save/account schema",
+        "guest-link, rollback, and offline reconciliation tests"
+      ]
+    },
+    {
+      "id": "P24",
+      "gate": "G4",
+      "condition": "Balance verification is no longer limited to 100F. It covers the first 10F, first 100F milestone, at least a 1,000F medium horizon, a 10,000F or mathematically equivalent long horizon, repeated strong-new-game cycles, rarity tiers, evolution states, character/weapon duplicate levels, free/no-ad, ad-supported, pass, and payer personas, plus high-volume gacha-tail probability tests.",
+      "evidenceRequired": [
+        "expanded run plan",
+        "infinite-horizon invariant proof",
+        "reset/rarity/evolution/duplicate scenario identity set"
+      ]
+    },
+    {
+      "id": "P25",
+      "gate": "G4",
+      "condition": "Reference games are used only for abstract mechanics. Cat's Tower does not copy their character designs, UI arrangement, names, exact rarity visuals, probability tables, formulas, reset terminology, advertising patterns, or live-operations content.",
+      "evidenceRequired": [
+        "reference-to-originality matrix",
+        "three visible Cat's Tower differences per borrowed mechanic",
+        "independent originality critique"
+      ]
+    },
+    {
+      "id": "P26",
+      "gate": "G4",
+      "condition": "Independent critics separately attack unbounded-system feasibility, reset/ruby economy, gacha/duplicate ethics and probability, N/R viability, backend authority, mobile density, and originality. All unresolved P0/P1 findings must be zero before PASS.",
+      "evidenceRequired": [
+        "six critic artifacts",
+        "repair rounds",
+        "final judge artifact"
+      ]
+    }
+  ],
+  "initialProgressionHypotheses": {
+    "status": "DESIGN_CANDIDATE_NOT_VALIDATED",
+    "tower": {
+      "visibleMaximum": null,
+      "districtLengthFloors": 10,
+      "sagaCycleLengthFloors": 100,
+      "floorIdentifierStorage": "arbitrary-precision decimal string or BigInt with JSON-safe canonical encoding",
+      "uniqueAuthoredContentPerFloorForever": false
+    },
+    "reset": {
+      "unlockTiming": "UNSET_UNTIL_PROGRESSION_SIMULATION",
+      "rewardBasis": "new-highest-floor and one-time milestone ledger",
+      "sameMaximumPermanentRuby": 0,
+      "dawnMigration": "MERGE_RENAME_OR_REMOVE"
+    },
+    "ruby": {
+      "paidFreeSubLedgers": true,
+      "sources": [
+        "purchase",
+        "reset",
+        "rewarded-ad"
+      ],
+      "spendPriority": "UNSET",
+      "evolutionCosts": "UNSET",
+      "gachaCosts": "UNSET",
+      "adRewardCaps": "UNSET"
+    },
+    "character": {
+      "coinLevelCap": null,
+      "evolutionEveryLevels": 100,
+      "levelCanExceedPendingEvolution": true,
+      "evolutionStageMaximum": "derived from current level or a later explicit cap",
+      "skillLevelCap": "UNSET",
+      "duplicateConversion": "UNSET"
+    },
+    "weapon": {
+      "gacha": true,
+      "skillLevelCap": "UNSET",
+      "duplicateConversion": "UNSET"
+    },
+    "rarity": {
+      "order": [
+        "N",
+        "R",
+        "RR",
+        "SR",
+        "SSR",
+        "UR"
+      ],
+      "nonGacha": [
+        "N",
+        "R"
+      ],
+      "gacha": [
+        "RR",
+        "SR",
+        "SSR",
+        "UR"
+      ],
+      "exactOdds": "UNSET_UNTIL_PROBABILITY_AND_ECONOMY_SIMULATION"
+    }
+  },
+  "referenceResearch": [
+    {
+      "source": "Apple App Store official editorial and product listing for Kinoko Legend",
+      "checked": "2026-08-26",
+      "supportedUse": "automated stage progression, equipment gacha, skills/evolution, and companion recruitment as abstract reference patterns",
+      "unsupportedOrRejectedUse": "its exact rarity ladder, rates, UI, gacha-level gates, PvP/live-ops stack, art, names, and formulas"
+    },
+    {
+      "source": "Apple App Store listing for Maou 'Sekai no Hanbun Ageru'",
+      "checked": "2026-08-26",
+      "supportedUse": "officially described Soul Reverse/prestige that makes the hero and allies stronger",
+      "unsupportedOrRejectedUse": "exact reset formula, terminology, rewards, ads, content, and presentation"
+    },
+    {
+      "source": "Apple App Store listing and reviews for Merchant Saga",
+      "checked": "2026-08-26",
+      "supportedUse": "ally recruitment, shops supporting tower combat, repeated climb/reset/ruby loop as qualitative reference",
+      "unsupportedOrRejectedUse": "merchant-chairman identity, forced or intrusive ad patterns, repetitive manual leveling, exact formulas, UI, and content"
+    }
+  ],
+  "failureConditions": [
+    "A visible hard maximum floor or 100F ending remains in an active canonical document.",
+    "The code uses unsafe Number arithmetic for unbounded floor or economy state.",
+    "Dawn and strong-new-game remain as two overlapping prestige systems.",
+    "A character cannot level past 100 because evolution is unpaid or pending.",
+    "Reset, purchase, or ad callbacks can mint ruby twice.",
+    "Paid and free ruby are merged without an auditable source ledger.",
+    "A base character or weapon lacks its core role until duplicates are obtained.",
+    "Duplicate progression has no cap, no overflow rule, or hidden requirements.",
+    "A main-story role or required mechanic is available only from RR-UR gacha.",
+    "Character and weapon results are mixed in an ambiguously labeled pool.",
+    "N/R become mathematically unusable beyond onboarding without a disclosed product decision.",
+    "100F-only simulation is used as proof for an unbounded product.",
+    "Reference UI, art, rates, formulas, or terminology are copied.",
+    "Step 2 begins before the expanded executable contract is sealed.",
+    "Any write targets a branch other than kimi."
+  ],
+  "currentRound": {
+    "artifact": "quality-reviews/step-1-hero-merchant-large-idle-integration/round-003-infinite-tower-prestige-evolution.md",
+    "status": "IN_PROGRESS",
+    "advanceAllowed": false
+  },
+  "nextAuthorizedWork": "Continue collecting user changes, then consolidate product identity, unbounded tower generation, single-reset migration, ruby wallet, evolution, duplicate skills, rarity, character/weapon gacha, twelve-screen responsibilities, backend ledgers, and expanded simulation into the canonical redline."
+}

@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-hero-merchant-large-idle-integration-handover-round-003",
+  "createdAt": "2026-08-26",
+  "chat": "00_統括・工程管理",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "baseHead": "2eeec8511d7cac7459af3672d04f101f23d4c8bd",
+  "phase": "Step 1 product-boundary change control for unbounded tower, prestige, evolution, rarity, duplicate skills, and weapon gacha",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS",
+  "advanceAllowed": false,
+  "acceptedUserDirections": [
+    "The tower has no player-visible maximum floor.",
+    "A strong-new-game reset is required, using Merchant Saga and Maou 'Sekai no Hanbun Ageru' only as abstract references.",
+    "Merchant Saga mechanics may remain selectively, but the heavy merchant-company-chairman identity is removed.",
+    "Characters level with coin beyond level 100 and become eligible for ruby evolution at every 100 levels.",
+    "Ruby comes from purchases, strong-new-game reset rewards, and rewarded advertisements.",
+    "Duplicate characters raise character skill progression.",
+    "Weapons have a gacha acquisition route and duplicate-based weapon skill progression.",
+    "Characters and weapons use N/R/RR/SR/SSR/UR rarity.",
+    "N/R have non-gacha acquisition paths; RR-UR use the gacha route.",
+    "Kinoko Legend is an abstract reference for rarity/gacha/skill/evolution structure, not a source to copy."
+  ],
+  "primaryDesignResolutions": [
+    "Unbounded means no product-visible hard cap and data-driven generated cycles, not infinite hand-authored content.",
+    "Dawn and strong-new-game may not coexist as separate prestige systems; Dawn must merge, rename, or be removed.",
+    "Character level and evolution stage are independent axes.",
+    "Ruby must have paid/free source ledgers and server-authoritative grants.",
+    "Base characters and weapons must be usable before duplicate skill upgrades.",
+    "Character and weapon banners are separate.",
+    "The existing twelve-screen monetization architecture can absorb the new progression without a thirteenth screen.",
+    "The first implementation slice remains Floors 1-10 while Step 1 is reopened."
+  ],
+  "newArtifacts": [
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/progression-acceptance-round-003.json",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/round-003-infinite-tower-prestige-evolution.md",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/handover-round-003.json"
+  ],
+  "updatedArtifacts": [
+    "quality-reviews/step-1-canonical-design/active-change-control.json"
+  ],
+  "unchangedAreas": [
+    "game runtime",
+    "art and audio assets",
+    "simulation/candidate-v1.json",
+    "candidate schema and validators",
+    "backend and database configuration",
+    "billing provider configuration",
+    "advertisement network configuration",
+    "Vercel configuration",
+    "Production alias",
+    "physical iPhone evidence"
+  ],
+  "openP1": [
+    "The active canonical documents still contain the fixed 100F maximum and 101F prohibition.",
+    "The one-line product identity still includes a merchant-company-leader frame.",
+    "Dawn, Dawn shards, strong-new-game, and ruby have not been consolidated.",
+    "No arbitrary-precision floor/economy representation is sealed.",
+    "No final reset loss/retention/reward matrix is sealed.",
+    "Ruby evolution cost and free reset income are unvalidated.",
+    "Character and weapon duplicate caps and overflow are unset.",
+    "The N/R/RR/SR/SSR/UR registry is not yet in PROJECT_STATUS, schemas, or UI contracts.",
+    "Weapon gacha conflicts with the current one-slot three-armament contract.",
+    "The old 100F and 12,000-scenario simulation plan is insufficient.",
+    "The uploaded ChatGPT Project instruction MD is stale for the reopened product scope."
+  ],
+  "nextAuthorizedWork": "Continue collecting user product changes. After the direction set stabilizes, create one consolidated canonical redline and one numbered replacement ChatGPT Project instruction MD; do not repeatedly replace the Project source while requirements are still being supplied.",
+  "projectSourceMd": {
+    "current": "CHATGPT_PROJECT_INSTRUCTIONS.md",
+    "status": "STALE_FOR_REOPENED_PRODUCT_SCOPE",
+    "replacementNow": false,
+    "reason": "The user is still supplying product changes; premature replacement would create repeated stale snapshots.",
+    "futureFileRule": "Create the next numbered consolidated MD after the current direction set stabilizes, then remove the older active source."
+  },
+  "vercel": {
+    "manualActionPerformed": false,
+    "productionAliasChanged": false,
+    "automaticDeploymentExpectedAfterDocumentationCommit": true,
+    "usedAsCompletionEvidence": false
+  },
+  "limits": {
+    "canonicalRedlineComplete": false,
+    "infiniteTowerValidated": false,
+    "resetEconomyValidated": false,
+    "rubyEvolutionValidated": false,
+    "gachaAndDuplicateProbabilityValidated": false,
+    "runtimeImplemented": false,
+    "backendImplemented": false,
+    "physicalIPhoneVerified": false
+  }
+}
