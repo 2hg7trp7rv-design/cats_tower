@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-hero-merchant-large-idle-integration-deployment-evidence-round-003",
+  "createdAt": "2026-08-26",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "contentCommit": "99e45ac5c3e05b84ba6f17f377f9dcee68bfb040",
+  "contentTree": "6517a5da17ffb93fdb8cb447cb4fce681b55996a",
+  "parentCommit": "2eeec8511d7cac7459af3672d04f101f23d4c8bd",
+  "commitMessage": "docs: require unbounded tower prestige evolution and dupe skills",
+  "changedPaths": [
+    "quality-reviews/step-1-canonical-design/active-change-control.json",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/progression-acceptance-round-003.json",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/round-003-infinite-tower-prestige-evolution.md",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/handover-round-003.json"
+  ],
+  "changeSummary": {
+    "changedPathCount": 4,
+    "runtimeOrAssetChangedPathCount": 0,
+    "candidateSchemaValidatorChangedPathCount": 0,
+    "backendOrConfigurationChangedPathCount": 0
+  },
+  "deployment": {
+    "id": "dpl_AJMCUK1c6y89tWuosWL9agrNu1xM",
+    "url": "https://catstower-9b93oa3b6-shinyaaas-projects.vercel.app/",
+    "branchAlias": "https://catstower-git-kimi-shinyaaas-projects.vercel.app/",
+    "state": "READY",
+    "target": null,
+    "githubCommit": "99e45ac5c3e05b84ba6f17f377f9dcee68bfb040",
+    "githubBranch": "kimi",
+    "commitMatchVerified": true,
+    "automaticGitDeployment": true,
+    "manualDeploymentActionPerformed": false,
+    "productionAliasChanged": false
+  },
+  "twoStageBindingRule": "The authoritative evidence commit is the commit that adds this exact file as its sole path change with contentCommit as its parent. Git binds this otherwise self-referential evidence record to that commit and tree.",
+  "evidenceBoundary": {
+    "status": "IN_PROGRESS",
+    "advanceAllowed": false,
+    "usedAsCompletionEvidence": false,
+    "canonicalRedlineComplete": false,
+    "infiniteTowerValidated": false,
+    "resetAndRubyEconomyValidated": false,
+    "evolutionAndDuplicateProgressionValidated": false,
+    "runtimeOrBackendImplemented": false,
+    "physicalIPhoneVerified": false,
+    "firstTenPreviewReady": false,
+    "productReady": false,
+    "meaning": "READY proves only that the documentation content commit built and deployed. It does not prove unbounded progression, reset behavior, ruby accounting, evolution, rarity, character or weapon gacha, duplicate skills, gameplay quality, backend security, production readiness, or physical-device behavior."
+  }
+}
