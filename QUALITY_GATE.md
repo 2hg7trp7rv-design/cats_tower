@@ -1,102 +1,145 @@
-# Cat's Tower — 完成判定の必須ループ
+# Cat's Tower — 完成判定と工程Gate
 
-更新日: 2026-08-25
+更新日: **2026-08-26**  
+Repository: `2hg7trp7rv-design/cats_tower`  
+書込みbranch: **既存の`kimi`のみ**  
+現在工程: **Step 1 正本統合・再封印 — IN_PROGRESS**  
+次の許可チャット: **`01_正本仕様・競合調査`**  
+Step 2〜6: **BLOCKED**  
+物理iPhone: **NOT_VERIFIED**
 
-工程状態: 工程1A=PASS / 承認済み6工程のStep 1=PASS（正本仕様固定完了） / Step 2以降=NOT_STARTED
+本書は、有限100F・非ガチャ設計に対する旧Gateを現行製品へ流用しないための完成判定正本である。旧Acceptance、旧PASS、旧workflow成功は履歴証拠として保持するが、現在の無制限塔・ガチャ・収益化設計を承認しない。
 
-ユーザー承認済みの以後の順序は、①修正版の正本仕様固定、②全100F購入・戦闘・夜明け・24時間放置シミュレーション、③3ビルド各1,000パターン検証、④9画面完成見本、⑤1〜10Fだけ実装、⑥物理iPhoneの3分（180秒）ボス戦＋10分（600秒）連続試験とする。後工程の証拠を前工程の合格理由に流用しない。Step 5の合格は非物理端末の実装Acceptanceだけを意味し、Gate Cまたは1〜10F Preview Readyの合格ではない。Step 6を同一`kimi` commitと対象Vercel URLで完了した後にだけGate Cの物理端末要件を判定できる。11F以降の実装はこの6工程の許可に含まれない。
+## 1. 現行製品境界
 
-Step 3のholdout bankは一回限りの昇格判定資源とする。seed単位結果、集計、判定または診断を一つでも外部へ実体化した時点で観測済み・使用済みとなる。同じ登録済み実行は完走してよいが、途中停止後の再開・再実行はしない。部分出力後に有効判定を作れなかった場合もbankは使用済みである。使用済みbankを見てcandidateまたはsimulator semanticsを変更した場合はStep 1へ戻り、重複しない未観測bankを登録して再封印し、Step 2を全件再実行してからStep 3へ進む。同一digestのbyte-equivalence検査、または結果を一切露出しなかった基盤障害からの復旧以外に同じbankを再実行せず、最初の有効なAcceptance判定を権威とする。bank使用履歴は`simulation/results/step-3/holdout-bank-ledger.jsonl`へcanonical JSONL hash chainで追記だけを行う。preflightと開始recordの追加は排他的なcompare-and-appendとし、calibration range、全bank履歴の観測済み・未解決rangeとの重複、bank ID/rangeの再割当、並行開始、削除、上書き、切詰め、chain断裂、重複record/finalizeを不合格にする。
+現行製品は、猫と猫人の4体編成を育成し、店舗・配送の支援を受けながら、プレイヤーから見て上限のない塔を登り、一つの強くてニューゲームで1Fから高速再攻略する放置インクリメンタルRPGである。
 
-Step 2が`PASS`した時点で、candidate、`simulation/engine`の完全file closure、run plan、result schema・validator、Node version、raw dataset、summary、Acceptanceのdigestをstrict schemaの`simulation/results/step-2/executable-seal.json`へ一方向に固定する。Step 3はholdout draw前にseal raw bytesと全file集合・全項目の一致を確認し、Step 3出力や進捗文書からこのsealを書き換えない。進捗状態だけを更新する文書はbalance実行入力ではなく、変更だけでStep 2結果を失効させない。意味仕様を変えた場合は新candidateとStep 1再封印を必須とする。
+現在の必須境界には、少なくとも以下を含む。
 
-1. V0.8.2 deployed browser-runtime source + deployment-input byte checkpoint — `PASS`
+- 100Fは終了地点ではなく最初の大型節目。101F以降も継続
+- コインレベル無制限、100レベルごとのルビー進化
+- `N < R < RR < SR < SSR < UR`
+- キャラクターガチャと武器ガチャの分離
+- 100回hard pity、200回featured保証の設計目標
+- 初回入手で機能完成、20体分以上は任意の長期完全熟練
+- 新規・月間・復帰ログイン、課金、リワード広告
+- S01〜S12の12画面
+- wallet、抽選、pity、取得、重複、進化、ログイン、広告、決済、権利のサーバー権威
+- 最低15,000scenarioと別枠Monte Carlo・状態遷移検証
 
-この規則は、仕様書、調査、画像、画面、コード、QA、配信など、ユーザーへ成果として渡す全作業へ適用する。目的は「作れた」を「完成した」と誤認しないことにある。
+詳細は`MASTER_SPEC.md`、`PROJECT_STATUS.json`、active change-controlを参照する。
 
-## 必須の順序
+## 2. fail-closed規則
 
-1. **期待を定義する**
-   - 作る物、利用者が期待する水準、強い比較対象、失敗条件、禁止事項、確認環境を制作前に固定する。
-2. **制作する**
-   - 要求を満たす成果物を作る。途中で前提の誤りや工程順の問題を見つけたら制作を止める。
-3. **実物を自己検収する**
-   - ユーザーが見る大きさ、通常の導線、通常の速度、対象環境で出力そのものを見る。
-   - ソース、自動テスト、ファイル数、deploymentの`READY`だけで合格にしない。
-4. **反証する**
-   - 「なぜ期待外れか」「強い比較対象より何が弱いか」「第三者が最初の5秒で何を誤解するか」を、完成を覆す目的で探す。
-   - 制作量や努力は評価しない。
-5. **判定する**
-   - G1〜G5がすべて合格した場合だけ`PASS`とする。
-   - 一つでも不合格なら`IN_PROGRESS`へ戻し、失敗原因を次のAcceptanceへ加えて手順1から再構成する。
-   - 続行にユーザー固有の権限、実機、素材、方針選択が必要な場合だけ`BLOCKED`とする。
-6. **報告する**
-   - `PASS`時だけ完成報告する。未完成時は完成したように表現しない。
-   - 報告には自己検収で見つけた問題、再構成、再検証、残る対象外を含める。
+以下のどれかを現行工程・現行製品として案内する文書、candidate、schema、validator、workflowは、そのままでは合格証拠に使用できない。
 
-外部CI、配信、承認、第三者監査など、制作後にしか判明しない必須条件がある場合、その結果が出る前に正本を`PASS`へ変えない。内部sealは`EXTERNAL_PENDING`として分離し、外部成功を改変不能な証拠へ結合したcompletion sealの後だけ`PASS`にする。
+- 1F〜100Fが最終商品
+- 101F禁止
+- 100Fが製品ending
+- ガチャ・有償通貨・ログイン・広告禁止
+- Dawnを独立したresetとして維持
+- 9画面固定
+- 3build×1,000seedの3,000scenarioだけで十分
+- localStorageだけで恒久経済を管理
+- 旧Step 1 PASSからStep 2開始を許可
 
-## 五つのGate
+過去証拠内の記述は削除しない。ただし、現行entry point、正本、状態mirror、実行入力として参照してはならない。
 
-| Gate | 判定する内容 | 必須証拠 |
+## 3. 必須の完成ループ
+
+1. **期待定義** — 対象、利用者、比較対象、失敗条件、禁止事項、確認環境、証拠形式をAcceptanceへ固定
+2. **制作** — 正本とAcceptanceに沿って成果物を作成
+3. **実物自己検収** — ユーザーが見る大きさ、通常導線、通常速度で実物を確認
+4. **専門監査** — コード、データ、経済、確率、台帳、privacy、性能、保存、移行を確認
+5. **独立批評** — 完成を否定する目的でP0〜P3を付与
+6. **修正** — 採用した指摘を直し、影響範囲を再検証
+7. **回帰** — 既存の正しい契約、履歴証拠、runtime baselineを壊していないか確認
+8. **証拠結合** — exact `kimi` commit、tree、deploymentへ結合
+9. **最終判定** — G1〜G5と追加Gateがすべて合格した場合だけPASS
+
+作成、ファイル存在、build、test、Vercel `READY`、決済sandbox応答は単独の完成条件ではない。
+
+## 4. 五つの基本Gate
+
+| Gate | 判定対象 | 最低証拠 |
 |---|---|---|
-| G1 要求適合 | 依頼、禁止事項、制作前Acceptanceを満たしたか | 要求対照、差分、未対応0 |
-| G2 実物品質 | 最終成果物に仮物、破綻、欠落がないか | 最終サイズの実物、runtime、全体一覧 |
-| G3 人間期待 | 専門外の依頼者が期待する水準へ届くか | 5秒理解、主役、魅力、実用性の批評 |
-| G4 比較・反証 | 強い参考、代替案、失敗仮説に耐えるか | 横比較、反対証拠、重大指摘0 |
-| G5 通常利用 | 普通の使い方で一連の体験が成立するか | 通常導線、失敗、再開、保存、対象環境 |
+| G1 要求適合 | 最新のユーザー決定、正本、禁止事項への適合 | 要求対照表、差分、未対応0 |
+| G2 実物品質 | 最終成果物の欠落・仮物・破綻の有無 | 実物、全state、最終サイズ確認 |
+| G3 人間期待 | 5秒理解、魅力、主役、次操作、失敗回復 | 独立UX批評、通常導線 |
+| G4 比較・反証 | 強い競合、代替案、失敗仮説に耐えるか | 横比較、P0/P1=0 |
+| G5 通常利用 | 起動、進行、失敗、復帰、保存、通信異常 | E2E、異常系、対象環境証拠 |
 
-G1だけなら「仕様適合」、自動テストだけなら「技術QA合格」と呼べるが、成果物全体の`PASS`ではない。
+## 5. 追加Gate
 
-## 役割分離
+### G6 正本・工程整合
 
-重大成果物では、最低限、次の三視点を分ける。
+- active change-control、`MASTER_SPEC.md`、`PROJECT_STATUS.json`、本書、`AGENTS.md`、handoverが同じ工程を示す
+- 現行権威として残る旧有限100F・非ガチャ主張が0件
+- 過去証拠は履歴として保持し、現行許可に使わない
 
-- 制作者: 要求から成果物を作る。
-- 独立批評者: 完成を前提にせず欠点を探す。
-- 最終判定者: 努力ではなく、ユーザーへ渡せる結果かだけを判定する。
+### G7 経済・確率・長期進行
 
-独立批評を行えない場合は`PASS`にしない。批評を受け取っただけで終わらず、指摘を採否し、修正後の実物を再検証する。
+- 広告なしF2Pが本編、reset、必須進化を継続可能
+- 初回入手、実用breakpoint、完全熟練を分離
+- N・Rが長期的に死なず、URが全役割で無条件最強にならない
+- pity、pickup、carryover、交換、overflow、返金後状態を検証
+- 1〜10F、100F、1,000F、10,000F相当、複数resetを検証
 
-## Acceptance Matrix
+### G8 サーバー・決済・広告・privacy
 
-成果物ごとに制作前のAcceptance Matrixを`quality-reviews/<artifact-id>/acceptance.json`へ保存する。
+- paid/free ruby、ticket、draw、pity、取得、duplicate、evolution、login、ad、payment、entitlementがサーバー権威
+- idempotency、retry、race、multi-tab、refund、revocation、restore、guest linkを検証
+- 未成年者保護、同意、personalized ad、データ削除をrelease gateへ含める
 
-- 対象と対象外を分ける。
-- 機能要件、品質要件、感情要件、比較対象、失敗条件、確認環境を固定する。
-- 未対応、未確認、後工程送りを、完成後に`N/A`へ変えて合格させない。
-- 物理的に対象外とする項目は、その理由と代替証拠を制作前に書く。
+### G9 mobile・物理端末
 
-## 不合格と再構成の記録
+- 320×667、375×667、390×844を含む縦画面
+- 主要tap領域、safe-area、誤操作、スクロール競合、100連後の密度
+- 物理iPhone証拠なしに触覚、発熱、電池、実tap、PWA復帰をPASSにしない
 
-不合格roundには必ず次を残す。
+## 6. 現在のStep 1 Gate
 
-1. 何を完成と誤認したか。
-2. 何の確認を省略したか。
-3. 人間の期待と何がずれたか。
-4. 根本原因が要求、順序、素材、実装、QAのどこにあったか。
-5. 次の合格条件へ何を追加したか。
-6. 何を再利用し、何を作り直すか。
+Step 1は次をすべて満たした場合だけPASSにできる。
 
-過去roundは上書きせず、`round-001.json`、`round-002.json`のように追加する。成果物または証拠が変わった場合は以前の判定を失効させ、再検証する。
+- repository-wide contradiction inventory完成
+- 下位正本、入口文書、状態mirrorの統合
+- S01〜S12とrequired stateの固定
+- stable ID、migration alias、状態遷移、backend trust boundaryの固定
+- Step 2 dependency closure完成
+- 競合・platform policy・privacy・未成年者保護の調査記録
+- 独立批評の未解決P0/P1が0
+- exact commit/tree-bound Step 1 seal
 
-## ユーザーへ確認を戻す条件
+現在は上記を満たしていないため、Step 1全体は`IN_PROGRESS`である。
 
-通常の欠陥発見、比較、修正、再検証は制作側で行い、ユーザーへ毎回の検品を要求しない。質問するのは次の場合に限る。
+## 7. Step 2以降
 
-- 同等に成立する複数案の間で、好みにより製品方針が大きく変わる。
-- 承認済み資料から好みを合理的に推定できない。
-- ユーザーにしか用意できない実機、権限、素材、外部操作が必須である。
-- 破壊的操作、課金、送信、公開範囲の拡大など、明示承認が必要である。
+1. **Step 2** — 新しいcandidate、schema、validator、simulator、result contractを実行可能化
+2. **Step 3** — 3build×5persona×各1,000seed以上と別枠Monte Carlo
+3. **Step 4** — S01〜S12の完成見本と全正常・異常state
+4. **Step 5** — 1〜10Fと必要backendの実装
+5. **Step 6** — physical iPhone、billing、広告、PWA、長時間試験
 
-それ以外は内部で①〜④を繰り返し、合格後にまとめて報告する。
+前工程のPASS前に後工程へ進まない。
 
-## 状態語
+## 8. 三役分離
 
-- `NOT_STARTED`: 未着手。
-- `PENDING_REVALIDATION`: 旧成果物はあるが、このGateでは未判定。
-- `IN_PROGRESS`: 制作または再構成中。完成報告禁止。
-- `BLOCKED`: 必須条件を制作側だけでは解消できない。
-- `PASS`: G1〜G5すべて合格。完成報告可能。
+- **Creator** — Acceptanceに沿って作る
+- **Independent critic** — 完成を前提にせず拒否理由を探す
+- **Final judge** — 努力を無視し、証拠だけで判定する
 
-ユーザーが品質を否認した場合は旧判定を守らず、直ちに`IN_PROGRESS`へ戻して次roundの失敗条件へ反映する。
+重大な収益化成果物では、製品・UX、経済・確率、backend・不正、platform policy・privacy、mobile密度の批評を分離する。未解決P0またはP1が一つでもあればPASS禁止。
+
+## 9. 状態語
+
+- `NOT_STARTED` — 未着手
+- `PENDING_REVALIDATION` — 旧成果物は存在するが現行製品では未判定
+- `IN_PROGRESS` — 制作・再構成中。完成報告禁止
+- `BLOCKED` — 制作側だけでは解消不能
+- `PASS` — 適用Gateすべて合格
+
+ユーザーが品質を否認した範囲は、以前のPASSを守らず即`IN_PROGRESS`へ戻す。
+
+## 10. 報告
+
+報告にはrepository、branch、content commit、evidence commit、tree、deployment、工程、判定、P0/P1、変更範囲、対象外、Production変更、物理iPhone状態を含める。未完成を完成したように表現しない。
