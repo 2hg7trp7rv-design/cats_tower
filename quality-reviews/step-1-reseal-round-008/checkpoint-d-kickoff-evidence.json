@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-route-01-2-kickoff-evidence",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "scope": "Route 01-2 research kickoff only",
+  "base": {
+    "commit": "68cb3f6a4689869538340f5f1a186bed3efac7e2",
+    "tree": "95d05a27ce739c3f1e525348c13a6955baf5b721"
+  },
+  "content": {
+    "commit": "677c55bd0d79033e3650c573c0ce8d2cdb276bc9",
+    "tree": "86f1b0c199d1e74fa8c8b5d10a5396ab0dbde258",
+    "parentMatchesBase": true,
+    "aheadBy": 1,
+    "behindBy": 0,
+    "message": "docs: open Round 008 Route 01-2 research",
+    "changedPaths": [
+      "PROJECT_HANDOVER.md",
+      "PROJECT_STATUS.json",
+      "README.md",
+      "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-011.json",
+      "quality-reviews/step-1-reseal-round-008/route-01-2-acceptance.json"
+    ],
+    "changedPathCount": 5,
+    "changedPathSetExact": true
+  },
+  "deployment": {
+    "id": "dpl_4ctpmbRYP99SoPoVS4BSXoSh3RVW",
+    "url": "https://catstower-j4dni6a8m-shinyaaas-projects.vercel.app",
+    "state": "READY",
+    "target": null,
+    "githubCommit": "677c55bd0d79033e3650c573c0ce8d2cdb276bc9",
+    "githubBranch": "kimi",
+    "commitMatch": true,
+    "branchMatch": true,
+    "branchAlias": "https://catstower-git-kimi-shinyaaas-projects.vercel.app",
+    "readyMeaning": "documentation deployment only; Route 01-2 remains IN_PROGRESS"
+  },
+  "verification": {
+    "route011EvidenceVerified": true,
+    "acceptanceCreatedBeforeResearch": true,
+    "sourceClassSeparationRequired": true,
+    "researchCutoffFixed": true,
+    "runtimeChanged": false,
+    "assetsChanged": false,
+    "candidateChanged": false,
+    "schemaChanged": false,
+    "validatorChanged": false,
+    "simulatorChanged": false,
+    "backendChanged": false,
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "productionAliasChanged": false,
+    "pullRequestOperation": false
+  },
+  "verdicts": {
+    "route011": "PASS",
+    "route012Kickoff": "PASS",
+    "route012Completion": "IN_PROGRESS",
+    "overallStep1": "IN_PROGRESS",
+    "step2Allowed": false,
+    "physicalIPhoneVerified": false
+  },
+  "nextAuthorizedWork": "Perform web research from first-party/store/regulator sources, label review and inference separately, produce policy gates, critique and evidence.",
+  "evidenceBoundary": "This does not certify any competitor finding, policy interpretation, legal conclusion or Step 1 completion."
+}
