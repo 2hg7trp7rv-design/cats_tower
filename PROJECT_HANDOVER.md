@@ -2,64 +2,56 @@
 
 更新日: **2026-08-27**  
 Repository: `2hg7trp7rv-design/cats_tower`  
-Canonical / writable branch: **既存の`kimi`のみ**  
-現在工程: **Step 1 正本統合・再封印 — IN_PROGRESS**  
-現在checkpoint: **Round 008 Route 01-1 repository-wide Acceptance / contradiction inventory**  
-次の許可チャット: **`01_正本仕様・競合調査`の継続**  
+Branch: **既存の`kimi`のみ**  
+現在工程: **Step 1 — IN_PROGRESS**  
+現在checkpoint: **Round 008 Route 01-1 completion**  
 Step 2〜6: **BLOCKED**  
 物理iPhone: **NOT_VERIFIED**
 
-## 1. 現在の結論
+## 1. 完了済み
 
-00 Round 006の中核権威同期とRound 007のlive entrypoint containmentは、当時のscopeに限る`SCOPED_PASS`として有効である。00をやり直したり、`6d7724f1f71fa99d0e9b119ef437ebb902187858`以前へrollbackしたりしない。
+- 00 Round 006 core authority: `SCOPED_PASS`
+- 00 Round 007 entrypoint containment: `SCOPED_PASS`
+- Route 01-0 governance recovery: `PASS`
+  - content `77df8b720733e4af6e22220e39950d2e9ff25df4`
+  - evidence `ea5a060c23b7e4a18bc179b4289beb8f1502f4a6`
 
-その後の部分的な01作業で`MASTER_SPEC.md`と3つの`canonical/*`が追加・更新されたが、status mirror、dependency closure、policy gate、独立批評、sealが揃う前にPASS／02導線が記載された。Route 01-0はこのgovernance driftを修復する。
+過去証拠は現行Step 2を許可しない。
 
-## 2. Route 01-0完了証拠
+## 2. Route 01-1
 
-- `MASTER_SPEC.md`をStep 1 `IN_PROGRESS`へ戻す。
-- `PROJECT_STATUS.json`を`01_正本仕様・競合調査`進行中へ同期する。
-- 3つの`canonical/*`を`PRESEAL_DRAFT`へ明示的に降格する。
-- 未作成のStep 2 closure、policy gate、sealを存在済み正本として扱わない。
-- `AI_PROJECT_POLICY.json`の情報源順位をProject sourceとactive change-control優先へ修正する。
-- draft PR #8をstale external non-authorityとしてrepository内に記録し、更新・close・mergeは行わない。
-- Acceptance、00 postcheck、外部stale artifact記録をRound 008 evidence directoryへ置く。
+exact treeを優先順位付きpath ruleへ分類し、13 familyの旧主張を次へ分離した。
 
-exact content commit、tree、Vercel Previewは、このcontent commitの直接子に置く`quality-reviews/step-1-reseal-round-008/checkpoint-a-evidence.json`で記録する。
+- C1 current authority
+- C2 active mirror/guard/evidence
+- C3 superseded executable
+- C4 legacy runtime/test/assets
+- C5 immutable history
+- C6 current file内の禁止・失効説明
 
+結果候補:
 
-- Content commit: `77df8b720733e4af6e22220e39950d2e9ff25df4`
-- Content tree: `86a1137169f25f5abb8a7d1fa4315b9d100564c5`
-- Evidence commit: `ea5a060c23b7e4a18bc179b4289beb8f1502f4a6`
-- Evidence tree: `dbd72c34ab33b811ac93d284451e5b3a049d0e9e`
-- Content Preview: `dpl_2bYyqA6NnSEazsxF8yToZQU5aSjp`
-- Evidence Preview: `dpl_xVkczHkpj2smFRHQ9Tdk5Egq1QfG`
-- Both: `READY`, target `null`, branch `kimi`, exact commit match
-- Route 01-0 P0/P1: `0 / 0`
+- unclassified path: `0`
+- unclassified match: `0`
+- current-authority superseded assertion: `0`
+- Route 01-1 P0/P1: `0 / 0`
 
-## 3. 現在の正本候補
+`checkpoint-c-evidence.json`がexact content commit/tree/Previewへ結合した時点でRoute 01-1 PASS。Step 1全体は引き続き`IN_PROGRESS`。
 
-- `MASTER_SPEC.md` — `PRESEAL_DRAFT`
-- `canonical/STABLE_ID_REGISTRY.json` — `PRESEAL_DRAFT`
-- `canonical/SCREEN_STATE_REGISTRY.json` — `PRESEAL_DRAFT`
-- `canonical/STATE_TRANSITION_CONTRACT.json` — `PRESEAL_DRAFT`
-- `FLOORS_1_10_DESIGN.md` — `PENDING_REVALIDATION`
-- `canonical/STEP2_DEPENDENCY_CLOSURE.json` — `PLANNED_NOT_CREATED`
-- `canonical/POLICY_RELEASE_GATES.json` — `PLANNED_NOT_CREATED`
-- `quality-reviews/step-1-reseal-round-008/seal-round-008.json` — `NOT_CREATED`
+## 3. 残るStep 1 blocker
+
+- `FLOORS_1_10_DESIGN.md`再設計
+- `canonical/POLICY_RELEASE_GATES.json`
+- `canonical/STEP2_DEPENDENCY_CLOSURE.json`
+- 下位mirror統合
+- 11独立criticと修正
+- final judge、evidence、seal
 
 ## 4. 禁止範囲
 
-Route 01-0ではruntime、asset、V1 candidate、schema、validator、simulator、backend、payment provider、ad network、Production aliasを変更しない。Vercel `READY`はdocumentation deploymentだけを意味する。
+runtime、assets、V1 candidate/schema/validator/simulator、backend、payment/ad provider、他branch、PR操作、Production aliasは変更しない。
 
-## 5. 現在実行中の作業
+## 5. 次
 
-Route 01-0のevidenceは成立済み。現在はRoute 01-1として次を実行する。
+`01_正本仕様・競合調査`のRoute 01-2へ進み、2026-08-26基準の競合、Apple、Google、日本国内rule、privacy、未成年者保護を一次資料優先で調査する。
 
-1. Acceptance Matrixをrepository全体scopeへ拡張
-2. full treeのcontradiction inventory
-3. current authority／mirror／Step 2移行／runtime gap／history／false positiveの分類
-4. 未分類0、current-authority contradictionの修正計画
-5. Route 01-2の競合・platform・日本国内policy調査へ接続
-
-新Step 1 sealがlive `kimi`に存在し、P0/P1=0とexact commit/tree/deployment bindingを満たすまでStep 2を開始しない。

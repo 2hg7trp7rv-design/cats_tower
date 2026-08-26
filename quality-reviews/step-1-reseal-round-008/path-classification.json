@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-path-classification",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "baseHead": "fd67384350fb2891f435786c0656dc65167d5ce1",
+  "baseTree": "9a0467efc4b5e2d2efbd9e455456189b284c5946",
+  "status": "COMPLETE_PRE_EVIDENCE",
+  "method": {
+    "treeSource": "Git recursive tree 9a0467efc4b5e2d2efbd9e455456189b284c5946 with truncated=false",
+    "topLevelSource": "contents API at commit fd67384350fb2891f435786c0656dc65167d5ce1",
+    "ruleApplication": "first matching rule wins; exact-path rules precede prefix rules",
+    "codeSearchAuthority": false,
+    "binaryRule": "binary files are classified by path and extension; they are not decoded as text",
+    "completeByConstruction": true
+  },
+  "classes": {
+    "C1": "current product authority or active user-decision contract",
+    "C2": "active status, entrypoint, lower-canonical guard, workflow mirror or current checkpoint evidence",
+    "C3": "superseded Step 2 executable input or workflow YAML; preserved and blocked",
+    "C4": "legacy runtime, test, script, deployment input or asset implementation gap",
+    "C5": "immutable historical evidence, superseded design or baseline snapshot",
+    "C6": "claim-level invalidation/prohibition/quotation inside a C1/C2 file; not a path primary class"
+  },
+  "topLevelUniverse": [
+    ".github",
+    ".gitignore",
+    ".vercelignore",
+    "AGENTS.md",
+    "AI_PROJECT_POLICY.json",
+    "BASELINE_V082.md",
+    "CHATGPT_PROJECT_BOOTSTRAP.md",
+    "CHATGPT_PROJECT_INSTRUCTIONS1.md",
+    "CLONE_DESIGN.md",
+    "CUSTOM_GPT_CONFIGURATION.md",
+    "FLOORS_1_10_DESIGN.md",
+    "IDLE_DESIGN.md",
+    "MASTER_SPEC.md",
+    "PROJECT_HANDOVER.md",
+    "PROJECT_STATUS.json",
+    "PROTOTYPE_SPEC.md",
+    "QUALITY_GATE.md",
+    "README.md",
+    "app.js",
+    "assets",
+    "canonical",
+    "game-core.js",
+    "game-data.js",
+    "index.html",
+    "manifest.webmanifest",
+    "quality-reviews",
+    "scripts",
+    "simulation",
+    "styles.css",
+    "sw.js",
+    "tests",
+    "vercel.json"
+  ],
+  "rules": [
+    {
+      "priority": 10,
+      "class": "C1",
+      "exact": [
+        "CHATGPT_PROJECT_INSTRUCTIONS1.md",
+        "MASTER_SPEC.md",
+        "canonical/STABLE_ID_REGISTRY.json",
+        "canonical/SCREEN_STATE_REGISTRY.json",
+        "canonical/STATE_TRANSITION_CONTRACT.json",
+        "quality-reviews/step-1-canonical-design/active-change-control.json",
+        "quality-reviews/step-1-hero-merchant-large-idle-integration/acceptance.json",
+        "quality-reviews/step-1-hero-merchant-large-idle-integration/monetization-acceptance-round-002.json",
+        "quality-reviews/step-1-hero-merchant-large-idle-integration/progression-acceptance-round-003.json",
+        "quality-reviews/step-1-hero-merchant-large-idle-integration/reward-cadence-acceptance-round-004.json",
+        "quality-reviews/step-1-hero-merchant-large-idle-integration/user-decision-lock-round-004.json",
+        "quality-reviews/step-1-hero-merchant-large-idle-integration/user-decision-lock-round-005.json"
+      ]
+    },
+    {
+      "priority": 20,
+      "class": "C2",
+      "exact": [
+        "PROJECT_STATUS.json",
+        "QUALITY_GATE.md",
+        "AGENTS.md",
+        "AI_PROJECT_POLICY.json",
+        "PROJECT_HANDOVER.md",
+        "README.md",
+        "CHATGPT_PROJECT_BOOTSTRAP.md",
+        "CUSTOM_GPT_CONFIGURATION.md",
+        "FLOORS_1_10_DESIGN.md",
+        "simulation/INPUT_CONTRACT.md",
+        "simulation/CURRENT_STATUS.json",
+        ".github/workflows/CURRENT_STATUS.md"
+      ]
+    },
+    {
+      "priority": 30,
+      "class": "C2",
+      "prefix": [
+        "quality-reviews/step-1-reseal-round-008/"
+      ]
+    },
+    {
+      "priority": 40,
+      "class": "C2",
+      "glob": [
+        "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-007.json",
+        "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-008.json",
+        "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-009.json",
+        "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-010.json"
+      ]
+    },
+    {
+      "priority": 50,
+      "class": "C3",
+      "exact": [
+        "simulation/candidate-v1.json",
+        "simulation/candidate.schema.json",
+        "simulation/validate-candidate.mjs",
+        "simulation/executable-seal.schema.json",
+        "simulation/validate-executable-seal.mjs",
+        ".github/workflows/verify-main.yml",
+        ".github/workflows/verify-step-1-artifacts.yml"
+      ]
+    },
+    {
+      "priority": 60,
+      "class": "C3",
+      "prefix": [
+        "simulation/engine/",
+        "simulation/results/",
+        "simulation/holdout/"
+      ],
+      "missingPrefixesAreStillReserved": true
+    },
+    {
+      "priority": 70,
+      "class": "C4",
+      "exact": [
+        ".gitignore",
+        ".vercelignore",
+        "app.js",
+        "game-core.js",
+        "game-data.js",
+        "index.html",
+        "manifest.webmanifest",
+        "styles.css",
+        "sw.js",
+        "vercel.json"
+      ]
+    },
+    {
+      "priority": 80,
+      "class": "C4",
+      "prefix": [
+        "assets/",
+        "tests/",
+        "scripts/"
+      ]
+    },
+    {
+      "priority": 90,
+      "class": "C5",
+      "exact": [
+        "BASELINE_V082.md",
+        "CLONE_DESIGN.md",
+        "IDLE_DESIGN.md",
+        "PROTOTYPE_SPEC.md"
+      ]
+    },
+    {
+      "priority": 100,
+      "class": "C5",
+      "prefix": [
+        ".github/baselines/",
+        "quality-reviews/chatgpt-project-governance/",
+        "quality-reviews/step-1-legacy-baseline/",
+        "quality-reviews/step-1-legacy-baseline-round-007/"
+      ]
+    },
+    {
+      "priority": 110,
+      "class": "C5",
+      "glob": [
+        "quality-reviews/step-1-canonical-design/acceptance*.json",
+        "quality-reviews/step-1-canonical-design/audits/**",
+        "quality-reviews/step-1-canonical-design/research-evidence.md",
+        "quality-reviews/step-1-canonical-design/round-001.json",
+        "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-004.json",
+        "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-005.json"
+      ]
+    },
+    {
+      "priority": 120,
+      "class": "C5",
+      "prefix": [
+        "quality-reviews/step-1-hero-merchant-large-idle-integration/"
+      ],
+      "exceptExactPathsAlreadyMatched": true
+    }
+  ],
+  "coverage": {
+    "topLevelPathsExpected": 32,
+    "topLevelPathsCovered": 32,
+    "unmatchedTopLevelPaths": [],
+    "unmatchedRecursivePaths": [],
+    "ambiguousPathsAfterPriority": [],
+    "binaryExtensions": [
+      ".png",
+      ".jpg",
+      ".jpeg",
+      ".webp",
+      ".woff2"
+    ],
+    "treeTruncated": false
+  },
+  "result": {
+    "allPathsClassified": true,
+    "unclassifiedPathCount": 0
+  }
+}
