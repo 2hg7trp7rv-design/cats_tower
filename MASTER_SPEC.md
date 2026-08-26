@@ -1,1222 +1,858 @@
-# Cat's Tower 100F 正本仕様書
+# Cat's Tower 統合正本仕様書
 
-文書状態: **PASS — STEP1_CANONICAL_FREEZE（数値係数は`SIMULATION_CANDIDATE`）**
+文書状態: **CORE_AUTHORITY_SYNC_PASS — STEP1_RESEAL_IN_PROGRESS**  
+更新日: **2026-08-26**  
+作業branch: **既存の`kimi`のみ**  
+対象: スマートフォン縦持ち Web / PWA。将来のiOS・Android billing / advertisement adapterを含む。  
+最初の実装slice: **1F〜10F**  
+最終的な塔の高さ: **プレイヤーから見て上限なし**  
+数値状態: 明示的に固定した境界以外は`SIMULATION_CANDIDATE`。  
+現在工程: **Step 1 正本統合・再封印**。Step 2以降は未許可。
 
-更新日: 2026-08-25
+本書はCat's Towerの製品境界、状態遷移、画面責務、経済境界、保存境界、禁止事項を定義する最上位正本である。2026年8月25日までの有限100F・非ガチャ仕様に対する旧PASSはGit履歴上の証拠として保持するが、現在の製品を承認しない。
 
-固定範囲: 製品構造、操作、経済の境界、夜明け、画面、性能、QA
+---
 
-未固定範囲: `SIMULATION_CANDIDATE`と明記した係数の最終値
+## 0. 権威、変更管理、文書状態
 
-作業ブランチ: **`kimi`のみ。別ブランチを作成・使用しない**
+### 0.1 情報源の優先順位
 
-対象: スマートフォン縦持ち Web / PWA
+同一scopeで内容が競合する場合は、次の順で解決する。
 
-最終商品範囲: 1つの塔・1F〜100F
+1. ユーザーの最新の明示的な製品決定
+2. live `kimi`上の有効な`active-change-control`、addendum、`user-decision-lock`
+3. 新しいStep 1 sealで封印された本書と状態mirror
+4. 現行Acceptance、監査round、handover、deployment evidence
+5. 下位正本、simulation contract、runtime
+6. 過去の有限100F正本、過去PASS、参考画像、競合作品
 
-最初の制作範囲: 1F〜10Fのみ
+下位文書が本書と競合する場合は、本書を優先し、下位文書を`PENDING_REVALIDATION`として扱う。競合箇所を実装やsimulationへ持ち込んではならない。
 
-本書は製品判断の正本である。`SIMULATION_CANDIDATE`の数値は、100F全体シミュレーションと3ビルド各1,000パターンの検証で採否を決める。検証前に候補値を「確定バランス」と表示したり、検証不合格の係数を9画面見本や実装へ持ち込んだりしない。
+### 0.2 本書の今回の判定
 
-## 0. この文書の役割
+`00_統括・工程管理`で、次の三つの中核権威を現行方針へ同期する。
 
-この文書は、デザイン、機能、ゲーム性、操作感、保存、性能、QAを一つにまとめた Cat's Tower の最上位正本仕様である。下位文書、見本、シミュレーター、実装は本書に適合させる。
+- `MASTER_SPEC.md`
+- `PROJECT_STATUS.json`
+- `quality-reviews/step-1-canonical-design/active-change-control.json`
 
-1〜10Fの階別・敵別・施設別の確定詳細は、下位正本[`FLOORS_1_10_DESIGN.md`](./FLOORS_1_10_DESIGN.md)を参照する。
+この三文件の同期がPASSしても、Step 1全体の再封印が完了したことにはならない。`FLOORS_1_10_DESIGN.md`、`QUALITY_GATE.md`、`PROJECT_HANDOVER.md`、`README.md`、`AGENTS.md`、`AI_PROJECT_POLICY.json`、simulation契約、schema、validator、workflow等の全面統合は`01_正本仕様・競合調査`で行う。
 
-一列の曖昧な優先順位は使わず、scopeごとの権威を次で固定する。
+### 0.3 旧仕様の扱い
 
-| scope | 権威 |
-|---|---|
-| 製品境界、状態遷移、操作・保存・表示・禁止事項 | 本書 |
-| 1〜10Fの階別・敵別・施設別詳細 | `FLOORS_1_10_DESIGN.md`（本書へ従う下位正本） |
-| 安定IDと読取専用alias | `PROJECT_STATUS.json.stableIdRegistry` / `stableIdMigrationAliases` |
-| S01〜S09と各required stateの完全な集合 | `PROJECT_STATUS.json.canonicalScreens` |
-| 工程1の合否条件・完成証跡 | `quality-reviews/step-1-canonical-design/acceptance-round-003.json` / `acceptance-round-005.json` |
-| 工程2・3の数値・式・実行入力 | schema・validatorに合格した同一digestの`simulation/candidate-v1.json` |
-| candidate構造と事前検査 | `simulation/candidate.schema.json` / `simulation/validate-candidate.mjs` |
-| QA gateと物理端末判定 | `QUALITY_GATE.md` |
-| repository作業規則 | `AGENTS.md` |
-| 進捗案内 | `PROJECT_HANDOVER.md` / `README.md`（仕様追加不可） |
+次の旧契約は現行製品境界として失効する。
 
-scope内の正本が競合した場合は実装・simulationを停止し、同じ変更で矛盾を解消する。現行コード、古いテスト、コメントは正本ではない。
+- 塔は1F〜100Fで終了する
+- 101F以降を禁止する
+- 100F到達を製品エンディングとする
+- 猫はすべて公開条件だけで取得し、ガチャを持たない
+- 有償通貨、ログインボーナス、課金、広告を禁止する
+- 通貨をコインと夜明けの欠片だけに限定する
+- Dawnを独立したリセットとして維持する
+- 画面数をS01〜S09の9画面に固定する
+- 3build×1,000seedの3,000scenarioだけで十分とする
+- localStorageだけで恒久通貨、抽選、権利を管理できるとする
 
-現在公開中の V0.8.2 は、新仕様の完成版ではなく、修正前の比較・復旧基準である。
+過去のAcceptance、監査、commit、deployment evidence自体は書き換えない。
 
-- 保存点 commit: `727b8d00c281e7539117da5ded7309ea01c7e516`
-- 保存点 GitHub: <https://github.com/2hg7trp7rv-design/cats_tower/commit/727b8d00c281e7539117da5ded7309ea01c7e516>
-- 保存点 Vercel deployment: `dpl_4YVfqsWrzkSUmzQLZMzcTHLVzTe1`
-- 固定確認 URL: <https://cats-tau-dusky.vercel.app/>
-- V0.8.2 Production Ready: **false**
-
-旧文書にあった「10Fでゲーム終了」「11F禁止」「3Fと5Fの施設固定」「ショップ選択を作らない」「常時3層だけを表示」は、V0.8.2の挙動を説明する履歴であり、今後の製品仕様としては失効する。
-
-### 0.1 言葉の強さ
-
-- **必須**: 合格しない限り次工程へ進めない。
-- **目標**: 実機計測で調整できるが、理由なく弱めない。
-- **仮**: 後工程で決定する。実装へハードコードしない。
-- **禁止**: 実装しない。既存コードに残る場合は移行計画を作る。
-
-### 0.2 固定仕様とシミュレーション候補
-
-固定するのは、100F構造、中核体験、階の用途、画面、入力、動き、施設、猫解放、敵の役割、武装、夜明け、通貨、保存境界、性能境界、QAゲートである。
-
-次の数値は初期仮説を本書へ明記するが、状態を`SIMULATION_CANDIDATE`とし、後のバランスシミュレーションで最終決定する。
-
-- 敵HP、攻撃力、出現数
-- 猫の成長倍率と最終DPS
-- コイン価格曲線
-- 店舗倍率と収益量
-- 夜明け各枝の最終倍率と短縮率
-- オフライン収益量
-- 各階の最終クリア時間
-- 3ビルド間の最終均衡
-
-候補値を変更できるのは、検証入力、出力、採否理由、回帰結果を同じ記録へ残した場合だけである。入力応答、移動距離、接地精度、ヒット同期、DOM上限、通貨種類、ガチャ禁止など、触り心地と製品倫理を守る条件はシミュレーションで弱めない。
-
-### 0.3 工程1の固定と数値合格を分ける
-
-工程1の現行受入条件は[`quality-reviews/step-1-canonical-design/acceptance-round-003.json`](./quality-reviews/step-1-canonical-design/acceptance-round-003.json)、最終完成証跡は[`acceptance-round-005.json`](./quality-reviews/step-1-canonical-design/acceptance-round-005.json)である。Round 1・2の不合格記録と、状態表記・holdout封印範囲の見落としを記録したRound 4は履歴として保持する。工程1で固定したのは、製品境界、状態遷移、計測定義、入力・保存・表示契約、禁止事項、候補manifest schema、後工程の合否式までである。候補HP、攻撃、価格、報酬、時間、Dawn、放置、build、武装の値は工程1の文書一致だけでは合格にしない。
-
-数値balanceの合格は、工程2・3で同一`candidateId`の出力がGate Sを満たした時だけである。したがって「仕様として固定」と「balanceとして採用」を同じ`PASS`で表現せず、工程1の完了後も`SIMULATION_CANDIDATE`は候補のまま残す。
+---
 
 ## 1. 製品定義
 
 ### 1.1 一文で言うと
 
-> 猫を呼んで塔を奪還し、制圧した部屋で猫が暮らし、選んだ店と物資配送が上階の戦闘を支える、スマートフォン縦画面専用の100F放置インクリメンタルRPG。
+> 猫と猫人の冒険者を育て、制圧した塔内の店と配送網から支援を受け、上限のない塔を自動戦闘で登り、行き詰まったら一つの強くてニューゲームで恒久成長して前回より高く進む、スマートフォン縦画面専用の放置インクリメンタルRPG。
 
-### 1.2 プレイヤーに感じてほしいこと
+### 1.2 プレイヤーへ提供する中核感情
 
-1. タップすると、猫が本当に入口から走って戦線へ加わる。
-2. 猫と敵が接触し、攻撃が当たり、相手が反応する因果が読める。
-3. 制圧した階は消えず、猫が働き、休み、物資を運ぶ生活空間になる。
-4. どの店をどこへ置いたかが、上階の攻略方法へつながる。
-5. 敗北しても原因と次の改善方法が分かる。
-6. 夜明け後は前回より速く、違う構成で再攻略できる。
-7. 100Fが遠い目標として常に見え、到達時に記録と収集を確認して通常再周回できる。
+1. 猫が実際に入口から走り、接敵または射程へ入り、攻撃が当たる因果を読める。
+2. 短い間隔でコイン、レベル、装備、抽選、熟練、進化のいずれかが進む。
+3. 行き詰まりは失敗ではなく、リセットして前回より速く再攻略する転換点になる。
+4. 店舗と配送は別ゲームではなく、前線のDPS、生存、収益、再攻略速度へ届く。
+5. N・Rにも終盤用途があり、URだけを並べる一択にならない。
+6. 大量ガチャを引けるが、回数だけを水増しした無価値抽選にはしない。
+7. 推しキャラ・推し武器は20体分以上の長期熟練で育て続けられる。
 
 ### 1.3 独自の柱
 
-- **生きた猫の塔**: 制圧階に猫と施設活動が残る。
-- **配置が戦闘へ届く**: 店舗の生産物が視覚的に前線へ運ばれる。
-- **100Fを見渡せる**: 戦闘中でも制圧済み・未制圧階を自由に閲覧できる。
-- **公開条件で猫を救う**: ガチャではなく、到達・施設・実績で解放する。
-- **敗北が次の作戦になる**: 火力不足、回復不足、対空不足などを診断する。
+- **生きた猫の塔**: 制圧階が生活・店舗・配送の空間として残る。
+- **配置が戦闘へ届く**: 店舗や配送物が前線支援へ変換される。
+- **上限のない登攀**: 10F地区と100F大サイクルを反復・変化させる。
+- **高速な再攻略**: リセット後は1Fから始め、既知部分を前回より大幅に速く登る。
+- **大量抽選と長期熟練**: 入手機会は多く、初回入手、実用breakpoint、完全熟練を分離する。
+- **猫主役**: 商人要素、課金、ガチャは猫・戦闘・塔の価値提案を奪わない。
+
+### 1.4 初期製品の非目標
+
+次は初期製品へ入れない。
+
+- 商会会長、会社経営、企業ロビーを主役にする構造
+- 強制interstitial広告、常設banner広告
+- PvP、競争報酬、guild競争
+- battle pass、密集した限定event
+- random substat装備迷路、膨大な手動分解
+- stamina / energyによる本編停止
+- 完全熟練を通常PvEの前提にする設計
+
+---
 
 ## 2. 対象端末と操作原則
 
-- スマートフォン縦持ち専用。
-- iPhone Safariを最優先し、ChatGPT内ブラウザ、PWA standalone、Android Chromeも確認する。
-- PC専用UI、横画面専用UI、キーボード前提の操作は作らない。
-- 主要操作は片手の親指で届く下部へ置く。
-- 主要タップ領域は48×48 CSS px以上、呼び鈴、夜明け確定、購入確定など誤操作の影響が大きい操作は56×56 CSS px以上を基本とし、隣接操作間は8px以上空ける。
-- 色、細い文字、振動だけを情報伝達に使わない。
-- iPhone Webで確実に使えない振動を中核フィードバックにしない。
-- safe-area、Safari下部バー、Dynamic Island、ホームインジケータを実機で確認する。
-- 上下のブラウザUIが展開・収納されても、HUD、呼び鈴、モーダル確定ボタンを切らさない。`100vh`固定だけで配置せず、動的viewportとsafe-areaの両方を扱う。
+- スマートフォン縦持ちを主対象とする。
+- iPhone Safari、PWA standalone、ChatGPT内ブラウザ、Android Chromeを確認対象とする。
+- PC、横画面、キーボードを前提にしない。
+- 主要操作は片手親指の到達範囲へ置く。
+- 主要tap領域は48×48 CSS px以上、購入・リセット・消費確定等は56×56 CSS px以上を基本とする。
+- 隣接する重要操作の間隔は8 CSS px以上を基本とする。
+- 色、細線、振動だけを情報伝達に使わない。
+- `100vh`固定だけに依存せず、dynamic viewportとsafe-areaを扱う。
+- tapは敵へ直接damageを与えない。
+- active inputは最適化、編成、支援選択、skill timing等に限定し、連打を基礎進行条件にしない。
+- auto battleとoffline progressを基礎とし、個別回収、補充連打、毎階の手動再配置を通常作業にしない。
 
-## 3. 最終100Fと最初の1〜10Fを分離する
+---
 
-### 3.1 最終商品
+## 3. 無制限の塔
 
-- 1つの塔は必ず100F。
-- 1Fが最下部、100Fが最上部。
-- 通常階として101F以降は作らない。
-- データID、保存、スクロール、素材分割は最初から100Fに耐える構造にする。
+### 3.1 高さの契約
 
-### 3.2 最初の制作範囲
+- プレイヤーから見える最大階を設定しない。
+- 100Fは最初の大型物語・進行節目であり、終了地点ではない。
+- 101F以降も通常進行として継続する。
+- 無限数の固有背景、敵、物語を事前に手作業で用意したように見せない。
+- 塔はデータ駆動のdistrict、cycle、modifier、boss、reward bandで構成する。
 
-最初に完成させるのは1〜10Fだけである。11〜100Fのデータ枠は定義してよいが、敵、背景、猫、店舗の完成素材を量産してはならない。
+### 3.2 構成単位
 
-1〜10Fで最低限完成させる内容:
+| 単位 | 固定責務 |
+|---|---|
+| 1F | 一つの戦闘・イベント・施設・選択単位 |
+| 10F | 一地区。通常階、商業、支援、救出、壁、elite、bossを構成 |
+| 100F | 一つの大サイクル。大型boss、背景・modifier・報酬帯を更新 |
+| 1000F等 | 長期記録・演出候補。最終値はStep 2以降で検証 |
+
+### 3.3 反復制御
+
+- 同一敵編成、同一背景、同一modifierの連続回数へ上限を設ける。
+- 10F内の役割patternは認知可能にしつつ、敵、modifier、店舗支援、報酬で変化させる。
+- 100Fごとに新しい脅威、組合せ、演出、報酬帯の少なくとも一つを更新する。
+- 長期階層では全戦闘を逐次renderする必要はないが、結果は同一seed・同一入力から再現可能にする。
+
+### 3.4 大数契約
+
+階数、敵HP、damage、coin、cost、reset count、offline rewardは、JavaScript `Number`の安全整数を超えることを前提とする。
+
+- 永続化値は任意精度整数または正規化した10進文字列で保持する。
+- `NaN`、`Infinity`、暗黙の浮動小数丸めを保存しない。
+- 表示短縮と内部値を分離する。
+- 丸め方向、比較、加算、乗算、上限処理をschemaとvalidatorで固定する。
+- save、network、analytics、simulationで同一表現を使用する。
+
+---
+
+## 4. 戦闘と増援
+
+### 4.1 戦闘の可読性
+
+- 猫は画面上を移動し、接敵または射程へ入って攻撃する。
+- 敵は複数同時出現可能とする。
+- 攻撃予告、弾着、damage、hit reaction、hit stopを同期させる。
+- 前衛、対空、回復、後列妨害、盾破壊、範囲攻撃等の役割差を見た目と結果で理解できるようにする。
+- bossはphase、break、危険予告、失敗原因を表示する。
+- 敗北後は火力不足、生存不足、対空不足、後列処理不足、経済不足等の改善候補を提示する。
+
+### 4.2 常設編成と一時増援
+
+- 常設の名前付き編成は4体。
+- プレイアブル種族は猫と猫人。
+- 一時増援は常設4体とは別の支援layerとする。
+- 増援は前衛、遠隔、runner等の明確な役割差を持つ。
+- 常設編成人数を増援で恒久的に偽装しない。
+
+### 4.3 戦略軸
+
+Step 2・3では少なくとも三つの戦略軸を検証する。現行候補は次とする。
+
+- combat / 直接戦闘
+- reinforcement / 増援・召喚
+- commerce / 店舗・配送
+
+名称や内部構造を変更する場合も、三つ以上の意味の異なるbuildが一強化しないことを検証する。
+
+---
+
+## 5. 店舗、配送、生きた塔
+
+### 5.1 商人要素の境界
+
+残す要素:
+
+- 店舗配置
+- 自動収益
+- 配送
+- 仲間募集
+- 再投資
+- 店舗相性、隣接、支援効果
+- リセット後の自動復元・高速再構築
+
+削除または主役にしない要素:
+
+- 商会会長というプレイヤー肩書
+- 会社経営を中心にした物語
+- 独立した企業ロビー
+- 在庫補充、個別回収、全回収の反復作業
+- 戦闘と因果のない店舗管理
+
+### 5.2 配送の可視化
+
+- 店舗の生産物または支援効果が前線へ届く因果を表示する。
+- 戦闘画面では詳細管理を常設せず、到着・効果・次回予定を簡潔に示す。
+- 詳細な配置、比較、再構成は専用画面で行う。
+- リセット後は、許可された範囲で保存済み店舗設定を自動復元する。
+
+---
+
+## 6. キャラクター、武器、収集規模
+
+### 6.1 初期フル製品目標
+
+- キャラクター: 24体
+- 武器: 36本
+- 常設編成: 4体
+- 装備: アクティブキャラクター1体につき武器1本
+
+1F〜10Fでは縮小subsetを実装し、24体・36本が完成したように表示しない。
+
+### 6.2 物語必須キャラクター
+
+- 第1地区の主要役割を担う物語必須キャラクターは、購入や有償ランダムだけに依存させない。
+- ムギ、ルナ、トト、コハクを含む第1地区core rosterには、明示された無料・確定経路を用意する。
+- 初日保証のSSRキャラクターはcore rosterを置換する必須条件ではなく、選択肢と爽快感を増やす。
+
+### 6.3 武器
+
+- キャラクターガチャと武器ガチャを分離する。
+- 初期版ではrandom substatを導入しない。
+- 武器は役割、相性、skillを持つ。
+- 旧「塔全体で一つの三系統武装」は、個別武器システムへ統合・再設計する対象であり、並行する独立強化系として残さない。
+
+---
+
+## 7. レベル、進化、基礎レアリティ
+
+### 7.1 コインレベル
+
+- キャラクターは今周coinでレベルアップする。
+- レベル上限を設けない。
+- 強くてニューゲームで今周レベルを失う候補とする。
+- `×10`、`×100`、`節目まで`、`MAX`、`おすすめ`の一括購入を用意する。
+
+### 7.2 100レベルごとの進化
+
+- レベル100ごとに進化資格を一段得る。
+- 進化にはrubyを使用する。
+- 進化していなくても101、201、301以降へレベルアップできる。
+- 未購入の進化段階は後から順番に追いついて購入できる。
+- 最初の進化は、最初の有効リセットで得る無料rubyから支払えるようにする。
+- 購入または広告視聴を最初の進化条件にしない。
+- 100レベルごとにFX、UI、軽微な見た目変化を付ける。
+- 専用の大幅アート変更は大節目へ限定する。
+
+進化可能段階数の基礎式:
+
+`eligibleEvolutionStages = floor(highestQualifiedLevel / 100)`
+
+リセット後に今周levelが下がっても、一度正当に獲得した進化資格と購入済み進化を巻き戻さない。
+
+### 7.3 基礎レアリティ
+
+固定順序:
+
+`N < R < RR < SR < SSR < UR`
+
+- 基礎レアリティは固定identityとする。
+- Nが進化してUR表記になる設計にはしない。
+- 進化、level、skill熟練、武器、店舗支援は別軸で予算化する。
+- URは概して強いが、すべての役割、敵相性、リセット立ち上がり、店舗・配送価値で常に最強にしない。
+
+### 7.4 入手境界
+
+- N・Rのキャラクターと武器には、物語、塔報酬、交換、店舗、ログイン等の確定非ガチャ経路を用意する。
+- 通常攻略に必要な主要役割はN・Rだけでも構成できる。
+- N・Rは相性特化、低cost、リセット直後、店舗・配送、skill完成容易性で終盤用途を持つ。
+- RR〜URはガチャ入手routeを持つ。
+- 特定RR〜URを本編、進化、リセット、必須戦闘機能の鍵にしない。
+
+---
+
+## 8. ガチャ、天井、限定、初日保証
+
+### 8.1 ガチャsurface
+
+- character bannerとweapon bannerを分離する。
+- 通常の同一poolへキャラクターと武器を混在させない。
+- 特別mixed bannerを将来検討する場合は、別Acceptanceを必要とする。
+
+### 8.2 抽選資源
+
+- 日常の大量character drawはcharacter ticketを主力にする。
+- 日常の大量weapon drawはweapon ticketを主力にする。
+- pickup ticketを別classとして持てる。
+- rubyは進化を優先し、pickup ticketまたは選択的なpremium drawの補助に使用できる。
+- 日常大量drawと必須進化が同一ruby予算を恒常的に奪い合う設計は禁止する。
+
+### 8.3 天井と保証
+
+現行固定目標:
+
+- hard rarity pity: 100 draw
+- featured pickup guarantee: 200 draw
+- 対応する同banner classへのcarryover: 必須
+- visible counter: 必須
+- deterministic exchange: 必須
+
+排出率、soft pity、10連保証、交換rateは`SIMULATION_CANDIDATE`とし、Step 2・3で確率適合性を検証する。
+
+### 8.4 開示
+
+抽選前に次を表示する。
+
+- itemまたは曖昧さのないtypeごとの確率
+- hard pityとfeatured保証の現在値
+- carryover対象
+- 重複変換
+- 交換point
+- banner終了後の扱い
+- draw履歴
+- 有償・無料資源の消費順序
+
+### 8.5 限定戦力
+
+戦闘性能を持つ限定character・weaponは、少なくとも次を満たす。
+
+- 復刻
+- 確定交換または選択
+- compatible bannerへのpity carryover
+- paid pityの消失禁止
+- 永久入手不能状態の禁止
+
+外見のみの限定は別途設計できる。
+
+### 8.6 初日保証
+
+初日中に、明示された確定経路で次を保証する。
+
+- SSR character 1体
+- SR以上weapon 1本
+
+保証characterとweaponは役割が著しく噛み合わない組合せにしない。
+
+---
+
+## 9. 重複skill熟練
+
+characterとweaponの重複は、それぞれ固有のskill熟練または等価な確定資源へ変換する。
+
+### 9.1 三つの完成line
+
+1. **機能完成**: 初回入手だけで広告どおりの役割と基本skillを使える。
+2. **実用育成**: 初期〜中期重複で主力として十分な性能へ到達する。
+3. **完全熟練**: 初回後20体分以上の有効重複または同等資源で到達する長期やり込み。
+
+### 9.2 固定条件
+
+- 20体以上は任意のendgame masteryであり、通常所有の未完成表示にしない。
+- 回復、挑発、対空、範囲攻撃等の基本機能を重複で人質にしない。
+- 最大の機能的強化は前半に置き、後半ほど限界効用を逓減させる。
+- 通常PvEを完全熟練前提にしない。
+- 本編、リセット、進化を完全熟練でlockしない。
+- 選択箱、交換通貨、汎用欠片、復刻、pity carryover等の確定進行を用意する。
+- 最大後の重複を消滅させない。
+- UIでは「未完成」ではなく「長期熟練」と表示する。
+
+### 9.3 検証breakpoint
+
+Step 2・3では少なくとも次を別々に測定する。
+
+- 初回入手
+- 追加1体
+- 追加3体
+- 追加5体
+- 追加10体
+- 追加15体
+- 追加20体
+- 最終上限
+
+最終上限は20未満へ下げない。20を超える値、各段階効果、汎用欠片価値はsimulationで決める。
+
+---
+
+## 10. Ruby、通貨、商品
+
+### 10.1 通貨registry
+
+| 種別 | lifetime | 主用途 | 権威 |
+|---|---|---|---|
+| coin | run | 今周level、店舗、短期強化 | serverまたは検証可能なrun authority |
+| paid ruby | profile | 進化、選択的premium用途 | server |
+| free ruby from reset | profile | 進化、選択的premium用途 | server |
+| free ruby from ads | profile | 進化、選択的premium用途 | server |
+| other free ruby | profile | event、login等 | server |
+| character ticket | profile | character draw | server |
+| weapon ticket | profile | weapon draw | server |
+| pickup ticket | profile | pickup banner | server |
+| exchange / mastery resource | profile | 確定交換・熟練catch-up | server |
+
+UIでrubyを一つの残高に見せる場合も、内部台帳では有償・無料・取得元を分離する。
+
+### 10.2 Ruby入手経路
+
+- purchase
+- 新最高階または一度限り節目を伴う強くてニューゲーム
+- 任意のrewarded advertisement
+- 明示されたlogin、event、achievement等の無料配布
+
+同じ最高階へ繰り返し到達するだけで、新しいreset rubyを発行しない。
+
+### 10.3 有償ruby
+
+- 失効させない。
+- refund、revocation、restore、chargeback、消費順序を監査可能にする。
+- clientから新規発行できない。
+
+### 10.4 初期商品catalog
+
+初期候補:
+
+- ruby pack
+- one-time starter pack
+- monthly pass
+- cosmetic / style pack
+- 内容が明示されたticket pack
+
+fake discount、曖昧なvalue、購入後に内容が変わるofferを禁止する。
+
+### 10.5 課金加速境界
+
+- monthly pass persona: 約1.5〜2倍を目標上限
+- high-spend stress persona: 約3〜5倍を目標上限
+- 課金でしか解放できない本編階、戦闘rule、reset機能を作らない。
+- 課金が塔・reset progressionから独立した無制限powerを生まないようにする。
+
+---
+
+## 11. 強くてニューゲーム
+
+### 11.1 単一system
+
+- reset systemは一つだけ。
+- 旧Dawnは統合、改名、または削除する。
+- 二つのprestige、通貨、確認画面を併存させない。
+- 正式名称はCat's Tower独自名とする。名称は`01`で決定・封印する。
+
+### 11.2 起動条件と周期
+
+- 最初の有効resetはforeground 20〜35分を目標とする。
+- reset後は1Fから開始する。
+- saved formation、shop配置、automation、bulk purchase、known-floor fast-forwardを復元する。
+- 前回最高階までの再到達時間を大幅に短縮する。
+- 成熟後reset cycleは5〜25分、target 12分を候補とする。
+
+### 11.3 失う、残る、得る
+
+原則として失う:
+
+- current floor
+- run coin
+- run character levels
+- run shop levels
+- temporary relic / effect
+- current battle、delivery、temporary state
+
+原則として残る:
+
+- acquired characters and weapons
+- base rarity
+- evolution stages and eligibility
+- character / weapon mastery
+- ruby、tickets、exchange resources
+- pity、draw history、exchange progress
+- purchases、monthly entitlement
+- collection、achievements、highest floor、permanent unlocks
+- allowed automation and saved configuration
+
+得る:
+
+- new-record / one-time milestoneに基づくfree ruby
+- permanent acceleration / unlock候補
+- known-floor re-clear speed
+
+### 11.4 reset preview
+
+確定前に、失う物、残る物、獲得ruby、次周の予測短縮、未保存設定を表示する。通信再送、multiple tap、reloadで二重rewardを発行しない。
+
+---
+
+## 12. Login bonus、広告、live operations
+
+### 12.1 Login bonus
+
+- newcomer track
+- monthly track
+- returner track
+
+server timeを使用し、同日二重受取を防止する。1日逃しただけで月間進捗全体を0へ戻さない。
+
+### 12.2 広告
+
+初期製品はrewarded advertisementのみ。
+
+- userの明示opt-in
+- 視聴前に報酬、上限、残回数を表示
+- battle、boss、gacha result、purchase、save recoveryを中断しない
+- forced interstitial、bannerを初期製品へ入れない
+- server callbackまたは検証可能なreceiptで一度だけ付与
+- 広告なしplayerも本編、進化、reset、save、floor clearを継続可能
+- 強制広告がない状態で実質価値のない「広告削除商品」を販売しない
+
+### 12.3 初期live operations
+
+- permanent content
+- pickup banner
+- login event
+
+battle pass、重複する多数の限定event、PvP、ranking reward、guild competitionは延期する。
+
+### 12.4 未成年、privacy、policy
+
+release前に次をgate化する。
+
+- age rating
+- minors purchase protection
+- parental control
+- consent
+- personalized ad restrictions
+- privacy disclosure
+- inappropriate-ad reporting
+- platform billing、random-item odds、refund、restore
+- 日本国内の有償通貨・ランダム型販売・コンプリートガチャ禁止への適合
+
+---
+
+## 13. 大量ガチャと報酬テンポ
+
+「キノコ伝説と同程度」は、変動するlive serviceのruby個数、確率、UIをコピーする意味ではない。入手努力、抽選頻度、保証到達、成長実感をCat's Tower独自の設計で比較する。
+
+### 13.1 現行検証候補
+
+| 期間 | character + weapon合計draw |
+|---|---:|
+| 最初の10分 | 50〜100 |
+| 最初の1時間 | 150〜250 |
+| 最初の7日 | 500〜800 |
+| steady no-ad F2P / day | 40〜60 |
+| optional ads additional / day | target 20、hard cap 40 |
+
+- bulk draw: 10、50、100
+- 初回演出後はskip可能
+- new player visible power gain: 最大45秒目標
+- steady session visible power gain: 最大120秒目標
+- 10連でR以上または等価な熟練progressを最低一つ保証する候補
+- 50連でRR以上、選択、pity milestone等の明確なprogressを保証する候補
+
+これらは`SIMULATION_CANDIDATE`であり、回数だけを満たして価値を失う場合は不合格とする。
+
+### 13.2 F2P保証
+
+- no-ad F2Pが必須core rosterの進化費用を受け入れた速度で100%賄えること。
+- no-ad F2Pが30〜45日でfeatured UR guarantee 1回へ到達できる目標を持つ。
+- 30〜45日はUR完全熟練の保証ではなく、featured UR初回入手保証である。
+
+---
+
+## 14. Offline progress
+
+- offline progressは放置ゲームの基礎とする。
+- offline capの現行候補は24時間。最終値はsimulationで確認する。
+- 未見のstory choice、shop choice、relic choice、reset confirmationをofflineで自動決定しない。
+- 初回runの未見bossをofflineだけで突破させない。
+- reset後の既知階層は、明示したguard内で高速再攻略可能とする。
+- offline reward、広告倍率、monthly pass倍率を分離表示する。
+- client clock変更だけでrewardを増やせないようにする。
+
+---
+
+## 15. Save、account、server authority
+
+### 15.1 authority分離
+
+local clientが保持できるもの:
+
+- presentation cache
+- current animation state
+- recoverable run snapshot
+- user preferences
+- serverから取得したread cache
+
+serverを正本とするもの:
+
+- account / guest linking
+- paid / free ruby
+- tickets、exchange resources
+- product catalog version
+- receipt、webhook、refund、revocation、restore
+- gacha result、random audit ID、pity、history、exchange
+- acquired characters / weapons
+- duplicates、mastery、overflow
+- evolution stages
+- reset reward、highest floor
+- login claims
+- ad reward receipts
+- monthly and other entitlements
+
+### 15.2 transaction contract
+
+purchase、draw、evolution、duplicate conversion、reset、login、ad、refundは、すべて次を持つ。
+
+- immutable transaction ID
+- idempotency key
+- server timestamp
+- before / after balance
+- source and reason
+- catalog / banner / rule version
+- support lookup ID
+
+retry、reload、multiple tabs、raceで二重付与・二重消費しない。
+
+### 15.3 migration
+
+- 旧local saveをraw backupしてからmigrationする。
+- local gameplay stateとserver-owned economyを分離する。
+- guestからaccount linkingでduplicate grantを発生させない。
+- rollback、older client、future schemaから恒久資源を巻き戻せないようにする。
+- migration失敗時は破損状態を上書きせず、復旧・問い合わせ導線を表示する。
+
+---
+
+## 16. 12画面の責務
+
+| ID | 画面 | 主責務 |
+|---|---|---|
+| S01 | title / resume / account | 新規、resume、account link、migration recovery |
+| S02 | battle follow | 猫・敵・攻撃予告・主要skill・支援到着 |
+| S03 | unbounded tower | current / best floor、10F district、100F cycle、次節目、browse |
+| S04 | floor clear / placement | reward、stair、shop / support / rescue choice |
+| S05 | shop / delivery | placement、adjacency、reconfigure、delivery予測 |
+| S06 | character | rarity、coin level、evolution、character mastery、party |
+| S07 | weapon / build | equipment、weapon mastery、build比較、defeat diagnosis |
+| S08 | boss variant | phase、telegraph、break、failure、reward |
+| S09 | strong new game | lose / keep / gain、ruby、re-clear予測、confirm |
+| S10 | recruit / gacha | character / weapon banner、odds、pity、exchange、history |
+| S11 | store / ruby / ads | paid/free display、products、rewarded ads、entitlements |
+| S12 | login / inbox | newcomer、monthly、returner、claims、history |
+
+### 16.1 mobile密度
+
+- 320×667、375×667、390×844で確認する。
+- 戦闘画面へshop、gacha、storeの詳細を常設しない。
+- 5秒で主役、現在階、次の操作、報酬、危険を理解できること。
+- gacha・purchase・resetは確認、通信中、成功、失敗、復旧状態を持つ。
+
+---
+
+## 17. 1F〜10F first production slice
+
+1F〜10Fの詳細は`FLOORS_1_10_DESIGN.md`を下位正本とする。ただし、有限100F、非ガチャ、Dawn独立等の競合部分は本書で上書きし、`01`で正式redlineする。
+
+最低scope:
 
 | 分類 | 必須内容 |
 |---|---|
-| 猫 | 名前付き4匹。ムギ、ルナ、トトに加え、公開条件で解放する1匹 |
-| 一時増援 | 役割が見た目と動きで異なる3種以上 |
-| 敵 | 通常6種、エリート2種、地区の壁遭遇1件、3段階ボス1体。壁遭遇は追加の敵種に数えない |
-| 施設 | 選択可能なショップ4種、支援施設2種 |
-| 塔 | 制圧済み・現在・未制圧を連続スクロール可能 |
-| 配置 | 制圧した商業階で店を選択、効果比較、配置、再配置が可能 |
-| 猫解放 | 到達＋施設＋実績を組み合わせた条件を最低1件実装 |
-| 戦闘 | 実移動、接敵、複数敵、ヒット同期、階段上昇 |
-| 夜明け | 失う物・残る物・得る物を表示し、3択の祝福を選べる |
-| 保存 | 戦闘途中、塔配置、解放状態、夜明け状態を復元できる |
+| core cats | ムギ、ルナ、トト、コハクを含む4体の無料・確定導線 |
+| temporary support | 3role以上 |
+| enemies | normal 6、elite 2、district wall 1 |
+| boss | 3phase boss 1体 |
+| shops | selectable 4種 |
+| support | 2種 |
+| tower | conquered / current / unseenをbrowse可能 |
+| battle | actual movement、contact、multiple enemies、hit sync、stair climb |
+| progression | coin level、初回reset、最初のruby進化 |
+| gacha | beginner character / weapon surface、初日保証の検証可能状態 |
+| save | mid-battle、placement、party、pity、claimsの復旧境界 |
+
+1F〜10Fだけで無制限塔全体の完成を主張しない。
+
+---
+
+## 18. Stable ID方針
+
+- persistence、server、simulation、analyticsでdisplay nameをIDに使わない。
+- canonical IDはlowercase ASCII namespaceとslugを使用する。
+- aliasはread-only migration inputとする。
+- 新しいnamespace候補: `cat`、`weapon`、`enemy`、`elite`、`boss`、`shop`、`support`、`currency`、`ticket`、`rarity`、`banner`、`product`、`entitlement`、`reward`、`event`、`district`、`cycle`、`reset`、`mastery`。
+- 旧`dawn.*` IDはmigration aliasとして保持可能だが、新規writeでは単一reset namespaceへ移行する。
+- 24character、36weaponの全IDは`01`でregistryを確定する。
+
+---
+
+## 19. Simulationと合否
+
+### 19.1 検証horizon
+
+- 1〜10F初回
+- 初回100F milestone
+- 1,000F
+- 10,000Fまたは数学的に同等なlong horizon
+- repeated reset cycles
 
-### 3.3 量産開始ゲート
+### 19.2 persona matrix
 
-Gate Cは1〜10Fの商品スライスの技術・実機合格であり、それだけでは11〜100Fの本番素材量産を許可しない。Gate C合格後に行えるのは1〜10Fの修正、検証、完成度向上だけである。
+最低基準:
 
-第三者検証を含むGate D1合格を、11〜20Fの本番素材と数値投入を開始できる唯一の許可条件とする。21F以降は地区ごとに同じGateを繰り返す。次のすべてが合格するまでGate D1へ進めない。
+`3 gameplay builds × 5 personas × 1,000 seeds = 15,000 scenarios以上`
+
+personas:
+
+1. no-ad F2P
+2. rewarded-ad F2P
+3. monthly pass
+4. controlled payer
+5. high-spend stress
 
-- 1〜10Fを通常操作だけで完走できる。
-- プレイヤーが説明なしでも「猫を呼ぶ」「店を置く」「猫を解放する」を理解できる。
-- 猫が入口から接敵地点まで移動し、接敵前に攻撃しない。
-- 制圧階を自発的に見返したくなる活動表示がある。
-- ショップ配置が戦闘結果へ目に見えて影響する。
-- 夜明け後にもう一周したい理由がある。
-- 通常速度、reduced-motion、再読込、物理iPhoneのQAが合格する。
-- 「生きた猫の塔」という独自性が第三者に伝わる。
-
-## 4. 100Fの地区構造
+### 19.3 別枠検証
 
-塔は10地区×10Fで構成する。
-
-| 地区 | 階 | 名称 | 主な新ルール・敵の圧力 |
-|---:|---:|---|---|
-| 1 | 1〜10F | 灰かぶり入口市場 | 呼び鈴、接敵、店舗、猫救出、夜明けの基礎 |
-| 2 | 11〜20F | 焔の大厨房 | 火傷、重装、短時間の高火力 |
-| 3 | 21〜30F | 水没貯水区 | 減速、吸収、盾、配送遅延 |
-| 4 | 31〜40F | 歯車工房 | 機械、砲台、修理、設備妨害 |
-| 5 | 41〜50F | 苔庭温室 | 毒、根、回復、長期戦 |
-| 6 | 51〜60F | 亡霊書庫 | 呪い、潜伏、施設効果の一時停止 |
-| 7 | 61〜70F | 雷鳴鳥舎 | 飛行、雷、レーン移動、対空要求 |
-| 8 | 71〜80F | 氷結宝物庫 | 凍結、破砕、厚い盾、速度管理 |
-| 9 | 81〜90F | 月鏡宮 | 反射、模倣、プレイヤー構成への対策 |
-| 10 | 91〜100F | 黒羽王座 | 既習ルールの組合せと最終試験 |
-
-### 4.1 各10Fの用途テンプレート
-
-地区番号を`d`（1〜10）、地区開始前の基準階を`base = (d - 1) × 10`とする。`X1〜X9 = base + 1〜9`、`X0 = base + 10`である。したがって第1地区は1〜10F、第2地区は11〜20F、第10地区は91〜100Fとなる。
-
-| 相対階 | 用途 | 制圧後の姿 |
-|---|---|---|
-| X1 | 地区入口・補給・新ルール導入 | 補給所・案内所 |
-| X2 | ショップ | プレイヤーが選んだ店舗 |
-| X3 | 支援施設 | 固有支援施設 |
-| X4 | ショップ | プレイヤーが選んだ店舗 |
-| X5 | 猫救出・猫部屋 | 解放猫の居住区 |
-| X6 | ショップ・複数ウェーブ | プレイヤーが選んだ店舗 |
-| X7 | 支援施設・特殊イベント | 固有支援施設 |
-| X8 | ショップ・地区の壁 | プレイヤーが選んだ店舗 |
-| X9 | エリート・遺物3択 | 戦利品・記念室 |
-| X0 | 3段階以上の地区ボス | 地区拠点・大広間 |
-
-100F全体の用途総数:
-
-- ショップ階: 40
-- 支援施設階: 20
-- 猫救出・猫部屋: 10
-- 地区入口・補給: 10
-- 遺物・戦利品: 10
-- ボス後の地区拠点: 10
-
-90の制圧済み階すべてに店を選ばせない。選択の意味を保ち、毎周の事務作業を防ぐため、用途を分散する。
-
-### 4.2 100F数値モデルの初期仮説
-
-工程2・3が読む唯一の候補入力は、現存する版付きmanifest [`simulation/candidate-v1.json`](./simulation/candidate-v1.json) とする。工程2開始前にparse、schema、状態を検証して凍結し、不存在、parse失敗、未凍結、schema不一致の状態ではシミュレーションを開始しない。仕様書へ候補係数を複製せず、出力には`candidateId`と入力file hashを必ず残す。
-
-工程3のholdoutは、candidateが一度も参照していない一回限りのbankでなければならない。seed単位結果、集計値、Acceptance判定または診断を一つでもprocess外へ実体化した時点で、そのbank全体を観測済み・使用済みとする。最初の有効なAcceptance判定を権威とし、同一digestのbyte-equivalence確認、または結果を一切露出しなかった基盤障害の復旧以外では同じbankを再実行しない。使用済みbankを見てcandidateまたはsimulator semanticsを変更した場合、Step 3の成否にかかわらずStep 1へ戻り、重複しない未観測bankを登録して再封印し、Step 2を全件再実行してからStep 3を行う。使用済みbankは診断専用であり、candidateの再調整や昇格判定へ使わない。
-
-一つの登録済み消費sessionは、最初の出力でbankを使用済みにした後も中断せず完走してよいが、部分出力後のcrash、欠落、schema不一致または有効判定未生成から同じbankを再開・再実行してはならない。その場合もStep 1へ戻って新bankを使う。有効判定は、同一candidate raw digest、Step 2 sealの`simulatorSourceTreeSha256`と同一のsimulator raw digest、期待した3,000のbuild×seed identityが欠落・重複なく揃い、全raw recordが固定result schemaへ合格し、独立再集計とdataset・summary・Acceptance digestが一致した最初の一件だけとする。使用履歴は追記専用ledgerへ、開始、結果未露出の基盤失敗、最初の出力、最終判定の順で記録する。ledgerはUTF-8のcanonical JSONL、sequence 1始まり、64桁zero genesis、直前`recordSha256` link、raw-ledger compare-and-append revisionを使用し、全bank IDの履歴に対してcalibration range、観測済み・finalize済み・未解決rangeとの重複、bank IDとrangeの再割当を拒否する。
-
-candidateが直接digest固定する実行依存は、`candidate.schema.json`、`validate-candidate.mjs`、`executable-seal.schema.json`、`validate-executable-seal.mjs`のraw bytesと、`PROJECT_STATUS.json`内の`canonicalScreens`、`stableIdMigrationAliases`、`stableIdRegistry`のcanonical JSON selectionだけとする。工程状態、引継ぎ、README、Acceptance案内などのworkflow mirrorはRound 5のreviewed-content commit/treeと完成証跡で別に固定し、Step 2の`NOT_STARTED→IN_PROGRESS→PASS`更新だけでbalance結果を自己失効させない。ただし製品・simulationの意味仕様を変えた場合は、mirrorだけの編集と偽らず新candidateを作りStep 1へ戻す。
-
-Step 2合格時には、candidate、simulator source tree、run plan、result schema・validator、Node version、raw dataset、summary、Acceptanceのdigestをstrict schemaの`simulation/results/step-2/executable-seal.json`へ固定する。source treeは`simulation/engine`配下のregular non-symlink fileを再帰列挙した完全集合とrun planの一覧を一致させ、pathとraw digestのcanonical arrayから算出する。未列挙local code/data、computed dynamic import、`eval`、`Function`、native addonを禁止する。Step 3はholdout draw前にseal raw bytes、全field、source集合とdigestを一致させ、Step 3出力やworkflow mirrorからこの一方向sealを変更しない。
-
-manifestは少なくとも次のtop-level fieldを機械可読で持つ。
-
-- `schemaVersion`、`candidateId`、`status`、`createdAt`
-- `clockModel`、`returnSchedules`、`personas`、`seedPolicy`、`rounding`、`formulaRules`
-- `initialState`、`stopPolicy`、`curves`、`floorRoleModifiers`、`floorOverrides`、`districtProgression`
-- `catBaselines`、`helperBaselines`、`enemyModel`、`combatRules`、`shopModel`、`supportModel`、`relicModel`
-- `effectComposition`、`weapons`、`survival`、`timingTargets`、`dawn`、`offline`、`builds`、`decisionPolicies`、`driftMeasurement`
-- `acceptance`
-
-候補manifest内の敵攻撃階倍率`1.105〜1.115`は探索priorであり、採用範囲ではない。前衛・後衛の被弾回数、予告付き強攻撃の割合、回復猶予、全HPからの一撃KO件数を`survival`結果で評価し、結果が生存契約へ合わなければpriorの内外を問わず不採用とする。
-
-各10Fの難度ドリフトは、同じ相対階どうしを比較して次の2指標で監視する。
-
-```text
-D10_pre(F) = enemyEhp(F + 10) / enemyEhp(F)
-             ÷ districtPurchasePower(F → F + 10)
-
-Net10(F) = enemyEhp(F + 10) / enemyEhp(F)
-           ÷ totalPowerIncludingDistrictPersistentAndUnlocks(F → F + 10)
-```
-
-- `D10_pre`は同一run・同一buildで、その地区内のcoin購入だけを分母へ含める。恒久夜明け、地区章、猫・武装・店舗の新規解放は含めず、目標`1.35〜1.55`、絶対上限`1.60`とする。
-- `Net10`は同じ比較へ、その地区で確定取得する恒久効果と公開解放を加え、目標`0.95〜1.10`とする。`Net10 < 0.95`は新地区が自動消化になりやすく、`Net10 > 1.10`は地区を越えるたび壁が累積する。
-- X1対X1、X8対X8、X0対X0のように同じ相対階で計測し、X9対次地区X1など役割の違う階を混ぜない。
-
-ここでいう実効戦力は表示DPSだけでなく、生存、回復、増援間隔、武装相性、店舗支援を含む。同じ数式を表示値と戦闘内で使い、隠れ補正で帳尻を合わせない。
-
-猫の価格fieldは`nextCost(catId, L)`、すなわち現在level `L`から`L + 1`へ上げる1回分の価格として定義する。10level節目は到達後levelが10の倍数になった時に能力へ一度だけ適用し、価格indexへ二重適用しない。丸め順と整数型はmanifestの`rounding`だけを正本にする。
-
-### 4.3 時間設計と壁の契約
-
-時間は「待たせる日数」ではなく、判断と再挑戦が生まれる範囲として設計する。以下は合格目標であり、広告、日付、ログイン日数で強制しない。
-
-| 状態 | p50目標時間 |
-|---|---:|
-| 初回1〜10F | 6〜8分 |
-| 前回攻略済み通常階 | 5〜8秒 |
-| 前回攻略済み地区ボス | 12〜20秒 |
-| 新規通常階の前線 | 20〜35秒 |
-| X8の地区壁 | 45〜60秒 |
-| X9エリート | 40〜55秒 |
-| 適正構成のX0ボス | 50〜75秒 |
-| 敗因を提示する戦闘上限 | 90秒 |
-
-初回1〜10Fの総所要はp50 `6〜8分`、p90 `10分以内`とする。各floorの表は戦闘区間のp50であり、集計では`combatSeconds`、`transitionSeconds`、`firstTimeDecisionSeconds`を混ぜずに記録し、その合計を初回foreground所要として併記する。
-
-時間は次の4clockを混同しない。
-
-- `scenarioResultClock`: Step 2/3のsimulation専用で永続化しない。`resultForegroundElapsedMs`はdocumentがvisibleで実際にsimulationした時間、`resultWallElapsedMs`はofflineを含む実際のschedule経過を0から単調加算し、それぞれ`foregroundProgressionSeconds`と`wallClockElapsedSeconds`および停止上限の唯一のoperandにする。最終境界のtransactionが棄却されても、実際に消費した時間は巻き戻さない。
-- `gameplayClock`: `system.foregroundClockMs`と`system.monotonicClockMs`として永続化するgameplay・event・入力phase用の論理時計。開いているtransaction draftがあればそのstaged clockを使い、成功時だけ公開し、棄却時は直前のdurable boundaryへ戻す。したがってterminal sampleでは`scenarioResultClock`と一致しない場合がある。
-- `touchClock`: 受理したpointer downからup/cancelまでの接触時間と受理input件数。背景中、scrollへ取消済みの長押し、合成eventを加えない。
-- `hostWallClock`: runtimeのhideからreturnまでの実経過。背景・端末sleepを含み、オフライン報酬にだけ使う。端末時計の巻戻しで報酬を増やさない。Step 2/3の経過日数はhost clockではなく`scenarioResultClock`から測る。
-
-候補比較、Dawn 300秒projection、Dawn副branchの標準24時間projection、夜明け後の再到達診断は、sourceのgameplay clock・入力phase・attempt identityを保持した非破壊cloneで行う。ただし停止判定には各procedure専用の0起点local diagnostic clockとattempt countを使い、source scenarioの残時間・残attempt数でprojectionを短縮しない。Dawn 300秒projectionが新しい必須店舗・遺物選択へ到達した場合、選択を捏造せず、その未完成floor-clear draftを最終batch前へ全rollbackする。以後は確定済みの店舗構成によるlive incomeだけを残時間へ積算し、未commitのafter-floor-reward購入checkpointを実行しない。診断経過だけは巻き戻さず、partial reward・unlock・U・counter・ordinal・draftをendpointへ残さない。offlineを含むDawn副branch診断は、sourceの論理時計と最終受理host時刻の大きい方を診断専用host基点として固定し、そこへlocal wall経過を加えた値だけをhide/returnへ注入する。sourceのscenario clockやoffline高水位は読替え・更新しない。診断中に100Fを早期制圧した場合は、正式な制圧時刻とterminal gameplay全体をその場で凍結し、残scheduleではlocal diagnostic clockだけをsegment種別どおり24時間・foreground 12分へpaddingする。制圧後のhide・精算・収益・購入・Dawnは発生させず、凍結戦力を有限値で採点する。100F未到達時の24時間ちょうどの最終復帰は、追加foregroundなしで完全精算・context解決まで終わる候補だけを採点する。残り演出や判断に正時間を要する候補、pending/draftが残る候補は24時間を延長せず非有限scoreとして棄却し、未精算または部分精算状態を戦力値にしない。厳密なfield名、上限、同時刻処理は同一digestの`simulation/candidate-v1.json.clockModel`だけを正本にする。
-
-能動・受動personaの3分比較でも、仮に100Fへ早期到達したcloneは同じterminal freezeを使う。残りは比較専用local clockだけを180秒へpaddingし、terminal後のincomeやstate変化を作らない。現候補値では遷移と必須判断の不変下限だけで180秒を超えるため防御規則だが、正本内に相反するterminal処理は残さない。
-
-foregroundとbackgroundを交互にする復帰scheduleは`candidate-v1.json.returnSchedules`の入力とし、連続foreground、8時間復帰、24時間復帰を必須caseに含める。各scheduleはvisibility変化、touch列、wall経過、Dawn判断時点を持ち、コード側の暗黙scheduleで補わない。
-
-- 夜明けは10F制圧で解放するが、10F直後に強制しない。最初の自然な実行はプレイ開始12〜20分、18〜22F付近の壁を中心目標とする。
-- 夜明けを意図的に使わない比較も、全戦闘共通の90秒上限を越えて継続しない。90秒到達時は失敗として停止し、原因と夜明けを提案する。旧案の「20Fボス78〜93秒／30Fボス112〜133秒」は90秒上限と両立しないため失効した参考値であり、工程2・3の入力・合否判定・完成見本へ使用しない。各絶対階の有効な目標帯と集計母集団は、同一digestの`simulation/candidate-v1.json.timingTargets`だけを使う。
-- 初回100Fは実操作合計2.5〜4時間を中心とし、熟練者の約2時間到達を妨げない。自然進行の経過日数は、能動scheduleでp50 7〜12日、標準scheduleでp50 10〜18日をGate Sのbalance目標とする。ただしこれはsimulation上の成長速度判定であり、runtimeに日付・ログイン日数・経過時間による解放条件や待機門を置かない。passive scheduleの日数はp10/p50/p90の診断出力だけとする。
-- 100Fまでの夜明けは3〜5回、標準4回を中心とする。標準的な節目は20F、40F、60F、80F付近だが、階数固定の強制リセットにはしない。
-- 各地区で得る恒久的な合成戦力は約`×1.35〜1.50`を初期目標とし、単一の攻撃倍率だけで作らない。
-- 1.6〜2.0秒の階遷移を含めても複数猫の出撃、攻撃、被弾、数字、HP、報酬が長く途切れないことを優先する。
-
-## 5. 中核ゲームループ
-
-### 5.1 一回の短いループ
-
-> 呼ぶ → 猫が走る → 接敵 → 攻撃 → 敵が反応する → 撃破 → 報酬 → 即時強化
-
-- タップによる直接ダメージは常に0。
-- 空き枠があれば増援を予約または出撃する。
-- 満員時は号令、スキル予約、出撃列強化のいずれかへ変換し、主操作を無反応にしない。
-- 入力直後に100ms以内の視覚または音の一次反応を返す。
-- 出撃できない場合は「満員」「回復中」「クールダウン」など理由を表示する。
-
-チュートリアル最初の一回だけはプレイヤーが呼び鈴を鳴らす。その最初の短押しが増援要求として受理された直後から基礎自動出撃を開始する。初撃、初接敵、初撃破まで待たせず、「手動連打しないと最初の敵を倒せない」状態を作らない。自動出撃間隔は`candidate-v1.json.helperBaselines`の`SIMULATION_CANDIDATE`を使う。
-
-短押しは1回の増援要求とする。`400〜450ms`の長押し判定後、`150〜200ms`間隔で連続呼び込みを行う。指を離す、指がスクロール判定距離を越える、画面が停止状態へ入る、のいずれかで即時終了する。長押しは連打疲労を減らす任意の補助操作であり、攻略へ必須にしない。満員時も要求を捨てず、増援列、号令、次枠予約のうち画面に明記した一つへ変換し、前線の猫を削除して空きを作らない。
-
-3分間の平均で、通常の能動操作が完全放置に対して与える実効戦力差は`×1.25〜1.40`を`SIMULATION_CANDIDATE`とする。短い好機の瞬間火力は`×2〜3`を許すが、30秒以上の連打・長押し継続を最適解にしない。
-
-強化操作は一段ずつの連打を要求しない。
-
-- 開始60〜90秒で`+10`を解放する。
-- 5F制圧で`次の10レベル節目まで`を解放する。
-- 初回夜明けで`MAX`と`おすすめ一括購入`を解放する。
-- 20F到達で、上限、優先項目、コイン残量を指定できる自動配分を解放する。
-- 一括購入と自動配分の選択は夜明け後も記憶する。
-- すべての購入前に、価格、現在値→購入後、実効DPS・生存・予想撃破時間の変化を表示する。
-
-### 5.2 一階のループ
-
-> 敵編成を読む → 猫と店の支援を選ぶ → 戦う → 制圧する → 階の用途を確定する → 猫が階段を登る
-
-### 5.3 一地区のループ
-
-> 新ルール → 店舗と支援の組合せ → 猫救出 → エリートと遺物3択 → 地区ボス → 拠点化
-
-### 5.4 一周のループ
-
-> 進行が鈍る → 敗因を確認 → 夜明けを選ぶ → 恒久方針を選ぶ → 配置図を復元しながら高速再攻略 → 前回最高階を越える
-
-### 5.5 長期ループ
-
-> 100F制覇 → 記録と猫・図鑑・遺物・配置の収集状況を確認 → 既存ルールで通常再周回
-
-## 6. 戦闘、移動、触り心地
-
-### 6.1 猫の移動
-
-- 猫は入口から接敵地点までシミュレーション座標で移動する。
-- 見た目だけ固定位置へ出現させない。
-- 通常の移動距離は戦闘幅の30〜45%を目標とする。
-- 通常の移動時間は650〜1,000msを目標とする。
-- 敵との接触範囲へ入る前に攻撃判定を出さない。
-- 移動速度が上がっても、走行、接近、停止、攻撃の因果を消さない。
-
-### 6.2 攻撃の一連動作
-
-1. 予備動作
-2. 武器・手・弾の移動
-3. 接触または弾着
-4. ダメージ確定
-5. HP減少、効果音、敵の反動
-6. 50〜80ms目安のヒットストップ
-7. 復帰
-
-命中、HP減少、音、反動は±50ms以内へそろえる。遠距離攻撃は弾が届く前にHPを減らさない。
-
-### 6.3 敵の攻撃予告
-
-- 強攻撃は400〜800ms目安の読める予備動作を持つ。
-- 対処できる攻撃は、色だけでなく姿勢、音、アイコンでも示す。
-- 画面外から即死させない。
-- ボスの初回戦では主要行動を最低一度見せ、瞬殺で形態が飛ばないようにする。
-
-### 6.4 階制圧と上昇
-
-> 最後の敵撃破 → 勝利保持 → 報酬と制圧表示 → 猫が階段へ移動 → 階段を登る → 次階へ入る
-
-- 背景全体を動かすだけの疑似上昇を完成扱いにしない。
-- 階移動全体は1.6〜2.0秒を目安とする。
-- 遷移中も猫の足、身体、影を動かす。
-- 次の敵は入階後に出す。撃破と同時に置き換えない。
-
-### 6.5 同時戦闘
-
-- 1つの敵オブジェクトだけをHP量で差し替える方式を廃止する。
-- 複数敵、前後列またはレーン、標的選択を扱えるデータ構造にする。
-- 前衛、後衛、支援、対空など、猫の役割が敵構成で変わるようにする。
-
-### 6.6 音の触り心地
-
-1〜10Fでは、呼び鈴、足音、近接命中、遠距離発射・着弾、猫被弾、敵KO、コイン、配送到着、階段、階制圧、夜明け、ボス登場・形態変化に制作用音素材を用意する。oscillatorだけの仮音はGate Cで不合格とする。
-
-BGM、効果音、ミュートを分離する。音がなくても予告と結果を理解できる状態を維持し、音ありでは視覚的な命中と±50ms以内に同期させる。
-
-### 6.7 数字と結果の短い同期
-
-- 攻撃接触、被弾姿勢、ダメージ数字、HP減少を±50ms以内へそろえる。
-- 敵撃破からコイン加算まで150ms以内、階内の最終撃破から報酬要約の開始まで300ms以内を目標とする。
-- ダメージ数字は戦闘キャラクターを隠す密度で重ねない。同じ対象への小ダメージは100ms単位で集約できるが、会心、弱点、回復、致命傷を同じ数字へ混ぜない。
-- ボスHUDでは「現在HP / 最大HP」と割合を読みやすいWebフォントで描画し、低解像度画像へ文字を焼き込まない。
-- 撃破数、階数、HP、報酬など可変値はDOMまたは高解像度Canvas文字として描画し、画像拡大によるモザイクを禁止する。
-
-## 7. 階、キャラクター、影の座標契約
-
-ユーザーが指摘した「階層の段とキャラクターの高低のズレ」は、CSSの個別微調整ではなく共通座標で解決する。
-
-### 7.1 必須アンカー
-
-各キャラクター素材は次のメタデータを持つ。
-
-- `visibleBounds`: 透明余白を除いた可視範囲
-- `footAnchor`: 足裏の基準点
-- `headAnchor`: 頭頂の基準点
-- `shadowAnchor`: 影の中心と幅
-- `contactAnchor`: 攻撃が接触する基準点
-- `frameDuration`: 各フレーム時間
-- `displayScale`: 390px幅での基準倍率
-
-階側は`floorGroundY`、`entryX`、`frontlineX`、`rangedX`、`enemyEntryX`、`stairsPath`を共通ワールド座標で定義する。
-
-### 7.2 合格誤差
-
-- 同一レーンの足裏と床のずれ: 2 CSS px以内
-- 状態切替時の足裏ジャンプ: 2 CSS px以内
-- 同じ役割の猫で意図しない体格差: ±15%以内
-- 影の中心と足裏中心のずれ: 2 CSS px以内
-- 接敵時に猫と敵が視覚的に離れたまま攻撃しない
-
-### 7.3 390px幅での仮表示サイズ
-
-最終値はアートバイブルで確定するが、初期目標は次の範囲とする。
-
-- 名前付き猫: 78〜94px
-- 一時増援猫: 68〜82px
-- 通常敵: 84〜105px
-- エリート: 105〜125px
-- ボス: 125〜150px
-
-透明余白の違いをCSS倍率で隠さない。素材段階で可視境界と足裏位置を統一する。
-
-## 8. 塔スクロールとカメラ
-
-### 8.1 2つのカメラモード
-
-1. **戦闘追従モード**: 現在戦闘階を中心にし、上下の関係階を見せる。
-2. **塔閲覧モード**: 制圧済み階と未制圧階を自由にスクロールする。
-
-塔閲覧はモーダルではない。閲覧中も戦闘は継続し、勝手に現在階へ戻さない。
-
-### 8.2 閲覧中の情報
-
-- 固定ミニHUDに現在階、味方HP、敵HP、危険通知を表示する。
-- 「戦闘へ 47F ↑」のような帰還ボタンを常時表示する。
-- 帰還操作から450ms以内に現在戦闘階へ戻る。
-- 右側に10F単位の地区レールを置く。
-
-### 8.3 階の視覚状態
-
-- 現在戦闘階: 最も強い輪郭、動き、戦闘HUD
-- 今周の制圧階: 暖色の照明、猫、店舗・支援活動
-- 過去周だけの制圧階: 暗い金色の設計図表示
-- 次の3階: 敵の役割と報酬を予告
-- 遠い未制圧階: 霧とシルエット
-- 未到達の秘密は隠してよいが、猫解放条件と主要報酬は隠さない
-
-### 8.4 スクロール性能
-
-- 全100階をDOMへ常駐させない。
-- 画面内と上下の合計9〜13階だけを描画する。
-- 画面外アニメーションを停止する。
-- DOM数がプレイ時間とともに増えない。
-- `touch-action: pan-y`を基本にし、タップと縦スクロールを判別する。
-- 50回の増援操作で誤スクロール0回、50回のスクロールで誤増援0回を合格基準とする。
-
-## 9. 制圧階とショップ
-
-### 9.1 ショップ一覧
-
-最終的に次の10種を用意する。
-
-| ショップ | 戦闘への主な役割 |
+- gacha probability conformance
+- p50 / p90 / p99 first copy
+- 100 hard pity
+- 200 featured guarantee
+- pity carryover
+- duplicate distribution
+- first copy / useful breakpoint / full mastery
+- selector / exchange / universal fragment supply
+- refund、revocation、restore
+- retry、replay、race、multiple tabs
+- ad callback idempotency
+- login claim idempotency
+- large-number serialization
+
+### 19.4 固定と候補
+
+Step 1で固定する:
+
+- product boundary
+- state machine
+- authority boundary
+- screen responsibilities
+- currency / item roles
+- prohibitions
+- acceptance formula
+
+Step 2・3で決める:
+
+- HP、damage、cost、drop、ruby amount
+- exact rates、soft pity、exchange rate
+- evolution cost curve
+- mastery power curve
+- offline amount
+- reset reward formula
+- build balance
+- draw cadenceの最終値
+
+Step 1の文書一致だけで数値balanceをPASSにしない。
+
+---
+
+## 20. 品質、性能、accessibility
+
+最低確認:
+
+- 320×667、375×667、390×844、430×932
+- normal motion / reduced motion
+- primary input p95 100ms以下目標
+- median 55fps以上目標
+- p95 frame time 32ms以下目標
+- 100ms超stall 0件目標
+- 3分boss、10分continuous、100連bulk draw
+- maximum rendered floor shellsを制限し、全階をDOMへ常駐させない
+- offscreen animation停止
+- district asset lazy loading
+- safe-area、browser bar、Dynamic Island、home indicator
+- purchase、gacha、resetの誤操作防止
+- screen reader用label、color-only情報禁止、文字可読性
+
+物理iPhoneでしか確認できない実tap、触覚、発熱、電池、PWA復帰、native billing / ad挙動は、証拠がない限り`NOT_VERIFIED`とする。
+
+---
+
+## 21. 六段階の工程
+
+1. **Step 1 — 正本統合・再封印**
+2. **Step 2 — 実行可能contractとsimulation**
+3. **Step 3 — 大量検証**
+4. **Step 4 — 12画面完成見本**
+5. **Step 5 — 1〜10Fと必要backendの実装**
+6. **Step 6 — physical iPhone検証**
+
+Step 1の新しいexact commit / tree-bound PASS sealがない限り、Step 2以降へ進まない。
+
+### 21.1 `00`と`01`の境界
+
+`00_統括・工程管理`で行う:
+
+- Project instructions完全置換
+- 本書、`PROJECT_STATUS.json`、active change-controlの中核同期
+- 旧PASSの権威失効を明示
+- 次工程を`01`へ固定
+
+`01_正本仕様・競合調査`で行う:
+
+- repository全体の矛盾inventory
+- 下位正本とstatus mirrorの全面redline
+- 競合・policy調査
+- backend trust boundaryの詳細化
+- Step 2 dependency closure
+- 独立批評
+- 新Step 1 seal
+
+---
+
+## 22. 明示的禁止事項
+
+- 100Fを最終上限として扱う
+- 101F以降を禁止する
+- 100Fだけのsimulationで無制限塔を合格にする
+- Dawnと新resetを併存させる
+- 商会会長を主役へ戻す
+- characterとweaponを通常同一poolへ混在させる
+- 日常大量drawで必須進化rubyを恒常的に枯渇させる
+- 初回入手では役割が未完成なcharacter / weaponを販売する
+- 20体以上の熟練を通常PvEの前提にする
+- N・Rを序盤だけの無価値枠にする
+- URを全役割で無条件最強にする
+- 限定戦力を永久入手不能にする
+- compatible bannerのpaid pityを消す
+- 初期製品へ強制広告、banner、PvP、競争報酬、guild competitionを入れる
+- 有償通貨、抽選、権利、login、ad rewardをclient authorityにする
+- Vercel `READY`だけで品質PASSを出す
+- 実機未確認を実機確認済みと表現する
+- 競合作品のUI、固有名称、画像、exact確率表をコピーする
+
+---
+
+## 23. 現在の判定と次の許可工程
+
+| 項目 | 判定 |
 |---|---|
-| 人材受付所 | 増援列、出撃速度、編成枠の支援 |
-| 魚食堂 | 配膳による回復、短時間の攻撃加速 |
-| 爪工房 | 近接火力、装甲破壊 |
-| おもちゃ工房 | 遠距離、弾、クールダウン支援 |
-| ねこ診療所 | KO復帰、状態異常解除 |
-| 配送倉庫 | 物資の到着頻度、隣接店舗の供給強化 |
-| 星見観測所 | 敵予告、会心、潜伏発見 |
-| 灯火店 | 暗闇・呪い対策、制圧階の照明強化 |
-| 昼寝宿 | 最大HP、退避、地区間回復 |
-| 珍品館 | 遺物候補、構成変更、限定交換 |
-
-### 9.2 支援施設
-
-| 支援施設 | 役割 |
-|---|---|
-| 訓練場 | 猫の役割訓練と一時強化 |
-| 休憩巣 | KO復帰と地区間回復 |
-| 物資昇降機 | 下階の生産物を前線へ運ぶ |
-| 依頼掲示板 | 公開目標、猫解放、地区課題 |
-
-### 9.3 配置のルール
-
-- 商業階の制圧時に、解放済み候補から店を選ぶ。
-- 現在効果、配置後効果、隣接効果、対策できる敵を同じ画面で比較する。
-- 店舗選択は可逆にする。
-- 地区ボスを今周撃破してから次の夜明けまでは、その地区内を無料で再配置できる。変更した配置の今周レベルは0へ戻り、配置階の設計図枠は保持する。
-- 同一店舗の重複は逓減させる。
-- 隣接店舗と支援施設に組合せ効果を持たせる。
-- 夜明け後も店舗種類と配置設計図を保持する。
-- 再制圧時は保存した配置を自動復元し、必要な時だけ変更させる。
-- 毎周40店舗を手動で置き直させない。
-- 在庫、接客、皿運びを独立した必須ミニゲームにしない。
-
-### 9.4 活動の見せ方
-
-ショップ効果を数字だけにしない。
-
-- 魚食堂から料理が出る。
-- 配送猫が階段または昇降機を使う。
-- 前線到着時に猫が食べる、回復する、武器が光る。
-- 診療所へKO猫が戻り、回復後に再出撃する。
-- 店舗が妨害された時は灯りや動作が止まり、原因を表示する。
-
-### 9.5 通貨と収益の境界
-
-プレイヤーが数量を消費して購入する通貨は、100F本編では次の2種類だけに固定する。
-
-| 通貨 | 保存先 | 用途 | 夜明け |
-|---|---|---|---|
-| コイン | `run` | 猫、増援、店舗の今周強化 | 失う |
-| 夜明けの欠片 | `profile` | 3系統の恒久方針 | 残る |
-
-ボス設計図、地区印、猫の思い出、実績は解放フラグまたは収集記録であり、残高を持つ第三・第四通貨にしない。100F中核ループの検証前に有償通貨、ガチャ券、広告視聴券を追加しない。
-
-店舗は制圧・再制圧された時点から常時稼働する。個々の店に「再開」「回収」「在庫補充」を要求せず、再ログイン後に40店舗を触らせない。店舗選択、隣接、配送は攻略判断であり、定期的な作業化を禁止する。
-
-収益・価格・強化の画面は必ず次を表示する。
-
-- 現在収益と変更後収益
-- 購入価格と回収目安
-- 価格式と次の価格
-- 戦闘へ変換される効果と予想差
-- 同じ候補との比較
-
-表示式と内部式を分けず、隠し補正、説明のない逓減、広告視聴後だけ外れる上限を置かない。
-
-## 10. 猫、編成、解放
-
-### 10.1 最終規模
-
-- 名前付き猫: 100F商品版で12匹を上限とする
-- 同時編成: 最大6匹
-- 画面内の一時増援猫: 12〜16匹を目安
-- 上限を超える増援: 出撃列または`×N`表示にまとめる
-
-名前付き猫、編成中の猫、一時増援猫、回復待ち猫を別のデータとして管理する。全員を`mugiLevel`など一つの共通レベルへ依存させない。
-
-### 10.2 各猫が持つもの
-
-- 安定した猫ID
-- 名前、役割、個別レベル
-- 通常攻撃、固有スキル、連携タグ
-- 前衛・後衛・支援・対空などの適性
-- 店舗・支援施設への適性
-- ラン内遺物との適性タグ。独立した装備インベントリ、装備ドロップ、装備強化は100F本編の対象外
-- 待機、歩行、攻撃、被弾、KO、勝利の動作
-- 足裏、影、接触アンカー
-
-### 10.3 解放原則
-
-- 解放条件は常に猫一覧で確認できる。
-- ガチャ、隠し乱数、広告視聴回数を条件にしない。
-- 「到達階＋店舗配置＋プレイ実績」の組合せを基本にする。
-- 進捗を数値またはチェック項目で表示する。
-- 解放済み猫は夜明け後も保持する。
-- ムギ、ルナ、トトは既存名として維持する。
-- 4匹目以降の正式名と細かな条件は1〜10F完全設計で確定する。
-
-### 10.4 塔武装と乗換え判断
-
-武装は「より大きい数字を引く収集」ではなく、次の敵へ何を持っていくかを判断する仕組みとする。塔全体で同時装備できるのは1枠、系統は次の3つだけに固定する。
-
-| 安定ID | 表示名 | 得意 | 苦手 |
-|---|---|---|---|
-| `armament.breaker` | 破砕 | 盾、重装、構造物 | 飛行、高速分散 |
-| `armament.hunter` | 狩猟 | 飛行、後衛、単体弱点 | 密集、反撃 |
-| `armament.guardian` | 守護 | 生存、回復、長期戦 | 短時間の火力検査 |
-
-- 独立装備インベントリ、ランダム能力、装備ガチャ、武器ドロップ周回を作らない。
-- 第1地区では10Fボス前に3系統の基礎形を一度ずつ試せるようにし、相性表示と乗換えをチュートリアルする。正確な解放階は1〜10F下位正本で固定する。
-- 地区ボスの初回撃破で決められた設計図を解放する。抽選しない。
-- `profile`へ設計図と系統熟練、`run`へ現在装備中の1系統だけを保存する。
-- 新段階の武装は取得直後に実効改善を感じられることを`SIMULATION_CANDIDATE`とし、倍率は`candidate-v1.json.weapons`だけに置く。
-- favorable、neutral、resistantのboss p50 TTK帯は`candidate-v1.json.weapons.bossTtkBandsSeconds`だけを正本とし、同じ推奨構成・同じ敵・同じseedで分類する。耐性相手も90秒以内に敗因または勝敗へ到達できなければならない。
-- 守護は隠れ攻撃倍率を持たない。生存budgetは`guardianRawDamageBudget = (baseMaxHp + healingDuringFight × healingMultiplier) / incomingDamageMultiplier`、`survivalMargin = guardianRawDamageBudget - predictedRawIncomingDamage`で比較し、2倍率はmanifestから読む。守護が有利とは、他系統で負となる生存余裕を正へ戻し、戦闘上限内に勝敗を出せる状態を指す。
-- 乗換え前に、対象敵への予想撃破時間、味方の生存見込み、現在装備との差を表示する。
-- 戦闘中の変更は次ウェーブまたは再挑戦から適用し、攻撃途中の計算を書き換えない。
-- 武装は画面7「強化・ビルド」で扱い、10番目の主要画面を増やさない。
-
-次のいずれかなら武装設計を不合格としてmanifestへ戻す。
-
-- 役割を均等にした基準遭遇群で、単一系統の選択shareが`candidate-v1.json.weapons.rejection.maximumSingleFamilySelectionShare`を超える、または一系統が全遭遇で常に最速となる。
-- 通常乗換えの予測TTK改善が`candidate-v1.json.weapons.minimumPredictedTtkImprovementForRoutineSwitch`未満で、意味のない切替を推薦する。
-- 100Fまでの乗換え回数中央値が`weapons.rejection.minimumMedianSwitchesToFloor100`未満または`maximumMedianSwitchesToFloor100`超となる。
-- 耐性系統だけを理由に90秒超、進行停止、推奨帯の一撃KOが発生する。
-- 複合脅威でTTKと生存のtrade-offが消え、一つの系統が両方で無条件に優位となる。
-- 表示した予測TTKまたは生存余裕と実測の符号が逆になり、乗換え判断を誤誘導する。
-
-## 11. 敵とボス
-
-### 11.1 最終規模
-
-- 通常敵: 30種
-- エリート: 10種
-- 地区ボス: 9体
-- 最終ボス: 1体
-- 発売時目標・上限: 合計50種
-
-色替え、単純な拡大、HPだけの変更は別種として数えない。通常30、エリート10、地区ボス9、最終ボス1を超える追加は、100F商品版完成後の別仕様変更とする。名前付き猫の13匹目以降も同様に別承認とする。
-
-X8の「地区の壁」は敵種ではなく、既存の地区敵、環境障害、遭遇modifierを組み合わせた壁遭遇である。独立した51種目や地区ごとの追加キャラクター素材にしない。第1地区の黒羽の結界も環境障害として分類する。
-
-### 11.2 必須行動群
-
-- 突進
-- 盾・重装
-- 遠距離
-- 回復
-- 召喚
-- 飛行
-- 潜伏
-- 分裂
-- 反射
-- 状態異常
-- 自爆
-- レーン移動
-- 店舗妨害
-- 増援封鎖
-- 模倣
-
-各敵は、名前を隠してもシルエット、姿勢、予備動作で役割を判別できなければならない。
-
-### 11.3 ボス
-
-- 専用の登場、音、形態変化、KO、恒久報酬を持つ。
-- 地区ボスは3段階以上。
-- 初回は主要行動を見せるための形態スキップ防止を持つ。
-- 100Fのクロバネは、地上、飛行、店舗封鎖、暴走の4形態を基本とする。
-- 通常カラスを単純に拡大してボスにしない。
-
-### 11.4 生存と一撃KOの範囲
-
-推奨帯は`candidate-v1.json.survival.recommendedBandDefinition`に従い、検査対象floorで同じpersona、build、購入policyが通常報酬だけから到達できるlevel・編成集合とする。debug grant、結果を見た追加coin、別personaの購入履歴を混ぜない。
-
-- 一撃KOは、全HPの対象が一つの原子的damage eventだけでHP 0以下になることとする。表示だけ分割した同一hitを複数hitと数えない。
-- 推奨帯の前衛は同格通常攻撃6〜10回、後衛は3〜5回をp50の生存目標とする。
-- 予告付きボス強攻撃は推奨帯前衛の最大HP35〜55%を目標とする。
-- 推奨帯では、通常攻撃、飛び道具、ボス強攻撃の全HPからの一撃KOを0件にする。回避失敗を罰する場合も、初回は立て直しまたは明示した複数hitで表現する。
-- 推奨帯外の検査も残し、急な一撃KO境界を「強化不足」の一文だけで隠さない。
-
-## 12. 夜明け
-
-夜明けは罰ではなく、作戦を変えて再攻略するための選択である。
-
-### 12.1 導入
-
-- 8Fで意味を予告し、10F制圧で操作を解放する。
-- 10F直後の実行は任意であり、チュートリアルによる強制リセットを行わない。
-- 最初の自然な実行は12〜20分、18〜22F付近の壁を目標とする。
-- 解放後はいつでも実行前比較を開けるが、恒久報酬の発生条件は新記録へ結び付ける。
-
-夜明け判断は`candidate-v1.json.dawn.decisionPolicy`の決定論的policyで検証する。policyは少なくとも、敗北後、予測TTKがmanifestの壁閾値へ達した時、foregroundで新最高階を更新できない停滞時、任意に比較画面を開いた時を別triggerとして記録する。triggerは提案を許可するだけで自動実行せず、実行には失う・残る・得るものを表示した明示確認を必須とする。階固定やwall clockだけで強制しない。
-
-### 12.2 実行前に必ず表示するもの
-
-- 失うもの
-- 残るもの
-- 得るもの
-- 実行前後の数値比較
-- 前回最高階までの予想到達目安
-- 選択する祝福または恒久方針
-
-### 12.3 失うもの
-
-- 現在階
-- 今周コイン
-- 今周の猫レベル
-- 店舗の今周稼働レベル
-- 一時遺物
-- 今周の状態効果
-
-### 12.4 残るもの
-
-- 解放済み猫
-- 店舗種類と設計図
-- 店舗配置図
-- ボス撃破記録と武装設計図
-- 最高到達階
-- 敵図鑑
-- 猫の物語
-- 恒久強化
-
-### 12.5 成長方針
-
-最終的には次の3系統を成立させる。枝の上限は`SIMULATION_CANDIDATE`であり、工程3で各1,000パターンを比較して調整する。
-
-| 系統 | 判断 | 単独枝の上限候補 |
-|---|---|---:|
-| 戦闘・精鋭型 | 名前付き猫、武装、会心 | 実効DPS `+35%` |
-| 増援・数型 | 出撃間隔、列、連携 | 実効DPS `+30〜35%` |
-| 商業・配送型 | 収益、配送、施設連携 | 収益上限候補 `+45%`。戦闘換算は固定せず、同じ購入policyの実測だけで比較 |
-
-ただし最初の1〜10Fでは巨大な恒久ツリーを作らず、違いが明確な3択の祝福で仮説を検証する。初回夜明けは戦闘、増援、商業から各1候補を同時に提示する。選んだ祝福は`profile`へ保存する恒久強化であり、ラン終了時に消えない。
-
-### 12.6 恒久報酬と周回防止
-
-夜明けの欠片は次の新規達成からだけ得る。
-
-- 初めて越えた5F刻みの到達記録
-- 各地区ボスの初回撃破
-- 一度だけ達成できる公開実績
-
-恒久報酬は加算式の推測ではなく、達成ledgerの差集合で確定する。
-
-```text
-newRewardIds = reachedEligibleRewardIds - profile.claimedDawnRewardIds
-dawnShards   = sum(rewardLedger[id].shards for id in newRewardIds)
-claimedAfter = profile.claimedDawnRewardIds union newRewardIds
-```
-
-manifestの`sameMaximumFloorContribution`は`0`、`noNewRewardIdsPermanentCurrency`も`0`とする。ただし同じ最高階でも未請求の一度限りachievement IDを初達成したなら、そのIDは差集合として一度だけ報酬になり得る。previewと実行commitは同じ`newRewardIds`を使い、再読込、複数tab、実行再送で二重加算しない。同じ最高階での夜明けには、無料の再配分と、その一周だけの追いつき補正を与えてよいが、値はmanifestの候補とする。補正は重複せず、新記録到達時に消える。これは失敗構成からの救済であり、F10反復を最適化する報酬ではない。
-
-初回夜明け後、前回最高階へ戻るforeground実時間は初回到達時間の`35〜50%`を合格帯とする。速度は各scenarioの実測時間の逆数から算出し、厳密な合格帯を`2.00〜2.857142857142857倍`、表示上限だけを`2.86倍`とする。再制圧短縮、経済、設計図復元、操作補助の合成結果で達成し、生の攻撃力、HP、収益のどれか一つへ`×2`以上を直接与えない。
-
-3ビルド比較は同じseed集合とreturn scheduleを使い、未完走は除外せず`T = +Infinity`として停止率も別記する。`T[b,i,s]`をbuild `b`、seed `i`、schedule `s`の100F wall-clock到達時間として、次をそのまま計算する。
-
-```text
-medianSpread  = max_b(P50_i(T[b,i,baseline])) / min_b(P50_i(T[b,i,baseline]))
-robustSpread  = max_b(P90_i(T[b,i,baseline])) / min_b(P10_i(T[b,i,baseline]))
-extremeSpread = max_b(
-                  P50_i(T[b,passivePersona,i,standardSchedule])
-                  / P50_i(T[b,activePersona,i,standardSchedule])
-                )
-```
-
-合格条件は`medianSpread <= 1.25`、`robustSpread <= 1.35`、`extremeSpread <= 1.60`である。extreme比較はreturn cadenceを混ぜず、同じ`standardSchedule`で任意入力だけを変える。active/passive固有scheduleの実日数差は別のstress reportへ出し、この閾値で隠さない。personaとscheduleはmanifestで固定し、結果を見て入れ替えない。最速一択を「個性」と呼ばない。
-
-## 13. 刺激、継続性、課金に頼らない習慣化
-
-- 現在目標、近距離目標、長期目標を最大3件だけ表示する。
-- X9階の遺物3択でランごとの差を作る。
-- 猫の役割連携で「ねこラッシュ」を発生させる。
-- ラン内の限定的なランダム遭遇は全体の約20%までとし、約80%は計画可能にする。日付限定イベント、連続ログイン、LiveOpsを意味しない。
-- 敗北時に火力、回復、前衛、対空、増援、状態異常、施設停止など主因を表示する。
-- 次に変えるべき猫、店、強化を1〜3件提案する。
-- 100F制覇後は101Fを作らない。ボスラッシュ、制限編成、地区契約、配置固定、タイムアタックは将来候補であり、100F商品版Production Readyの必須範囲に含めない。本編完成後の検証結果から一つだけ選び、別工程で承認する。
-
-本編の触り心地が完成する前に、強制広告、スタミナ、失効型ログイン報酬、ガチャ、PvP、ギルド、シーズンを入れない。
-
-参考録画から引き継ぐのは、入力直後の応答、複数キャラクターが途切れず動く密度、攻撃・被弾・数字・HP・報酬の短い同期だけである。広告モーダル、チケット、複数の残高、店舗ごとの再開作業、大量のレベル連打、説明のない壁は、画面密度ではなく操作負債なので再現しない。
-
-短期・中期・長期の目標は同時に最大3件とし、次を基本セットにする。
-
-- 短期: 次の強化、敵、店舗配送まで10〜90秒
-- 中期: X8の壁、X9遺物、X0ボスまで3〜12分
-- 長期: 猫解放、武装設計図、夜明け枝、次地区、100F
-
-通知、赤点、受取箱を目標の代わりにしない。未受取項目を増やして継続率を作る設計は不合格とする。
-
-## 14. 9画面の機能契約
-
-完成見本は後工程で作るが、対象9画面をここで固定する。状態違いは同じ画面のコンポーネント契約であり、主要画面数を水増ししない。次表は人間向けの要約であり、各画面へ含めるrequired stateの完全かつ順序付きの集合は`PROJECT_STATUS.json.canonicalScreens`だけを権威とする。表に省略されたstateを削除してはならない。
-
-| ID | 画面 | 完成見本に含める状態 | 最重要操作 | シミュレーション |
-|---|---|---|---|---|
-| S01 | タイトル・再開 | 初回、保存あり、移行失敗 | はじめる／続ける | 停止 |
-| S02 | 戦闘追従 | 初回呼び鈴、通常、複数敵、エリート | 猫を呼ぶ | 継続 |
-| S03 | 塔閲覧 | 制圧済み、現在戦闘、未到達、戦闘警告 | 戦闘へ戻る | 継続 |
-| S04 | 階制圧・枠種確認 | ショップ階、支援階、猫救出、報酬 | 次へ／店を選ぶ | 停止 |
-| S05 | ショップ選択・再配置 | 初回配置、比較、隣接、無料再配置 | 配置を保存 | 停止 |
-| S06 | 猫一覧・解放 | ロック条件、解放演出、編成、役割比較 | 編成する | 停止 |
-| S07 | 強化・ビルド | 3系統、武装乗換え、一括購入、敗因診断シート | 強化／装備変更 | 停止 |
-| S08 | ボス戦闘 | 登場、3形態、強攻撃予告、失敗、撃破 | 呼ぶ／作戦変更 | 継続／敗北時停止 |
-| S09 | 地区結果・夜明け | 地区制覇、喪失保持比較、3択、100F完了 | 次地区／夜明け | 停止 |
-
-S08は別ゲームモードではなく戦闘追従のボス構成を検査する完成見本である。S09は地区結果から夜明け確認へ進む同一フローであり、100Fでは完了記録状態へ切り替わる。設定、図鑑、物語は補助シートとして扱い、主要9画面を増やさない。
-
-### 14.1 シミュレーション停止方針
-
-- 塔閲覧中は戦闘を継続する。
-- 夜明け確認、制圧用途の確定など、取り返しに影響するモーダルでは戦闘を一時停止し、停止中であることを明示する。
-- 画面を覆ったまま重要な撃破、猫解放、階移動を裏で発生させない。
-- 各画面は「継続」「一時停止」のどちらかを仕様とテストへ明記する。
-
-## 15. 保存・100Fデータの境界
-
-詳細なフィールド設計は「8. 保存・100Fデータ設計」で確定する。ここでは壊してはいけない境界を固定する。
-
-### 15.1 新保存
-
-- 新仕様は`gameplaySchema: 3`として設計する。
-- 現行schema2へ100F項目を無計画に追加しない。
-- schema3はschema2の`cats-tower-v080`へ直接書き込まない。
-- 新版の正規キーは`cats-tower-v100`とする。
-- schema2の生JSONは`cats-tower-v080-schema2-raw-backup`へ一度だけバックアップする。
-- 移行はコピーであり、旧キーを削除・変更しない。
-- 移行処理は同じ入力へ複数回実行しても同じ結果になるようにする。
-- migration ID、実行日時、元schema、元revisionを記録する。
-- 移行失敗時はschema3を正規保存へ昇格しない。
-- schema3保存後もV0.8.2へ戻して旧保存を開けることを検査する。
-- future schemaを古いコードで上書きしない。
-
-### 15.2 データの分離
-
-- `profile`: 解放猫、店舗・施設解放、図鑑、物語、夜明けの欠片、恒久強化、武装設計図・熟練、設定、`retainedShopBlueprint`
-- `run`: 現在階、コイン、今周レベル、遺物、装備中の武装系統、敵、増援列
-- `tower`: 今周の制圧状態、現在稼働中の店舗、今周店舗レベル、現在の配送経路
-- `runtime`: 猫と敵のHP、位置、クールダウン、回復、階移動
-- `system`: schema、revision、保存時刻、移行履歴
-
-猫、敵、階、店舗、遺物、地区は表示名ではなく安定IDで参照する。全namespaceの正規IDは`PROJECT_STATUS.json.stableIdRegistry`、読取専用aliasは`PROJECT_STATUS.json.stableIdMigrationAliases`だけを機械可読の権威とする。[`FLOORS_1_10_DESIGN.md` 9.7](./FLOORS_1_10_DESIGN.md#97-正規id-registryと移行alias)は用途と移行手順を説明する人間向け参照であり、本書、manifest、schema、event、telemetryに別の正規ID集合を作らない。
-
-夜明け後も`profile.retainedShopBlueprint`は残るが、未再制圧階の店舗効果は発動しない。該当階を再制圧した時に設計図を自動適用し、その時点から店舗を稼働する。`tower`の今周稼働状態は夜明けでリセットする。
-
-### 15.3 旧保存の扱い
-
-- 旧10Fクリアを100Fクリアへ変換しない。
-- 旧10Fクリアは1〜10Fの履歴・記念として移行する。
-- 旧猫、思い出、音設定など、意味が維持できる項目は失わない。
-- 不明項目を黙って捨てず、移行ログへ残す。
-- 破損保存からの復旧と初期化を区別する。
-
-### 15.4 再読込とオフライン
-
-- 戦闘中に再読込しても猫、敵、HP、位置、増援列、施設、階遷移を復元する。
-- 再読込でボスを飛ばす、HPを全快する、猫を複製することを防ぐ。
-- 初回攻略中のオフラインでは、コインだけを与える。未確認階の制圧、ボス撃破、猫解放、武装解放、店舗選択、夜明けを自動実行しない。
-- 安全収益の上限は24時間、減衰なしの100%を製品契約とする。数字を小さくするための8時間打切りや広告視聴による上限解除を行わない。
-- オフライン基準価格`U`は、`candidate-v1.json.offline.uIndex`に固定した`fixedCombatReference`、`fixedReinforcementReference`、`fixedCommerceReference`を、`highestReachedFloor`と、実際に新規reward IDを付与した`rewardingDawnCount`で決定論的に投影した3値の中央値とする。変動するplayer state入力はこの2つだけとし、現在coin、装着build・武装、開いているmenu、推薦表示、購入可能状態、logout直前の操作、報酬0の回復Dawn回数を使わない。
-- `U`のclamp基準はfloor role補正を含まない報酬曲線とし、正当なfloor更新またはrewarding Dawnで低下してはならない。clamp前値、clamp後値、3つの固定reference keyと値、`highestReachedFloor`、`rewardingDawnCount`、policy versionをsnapshotへ保存する。
-- snapshotは購入、level変更、floor更新、Dawn、解放など経済へ影響する各commit後と、`visibilitychange`でhiddenになる時、`pagehide`時に更新する。復帰精算では最後に正常commitされたsnapshotだけを使い、復帰時に遡って再推薦しない。
-- 標準構成のオフライン式と係数は`candidate-v1.json.offline`だけから読み、24時間capは固定製品契約として維持する。
-
-- 8時間で標準1〜2個、24時間で標準4〜5個、商業型5〜6個の有効強化を買えることを合格範囲とする。
-- 24時間収益だけで未攻略の2地区以上を飛び越せる場合は不合格とする。
-- browser単体には信頼済みserver時刻がないため、正当な不在時間と端末時計を一度だけ未来へ進めた区間を識別できるとは主張しない。1区間の支給は24時間capで制限し、精算済みhost時刻のhigh-water markより前へ戻ったhide／returnは報酬0として隔離する。これにより未来送り後の巻戻しを同じhigh-water未満で反復して稼ぐこと、負の経過、二重精算を防ぐ。未来送りそのものを検知して無効化する保証が必要なら、信頼済みserver時刻を別契約として承認・実装する。進行も経済変更もない同一saveで24時間復帰を連続して行い、各回の`U`が同じで、1回あたり報酬が増幅せず、二重精算が0件であることを検査する。
-- 商業型のオフライン収益候補はmanifestで管理する。広告や有償倍率を前提にしない。
-- 夜明け後に限り、既知階のオフライン再制圧を許す。clear可能な最終階は`min(floor(前回最高階×0.90), 次の未解決X9-1, 次の未選択分岐-1, 次の未確認boss-1)`とする。存在しないblockerは`null`として最小値から除外し、結果を`1〜前回最高階`へclampする。これによりblocker階そのものと初見コンテンツを自動突破しない。
-- オフライン再制圧とは別に「アドバンス開始」「階スキップ券」を重ねて実装しない。まず一つの追いつき系だけを検証する。
-
-### 15.5 保存の安全性
-
-- 保存前にschemaと値を検証する。
-- 新規保存を一時領域へ書き、読み戻し検証後だけ正規保存へ昇格する。
-- 最新2世代と移行前1世代を保持する。
-- 単調増加する`revision`を持ち、古いタブが新しい保存を上書きしないようにする。
-- 複数タブ時は片方を読み取り専用にするか、明示確認を出す。
-- 容量不足、書込禁止、破損、移行失敗を黙って初期化しない。
-- ブラウザ保存が消去され得ることを明記し、JSONの書出し・読込み手段を用意する。
-- `navigator.storage.persist()`は補助策であり、唯一の保護策にしない。
-
-## 16. 性能、素材、Service Worker
-
-### 16.1 描画
-
-- 固定ステップのシミュレーションとDOM描画を分離する。
-- 実際のシミュレーション座標を描画へ使う。
-- 100Fを一括描画しない。
-- 画面外のアニメーションと更新を停止する。
-- 通常プレイは物理端末で中央値55fps以上を合格基準とし、表示品質を上げるために入力応答を犠牲にしない。
-- 50msを超えるlong taskを継続的に発生させない。
-- 画面内12〜16匹の一時増援、名前付き猫、複数敵、ダメージ数字、配送演出が同時に存在する最大密度を性能試験に含める。
-- エフェクトを減らす時も、予備動作、接触、HP、反動の因果は削除しない。
-
-### 16.2 読み込み
-
-- 初回はアプリ殻、共通UI、地区1素材だけを読む。
-- 地区素材は地区単位で遅延取得する。
-- 初回転送量は4MB以下を初期目標とする。
-- 100F全素材を`cache.addAll`で一括precacheしない。
-- 素材名へhashまたはversionを付け、旧コードと新素材を混在させない。
-- Service Worker更新、offline、再起動後のversion一致を検証する。
-
-### 16.3 応答
-
-- 中核操作の入力から一次描画まで、物理iPhoneでp95 100ms以内を合格基準とする。
-- Web全体のINPはp75で200ms以下を目標とする。
-- 実機計測値を残し、開発PCだけで合格させない。
-- 接敵は出撃後650〜1,000ms、命中・HP・音・反動の同期は±50ms、ヒットストップは50〜80msを通常motionで検査する。
-- 3分間の最大演出ボス戦と10分間の連続戦闘を、同一commit・同一Vercel URLの物理iPhoneで別々に計測する。
-
-## 17. アクセシビリティ
-
-- 主要操作は48×48 CSS px以上、重大操作は56×56 CSS px以上、操作間隔は8px以上を基本とする。
-- 機能を持つ本文は11〜12px未満にしない。
-- 色だけで制圧、危険、選択、ロックを区別しない。
-- reduced-motionでも、出撃、接敵、命中、撃破、上昇の因果順は残す。
-- 動きを減らしても瞬間移動や無反応へ置き換えない。
-- モーダルは背景を操作不能にし、フォーカスを閉じ込め、閉じた後に元の操作へ戻す。
-- 重要通知は視覚表示と適切なライブ領域を併用する。
-- 音なしでも攻撃予告と結果を理解できるようにする。
-
-## 18. 商人サーガから学ぶ範囲と独自性
-
-参考にするのは、次の因果と操作文法である。
-
-- 入力が増援へ変わる
-- 増援が戦線へ移動する
-- 戦闘結果が制圧と経済へつながる
-- 制圧した場所の店が次の戦闘を支える
-- 短い反復の中で数値と画面が頻繁に反応する
-- 武装を乗り換える前後で攻略時間が読める
-- 周回による複利成長と複数の長期目標が並行する
-
-複製してはいけないもの:
-
-- コード
-- キャラクター、敵、素材、音
-- 文章、名称、物語
-- UIの具体的な配置、色、アイコン
-- 数値、演出時間、画面遷移の具体表現
-- 強制広告、広告前提の収益、チケット、ガチャ依存
-- 店舗ごとの再開・回収、大量レベル連打、同じ操作の大量反復
-- 不透明な数式、後半の極端な壁、一撃死前提のHP、予告の弱いリセット
-
-目標は「商人サーガの猫差し替え」ではない。触った時の明快な因果と反応密度を同等以上にしつつ、Cat's Towerは猫の生活、店舗隣接、配送、100F閲覧、公開解放、敗因診断で独自化する。
-
-制作時は次を必須とする。
-
-- 商人サーガの実行ファイル、通信データ、コード、音声、画像を抽出・逆解析しない。
-- スクリーンショットや動画を下絵としてトレースしない。
-- 画面配置、タイミング、数値、演出順をフレーム単位で再現しない。
-- 参考作品由来の機構は、抽象目的とCat's Tower固有の見える差を3点以上、設計記録へ残す。
-- 全画像、音声、フォントへ出所、ライセンス、生成日、生成方法、手修正内容、hashを記録する。
-- 来歴不明の素材を本番へ入れない。
-- 類似性が強い場合は法的安全を推測で断定せず、公開前の専門家確認対象として記録する。
-
-## 19. 明確な禁止事項
-
-- 1〜10F合格前の100F素材量産
-- 10F上限の変数だけを100へ変える実装
-- タップ直接ダメージ
-- 猫を戦闘位置へ瞬間配置すること
-- 接敵前のダメージ
-- 背景切替だけの階段上昇
-- 1敵オブジェクトだけの戦闘
-- 全100階の同時DOM描画
-- 全地区素材の初回一括取得
-- 色替えだけの敵量産
-- 同じ素材を倍率だけ変えたボス
-- 毎周40店舗の手動再配置
-- 取り返しのつかない店舗選択
-- 猫解放のガチャ、隠し確率
-- 武装のランダム能力、装備ガチャ、装備インベントリ周回
-- 同じ最高到達階の夜明けによる恒久通貨稼ぎ
-- オフラインで未確認の階、ボス、選択を自動突破すること
-- 店舗ごとの再開、回収、補充を必須作業にすること
-- 一段ずつの大量購入だけを最適操作にすること
-- 表示式と戦闘式が異なる隠し補正
-- 本編完成前の強制広告、スタミナ、PvP、ギルド、シーズン
-- 在庫・接客を主役にする巨大な管理ミニゲーム
-- CSS末尾の上書きだけで旧構造を温存すること
-- QA専用APIまたはreduced-motionだけで触り心地を合格させること
-- ページが開く、buildが通る、deployがREADYという理由だけでProduction Readyにすること
-- 実機未確認を実機確認済みと書くこと
-
-### 19.1 仕様変更の記録
-
-正本へ未記載の機能をAI判断だけで追加しない。新機能を提案する時は、実装前に次を記録する。
-
-1. 解決するプレイヤー上の問題
-2. 既存機能では解決できない理由
-3. 増える画面、状態、保存項目
-4. 増える素材数と容量
-5. 性能とQAへの影響
-6. 商人サーガ等との類似点と独自差
-7. 代わりに削除または延期する項目
-
-「面白そう」「将来使えそう」「100Fだから必要」は単独の追加理由にしない。
-
-### 19.2 V0.8.2から再利用するもの・置き換えるもの
-
-再利用候補:
-
-- 固定ステップの更新思想
-- イベントバス・イベントキュー
-- future schemaを上書きしない保護
-- オフライン進行の上限と、階を自動攻略しない原則
-- PWA起動とQAの基礎構造
-
-置き換え必須:
-
-- 6枠の固定座標
-- 単体敵モデル
-- 10Fハード上限
-- 全猫共通レベル
-- 3F食堂、5F共同部屋だけを固定する構造
-- 常時3層だけを描く塔UI
-- 旧素材の透明余白と倍率をCSSで吸収する方式
-- CSS末尾の上書きを重ねる方式
-- QA APIがなければ到達できないテスト導線
-
-旧保存キーを読む処理は専用migrationへ隔離し、新版の通常ロジックから旧定数を参照しない。新版Service Workerのcache名も旧版と分離する。
-
-## 20. QAゲート
-
-### Gate S: バランスシミュレーション
-
-9画面完成見本とコード修正の前に、同じ版の数値データで次を順番に実施する。
-
-1. 1〜100Fについて、購入、戦闘、敗北、武装変更、夜明け、再制圧、8時間・24時間放置を含む決定論的な基準シミュレーションを完走する。
-2. 戦闘・精鋭型、増援・数型、商業・配送型を各1,000パターン、合計3,000パターン実行する。
-3. seed、購入方針、能動操作率、放置時間、夜明け階、結果、失敗理由を機械可読データへ残す。
-4. 最小、中央値、p90、最大を、100F時間、各地区時間、敗北数、夜明け数、購入数、放置収益、操作数で比較する。
-
-Step 2のcalibration seedだけが候補係数を変更できる。Step 3は未観測holdout bankに対する一回限りの昇格判定であり、その出力を見た再調整は禁止する。Step 3が不合格、部分出力後に有効判定を作れない、または出力後にcandidate・simulator semanticsを変更する場合はStep 1へ戻り、重複しない未観測bank、更新candidate、更新schema・validatorを再封印し、Step 2を最初から通す。使用済みbankの再計算結果は診断にだけ使い、昇格判定を置き換えない。Step 3開始前にはStep 2 executable sealとholdout lifecycle ledgerのpreflightを通す。
-
-合格条件:
-
-- 1〜10F初回のforeground合計がp50 `6〜8分`、p90 `10分以内`へ入り、combat・transition・decisionが別列で出力される。
-- 初回夜明けが12〜20分、18〜22Fを中心とし、10F即時反復が最適にならない。
-- 初回100Fの実操作合計中央値が2.5〜4時間、夜明け3〜5回へ入る。
-- 初回100Fの自然なwall-clock到達が、各buildで能動scheduleのp50 7〜12日、標準scheduleのp50 10〜18日へ入る。passive scheduleはp10/p50/p90を報告するが合否には使わず、runtimeの日付・ログイン日数・経過時間による解放門は全scheduleで禁止する。
-- 同じ相対階比較の`D10_pre`が各地区で`1.35〜1.55`、いずれも`1.60`以下で、`Net10`が`0.95〜1.10`である。
-- 適正構成の新規通常階20〜35秒、X8 45〜60秒、X9 40〜55秒、X0 50〜75秒を中心とする。
-- `newRewardIds`が空の夜明けによる夜明けの欠片獲得が全件`0`で、同じreward IDの再獲得が0件である。
-- 夜明け後の前回最高階へのforeground復帰が初回時間の35〜50%、各scenarioで逆数計算した合成再制圧速度で`2.00〜2.857142857142857倍`（表示上限`2.86`）である。
-- 3ビルドが12.6の式で`medianSpread <= 1.25`、`robustSpread <= 1.35`、`extremeSpread <= 1.60`を満たす。
-- 8時間で標準1〜2強化、24時間で標準4〜5強化、商業型5〜6強化となり、未攻略2地区以上を飛ばさない。
-- 11.4の推奨帯における全HPからの一撃KO、負数、NaN、無限購入、通貨増殖、停止しない戦闘、90秒超過後の無説明放置が0件である。
-- 進行なしの同一saveへ24時間復帰を反復しても`U`と1回分報酬が増幅せず、二重精算が0件である。
-
-平均だけが範囲内でも、p90以降に極端な壁、単一正解、無限反復がある場合は不合格とする。合格しない限り`SIMULATION_CANDIDATE`を最終値へ昇格せず、9画面見本と1〜10F実装へ進まない。
-
-### Gate A: アート試験素材
-
-- Gate B合格前の試験素材は、名前付き猫2匹、一時増援1種、通常敵2種、エリート1種、ボス1体の形態変化試験、背景1階、ショップ1種を絶対上限とする。
-- ボス試験には登場、攻撃予告、被弾、形態変化、KOを含める。
-- 全状態で足裏、透明余白、輪郭、光源、ピクセル密度が一致する。
-- 合格前に猫12匹、敵50種、10地区背景を量産しない。
-- Gate B合格前に第2バッチを作らない。
-- Gate B合格後も、Gate Cまでは1〜10Fの必須数を総量上限とする。
-
-Gateが許可した総量の範囲でも、一度に作る上限は次のとおりとする。
-
-- 猫: 2匹
-- 通常敵: 5種
-- エリート: 2種
-- ボス: 1体
-- ショップ: 2種
-- 地区背景: 1地区
-
-前バッチが実機、アンカー、アニメーション、容量検査に合格するまで次バッチへ進まない。バッチ上限は一回の発注量を制限するものであり、工程Gateを越える許可ではない。
-
-### Gate B: 1〜3F技術スライス
-
-- タップ一次反応100ms以内。
-- 猫が戦闘幅30〜45%を移動する。
-- 接敵前にダメージ0。
-- 命中同期±50ms。
-- 足裏誤差2px以内。
-- 複数敵が独立して行動する。
-- 塔のスクロールと戦闘帰還が成立する。
-- 戦闘途中の保存・復元が一致する。
-- QA APIなしで1〜3Fを遊べる。
-
-一項目でも失敗した場合、新しい猫、敵、店舗、階の追加を止め、原因修正へ戻る。
-
-### Gate C: 1〜10F商品スライス
-
-工程5では実装に加え、自動test、desktop browser、WebKit simulation、Vercel上の非物理受入を完走し、Gate Cを`IN_PROGRESS（物理実機未完了）`の未合格状態まで進める。ただし工程5だけでGate Cを`PASS`にしてはならない。工程6で同一commit・同一deploymentの物理iPhone 180秒boss試験と600秒連続試験を完了し、下記すべてが合格した時だけGate Cを`PASS`とする。工程6で一件でも失敗した場合は工程5へ戻って修正・非物理回帰をやり直し、新commitで工程6を最初から再実行する。
-
-- 通常操作だけで完走できる。
-- 名前付き猫4匹、通常敵6種、エリート2種、追加敵種に数えない壁遭遇1件、3段階ボス1体が成立する。
-- ショップ4種、支援2種、配置、隣接、配送が戦闘へ影響する。
-- 公開条件による猫解放が成立する。
-- 制圧済み・未制圧階を自由に見られる。
-- 夜明け前後の喪失、保持、獲得が理解できる。
-- 増援50回で誤スクロール0回。
-- スクロール50回で誤増援0回。
-- 長押し開始前の誤発火0件。
-- 長押しからスクロールへ移った後の増援継続0件。
-- 指を離した後の増援継続0件。
-- 描画する階は最大13。
-- 再読込前後で戦闘・配置・解放状態が一致する。
-- 通常motionとreduced-motionを別々に検査する。
-- 375×667、390×844、430×932をChromium / WebKitで確認する。
-- 物理iPhone Safari、ChatGPT内ブラウザ、PWAを確認する。
-- 物理iPhone、Safari、通常motionで、最大演出密度のボス戦を3分間計測する。
-- 同じ端末・commit・deploymentで通常戦闘、階遷移、塔閲覧、復帰、購入を含む10分間の連続試験を行う。
-- 3分ボスと10分連続の両方で中央値55fps以上、95パーセンタイルのフレーム時間32ms以下、100msを超える画面停止0回。
-- 10分連続試験後に、floor shell、戦闘entity、damage number、event listener、timer、audio nodeが開始時の設計上限を超えて残留しない。
-- 中核操作の入力から一次描画まで実機p95で100ms以内。
-- cold cache時のアプリ殻、共通UI、第1地区の転送量4.0MB以下。
-- 第1地区の初回起動で第2地区以降の画像・音声を取得しない。
-- 塔を50往復してもfloor shell、event listener、timer数が開始時より増えない。
-- 呼び鈴、足音、命中、被弾、KO、配送、階段、制圧、夜明け、ボスに制作用音があり、oscillatorだけの仮音がない。
-- 実機証拠に端末型番、OS、browser/PWA、viewport、日時、commit、Vercel URL、3分と10分の通常速度録画、計測JSONを残す。
-
-INP p75 200msは、十分な実利用データが得られた時のフィールドGateとする。少数の開発端末だけで「p75合格」と報告しない。
-
-### Gate D1: 11〜20Fだけの制作許可
-
-Gate C合格後、制作へ参加していない初見テスター10人以上を、同一Production Candidateと同一端末条件で検査する。操作説明はゲーム内チュートリアル以外に与えず、制作担当者と既プレイヤーを母数へ含めない。
-
-- 10人中8人以上が「呼ぶ→走る→戦う」を説明なしで理解する。
-- 10人中7人以上が店舗配置による違いを説明できる。
-- 10人中7人以上が制圧階を自発的に閲覧する。
-- 10人中6人以上が夜明け後に実際に第2周を開始する。開始しない場合は理由を記録する。
-- 10人中7人以上が敗北後に一つ以上の改善行動を選べる。
-- 「何をすればよいか分からない」による離脱が2人以下。
-- 保存消失、進行不能、報酬重複、P0・P1が0件。
-- 「生きた猫の塔」が独自の魅力として定性回答に現れる。
-
-Gate D1が許可するのは11〜20Fだけであり、21F以降を許可しない。以後は各地区完成後に同じ第三者Gateを繰り返し、合格のたびに次の10Fだけを許可する。一つのGateで複数地区を同時に量産しない。
-
-### Gate E: 1〜10F Preview Ready
-
-これは1〜10F公開試験版の合格であり、100F商品版のProduction Readyではない。
-
-- GitHub `kimi`、Vercel metadata、配信runtime hashが一致する。
-- GitHub Actionsの対象matrixが完走する。
-- 通常速度の動画を目視する。
-- 物理iPhoneとPWA更新を確認する。
-- 保存移行とfuture schema保護を確認する。
-- 既知の重大バグが0件。
-- 未確認項目を確認済みと表記しない。
-
-### Gate F: 100F Product Production Ready
-
-このGateだけが100F商品版の`Production Ready: true`を許可する。
-
-- 同一commit、同一deploymentでGate Eが`PASS`済みである。Gate E後にコード、素材、保存、Service Workerを変更した場合はGate Eを再実行する。
-
-- 1〜100Fを通常プレイヤー導線で完走できる。
-- 10地区すべてが地区Gateへ合格している。
-- 名前付き猫12匹、通常敵30種、エリート10種、地区ボス9体、最終ボス1体が完成定義を満たす。
-- 仮階、仮敵、仮背景、仮音、未接続UI、無効ボタンが0件。
-- 全制圧階の用途、保存、再制圧後の設計図復元が成立する。
-- 全ボスの形態変化と報酬が成立する。
-- schema2からschema3への移行とV0.8.2への復旧を実機で確認する。
-- 物理iPhone Safari、PWA、ChatGPT内ブラウザを確認する。
-- GitHub `kimi`、Vercel metadata、配信runtime hashが一致する。
-- P0・P1が0件。
-
-### 20.1 機能の完成定義
-
-機能はコードが動いただけでは完成としない。次のすべてを満たした時だけ`PASS`とする。
-
-- 通常のプレイヤー導線から使える。
-- QA APIなしで使える。
-- 保存、再読込、失敗状態に対応する。
-- 通常motionとreduced-motionの両方で意味が通る。
-- 自動テストと通常速度の実機録画がある。
-- 仮素材、無効ボタン、未接続メニューがない。
-- 正本文書と状態文書が更新されている。
-- 対象Vercel URLとGit commitを証拠に残す。
-- P0・P1不具合が0件。
-
-「実装済みだが未接続」「内部イベントだけ動く」「QA APIなら動く」は未完成とする。
-
-### 20.2 状態と停止規定
-
-工程状態は`NOT_STARTED`、`PENDING_REVALIDATION`、`IN_PROGRESS`、`BLOCKED`、`PASS`だけを使用する。「ほぼ完成」「実質完成」は使用しない。
-
-- **NOT_STARTED**: 必要な成果物の制作または検証を開始していない。
-- **PENDING_REVALIDATION**: 旧成果物は保持しているが、現行の品質Gateでは未合格である。完成報告や次工程の開始根拠に使わない。
-- **IN_PROGRESS**: 制作、再構成または検証の途中である。
-- **BLOCKED**: 必須条件が制作側だけでは解消できず、続行できない。
-- **PASS**: 適用するすべての品質Gateに合格し、完成報告と次工程への移行が可能である。
-
-- **P0**: 保存消失・破損、起動不能、進行全消失、報酬・通貨の無限複製、future save上書き、セキュリティ事故、全ユーザーが主要導線を完了できない状態。
-- **P1**: 主要ループ進行不能、誤階移動、誤解放、誤夜明け、主要入力の誤作動、性能予算超過、足裏・命中の基準超過、`kimi`と対象Vercel runtime不一致、対応端末で再現する重大UI欠損。
-
-P0・P1を根拠なくP2へ降格しない。降格には再現結果、影響範囲、修正証拠、回帰テストを必要とする。
-
-仕様矛盾、保存破損、P0・P1、性能予算超過、実機での重大入力不良を見つけた場合は次を行う。
-
-1. 新規機能、階、素材の制作を停止する。
-2. 最後に合格したcommitを記録する。
-3. 根本原因と影響範囲を文書化する。
-4. 回帰テストを追加する。
-5. 同じGateを最初から再実行する。
-
-停止条件を「既知の問題」へ書き換えて次工程へ進まない。
-
-## 21. 実装順序の拘束
-
-ユーザー承認済みの順序を次に固定する。前工程が合格するまで次を完成扱いにせず、実装を先行させて数値や画面の失敗を隠さない。すべて`kimi`ブランチだけで行い、別ブランチを作らない。
-
-1. **上記修正版を正本仕様へ固定** — 本書と1〜10F下位正本の契約、根拠、受入条件を一致させる。
-2. **全100F購入・戦闘・夜明け・24時間放置シミュレーション** — Gate Sの決定論的基準を完走する。
-3. **3ビルド各1,000パターンの検証** — 戦闘、増援、商業を合計3,000パターン比較し、候補係数を採否する。
-4. **9画面完成見本へ反映** — S01〜S09に、採用した数値、状態、操作、敗因、武装、夜明けを反映する。
-5. **1〜10Fだけ実装** — 11F以降の本番コンテンツを作らず、自動test、browser、Vercel上の非物理受入を完了する。物理証拠がないため、この時点ではGate Cを`PASS`にしない。
-6. **物理iPhoneで3分ボス＋10分連続試験** — 同一`kimi` commitと対象Vercel URLで180秒boss、600秒連続の証拠を残し、全Gate C条件が成立した時だけGate Cを`PASS`にする。
-
-工程6を開発PC、エミュレーター、短い録画だけで代替しない。物理iPhoneの証拠がない状態は`NOT_STARTED`または`BLOCKED`であり、確認済みと記載しない。工程6の失敗は工程5へ戻し、修正、全非物理回帰、再deploy後に新しい同一条件で再試験する。
-
-工程5へ入った後の実装順は次のとおりとする。
-
-1. 安定ID、schema3、アセットmanifestの契約
-2. 共通ワールド座標、足裏・影・接触アンカー
-3. 塔スクロールと階virtualization
-4. 猫の実移動、複数敵、命中同期
-5. 制圧階、ショップ配置、配送
-6. 猫解放、編成、夜明け
-7. 1〜10Fコンテンツ
-8. 自動test、browser、Vercelの非物理受入と修正
-
-11〜20F制作はこの6工程に含まれず、工程6合格後にも自動開始しない。第三者検証とGate D1を満たした上で、将来ユーザーから別途明示承認を得た場合だけ、新しい工程として計画する。
-
-## 22. 調査根拠
-
-2026-08-25時点の出典、確認事実、設計への適用範囲、適用できない範囲は、[`quality-reviews/step-1-canonical-design/research-evidence.md`](./quality-reviews/step-1-canonical-design/research-evidence.md)を証拠台帳とする。
-
-主な参照先:
-
-- [GameAnalytics: 2026 Mobile & PC Gaming Benchmarks](https://www.gameanalytics.com/reports/2026-mobile-pc-gaming-benchmarks)
-- [Kongregate: The Math of Idle Games, Part I](https://www.kongregate.com/en/pages/the-math-of-idle-games-part-i)
-- [Kongregate: The Math of Idle Games, Part III](https://www.kongregate.com/en/pages/the-math-of-idle-games-part-iii)
-- [Tap Titans 2公式ヘルプ: Should I prestige? When?](https://gamehive.helpshift.com/hc/en/3-tap-titans-2/faq/75-should-i-prestige-when/)
-- [Idle Miner Tycoon 公式サイト](https://idleminertycoon.com/)
-- ユーザー提供の39.078秒参照録画。連続戦闘密度と表示比較を参考にし、広告、複数通貨、ランダム券、店舗再開作業は不採用とした。
-
-- [商人サーガ App Store](https://apps.apple.com/jp/app/%E5%95%86%E4%BA%BA%E3%82%B5%E3%83%BC%E3%82%AC-%E9%AD%94%E7%8E%8B%E5%9F%8E%E3%81%A7%E3%81%8A%E5%BA%97%E9%96%8B%E3%81%91%E3%81%A3%E3%81%A6%E8%A8%80%E3%82%8F%E3%82%8C%E3%81%9F/id1198096385)
-- [Apple Human Interface Guidelines: Game controls](https://developer.apple.com/design/human-interface-guidelines/game-controls)
-- [W3C WCAG 2.2: Target Size (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum)
-- [web.dev: Virtualize large lists](https://web.dev/articles/virtualize-long-lists-react-window)
-- [web.dev: Optimize INP](https://web.dev/articles/optimize-inp)
-- [MDN: touch-action](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/touch-action)
-- [MDN: Cache.addAll](https://developer.mozilla.org/en-US/docs/Web/API/Cache/addAll)
-- [文化庁: 著作権侵害対策情報ポータル FAQ](https://www.bunka.go.jp/seisaku/chosakuken/kaizoku/faq.html)
-
-これらは、自動化、指数成長、prestigeの不正反復、初回価値提示、操作サイズなどの設計仮説を作る根拠である。Cat's Towerの係数、継続率、最適な100F所要時間を証明するものではない。manifest内の全候補係数はGate Sで反証を試み、他作品の値、画面、具体表現を複製しない。
+| Project instructions完全置換 | PASS |
+| `MASTER_SPEC.md`現行製品境界同期 | PASS |
+| `PROJECT_STATUS.json`現行状態同期 | PASS |
+| active change-control現行状態同期 | PASS |
+| `00_統括・工程管理`中核権威同期 | PASS |
+| repository全下位文書の統合 | IN_PROGRESS / `01`で実施 |
+| Step 1最終seal | IN_PROGRESS |
+| Step 2以降 | BLOCKED |
+| runtime / asset / candidate / schema / backend | 未変更 |
+| physical iPhone | NOT_VERIFIED |
+| Production | 未変更 |
+
+次に許可されるチャットは **`01_正本仕様・競合調査`** である。
