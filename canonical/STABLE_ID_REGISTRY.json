@@ -13,7 +13,7 @@
     "canonicalWritesAcceptAliases": false,
     "aliasesAreReadOnlyMigrationInputs": true,
     "deletePolicy": "RETIRED_TOMBSTONE",
-    "unboundedNumericSegments": "normalized unsigned decimal strings; never unsafe JavaScript Number"
+    "unboundedNumericSegments": "normalized unsigned decimal strings or explicitly defined minimum-width decimal segments; never unsafe JavaScript Number"
   },
   "rarities": [
     {"id": "rarity.n", "code": "N", "rank": 0},
@@ -55,9 +55,11 @@
     "normalEnemies": ["enemy.normal.001", "enemy.normal.002", "enemy.normal.003", "enemy.normal.004", "enemy.normal.005", "enemy.normal.006"],
     "eliteEnemies": ["enemy.elite.001", "enemy.elite.002"],
     "districtWall": "enemy.wall.001",
+    "midBoss": "tower.boss.d01.mid.001",
     "districtBoss": "tower.boss.d01.kagetsubasa",
     "district": "tower.district.001",
-    "cycle": "tower.cycle.000001"
+    "cycle": "tower.cycle.000001",
+    "firstMajorMilestone": "tower.milestone.floor.100"
   },
   "namespaces": {
     "evolution": ["evolution.character.stage"],
@@ -82,20 +84,29 @@
     "enemies": ["enemy.normal", "enemy.elite", "enemy.wall"],
     "builds": ["build.combat", "build.reinforcement", "build.commerce"],
     "account": ["account.guest", "account.registered", "account.deletion"],
-    "catalog": ["catalog.product", "catalog.banner", "catalog.rate_table"],
+    "catalog": ["catalog.product", "catalog.banner", "catalog.rate_table", "catalog.ad_offer", "catalog.login_campaign"],
     "receipt": ["receipt.apple", "receipt.google", "receipt.ad"],
     "transaction": ["transaction.wallet", "transaction.draw", "transaction.payment", "transaction.reset", "transaction.claim", "transaction.ad", "transaction.evolution", "transaction.exchange", "transaction.account"],
     "audit": ["audit.rng", "audit.payment", "audit.reward", "audit.migration", "audit.security", "audit.support"]
   },
   "instanceRules": {
     "evolutionStage": "evolution.character.stage.<positive-decimal-string>",
-    "towerDistrict": "tower.district.<positive-zero-padded-decimal-string>",
-    "towerCycle": "tower.cycle.<positive-zero-padded-decimal-string>",
-    "towerMilestone": "tower.milestone.floor.<normalized-decimal-string>",
+    "towerDistrict": "tower.district.<decimal value left-padded to a minimum width of 3; values with more than 3 digits use their normalized full width; canonical writes use no extra leading zeros>",
+    "towerCycle": "tower.cycle.<decimal value left-padded to a minimum width of 6; values with more than 6 digits use their normalized full width; canonical writes use no extra leading zeros>",
+    "towerMilestone": "tower.milestone.floor.<positive normalized unsigned decimal string with no leading zeros>",
+    "towerMidBoss": "tower.boss.d<minimum-width-2-district>.mid.<minimum-width-3-ordinal>",
     "transaction": "transaction.<entity>.<uuidv7-or-ulid>",
     "audit": "audit.<domain>.<uuidv7-or-ulid>",
     "claim": "reward.claim.<domain>.<uuidv7-or-ulid>",
     "catalogVersion": "catalog.<domain>.<version-string>"
+  },
+  "canonicalExamples": {
+    "towerDistrict": ["tower.district.001", "tower.district.999", "tower.district.1000"],
+    "towerCycle": ["tower.cycle.000001", "tower.cycle.999999", "tower.cycle.1000000"],
+    "towerMilestone": ["tower.milestone.floor.10", "tower.milestone.floor.100", "tower.milestone.floor.10000"],
+    "towerMidBoss": ["tower.boss.d01.mid.001"],
+    "adOfferCatalog": ["catalog.ad_offer.v1"],
+    "loginCampaignCatalog": ["catalog.login_campaign.v1"]
   },
   "migrationAliases": [
     {"alias": "cat.mugi", "canonical": "character.launch.001", "mode": "READ_ONLY"},
@@ -124,6 +135,8 @@
     "Aliases are accepted only on migration input.",
     "New writes never emit dawn or legacy cat aliases.",
     "Retired IDs remain tombstones.",
+    "A generated tower entity has exactly one canonical decimal representation; additional leading-zero variants are rejected for canonical writes.",
+    "Ad rewards and login campaigns bind immutable catalog versions before eligibility or grant evaluation.",
     "This registry cannot authorize Step 2 until the Round 008 seal validates it."
   ]
 }
