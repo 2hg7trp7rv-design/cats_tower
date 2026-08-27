@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-v2-live-readback",
+  "recordedDate": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "observedLiveHead": "9d55828439ba20aa5914964898e775f6be8c5778",
+  "observedLiveTree": "ffd91a691dc27caaf9243892809ce086c0e0ca84",
+  "semanticCommit": "724d04940f9f3794b993cddbc5af3a7163a0395b",
+  "semanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
+  "completionEvidence": {
+    "path": "quality-reviews/step-2-executable-contract-v2/completion-evidence.json",
+    "blob": "1f771b02f0982c879e038bfd36925ed889142d95",
+    "commit": "9d55828439ba20aa5914964898e775f6be8c5778",
+    "tree": "ffd91a691dc27caaf9243892809ce086c0e0ca84"
+  },
+  "executableSeal": {
+    "path": "simulation/executable-seal-v2.json",
+    "blob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
+    "activationCommit": "89174eeebb033fe807a0592c8df0279c2a7b9a6f",
+    "activationTree": "ccf444df436d63d86fd4da0355f20349753b0546",
+    "workflowRunId": "33104391753",
+    "jobId": "98630217077",
+    "conclusion": "SUCCESS",
+    "validatorVerdict": "PASS_EXECUTABLE_SEAL_V2"
+  },
+  "qualityGate": {
+    "criticSummaryBlob": "4d85d95c0b00b3e2aed4aecc6025ceea9253308e",
+    "finalJudgeBlob": "44fe4c83e3ea1ceefba836200100b6d6628028d1",
+    "unresolvedP0": 0,
+    "unresolvedP1": 0,
+    "trackedP2": 6
+  },
+  "observedStatusBeforeActivation": {
+    "simulationStatus": "IN_PROGRESS",
+    "simulationStep3Allowed": false,
+    "projectStatus": "IN_PROGRESS_CONTENT_PHASE_PASS",
+    "projectStep3Allowed": false
+  },
+  "qualification": {
+    "scenarioCount": "30",
+    "digest": "a24fa5a4a12cf132ac477c80e77431cd0b97ab070bbbef83c3881c160f42562c",
+    "balanceVerdict": "NOT_EVALUATED_STEP2"
+  },
+  "statusActivationAuthorized": true,
+  "step3Executed": false,
+  "physicalIPhoneVerified": false,
+  "productionChanged": false,
+  "verdict": "PASS_CHAIN_READY_FOR_STATUS_ACTIVATION"
+}
