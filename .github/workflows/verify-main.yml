@@ -1,1022 +1,120 @@
-name: Verify Cat's Tower baseline and quality records
+name: Verify Cat's Tower history and current governance
 
 on:
-  pull_request:
-    branches: [main]
   push:
-    branches: [main]
+    branches: [kimi]
+    paths:
+      - '.github/workflows/verify-main.yml'
+      - '.github/workflows/CURRENT_STATUS.md'
+      - 'AI_PROJECT_POLICY.json'
+      - 'QUALITY_GATE.md'
+      - 'PROJECT_STATUS.json'
+      - 'PROJECT_HANDOVER.md'
+      - 'AGENTS.md'
+      - 'CHATGPT_PROJECT_INSTRUCTIONS1.md'
+      - 'MASTER_SPEC.md'
+      - 'canonical/**'
+      - 'simulation/**'
+      - 'quality-reviews/step-1-canonical-design/**'
+      - 'quality-reviews/step-1-reseal-round-008/**'
+      - 'quality-reviews/step-2-executable-contract-v2/**'
+      - 'quality-reviews/step-2-governance-repair-round-001/**'
+      - 'tests/governance/**'
   workflow_dispatch:
 
 permissions:
   contents: read
-  actions: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  group: cats-governance-${{ github.sha }}
+  cancel-in-progress: false
 
 jobs:
-  vertical-tower-qa:
-    name: vertical-tower-qa
+  historical-round7-evidence:
+    name: historical-round7-evidence
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.sha }}
           fetch-depth: 0
-
-      - name: Assert primary checkout provenance
-        env:
-          EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-        run: |
-          set -euo pipefail
-          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
-          test -n "$(git rev-parse HEAD^{tree})"
-          test -z "$(git status --porcelain --untracked-files=all)"
-
-      - name: Capture immutable invocation provenance
-        id: ci_invocation
-        env:
-          EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-          CI_REPOSITORY: ${{ github.repository }}
-          CI_WORKFLOW_NAME: ${{ github.workflow }}
-          CI_WORKFLOW_REF: ${{ github.workflow_ref }}
-          CI_WORKFLOW_COMMIT_SHA: ${{ github.workflow_sha }}
-          CI_EVENT: ${{ github.event_name }}
-          CI_RUN_ID: ${{ github.run_id }}
-          CI_RUN_NUMBER: ${{ github.run_number }}
-          CI_RUN_ATTEMPT: ${{ github.run_attempt }}
-          CI_JOB_NAME: ${{ github.job }}
-          CI_REF: ${{ github.ref }}
-          CI_SHA: ${{ github.sha }}
-        run: |
-          set -euo pipefail
-          INVOCATION_SHA=$(git rev-parse HEAD)
-          INVOCATION_TREE=$(git rev-parse HEAD^{tree})
-          test "$INVOCATION_SHA" = "$EXPECTED_HEAD_SHA"
-          test -z "$(git status --porcelain --untracked-files=all)"
-          if ! git cat-file -e "$CI_WORKFLOW_COMMIT_SHA^{commit}" 2>/dev/null; then
-            git fetch --no-tags origin "$CI_WORKFLOW_COMMIT_SHA"
-          fi
-          WORKFLOW_BLOB_SHA=$(git rev-parse "$CI_WORKFLOW_COMMIT_SHA:.github/workflows/verify-main.yml")
-          case "$CI_EVENT" in
-            pull_request)
-              jq -e '
-                .number > 0 and
-                (.pull_request.base.ref | type=="string" and length>0) and
-                (.pull_request.base.sha | test("^[a-f0-9]{40}$")) and
-                (.pull_request.head.ref | type=="string" and length>0) and
-                (.pull_request.head.sha | test("^[a-f0-9]{40}$"))
-              ' "$GITHUB_EVENT_PATH" >/dev/null
-              INVOCATION_REF=$(jq -r '.pull_request.head.sha' "$GITHUB_EVENT_PATH")
-              jq '{
-                kind: "pull_request",
-                pullRequest: {
-                  number: .number,
-                  baseBranch: .pull_request.base.ref,
-                  baseSha: .pull_request.base.sha,
-                  headBranch: .pull_request.head.ref,
-                  headSha: .pull_request.head.sha
-                },
-                push: null,
-                workflowDispatch: null
-              }' "$GITHUB_EVENT_PATH" > "$RUNNER_TEMP/cats-ci-event-context.json"
-              ;;
-            push)
-              jq -e '
-                (.ref | type=="string" and length>0) and
-                (.before | test("^[a-f0-9]{40}$")) and
-                (.after | test("^[a-f0-9]{40}$"))
-              ' "$GITHUB_EVENT_PATH" >/dev/null
-              INVOCATION_REF=$(jq -r '.after' "$GITHUB_EVENT_PATH")
-              jq '{
-                kind: "push",
-                pullRequest: null,
-                push: {ref: .ref, before: .before, after: .after},
-                workflowDispatch: null
-              }' "$GITHUB_EVENT_PATH" > "$RUNNER_TEMP/cats-ci-event-context.json"
-              ;;
-            workflow_dispatch)
-              INVOCATION_REF="$CI_SHA"
-              jq -n --arg ref "$CI_REF" --arg sha "$CI_SHA" '{
-                kind: "workflow_dispatch",
-                pullRequest: null,
-                push: null,
-                workflowDispatch: {ref: $ref, sha: $sha}
-              }' > "$RUNNER_TEMP/cats-ci-event-context.json"
-              ;;
-            *)
-              echo "Unsupported event for CI provenance: $CI_EVENT" >&2
-              exit 1
-              ;;
-          esac
-          test "$INVOCATION_REF" = "$INVOCATION_SHA"
-          jq -n \
-            --arg repository "$CI_REPOSITORY" --arg workflowName "$CI_WORKFLOW_NAME" \
-            --arg workflowPath ".github/workflows/verify-main.yml" --arg workflowRef "$CI_WORKFLOW_REF" \
-            --arg workflowCommitSha "$CI_WORKFLOW_COMMIT_SHA" --arg workflowBlobSha "$WORKFLOW_BLOB_SHA" \
-            --arg generator "workflow-steps:Capture immutable invocation provenance+Finalize event-time CI provenance" \
-            --arg sourceBoundary "frozen-workflow-generated record; not a GitHub-signed attestation" \
-            --arg event "$CI_EVENT" --slurpfile eventContext "$RUNNER_TEMP/cats-ci-event-context.json" \
-            --argjson runId "$CI_RUN_ID" --argjson runNumber "$CI_RUN_NUMBER" \
-            --argjson runAttempt "$CI_RUN_ATTEMPT" --arg jobName "$CI_JOB_NAME" \
-            --arg invocationSha "$INVOCATION_SHA" --arg invocationTree "$INVOCATION_TREE" \
-            --arg invocationRef "$INVOCATION_REF" '{
-              schemaVersion: 1,
-              repository: $repository,
-              workflowName: $workflowName,
-              workflowPath: $workflowPath,
-              workflowRef: $workflowRef,
-              workflowCommitSha: $workflowCommitSha,
-              workflowBlobSha: $workflowBlobSha,
-              generator: $generator,
-              sourceBoundary: $sourceBoundary,
-              event: $event,
-              eventContext: $eventContext[0],
-              runId: $runId,
-              runNumber: $runNumber,
-              runAttempt: $runAttempt,
-              jobName: $jobName,
-              invocationCheckout: {sha: $invocationSha, tree: $invocationTree, ref: $invocationRef}
-            }
-          ' > "$RUNNER_TEMP/cats-ci-invocation.json"
-          INVOCATION_RECORD_SHA=$(sha256sum "$RUNNER_TEMP/cats-ci-invocation.json" | cut -d' ' -f1)
-          echo "sha256=$INVOCATION_RECORD_SHA" >> "$GITHUB_OUTPUT"
-
-      - name: Resolve immutable Step 1 verification kit
-        id: step1
-        env:
-          EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-        run: |
-          set -euo pipefail
-          ACCEPTANCE=quality-reviews/step-1-legacy-baseline-round-007/acceptance-round-007.json
-          ROUND=quality-reviews/step-1-legacy-baseline-round-007/round-007.json
-          COMPLETION=quality-reviews/step-1-legacy-baseline-round-007/completion.json
-          BASE=88daf9c912fa726e019915e5d7bfed94f0a47158
-          HEAD_SHA=$(git rev-parse HEAD)
-          test "$HEAD_SHA" = "$EXPECTED_HEAD_SHA"
-          test "$(git rev-parse --is-shallow-repository)" = "false"
-          test -z "$(git replace -l)"
-          discover_path_introductions() {
-            local TARGET=$1
-            while read -r COMMIT PARENTS; do
-              if ! git cat-file -e "$COMMIT:$TARGET" 2>/dev/null; then
-                continue
-              fi
-              INTRODUCED=true
-              for PARENT in $PARENTS; do
-                if git cat-file -e "$PARENT:$TARGET" 2>/dev/null; then
-                  INTRODUCED=false
-                  break
-                fi
-              done
-              if [ "$INTRODUCED" = "true" ]; then
-                printf '%s\n' "$COMMIT"
-              fi
-            done < <(git rev-list --parents HEAD)
-          }
-          mapfile -t C1S < <(discover_path_introductions "$ACCEPTANCE" | sort -u)
-          test "${#C1S[@]}" -eq 1
-          C1=${C1S[0]}
-          read -ra C1_ROW <<< "$(git rev-list --parents -n 1 "$C1")"
-          test "${#C1_ROW[@]}" -eq 2
-          test "${C1_ROW[0]}" = "$C1"
-          test "${C1_ROW[1]}" = "$BASE"
-          test "$(git rev-parse "$C1^{commit}")" = "$C1"
-          C1_TREE=$(git rev-parse "$C1^{tree}")
-          test -n "$C1_TREE"
-          git merge-base --is-ancestor "$C1" HEAD
-          test "$(git cat-file -t "$C1:$ACCEPTANCE")" = "blob"
-          VALIDATOR_PATH=$GITHUB_WORKSPACE
-          POST_C1=false
-          if [ "$HEAD_SHA" != "$C1" ]; then
-            POST_C1=true
-            VALIDATOR_PATH="$RUNNER_TEMP/sealed-step1-round7-c1"
-            test ! -e "$VALIDATOR_PATH"
-            git worktree add --detach "$VALIDATOR_PATH" "$C1"
-            test "$(git -C "$VALIDATOR_PATH" rev-parse HEAD)" = "$C1"
-            test "$(git -C "$VALIDATOR_PATH" rev-parse HEAD^{tree})" = "$C1_TREE"
-            ! git -C "$VALIDATOR_PATH" symbolic-ref -q HEAD
-          fi
-          test "$(git -C "$VALIDATOR_PATH" rev-parse --is-shallow-repository)" = "false"
-          test -z "$(git -C "$VALIDATOR_PATH" replace -l)"
-          test "$(git -C "$VALIDATOR_PATH" rev-parse HEAD:tests/verify-step-1-baseline.mjs)" = \
-            "$(git rev-parse "$C1:tests/verify-step-1-baseline.mjs")"
-          echo "validator_path=$VALIDATOR_PATH" >> "$GITHUB_OUTPUT"
-          echo "c1=$C1" >> "$GITHUB_OUTPUT"
-          echo "c1_tree=$C1_TREE" >> "$GITHUB_OUTPUT"
-          echo "post_c1=$POST_C1" >> "$GITHUB_OUTPUT"
-
-          mapfile -t SEALS < <(discover_path_introductions "$ROUND" | sort -u)
-          test "${#SEALS[@]}" -le 1
-          if [ "${#SEALS[@]}" -eq 1 ]; then
-            test "$(git rev-list --parents -n 1 "${SEALS[0]}" | wc -w)" -eq 2
-          fi
-          mapfile -t COMPLETIONS < <(discover_path_introductions "$COMPLETION" | sort -u)
-          test "${#COMPLETIONS[@]}" -le 1
-          HISTORICAL=false
-          KIT=$GITHUB_WORKSPACE
-          if [ "${#COMPLETIONS[@]}" -eq 1 ]; then
-            COMPLETION_SHA=${COMPLETIONS[0]}
-            test "$(git rev-list --parents -n 1 "$COMPLETION_SHA" | wc -w)" -eq 2
-            COMPLETION_TREE=$(git rev-parse "$COMPLETION_SHA^{tree}")
-            mapfile -t COMPLETION_MERGES < <(
-              while read -ra ROW; do
-                if [ "${#ROW[@]}" -ne 3 ] || [ "${ROW[2]}" != "$COMPLETION_SHA" ]; then continue; fi
-                if [ "$(git rev-parse "${ROW[0]}^{tree}")" != "$COMPLETION_TREE" ]; then continue; fi
-                printf '%s\n' "${ROW[0]}"
-              done < <(git rev-list --parents HEAD)
-            )
-            test "${#COMPLETION_MERGES[@]}" -le 1
-            if [ "${#COMPLETION_MERGES[@]}" -eq 1 ] && [ "${COMPLETION_MERGES[0]}" != "$(git rev-parse HEAD)" ]; then
-              git merge-base --is-ancestor "${COMPLETION_MERGES[0]}" HEAD
-              KIT="$RUNNER_TEMP/sealed-step1-round7-completion"
-              test ! -e "$KIT"
-              git worktree add --detach "$KIT" "$COMPLETION_SHA"
-              test "$(git -C "$KIT" rev-parse HEAD)" = "$COMPLETION_SHA"
-              test "$(git -C "$KIT" rev-parse HEAD^{tree})" = "$COMPLETION_TREE"
-              ! git -C "$KIT" symbolic-ref -q HEAD
-              HISTORICAL=true
-            fi
-          fi
-          case "$KIT" in
-            /*) ;;
-            *) echo "Step 1 runtime kit must be an absolute path" >&2; exit 1 ;;
-          esac
-          if [ "$HISTORICAL" = "true" ]; then
-            test "$KIT" = "$RUNNER_TEMP/sealed-step1-round7-completion"
-          else
-            test "$KIT" = "$GITHUB_WORKSPACE"
-          fi
-          echo "kit=$KIT" >> "$GITHUB_OUTPUT"
-          echo "historical=$HISTORICAL" >> "$GITHUB_OUTPUT"
-          echo "seal=${SEALS[0]:-}" >> "$GITHUB_OUTPUT"
-          echo "completion=${COMPLETIONS[0]:-}" >> "$GITHUB_OUTPUT"
-
-      - name: Finalize event-time CI provenance
-        id: ci_provenance
-        env:
-          EXPECTED_INVOCATION_SHA256: ${{ steps.ci_invocation.outputs.sha256 }}
-          HISTORICAL_STEP1_MODE: ${{ steps.step1.outputs.historical }}
-          POST_C1_MODE: ${{ steps.step1.outputs.post_c1 }}
-          EXPECTED_C1_SHA: ${{ steps.step1.outputs.c1 }}
-          EXPECTED_C1_TREE: ${{ steps.step1.outputs.c1_tree }}
-        run: |
-          set -euo pipefail
-          test "$(sha256sum "$RUNNER_TEMP/cats-ci-invocation.json" | cut -d' ' -f1)" = "$EXPECTED_INVOCATION_SHA256"
-          KIT_DIR="${{ steps.step1.outputs.validator_path }}"
-          KIT_SHA=$(git -C "$KIT_DIR" rev-parse HEAD)
-          KIT_TREE=$(git -C "$KIT_DIR" rev-parse HEAD^{tree})
-          test "$KIT_SHA" = "$EXPECTED_C1_SHA"
-          test "$KIT_TREE" = "$EXPECTED_C1_TREE"
-          if [ "$POST_C1_MODE" = "true" ]; then
-            KIT_MODE=sealed-round7-c1
-          else
-            KIT_MODE=current-round7-c1
-          fi
-          if [ "$HISTORICAL_STEP1_MODE" = "true" ]; then
-            RUNTIME_MODE=sealed-round7-completion-runtime
-            RUNTIME_DIR="${{ steps.step1.outputs.kit }}"
-            RUNTIME_SHA=$(git -C "$RUNTIME_DIR" rev-parse HEAD)
-            RUNTIME_TREE=$(git -C "$RUNTIME_DIR" rev-parse HEAD^{tree})
-          else
-            RUNTIME_MODE=immutable-baseline-checkout
-            RUNTIME_SHA=727b8d00c281e7539117da5ded7309ea01c7e516
-            RUNTIME_TREE=c508c58b0bb1b3fa591eefe143aab2dd6eac9271
-          fi
-          jq \
-            --arg kitMode "$KIT_MODE" --arg kitSha "$KIT_SHA" --arg kitTree "$KIT_TREE" \
-            --arg runtimeMode "$RUNTIME_MODE" --arg runtimeSha "$RUNTIME_SHA" --arg runtimeTree "$RUNTIME_TREE" '
-            . + {
-              verificationKit: {mode: $kitMode, sha: $kitSha, tree: $kitTree},
-              servedRuntime: {mode: $runtimeMode, sha: $runtimeSha, tree: $runtimeTree}
-            }
-          ' "$RUNNER_TEMP/cats-ci-invocation.json" > "$RUNNER_TEMP/cats-ci-provenance.json"
-          PROVENANCE_SHA=$(sha256sum "$RUNNER_TEMP/cats-ci-provenance.json" | cut -d' ' -f1)
-          echo "sha256=$PROVENANCE_SHA" >> "$GITHUB_OUTPUT"
-
-      - name: Clean checkout of the immutable V0.8.2 commit
-        if: steps.step1.outputs.historical != 'true'
-        uses: actions/checkout@v4
-        with:
-          ref: 727b8d00c281e7539117da5ded7309ea01c7e516
-          fetch-depth: 0
-          path: recovered-v082
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: '22'
 
-      - name: GitHub recovery ref and live runtime manifest
-        working-directory: ${{ steps.step1.outputs.validator_path }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          EXPECTED_C1_SHA: ${{ steps.step1.outputs.c1 }}
-          EXPECTED_C1_TREE: ${{ steps.step1.outputs.c1_tree }}
-          HISTORICAL_STEP1_MODE: ${{ steps.step1.outputs.historical }}
+      - name: Validate immutable Round 7 worktrees only
         run: |
           set -euo pipefail
-          VALIDATOR_DIR="${{ steps.step1.outputs.validator_path }}"
-          test "$(git -C "$VALIDATOR_DIR" rev-parse HEAD)" = "$EXPECTED_C1_SHA"
-          test "$(git -C "$VALIDATOR_DIR" rev-parse HEAD^{tree})" = "$EXPECTED_C1_TREE"
-          VALIDATOR_ENV=("CATS_REPO_ROOT=$GITHUB_WORKSPACE")
-          BASELINE_DIR="$GITHUB_WORKSPACE/recovered-v082"
-          if [ -d "$BASELINE_DIR" ]; then
-            test "$(git -C "$BASELINE_DIR" rev-parse HEAD)" = "727b8d00c281e7539117da5ded7309ea01c7e516"
-            test "$(git -C "$BASELINE_DIR" rev-parse HEAD^{tree})" = "c508c58b0bb1b3fa591eefe143aab2dd6eac9271"
-            VALIDATOR_ENV+=("CATS_BASELINE_DIR=$BASELINE_DIR")
-          fi
-          if [ "$HISTORICAL_STEP1_MODE" = "true" ]; then
-            env "${VALIDATOR_ENV[@]}" node tests/verify-step-1-baseline.mjs --remote
-          else
-            env "${VALIDATOR_ENV[@]}" node tests/verify-step-1-baseline.mjs --remote --live
-          fi
 
-      - uses: actions/setup-python@v5
+          ACCEPTANCE='quality-reviews/step-1-legacy-baseline-round-007/acceptance-round-007.json'
+          ROUND='quality-reviews/step-1-legacy-baseline-round-007/round-007.json'
+          COMPLETION='quality-reviews/step-1-legacy-baseline-round-007/completion.json'
+
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          test "$(git rev-parse --is-shallow-repository)" = 'false'
+          test -z "$(git replace -l)"
+
+          first_addition() {
+            local target="$1"
+            git log --diff-filter=A --format='%H' -- "$target" | tail -n 1
+          }
+
+          C1_COMMIT=$(first_addition "$ACCEPTANCE")
+          ROUND_COMMIT=$(first_addition "$ROUND")
+          COMPLETION_COMMIT=$(first_addition "$COMPLETION")
+
+          test "$C1_COMMIT" = '88fb46b1d1cdbd5c071804275c92dc51a8c59913'
+          test -n "$ROUND_COMMIT"
+          test -n "$COMPLETION_COMMIT"
+          git merge-base --is-ancestor "$C1_COMMIT" HEAD
+          git merge-base --is-ancestor "$ROUND_COMMIT" HEAD
+          git merge-base --is-ancestor "$COMPLETION_COMMIT" HEAD
+
+          C1_DIR="$RUNNER_TEMP/round7-c1"
+          COMPLETION_DIR="$RUNNER_TEMP/round7-completion"
+          test ! -e "$C1_DIR"
+          test ! -e "$COMPLETION_DIR"
+          git worktree add --detach "$C1_DIR" "$C1_COMMIT"
+          git worktree add --detach "$COMPLETION_DIR" "$COMPLETION_COMMIT"
+
+          test "$(git -C "$C1_DIR" rev-parse HEAD)" = "$C1_COMMIT"
+          test "$(git -C "$COMPLETION_DIR" rev-parse HEAD)" = "$COMPLETION_COMMIT"
+          test "$(git -C "$C1_DIR" cat-file -t "HEAD:$ACCEPTANCE")" = 'blob'
+          test "$(git -C "$COMPLETION_DIR" cat-file -t "HEAD:$ROUND")" = 'blob'
+          test "$(git -C "$COMPLETION_DIR" cat-file -t "HEAD:$COMPLETION")" = 'blob'
+
+          jq -e '.repository == "2hg7trp7rv-design/cats_tower"' "$C1_DIR/$ACCEPTANCE" >/dev/null
+          jq -e '.repository == "2hg7trp7rv-design/cats_tower"' "$COMPLETION_DIR/$ROUND" >/dev/null
+          jq -e '.repository == "2hg7trp7rv-design/cats_tower"' "$COMPLETION_DIR/$COMPLETION" >/dev/null
+
+          (
+            cd "$C1_DIR"
+            CATS_REPO_ROOT="$COMPLETION_DIR" node tests/verify-step-1-baseline.mjs
+          )
+
+          echo 'PASS_HISTORICAL_ROUND7_IMMUTABLE_WORKTREES'
+
+  current-governance:
+    name: current-governance
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
         with:
-          python-version: '3.12'
+          ref: ${{ github.sha }}
+          fetch-depth: 0
 
-      - name: Repository handover and source contracts
-        working-directory: ${{ steps.step1.outputs.kit }}
-        run: |
-          set -euo pipefail
-          test -s AGENTS.md
-          test -s BASELINE_V082.md
-          test -s QUALITY_GATE.md
-          test -s PROJECT_HANDOVER.md
-          test -s PROJECT_STATUS.json
-          test -s README.md
-          test ! -e .v080
-          test ! -e test
-          test ! -e art.css
-          test ! -e art.js
-          test ! -e icon.svg
-          test ! -e visual-fix-v04.css
-          test ! -e character-assets-v06.js
-          test ! -d node_modules
-          test ! -d test-results
-          grep -qx 'tests/' .vercelignore
-          grep -qx 'assets/v080/r1/' .vercelignore
-          grep -qx 'assets/v080/\*.webp' .vercelignore
-          test "$(find .github/workflows -maxdepth 1 -type f -printf '%f\n' | sort | paste -sd' ' -)" = "verify-main.yml verify-step-1-artifacts.yml"
-          test "$(find tests -maxdepth 1 -type f -printf '%f\n' | sort | paste -sd' ' -)" = "artifact-download-transport.mjs artifact-download-transport.test.mjs capture-v082-preview.mjs living-tower-v080.mjs step-1-normal-flow.mjs step-1-service-worker.mjs verify-ci-artifact.mjs verify-step-1-baseline.mjs"
-          node --check tests/artifact-download-transport.mjs
-          node --check tests/artifact-download-transport.test.mjs
-          node --check tests/verify-ci-artifact.mjs
-          node --test tests/artifact-download-transport.test.mjs
-          node tests/verify-ci-artifact.mjs self-test
-          test "$(find scripts -maxdepth 1 -type f -printf '%f\n' | sort)" = "build_v080_art.py"
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          status=json.loads(Path('PROJECT_STATUS.json').read_text())
-          assert status['legacyBaseline']['version']=='0.8.2'
-          assert status['legacyBaseline']['build']=='v082-pixel-tower-gameplay-redesign'
-          assert status['legacyBaseline']['commit']=='727b8d00c281e7539117da5ded7309ea01c7e516'
-          assert status['legacyBaseline']['productionReady'] is False
-          assert status['canonicalBranch']=='main'
-          assert status['productionUrl']=='https://cats-tau-dusky.vercel.app/'
-          assert status['productionGates']['physicalIPhoneRequired'] is True
-          assert status['legacyV082Verification']['physicalIPhone']=='not-verified'
-          assert status['completionQualityGate']=='QUALITY_GATE.md'
-          print('handover contracts passed')
-          PY
-
-      - name: Vertical tower source and raster contracts
-        working-directory: ${{ steps.step1.outputs.kit }}
-        run: |
-          set -euo pipefail
-          python -m pip install --quiet pillow
-          node --check game-data.js
-          node --check game-core.js
-          node --check app.js
-          node --check sw.js
-          node --check tests/capture-v082-preview.mjs
-          node --check tests/living-tower-v080.mjs
-          node --check tests/step-1-normal-flow.mjs
-          node --check tests/step-1-service-worker.mjs
-          node --check tests/verify-step-1-baseline.mjs
-          grep -q "const VERSION = '0.8.2'" game-data.js
-          grep -q "GAMEPLAY_SCHEMA = 2" game-data.js
-          grep -q "cats-tower-v080" game-data.js
-          grep -q "unitCap: 6" game-data.js
-          grep -q "floorTransitionMs: 2000" game-data.js
-          grep -q "rallyDurationMs: 6000" game-data.js
-          grep -q "luna: Object.freeze" game-data.js
-          grep -q "toto: Object.freeze" game-data.js
-          grep -q "owl: Object.freeze" game-data.js
-          grep -q "barrier: Object.freeze" game-data.js
-          grep -q "dispatch-cat" index.html
-          grep -q "upgrade-mugi" index.html
-          grep -q "open-dawn" index.html
-          grep -q "confirm-dawn" app.js
-          grep -q "towerBattlefield" index.html
-          grep -q "tapDispatch" index.html
-          grep -q "upgradePanel" index.html
-          grep -q "dawnButton" index.html
-          grep -q "/assets/v080/pixel-r2/tower-night-r2.png" index.html
-          grep -q "/assets/v080/pixel-r2/mugi-sprites-r2.png" sw.js
-          grep -q "/assets/v080/pixel-r2/crow-sprites-r2.png" sw.js
-          grep -q "/assets/v082/pixel-r3/cats-cast-r3.png" sw.js
-          grep -q "/assets/v082/pixel-r3/enemies-r3.png" sw.js
-          grep -q "/assets/v082/pixel-r3/cats-cast-r3.png" styles.css
-          grep -q "/assets/v082/pixel-r3/enemies-r3.png" styles.css
-          grep -q "serviceWorker.register('/sw.js?v=082r3')" app.js
-          grep -q "cats-tower-v082-pixel-tower-r3" sw.js
-          grep -q "/assets/v082/pixel-r3/cats-cast-r3.png" index.html
-          grep -q "/assets/v082/pixel-r3/enemies-r3.png" index.html
-          grep -q 'font-family:"CatsTowerJP"' styles.css
-          grep -q "/assets/fonts/noto-sans-jp-700-ja.woff2" styles.css
-          ! grep -Eiq 'assets/(living|v0?9)|V0\.9' index.html game-data.js game-core.js app.js styles.css sw.js manifest.webmanifest
-          ! grep -Eiq 'battle-fish|battle-bell|battle-box|魚を投げる|ベルを鳴らす|箱で止める' index.html game-data.js game-core.js app.js
-          ! grep -Eiq '屋台型|ビストロ型|速度型|一撃型|皿を滑らせる|魚スライド' index.html app.js
-          ! grep -q "RASTER_ART_V03_START" styles.css
-          ! grep -q "V04_MOBILE_VISUAL_FIX_START" styles.css
-          ! grep -q "V05_CHARACTER_ART_START" styles.css
-          python - <<'PY'
-          from pathlib import Path
-          from PIL import Image
-          font=Path('assets/fonts/noto-sans-jp-700-ja.woff2')
-          license_file=Path('assets/fonts/NotoSansJP-OFL.txt')
-          assert font.is_file() and font.stat().st_size>500_000,('Japanese font missing or too small',font.stat().st_size if font.exists() else 0)
-          assert font.read_bytes()[:4]==b'wOF2','Japanese font must be a WOFF2 file'
-          assert license_file.is_file() and license_file.stat().st_size>3_000,'Noto Sans JP OFL text is missing'
-          assert 'SIL OPEN FONT LICENSE Version 1.1' in license_file.read_text(),'Unexpected Japanese font license text'
-          pixel_expected={
-            'tower-night-r2.png':((941,1672),'RGB'),
-            'mugi-sprites-r2.png':((2172,724),'RGBA'),
-            'crow-sprites-r2.png':((1774,887),'RGBA'),
-          }
-          for name,(size,mode) in pixel_expected.items():
-            path=Path('assets/v080/pixel-r2')/name
-            assert path.is_file() and path.stat().st_size>5000,(name,'missing or too small')
-            with Image.open(path) as image:
-              image.load()
-              assert image.format=='PNG',(name,image.format)
-              assert image.size==size,(name,image.size,size)
-              assert image.mode==mode,(name,image.mode,mode)
-              if mode=='RGBA':
-                lo,hi=image.getchannel('A').getextrema()
-                assert lo==0 and hi>200,(name,'invalid alpha',lo,hi)
-          v082_expected={
-            'cats-cast-r3.png':((1448,1086),'RGBA'),
-            'enemies-r3.png':((1448,1086),'RGBA'),
-          }
-          for name,(size,mode) in v082_expected.items():
-            path=Path('assets/v082/pixel-r3')/name
-            assert path.is_file() and path.stat().st_size>500_000,(name,'missing or too small')
-            with Image.open(path) as image:
-              image.load()
-              assert image.format=='PNG',(name,image.format)
-              assert image.size==size,(name,image.size,size)
-              assert image.mode==mode,(name,image.mode,mode)
-              lo,hi=image.getchannel('A').getextrema()
-              assert lo==0 and hi>200,(name,'invalid alpha',lo,hi)
-          for name,size in {'icon-192.png':(192,192),'icon-512.png':(512,512)}.items():
-            path=Path('assets/icons')/name
-            assert path.is_file() and path.stat().st_size>5000,(name,'missing or too small')
-            with Image.open(path) as image:
-              image.load()
-              assert image.format=='PNG',(name,image.format)
-              assert image.size==size,(name,image.size,size)
-          print('V0.8.2 Pixel R2/R3 raster, font, and icon contracts passed')
-          PY
-
-      - name: Bind unexpired CI records and downloaded artifacts before seal
-        working-directory: ${{ steps.step1.outputs.kit }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-          HISTORICAL_STEP1_MODE: ${{ steps.step1.outputs.historical }}
-        run: |
-          set -euo pipefail
-          if [ "$HISTORICAL_STEP1_MODE" = "true" ]; then
-            echo "Historical descendant mode: C3 already performed the time-limited API and artifact checks."
-            exit 0
-          fi
-          AUTH=(-H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28')
-          ROUND=quality-reviews/step-1-legacy-baseline-round-007/round-007.json
-          discover_path_introductions() {
-            while read -r COMMIT PARENTS; do
-              if ! git cat-file -e "$COMMIT:$ROUND" 2>/dev/null; then
-                continue
-              fi
-              INTRODUCED=true
-              for PARENT in $PARENTS; do
-                if git cat-file -e "$PARENT:$ROUND" 2>/dev/null; then
-                  INTRODUCED=false
-                  break
-                fi
-              done
-              if [ "$INTRODUCED" = "true" ]; then
-                printf '%s\n' "$COMMIT"
-              fi
-            done < <(git rev-list --parents HEAD)
-          }
-          mapfile -t SEALS < <(discover_path_introductions | sort -u)
-          test "${#SEALS[@]}" -le 1
-          if [ "${#SEALS[@]}" -eq 1 ]; then
-            test "$(git rev-list --parents -n 1 "${SEALS[0]}" | wc -w)" -eq 2
-          fi
-          if [ "${#SEALS[@]}" -eq 1 ] && [ "${SEALS[0]}" != "$(git rev-parse HEAD)" ]; then
-            git merge-base --is-ancestor "${SEALS[0]}" HEAD
-            echo "Historical descendant mode: C3 already performed the time-limited API and artifact checks."
-            exit 0
-          fi
-
-          verify_failed_round_three() {
-            local FAILURE=quality-reviews/step-1-legacy-baseline/round-003.json
-            local RUN_ID RUN_NUMBER RUN_ATTEMPT WORKFLOW_ID JOB_ID JOB_NAME EVENT HEAD_BRANCH HEAD_SHA STARTED_AT COMPLETED_AT FAILED_STEP PREFIX
-            RUN_ID=$(jq -r '.failedCi.runId' "$FAILURE")
-            RUN_NUMBER=$(jq -r '.failedCi.runNumber' "$FAILURE")
-            RUN_ATTEMPT=$(jq -r '.failedCi.runAttempt' "$FAILURE")
-            WORKFLOW_ID=$(jq -r '.failedCi.workflowId' "$FAILURE")
-            JOB_ID=$(jq -r '.failedCi.jobId' "$FAILURE")
-            JOB_NAME=$(jq -r '.failedCi.jobName' "$FAILURE")
-            EVENT=$(jq -r '.failedCi.event' "$FAILURE")
-            HEAD_BRANCH=$(jq -r '.failedCi.headBranch' "$FAILURE")
-            HEAD_SHA=$(jq -r '.failedCi.headSha' "$FAILURE")
-            STARTED_AT=$(jq -r '.failedCi.startedAt' "$FAILURE")
-            COMPLETED_AT=$(jq -r '.failedCi.completedAt' "$FAILURE")
-            FAILED_STEP=$(jq -r '.failedCi.failedStep' "$FAILURE")
-            PREFIX="/tmp/cats-round3-failure-$RUN_ID"
-            curl -fsSL "${AUTH[@]}" "https://api.github.com/repos/${{ github.repository }}/actions/runs/$RUN_ID/attempts/$RUN_ATTEMPT" > "${PREFIX}-run.json"
-            jq -e \
-              --argjson run "$RUN_ID" --argjson runNumber "$RUN_NUMBER" --argjson attempt "$RUN_ATTEMPT" \
-              --argjson workflow "$WORKFLOW_ID" --arg event "$EVENT" --arg headBranch "$HEAD_BRANCH" --arg headSha "$HEAD_SHA" '
-              .id==$run and .run_number==$runNumber and .run_attempt==$attempt and .workflow_id==$workflow and
-              .event==$event and .head_branch==$headBranch and .head_sha==$headSha and
-              .status=="completed" and .conclusion=="failure"
-            ' "${PREFIX}-run.json"
-            curl -fsSL "${AUTH[@]}" "https://api.github.com/repos/${{ github.repository }}/actions/runs/$RUN_ID/attempts/$RUN_ATTEMPT/jobs?per_page=100" > "${PREFIX}-jobs.json"
-            jq -e \
-              --argjson id "$JOB_ID" --arg name "$JOB_NAME" --arg started "$STARTED_AT" \
-              --arg completed "$COMPLETED_AT" --arg failedStep "$FAILED_STEP" '
-              any(.jobs[];
-                .id==$id and .name==$name and .status=="completed" and .conclusion=="failure" and
-                .started_at==$started and .completed_at==$completed and
-                any(.steps[]; .name==$failedStep and .conclusion=="failure"))
-            ' "${PREFIX}-jobs.json"
-          }
-
-          verify_record() {
-            local EVIDENCE="$1"
-            local RAW_BINDING="$2"
-            local LABEL="$3"
-            local RUN_ID RUN_NUMBER RUN_ATTEMPT WORKFLOW_ID PR_NUMBER BASE_BRANCH BASE_SHA HEAD_BRANCH HEAD_SHA HEAD_TREE
-            local CHECKOUT_MODE CHECKOUT_SHA CHECKOUT_TREE CHECKOUT_PARENTS JOB_ID JOB_NAME JOB_STARTED_AT JOB_COMPLETED_AT ARTIFACT_ID ARTIFACT_NAME ARTIFACT_SIZE
-            local ARTIFACT_DIGEST ARTIFACT_CREATED_AT ARTIFACT_EXPIRES_AT ARTIFACT_FILE_COUNT PREFIX ZIP_PATH
-            RUN_ID=$(jq -r '.runId' "$EVIDENCE")
-            RUN_NUMBER=$(jq -r '.runNumber' "$EVIDENCE")
-            RUN_ATTEMPT=$(jq -r '.runAttempt' "$EVIDENCE")
-            WORKFLOW_ID=$(jq -r '.workflowId' "$EVIDENCE")
-            PR_NUMBER=$(jq -r '.pullRequest.number' "$EVIDENCE")
-            BASE_BRANCH=$(jq -r '.pullRequest.baseBranch' "$EVIDENCE")
-            BASE_SHA=$(jq -r '.pullRequest.baseSha' "$EVIDENCE")
-            HEAD_BRANCH=$(jq -r '.pullRequest.headBranch' "$EVIDENCE")
-            HEAD_SHA=$(jq -r '.pullRequest.headSha' "$EVIDENCE")
-            HEAD_TREE=$(jq -r '.pullRequest.headTree' "$EVIDENCE")
-            CHECKOUT_MODE=$(jq -r '.checkout.mode' "$EVIDENCE")
-            CHECKOUT_SHA=$(jq -r '.checkout.sha' "$EVIDENCE")
-            CHECKOUT_TREE=$(jq -r '.checkout.tree' "$EVIDENCE")
-            JOB_ID=$(jq -r '.job.id' "$EVIDENCE")
-            JOB_NAME=$(jq -r '.job.name' "$EVIDENCE")
-            JOB_STARTED_AT=$(jq -r '.job.startedAt' "$EVIDENCE")
-            JOB_COMPLETED_AT=$(jq -r '.job.completedAt' "$EVIDENCE")
-            ARTIFACT_ID=$(jq -r '.artifact.id' "$EVIDENCE")
-            ARTIFACT_NAME=$(jq -r '.artifact.name' "$EVIDENCE")
-            ARTIFACT_SIZE=$(jq -r '.artifact.sizeBytes' "$EVIDENCE")
-            ARTIFACT_DIGEST=$(jq -r '.artifact.digest' "$EVIDENCE")
-            ARTIFACT_CREATED_AT=$(jq -r '.artifact.createdAt' "$EVIDENCE")
-            ARTIFACT_EXPIRES_AT=$(jq -r '.artifact.expiresAt' "$EVIDENCE")
-            ARTIFACT_FILE_COUNT=$(jq -r '.artifact.fileCount' "$EVIDENCE")
-            PREFIX="/tmp/cats-${LABEL}-${RUN_ID}"
-            ZIP_PATH="${PREFIX}.zip"
-
-            curl -fsSL "${AUTH[@]}" "https://api.github.com/repos/${{ github.repository }}/actions/runs/$RUN_ID/attempts/$RUN_ATTEMPT" > "${PREFIX}-run.json"
-            jq -e \
-              --argjson run "$RUN_ID" --argjson runNumber "$RUN_NUMBER" --argjson runAttempt "$RUN_ATTEMPT" \
-              --argjson workflow "$WORKFLOW_ID" --arg headBranch "$HEAD_BRANCH" --arg headSha "$HEAD_SHA" \
-              --arg name "Verify Cat's Tower baseline and quality records" '
-              .id==$run and .run_number==$runNumber and .run_attempt==$runAttempt and
-              .workflow_id==$workflow and .head_sha==$headSha and .head_branch==$headBranch and
-              .name==$name and .event=="pull_request" and .status=="completed" and .conclusion=="success"
-            ' "${PREFIX}-run.json"
-
-            curl -fsSL "${AUTH[@]}" "https://api.github.com/repos/${{ github.repository }}/actions/runs/$RUN_ID/attempts/$RUN_ATTEMPT/jobs?per_page=100" > "${PREFIX}-jobs.json"
-            jq -e --argjson id "$JOB_ID" --arg name "$JOB_NAME" \
-              --arg started "$JOB_STARTED_AT" --arg completed "$JOB_COMPLETED_AT" '
-              any(.jobs[];
-                .id==$id and .name==$name and .status=="completed" and .conclusion=="success" and
-                .started_at==$started and .completed_at==$completed)
-            ' "${PREFIX}-jobs.json"
-            jq -n -e --slurpfile evidence "$EVIDENCE" --slurpfile jobs "${PREFIX}-jobs.json" --argjson id "$JOB_ID" '
-              [$evidence[0].job.requiredSteps[] | {name, conclusion}] as $required |
-              [$jobs[0].jobs[] | select(.id==$id) | .steps[] | {name, conclusion}] as $actual |
-              all($required[]; . as $wanted | any($actual[]; .name==$wanted.name and .conclusion==$wanted.conclusion))
-            '
-
-            CREATED_EPOCH=$(date -u -d "$ARTIFACT_CREATED_AT" +%s)
-            STARTED_EPOCH=$(date -u -d "$JOB_STARTED_AT" +%s)
-            COMPLETED_EPOCH=$(date -u -d "$JOB_COMPLETED_AT" +%s)
-            test "$CREATED_EPOCH" -ge "$STARTED_EPOCH"
-            test "$CREATED_EPOCH" -le "$COMPLETED_EPOCH"
-
-            curl -fsSL "${AUTH[@]}" "https://api.github.com/repos/${{ github.repository }}/actions/runs/$RUN_ID/artifacts?per_page=100" > "${PREFIX}-artifacts.json"
-            test "$(date -u +%s)" -lt "$(date -u -d "$ARTIFACT_EXPIRES_AT" +%s)"
-            jq -e \
-              --argjson id "$ARTIFACT_ID" --arg name "$ARTIFACT_NAME" --argjson size "$ARTIFACT_SIZE" \
-              --arg digest "$ARTIFACT_DIGEST" --arg created "$ARTIFACT_CREATED_AT" --arg expires "$ARTIFACT_EXPIRES_AT" '
-              any(.artifacts[];
-                .id==$id and .name==$name and .size_in_bytes==$size and .digest==$digest and
-                .created_at==$created and .expires_at==$expires and .expired==false)
-            ' "${PREFIX}-artifacts.json"
-            node --input-type=module - "$ZIP_PATH" "$ARTIFACT_ID" "$ARTIFACT_SIZE" "$ARTIFACT_DIGEST" <<'NODE'
-          import { writeFile } from 'node:fs/promises';
-          import { resolve } from 'node:path';
-          import { pathToFileURL } from 'node:url';
-
-          const [zipPath, artifactIdText, expectedSizeText, expectedDigest] = process.argv.slice(2);
-          const transport = await import(pathToFileURL(resolve('tests/artifact-download-transport.mjs')).href);
-          const bytes = await transport.downloadGithubArtifactArchive({
-            repository: process.env.GITHUB_REPOSITORY,
-            artifactId: Number(artifactIdText),
-            token: process.env.GH_TOKEN,
-            timeoutMs: 120_000,
-          });
-          const bound = transport.assertArtifactArchiveBinding(bytes, {
-            expectedSize: Number(expectedSizeText),
-            expectedDigest,
-          });
-          await writeFile(zipPath, bound, { mode: 0o600 });
-          NODE
-            python - "$ZIP_PATH" "$ARTIFACT_FILE_COUNT" <<'PY'
-          import sys
-          from pathlib import PurePosixPath
-          from zipfile import ZipFile
-          archive, expected_count = sys.argv[1], int(sys.argv[2])
-          with ZipFile(archive) as zipped:
-            names = zipped.namelist()
-          assert len(names) == expected_count, (len(names), expected_count)
-          assert len(names) == len(set(names)), 'duplicate ZIP member name'
-          for name in names:
-            candidate = PurePosixPath(name)
-            assert name and not candidate.is_absolute(), name
-            assert '..' not in candidate.parts and '.' not in candidate.parts, name
-            assert '\\' not in name and '//' not in name, name
-          PY
-
-            if [ "$RAW_BINDING" = "true" ]; then
-              test "$ARTIFACT_FILE_COUNT" -eq 94
-            else
-              test "$ARTIFACT_FILE_COUNT" -eq 95
-            fi
-
-            if [ "$RAW_BINDING" = "false" ]; then
-              local PROVENANCE_MEMBER PROVENANCE_SHA WORKFLOW_COMMIT_SHA WORKFLOW_BLOB_SHA WORKFLOW_TREE_SHA
-              PROVENANCE_MEMBER=$(jq -r '.artifact.provenanceMember' "$EVIDENCE")
-              PROVENANCE_SHA=$(jq -r '.artifact.provenanceMemberSha256' "$EVIDENCE")
-              test "$PROVENANCE_MEMBER" = "ci-provenance.json"
-              test "$(unzip -Z1 "$ZIP_PATH" | grep -Fxc "$PROVENANCE_MEMBER")" -eq 1
-              unzip -p "$ZIP_PATH" "$PROVENANCE_MEMBER" > "${PREFIX}-ci-provenance.json"
-              test "$(sha256sum "${PREFIX}-ci-provenance.json" | cut -d' ' -f1)" = "$PROVENANCE_SHA"
-              jq -j '.artifact.provenanceMemberRaw' "$EVIDENCE" > "${PREFIX}-recorded-ci-provenance.json"
-              cmp -s "${PREFIX}-ci-provenance.json" "${PREFIX}-recorded-ci-provenance.json"
-              python - "${PREFIX}-ci-provenance.json" <<'PY'
-          import json
-          import sys
-          from pathlib import Path
-
-          def reject_duplicates(pairs):
-            result = {}
-            for key, value in pairs:
-              if key in result:
-                raise ValueError(f'duplicate object key: {key}')
-              result[key] = value
-            return result
-
-          json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'), object_pairs_hook=reject_duplicates)
-          PY
-              jq -e \
-                --arg repository "${{ github.repository }}" --arg workflowName "Verify Cat's Tower baseline and quality records" \
-                --arg workflowPath ".github/workflows/verify-main.yml" --argjson runId "$RUN_ID" \
-                --argjson runNumber "$RUN_NUMBER" --argjson runAttempt "$RUN_ATTEMPT" --arg jobName "$JOB_NAME" \
-                --argjson pr "$PR_NUMBER" --arg baseBranch "$BASE_BRANCH" --arg baseSha "$BASE_SHA" \
-                --arg headBranch "$HEAD_BRANCH" --arg headSha "$HEAD_SHA" --arg checkoutSha "$CHECKOUT_SHA" \
-                --arg checkoutTree "$CHECKOUT_TREE" --arg baselineSha "727b8d00c281e7539117da5ded7309ea01c7e516" \
-                --arg baselineTree "c508c58b0bb1b3fa591eefe143aab2dd6eac9271" '
-                (keys == ["event","eventContext","generator","invocationCheckout","jobName","repository","runAttempt","runId","runNumber","schemaVersion","servedRuntime","sourceBoundary","verificationKit","workflowBlobSha","workflowCommitSha","workflowName","workflowPath","workflowRef"]) and
-                (.eventContext | keys == ["kind","pullRequest","push","workflowDispatch"]) and
-                (.eventContext.pullRequest | keys == ["baseBranch","baseSha","headBranch","headSha","number"]) and
-                (.invocationCheckout | keys == ["ref","sha","tree"]) and
-                (.verificationKit | keys == ["mode","sha","tree"]) and
-                (.servedRuntime | keys == ["mode","sha","tree"]) and
-                .schemaVersion==1 and .repository==$repository and .workflowName==$workflowName and
-                .workflowPath==$workflowPath and .event=="pull_request" and .runId==$runId and
-                .runNumber==$runNumber and .runAttempt==$runAttempt and .jobName==$jobName and
-                .eventContext.kind=="pull_request" and .eventContext.push==null and
-                .eventContext.workflowDispatch==null and .eventContext.pullRequest.number==$pr and
-                .eventContext.pullRequest.baseBranch==$baseBranch and .eventContext.pullRequest.baseSha==$baseSha and
-                .eventContext.pullRequest.headBranch==$headBranch and .eventContext.pullRequest.headSha==$headSha and
-                .invocationCheckout.sha==$checkoutSha and .invocationCheckout.tree==$checkoutTree and
-                .invocationCheckout.ref==$headSha and .verificationKit.mode=="current-head" and
-                .verificationKit.sha==$headSha and .verificationKit.tree==$checkoutTree and
-                .servedRuntime.mode=="immutable-baseline-checkout" and .servedRuntime.sha==$baselineSha and
-                .servedRuntime.tree==$baselineTree and
-                .generator=="workflow-steps:Capture immutable invocation provenance+Finalize event-time CI provenance" and
-                .sourceBoundary=="frozen-workflow-generated record; not a GitHub-signed attestation" and
-                (.workflowCommitSha | test("^[a-f0-9]{40}$")) and
-                (.workflowBlobSha | test("^[a-f0-9]{40}$")) and
-                (.workflowRef | endswith("/.github/workflows/verify-main.yml@refs/pull/" + ($pr|tostring) + "/merge"))
-              ' "${PREFIX}-ci-provenance.json"
-              WORKFLOW_COMMIT_SHA=$(jq -r '.workflowCommitSha' "${PREFIX}-ci-provenance.json")
-              WORKFLOW_BLOB_SHA=$(jq -r '.workflowBlobSha' "${PREFIX}-ci-provenance.json")
-              test "$(git rev-parse "$HEAD_SHA:.github/workflows/verify-main.yml")" = "$WORKFLOW_BLOB_SHA"
-              curl -fsSL "${AUTH[@]}" "https://api.github.com/repos/${{ github.repository }}/git/commits/$WORKFLOW_COMMIT_SHA" > "${PREFIX}-workflow-commit.json"
-              WORKFLOW_TREE_SHA=$(jq -r '.tree.sha' "${PREFIX}-workflow-commit.json")
-              test -n "$WORKFLOW_TREE_SHA"
-              curl -fsSL "${AUTH[@]}" "https://api.github.com/repos/${{ github.repository }}/git/trees/$WORKFLOW_TREE_SHA?recursive=1" > "${PREFIX}-workflow-tree.json"
-              jq -e --arg blob "$WORKFLOW_BLOB_SHA" '
-                .truncated==false and any(.tree[]; .path==".github/workflows/verify-main.yml" and .type=="blob" and .sha==$blob)
-              ' "${PREFIX}-workflow-tree.json"
-            fi
-
-            jq -e '
-              (.rawReports | length) == 10 and
-              ([.rawReports[].artifactMember] | unique | length) == 10 and
-              ([.rawReports[].path] | unique | length) == 10 and
-              all(.rawReports[]; (.sha256 | test("^[a-f0-9]{64}$")))
-            ' quality-reviews/step-1-legacy-baseline/evidence/browser-qa.json
-            jq -r '.rawReports[] | [.artifactMember,.sha256,.path] | @tsv' \
-              quality-reviews/step-1-legacy-baseline/evidence/browser-qa.json > "${PREFIX}-raw-reports.tsv"
-            test "$(wc -l < "${PREFIX}-raw-reports.tsv")" -eq 10
-            while IFS=$'\t' read -r MEMBER EXPECTED_SHA LOCAL_PATH; do
-              test "$(unzip -Z1 "$ZIP_PATH" | grep -Fxc "$MEMBER")" -eq 1
-              unzip -p "$ZIP_PATH" "$MEMBER" > "${PREFIX}-member.json"
-              jq -e '.passed==true' "${PREFIX}-member.json"
-              if [ "$RAW_BINDING" = "true" ]; then
-                test "$(sha256sum "${PREFIX}-member.json" | cut -d' ' -f1)" = "$EXPECTED_SHA"
-                cmp -s "${PREFIX}-member.json" "$LOCAL_PATH"
-              fi
-            done < "${PREFIX}-raw-reports.tsv"
-
-            test "$(git rev-parse "$HEAD_SHA^{tree}")" = "$HEAD_TREE"
-            test "$CHECKOUT_TREE" = "$HEAD_TREE"
-            test "$(jq '.checkout.contentDiffFromHead | length' "$EVIDENCE")" -eq 0
-            if [ "$CHECKOUT_MODE" = "pull-request-head" ]; then
-              test "$CHECKOUT_SHA" = "$HEAD_SHA"
-              test "$(jq -r '.checkout.ref' "$EVIDENCE")" = "$HEAD_SHA"
-            elif [ "$CHECKOUT_MODE" = "pull-request-merge" ] && [ "$RAW_BINDING" = "true" ]; then
-              CHECKOUT_PARENTS=$(jq -c '.checkout.parents' "$EVIDENCE")
-              curl -fsSL "${AUTH[@]}" "https://api.github.com/repos/${{ github.repository }}/git/commits/$CHECKOUT_SHA" > "${PREFIX}-checkout-commit.json"
-              jq -e --arg sha "$CHECKOUT_SHA" --arg tree "$CHECKOUT_TREE" --argjson parents "$CHECKOUT_PARENTS" '
-                .sha==$sha and .tree.sha==$tree and ([.parents[].sha] == $parents)
-              ' "${PREFIX}-checkout-commit.json"
-              curl -fsSL -L "${AUTH[@]}" "https://api.github.com/repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" > "${PREFIX}-job.log"
-              grep -Fq "$CHECKOUT_SHA" "${PREFIX}-job.log"
-              grep -Fq "refs/remotes/pull/$PR_NUMBER/merge" "${PREFIX}-job.log"
-            else
-              echo "Unsupported checkout provenance for $LABEL: $CHECKOUT_MODE" >&2
-              exit 1
-            fi
-            git merge-base --is-ancestor "$HEAD_SHA" HEAD
-          }
-
-          verify_failed_round_three
-          verify_record quality-reviews/step-1-legacy-baseline/evidence/ci-run.json true raw-source
-          if [ -f quality-reviews/step-1-legacy-baseline/evidence/acceptance-ci-run.json ]; then
-            verify_record quality-reviews/step-1-legacy-baseline/evidence/acceptance-ci-run.json false acceptance
-          fi
-          if [ -f quality-reviews/step-1-legacy-baseline/evidence/candidate-ci-run.json ]; then
-            verify_record quality-reviews/step-1-legacy-baseline/evidence/candidate-ci-run.json false candidate
-          fi
-
-      - name: Exercise repaired artifact transport against Round 6 provider artifacts
-        if: steps.step1.outputs.historical != 'true'
-        working-directory: ${{ steps.step1.outputs.kit }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-        run: |
-          set -euo pipefail
-          SMOKE_DIR="$RUNNER_TEMP/cats-round7-provider-smoke"
-          mkdir -p "$SMOKE_DIR"
-          node tests/verify-ci-artifact.mjs round6-c3-smoke 32590094723 1 \
-            | tee "$SMOKE_DIR/round6-c3.json"
-          node tests/verify-ci-artifact.mjs round6-main-smoke 32590658257 1 \
-            | tee "$SMOKE_DIR/round6-main.json"
-          jq -e '.status=="PASS" and .role=="round6-c3-smoke" and .runId==32590094723 and .runAttempt==1' \
-            "$SMOKE_DIR/round6-c3.json"
-          jq -e '.status=="PASS" and .role=="round6-main-smoke" and .runId==32590658257 and .runAttempt==1' \
-            "$SMOKE_DIR/round6-main.json"
-
-      - name: Install mobile browser QA runtime
-        working-directory: ${{ steps.step1.outputs.kit }}
-        run: |
-          npm install --no-save --no-package-lock playwright@1.60.0
-          npx playwright install --with-deps chromium webkit
-
-      - name: Chromium and WebKit vertical tower loop QA
-        working-directory: ${{ steps.step1.outputs.kit }}
-        env:
-          HISTORICAL_STEP1_MODE: ${{ steps.step1.outputs.historical }}
-        run: |
-          set -euo pipefail
-          if [ "$HISTORICAL_STEP1_MODE" = "true" ]; then
-            RUNTIME_DIR="$PWD"
-          else
-            RUNTIME_DIR="${{ github.workspace }}/recovered-v082"
-          fi
-          python3 -m http.server 4173 --directory "$RUNTIME_DIR" >/tmp/cats-v082-http.log 2>&1 &
-          SERVER_PID=$!
-          trap 'kill $SERVER_PID' EXIT
-          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
-          for VIEWPORT in 390x844 375x667; do
-            CATS_BROWSER=chromium CATS_VIEWPORT=$VIEWPORT CATS_TEST_OUT=test-results/v082-chromium-$VIEWPORT node tests/living-tower-v080.mjs
-            CATS_BROWSER=webkit CATS_VIEWPORT=$VIEWPORT CATS_TEST_OUT=test-results/v082-webkit-$VIEWPORT node tests/living-tower-v080.mjs
-            CATS_BROWSER=chromium CATS_VIEWPORT=$VIEWPORT CATS_TEST_OUT=test-results/step-1-normal-chromium-$VIEWPORT node tests/step-1-normal-flow.mjs
-            CATS_BROWSER=webkit CATS_VIEWPORT=$VIEWPORT CATS_TEST_OUT=test-results/step-1-normal-webkit-$VIEWPORT node tests/step-1-normal-flow.mjs
-            CATS_BROWSER=chromium CATS_VIEWPORT=$VIEWPORT CATS_TEST_OUT=test-results/step-1-sw-chromium-$VIEWPORT node tests/step-1-service-worker.mjs
-          done
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          expected={
-            '00-title.png','00-settings-paused.png','01-auto-climb.png','02-tap-dispatch.png','02-full-party-rally.png',
-            '03-upgrade-panel.png','04-floor-conquered.png',
-            '05-food-support-full.png','05-food-support-sheet.png',
-            '06-shared-room-full.png','06-shared-room-sheet.png',
-            '07-wall.png',
-            '08-dawn-preview-full.png','08-dawn-preview-sheet.png','08-dawn-actions.png',
-            '09-faster-replay.png','10-first-night-boss.png','11-first-night-clear.png',
-          }
-          viewports={'390x844':(390,844),'375x667':(375,667)}
-          for browser in ('chromium','webkit'):
-            for label,(width,height) in viewports.items():
-              root=Path('test-results')/f'v082-{browser}-{label}'
-              report=json.loads((root/'report.json').read_text())
-              assert report['passed'] is True
-              assert report['version']=='0.8.2'
-              assert report['gameplaySchema']==2
-              assert report['viewport']=={'width':width,'height':height,'deviceScaleFactor':3,'reducedMotion':'reduce'}
-              font=report['japaneseFont']
-              assert font['status']=='loaded' and font['checked'] is True
-              assert font['faceCount']>=1 and set(font['faceStatuses'])=={'loaded'}
-              assert 'CatsTowerJP' in font['bodyFamily']
-              assert font['fontHttpStatus']==200 and font['fontByteLength']>500_000 and font['fontSignature']=='wOF2'
-              assert font['customFingerprint']['ink']>0
-              assert font['customFingerprint']['hash']!=font['fallbackFingerprint']['hash']
-              assets={item['path']:item for item in report['v082Assets']}
-              assert set(assets)=={'/assets/v082/pixel-r3/cats-cast-r3.png','/assets/v082/pixel-r3/enemies-r3.png'}
-              assert all(item['status']==200 and item['bytes']>500_000 and (item['width'],item['height'])==(1448,1086) for item in assets.values())
-              assert report['modalPause']=={'playTimeMs':0,'enemyDamage':0,'floorBefore':1,'floorAfter':1}
-              roster=report['recoveryRosterContract']
-              assert roster['waitingUnitCount']==5 and max(roster['waitingCounts'].values())<=1
-              assert roster['recoveredUnitCount']==6 and set(roster['recoveredCounts'].values())=={1}
-              assert roster['recoveryCount']==0 and roster['totalUnitsRecovered']==1
-              targets=report['roleTargetContract']
-              assert targets['withFrontline']=={'kind':'mugi','role':'frontline'}
-              assert targets['withoutFrontline']['role'] in {'ranged','support'}
-              loop=report['loop']
-              assert loop['autoDispatches']>=1
-              assert loop['tapDispatches']>=1
-              assert loop['tapDirectDamage']==0
-              assert loop['rally']['directDamage']==0
-              assert loop['rally']['durationMs']==6000
-              assert loop['rally']['unitCount']==6
-              assert loop['rally']['namedKinds']==['luna','mugi','toto']
-              assert set(loop['rally']['castVisual']['characters'])>={'luna','toto','helper'}
-              assert all('cats-cast-r3.png' in value for value in loop['rally']['castVisual']['backgrounds'])
-              assert loop['rally']['helperHueVisual']=={'helper-tabby':'42deg','helper-gray':'84deg','helper-calico':'0deg'}
-              filters=loop['rally']['rallyHelperFilters']
-              assert 'hue-rotate(42deg)' in filters['helper-tabby']
-              assert 'hue-rotate(84deg)' in filters['helper-gray']
-              assert 'hue-rotate(0deg)' in filters['helper-calico']
-              party=loop['rally']['partyGeometry']
-              assert party['footSpread']<=1.5
-              assert 0.875<=party['groundRatio']<=0.885
-              assert party['minimumGap']>=2 and party['contained'] is True
-              matrix=loop['rally']['alignmentPhaseMatrix']
-              assert len(matrix['cats'])==24 and len(matrix['enemies'])==16
-              assert matrix['maximumCatGroundError']<=0.15
-              assert matrix['maximumEnemyHoverError']<=0.15
-              assert loop['firstKillReward']>0
-              assert loop['upgrade']['levelAfter']==loop['upgrade']['levelBefore']+1
-              assert loop['upgrade']['dpsAfter']>loop['upgrade']['dpsBefore']
-              assert loop['wall']['floor']==report['rules']['wallFloor'] and loop['wall']['heldMs']==12000
-              assert loop['wall']['visual']['enemy']=='black-feather-barrier'
-              assert loop['wall']['visual']['character']=='barrier'
-              assert 'enemies-r3.png' in loop['wall']['visual']['spriteBackground']
-              assert 3<=loop['wall']['ground']['hoverGap']<=7.5
-              assert loop['dawn']['bestFloorAfter']>=loop['dawn']['bestFloorBefore']
-              assert loop['dawn']['shardsAfter']>loop['dawn']['shardsBefore']
-              assert loop['replay']['replayMs']<loop['replay']['baselineMs']
-              assert loop['replay']['speedupRatio']<=0.75
-              assert loop['firstEnemy']['ground']['enemy']=='crow'
-              assert 3<=loop['firstEnemy']['ground']['hoverGap']<=7.5
-              assert loop['normalEnemy']['enemy']=='owl' and loop['normalEnemy']['character']=='owl'
-              assert 'enemies-r3.png' in loop['normalEnemy']['spriteBackground']
-              assert 3<=loop['normalEnemy']['ground']['hoverGap']<=7.5
-              assert loop['firstNightBoss']['enemy']=='boss'
-              assert loop['firstNightBoss']['character']=='boss'
-              assert loop['firstNightBoss']['phase']!='defeated'
-              assert loop['firstNightBoss']['opacity']>0 and loop['firstNightBoss']['intersectsViewport'] is True
-              assert loop['firstNightBoss']['width']>0 and loop['firstNightBoss']['height']>0
-              assert 'enemies-r3.png' in loop['firstNightBoss']['spriteBackground']
-              assert 3<=loop['firstNightBoss']['ground']['hoverGap']<=7.5
-              entry=loop['firstNightBoss']['entryFormation']
-              assert entry['count']==6 and len(set(entry['kinds']))==6
-              assert entry['minimumGap']>=2 and entry['contained'] is True
-              sweep=loop['firstNightBoss']['entryFormationSweep']
-              assert sweep['samples']>=2 and sweep['minimumGap']>=2 and sweep['allContained'] is True
-              immediate=loop['completedImmediateRoster']
-              assert immediate['unitCount']==6 and len(set(immediate['kinds']))==6
-              assert immediate['recoveryCount']==0
-              assert immediate['geometry']['minimumGap']>=2 and immediate['geometry']['contained'] is True
-              assert loop['firstNightCleared'] is True
-              assert loop['firstNightCompleted'] is True
-              assert loop['completedFloor']==report['rules']['firstBossFloor']==10
-              assert report['save']['newSchemaReload'] is True
-              restored=report['save']['completedReloadRuntime']
-              assert restored['unitCount']==6 and len(set(restored['kinds']))==6
-              assert restored['phases']==['celebrating']
-              assert restored['geometry']['minimumGap']>=2 and restored['geometry']['contained'] is True
-              assert {item['name'] for item in report['save']['migrations']}=={'living-v080','legacy-v01','corrupt-v080','v081-post-dawn','v081-boss-clear','future-schema'}
-              assert all(item['passed'] for item in report['save']['migrations'])
-              assert {item['name'] for item in report['evidence']}==expected
-              assert {path.name for path in root.glob('*.png')}==expected
-              normal=json.loads((Path('test-results')/f'step-1-normal-{browser}-{label}'/'report.json').read_text())
-              assert normal['passed'] is True
-              assert normal['qaMode'] is False
-              assert normal['reducedMotion'] is False
-              assert normal['serviceWorkers']=='enabled'
-              assert normal['active']['gameVisible'] is True
-              assert normal['active']['titleHidden'] is True
-              assert normal['active']['visibleCats']>=1
-              assert normal['reloaded']['gameVisible'] is True
-              assert normal['durableReload']['preserved'] is True
-              assert normal['durableReload']['before']['durable']==normal['durableReload']['after']['durable']
-              assert normal['durableReload']['before']['screen']==normal['durableReload']['after']['screen']
-              assert normal['errors']==[]
-              assert normal['failedRequests']==[]
-              if browser=='chromium':
-                assert normal['reloaded']['serviceWorkerSupported'] is True
-                assert normal['reloaded']['serviceWorkerControlled'] is True
-                assert normal['reloaded']['serviceWorkerControllerUrl']
-                sw=json.loads((Path('test-results')/f'step-1-sw-{browser}-{label}'/'report.json').read_text())
-                assert sw['passed'] is True
-                assert sw['runtimeVersion']=='0.8.2'
-                assert sw['gameplaySchema']==2
-                assert sw['saveKey']=='cats-tower-v080'
-                assert sw['cacheState']['controlled'] is True
-                assert sw['cacheState']['actualEntryCount']==15
-                assert sw['cacheState']['expectedEntryCount']==15
-                assert sw['futureSchemaPreserved'] is True
-                assert sw['futureSchemaRawBytesUnchanged'] is True
-                assert sw['obsoleteCacheRemoved'] is True
-                assert sw['offline']['version']=='0.8.2'
-                assert sw['offline']['controlled'] is True
-                assert sw['errors']==[]
-          print('deterministic vertical tower and visual evidence contracts passed')
-          PY
-
-      - name: Attach captured CI provenance
-        working-directory: ${{ steps.step1.outputs.kit }}
-        env:
-          EXPECTED_PROVENANCE_SHA256: ${{ steps.ci_provenance.outputs.sha256 }}
-          EXPECTED_INVOCATION_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
-        run: |
-          set -euo pipefail
-          test "$(git -C "$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_INVOCATION_HEAD"
-          git -C "$GITHUB_WORKSPACE" diff --quiet
-          git -C "$GITHUB_WORKSPACE" diff --cached --quiet
-          test "$(sha256sum "$RUNNER_TEMP/cats-ci-provenance.json" | cut -d' ' -f1)" = "$EXPECTED_PROVENANCE_SHA256"
-          mkdir -p test-results
-          install -m 0644 "$RUNNER_TEMP/cats-ci-provenance.json" test-results/ci-provenance.json
-          cmp -s "$RUNNER_TEMP/cats-ci-provenance.json" test-results/ci-provenance.json
-          test "$(sha256sum test-results/ci-provenance.json | cut -d' ' -f1)" = "$EXPECTED_PROVENANCE_SHA256"
-
-      - name: Upload V0.8.2 vertical tower evidence
-        if: always()
-        uses: actions/upload-artifact@v4
+      - uses: actions/setup-node@v4
         with:
-          name: cats-v082-step-1-recovery-evidence-attempt-${{ github.run_attempt }}
-          path: ${{ steps.step1.outputs.kit }}/test-results
-          if-no-files-found: error
-          retention-days: 30
+          node-version: '22'
 
-  round7-external-audit:
-    name: round7-external-artifact-audit
-    needs: vertical-tower-qa
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && needs['vertical-tower-qa'].result == 'success' }}
-    permissions:
-      contents: read
-      actions: read
-    uses: ./.github/workflows/verify-step-1-artifacts.yml
-    with:
-      source_run_id: ${{ fromJSON(github.run_id) }}
-      source_run_attempt: ${{ fromJSON(github.run_attempt) }}
-      source_head_sha: ${{ github.sha }}
-      source_event: ${{ github.event_name }}
-      source_ref: ${{ github.ref }}
+      - name: Verify current Round 008 and Step 2 state
+        run: node tests/governance/verify-current-step2-state.mjs
+
+      - name: Re-run the sealed Step 2 executable verifier
+        run: node simulation/verify-step2-v2.mjs
+
+      - name: Reject whitespace and patch defects
+        run: git diff --check 510157c97e7e94456df8d45c3af20082e71aced6..HEAD
