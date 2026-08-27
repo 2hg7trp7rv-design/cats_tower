@@ -26,11 +26,14 @@ Tapによる敵への直接damageは0。通常進行にcollect-all、個別回�
 
 - district: `tower.district.001`
 - cycle: `tower.cycle.000001`
-- Floor 10 boss: `tower.boss.d01.kagetsubasa`
-- first 100F milestone: `tower.milestone.floor.0000000100`
+- Floor 5 mid-boss: `tower.boss.d01.mid.001`
+- Floor 10 district boss: `tower.boss.d01.kagetsubasa`
+- first 100F milestone: `tower.milestone.floor.100`
 - normal enemies: `enemy.normal.001`〜`enemy.normal.006`
 - elites: `enemy.elite.001`〜`enemy.elite.002`
 - district wall: `enemy.wall.001`
+
+Generated district/cycle IDs use the minimum-width rules in `canonical/STABLE_ID_REGISTRY.json`; milestone IDs use a normalized positive decimal segment with no leading zeros. Alternate leading-zero forms are not canonical writes.
 
 ### Characters and weapons
 
@@ -74,7 +77,7 @@ N/Rだけで前衛、対空、回復、後衛干渉を満たす。SR/SSRは速�
 | 2F | 強化の因果 | 近接＋小型遠距離 | coin level、bulk purchase preview | S06 coin-level |
 | 3F | 遠距離・対空 | 飛行敵を混ぜる | ルナ救出、最初のshop選択 | S04 rescue、S05 placement |
 | 4F | shop→delivery→combat | 配送到着で一時buff | `weapon.launch.002`、delivery forecast | S02/S05 delivery |
-| 5F | 最初の節目boss | 予告→攻撃→break | トト救出、N/R core 3役 | S08 intro/telegraph/reward |
+| 5F | 最初の節目boss | `tower.boss.d01.mid.001`。予告→攻撃→break | トト救出、N/R core 3役 | S08 intro/telegraph/reward |
 | 6F | recruitmentは補助 | 複数敵と役割比較 | S10解放、newcomer保証進捗、無料ticket | S10 odds/pity/exchange/history |
 | 7F | first copyとmasteryを分離 | 同一役割の別解を提示 | mastery tutorial、universal fragment preview | S06/S07 mastery |
 | 8F | deliveryとrunner統合 | 前衛＋後衛支援＋`enemy.wall.001` | コハク救援、`weapon.launch.004` | S04 rescue、S05 reconfigure |
