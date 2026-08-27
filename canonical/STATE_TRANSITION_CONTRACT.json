@@ -12,6 +12,8 @@
     "idempotencyKey": "stable per user intent",
     "accountId": "server resolved",
     "catalogVersion": "required for commerce and gacha",
+    "adOfferVersion": "required for rewarded-ad opt-in and grant verification",
+    "loginCampaignVersion": "required for login eligibility and claim grant",
     "clientObservedEntityVersion": "required for optimistic concurrency",
     "transactionId": "immutable on accepted permanent-economy operation",
     "auditId": "immutable on committed or rejected auditable result"
@@ -23,6 +25,7 @@
     "multiTabConvergence": "transaction, claim or account entity version",
     "partialCompletion": "resume or compensate; never reroll or double grant",
     "duplicateRequest": "return the original result or original terminal failure",
+    "staleConfiguration": "reject before acceptance or reconcile to the immutable version already accepted; never re-evaluate an accepted intent against a newer definition",
     "outOfOrderExternalEvents": "reconcile by provider event time, transaction identity and current entitlement state",
     "supportAuditVisibility": true
   },
@@ -39,27 +42,34 @@
     },
     "payment": {
       "id": "transition.payment.v2",
-      "states": ["CREATED", "STORE_PENDING", "STORE_PURCHASED", "SERVER_VERIFYING", "ENTITLEMENT_GRANTED", "ACKNOWLEDGED", "REFUNDED", "REVOKED", "RESTORED", "FAILED"],
+      "states": ["CREATED", "STORE_PENDING", "STORE_PURCHASED", "SERVER_VERIFYING", "ENTITLEMENT_GRANTED", "ACKNOWLEDGED", "REFUNDED", "REFUND_DEFICIT_RECORDED", "REVOKED", "RESTORED", "FAILED"],
       "retry": "provider transaction/token uniqueness grants exactly once",
       "partial": "PENDING grants nothing; PURCHASED must verify server-side",
-      "refund": "reverse or suspend the affected paid grant according to disclosed policy without silently deleting unrelated free balance",
-      "revocation": "entitlement and paid ledger reconcile to provider truth with audit trail",
-      "restore": "rebuild restorable entitlement from provider truth",
-      "invariants": ["catalog version and displayed contents are immutable for the purchase", "paid ruby provenance remains", "provider webhook ordering may be out of order"]
+      "refund": "reverse the unspent affected paid grant; when the paid grant has already been spent, record an explicit paid-ruby deficit or disclosed restriction state under a versioned policy; never silently debit unrelated free-reset, free-ad or free-other ledgers",
+      "refundDeficit": {
+        "requiredRepresentation": "server-owned explicit state plus canonical decimal magnitude, source transaction, policy version and audit ID",
+        "allowedResolution": ["future paid grant offset", "entitlement or purchase restriction", "support-reviewed settlement"],
+        "forbiddenResolution": ["unsigned underflow", "silent free-ledger debit", "unrelated entitlement deletion", "client-only negative balance"]
+      },
+      "revocation": "entitlement and paid ledger reconcile to provider truth with the same explicit deficit rules and audit trail",
+      "restore": "rebuild restorable entitlement from provider truth; consumable restoration follows provider truth and does not duplicate an already granted transaction",
+      "invariants": ["catalog version and displayed contents are immutable for the purchase", "paid ruby provenance remains", "provider webhook ordering may be out of order", "refund or revocation never hides a deficit by consuming unrelated free value"]
     },
     "rewardedAd": {
       "id": "transition.rewarded_ad.v2",
-      "states": ["OFFERED", "OPTED_IN", "CONSENT_CHECKED", "STARTED", "NETWORK_COMPLETED", "SERVER_VERIFYING", "GRANTED", "CAP_REJECTED", "FAILED"],
-      "retry": "ad receipt or nonce is accepted exactly once",
-      "partial": "network completion without server verification remains pending",
-      "invariants": ["initial product has no forced interstitial or banner", "reward and daily cap are shown before opt-in", "no ad during battle, boss, gacha result, purchase or save recovery"]
+      "states": ["OFFERED", "OPTED_IN", "CONSENT_CHECKED", "STARTED", "NETWORK_COMPLETED", "SERVER_VERIFYING", "GRANTED", "CAP_REJECTED", "OFFER_STALE", "FAILED"],
+      "versionBinding": "catalog.ad_offer ID and immutable adOfferVersion fix placement, reward, eligibility and cap before OPTED_IN",
+      "retry": "ad receipt or nonce is accepted exactly once against the accepted adOfferVersion",
+      "partial": "network completion without server verification remains pending under the accepted offer version",
+      "invariants": ["initial product has no forced interstitial or banner", "reward and daily cap are shown before opt-in", "no ad during battle, boss, gacha result, purchase or save recovery", "a stale offer is rejected before start and an accepted offer is never re-priced during retry"]
     },
     "loginClaim": {
       "id": "transition.login_claim.v2",
-      "states": ["ELIGIBLE", "CLAIM_REQUESTED", "GRANTED", "ALREADY_CLAIMED", "NOT_ELIGIBLE", "EXPIRED", "SERVER_TIME_ERROR"],
-      "retry": "campaign plus period plus account is unique",
+      "states": ["ELIGIBLE", "CLAIM_REQUESTED", "GRANTED", "ALREADY_CLAIMED", "NOT_ELIGIBLE", "EXPIRED", "CAMPAIGN_STALE", "SERVER_TIME_ERROR"],
+      "versionBinding": "catalog.login_campaign ID and immutable loginCampaignVersion fix period, rewards, missed-day rule and eligibility before CLAIM_REQUESTED",
+      "retry": "campaign ID plus version plus period plus account is unique",
       "multiTab": "second claim reads the first grant",
-      "invariants": ["server time defines the period", "one missed day does not reset an entire track unless the disclosed campaign explicitly says so", "claim history is queryable"]
+      "invariants": ["server time defines the period", "one missed day does not reset an entire track unless the disclosed campaign version explicitly says so", "claim history is queryable", "an accepted claim is never re-evaluated against a newer campaign version"]
     },
     "towerReturn": {
       "id": "transition.reset.v2",
@@ -104,9 +114,12 @@
     "multiple-tab race",
     "network timeout before and after commit",
     "partial completion",
-    "refund",
+    "refund with unspent paid grant",
+    "refund after paid grant was spent and explicit deficit is recorded",
     "revocation",
     "restore",
+    "stale ad-offer version before start and retry after accepted offer",
+    "stale login-campaign version and retry after accepted claim",
     "out-of-order webhook or RTDN",
     "older client",
     "migration alias",
@@ -117,6 +130,8 @@
     "Every persistent operation has an idempotency key, transaction ID and support-visible audit result.",
     "Client uncertainty is represented as pending reconciliation rather than guessed success or failure.",
     "Permanent economy and entitlement state is server authoritative.",
+    "Ad and login eligibility/grants bind immutable accepted configuration versions.",
+    "Refund/revocation deficit is explicit, auditable and never resolved by silently consuming unrelated free value.",
     "This contract cannot authorize Step 2 until the Round 008 seal validates it."
   ]
 }
