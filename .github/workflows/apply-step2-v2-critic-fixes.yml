@@ -1,0 +1,73 @@
+name: Apply Step 2 V2 critic fixes
+
+on:
+  push:
+    branches: [kimi]
+    paths:
+      - 'quality-reviews/step-2-executable-contract-v2/patch/READY'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apply-step2-v2-critic-fixes-kimi
+  cancel-in-progress: false
+
+jobs:
+  apply-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: kimi
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify and extract bounded patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          PATCH='quality-reviews/step-2-executable-contract-v2/patch'
+          cat "$PATCH"/chunk-*.txt | tr -d '\r\n\t ' > "$RUNNER_TEMP/step2-fixes.b64"
+          echo '004c3373a85e639417ae025cf3d761638c4cbe3336e97ed027231d88fce265aa  '"$RUNNER_TEMP/step2-fixes.b64" | sha256sum -c -
+          base64 --decode "$RUNNER_TEMP/step2-fixes.b64" > "$RUNNER_TEMP/step2-fixes.tar.gz"
+          echo '66db88e7dbb32ea72da42c3f2415604e0e1e09f8ead7863d1e178d0134be9fe4  '"$RUNNER_TEMP/step2-fixes.tar.gz" | sha256sum -c -
+          python - <<'PY'
+          import os
+          import tarfile
+          from pathlib import PurePosixPath
+          archive = tarfile.open(os.path.join(os.environ['RUNNER_TEMP'], 'step2-fixes.tar.gz'), 'r:gz')
+          for member in archive.getmembers():
+              path = PurePosixPath(member.name)
+              if path.is_absolute() or '..' in path.parts:
+                  raise SystemExit(f'unsafe archive path: {member.name}')
+              if not (member.name == 'simulation' or member.name.startswith('simulation/')):
+                  raise SystemExit(f'out-of-bound archive path: {member.name}')
+          archive.extractall('.')
+          PY
+      - name: Run complete content-phase verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          find simulation -name '*.mjs' -print0 | xargs -0 -n1 node --check
+          node simulation/validate-candidate-v2.mjs
+          node simulation/validate-run-plan-v2.mjs
+          node simulation/fixtures/v2/validate-fixtures.mjs
+          node simulation/migrations/v1-to-v2/validate-migration.mjs
+          node simulation/engine-v2/run-plan.mjs --mode qualification --output quality-reviews/step-2-executable-contract-v2/qualification-result.json
+          node simulation/validate-result-v2.mjs quality-reviews/step-2-executable-contract-v2/qualification-result.json --reproduce
+          node simulation/verify-step2-v2.mjs
+      - name: Commit verified fixes only to existing kimi
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf quality-reviews/step-2-executable-contract-v2/patch
+          rm -f .github/workflows/apply-step2-v2-critic-fixes.yml
+          git config user.name 'cats-tower-step2-bot'
+          git config user.email 'cats-tower-step2-bot@users.noreply.github.com'
+          git add -A simulation quality-reviews/step-2-executable-contract-v2 .github/workflows/apply-step2-v2-critic-fixes.yml
+          git diff --cached --name-only
+          git commit -m 'fix: close Step 2 V2 critic defects'
+          git push origin HEAD:kimi
