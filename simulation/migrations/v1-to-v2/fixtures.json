@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "2.0.0",
+  "fixtureSetId": "cats-tower-v1-to-v2-migration",
+  "positive": [
+    {
+      "id": "aliases-and-dawn",
+      "input": {
+        "profileId": "legacy-001",
+        "characters": [{"id": "cat.mugi", "copies": "2"}, {"id": "cat.luna", "copies": "1"}],
+        "weapons": [{"id": "weapon.launch.001", "copies": "1"}],
+        "shops": [{"id": "shop.staff_reception", "copies": "1"}],
+        "resetId": "dawn",
+        "highestFloor": "125",
+        "wallet": {"paidRuby": "50", "dawnShard": "15", "freeResetRuby": "5", "freeAdRuby": "2", "freeOtherRuby": "3"}
+      },
+      "expected": {
+        "resetId": "reset.tower_return",
+        "characterIds": ["character.launch.001", "character.launch.002"],
+        "shopIds": ["shop.launch.001"],
+        "paidRuby": "50",
+        "freeResetRuby": "20",
+        "dawnProvenance": "15"
+      }
+    },
+    {
+      "id": "canonical-input",
+      "input": {
+        "profileId": "legacy-002",
+        "characters": [{"id": "character.launch.004", "copies": "1"}],
+        "weapons": [{"id": "weapon.launch.036", "copies": "1"}],
+        "shops": [{"id": "shop.launch.004", "copies": "1"}],
+        "resetId": "reset.tower_return",
+        "highestFloor": "10000",
+        "wallet": {"paidRuby": "0", "dawnShard": "0"}
+      },
+      "expected": {
+        "resetId": "reset.tower_return",
+        "characterIds": ["character.launch.004"],
+        "shopIds": ["shop.launch.004"],
+        "paidRuby": "0",
+        "freeResetRuby": "0",
+        "dawnProvenance": "0"
+      }
+    }
+  ],
+  "negative": [
+    {
+      "id": "unknown-character",
+      "input": {"characters": [{"id": "cat.unknown", "copies": "1"}], "resetId": "dawn", "wallet": {}},
+      "expectedError": "UNKNOWN_OR_INVALID_CHARACTER_ID"
+    },
+    {
+      "id": "conflicting-alias-ownership",
+      "input": {"characters": [{"id": "cat.mugi", "copies": "1"}, {"id": "character.launch.001", "copies": "2"}], "resetId": "dawn", "wallet": {}},
+      "expectedError": "CONFLICTING_OWNERSHIP"
+    },
+    {
+      "id": "unknown-reset",
+      "input": {"characters": [], "resetId": "reset.prestige_two", "wallet": {}},
+      "expectedError": "UNKNOWN_OR_INVALID_RESET_ID"
+    },
+    {
+      "id": "malformed-currency",
+      "input": {"characters": [], "resetId": "dawn", "wallet": {"dawnShard": "01"}},
+      "expectedError": "normalized unsigned decimal string"
+    },
+    {
+      "id": "marker-without-backup",
+      "input": {"migration": {"version": "cats-tower-v1-to-v2.1"}},
+      "expectedError": "MIGRATION_MARKER_WITHOUT_RAW_BACKUP"
+    }
+  ]
+}

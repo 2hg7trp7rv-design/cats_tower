@@ -1,0 +1,146 @@
+{
+  "schemaVersion": "2.0.0",
+  "fixtureSetId": "cats-tower-v2-cross-runtime-golden",
+  "numeric": [
+    {
+      "id": "add-large",
+      "operation": "addUnsigned",
+      "input": [
+        "999999999999999999999999999999",
+        "1"
+      ],
+      "expected": "1000000000000000000000000000000"
+    },
+    {
+      "id": "subtract",
+      "operation": "subtractUnsigned",
+      "input": [
+        "1000000000000000000000000000000",
+        "1"
+      ],
+      "expected": "999999999999999999999999999999"
+    },
+    {
+      "id": "multiply",
+      "operation": "multiplyUnsigned",
+      "input": [
+        "12345678901234567890",
+        "98765432109876543210"
+      ],
+      "expected": "1219326311370217952237463801111263526900"
+    },
+    {
+      "id": "divide-floor",
+      "operation": "divideUnsigned",
+      "input": [
+        "10",
+        "3",
+        "floor"
+      ],
+      "expected": "3"
+    },
+    {
+      "id": "divide-ceil",
+      "operation": "divideUnsigned",
+      "input": [
+        "10",
+        "3",
+        "ceil"
+      ],
+      "expected": "4"
+    },
+    {
+      "id": "half-even-2-5",
+      "operation": "halfEven",
+      "input": [
+        "5",
+        "2"
+      ],
+      "expected": "2"
+    },
+    {
+      "id": "half-even-3-5",
+      "operation": "halfEven",
+      "input": [
+        "7",
+        "2"
+      ],
+      "expected": "4"
+    }
+  ],
+  "canonicalJson": [
+    {
+      "input": {
+        "b": 2,
+        "a": 1
+      },
+      "canonical": "{\"a\":1,\"b\":2}",
+      "sha256": "43258cff783fe7036d8a43033f830adfc60ec037382473548ac742b888292777"
+    }
+  ],
+  "tower": [
+    {
+      "floor": "1",
+      "expectedDistrictId": "tower.district.001",
+      "expectedCycleId": "tower.cycle.000001",
+      "expectedBossId": "NONE",
+      "expectedHpRepresentation": "expanded-integer"
+    },
+    {
+      "floor": "5",
+      "expectedDistrictId": "tower.district.001",
+      "expectedCycleId": "tower.cycle.000001",
+      "expectedBossId": "tower.boss.d01.mid.001",
+      "expectedHpRepresentation": "expanded-integer"
+    },
+    {
+      "floor": "10",
+      "expectedDistrictId": "tower.district.001",
+      "expectedCycleId": "tower.cycle.000001",
+      "expectedBossId": "tower.boss.d01.kagetsubasa",
+      "expectedHpRepresentation": "expanded-integer"
+    },
+    {
+      "floor": "100",
+      "expectedDistrictId": "tower.district.010",
+      "expectedCycleId": "tower.cycle.000001",
+      "expectedBossId": "tower.boss.d10.end.001",
+      "expectedHpRepresentation": "expanded-integer"
+    },
+    {
+      "floor": "101",
+      "expectedDistrictId": "tower.district.011",
+      "expectedCycleId": "tower.cycle.000002",
+      "expectedBossId": "NONE",
+      "expectedHpRepresentation": "expanded-integer"
+    },
+    {
+      "floor": "1000",
+      "expectedDistrictId": "tower.district.100",
+      "expectedCycleId": "tower.cycle.000010",
+      "expectedBossId": "tower.boss.d100.end.001",
+      "expectedHpRepresentation": "expanded-integer"
+    },
+    {
+      "floor": "10000",
+      "expectedDistrictId": "tower.district.1000",
+      "expectedCycleId": "tower.cycle.000100",
+      "expectedBossId": "tower.boss.d1000.end.001",
+      "expectedHpRepresentation": "exact-symbolic-power"
+    },
+    {
+      "floor": "1000000000000000000000000000000",
+      "expectedDistrictId": "tower.district.100000000000000000000000000000",
+      "expectedCycleId": "tower.cycle.10000000000000000000000000000",
+      "expectedBossId": "tower.boss.d100000000000000000000000000000.end.001",
+      "expectedHpRepresentation": "exact-symbolic-power"
+    }
+  ],
+  "displayInternalSeparation": [
+    {
+      "internal": "1000000000000000000000000",
+      "display": "1e24",
+      "displayIsSourceOfTruth": false
+    }
+  ]
+}

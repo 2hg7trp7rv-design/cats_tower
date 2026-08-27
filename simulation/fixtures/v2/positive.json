@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "2.0.0",
+  "fixtureSetId": "cats-tower-v2-positive",
+  "cases": [
+    {
+      "id": "numeric-add",
+      "kind": "numeric",
+      "operation": "addUnsigned",
+      "input": [
+        "999999999999999999999999",
+        "1"
+      ],
+      "expected": "1000000000000000000000000"
+    },
+    {
+      "id": "numeric-half-even-down",
+      "kind": "numeric",
+      "operation": "halfEven",
+      "input": {
+        "numerator": "5",
+        "denominator": "2"
+      },
+      "expected": "2"
+    },
+    {
+      "id": "numeric-half-even-up",
+      "kind": "numeric",
+      "operation": "halfEven",
+      "input": {
+        "numerator": "7",
+        "denominator": "2"
+      },
+      "expected": "4"
+    },
+    {
+      "id": "probability-exact-sum",
+      "kind": "probability",
+      "table": "catalog.rate_table.character.v2",
+      "expected": "PASS"
+    },
+    {
+      "id": "floor-101-normal",
+      "kind": "tower",
+      "floor": "101",
+      "expectedDistrictId": "tower.district.011",
+      "expectedCycleId": "tower.cycle.000002"
+    },
+    {
+      "id": "first-reset",
+      "kind": "reset",
+      "previousBest": "0",
+      "newBest": "30",
+      "expectedEligible": true,
+      "minimumReward": "15"
+    },
+    {
+      "id": "repeat-best-zero",
+      "kind": "reset",
+      "previousBest": "100",
+      "newBest": "100",
+      "expectedEligible": false,
+      "expectedReward": "0"
+    },
+    {
+      "id": "evolution-level-101",
+      "kind": "evolution",
+      "level": "101",
+      "purchasedStages": "0",
+      "expectedNextMissingStage": "1",
+      "expectedBlocked": false
+    },
+    {
+      "id": "mastery-overflow",
+      "kind": "mastery",
+      "copies": "25",
+      "expectedMasteredCopies": "20",
+      "expectedOverflowCopies": "5",
+      "expectedOverflowCredit": "500"
+    },
+    {
+      "id": "refund-after-spend",
+      "kind": "refund",
+      "paidBalance": "0",
+      "affectedGrant": "100",
+      "alreadySpent": "100",
+      "expectedState": "paid-ruby-deficit",
+      "expectedMagnitude": "100",
+      "expectedFreeLedgersDebited": false
+    },
+    {
+      "id": "hard-pity-100",
+      "kind": "pity",
+      "drawsSinceUR": "99",
+      "featuredProgress": "12",
+      "expectedRarity": "UR",
+      "expectedHardPity": true
+    },
+    {
+      "id": "featured-200",
+      "kind": "pity",
+      "drawsSinceUR": "0",
+      "featuredProgress": "199",
+      "naturalRarity": "UR",
+      "expectedFeatured": true,
+      "expectedGuarantee": true
+    }
+  ]
+}

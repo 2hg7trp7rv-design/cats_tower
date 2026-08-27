@@ -1,0 +1,223 @@
+{
+  "schemaVersion": "2.0.0",
+  "fixtureSetId": "cats-tower-v2-state-transitions",
+  "successSequences": [
+    {
+      "id": "draw-success",
+      "machineId": "transition.draw.v2",
+      "states": [
+        "CREATED",
+        "VALIDATING",
+        "RESOURCES_RESERVED",
+        "RNG_COMMITTED",
+        "RESULT_GRANTED",
+        "RECORDED"
+      ]
+    },
+    {
+      "id": "draw-recovery",
+      "machineId": "transition.draw.v2",
+      "states": [
+        "CREATED",
+        "VALIDATING",
+        "RESOURCES_RESERVED",
+        "RNG_COMMITTED",
+        "RECOVERY_REQUIRED",
+        "RESULT_GRANTED",
+        "RECORDED"
+      ]
+    },
+    {
+      "id": "payment-success",
+      "machineId": "transition.payment.v2",
+      "states": [
+        "CREATED",
+        "STORE_PENDING",
+        "STORE_PURCHASED",
+        "SERVER_VERIFYING",
+        "ENTITLEMENT_GRANTED",
+        "ACKNOWLEDGED"
+      ]
+    },
+    {
+      "id": "payment-refund-deficit",
+      "machineId": "transition.payment.v2",
+      "states": [
+        "CREATED",
+        "STORE_PENDING",
+        "STORE_PURCHASED",
+        "SERVER_VERIFYING",
+        "ENTITLEMENT_GRANTED",
+        "ACKNOWLEDGED",
+        "REFUND_DEFICIT_RECORDED"
+      ]
+    },
+    {
+      "id": "ad-success",
+      "machineId": "transition.rewarded_ad.v2",
+      "states": [
+        "OFFERED",
+        "OPTED_IN",
+        "CONSENT_CHECKED",
+        "STARTED",
+        "NETWORK_COMPLETED",
+        "SERVER_VERIFYING",
+        "GRANTED"
+      ]
+    },
+    {
+      "id": "login-success",
+      "machineId": "transition.login_claim.v2",
+      "states": [
+        "ELIGIBLE",
+        "CLAIM_REQUESTED",
+        "GRANTED"
+      ]
+    },
+    {
+      "id": "reset-success",
+      "machineId": "transition.reset.v2",
+      "states": [
+        "NOT_ELIGIBLE",
+        "QUOTE_ISSUED",
+        "CONFIRMED",
+        "COMMITTING",
+        "APPLIED"
+      ]
+    },
+    {
+      "id": "evolution-success",
+      "machineId": "transition.evolution.v2",
+      "states": [
+        "NOT_ELIGIBLE",
+        "ELIGIBLE",
+        "QUOTE_ISSUED",
+        "CONFIRMED",
+        "RUBY_DEBITED",
+        "EVOLUTION_GRANTED",
+        "RECORDED"
+      ]
+    },
+    {
+      "id": "mastery-overflow",
+      "machineId": "transition.mastery_exchange.v2",
+      "states": [
+        "QUOTE_ISSUED",
+        "CONFIRMED",
+        "RESOURCE_DEBITED",
+        "CAP_REACHED",
+        "OVERFLOW_CREDITED",
+        "RECORDED"
+      ]
+    },
+    {
+      "id": "account-link",
+      "machineId": "transition.account_link.v2",
+      "states": [
+        "GUEST",
+        "AUTHENTICATING",
+        "SERVER_SNAPSHOT_FETCHED",
+        "CONFLICT_REVIEW",
+        "MERGING",
+        "LINKED"
+      ]
+    },
+    {
+      "id": "account-delete",
+      "machineId": "transition.account_deletion.v1",
+      "states": [
+        "ACTIVE",
+        "DELETE_QUOTE_ISSUED",
+        "CONFIRMED",
+        "DELETION_PENDING",
+        "ENTITLEMENT_RECONCILIATION",
+        "DELETED"
+      ]
+    }
+  ],
+  "invalidSequences": [
+    {
+      "id": "draw-reroll",
+      "machineId": "transition.draw.v2",
+      "states": [
+        "RNG_COMMITTED",
+        "VALIDATING"
+      ],
+      "expectedError": "INVALID_TRANSITION"
+    },
+    {
+      "id": "payment-pending-grant",
+      "machineId": "transition.payment.v2",
+      "states": [
+        "STORE_PENDING",
+        "ENTITLEMENT_GRANTED"
+      ],
+      "expectedError": "INVALID_TRANSITION"
+    },
+    {
+      "id": "ad-skip-consent",
+      "machineId": "transition.rewarded_ad.v2",
+      "states": [
+        "OPTED_IN",
+        "STARTED"
+      ],
+      "expectedError": "INVALID_TRANSITION"
+    },
+    {
+      "id": "login-double-claim-transition",
+      "machineId": "transition.login_claim.v2",
+      "states": [
+        "GRANTED",
+        "GRANTED"
+      ],
+      "expectedError": "INVALID_TRANSITION"
+    }
+  ],
+  "idempotencyCases": [
+    {
+      "id": "duplicate-intent",
+      "key": "intent-001",
+      "expectedOperationCount": "1"
+    },
+    {
+      "id": "duplicate-ad-receipt",
+      "receiptId": "receipt-ad-001",
+      "expectedGrantCount": "1"
+    },
+    {
+      "id": "duplicate-login-period",
+      "key": "account|catalog.login_campaign.v1|2026-08-27.1|day-1",
+      "expectedOperationCount": "1"
+    }
+  ],
+  "versionCases": [
+    {
+      "id": "stale-before-ad-start",
+      "accepted": false,
+      "acceptedVersion": "1",
+      "currentVersion": "2",
+      "expected": "STALE_BEFORE_ACCEPT"
+    },
+    {
+      "id": "retry-accepted-ad",
+      "accepted": true,
+      "acceptedVersion": "1",
+      "currentVersion": "2",
+      "expected": "RECONCILE_ACCEPTED_VERSION"
+    },
+    {
+      "id": "stale-before-login-claim",
+      "accepted": false,
+      "acceptedVersion": "1",
+      "currentVersion": "2",
+      "expected": "STALE_BEFORE_ACCEPT"
+    },
+    {
+      "id": "retry-accepted-login",
+      "accepted": true,
+      "acceptedVersion": "1",
+      "currentVersion": "2",
+      "expected": "RECONCILE_ACCEPTED_VERSION"
+    }
+  ]
+}

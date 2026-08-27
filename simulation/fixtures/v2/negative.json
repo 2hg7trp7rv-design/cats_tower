@@ -1,0 +1,909 @@
+{
+  "schemaVersion": "2.0.0",
+  "fixtureSetId": "cats-tower-v2-negative",
+  "caseCount": "82",
+  "cases": [
+    {
+      "id": "missing-top-meta",
+      "mutation": {
+        "op": "delete",
+        "path": "/meta"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-numeric",
+      "mutation": {
+        "op": "delete",
+        "path": "/numeric"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-tower",
+      "mutation": {
+        "op": "delete",
+        "path": "/tower"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-combat",
+      "mutation": {
+        "op": "delete",
+        "path": "/combat"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-offline",
+      "mutation": {
+        "op": "delete",
+        "path": "/offline"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-shops",
+      "mutation": {
+        "op": "delete",
+        "path": "/shops"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-delivery",
+      "mutation": {
+        "op": "delete",
+        "path": "/delivery"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-characters",
+      "mutation": {
+        "op": "delete",
+        "path": "/characters"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-weapons",
+      "mutation": {
+        "op": "delete",
+        "path": "/weapons"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-rarities",
+      "mutation": {
+        "op": "delete",
+        "path": "/rarities"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-levels",
+      "mutation": {
+        "op": "delete",
+        "path": "/levels"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-evolution",
+      "mutation": {
+        "op": "delete",
+        "path": "/evolution"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-characterMastery",
+      "mutation": {
+        "op": "delete",
+        "path": "/characterMastery"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-weaponMastery",
+      "mutation": {
+        "op": "delete",
+        "path": "/weaponMastery"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-gacha",
+      "mutation": {
+        "op": "delete",
+        "path": "/gacha"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-wallet",
+      "mutation": {
+        "op": "delete",
+        "path": "/wallet"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-reset",
+      "mutation": {
+        "op": "delete",
+        "path": "/reset"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-login",
+      "mutation": {
+        "op": "delete",
+        "path": "/login"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-products",
+      "mutation": {
+        "op": "delete",
+        "path": "/products"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-payments",
+      "mutation": {
+        "op": "delete",
+        "path": "/payments"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-ads",
+      "mutation": {
+        "op": "delete",
+        "path": "/ads"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-entitlements",
+      "mutation": {
+        "op": "delete",
+        "path": "/entitlements"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-accounts",
+      "mutation": {
+        "op": "delete",
+        "path": "/accounts"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-screens",
+      "mutation": {
+        "op": "delete",
+        "path": "/screens"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-builds",
+      "mutation": {
+        "op": "delete",
+        "path": "/builds"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-personas",
+      "mutation": {
+        "op": "delete",
+        "path": "/personas"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-runMatrix",
+      "mutation": {
+        "op": "delete",
+        "path": "/runMatrix"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-monteCarlo",
+      "mutation": {
+        "op": "delete",
+        "path": "/monteCarlo"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-stateTransitions",
+      "mutation": {
+        "op": "delete",
+        "path": "/stateTransitions"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-fixtures",
+      "mutation": {
+        "op": "delete",
+        "path": "/fixtures"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-migrations",
+      "mutation": {
+        "op": "delete",
+        "path": "/migrations"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-invariants",
+      "mutation": {
+        "op": "delete",
+        "path": "/invariants"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "missing-top-output",
+      "mutation": {
+        "op": "delete",
+        "path": "/output"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "unknown-top-field",
+      "mutation": {
+        "op": "set",
+        "path": "/unsealedField",
+        "value": true
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "TOP_LEVEL_FIELDS"
+      ]
+    },
+    {
+      "id": "unsafe-json-number",
+      "mutation": {
+        "op": "set",
+        "path": "/numeric/displayAbbreviation/significantDigits",
+        "value": 9007199254740992
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "UNSAFE_JSON_NUMBER"
+      ]
+    },
+    {
+      "id": "nan-literal",
+      "mutation": {
+        "op": "set",
+        "path": "/tower/floorGenerator/hpBase",
+        "value": "NaN"
+      },
+      "expectedCodes": [
+        "FORBIDDEN_NUMERIC_LITERAL"
+      ]
+    },
+    {
+      "id": "infinity-literal",
+      "mutation": {
+        "op": "set",
+        "path": "/tower/floorGenerator/hpBase",
+        "value": "Infinity"
+      },
+      "expectedCodes": [
+        "FORBIDDEN_NUMERIC_LITERAL"
+      ]
+    },
+    {
+      "id": "exponent-persistence",
+      "mutation": {
+        "op": "set",
+        "path": "/tower/floorGenerator/hpBase",
+        "value": "1e100"
+      },
+      "expectedCodes": [
+        "IMPLICIT_EXPONENT"
+      ]
+    },
+    {
+      "id": "visible-floor-cap",
+      "mutation": {
+        "op": "set",
+        "path": "/tower/playerVisibleMaximum",
+        "value": "10000"
+      },
+      "expectedCodes": [
+        "VISIBLE_FLOOR_CAP"
+      ]
+    },
+    {
+      "id": "floor100-ending",
+      "mutation": {
+        "op": "set",
+        "path": "/tower/floor100Role",
+        "value": "FINAL_FLOOR"
+      },
+      "expectedCodes": [
+        "FLOOR_100_BOUNDARY"
+      ]
+    },
+    {
+      "id": "direct-tap-damage",
+      "mutation": {
+        "op": "set",
+        "path": "/combat/movement/directTapDamage",
+        "value": "1"
+      },
+      "expectedCodes": [
+        "DIRECT_TAP_DAMAGE"
+      ]
+    },
+    {
+      "id": "party-five",
+      "mutation": {
+        "op": "set",
+        "path": "/combat/formationSize",
+        "value": "5"
+      },
+      "expectedCodes": [
+        "FORMATION"
+      ]
+    },
+    {
+      "id": "manual-shop-collection",
+      "mutation": {
+        "op": "set",
+        "path": "/shops/automation/collectAllRequired",
+        "value": true
+      },
+      "expectedCodes": [
+        "SHOP_CHORE"
+      ]
+    },
+    {
+      "id": "rarity-order",
+      "mutation": {
+        "op": "set",
+        "path": "/rarities/order/1",
+        "value": "SR"
+      },
+      "expectedCodes": [
+        "RARITY_ORDER"
+      ]
+    },
+    {
+      "id": "character-count",
+      "mutation": {
+        "op": "delete",
+        "path": "/characters/catalog/23"
+      },
+      "expectedCodes": [
+        "CHARACTER_COUNT",
+        "CHARACTER_RESERVATION"
+      ]
+    },
+    {
+      "id": "weapon-count",
+      "mutation": {
+        "op": "delete",
+        "path": "/weapons/catalog/35"
+      },
+      "expectedCodes": [
+        "WEAPON_COUNT",
+        "WEAPON_RESERVATION"
+      ]
+    },
+    {
+      "id": "nr-role-missing",
+      "mutation": {
+        "op": "set",
+        "path": "/characters/catalog/7/role",
+        "value": "area-damage"
+      },
+      "expectedCodes": [
+        "NR_CORE_ROLE"
+      ]
+    },
+    {
+      "id": "rr-core-gate",
+      "mutation": {
+        "op": "set",
+        "path": "/characters/catalog/8/coreProgressionGate",
+        "value": true
+      },
+      "expectedCodes": [
+        "CHARACTER_FIRST_COPY"
+      ]
+    },
+    {
+      "id": "level-cap",
+      "mutation": {
+        "op": "set",
+        "path": "/levels/uncappedRule",
+        "value": false
+      },
+      "expectedCodes": [
+        "LEVEL_CAP"
+      ]
+    },
+    {
+      "id": "evolution-blocks",
+      "mutation": {
+        "op": "set",
+        "path": "/evolution/nonBlockingContinuation",
+        "value": false
+      },
+      "expectedCodes": [
+        "EVOLUTION_RULE"
+      ]
+    },
+    {
+      "id": "first-evolution-underfunded",
+      "mutation": {
+        "op": "set",
+        "path": "/evolution/firstEvolutionCoverage/firstEffectiveResetMinimumReward",
+        "value": "5"
+      },
+      "expectedCodes": [
+        "FIRST_EVOLUTION_COVERAGE"
+      ]
+    },
+    {
+      "id": "first-copy-locked",
+      "mutation": {
+        "op": "set",
+        "path": "/characterMastery/firstCopy/functional",
+        "value": false
+      },
+      "expectedCodes": [
+        "FIRST_COPY_MASTERY"
+      ]
+    },
+    {
+      "id": "mastery-below20",
+      "mutation": {
+        "op": "set",
+        "path": "/characterMastery/fullMastery/minimumAdditionalEffectiveCopies",
+        "value": "19"
+      },
+      "expectedCodes": [
+        "FULL_MASTERY_COPIES"
+      ]
+    },
+    {
+      "id": "mastery-no-overflow",
+      "mutation": {
+        "op": "set",
+        "path": "/weaponMastery/overflow/neverDiscard",
+        "value": false
+      },
+      "expectedCodes": [
+        "MASTERY_OVERFLOW"
+      ]
+    },
+    {
+      "id": "mastery-increasing-marginal",
+      "mutation": {
+        "op": "set",
+        "path": "/characterMastery/marginalCurve/nodes/4/cumulativePowerBasisPoints",
+        "value": "2000"
+      },
+      "expectedCodes": [
+        "MASTERY_DIMINISHING"
+      ]
+    },
+    {
+      "id": "mixed-character-pool",
+      "mutation": {
+        "op": "set",
+        "path": "/gacha/characterPools/0/id",
+        "value": "banner.weapon.standard"
+      },
+      "expectedCodes": [
+        "POOL_SEPARATION",
+        "POOL_ID_COLLISION"
+      ]
+    },
+    {
+      "id": "bad-rate-sum",
+      "mutation": {
+        "op": "set",
+        "path": "/gacha/rates/0/entries/0/probability",
+        "value": "0.499"
+      },
+      "expectedCodes": [
+        "RATE_TABLE"
+      ]
+    },
+    {
+      "id": "hard-pity-101",
+      "mutation": {
+        "op": "set",
+        "path": "/gacha/hardPity/draws",
+        "value": "101"
+      },
+      "expectedCodes": [
+        "HARD_PITY"
+      ]
+    },
+    {
+      "id": "featured-201",
+      "mutation": {
+        "op": "set",
+        "path": "/gacha/featuredGuarantee/draws",
+        "value": "201"
+      },
+      "expectedCodes": [
+        "FEATURED_GUARANTEE"
+      ]
+    },
+    {
+      "id": "comp-gacha",
+      "mutation": {
+        "op": "set",
+        "path": "/gacha/compGachaProhibited",
+        "value": false
+      },
+      "expectedCodes": [
+        "COMP_GACHA"
+      ]
+    },
+    {
+      "id": "daily-draws-low",
+      "mutation": {
+        "op": "set",
+        "path": "/gacha/rewardCadence/noAdF2PDailyCombinedDraws/target",
+        "value": "10"
+      },
+      "expectedCodes": [
+        "DAILY_DRAWS"
+      ]
+    },
+    {
+      "id": "paid-ruby-expiry",
+      "mutation": {
+        "op": "set",
+        "path": "/wallet/paidRuby/expires",
+        "value": true
+      },
+      "expectedCodes": [
+        "PAID_EXPIRY"
+      ]
+    },
+    {
+      "id": "paid-ruby-first",
+      "mutation": {
+        "op": "set",
+        "path": "/wallet/consumptionOrder/paidRubyLast",
+        "value": false
+      },
+      "expectedCodes": [
+        "PAID_CONSUMPTION"
+      ]
+    },
+    {
+      "id": "refund-debits-free",
+      "mutation": {
+        "op": "set",
+        "path": "/wallet/refundDeficit/silentFreeLedgerDebit",
+        "value": true
+      },
+      "expectedCodes": [
+        "REFUND_FREE_DEBIT"
+      ]
+    },
+    {
+      "id": "second-reset",
+      "mutation": {
+        "op": "set",
+        "path": "/reset/count",
+        "value": "2"
+      },
+      "expectedCodes": [
+        "RESET_COUNT"
+      ]
+    },
+    {
+      "id": "repeat-best-reward",
+      "mutation": {
+        "op": "set",
+        "path": "/reset/reward/repeatSameBest",
+        "value": "1"
+      },
+      "expectedCodes": [
+        "RESET_ANTIFARM"
+      ]
+    },
+    {
+      "id": "forced-ad",
+      "mutation": {
+        "op": "set",
+        "path": "/ads/forcedInterstitial",
+        "value": true
+      },
+      "expectedCodes": [
+        "AD_MODE"
+      ]
+    },
+    {
+      "id": "ad-client-verified",
+      "mutation": {
+        "op": "set",
+        "path": "/ads/receiptVerification/serverSide",
+        "value": false
+      },
+      "expectedCodes": [
+        "AD_RECEIPT"
+      ]
+    },
+    {
+      "id": "login-client-time",
+      "mutation": {
+        "op": "set",
+        "path": "/login/serverTime",
+        "value": false
+      },
+      "expectedCodes": [
+        "LOGIN_CLAIM"
+      ]
+    },
+    {
+      "id": "screen-missing",
+      "mutation": {
+        "op": "delete",
+        "path": "/screens/registry/11"
+      },
+      "expectedCodes": [
+        "SCREENS"
+      ]
+    },
+    {
+      "id": "build-missing",
+      "mutation": {
+        "op": "delete",
+        "path": "/builds/2"
+      },
+      "expectedCodes": [
+        "BUILDS"
+      ]
+    },
+    {
+      "id": "persona-missing",
+      "mutation": {
+        "op": "delete",
+        "path": "/personas/4"
+      },
+      "expectedCodes": [
+        "PERSONAS"
+      ]
+    },
+    {
+      "id": "run-matrix-small",
+      "mutation": {
+        "op": "set",
+        "path": "/runMatrix/minimumScenarios",
+        "value": "14999"
+      },
+      "expectedCodes": [
+        "RUN_MATRIX"
+      ]
+    },
+    {
+      "id": "holdout-reuse",
+      "mutation": {
+        "op": "set",
+        "path": "/runMatrix/holdout/observedV1Reuse",
+        "value": true
+      },
+      "expectedCodes": [
+        "HOLDOUT"
+      ]
+    },
+    {
+      "id": "step3-in-step2",
+      "mutation": {
+        "op": "set",
+        "path": "/runMatrix/fullMatrixExecution",
+        "value": "STEP2"
+      },
+      "expectedCodes": [
+        "STEP_BOUNDARY"
+      ]
+    },
+    {
+      "id": "monthly-over2x",
+      "mutation": {
+        "op": "set",
+        "path": "/personas/2/accelerationMaximum",
+        "value": "2.1"
+      },
+      "expectedCodes": [
+        "MONTHLY_ACCELERATION"
+      ]
+    },
+    {
+      "id": "stress-over5x",
+      "mutation": {
+        "op": "set",
+        "path": "/personas/4/accelerationMaximum",
+        "value": "5.1"
+      },
+      "expectedCodes": [
+        "STRESS_ACCELERATION"
+      ]
+    },
+    {
+      "id": "noad-guarantee-too-slow",
+      "mutation": {
+        "op": "set",
+        "path": "/personas/0/dailyFeaturedProgress",
+        "value": "4"
+      },
+      "expectedCodes": [
+        "NO_AD_FEATURED_DAYS"
+      ]
+    },
+    {
+      "id": "wrong-payment-machine",
+      "mutation": {
+        "op": "set",
+        "path": "/stateTransitions/machines/payment/id",
+        "value": "transition.payment.v1"
+      },
+      "expectedCodes": [
+        "STATE_MACHINE"
+      ]
+    },
+    {
+      "id": "client-timeout-failure",
+      "mutation": {
+        "op": "set",
+        "path": "/stateTransitions/clientTimeoutMeansFailure",
+        "value": true
+      },
+      "expectedCodes": [
+        "STATE_AUTHORITY"
+      ]
+    },
+    {
+      "id": "dawn-not-merged",
+      "mutation": {
+        "op": "set",
+        "path": "/migrations/legacyDawnMergedInto",
+        "value": "reset.dawn"
+      },
+      "expectedCodes": [
+        "MIGRATION_CONTRACT"
+      ]
+    },
+    {
+      "id": "step2-balance-pass",
+      "mutation": {
+        "op": "set",
+        "path": "/output/balanceVerdictAllowedInStep2",
+        "value": true
+      },
+      "expectedCodes": [
+        "STEP2_BALANCE_VERDICT"
+      ]
+    }
+  ]
+}

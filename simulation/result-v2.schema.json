@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cats-tower.invalid/schema/result-v2.schema.json",
+  "title": "Cat's Tower Step 2 qualification result V2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "resultId", "deterministicPayload", "hashes", "evidence", "verdict"],
+  "properties": {
+    "schemaVersion": {"const": "2.0.0"},
+    "resultId": {"type": "string", "pattern": "^cats-tower-step2-v2-qualification-[0-9]{3}$"},
+    "deterministicPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "candidateId", "algorithmVersion", "roundingVersion", "seedNamespace", "scenarioCount", "scenarios", "summary", "violations"],
+      "properties": {
+        "mode": {"const": "STEP2_QUALIFICATION_ONLY"},
+        "candidateId": {"const": "cats-tower-v2-candidate-001"},
+        "algorithmVersion": {"const": "cats-tower-simulator-v2.0.0"},
+        "roundingVersion": {"const": "ct-rational-half-even-v1"},
+        "seedNamespace": {"const": "cats-tower-v2-qualification"},
+        "scenarioCount": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+        "scenarios": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["scenarioId", "buildId", "personaId", "seed", "ordinal", "firstResetMinutes", "firstResetRuby", "firstEvolutionCost", "firstEvolutionCovered", "featuredGuaranteeDay", "masteryAt20", "masteryOverflowAt25", "horizons", "scenarioDigest"],
+            "properties": {
+              "scenarioId": {"type": "string"},
+              "buildId": {"enum": ["build.combat", "build.reinforcement", "build.commerce"]},
+              "personaId": {"enum": ["no-ad-f2p", "rewarded-ad-f2p", "monthly-pass", "controlled-payer", "high-spend-stress"]},
+              "seed": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+              "ordinal": {"type": "string", "pattern": "^(0|[1-9][0-9]*)$"},
+              "firstResetMinutes": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+              "firstResetRuby": {"type": "string", "pattern": "^(0|[1-9][0-9]*)$"},
+              "firstEvolutionCost": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+              "firstEvolutionCovered": {"type": "boolean"},
+              "featuredGuaranteeDay": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+              "masteryAt20": {"$ref": "#/$defs/mastery"},
+              "masteryOverflowAt25": {"$ref": "#/$defs/mastery"},
+              "horizons": {
+                "type": "array",
+                "minItems": 6,
+                "maxItems": 6,
+                "items": {"$ref": "#/$defs/horizon"}
+              },
+              "scenarioDigest": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+            }
+          }
+        },
+        "summary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["buildCount", "personaCount", "seedsPerCell", "firstResetMinutesMinimum", "firstResetMinutesMaximum", "featuredGuaranteeDayMinimum", "featuredGuaranteeDayMaximum", "allFirstEvolutionsCovered", "balanceVerdict"],
+          "properties": {
+            "buildCount": {"const": "3"},
+            "personaCount": {"const": "5"},
+            "seedsPerCell": {"const": "2"},
+            "firstResetMinutesMinimum": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+            "firstResetMinutesMaximum": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+            "featuredGuaranteeDayMinimum": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+            "featuredGuaranteeDayMaximum": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+            "allFirstEvolutionsCovered": {"const": true},
+            "balanceVerdict": {"const": "NOT_EVALUATED_STEP2"}
+          }
+        },
+        "violations": {"type": "array", "maxItems": 0}
+      }
+    },
+    "hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidateSha256", "runPlanSha256", "deterministicPayloadSha256"],
+      "properties": {
+        "candidateSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "runPlanSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "deterministicPayloadSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runtimeVersion", "executedAt", "reproductionCommand", "canonicalJsonSha256"],
+      "properties": {
+        "runtimeVersion": {"type": "string", "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+"},
+        "executedAt": {"const": "2026-08-27T00:00:00Z"},
+        "reproductionCommand": {"type": "string"},
+        "canonicalJsonSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "verdict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contractQualification", "balanceQualification", "step3AuthorizedByThisResult"],
+      "properties": {
+        "contractQualification": {"const": "PASS"},
+        "balanceQualification": {"const": "NOT_RUN_STEP3_REQUIRED"},
+        "step3AuthorizedByThisResult": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "mastery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["masteredCopies", "overflowCopies", "overflowCredit"],
+      "properties": {
+        "masteredCopies": {"type": "string", "pattern": "^(0|[1-9][0-9]*)$"},
+        "overflowCopies": {"type": "string", "pattern": "^(0|[1-9][0-9]*)$"},
+        "overflowCredit": {"type": "string", "pattern": "^(0|[1-9][0-9]*)$"}
+      }
+    },
+    "horizon": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["horizonId", "targetFloor", "estimatedReachMinutes", "targetFloorDigest", "targetFloorRepresentation", "districtId", "cycleId", "bossId"],
+      "properties": {
+        "horizonId": {"enum": ["1-10F", "100F", "1000F", "10000F-or-equivalent", "repeated-resets", "30-45-day-economy"]},
+        "targetFloor": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+        "estimatedReachMinutes": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+        "targetFloorDigest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "targetFloorRepresentation": {"enum": ["expanded-integer", "exact-symbolic-power"]},
+        "districtId": {"type": "string", "pattern": "^tower\\.district\\.[0-9]+$"},
+        "cycleId": {"type": "string", "pattern": "^tower\\.cycle\\.[0-9]+$"},
+        "bossId": {"type": "string"},
+        "resetMinutes": {"type": "array", "minItems": 5, "maxItems": 5, "items": {"type": "string", "pattern": "^[1-9][0-9]*$"}},
+        "featuredGuaranteeDay": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+        "characterDraws45d": {"type": "string", "pattern": "^(0|[1-9][0-9]*)$"},
+        "weaponDraws45d": {"type": "string", "pattern": "^(0|[1-9][0-9]*)$"}
+      }
+    }
+  }
+}

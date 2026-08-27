@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "2.0.0",
+  "lockId": "cats-tower-legacy-v1-byte-lock-at-step2-entry",
+  "entryCommit": "e02a9af48aaab1a82b1ac4563a4c03f4922eb388",
+  "disposition": "HISTORICAL_BLOCKED_SUPERSEDED_INPUT",
+  "mayExecuteForV2Promotion": false,
+  "mayExtendInPlace": false,
+  "mayReuseObservedHoldout": false,
+  "files": [
+    {"path": "simulation/candidate-v1.json", "gitBlob": "6cbc77b006e5d3923d94c85019595ea1e897b7d3"},
+    {"path": "simulation/candidate.schema.json", "gitBlob": "ed81fcc431dbc4d4a55324746bf87343fd2ed1e7"},
+    {"path": "simulation/validate-candidate.mjs", "gitBlob": "bd68230e015d3ed742f318e23403eed36dcb5eca"},
+    {"path": "simulation/executable-seal.schema.json", "gitBlob": "11dd6b9d54caaaef7237026916d4e91bd055efd7"},
+    {"path": "simulation/validate-executable-seal.mjs", "gitBlob": "9c222be6a19787ee802e57712f53c2edfd163d2f"}
+  ]
+}

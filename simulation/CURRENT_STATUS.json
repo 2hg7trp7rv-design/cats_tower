@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "updatedDate": "2026-08-27",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "currentStep": 2,
-  "status": "READY_TO_START",
+  "status": "IN_PROGRESS",
   "step1": {
     "status": "PASS",
     "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
@@ -16,11 +16,15 @@
   },
   "step2Allowed": true,
   "step3Allowed": false,
-  "reason": "Step 1 Round 008 is sealed and active. Step 2 may begin only by committing a dedicated Acceptance Matrix and creating the new V2 chain defined by the sealed dependency closure.",
+  "acceptance": {
+    "path": "quality-reviews/step-2-executable-contract-v2/acceptance-matrix.json",
+    "blob": "f8986a3d436e93a003ff0f7e07f6a5d28d6faf2f",
+    "commit": "e02a9af48aaab1a82b1ac4563a4c03f4922eb388",
+    "status": "ACTIVE"
+  },
+  "reason": "The dedicated Acceptance Matrix is live. V2 content is present or being materialized, but the executable seal, independent critics, final judge, completion evidence and final live read-back have not yet passed.",
   "v1Artifacts": {
-    "candidate": "simulation/candidate-v1.json",
-    "schema": "simulation/candidate.schema.json",
-    "validator": "simulation/validate-candidate.mjs",
+    "lock": "simulation/legacy-v1-lock.json",
     "executeForCurrentPromotion": false,
     "extendInPlace": false,
     "reuseObservedHoldout": false,
@@ -29,22 +33,32 @@
   "dependencyClosure": {
     "path": "canonical/STEP2_DEPENDENCY_CLOSURE.json",
     "blob": "d23ea91754f6b11e4d452312752fc8850bd7ab9b",
-    "status": "SEALED_STEP2_INPUT",
-    "mayAuthorizeStep2WithActiveSeal": true
+    "status": "SEALED_STEP2_INPUT"
   },
   "v2Artifacts": {
-    "acceptance": "NOT_CREATED",
-    "candidate": "NOT_CREATED",
-    "schema": "NOT_CREATED",
-    "validator": "NOT_CREATED",
-    "simulator": "NOT_CREATED",
-    "resultSchema": "NOT_CREATED",
-    "resultValidator": "NOT_CREATED",
-    "runPlan": "NOT_CREATED",
-    "fixtures": "NOT_CREATED",
-    "migrations": "NOT_CREATED",
-    "dedicatedWorkflow": "NOT_CREATED",
-    "executableSeal": "NOT_CREATED"
+    "acceptance": "ACTIVE",
+    "candidate": "PRESENT_UNSEALED",
+    "schema": "PRESENT_UNSEALED",
+    "validator": "PRESENT_UNSEALED",
+    "simulator": "PRESENT_UNSEALED",
+    "resultSchema": "PRESENT_UNSEALED",
+    "resultValidator": "PRESENT_UNSEALED",
+    "runPlan": "PRESENT_UNSEALED",
+    "fixtures": "PRESENT_UNSEALED",
+    "migrations": "PRESENT_UNSEALED",
+    "dedicatedWorkflow": "PRESENT_UNSEALED",
+    "qualificationResult": "PRESENT_UNSEALED",
+    "executableSeal": "NOT_CREATED",
+    "critics": "NOT_COMPLETED",
+    "finalJudge": "NOT_COMPLETED",
+    "completionEvidence": "NOT_CREATED",
+    "liveReadback": "NOT_CREATED"
+  },
+  "qualificationScope": {
+    "scenarioCount": "30",
+    "resultDigest": "83009807d3e24bd548c13a73830946b764e2a5f9294fcdeb4292eedb18a24423",
+    "balanceVerdict": "NOT_EVALUATED_STEP2",
+    "step3Authorized": false
   },
   "minimumLaterValidation": {
     "builds": 3,
@@ -54,7 +68,8 @@
     "separateMonteCarlo": true,
     "separateStateTransitionTests": true,
     "separateLargeNumberPropertyTests": true,
-    "horizons": ["1-10F", "100F", "1000F", "10000F-or-equivalent", "repeated-resets", "30-45-day-economy"]
+    "horizons": ["1-10F", "100F", "1000F", "10000F-or-equivalent", "repeated-resets", "30-45-day-economy"],
+    "executionOwner": "STEP3_ONLY_AFTER_STEP2_PASS"
   },
   "writeBoundary": {
     "allowed": ["Step 2 V2 executable contract and quality evidence"],
@@ -67,5 +82,5 @@
     "productionChanged": false,
     "step3MayRun": false
   },
-  "nextAuthorizedWork": "Create Step 2 Acceptance before the first V2 artifact, then implement and validate the new V2 executable contract."
+  "nextAuthorizedWork": "Read back the materialized content, run full source-bound CI, perform independent critic review and repairs, then create the V2 executable seal and completion chain."
 }

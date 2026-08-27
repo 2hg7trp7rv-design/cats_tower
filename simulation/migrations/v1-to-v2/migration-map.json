@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "2.0.0",
+  "migrationId": "cats-tower-v1-to-v2.1",
+  "mode": "READ_ONLY_INPUT_CANONICAL_OUTPUT",
+  "aliases": {
+    "cat.mugi": "character.launch.001",
+    "cat.luna": "character.launch.002",
+    "cat.toto": "character.launch.003",
+    "cat.kohaku": "character.launch.004",
+    "shop.staff_reception": "shop.launch.001",
+    "shop.fish_diner": "shop.launch.002",
+    "shop.claw_forge": "shop.launch.003",
+    "shop.toy_workshop": "shop.launch.004",
+    "dawn": "reset.tower_return",
+    "dawn.reset": "reset.tower_return",
+    "currency.dawn_shard": "wallet.ruby.free.reset"
+  },
+  "canonicalPatterns": {
+    "character": "^character\\.launch\\.(00[1-9]|01[0-9]|02[0-4])$",
+    "weapon": "^weapon\\.launch\\.(00[1-9]|0[12][0-9]|03[0-6])$",
+    "shop": "^shop\\.launch\\.00[1-4]$",
+    "reset": "^reset\\.tower_return$"
+  },
+  "currencyProvenance": {
+    "currency.dawn_shard": {
+      "targetLedger": "wallet.ruby.free.reset",
+      "sourceType": "legacy-dawn-currency",
+      "requiresAudit": true
+    }
+  },
+  "invariants": {
+    "rawBackupImmutable": true,
+    "idempotentMarker": true,
+    "unknownIdFailsClosed": true,
+    "conflictingOwnershipFailsClosed": true,
+    "aliasesNeverWritten": true,
+    "parallelDawnResetForbidden": true
+  }
+}

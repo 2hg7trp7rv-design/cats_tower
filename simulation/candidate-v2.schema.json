@@ -1,0 +1,4220 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cats-tower.invalid/schema/candidate-v2.schema.json",
+  "title": "Cat's Tower candidate V2",
+  "description": "Strict closed-shape executable contract. Semantic invariants are enforced by validate-candidate-v2.mjs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "meta",
+    "numeric",
+    "tower",
+    "combat",
+    "offline",
+    "shops",
+    "delivery",
+    "characters",
+    "weapons",
+    "rarities",
+    "levels",
+    "evolution",
+    "characterMastery",
+    "weaponMastery",
+    "gacha",
+    "wallet",
+    "reset",
+    "login",
+    "products",
+    "payments",
+    "ads",
+    "entitlements",
+    "accounts",
+    "screens",
+    "builds",
+    "personas",
+    "runMatrix",
+    "monteCarlo",
+    "stateTransitions",
+    "fixtures",
+    "migrations",
+    "invariants",
+    "output"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidateId",
+        "schemaVersion",
+        "algorithmVersion",
+        "createdAt",
+        "repository",
+        "branch",
+        "sourceStep1Seal",
+        "acceptance",
+        "sourceBindings",
+        "seedContract",
+        "roundingVersion",
+        "canonicalJsonVersion"
+      ],
+      "properties": {
+        "candidateId": {
+          "type": "string"
+        },
+        "schemaVersion": {
+          "type": "string"
+        },
+        "algorithmVersion": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "repository": {
+          "type": "string"
+        },
+        "branch": {
+          "type": "string"
+        },
+        "sourceStep1Seal": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "gitBlob",
+            "commit",
+            "semanticCommit",
+            "semanticTree"
+          ],
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "gitBlob": {
+              "type": "string"
+            },
+            "commit": {
+              "type": "string"
+            },
+            "semanticCommit": {
+              "type": "string"
+            },
+            "semanticTree": {
+              "type": "string"
+            }
+          }
+        },
+        "acceptance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "gitBlob",
+            "commit"
+          ],
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "gitBlob": {
+              "type": "string"
+            },
+            "commit": {
+              "type": "string"
+            }
+          }
+        },
+        "sourceBindings": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "gitBlob",
+              "role"
+            ],
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "gitBlob": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "seedContract": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "algorithm",
+            "calibrationNamespace",
+            "holdoutNamespace",
+            "qualificationNamespace",
+            "v1ObservedSeedReuse"
+          ],
+          "properties": {
+            "algorithm": {
+              "type": "string"
+            },
+            "calibrationNamespace": {
+              "type": "string"
+            },
+            "holdoutNamespace": {
+              "type": "string"
+            },
+            "qualificationNamespace": {
+              "type": "string"
+            },
+            "v1ObservedSeedReuse": {
+              "type": "boolean"
+            }
+          }
+        },
+        "roundingVersion": {
+          "type": "string"
+        },
+        "canonicalJsonVersion": {
+          "type": "string"
+        }
+      }
+    },
+    "numeric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "representation",
+        "serialization",
+        "roundingModes",
+        "signedRepresentation",
+        "displayAbbreviation",
+        "limits",
+        "goldenFixtures"
+      ],
+      "properties": {
+        "representation": {
+          "type": "string"
+        },
+        "serialization": {
+          "type": "string"
+        },
+        "roundingModes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "signedRepresentation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "shape",
+            "allowedDomains"
+          ],
+          "properties": {
+            "shape": {
+              "type": "string"
+            },
+            "allowedDomains": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "displayAbbreviation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "version",
+            "sourceOfTruth",
+            "significantDigits",
+            "suffixCycle"
+          ],
+          "properties": {
+            "version": {
+              "type": "string"
+            },
+            "sourceOfTruth": {
+              "type": "boolean"
+            },
+            "significantDigits": {
+              "type": "integer"
+            },
+            "suffixCycle": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "limits": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "playerVisibleFloorMaximum",
+            "silentSaturation",
+            "unsafeNumberPersistence",
+            "resourceGuard"
+          ],
+          "properties": {
+            "playerVisibleFloorMaximum": {
+              "type": "string"
+            },
+            "silentSaturation": {
+              "type": "boolean"
+            },
+            "unsafeNumberPersistence": {
+              "type": "boolean"
+            },
+            "resourceGuard": {
+              "type": "string"
+            }
+          }
+        },
+        "goldenFixtures": {
+          "type": "string"
+        }
+      }
+    },
+    "tower": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "districtSize",
+        "cycleSize",
+        "playerVisibleMaximum",
+        "floor100Role",
+        "floor101Normal",
+        "milestones",
+        "floorGenerator",
+        "modifierPools",
+        "repetitionLimits",
+        "bossCadence",
+        "backgroundCadence",
+        "generatedIdFormatting"
+      ],
+      "properties": {
+        "districtSize": {
+          "type": "string"
+        },
+        "cycleSize": {
+          "type": "string"
+        },
+        "playerVisibleMaximum": {
+          "type": "string"
+        },
+        "floor100Role": {
+          "type": "string"
+        },
+        "floor101Normal": {
+          "type": "boolean"
+        },
+        "milestones": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "floorGenerator": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "version",
+            "hpBase",
+            "hpGrowth",
+            "attackBase",
+            "attackGrowth",
+            "coinBase",
+            "coinGrowth",
+            "exactExpansionMaximumFloor",
+            "aboveThresholdRepresentation"
+          ],
+          "properties": {
+            "version": {
+              "type": "string"
+            },
+            "hpBase": {
+              "type": "string"
+            },
+            "hpGrowth": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "numerator",
+                "denominator"
+              ],
+              "properties": {
+                "numerator": {
+                  "type": "string"
+                },
+                "denominator": {
+                  "type": "string"
+                }
+              }
+            },
+            "attackBase": {
+              "type": "string"
+            },
+            "attackGrowth": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "numerator",
+                "denominator"
+              ],
+              "properties": {
+                "numerator": {
+                  "type": "string"
+                },
+                "denominator": {
+                  "type": "string"
+                }
+              }
+            },
+            "coinBase": {
+              "type": "string"
+            },
+            "coinGrowth": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "numerator",
+                "denominator"
+              ],
+              "properties": {
+                "numerator": {
+                  "type": "string"
+                },
+                "denominator": {
+                  "type": "string"
+                }
+              }
+            },
+            "exactExpansionMaximumFloor": {
+              "type": "string"
+            },
+            "aboveThresholdRepresentation": {
+              "type": "string"
+            }
+          }
+        },
+        "modifierPools": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "poolIds",
+            "selectionCount",
+            "adjacentRepeatMaximum",
+            "windowRepeatMaximum",
+            "windowSize"
+          ],
+          "properties": {
+            "poolIds": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "selectionCount": {
+              "type": "string"
+            },
+            "adjacentRepeatMaximum": {
+              "type": "string"
+            },
+            "windowRepeatMaximum": {
+              "type": "string"
+            },
+            "windowSize": {
+              "type": "string"
+            }
+          }
+        },
+        "repetitionLimits": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sameModifierPairAdjacentMaximum",
+            "sameBossMechanicWithinDistrictMaximum"
+          ],
+          "properties": {
+            "sameModifierPairAdjacentMaximum": {
+              "type": "string"
+            },
+            "sameBossMechanicWithinDistrictMaximum": {
+              "type": "string"
+            }
+          }
+        },
+        "bossCadence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "midBossEveryFloors",
+            "districtBossEveryFloors",
+            "firstMidBossId",
+            "firstDistrictBossId"
+          ],
+          "properties": {
+            "midBossEveryFloors": {
+              "type": "string"
+            },
+            "districtBossEveryFloors": {
+              "type": "string"
+            },
+            "firstMidBossId": {
+              "type": "string"
+            },
+            "firstDistrictBossId": {
+              "type": "string"
+            }
+          }
+        },
+        "backgroundCadence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "districtChangeEveryFloors",
+            "majorThemeCycleEveryFloors"
+          ],
+          "properties": {
+            "districtChangeEveryFloors": {
+              "type": "string"
+            },
+            "majorThemeCycleEveryFloors": {
+              "type": "string"
+            }
+          }
+        },
+        "generatedIdFormatting": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "districtMinimumWidth",
+            "cycleMinimumWidth",
+            "midBossDistrictMinimumWidth",
+            "midBossOrdinalMinimumWidth",
+            "extraLeadingZerosForbidden"
+          ],
+          "properties": {
+            "districtMinimumWidth": {
+              "type": "string"
+            },
+            "cycleMinimumWidth": {
+              "type": "string"
+            },
+            "midBossDistrictMinimumWidth": {
+              "type": "string"
+            },
+            "midBossOrdinalMinimumWidth": {
+              "type": "string"
+            },
+            "extraLeadingZerosForbidden": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "combat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tickRate",
+        "formationSize",
+        "temporarySupportLayerSeparate",
+        "movement",
+        "range",
+        "projectiles",
+        "damage",
+        "healing",
+        "control",
+        "bossPhases",
+        "failureDiagnosis"
+      ],
+      "properties": {
+        "tickRate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "milliseconds",
+            "version"
+          ],
+          "properties": {
+            "milliseconds": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            }
+          }
+        },
+        "formationSize": {
+          "type": "string"
+        },
+        "temporarySupportLayerSeparate": {
+          "type": "boolean"
+        },
+        "movement": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "automatic",
+            "directTapDamage",
+            "contactOrRangeRequired"
+          ],
+          "properties": {
+            "automatic": {
+              "type": "boolean"
+            },
+            "directTapDamage": {
+              "type": "string"
+            },
+            "contactOrRangeRequired": {
+              "type": "boolean"
+            }
+          }
+        },
+        "range": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "logicalUnit",
+            "melee",
+            "ranged"
+          ],
+          "properties": {
+            "logicalUnit": {
+              "type": "string"
+            },
+            "melee": {
+              "type": "string"
+            },
+            "ranged": {
+              "type": "string"
+            }
+          }
+        },
+        "projectiles": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "travelTimeMode",
+            "serverResultDeterministic"
+          ],
+          "properties": {
+            "travelTimeMode": {
+              "type": "string"
+            },
+            "serverResultDeterministic": {
+              "type": "boolean"
+            }
+          }
+        },
+        "damage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "formulaVersion",
+            "minimumDamage",
+            "criticalUsesExactProbability"
+          ],
+          "properties": {
+            "formulaVersion": {
+              "type": "string"
+            },
+            "minimumDamage": {
+              "type": "string"
+            },
+            "criticalUsesExactProbability": {
+              "type": "boolean"
+            }
+          }
+        },
+        "healing": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mayBeCoreRole",
+            "firstCopyFunctional"
+          ],
+          "properties": {
+            "mayBeCoreRole": {
+              "type": "boolean"
+            },
+            "firstCopyFunctional": {
+              "type": "boolean"
+            }
+          }
+        },
+        "control": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tauntAntiAirAreaAvailableInNR",
+            "fullMasteryRequired"
+          ],
+          "properties": {
+            "tauntAntiAirAreaAvailableInNR": {
+              "type": "boolean"
+            },
+            "fullMasteryRequired": {
+              "type": "boolean"
+            }
+          }
+        },
+        "bossPhases": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled",
+            "minimumTelegraphMilliseconds"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "minimumTelegraphMilliseconds": {
+              "type": "string"
+            }
+          }
+        },
+        "failureDiagnosis": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "codes",
+            "visibleToPlayer"
+          ],
+          "properties": {
+            "codes": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "visibleToPlayer": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "offline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eligibility",
+        "cap",
+        "calculation",
+        "knownConfiguration",
+        "serverReconciliation"
+      ],
+      "properties": {
+        "eligibility": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "minimumAwayMilliseconds",
+            "serverTime"
+          ],
+          "properties": {
+            "minimumAwayMilliseconds": {
+              "type": "string"
+            },
+            "serverTime": {
+              "type": "boolean"
+            }
+          }
+        },
+        "cap": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "baseMilliseconds",
+            "monthlyPassMilliseconds"
+          ],
+          "properties": {
+            "baseMilliseconds": {
+              "type": "string"
+            },
+            "monthlyPassMilliseconds": {
+              "type": "string"
+            }
+          }
+        },
+        "calculation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "version",
+            "autoBattleBaseline",
+            "directTapContribution",
+            "deterministicKnownFloorReplay"
+          ],
+          "properties": {
+            "version": {
+              "type": "string"
+            },
+            "autoBattleBaseline": {
+              "type": "boolean"
+            },
+            "directTapContribution": {
+              "type": "string"
+            },
+            "deterministicKnownFloorReplay": {
+              "type": "boolean"
+            }
+          }
+        },
+        "knownConfiguration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "savedFormation",
+            "savedShopConfiguration",
+            "automationRetainedAcrossReset"
+          ],
+          "properties": {
+            "savedFormation": {
+              "type": "boolean"
+            },
+            "savedShopConfiguration": {
+              "type": "boolean"
+            },
+            "automationRetainedAcrossReset": {
+              "type": "boolean"
+            }
+          }
+        },
+        "serverReconciliation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "authoritative",
+            "clientPredictionMayMint",
+            "idempotentClaim"
+          ],
+          "properties": {
+            "authoritative": {
+              "type": "boolean"
+            },
+            "clientPredictionMayMint": {
+              "type": "boolean"
+            },
+            "idempotentClaim": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "shops": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "catalog",
+        "placement",
+        "levels",
+        "adjacency",
+        "reconfiguration",
+        "automation",
+        "supportEffects"
+      ],
+      "properties": {
+        "catalog": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "role",
+              "firstTenSlice"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              },
+              "firstTenSlice": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "placement": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "districtSlots",
+            "reconfigurationAllowed"
+          ],
+          "properties": {
+            "districtSlots": {
+              "type": "string"
+            },
+            "reconfigurationAllowed": {
+              "type": "boolean"
+            }
+          }
+        },
+        "levels": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "uncappedWithinRun",
+            "resetLoss",
+            "bulkPurchase"
+          ],
+          "properties": {
+            "uncappedWithinRun": {
+              "type": "boolean"
+            },
+            "resetLoss": {
+              "type": "boolean"
+            },
+            "bulkPurchase": {
+              "type": "boolean"
+            }
+          }
+        },
+        "adjacency": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "version",
+            "maximumStackedSameTag"
+          ],
+          "properties": {
+            "version": {
+              "type": "string"
+            },
+            "maximumStackedSameTag": {
+              "type": "string"
+            }
+          }
+        },
+        "reconfiguration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "freeBeforeBattle",
+            "combatLock"
+          ],
+          "properties": {
+            "freeBeforeBattle": {
+              "type": "boolean"
+            },
+            "combatLock": {
+              "type": "boolean"
+            }
+          }
+        },
+        "automation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "retainedAcrossReset",
+            "collectAllRequired",
+            "individualCollectionRequired"
+          ],
+          "properties": {
+            "retainedAcrossReset": {
+              "type": "boolean"
+            },
+            "collectAllRequired": {
+              "type": "boolean"
+            },
+            "individualCollectionRequired": {
+              "type": "boolean"
+            }
+          }
+        },
+        "supportEffects": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "combatIncomeAndDeliveryOnly",
+            "merchantChairmanIdentity"
+          ],
+          "properties": {
+            "combatIncomeAndDeliveryOnly": {
+              "type": "boolean"
+            },
+            "merchantChairmanIdentity": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "routes",
+        "arrival",
+        "forecast",
+        "offline",
+        "failureRecovery"
+      ],
+      "properties": {
+        "routes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "durationMilliseconds"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "durationMilliseconds": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "arrival": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "serverTime",
+            "idempotentGrant"
+          ],
+          "properties": {
+            "serverTime": {
+              "type": "boolean"
+            },
+            "idempotentGrant": {
+              "type": "boolean"
+            }
+          }
+        },
+        "forecast": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "visibleBeforeDispatch",
+            "rewardRangeExact"
+          ],
+          "properties": {
+            "visibleBeforeDispatch": {
+              "type": "boolean"
+            },
+            "rewardRangeExact": {
+              "type": "boolean"
+            }
+          }
+        },
+        "offline": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "continues",
+            "capUsesOfflineCap"
+          ],
+          "properties": {
+            "continues": {
+              "type": "boolean"
+            },
+            "capUsesOfflineCap": {
+              "type": "boolean"
+            }
+          }
+        },
+        "failureRecovery": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "duplicateGrantForbidden",
+            "pendingReconciliation"
+          ],
+          "properties": {
+            "duplicateGrantForbidden": {
+              "type": "boolean"
+            },
+            "pendingReconciliation": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "characters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "catalog",
+        "catalogTarget",
+        "requiredCoreRoles",
+        "deterministicNRMinimum",
+        "coinLevel",
+        "partyRules"
+      ],
+      "properties": {
+        "catalog": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "displayName",
+              "publicNameStatus",
+              "species",
+              "baseRarity",
+              "role",
+              "acquisition",
+              "firstCopyFunctional",
+              "coreProgressionGate",
+              "longTermUtilityTag"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "publicNameStatus": {
+                "type": "string"
+              },
+              "species": {
+                "type": "string"
+              },
+              "baseRarity": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              },
+              "acquisition": {
+                "type": "string"
+              },
+              "firstCopyFunctional": {
+                "type": "boolean"
+              },
+              "coreProgressionGate": {
+                "type": "boolean"
+              },
+              "longTermUtilityTag": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "catalogTarget": {
+          "type": "string"
+        },
+        "requiredCoreRoles": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "deterministicNRMinimum": {
+          "type": "string"
+        },
+        "coinLevel": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "uncapped",
+            "currency"
+          ],
+          "properties": {
+            "uncapped": {
+              "type": "boolean"
+            },
+            "currency": {
+              "type": "string"
+            }
+          }
+        },
+        "partyRules": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "activeNamed",
+            "temporarySupportSeparate",
+            "duplicateCharacterInParty"
+          ],
+          "properties": {
+            "activeNamed": {
+              "type": "string"
+            },
+            "temporarySupportSeparate": {
+              "type": "boolean"
+            },
+            "duplicateCharacterInParty": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "weapons": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "catalog",
+        "catalogTarget",
+        "requiredCoreRoles",
+        "deterministicNRMinimum",
+        "equipRules"
+      ],
+      "properties": {
+        "catalog": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "displayName",
+              "publicNameStatus",
+              "baseRarity",
+              "role",
+              "acquisition",
+              "firstCopyFunctional",
+              "coreProgressionGate"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "publicNameStatus": {
+                "type": "string"
+              },
+              "baseRarity": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              },
+              "acquisition": {
+                "type": "string"
+              },
+              "firstCopyFunctional": {
+                "type": "boolean"
+              },
+              "coreProgressionGate": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "catalogTarget": {
+          "type": "string"
+        },
+        "requiredCoreRoles": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "deterministicNRMinimum": {
+          "type": "string"
+        },
+        "equipRules": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "onePerActiveCharacter",
+            "randomSubstatMaze",
+            "mandatoryDismantleLoop"
+          ],
+          "properties": {
+            "onePerActiveCharacter": {
+              "type": "boolean"
+            },
+            "randomSubstatMaze": {
+              "type": "boolean"
+            },
+            "mandatoryDismantleLoop": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "rarities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "order",
+        "catalog",
+        "strengthBoundary",
+        "lowRarityUtility",
+        "highRarityNonGate"
+      ],
+      "properties": {
+        "order": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "catalog": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "code",
+              "rank",
+              "baselinePowerMultiplier",
+              "mayGateCoreProgression",
+              "evolutionAxisSeparate"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              },
+              "rank": {
+                "type": "integer"
+              },
+              "baselinePowerMultiplier": {
+                "type": "string"
+              },
+              "mayGateCoreProgression": {
+                "type": "boolean"
+              },
+              "evolutionAxisSeparate": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "strengthBoundary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "URGenerallyStrong",
+            "URUnconditionalBestAllRoles"
+          ],
+          "properties": {
+            "URGenerallyStrong": {
+              "type": "boolean"
+            },
+            "URUnconditionalBestAllRoles": {
+              "type": "boolean"
+            }
+          }
+        },
+        "lowRarityUtility": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "deterministicRoutes",
+            "longTermMeasurable"
+          ],
+          "properties": {
+            "deterministicRoutes": {
+              "type": "boolean"
+            },
+            "longTermMeasurable": {
+              "type": "boolean"
+            }
+          }
+        },
+        "highRarityNonGate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "corePve",
+            "reset",
+            "evolution",
+            "requiredCombatFunctions"
+          ],
+          "properties": {
+            "corePve": {
+              "type": "boolean"
+            },
+            "reset": {
+              "type": "boolean"
+            },
+            "evolution": {
+              "type": "boolean"
+            },
+            "requiredCombatFunctions": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "levels": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "costCurve",
+        "uncappedRule",
+        "bulkPurchase",
+        "resetLoss"
+      ],
+      "properties": {
+        "costCurve": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "version",
+            "baseCost",
+            "growth",
+            "rounding"
+          ],
+          "properties": {
+            "version": {
+              "type": "string"
+            },
+            "baseCost": {
+              "type": "string"
+            },
+            "growth": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "numerator",
+                "denominator"
+              ],
+              "properties": {
+                "numerator": {
+                  "type": "string"
+                },
+                "denominator": {
+                  "type": "string"
+                }
+              }
+            },
+            "rounding": {
+              "type": "string"
+            }
+          }
+        },
+        "uncappedRule": {
+          "type": "boolean"
+        },
+        "bulkPurchase": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "options",
+            "deterministic"
+          ],
+          "properties": {
+            "options": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "deterministic": {
+              "type": "boolean"
+            }
+          }
+        },
+        "resetLoss": {
+          "type": "boolean"
+        }
+      }
+    },
+    "evolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eligibilityEveryLevels",
+        "costCurve",
+        "orderedCatchUp",
+        "nonBlockingContinuation",
+        "visualCadence",
+        "resetRetention",
+        "firstEvolutionCoverage"
+      ],
+      "properties": {
+        "eligibilityEveryLevels": {
+          "type": "string"
+        },
+        "costCurve": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "currency",
+            "stageCosts",
+            "afterListed"
+          ],
+          "properties": {
+            "currency": {
+              "type": "string"
+            },
+            "stageCosts": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "afterListed": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "base",
+                "perStage"
+              ],
+              "properties": {
+                "base": {
+                  "type": "string"
+                },
+                "perStage": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "orderedCatchUp": {
+          "type": "boolean"
+        },
+        "nonBlockingContinuation": {
+          "type": "boolean"
+        },
+        "visualCadence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "minorEveryLevels",
+            "majorEveryStages"
+          ],
+          "properties": {
+            "minorEveryLevels": {
+              "type": "string"
+            },
+            "majorEveryStages": {
+              "type": "string"
+            }
+          }
+        },
+        "resetRetention": {
+          "type": "boolean"
+        },
+        "firstEvolutionCoverage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "firstEffectiveResetMinimumReward",
+            "firstStageCost",
+            "adOrPaymentRequired"
+          ],
+          "properties": {
+            "firstEffectiveResetMinimumReward": {
+              "type": "string"
+            },
+            "firstStageCost": {
+              "type": "string"
+            },
+            "adOrPaymentRequired": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "characterMastery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "firstCopy",
+        "practicalBreakpoints",
+        "fullMastery",
+        "marginalCurve",
+        "overflow",
+        "catchUp"
+      ],
+      "properties": {
+        "firstCopy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "functional",
+            "roleComplete"
+          ],
+          "properties": {
+            "functional": {
+              "type": "boolean"
+            },
+            "roleComplete": {
+              "type": "boolean"
+            }
+          }
+        },
+        "practicalBreakpoints": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "nodes",
+            "latestAdditionalCopies"
+          ],
+          "properties": {
+            "nodes": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "additionalEffectiveCopies",
+                  "cumulativePowerBasisPoints",
+                  "functionalUnlock"
+                ],
+                "properties": {
+                  "additionalEffectiveCopies": {
+                    "type": "string"
+                  },
+                  "cumulativePowerBasisPoints": {
+                    "type": "string"
+                  },
+                  "functionalUnlock": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "latestAdditionalCopies": {
+              "type": "string"
+            }
+          }
+        },
+        "fullMastery": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "minimumAdditionalEffectiveCopies",
+            "normalPvePrerequisite"
+          ],
+          "properties": {
+            "minimumAdditionalEffectiveCopies": {
+              "type": "string"
+            },
+            "normalPvePrerequisite": {
+              "type": "boolean"
+            }
+          }
+        },
+        "marginalCurve": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "nodes",
+            "strictlyDiminishingMarginalGain"
+          ],
+          "properties": {
+            "nodes": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "additionalEffectiveCopies",
+                  "cumulativePowerBasisPoints",
+                  "functionalUnlock"
+                ],
+                "properties": {
+                  "additionalEffectiveCopies": {
+                    "type": "string"
+                  },
+                  "cumulativePowerBasisPoints": {
+                    "type": "string"
+                  },
+                  "functionalUnlock": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "strictlyDiminishingMarginalGain": {
+              "type": "boolean"
+            }
+          }
+        },
+        "overflow": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "currency",
+            "conversionPerDuplicate",
+            "neverDiscard"
+          ],
+          "properties": {
+            "currency": {
+              "type": "string"
+            },
+            "conversionPerDuplicate": {
+              "type": "string"
+            },
+            "neverDiscard": {
+              "type": "boolean"
+            }
+          }
+        },
+        "catchUp": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "selectors",
+            "universalFragments",
+            "exchange",
+            "rerun"
+          ],
+          "properties": {
+            "selectors": {
+              "type": "boolean"
+            },
+            "universalFragments": {
+              "type": "boolean"
+            },
+            "exchange": {
+              "type": "boolean"
+            },
+            "rerun": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "weaponMastery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "firstCopy",
+        "practicalBreakpoints",
+        "fullMastery",
+        "marginalCurve",
+        "overflow",
+        "catchUp"
+      ],
+      "properties": {
+        "firstCopy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "functional",
+            "roleComplete"
+          ],
+          "properties": {
+            "functional": {
+              "type": "boolean"
+            },
+            "roleComplete": {
+              "type": "boolean"
+            }
+          }
+        },
+        "practicalBreakpoints": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "nodes",
+            "latestAdditionalCopies"
+          ],
+          "properties": {
+            "nodes": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "additionalEffectiveCopies",
+                  "cumulativePowerBasisPoints",
+                  "functionalUnlock"
+                ],
+                "properties": {
+                  "additionalEffectiveCopies": {
+                    "type": "string"
+                  },
+                  "cumulativePowerBasisPoints": {
+                    "type": "string"
+                  },
+                  "functionalUnlock": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "latestAdditionalCopies": {
+              "type": "string"
+            }
+          }
+        },
+        "fullMastery": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "minimumAdditionalEffectiveCopies",
+            "normalPvePrerequisite"
+          ],
+          "properties": {
+            "minimumAdditionalEffectiveCopies": {
+              "type": "string"
+            },
+            "normalPvePrerequisite": {
+              "type": "boolean"
+            }
+          }
+        },
+        "marginalCurve": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "nodes",
+            "strictlyDiminishingMarginalGain"
+          ],
+          "properties": {
+            "nodes": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "additionalEffectiveCopies",
+                  "cumulativePowerBasisPoints",
+                  "functionalUnlock"
+                ],
+                "properties": {
+                  "additionalEffectiveCopies": {
+                    "type": "string"
+                  },
+                  "cumulativePowerBasisPoints": {
+                    "type": "string"
+                  },
+                  "functionalUnlock": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "strictlyDiminishingMarginalGain": {
+              "type": "boolean"
+            }
+          }
+        },
+        "overflow": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "currency",
+            "conversionPerDuplicate",
+            "neverDiscard"
+          ],
+          "properties": {
+            "currency": {
+              "type": "string"
+            },
+            "conversionPerDuplicate": {
+              "type": "string"
+            },
+            "neverDiscard": {
+              "type": "boolean"
+            }
+          }
+        },
+        "catchUp": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "selectors",
+            "universalFragments",
+            "exchange",
+            "rerun"
+          ],
+          "properties": {
+            "selectors": {
+              "type": "boolean"
+            },
+            "universalFragments": {
+              "type": "boolean"
+            },
+            "exchange": {
+              "type": "boolean"
+            },
+            "rerun": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "gacha": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "characterPools",
+        "weaponPools",
+        "rates",
+        "hardPity",
+        "featuredGuarantee",
+        "carryoverFamilies",
+        "exchange",
+        "history",
+        "bulkDraw",
+        "newcomerGuarantees",
+        "compGachaProhibited",
+        "rewardCadence"
+      ],
+      "properties": {
+        "characterPools": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "kind",
+              "rateTable",
+              "pityFamily",
+              "carryoverFamily"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string"
+              },
+              "rateTable": {
+                "type": "string"
+              },
+              "pityFamily": {
+                "type": "string"
+              },
+              "carryoverFamily": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "weaponPools": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "kind",
+              "rateTable",
+              "pityFamily",
+              "carryoverFamily"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string"
+              },
+              "rateTable": {
+                "type": "string"
+              },
+              "pityFamily": {
+                "type": "string"
+              },
+              "carryoverFamily": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "rates": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "entries"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "entries": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "rarity",
+                    "probability"
+                  ],
+                  "properties": {
+                    "rarity": {
+                      "type": "string"
+                    },
+                    "probability": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "hardPity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "draws",
+            "guaranteedRarity",
+            "resetsOnUR"
+          ],
+          "properties": {
+            "draws": {
+              "type": "string"
+            },
+            "guaranteedRarity": {
+              "type": "string"
+            },
+            "resetsOnUR": {
+              "type": "boolean"
+            }
+          }
+        },
+        "featuredGuarantee": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "draws",
+            "guaranteedFeatured",
+            "featuredShareWithinUR"
+          ],
+          "properties": {
+            "draws": {
+              "type": "string"
+            },
+            "guaranteedFeatured": {
+              "type": "boolean"
+            },
+            "featuredShareWithinUR": {
+              "type": "string"
+            }
+          }
+        },
+        "carryoverFamilies": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "compatibleOnly",
+            "expiresOnAccountDeletionOnly"
+          ],
+          "properties": {
+            "compatibleOnly": {
+              "type": "boolean"
+            },
+            "expiresOnAccountDeletionOnly": {
+              "type": "boolean"
+            }
+          }
+        },
+        "exchange": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "characterSelector",
+            "weaponSelector",
+            "bannerMedal",
+            "deterministicProgress"
+          ],
+          "properties": {
+            "characterSelector": {
+              "type": "string"
+            },
+            "weaponSelector": {
+              "type": "string"
+            },
+            "bannerMedal": {
+              "type": "string"
+            },
+            "deterministicProgress": {
+              "type": "boolean"
+            }
+          }
+        },
+        "history": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "serverAuthoritative",
+            "rngAuditId",
+            "preDrawDisclosure"
+          ],
+          "properties": {
+            "serverAuthoritative": {
+              "type": "boolean"
+            },
+            "rngAuditId": {
+              "type": "boolean"
+            },
+            "preDrawDisclosure": {
+              "type": "boolean"
+            }
+          }
+        },
+        "bulkDraw": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "options",
+            "firstAnimationThenSkip"
+          ],
+          "properties": {
+            "options": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "firstAnimationThenSkip": {
+              "type": "boolean"
+            }
+          }
+        },
+        "newcomerGuarantees": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "firstDaySSRCharacterByDraw",
+            "firstDaySRWeaponByDraw",
+            "deterministicRoutesShown"
+          ],
+          "properties": {
+            "firstDaySSRCharacterByDraw": {
+              "type": "string"
+            },
+            "firstDaySRWeaponByDraw": {
+              "type": "string"
+            },
+            "deterministicRoutesShown": {
+              "type": "boolean"
+            }
+          }
+        },
+        "compGachaProhibited": {
+          "type": "boolean"
+        },
+        "rewardCadence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "firstTenMinutesCombinedDraws",
+            "firstHourCombinedDraws",
+            "firstSevenDaysCombinedDraws",
+            "noAdF2PDailyCombinedDraws",
+            "rewardedAdAdditionalDailyDraws",
+            "visibleUpgradeIntervalSeconds"
+          ],
+          "properties": {
+            "firstTenMinutesCombinedDraws": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "minimum",
+                "target",
+                "maximum"
+              ],
+              "properties": {
+                "minimum": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                },
+                "maximum": {
+                  "type": "string"
+                }
+              }
+            },
+            "firstHourCombinedDraws": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "minimum",
+                "target",
+                "maximum"
+              ],
+              "properties": {
+                "minimum": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                },
+                "maximum": {
+                  "type": "string"
+                }
+              }
+            },
+            "firstSevenDaysCombinedDraws": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "minimum",
+                "target",
+                "maximum"
+              ],
+              "properties": {
+                "minimum": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                },
+                "maximum": {
+                  "type": "string"
+                }
+              }
+            },
+            "noAdF2PDailyCombinedDraws": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "minimum",
+                "target",
+                "maximum"
+              ],
+              "properties": {
+                "minimum": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                },
+                "maximum": {
+                  "type": "string"
+                }
+              }
+            },
+            "rewardedAdAdditionalDailyDraws": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "target",
+                "hardCap"
+              ],
+              "properties": {
+                "target": {
+                  "type": "string"
+                },
+                "hardCap": {
+                  "type": "string"
+                }
+              }
+            },
+            "visibleUpgradeIntervalSeconds": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "newPlayerMaximum",
+                "normalSessionMaximum"
+              ],
+              "properties": {
+                "newPlayerMaximum": {
+                  "type": "string"
+                },
+                "normalSessionMaximum": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "wallet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "coin",
+        "paidRuby",
+        "freeResetRuby",
+        "freeAdRuby",
+        "freeOtherRuby",
+        "tickets",
+        "consumptionOrder",
+        "conservation",
+        "refundDeficit"
+      ],
+      "properties": {
+        "coin": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "resetLoss"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "resetLoss": {
+              "type": "boolean"
+            }
+          }
+        },
+        "paidRuby": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "expires",
+            "serverAuthority"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "expires": {
+              "type": "boolean"
+            },
+            "serverAuthority": {
+              "type": "boolean"
+            }
+          }
+        },
+        "freeResetRuby": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "serverAuthority"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "serverAuthority": {
+              "type": "boolean"
+            }
+          }
+        },
+        "freeAdRuby": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "serverAuthority"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "serverAuthority": {
+              "type": "boolean"
+            }
+          }
+        },
+        "freeOtherRuby": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "serverAuthority"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "serverAuthority": {
+              "type": "boolean"
+            }
+          }
+        },
+        "tickets": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "character",
+            "weapon",
+            "pickupCharacter",
+            "pickupWeapon"
+          ],
+          "properties": {
+            "character": {
+              "type": "string"
+            },
+            "weapon": {
+              "type": "string"
+            },
+            "pickupCharacter": {
+              "type": "string"
+            },
+            "pickupWeapon": {
+              "type": "string"
+            }
+          }
+        },
+        "consumptionOrder": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "generalRuby",
+            "evolution",
+            "paidRubyLast",
+            "version"
+          ],
+          "properties": {
+            "generalRuby": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "evolution": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "paidRubyLast": {
+              "type": "boolean"
+            },
+            "version": {
+              "type": "string"
+            }
+          }
+        },
+        "conservation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "doubleEntry",
+            "transactionIdRequired",
+            "auditIdRequired",
+            "silentMintOrBurn"
+          ],
+          "properties": {
+            "doubleEntry": {
+              "type": "boolean"
+            },
+            "transactionIdRequired": {
+              "type": "boolean"
+            },
+            "auditIdRequired": {
+              "type": "boolean"
+            },
+            "silentMintOrBurn": {
+              "type": "boolean"
+            }
+          }
+        },
+        "refundDeficit": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "states",
+            "signedRepresentation",
+            "silentFreeLedgerDebit",
+            "policyVersion"
+          ],
+          "properties": {
+            "states": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "signedRepresentation": {
+              "type": "string"
+            },
+            "silentFreeLedgerDebit": {
+              "type": "boolean"
+            },
+            "policyVersion": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "reset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "count",
+        "eligibility",
+        "losses",
+        "retained",
+        "reward",
+        "antiFarm",
+        "floorOneRestart",
+        "reclearAcceleration",
+        "quoteAndCommit"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "count": {
+          "type": "string"
+        },
+        "eligibility": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "minimumNewBestFloor",
+            "targetFirstEffectiveMinutesP50"
+          ],
+          "properties": {
+            "minimumNewBestFloor": {
+              "type": "string"
+            },
+            "targetFirstEffectiveMinutesP50": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "minimum",
+                "maximum"
+              ],
+              "properties": {
+                "minimum": {
+                  "type": "string"
+                },
+                "maximum": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "losses": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "retained": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "reward": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "currency",
+            "formulaVersion",
+            "firstEffectiveMinimum",
+            "repeatSameBest",
+            "newRecordRequired"
+          ],
+          "properties": {
+            "currency": {
+              "type": "string"
+            },
+            "formulaVersion": {
+              "type": "string"
+            },
+            "firstEffectiveMinimum": {
+              "type": "string"
+            },
+            "repeatSameBest": {
+              "type": "string"
+            },
+            "newRecordRequired": {
+              "type": "boolean"
+            }
+          }
+        },
+        "antiFarm": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sameBestReward",
+            "highestFloorAtomic"
+          ],
+          "properties": {
+            "sameBestReward": {
+              "type": "string"
+            },
+            "highestFloorAtomic": {
+              "type": "boolean"
+            }
+          }
+        },
+        "floorOneRestart": {
+          "type": "boolean"
+        },
+        "reclearAcceleration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "savedFormation",
+            "shopAutomation",
+            "knownFloorSpeedMultiplierCap",
+            "bulkPurchase"
+          ],
+          "properties": {
+            "savedFormation": {
+              "type": "boolean"
+            },
+            "shopAutomation": {
+              "type": "boolean"
+            },
+            "knownFloorSpeedMultiplierCap": {
+              "type": "string"
+            },
+            "bulkPurchase": {
+              "type": "boolean"
+            }
+          }
+        },
+        "quoteAndCommit": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "lossKeepGainComplete",
+            "quoteExpiryMilliseconds",
+            "idempotent",
+            "serverAuthority"
+          ],
+          "properties": {
+            "lossKeepGainComplete": {
+              "type": "boolean"
+            },
+            "quoteExpiryMilliseconds": {
+              "type": "string"
+            },
+            "idempotent": {
+              "type": "boolean"
+            },
+            "serverAuthority": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "login": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "newcomer",
+        "monthly",
+        "returner",
+        "campaignCatalogId",
+        "campaignVersion",
+        "serverTime",
+        "missedDay",
+        "claimHistory"
+      ],
+      "properties": {
+        "newcomer": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "days",
+            "missedDayResetsTrack"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "days": {
+              "type": "string"
+            },
+            "missedDayResetsTrack": {
+              "type": "boolean"
+            }
+          }
+        },
+        "monthly": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "days",
+            "missedDayResetsTrack"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "days": {
+              "type": "string"
+            },
+            "missedDayResetsTrack": {
+              "type": "boolean"
+            }
+          }
+        },
+        "returner": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "days",
+            "missedDayResetsTrack"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "days": {
+              "type": "string"
+            },
+            "missedDayResetsTrack": {
+              "type": "boolean"
+            }
+          }
+        },
+        "campaignCatalogId": {
+          "type": "string"
+        },
+        "campaignVersion": {
+          "type": "string"
+        },
+        "serverTime": {
+          "type": "boolean"
+        },
+        "missedDay": {
+          "type": "string"
+        },
+        "claimHistory": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "serverAuthoritative",
+            "samePeriodExactlyOnce",
+            "multiTabConverges"
+          ],
+          "properties": {
+            "serverAuthoritative": {
+              "type": "boolean"
+            },
+            "samePeriodExactlyOnce": {
+              "type": "boolean"
+            },
+            "multiTabConverges": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "products": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "catalogVersion",
+        "rubyPacks",
+        "starterPack",
+        "monthlyPass",
+        "ticketPacks",
+        "cosmeticPacks",
+        "disclosures"
+      ],
+      "properties": {
+        "catalogVersion": {
+          "type": "string"
+        },
+        "rubyPacks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "paidRuby",
+              "bonusFreeOtherRuby",
+              "contentsImmutable"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "paidRuby": {
+                "type": "string"
+              },
+              "bonusFreeOtherRuby": {
+                "type": "string"
+              },
+              "contentsImmutable": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "starterPack": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "paidRuby",
+              "characterTickets",
+              "weaponTickets",
+              "oneTime"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "paidRuby": {
+                "type": "string"
+              },
+              "characterTickets": {
+                "type": "string"
+              },
+              "weaponTickets": {
+                "type": "string"
+              },
+              "oneTime": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "monthlyPass": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "durationDays",
+              "dailyFreeOtherRuby",
+              "offlineCapMultiplier",
+              "accelerationTargetMaximum"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "durationDays": {
+                "type": "string"
+              },
+              "dailyFreeOtherRuby": {
+                "type": "string"
+              },
+              "offlineCapMultiplier": {
+                "type": "string"
+              },
+              "accelerationTargetMaximum": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "ticketPacks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "characterTickets",
+              "weaponTickets",
+              "randomContents"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "characterTickets": {
+                "type": "string"
+              },
+              "weaponTickets": {
+                "type": "string"
+              },
+              "randomContents": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "cosmeticPacks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "combatPower",
+              "contentsImmutable"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "combatPower": {
+                "type": "string"
+              },
+              "contentsImmutable": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "disclosures": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "exactContents",
+            "period",
+            "claimConditions",
+            "fakeDiscount",
+            "forcedAdRemovalProduct"
+          ],
+          "properties": {
+            "exactContents": {
+              "type": "boolean"
+            },
+            "period": {
+              "type": "boolean"
+            },
+            "claimConditions": {
+              "type": "boolean"
+            },
+            "fakeDiscount": {
+              "type": "boolean"
+            },
+            "forcedAdRemovalProduct": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "payments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pending",
+        "verification",
+        "grant",
+        "acknowledge",
+        "refund",
+        "refundDeficitPolicy",
+        "revocation",
+        "restore"
+      ],
+      "properties": {
+        "pending": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "grantsValue"
+          ],
+          "properties": {
+            "grantsValue": {
+              "type": "boolean"
+            }
+          }
+        },
+        "verification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "serverSide",
+            "providerTransactionUnique"
+          ],
+          "properties": {
+            "serverSide": {
+              "type": "boolean"
+            },
+            "providerTransactionUnique": {
+              "type": "boolean"
+            }
+          }
+        },
+        "grant": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "exactlyOnce",
+            "catalogVersionBound"
+          ],
+          "properties": {
+            "exactlyOnce": {
+              "type": "boolean"
+            },
+            "catalogVersionBound": {
+              "type": "boolean"
+            }
+          }
+        },
+        "acknowledge": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "afterDurableGrant"
+          ],
+          "properties": {
+            "afterDurableGrant": {
+              "type": "boolean"
+            }
+          }
+        },
+        "refund": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "unspentAffectedPaidGrantReversed",
+            "spentGrantCreatesDeficit"
+          ],
+          "properties": {
+            "unspentAffectedPaidGrantReversed": {
+              "type": "boolean"
+            },
+            "spentGrantCreatesDeficit": {
+              "type": "boolean"
+            }
+          }
+        },
+        "refundDeficitPolicy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "version",
+            "freeLedgersUntouched"
+          ],
+          "properties": {
+            "version": {
+              "type": "string"
+            },
+            "freeLedgersUntouched": {
+              "type": "boolean"
+            }
+          }
+        },
+        "revocation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "providerTruth",
+            "auditRequired"
+          ],
+          "properties": {
+            "providerTruth": {
+              "type": "boolean"
+            },
+            "auditRequired": {
+              "type": "boolean"
+            }
+          }
+        },
+        "restore": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "entitlementsFromProviderTruth",
+            "noDuplicateConsumableGrant"
+          ],
+          "properties": {
+            "entitlementsFromProviderTruth": {
+              "type": "boolean"
+            },
+            "noDuplicateConsumableGrant": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "ads": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rewardedOnly",
+        "forcedInterstitial",
+        "persistentBanner",
+        "placements",
+        "offerCatalogId",
+        "offerVersion",
+        "consent",
+        "dailyCaps",
+        "receiptVerification",
+        "noAdF2P"
+      ],
+      "properties": {
+        "rewardedOnly": {
+          "type": "boolean"
+        },
+        "forcedInterstitial": {
+          "type": "boolean"
+        },
+        "persistentBanner": {
+          "type": "boolean"
+        },
+        "placements": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "reward",
+              "allowedContexts"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "reward": {
+                "type": "string"
+              },
+              "allowedContexts": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "offerCatalogId": {
+          "type": "string"
+        },
+        "offerVersion": {
+          "type": "string"
+        },
+        "consent": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "required",
+            "nonPersonalizedSupported"
+          ],
+          "properties": {
+            "required": {
+              "type": "boolean"
+            },
+            "nonPersonalizedSupported": {
+              "type": "boolean"
+            }
+          }
+        },
+        "dailyCaps": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "targetAdditionalDraws",
+            "hardCapAdditionalDraws",
+            "visibleBeforeOptIn"
+          ],
+          "properties": {
+            "targetAdditionalDraws": {
+              "type": "string"
+            },
+            "hardCapAdditionalDraws": {
+              "type": "string"
+            },
+            "visibleBeforeOptIn": {
+              "type": "boolean"
+            }
+          }
+        },
+        "receiptVerification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "serverSide",
+            "exactlyOnce",
+            "acceptedVersionRetainedOnRetry"
+          ],
+          "properties": {
+            "serverSide": {
+              "type": "boolean"
+            },
+            "exactlyOnce": {
+              "type": "boolean"
+            },
+            "acceptedVersionRetainedOnRetry": {
+              "type": "boolean"
+            }
+          }
+        },
+        "noAdF2P": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "progressionContinues",
+            "evolutionCoverage",
+            "featuredGuaranteeDays"
+          ],
+          "properties": {
+            "progressionContinues": {
+              "type": "boolean"
+            },
+            "evolutionCoverage": {
+              "type": "boolean"
+            },
+            "featuredGuaranteeDays": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "minimum",
+                "maximum"
+              ],
+              "properties": {
+                "minimum": {
+                  "type": "string"
+                },
+                "maximum": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "entitlements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grant",
+        "expiry",
+        "restore",
+        "revocation"
+      ],
+      "properties": {
+        "grant": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "serverAuthoritative",
+            "transactionBound"
+          ],
+          "properties": {
+            "serverAuthoritative": {
+              "type": "boolean"
+            },
+            "transactionBound": {
+              "type": "boolean"
+            }
+          }
+        },
+        "expiry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "serverTime",
+            "graceStateVisible"
+          ],
+          "properties": {
+            "serverTime": {
+              "type": "boolean"
+            },
+            "graceStateVisible": {
+              "type": "boolean"
+            }
+          }
+        },
+        "restore": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "providerTruth"
+          ],
+          "properties": {
+            "providerTruth": {
+              "type": "boolean"
+            }
+          }
+        },
+        "revocation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "auditable",
+            "unrelatedEntitlementUnaffected"
+          ],
+          "properties": {
+            "auditable": {
+              "type": "boolean"
+            },
+            "unrelatedEntitlementUnaffected": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "accounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "guest",
+        "link",
+        "conflict",
+        "merge",
+        "delete",
+        "retention"
+      ],
+      "properties": {
+        "guest": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "serverProfile",
+            "localCacheOnly"
+          ],
+          "properties": {
+            "serverProfile": {
+              "type": "boolean"
+            },
+            "localCacheOnly": {
+              "type": "boolean"
+            }
+          }
+        },
+        "link": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "idempotent",
+            "serverLock",
+            "rawGuestBackup"
+          ],
+          "properties": {
+            "idempotent": {
+              "type": "boolean"
+            },
+            "serverLock": {
+              "type": "boolean"
+            },
+            "rawGuestBackup": {
+              "type": "boolean"
+            }
+          }
+        },
+        "conflict": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "explicitReview",
+            "silentOverwrite"
+          ],
+          "properties": {
+            "explicitReview": {
+              "type": "boolean"
+            },
+            "silentOverwrite": {
+              "type": "boolean"
+            }
+          }
+        },
+        "merge": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "duplicateGrantForbidden",
+            "paidEntitlementProviderTruth"
+          ],
+          "properties": {
+            "duplicateGrantForbidden": {
+              "type": "boolean"
+            },
+            "paidEntitlementProviderTruth": {
+              "type": "boolean"
+            }
+          }
+        },
+        "delete": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "inAppInitiation",
+            "fullAccount",
+            "subscriptionDisclosure"
+          ],
+          "properties": {
+            "inAppInitiation": {
+              "type": "boolean"
+            },
+            "fullAccount": {
+              "type": "boolean"
+            },
+            "subscriptionDisclosure": {
+              "type": "boolean"
+            }
+          }
+        },
+        "retention": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "purposeAndPeriodRecorded",
+            "legalMinimumOnly"
+          ],
+          "properties": {
+            "purposeAndPeriodRecorded": {
+              "type": "boolean"
+            },
+            "legalMinimumOnly": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "screens": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "count",
+        "registry",
+        "battleScreenCommerceDetailPersistent",
+        "recoveryStatesRequired"
+      ],
+      "properties": {
+        "count": {
+          "type": "string"
+        },
+        "registry": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "responsibility",
+              "normalStates",
+              "errorStates",
+              "retryIdempotent",
+              "serverAuthorityVisible"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "responsibility": {
+                "type": "string"
+              },
+              "normalStates": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "errorStates": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "retryIdempotent": {
+                "type": "boolean"
+              },
+              "serverAuthorityVisible": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "battleScreenCommerceDetailPersistent": {
+          "type": "boolean"
+        },
+        "recoveryStatesRequired": {
+          "type": "boolean"
+        }
+      }
+    },
+    "builds": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "strategy",
+          "powerMultiplier",
+          "economyMultiplier",
+          "reclearMultiplier"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "strategy": {
+            "type": "string"
+          },
+          "powerMultiplier": {
+            "type": "string"
+          },
+          "economyMultiplier": {
+            "type": "string"
+          },
+          "reclearMultiplier": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "personas": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "adMode",
+          "spendTier",
+          "progressMultiplier",
+          "dailyCharacterDraws",
+          "dailyWeaponDraws",
+          "dailyFeaturedProgress",
+          "accelerationMaximum"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "adMode": {
+            "type": "string"
+          },
+          "spendTier": {
+            "type": "string"
+          },
+          "progressMultiplier": {
+            "type": "string"
+          },
+          "dailyCharacterDraws": {
+            "type": "string"
+          },
+          "dailyWeaponDraws": {
+            "type": "string"
+          },
+          "dailyFeaturedProgress": {
+            "type": "string"
+          },
+          "accelerationMaximum": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "runMatrix": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "planPath",
+        "builds",
+        "personas",
+        "seedsPerBuildPersona",
+        "minimumScenarios",
+        "calibration",
+        "holdout",
+        "horizons",
+        "step2Execution",
+        "fullMatrixExecution"
+      ],
+      "properties": {
+        "planPath": {
+          "type": "string"
+        },
+        "builds": {
+          "type": "string"
+        },
+        "personas": {
+          "type": "string"
+        },
+        "seedsPerBuildPersona": {
+          "type": "string"
+        },
+        "minimumScenarios": {
+          "type": "string"
+        },
+        "calibration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "seedsPerCell",
+            "namespace",
+            "tuningVisible"
+          ],
+          "properties": {
+            "seedsPerCell": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            },
+            "tuningVisible": {
+              "type": "boolean"
+            }
+          }
+        },
+        "holdout": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "seedsPerCell",
+            "namespace",
+            "tuningVisible",
+            "observedV1Reuse"
+          ],
+          "properties": {
+            "seedsPerCell": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            },
+            "tuningVisible": {
+              "type": "boolean"
+            },
+            "observedV1Reuse": {
+              "type": "boolean"
+            }
+          }
+        },
+        "horizons": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "step2Execution": {
+          "type": "string"
+        },
+        "fullMatrixExecution": {
+          "type": "string"
+        }
+      }
+    },
+    "monteCarlo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gachaTails",
+        "pityConformance",
+        "duplicateSkew",
+        "overflow",
+        "refundReplayRace",
+        "execution"
+      ],
+      "properties": {
+        "gachaTails": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "plannedSeeds",
+            "metrics"
+          ],
+          "properties": {
+            "plannedSeeds": {
+              "type": "string"
+            },
+            "metrics": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "pityConformance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "plannedDraws",
+            "boundaries"
+          ],
+          "properties": {
+            "plannedDraws": {
+              "type": "string"
+            },
+            "boundaries": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "duplicateSkew": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "plannedSeeds",
+            "stages"
+          ],
+          "properties": {
+            "plannedSeeds": {
+              "type": "string"
+            },
+            "stages": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "overflow": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "plannedEvents"
+          ],
+          "properties": {
+            "plannedEvents": {
+              "type": "string"
+            }
+          }
+        },
+        "refundReplayRace": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "plannedSequences",
+            "modelBased"
+          ],
+          "properties": {
+            "plannedSequences": {
+              "type": "string"
+            },
+            "modelBased": {
+              "type": "boolean"
+            }
+          }
+        },
+        "execution": {
+          "type": "string"
+        }
+      }
+    },
+    "stateTransitions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commonEnvelope",
+        "machines",
+        "serverAuthority",
+        "clientTimeoutMeansFailure"
+      ],
+      "properties": {
+        "commonEnvelope": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "machines": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "draw",
+            "payment",
+            "rewardedAd",
+            "loginClaim",
+            "towerReturn",
+            "evolution",
+            "masteryExchange",
+            "accountLink",
+            "accountDeletion"
+          ],
+          "properties": {
+            "draw": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "states",
+                "terminal"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "states": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "terminal": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "payment": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "states",
+                "terminal"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "states": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "terminal": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "rewardedAd": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "states",
+                "terminal"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "states": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "terminal": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "loginClaim": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "states",
+                "terminal"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "states": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "terminal": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "towerReturn": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "states",
+                "terminal"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "states": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "terminal": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "evolution": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "states",
+                "terminal"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "states": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "terminal": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "masteryExchange": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "states",
+                "terminal"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "states": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "terminal": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "accountLink": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "states",
+                "terminal"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "states": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "terminal": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "accountDeletion": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "states",
+                "terminal"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "states": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "terminal": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "serverAuthority": {
+          "type": "boolean"
+        },
+        "clientTimeoutMeansFailure": {
+          "type": "boolean"
+        }
+      }
+    },
+    "fixtures": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "positive",
+        "boundary",
+        "negative",
+        "stateTransitions",
+        "crossRuntime",
+        "manifest"
+      ],
+      "properties": {
+        "positive": {
+          "type": "string"
+        },
+        "boundary": {
+          "type": "string"
+        },
+        "negative": {
+          "type": "string"
+        },
+        "stateTransitions": {
+          "type": "string"
+        },
+        "crossRuntime": {
+          "type": "string"
+        },
+        "manifest": {
+          "type": "string"
+        }
+      }
+    },
+    "migrations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "legacyIds",
+        "legacyDawnMergedInto",
+        "legacyCurrencyTo",
+        "rawBackup",
+        "idempotentVersionMarker",
+        "unknownOwnershipFailsClosed"
+      ],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "legacyIds": {
+          "type": "boolean"
+        },
+        "legacyDawnMergedInto": {
+          "type": "string"
+        },
+        "legacyCurrencyTo": {
+          "type": "string"
+        },
+        "rawBackup": {
+          "type": "boolean"
+        },
+        "idempotentVersionMarker": {
+          "type": "string"
+        },
+        "unknownOwnershipFailsClosed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "invariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "product",
+        "economy",
+        "probability",
+        "authority",
+        "policy",
+        "recovery"
+      ],
+      "properties": {
+        "product": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "economy": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "probability": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "authority": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "policy": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "recovery": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resultSchema",
+        "summaryMetrics",
+        "tailMetrics",
+        "violations",
+        "hashes",
+        "evidence",
+        "balanceVerdictAllowedInStep2"
+      ],
+      "properties": {
+        "resultSchema": {
+          "type": "string"
+        },
+        "summaryMetrics": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "tailMetrics": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "violations": {
+          "type": "boolean"
+        },
+        "hashes": {
+          "type": "boolean"
+        },
+        "evidence": {
+          "type": "boolean"
+        },
+        "balanceVerdictAllowedInStep2": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

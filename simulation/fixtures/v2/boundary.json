@@ -1,0 +1,182 @@
+{
+  "schemaVersion": "2.0.0",
+  "fixtureSetId": "cats-tower-v2-boundary",
+  "towerCases": [
+    {
+      "floor": "1",
+      "expectedDistrictId": "tower.district.001",
+      "expectedCycleId": "tower.cycle.000001",
+      "expectedBossId": "NONE",
+      "expectedHpRepresentation": "expanded-integer"
+    },
+    {
+      "floor": "5",
+      "expectedDistrictId": "tower.district.001",
+      "expectedCycleId": "tower.cycle.000001",
+      "expectedBossId": "tower.boss.d01.mid.001",
+      "expectedHpRepresentation": "expanded-integer"
+    },
+    {
+      "floor": "10",
+      "expectedDistrictId": "tower.district.001",
+      "expectedCycleId": "tower.cycle.000001",
+      "expectedBossId": "tower.boss.d01.kagetsubasa",
+      "expectedHpRepresentation": "expanded-integer"
+    },
+    {
+      "floor": "100",
+      "expectedDistrictId": "tower.district.010",
+      "expectedCycleId": "tower.cycle.000001",
+      "expectedBossId": "tower.boss.d10.end.001",
+      "expectedHpRepresentation": "expanded-integer"
+    },
+    {
+      "floor": "101",
+      "expectedDistrictId": "tower.district.011",
+      "expectedCycleId": "tower.cycle.000002",
+      "expectedBossId": "NONE",
+      "expectedHpRepresentation": "expanded-integer"
+    },
+    {
+      "floor": "1000",
+      "expectedDistrictId": "tower.district.100",
+      "expectedCycleId": "tower.cycle.000010",
+      "expectedBossId": "tower.boss.d100.end.001",
+      "expectedHpRepresentation": "expanded-integer"
+    },
+    {
+      "floor": "10000",
+      "expectedDistrictId": "tower.district.1000",
+      "expectedCycleId": "tower.cycle.000100",
+      "expectedBossId": "tower.boss.d1000.end.001",
+      "expectedHpRepresentation": "exact-symbolic-power"
+    },
+    {
+      "floor": "1000000000000000000000000000000",
+      "expectedDistrictId": "tower.district.100000000000000000000000000000",
+      "expectedCycleId": "tower.cycle.10000000000000000000000000000",
+      "expectedBossId": "tower.boss.d100000000000000000000000000000.end.001",
+      "expectedHpRepresentation": "exact-symbolic-power"
+    }
+  ],
+  "idCases": [
+    {
+      "id": "tower.district.001",
+      "kind": "district",
+      "canonical": true
+    },
+    {
+      "id": "tower.district.1000",
+      "kind": "district",
+      "canonical": true
+    },
+    {
+      "id": "tower.district.0001",
+      "kind": "district",
+      "canonical": false
+    },
+    {
+      "id": "tower.cycle.000001",
+      "kind": "cycle",
+      "canonical": true
+    },
+    {
+      "id": "tower.cycle.1000000",
+      "kind": "cycle",
+      "canonical": true
+    },
+    {
+      "id": "tower.cycle.0000001",
+      "kind": "cycle",
+      "canonical": false
+    },
+    {
+      "id": "tower.milestone.floor.100",
+      "kind": "milestone",
+      "canonical": true
+    },
+    {
+      "id": "tower.milestone.floor.0100",
+      "kind": "milestone",
+      "canonical": false
+    }
+  ],
+  "pityCases": [
+    {
+      "drawsSinceUR": "98",
+      "featuredProgress": "198",
+      "naturalRarity": "N",
+      "naturalFeatured": false,
+      "hardPityTriggered": false,
+      "featuredGuaranteeTriggered": false
+    },
+    {
+      "drawsSinceUR": "99",
+      "featuredProgress": "198",
+      "naturalRarity": "N",
+      "naturalFeatured": false,
+      "hardPityTriggered": true,
+      "featuredGuaranteeTriggered": false
+    },
+    {
+      "drawsSinceUR": "0",
+      "featuredProgress": "199",
+      "naturalRarity": "UR",
+      "naturalFeatured": false,
+      "hardPityTriggered": false,
+      "featuredGuaranteeTriggered": true
+    }
+  ],
+  "evolutionCases": [
+    {
+      "level": "99",
+      "purchasedStages": "0",
+      "eligibleStages": "0",
+      "nextMissingStage": "NONE"
+    },
+    {
+      "level": "100",
+      "purchasedStages": "0",
+      "eligibleStages": "1",
+      "nextMissingStage": "1"
+    },
+    {
+      "level": "301",
+      "purchasedStages": "0",
+      "eligibleStages": "3",
+      "nextMissingStage": "1"
+    },
+    {
+      "level": "301",
+      "purchasedStages": "2",
+      "eligibleStages": "3",
+      "nextMissingStage": "3"
+    }
+  ],
+  "resetCases": [
+    {
+      "previousBest": "0",
+      "newBest": "29",
+      "eligible": false,
+      "reward": "0"
+    },
+    {
+      "previousBest": "0",
+      "newBest": "30",
+      "eligible": true,
+      "minimumReward": "15"
+    },
+    {
+      "previousBest": "100",
+      "newBest": "100",
+      "eligible": false,
+      "reward": "0"
+    },
+    {
+      "previousBest": "100",
+      "newBest": "101",
+      "eligible": true,
+      "minimumReward": "0"
+    }
+  ]
+}
