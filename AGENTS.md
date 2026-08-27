@@ -1,10 +1,10 @@
 # Cat's Tower repository instructions
 
-更新日: **2026-08-27**  
+更新日: **2026-08-28**  
 Repository: `2hg7trp7rv-design/cats_tower`  
 書込みbranch: **既存の`kimi`のみ**  
 Step 1 Round 008: **PASS**  
-Step 2: **READY_TO_START**  
+Step 2: **IN_PROGRESS_CONTENT_PHASE_PASS**  
 Step 3〜6: **BLOCKED BY PRIOR GATES**
 
 ## Branch hard lock
@@ -20,11 +20,11 @@ Step 3〜6: **BLOCKED BY PRIOR GATES**
 3. active change-control、最新addendum、user-decision-lock
 4. `quality-reviews/step-1-reseal-round-008/seal-round-008.json`
 5. seal対象`MASTER_SPEC.md`と`canonical/*`
-6. `PROJECT_STATUS.json`、`QUALITY_GATE.md`、Acceptance、critics、judge、handover、deployment/completion evidence
+6. `PROJECT_STATUS.json`、`simulation/CURRENT_STATUS.json`、`QUALITY_GATE.md`、Acceptance、critics、judge、handover、deployment/completion evidence
 7. Step 2 executable contract
 8. historical PASS、legacy、参考資料
 
-過去証拠は改変しないが、現行許可に使わない。
+過去証拠は改変しないが、現行許可に使わない。旧Round 7のcurrent-status markerを、Round 008以降の現行文書へ偽装復元してはならない。
 
 ## Step 1 seal
 
@@ -32,6 +32,27 @@ Step 3〜6: **BLOCKED BY PRIOR GATES**
 - seal commit/tree: `0b17f9b5b8decdab8ce329287a4dc073790c4bf7` / `9eac6b6103d65cf8bcb13859d00e43cd3389fa8a`
 - final unresolved P0/P1: `0 / 0`
 - physical iPhone: `NOT_VERIFIED`
+
+## Step 2 current checkpoint
+
+- content commit/tree: `408ce59760945ec032bec6e2b87e4b9bc824848e` / `3c2fc02fc55eff6aeec2016cb9d014148aec5b11`
+- evidence commit/tree: `e7bdc2ffa530e65d5416789429f54de645fe7fc7` / `db96b8c03e9315b2e6f6c82c7389adbc1e568374`
+- dedicated verifier: `.github/workflows/verify-step-2-v2.yml`
+- exact verified run/job: `33094611846` / `98596129603`
+- verifier verdict: `CONTENT_PHASE_PASS_STEP2_IN_PROGRESS`
+- qualification: `30` scenarios
+- qualification digest: `a24fa5a4a12cf132ac477c80e77431cd0b97ab070bbbef83c3881c160f42562c`
+- balance verdict: `NOT_EVALUATED_STEP2`
+- Step 3 authorization: `false`
+
+未完了のためStep 2をPASSへ変更してはならない。
+
+- executable seal
+- independent critics
+- P0/P1 repair and regression
+- final judge
+- completion evidence
+- final live read-back
 
 ## Product non-negotiables
 
@@ -49,23 +70,25 @@ Step 3〜6: **BLOCKED BY PRIOR GATES**
 - S01〜S12、server-authoritative permanent economy
 - arbitrary-precision numeric contract
 
-## Step 2 preflight
+## Step 2 remaining sequence
 
-1. live HEAD/tree、seal、completion/read-backを確認する。
-2. Step 2専用Acceptance Matrixを最初のwrite前に固定する。
-3. `canonical/STEP2_DEPENDENCY_CLOSURE.json`と全source blob/digestを固定する。
-4. new V2 candidate/schema/validator/simulator/result/run-plan/fixtures/migrations/executable-seal chainを作る。
-5. calibrationとholdoutを分離する。
-6. Step 2 critic、final judge、completion evidenceまでPASSさせる。
+1. live HEAD/treeとcontent-phase evidenceを再確認する。
+2. independent criticsを分離して実行する。
+3. P0/P1をすべて修正し、source-bound回帰を再実行する。
+4. executable sealとvalidatorを作成する。
+5. final judge、completion evidence、final live read-backを順序分離して作成する。
+6. 全チェーンPASS後だけstatus mirrorをStep 2 `PASS`、Step 3 `READY_TO_START`へ変更する。
 7. Step 2 PASS前にStep 3を開始しない。
 
 ## Legacy simulation and workflow
 
 V1 candidate/schema/validator、旧workflow、legacy runtimeはhistorical/implementation gap。current promotion実行、in-place延命、old observed holdout再利用を禁止する。
 
+`.github/workflows/verify-main.yml`のRound 7 current-marker assertionは、Round 008以降の現行status modelと不整合である。現行文書を旧状態へ戻して通してはならない。専用Step 2 verifierと別問題として記録し、governance repair時にhistorical validationとcurrent status validationを分離する。
+
 ## Current write boundary
 
-Allowed: Step 2 V2 executable contract、validator、simulator、result schema、run plan、fixtures、migrations、専用workflow、quality evidence。  
+Allowed: Step 2 independent critics、critic repair、executable seal、final judge、completion evidence、live read-back、status mirror、handover。  
 Forbidden: runtime、assets、backend、payment provider、ad network、PR、Production alias、Step 3 simulation before Step 2 PASS。
 
 ## Completion

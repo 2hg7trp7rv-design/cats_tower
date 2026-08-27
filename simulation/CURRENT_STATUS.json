@@ -108,5 +108,15 @@
     "productionChanged": false,
     "step3MayRun": false
   },
-  "nextAuthorizedWork": "Run independent Step 2 critics, repair every P0/P1, create and validate the V2 executable seal, then produce the final judge, completion evidence and final live read-back. Step 3 remains blocked."
+  "nextAuthorizedWork": "Run independent Step 2 critics, repair every P0/P1, create and validate the V2 executable seal, then produce the final judge, completion evidence and final live read-back. Step 3 remains blocked.",
+  "knownCiDiscrepancy": {
+    "workflow": ".github/workflows/verify-main.yml",
+    "workflowRunId": "33095422270",
+    "conclusion": "FAILURE",
+    "failingAssertion": "AGENTS.md must retain exactly one Step 1A PASS marker line",
+    "classification": "LEGACY_ROUND7_CURRENT_STATUS_ASSERTION_INCOMPATIBLE_WITH_ROUND008_STEP2_STATUS",
+    "step1HistoricalBaselineCoreCheck": "PASS_BEFORE_LEGACY_CURRENT_MARKER_ASSERTION",
+    "affectsDedicatedStep2ContentVerdict": false,
+    "remediation": "Separate historical Round 7 evidence validation from current Round 008 and Step 2 status validation. Do not restore obsolete current-state markers."
+  }
 }

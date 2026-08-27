@@ -121,6 +121,20 @@ Step 2のV2実行コンテンツは、live `kimi`へ実装済みであり、exac
   - advance allowed: `false`
   - Step 3 allowed: `false`
 
+## 既知のCI不整合
+
+全体baseline workflow `.github/workflows/verify-main.yml` のrun `33095422270`は`FAILURE`である。
+
+失敗箇所はStep 2実装ではなく、sealed Round 7 verifierが現行`AGENTS.md`へ旧current-state marker「Step 1A PASS」を要求するassertionである。ログ上、historical Step 1 baseline core check自体は先にPASSしている。
+
+- failing assertion: `AGENTS.md must retain exactly one Step 1A PASS marker line`
+- classification: `LEGACY_ROUND7_CURRENT_STATUS_ASSERTION_INCOMPATIBLE_WITH_ROUND008_STEP2_STATUS`
+- dedicated Step 2 run `33095418197`: `SUCCESS`
+- Step 2 final PASS claim: `false`
+- Step 3 authorization: `false`
+
+旧markerを現行文書へ偽装復元して通す対応は禁止する。governance repairでは、historical Round 7 evidence validationとRound 008以降のcurrent status validationを分離する。
+
 ## 次に許可される作業
 
 同じ`02_無制限塔・経済・リセットシミュレーション`で、以下のみ進める。

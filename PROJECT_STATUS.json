@@ -153,5 +153,16 @@
       "Production alias",
       "Step 3 before Step 2 PASS"
     ]
+  },
+  "knownCiDiscrepancy": {
+    "workflow": ".github/workflows/verify-main.yml",
+    "workflowRunId": "33095422270",
+    "conclusion": "FAILURE",
+    "failingAssertion": "AGENTS.md must retain exactly one Step 1A PASS marker line",
+    "classification": "LEGACY_ROUND7_CURRENT_STATUS_ASSERTION_INCOMPATIBLE_WITH_ROUND008_STEP2_STATUS",
+    "dedicatedStep2WorkflowConclusion": "SUCCESS",
+    "dedicatedStep2WorkflowRunId": "33095418197",
+    "step3StillBlocked": true,
+    "productionImpact": false
   }
 }
