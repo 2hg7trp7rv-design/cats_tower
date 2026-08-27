@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-critic-02-merchant-combat",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "role": "independent merchant and combat critic",
+  "reviewedContent": {
+    "commit": "5da274ddc63876565d3d210a7e2b5a87afca6730",
+    "tree": "b479c92bab43581f3ec293fecbb16ce9592a9dfa"
+  },
+  "method": [
+    "Traced the first-ten battle, shop, delivery and support responsibilities across MASTER_SPEC, FLOORS_1_10_DESIGN and S02/S05/S08 states.",
+    "Attempted rejection for passive spreadsheet combat, mandatory collection/refill tapping, persistent party-size inflation, shop systems replacing the tower loop and high-rarity-only failure fixes."
+  ],
+  "checks": {
+    "movementContactProjectileCausality": "PASS",
+    "tapDirectDamageZero": "PASS",
+    "autoAndOfflineFoundational": "PASS",
+    "fourNamedPartyAndTemporarySupportSeparated": "PASS",
+    "shopDeliverySupportCombatWithoutCompanyProtagonist": "PASS",
+    "mandatoryCollectionOrRefillTappingExcluded": "PASS",
+    "failureDiagnosisDoesNotMandateHighRarity": "PASS"
+  },
+  "findings": [],
+  "verdict": "PASS",
+  "unresolved": {"P0": 0, "P1": 0, "P2": 0, "P3": 0},
+  "sealEligibleFromThisCritic": true
+}
