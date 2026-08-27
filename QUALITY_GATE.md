@@ -1,20 +1,31 @@
 # Cat's Tower — 完成判定と工程Gate
 
-更新日: **2026-08-28**  
-現在工程: **Step 2 — PASS / SEALED**  
-次工程: **Step 3 — READY_TO_START**  
-Step 4〜6: **BLOCKED BY PRIOR GATES**  
-物理iPhone: **NOT_VERIFIED**  
+更新日: **2026-08-28**
+
+現在工程: **Step 2 — PASS / SEALED**
+
+次工程: **Step 3 — READY_TO_START**
+
+Step 4〜6: **BLOCKED BY PRIOR GATES**
+
+物理iPhone: **NOT_VERIFIED**
+
 Production変更: **なし**
 
-Step 1有効seal: `quality-reviews/step-1-reseal-round-008/seal-round-008.json`  
-Step 1 semantic commit/tree: `4b4d8abbf5388637101f7c5634d1ce5d60413fce` / `99084efa0e6055977b01cf507d7d7e2a391c74ce`  
+Step 1有効seal: `quality-reviews/step-1-reseal-round-008/seal-round-008.json`
+
+Step 1 semantic commit/tree: `4b4d8abbf5388637101f7c5634d1ce5d60413fce` / `99084efa0e6055977b01cf507d7d7e2a391c74ce`
+
 Step 1 seal commit/tree: `0b17f9b5b8decdab8ce329287a4dc073790c4bf7` / `9eac6b6103d65cf8bcb13859d00e43cd3389fa8a`
 
-Step 2 executable seal: `simulation/executable-seal-v2.json`  
-Step 2 seal blob: `ee3507969c03b08fe27350263cf0bc093a1c18e1`  
-Step 2 semantic commit/tree: `724d04940f9f3794b993cddbc5af3a7163a0395b` / `3552f5820681bd1fe037ac637fafc96b485e35f6`  
-Step 2 dedicated CI run/job: `33104391753` / `98630217077` — `SUCCESS`  
+Step 2 executable seal: `simulation/executable-seal-v2.json`
+
+Step 2 seal blob: `ee3507969c03b08fe27350263cf0bc093a1c18e1`
+
+Step 2 semantic commit/tree: `724d04940f9f3794b993cddbc5af3a7163a0395b` / `3552f5820681bd1fe037ac637fafc96b485e35f6`
+
+Step 2 dedicated CI run/job: `33104391753` / `98630217077` — `SUCCESS`
+
 Step 2 balance verdict: `NOT_EVALUATED_STEP2`
 
 本書は、有限100F・非ガチャ時代の旧Gateを現行製品へ流用しない。過去PASSは履歴証拠として保持するが、現行状態の認可にはRound 008 Step 1 seal、Step 2 executable seal、critic、final judge、completion evidence、live read-backを使用する。
@@ -90,9 +101,12 @@ Step 3 holdoutを調整へ再利用してはならない。
 
 ## G9 Evidence binding — GOVERNANCE REPAIR IN PROGRESS UNTIL TERMINAL READ-BACK
 
-修復Acceptance: `quality-reviews/step-2-governance-repair-round-001/acceptance-matrix.json`  
-最新addendum: `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-014.json`  
-修復completion evidence: `quality-reviews/step-2-governance-repair-round-001/completion-evidence.json`  
+修復Acceptance: `quality-reviews/step-2-governance-repair-round-001/acceptance-matrix.json`
+
+最新addendum: `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-014.json`
+
+修復completion evidence: `quality-reviews/step-2-governance-repair-round-001/completion-evidence.json`
+
 修復live read-back: `quality-reviews/step-2-governance-repair-round-001/live-readback.json`
 
 今回の修復を最終PASSと報告できるのは、exact content commit/treeで`historical-round7-evidence`と`current-governance`が成功し、全mirror blob、変更path、Step 1/Step 2 seal不変、Production変更なしをcompletion evidenceへ結合し、その後のlive branch read-backが通った場合だけである。
