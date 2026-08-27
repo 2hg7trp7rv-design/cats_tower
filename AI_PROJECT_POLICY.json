@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "updatedDate": "2026-08-27",
   "repository": {
     "fullName": "2hg7trp7rv-design/cats_tower",
@@ -14,63 +14,73 @@
     "CHATGPT_PROJECT_INSTRUCTIONS1.md",
     "active change-control and latest addendum",
     "latest user-decision-lock",
-    "validated live Step 1 seal",
-    "MASTER_SPEC.md and PROJECT_STATUS.json",
-    "QUALITY_GATE.md and AGENTS.md",
-    "task Acceptance, critics, judge, handover and deployment evidence",
-    "lower canonical documents and Step 2 executable contract",
+    "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
+    "MASTER_SPEC.md and sealed canonical contracts",
+    "PROJECT_STATUS.json, QUALITY_GATE.md and AGENTS.md",
+    "task Acceptance, critics, judge, handover, deployment and completion evidence",
+    "Step 2 executable contract",
     "historical Acceptance/PASS/audits and legacy runtime",
     "chat history and competitor references"
   ],
   "currentPhase": {
-    "step": 1,
-    "name": "canonical-integration-and-reseal",
-    "status": "IN_PROGRESS",
-    "checkpoint": "round-008-final-preseal-review",
-    "step2Allowed": false,
+    "step": 2,
+    "name": "executable-contract-and-simulation",
+    "status": "READY_TO_START",
+    "step1Status": "PASS",
+    "step3Allowed": false,
     "physicalIPhone": "NOT_VERIFIED"
   },
-  "presealRule": {
-    "contentCompletenessAloneAuthorizesStep2": false,
-    "internalCanonicalLabelAuthorizesStep2": false,
-    "requiredSeal": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
-    "missingOrInvalidSealStatus": "IN_PROGRESS",
-    "vercelReadyAloneIsPass": false
+  "activeStep1Seal": {
+    "path": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
+    "blob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
+    "commit": "0b17f9b5b8decdab8ce329287a4dc073790c4bf7",
+    "tree": "9eac6b6103d65cf8bcb13859d00e43cd3389fa8a",
+    "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+    "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce",
+    "unresolvedP0": 0,
+    "unresolvedP1": 0
   },
-  "currentPresealArtifacts": [
-    "MASTER_SPEC.md",
-    "FLOORS_1_10_DESIGN.md",
-    "canonical/STABLE_ID_REGISTRY.json",
-    "canonical/SCREEN_STATE_REGISTRY.json",
-    "canonical/STATE_TRANSITION_CONTRACT.json",
-    "canonical/POLICY_RELEASE_GATES.json",
-    "canonical/STEP2_DEPENDENCY_CLOSURE.json"
-  ],
-  "legacyContract": {
-    "status": "BLOCKED_SUPERSEDED_INPUT",
-    "executeForCurrentPromotion": false,
-    "extendInPlace": false,
-    "reuseObservedHoldout": false,
-    "workflowSuccessAuthorizesCurrentStep2": false
+  "step2Rule": {
+    "acceptanceBeforeFirstWrite": true,
+    "dependencySource": "canonical/STEP2_DEPENDENCY_CLOSURE.json",
+    "newV2ChainRequired": true,
+    "legacyV1MayPromote": false,
+    "legacyV1MayExtendInPlace": false,
+    "observedHoldoutMayBeReused": false,
+    "step3BeforeStep2Pass": false,
+    "requiredArtifacts": [
+      "simulation/candidate-v2.json",
+      "simulation/candidate-v2.schema.json",
+      "simulation/validate-candidate-v2.mjs",
+      "simulation/run-plan-v2.json",
+      "simulation/result-v2.schema.json",
+      "simulation/validate-result-v2.mjs",
+      "simulation/engine-v2/**",
+      "simulation/fixtures/v2/**",
+      "simulation/migrations/v1-to-v2/**",
+      "simulation/executable-seal-v2.json",
+      "simulation/executable-seal-v2.schema.json",
+      "simulation/validate-executable-seal-v2.mjs"
+    ]
   },
   "permanentEconomyAuthority": "server",
   "completionContract": {
     "insufficientAlone": ["files exist", "build succeeds", "tests pass", "deployment READY", "sandbox provider responds"],
     "required": [
       "requirements coverage",
-      "repository contradiction and path closure",
-      "canonical/dependency closure",
-      "competitive and policy review",
-      "ten separated independent critics",
-      "final judge",
+      "schema and semantic validation",
+      "deterministic source/seed/version/rounding/result binding",
+      "positive/boundary/negative/migration/cross-runtime fixtures",
+      "calibration and unseen holdout separation",
+      "independent critics and final judge",
       "unresolved P0/P1 zero",
       "exact commit/tree/deployment/evidence binding",
       "forbidden path and Production changes zero"
     ]
   },
   "writeBoundary": {
-    "currentAllowed": ["Step 1 canonical documentation", "status mirrors", "critics", "judge", "seal evidence"],
-    "currentForbidden": ["runtime", "assets", "V1 candidate/schema/validator/simulator", "backend", "payment provider", "ad network", "PR operation", "Production alias"]
+    "currentAllowed": ["Step 2 V2 candidate/schema/validator/simulator/result/run-plan/fixtures/migrations/dedicated workflow and quality evidence"],
+    "currentForbidden": ["runtime", "assets", "backend", "payment provider", "ad network", "PR operation", "Production alias", "Step 3 simulation before Step 2 PASS"]
   },
   "userBoundary": {
     "chatgptOwns": ["research", "specification", "implementation when authorized", "tests", "defect discovery", "repair", "regression", "handover"],
