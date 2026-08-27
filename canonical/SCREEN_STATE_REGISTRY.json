@@ -1,417 +1,147 @@
 {
-  "schemaVersion": 2,
-  "artifactId": "cats-tower-screen-state-registry-v2-preseal",
+  "schemaVersion": 3,
+  "artifactId": "cats-tower-screen-state-registry-round-008-preseal",
   "asOf": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
   "authority": "PRESEAL_DRAFT",
   "step1SealRequired": true,
   "mayAuthorizeStep2": false,
   "screenCount": 12,
+  "globalRules": {
+    "screenIds": ["S01", "S02", "S03", "S04", "S05", "S06", "S07", "S08", "S09", "S10", "S11", "S12"],
+    "combatRemainsPrimary": true,
+    "monetizationNotAlwaysOnBattle": true,
+    "errorStateCannotHideEconomicOutcome": true,
+    "serverTimeForClaims": true,
+    "economicTimeoutMeansFailure": false,
+    "physicalIPhone": "NOT_VERIFIED",
+    "mobileReview": ["320x667", "375x667", "390x844", "safe-area", "large text", "reduced motion"]
+  },
+  "universalRecovery": [
+    "economic intent carries an idempotency key",
+    "reload rehydrates authoritative status",
+    "multiple tabs converge by transaction, claim or entity version",
+    "timeout never retries as a new economic operation",
+    "partial completion exposes pending or recovery instead of duplicating grant",
+    "support-visible audit ID is available for permanent-economy operations"
+  ],
   "screens": [
     {
       "id": "S01",
       "name": "title-resume-account",
-      "responsibilities": [
-        "new game",
-        "resume",
-        "account link",
-        "migration recovery"
-      ],
-      "requiredState": [
-        "accountMode",
-        "saveSchema",
-        "serverSession",
-        "migrationStatus"
-      ],
-      "uiStates": [
-        "READY",
-        "LOADING",
-        "OFFLINE",
-        "RETRYABLE_ERROR",
-        "FATAL_RECOVERY",
-        "LINK_PENDING",
-        "CONFLICT",
-        "RECOVERED"
-      ],
-      "serverOwnedState": [
-        "account binding",
-        "entitlement restore"
-      ]
+      "responsibilities": ["new game", "resume", "guest/account link", "migration recovery", "account deletion"],
+      "authority": "local shell plus server account/profile",
+      "requiredState": ["accountMode", "saveSchema", "serverSession", "migrationStatus", "linkStatus", "deletionStatus", "retentionNotice"],
+      "uiStates": ["READY", "LOADING", "OFFLINE", "MAINTENANCE", "RETRYABLE_ERROR", "FATAL_RECOVERY", "LINK_PENDING", "LINK_CONFLICT", "DELETE_CONFIRM", "DELETION_PENDING", "DELETED", "RECOVERED"],
+      "serverOwnedState": ["account binding", "guest merge", "entitlement restore", "deletion request", "retention exception"]
     },
     {
       "id": "S02",
       "name": "battle-follow",
-      "responsibilities": [
-        "auto battle",
-        "movement/contact",
-        "telegraph",
-        "support arrival"
-      ],
-      "requiredState": [
-        "floorId",
-        "party4",
-        "temporarySupport",
-        "enemyWave",
-        "autoState",
-        "offlineCatchup"
-      ],
-      "uiStates": [
-        "READY",
-        "LOADING",
-        "OFFLINE",
-        "RETRYABLE_ERROR",
-        "FATAL_RECOVERY",
-        "PAUSED",
-        "DEFEAT",
-        "BACKGROUND_RECONCILE"
-      ],
-      "serverOwnedState": [
-        "validated battle settlement when rewards are permanent"
-      ]
+      "responsibilities": ["auto battle", "movement/contact", "projectile arrival", "telegraph", "support arrival", "offline catch-up"],
+      "authority": "local deterministic run cache plus server-verifiable settlement",
+      "requiredState": ["floorId", "party4", "temporarySupport", "enemyWave", "autoState", "offlineCatchup", "settlementStatus"],
+      "uiStates": ["TUTORIAL", "READY", "LOADING", "PAUSED", "OFFLINE", "BACKGROUND_RECONCILE", "DESYNC", "RETRYABLE_ERROR", "DEFEAT", "VICTORY_PENDING"],
+      "serverOwnedState": ["permanent reward settlement", "highest-floor candidate"]
     },
     {
       "id": "S03",
       "name": "unbounded-tower",
-      "responsibilities": [
-        "current/best floor",
-        "10F district",
-        "100F cycle",
-        "next milestone",
-        "browse"
-      ],
-      "requiredState": [
-        "currentFloor",
-        "bestFloor",
-        "districtId",
-        "cycleId",
-        "nextMilestone",
-        "knownFloorRange"
-      ],
-      "uiStates": [
-        "READY",
-        "LOADING",
-        "OFFLINE",
-        "RETRYABLE_ERROR",
-        "FATAL_RECOVERY",
-        "BROWSE_KNOWN",
-        "UNSEEN_LOCKED"
-      ],
-      "serverOwnedState": [
-        "best floor",
-        "milestone claims"
-      ]
+      "responsibilities": ["current/best floor", "10F district", "100F cycle", "next milestone", "virtualized browse"],
+      "authority": "server highest floor and milestones plus generated local browse cache",
+      "requiredState": ["currentFloor", "bestFloor", "districtId", "cycleId", "nextMilestone", "knownFloorRange"],
+      "uiStates": ["READY", "LOADING", "OFFLINE", "BROWSE_KNOWN", "UNSEEN_LOCKED", "STALE_CACHE", "RETRYABLE_ERROR"],
+      "serverOwnedState": ["best floor", "milestone claims", "cycle record"]
     },
     {
       "id": "S04",
       "name": "floor-clear-choice",
-      "responsibilities": [
-        "clear reward",
-        "stairs",
-        "shop/support/rescue choice"
-      ],
-      "requiredState": [
-        "settlementId",
-        "rewardPreview",
-        "choiceSet",
-        "nextFloor"
-      ],
-      "uiStates": [
-        "READY",
-        "LOADING",
-        "OFFLINE",
-        "RETRYABLE_ERROR",
-        "FATAL_RECOVERY",
-        "SETTLEMENT_PENDING",
-        "CHOICE_PENDING",
-        "CHOICE_COMMITTED"
-      ],
-      "serverOwnedState": [
-        "settlement",
-        "one-time choice"
-      ]
+      "responsibilities": ["clear reward", "stairs", "shop/support/rescue choice", "choose later"],
+      "authority": "server settlement and one-time choice plus local presentation",
+      "requiredState": ["settlementId", "rewardPreview", "choiceSet", "nextFloor", "claimStatus"],
+      "uiStates": ["READY", "SETTLEMENT_PENDING", "REWARD_CONFIRMED", "CHOICE_PENDING", "CHOICE_COMMITTED", "CLAIM_RECOVERY", "OFFLINE", "RETRYABLE_ERROR"],
+      "serverOwnedState": ["settlement", "one-time choice", "reward claim"]
     },
     {
       "id": "S05",
       "name": "shop-delivery",
-      "responsibilities": [
-        "placement",
-        "income",
-        "delivery",
-        "automation",
-        "reconfigure"
-      ],
-      "requiredState": [
-        "shopLayout",
-        "deliveryQueue",
-        "automationRules",
-        "projectedCombatSupport"
-      ],
-      "uiStates": [
-        "READY",
-        "LOADING",
-        "OFFLINE",
-        "RETRYABLE_ERROR",
-        "FATAL_RECOVERY",
-        "EDITING",
-        "SYNC_CONFLICT",
-        "RESTORED"
-      ],
-      "serverOwnedState": [
-        "premium or permanent unlocks only"
-      ]
+      "responsibilities": ["placement", "comparison", "income", "delivery", "automation", "reconfigure"],
+      "authority": "server profile configuration plus local forecast",
+      "requiredState": ["shopLayout", "deliveryQueue", "automationRules", "projectedCombatSupport", "entityVersion"],
+      "uiStates": ["READY", "LOADING", "EDITING", "SAVE_PENDING", "SYNC_CONFLICT", "RESTORED", "OFFLINE", "RETRYABLE_ERROR"],
+      "serverOwnedState": ["persistent layout", "automation unlocks", "permanent facility unlocks"]
     },
     {
       "id": "S06",
       "name": "character",
-      "responsibilities": [
-        "rarity",
-        "coin level",
-        "evolution",
-        "mastery",
-        "party"
-      ],
-      "requiredState": [
-        "characterId",
-        "rarityId",
-        "levelBigInt",
-        "evolutionEligibility",
-        "evolutionStage",
-        "masteryTrack",
-        "partySlot"
-      ],
-      "uiStates": [
-        "READY",
-        "LOADING",
-        "OFFLINE",
-        "RETRYABLE_ERROR",
-        "FATAL_RECOVERY",
-        "EVOLUTION_PENDING",
-        "MASTERY_PENDING",
-        "CONFLICT_RELOAD"
-      ],
-      "serverOwnedState": [
-        "ownership",
-        "evolution",
-        "mastery",
-        "ruby debit"
-      ]
+      "responsibilities": ["rarity", "coin level", "evolution", "character mastery", "party"],
+      "authority": "server ownership/evolution/mastery and server-verifiable run level",
+      "requiredState": ["characterId", "rarityId", "levelBigInt", "evolutionEligibility", "evolutionStage", "masteryTrack", "partySlot"],
+      "uiStates": ["READY", "LOADING", "INSUFFICIENT_COIN", "INSUFFICIENT_RUBY", "EVOLUTION_QUOTE", "EVOLUTION_PENDING", "MASTERY_PENDING", "CONFLICT_RELOAD", "REVOKED", "RETRYABLE_ERROR"],
+      "serverOwnedState": ["ownership", "evolution", "mastery", "ruby debit", "party profile"]
     },
     {
       "id": "S07",
-      "name": "weapon",
-      "responsibilities": [
-        "rarity",
-        "equip",
-        "weapon mastery",
-        "build"
-      ],
-      "requiredState": [
-        "weaponId",
-        "rarityId",
-        "owner",
-        "equippedBy",
-        "masteryTrack",
-        "buildImpact"
-      ],
-      "uiStates": [
-        "READY",
-        "LOADING",
-        "OFFLINE",
-        "RETRYABLE_ERROR",
-        "FATAL_RECOVERY",
-        "EQUIP_CONFLICT",
-        "MASTERY_PENDING"
-      ],
-      "serverOwnedState": [
-        "ownership",
-        "mastery",
-        "overflow"
-      ]
+      "name": "weapon-build",
+      "responsibilities": ["rarity", "equip", "weapon mastery", "build comparison", "defeat diagnosis"],
+      "authority": "server ownership/mastery/equipment profile",
+      "requiredState": ["weaponId", "rarityId", "owner", "equippedBy", "masteryTrack", "buildImpact", "entityVersion"],
+      "uiStates": ["READY", "LOADING", "EQUIP_PENDING", "EQUIP_CONFLICT", "MASTERY_PENDING", "OVERFLOW", "REVOKED", "RETRYABLE_ERROR"],
+      "serverOwnedState": ["ownership", "equipment", "mastery", "overflow"]
     },
     {
       "id": "S08",
       "name": "boss",
-      "responsibilities": [
-        "phase",
-        "telegraph",
-        "break",
-        "failure",
-        "retry"
-      ],
-      "requiredState": [
-        "bossId",
-        "phase",
-        "breakGauge",
-        "dangerAction",
-        "failureDiagnosis",
-        "retryCost"
-      ],
-      "uiStates": [
-        "READY",
-        "LOADING",
-        "OFFLINE",
-        "RETRYABLE_ERROR",
-        "FATAL_RECOVERY",
-        "BREAK",
-        "VICTORY_PENDING",
-        "DEFEAT"
-      ],
-      "serverOwnedState": [
-        "boss milestone settlement"
-      ]
+      "responsibilities": ["intro", "phase", "telegraph", "break", "failure diagnosis", "retry", "reward"],
+      "authority": "deterministic local battle plus server clear settlement",
+      "requiredState": ["bossId", "phase", "breakGauge", "dangerAction", "failureDiagnosis", "retryCost", "settlementStatus"],
+      "uiStates": ["INTRO", "READY", "BREAK", "DEFEAT", "RETRY", "VICTORY_PENDING", "REWARD_CONFIRMED", "RECONNECT", "REPLAY_SAFE"],
+      "serverOwnedState": ["boss milestone settlement", "one-time reward"]
     },
     {
       "id": "S09",
       "name": "tower-return",
-      "responsibilities": [
-        "lose/keep/gain",
-        "ruby",
-        "re-clear forecast",
-        "confirm"
-      ],
-      "requiredState": [
-        "resetId",
-        "eligibility",
-        "losses",
-        "retained",
-        "rubyGrant",
-        "forecast",
-        "idempotencyKey"
-      ],
-      "uiStates": [
-        "READY",
-        "LOADING",
-        "OFFLINE",
-        "RETRYABLE_ERROR",
-        "FATAL_RECOVERY",
-        "INELIGIBLE",
-        "CONFIRMING",
-        "PENDING_RECONCILIATION",
-        "COMPLETED"
-      ],
-      "serverOwnedState": [
-        "best floor",
-        "reset reward",
-        "ruby ledger",
-        "reset count"
-      ]
+      "responsibilities": ["lose/keep/gain", "ruby", "reclear forecast", "quote", "confirm"],
+      "authority": "server reset quote and commit",
+      "requiredState": ["resetId", "eligibility", "losses", "retained", "rubyGrant", "forecast", "quoteVersion", "idempotencyKey"],
+      "uiStates": ["READY", "INELIGIBLE", "QUOTE_LOADING", "QUOTE_READY", "CONFIRMING", "COMMIT_PENDING", "QUOTE_EXPIRED", "PENDING_RECONCILIATION", "ALREADY_APPLIED", "COMPLETED", "RETRYABLE_ERROR"],
+      "serverOwnedState": ["best floor", "reset reward", "ruby ledger", "reset count", "post-reset profile"]
     },
     {
       "id": "S10",
       "name": "recruit-gacha",
-      "responsibilities": [
-        "character/weapon banners",
-        "odds",
-        "pity",
-        "exchange",
-        "history"
-      ],
-      "requiredState": [
-        "bannerId",
-        "bannerClass",
-        "rateTableVersion",
-        "pityCounter",
-        "featuredGuarantee",
-        "ticketBalance",
-        "exchangeBalance",
-        "drawHistory"
-      ],
-      "uiStates": [
-        "READY",
-        "LOADING",
-        "OFFLINE",
-        "RETRYABLE_ERROR",
-        "FATAL_RECOVERY",
-        "DRAW_CONFIRM",
-        "DRAW_PENDING",
-        "RESULT_RECOVERY",
-        "BANNER_ENDED"
-      ],
-      "serverOwnedState": [
-        "RNG result",
-        "pity",
-        "ownership",
-        "duplicates",
-        "history"
-      ]
+      "responsibilities": ["character banner", "weapon banner", "odds", "pity", "featured guarantee", "exchange", "history"],
+      "authority": "server RNG/result/pity/exchange/history",
+      "requiredState": ["bannerId", "bannerClass", "rateTableVersion", "pityCounter", "featuredGuarantee", "ticketBalance", "rubyLedger", "exchangeBalance", "drawHistory"],
+      "uiStates": ["READY", "LOADING", "CATALOG_STALE", "ODDS_VIEW", "DRAW_CONFIRM", "DRAW_PENDING", "RESULT", "RESULT_RECOVERY", "BANNER_ENDED", "INSUFFICIENT_RESOURCE", "OFFLINE", "RETRYABLE_ERROR"],
+      "serverOwnedState": ["RNG result", "pity", "guarantee", "ownership", "duplicates", "exchange", "history"]
     },
     {
       "id": "S11",
       "name": "store-ruby-ads",
-      "responsibilities": [
-        "wallet ledgers",
-        "products",
-        "payment",
-        "rewarded ads",
-        "entitlement"
-      ],
-      "requiredState": [
-        "walletSubLedgers",
-        "catalogVersion",
-        "products",
-        "purchaseState",
-        "adAvailability",
-        "entitlements"
-      ],
-      "uiStates": [
-        "READY",
-        "LOADING",
-        "OFFLINE",
-        "RETRYABLE_ERROR",
-        "FATAL_RECOVERY",
-        "PURCHASE_PENDING",
-        "PURCHASE_RECONCILIATION",
-        "REFUND",
-        "REVOCATION",
-        "RESTORE",
-        "AD_PENDING"
-      ],
-      "serverOwnedState": [
-        "wallet",
-        "catalog",
-        "receipts",
-        "entitlements",
-        "ad receipts"
-      ]
+      "responsibilities": ["paid/free wallet", "products", "payment", "rewarded ads", "entitlements"],
+      "authority": "server wallet/catalog/receipt/ad/entitlement",
+      "requiredState": ["walletSubLedgers", "catalogVersion", "products", "purchaseState", "adAvailability", "adDailyCap", "entitlements", "auditId"],
+      "uiStates": ["READY", "LOADING", "CATALOG_STALE", "PURCHASE_CONFIRM", "PURCHASE_PENDING", "PURCHASE_RECONCILIATION", "VERIFICATION_FAILED", "REFUNDED", "REVOKED", "RESTORE_PENDING", "RESTORED", "AD_OPT_IN", "AD_PENDING", "AD_GRANTED", "AD_CAP_REACHED", "OFFLINE"],
+      "serverOwnedState": ["wallet", "catalog", "receipts", "entitlements", "ad receipts", "refund/revocation/restore"]
     },
     {
       "id": "S12",
       "name": "login-inbox",
-      "responsibilities": [
-        "newcomer/monthly/returner",
-        "inbox",
-        "claim history"
-      ],
-      "requiredState": [
-        "campaigns",
-        "eligibility",
-        "claimable",
-        "inbox",
-        "claimHistory"
-      ],
-      "uiStates": [
-        "READY",
-        "LOADING",
-        "OFFLINE",
-        "RETRYABLE_ERROR",
-        "FATAL_RECOVERY",
-        "CLAIM_PENDING",
-        "DUPLICATE_REQUEST",
-        "EXPIRED",
-        "RECOVERED"
-      ],
-      "serverOwnedState": [
-        "eligibility",
-        "claim history",
-        "grants"
-      ]
+      "responsibilities": ["newcomer", "monthly", "returner", "inbox", "claim history"],
+      "authority": "server time/eligibility/claim/inbox history",
+      "requiredState": ["campaigns", "serverTime", "eligibility", "claimable", "inbox", "claimHistory"],
+      "uiStates": ["READY", "LOADING", "CLAIM_PENDING", "GRANTED", "ALREADY_CLAIMED", "NOT_ELIGIBLE", "EXPIRED", "SERVER_TIME_ERROR", "DUPLICATE_REQUEST", "RECOVERED", "OFFLINE"],
+      "serverOwnedState": ["server time", "eligibility", "claim history", "grants"]
     }
   ],
   "globalInvariants": [
-    "exactly S01-S12",
-    "all permanent-economy writes surface pending and reconciliation states",
-    "no tap damage state",
-    "mobile-first review includes 320x667, 375x667 and 390x844",
-    "purchase/draw/reset never infer success from timeout",
-    "this registry cannot authorize Step 2 until the Round 008 seal validates it"
+    "Exactly S01-S12 are canonical.",
+    "All permanent-economy writes expose pending and reconciliation states.",
+    "No tap-damage state exists.",
+    "Purchase, draw, reset and claim never infer failure or success from client timeout.",
+    "Account deletion and legally retained records are visible rather than implicit.",
+    "This registry cannot authorize Step 2 until the Round 008 seal validates it."
   ]
 }
