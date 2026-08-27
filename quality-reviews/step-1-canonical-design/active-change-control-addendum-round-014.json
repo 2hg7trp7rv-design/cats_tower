@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-canonical-design-active-change-control-addendum-round-014",
+  "createdAt": "2026-08-28",
+  "activatedAt": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "parentChangeControl": "quality-reviews/step-1-canonical-design/active-change-control.json",
+  "previousAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-013.json",
+  "trigger": "Repair stale governance mirrors after the exact Step 2 executable seal, critics, final judge, completion evidence, status activation and terminal live read-back had already passed. Separate immutable Round 7 historical validation from current Round 008 and Step 2 status validation without restoring obsolete markers.",
+  "repairAcceptance": {
+    "path": "quality-reviews/step-2-governance-repair-round-001/acceptance-matrix.json",
+    "blob": "fd4ad16e056370bdf0b3c6e2e4ed8b97ca91db64",
+    "commit": "b5ebe4bfff4fc216c41c09c8410c4eaeb2edd1c6"
+  },
+  "step1Seal": {
+    "path": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
+    "blob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
+    "commit": "0b17f9b5b8decdab8ce329287a4dc073790c4bf7",
+    "tree": "9eac6b6103d65cf8bcb13859d00e43cd3389fa8a",
+    "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+    "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce",
+    "status": "PASS"
+  },
+  "step2Evidence": {
+    "semanticCommit": "724d04940f9f3794b993cddbc5af3a7163a0395b",
+    "semanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
+    "acceptance": {
+      "path": "quality-reviews/step-2-executable-contract-v2/acceptance-matrix.json",
+      "blob": "f8986a3d436e93a003ff0f7e07f6a5d28d6faf2f"
+    },
+    "executableSeal": {
+      "path": "simulation/executable-seal-v2.json",
+      "blob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
+      "activationCommit": "89174eeebb033fe807a0592c8df0279c2a7b9a6f",
+      "activationTree": "ccf444df436d63d86fd4da0355f20349753b0546",
+      "workflowRunId": "33104391753",
+      "jobId": "98630217077",
+      "conclusion": "SUCCESS",
+      "validatorVerdict": "PASS_EXECUTABLE_SEAL_V2"
+    },
+    "criticSummary": {
+      "path": "quality-reviews/step-2-executable-contract-v2/critic-summary.json",
+      "blob": "4d85d95c0b00b3e2aed4aecc6025ceea9253308e",
+      "criticCount": 5,
+      "unresolvedP0": 0,
+      "unresolvedP1": 0,
+      "trackedP2": 6
+    },
+    "finalJudge": {
+      "path": "quality-reviews/step-2-executable-contract-v2/final-judge.json",
+      "blob": "44fe4c83e3ea1ceefba836200100b6d6628028d1"
+    },
+    "completionEvidence": {
+      "path": "quality-reviews/step-2-executable-contract-v2/completion-evidence.json",
+      "blob": "1f771b02f0982c879e038bfd36925ed889142d95"
+    },
+    "activationReadback": {
+      "path": "quality-reviews/step-2-executable-contract-v2/live-readback.json",
+      "blob": "cfec952f14680482409ff621e9c89ed36cf4e6d6"
+    },
+    "finalLiveReadback": {
+      "path": "quality-reviews/step-2-executable-contract-v2/final-live-readback.json",
+      "blob": "4d26695cc6359ad933249ac6fdf2eddca9be9c6f",
+      "verdict": "PASS_FINAL_LIVE_READBACK_STEP2_SEALED"
+    },
+    "qualificationScenarioCount": "30",
+    "balanceVerdict": "NOT_EVALUATED_STEP2"
+  },
+  "governanceRepair": {
+    "classification": "CURRENT_STATUS_MIRROR_AND_LEGACY_ROUND7_VALIDATION_COLLISION",
+    "staleMirrors": [
+      "quality-reviews/step-1-canonical-design/active-change-control.json",
+      "AI_PROJECT_POLICY.json",
+      "QUALITY_GATE.md",
+      ".github/workflows/CURRENT_STATUS.md"
+    ],
+    "workflow": ".github/workflows/verify-main.yml",
+    "failedRunId": "33105086118",
+    "failedJobId": "98632705236",
+    "historicalJob": "historical-round7-evidence",
+    "currentJob": "current-governance",
+    "obsoleteMarkerRestorationAllowed": false,
+    "step1OrStep2SemanticChangeAllowed": false
+  },
+  "status": "PASS",
+  "verdict": "PASS",
+  "advanceAllowed": true,
+  "step2Allowed": true,
+  "step3Allowed": true,
+  "executionState": [
+    {"step": 1, "status": "PASS"},
+    {"step": 2, "status": "PASS"},
+    {"step": 3, "status": "READY_TO_START"},
+    {"step": 4, "status": "BLOCKED_UNTIL_STEP3_PASS"},
+    {"step": 5, "status": "BLOCKED_UNTIL_PRIOR_GATES"},
+    {"step": 6, "status": "BLOCKED_UNTIL_ELIGIBLE_BUILD"}
+  ],
+  "step3Boundary": {
+    "runPlan": "simulation/run-plan-v2.json",
+    "minimumGameplayScenarios": 15000,
+    "calibrationScenarios": 12000,
+    "unseenHoldoutScenarios": 3000,
+    "holdoutMayBeUsedForTuning": false,
+    "step2QualificationMayBeClaimedAsBalancePass": false,
+    "allowedNext": ["Step 3 large-scale validation artifacts and evidence"],
+    "forbiddenUntilLaterGates": ["runtime", "assets", "backend", "payment provider", "ad network", "Production alias", "physical-iPhone PASS claim"]
+  },
+  "repairEvidence": {
+    "completionPath": "quality-reviews/step-2-governance-repair-round-001/completion-evidence.json",
+    "liveReadbackPath": "quality-reviews/step-2-governance-repair-round-001/live-readback.json",
+    "bindingStatus": "REQUIRED_AFTER_CONTENT_AND_CI"
+  },
+  "nextAuthorizedChat": "03_3ビルド・ガチャ・重複熟練・進化・課金検証",
+  "nextAuthorizedWork": "After the governance repair completion evidence and terminal live read-back pass, execute the sealed Step 3 large-scale validation. Do not treat the 30-scenario Step 2 qualification as a balance PASS.",
+  "step3Executed": false,
+  "physicalIPhoneVerified": false,
+  "productionChanged": false
+}
