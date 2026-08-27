@@ -36,6 +36,7 @@ Step 2〜6: **BLOCKED UNTIL LIVE ROUND 008 SEAL**
 - 10F地区、100F cycle、milestone boss、modifier pool、背景変化、反復抑制をデータ駆動にする。
 - 階数、HP、攻撃力、coin、cost、reset count、offline報酬は安全整数限界を超える前提とする。
 - canonical integerは正規化10進文字列またはversioned arbitrary-precision型。`NaN`、`Infinity`、暗黙丸め、unsafe JavaScript `Number`を正本にしない。
+- district/cycleのminimum-width decimal IDとmilestoneのleading-zeroなし正規化IDは`canonical/STABLE_ID_REGISTRY.json`へ一意に固定し、別表記をcanonical writeとして受理しない。
 
 詳細な数値型、operation、rounding、cross-runtime fixtureは`canonical/STEP2_DEPENDENCY_CLOSURE.json`に固定する。
 
@@ -90,6 +91,11 @@ ruby sourceは課金、新記録/一度限り節目を伴う塔還り、任意re
 
 必須surfaceはcharacter/weapon gacha、newcomer/monthly/returner login、payment、rewarded opt-in ad。初期広告はrewardedのみで、battle、boss、draw result、purchase、save recovery中に出さない。
 
+- purchase、banner/rate、rewarded-ad offer、login campaignはそれぞれimmutableなcatalog/versionを持つ。
+- adはopt-in前にoffer ID/version、報酬、eligibility、daily capを固定し、受諾後のretryで新しいofferへ再評価しない。
+- login claimはcampaign ID/version、server period、報酬、missed-day ruleを固定し、受諾後のretryで新しいcampaignへ再評価しない。
+- 使用済み有償rubyの返金・取消で直接reverseできない場合は、source transaction、policy version、監査IDを持つ明示的なpaid-ruby deficitまたは購入制限状態をserverに記録する。free-reset、free-ad、free-otherを黙って削らず、unsigned underflowやclient-only負残高を作らない。
+
 広告なしF2Pでも本編、塔還り、必須進化を継続し、30〜45日でfeatured UR保証1回へ到達する目標を持つ。monthly accelerationは約1.5〜2倍、高額stress personaは約3〜5倍を目標上限とし、無制限倍率を禁止する。
 
 報酬テンポ候補は最初の10分50〜100draw、1時間150〜250、7日500〜800、通常no-ad 40〜60/day、optional ad +20 target/hard cap 40、bulk 10/50/100、newcomer visible upgrade ≤45秒、normal session ≤120秒。これらはStep 2/3で合否を決める候補値であり確定値ではない。
@@ -98,14 +104,14 @@ ruby sourceは課金、新記録/一度限り節目を伴う塔還り、任意re
 
 localStorageを正本にしない対象:
 
-- paid/free ruby、tickets、product/rate/banner catalog
+- paid/free ruby、refund deficit、tickets、product/rate/banner/ad-offer/login-campaign catalog
 - receipt、webhook/RTDN、refund、revocation、restore
 - draw result、RNG audit ID、pity、exchange、history
 - character/weapon acquisition、duplicate、mastery、overflow
 - evolution、reset reward、highest floor
 - login claim、ad receipt、entitlement、account link/deletion
 
-server operationはtransaction ID、idempotency key、audit ID、versionを持つ。client timeoutは失敗確定ではなくpending reconciliation。詳細は`canonical/STATE_TRANSITION_CONTRACT.json`。
+server operationはtransaction ID、idempotency key、audit ID、accepted catalog/offer/campaign versionを持つ。client timeoutは失敗確定ではなくpending reconciliation。詳細は`canonical/STATE_TRANSITION_CONTRACT.json`。
 
 ## 9. Canonical screens S01〜S12
 
