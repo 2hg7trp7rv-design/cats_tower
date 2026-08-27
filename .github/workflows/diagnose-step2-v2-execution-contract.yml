@@ -26,7 +26,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Apply known in-memory diagnostic correction
+      - name: Apply known in-memory diagnostic corrections
         shell: bash
         run: |
           set -euo pipefail
@@ -34,8 +34,16 @@ jobs:
           from pathlib import Path
           path = Path('simulation/engine-v2/high-volume.mjs')
           text = path.read_text(encoding='utf-8')
-          text = text.replace("import { parseExactDecimal, toBigInt } from './numeric.mjs';", "import { parseExactDecimal, normalizeUnsigned } from './numeric.mjs';")
-          text = text.replace("[key, toBigInt(value).toString()]", "[key, normalizeUnsigned(value)]")
+          replacements = {
+              "import { parseExactDecimal, toBigInt } from './numeric.mjs';": "import { parseExactDecimal, normalizeUnsigned } from './numeric.mjs';",
+              "[key, toBigInt(value).toString()]": "[key, normalizeUnsigned(value)]",
+              "function pityConformance(candidate, samples, namespace) {": "function pityConformance(candidate, _execution, samples, namespace) {",
+              "function duplicateSkew(candidate, samples, namespace) {": "function duplicateSkew(candidate, _execution, samples, namespace) {",
+          }
+          for old, new in replacements.items():
+              if old not in text:
+                  raise SystemExit(f'missing expected source fragment: {old}')
+              text = text.replace(old, new)
           path.write_text(text, encoding='utf-8')
           PY
       - name: Syntax and core contract validators
