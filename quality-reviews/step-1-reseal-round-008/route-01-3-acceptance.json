@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-route-01-3-acceptance",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "status": "ACTIVE_IN_PROGRESS",
+  "purpose": "Complete the first-ten canonical slice, stable ID closure, server-state closure, Step 2 dependency closure and all active lower mirrors without implementing Step 2.",
+  "requiredOutputs": [
+    "FLOORS_1_10_DESIGN.md",
+    "canonical/STABLE_ID_REGISTRY.json",
+    "canonical/SCREEN_STATE_REGISTRY.json",
+    "canonical/STATE_TRANSITION_CONTRACT.json",
+    "canonical/STEP2_DEPENDENCY_CLOSURE.json",
+    "quality-reviews/step-1-reseal-round-008/canonical-coverage-matrix.json"
+  ],
+  "acceptance": [
+    {"id": "R013-01", "requirement": "1-10F is the first unbounded-tower district and Floor 10 continues to Floor 11; Floor 100 remains a milestone."},
+    {"id": "R013-02", "requirement": "The four deterministic N/R core characters cover frontline, anti-air, healing and backline disruption; higher rarity is optional acceleration/variation."},
+    {"id": "R013-03", "requirement": "Tap damage is zero; auto battle and offline progress are foundational; collect-all, refill tapping and individual collection are not mandatory."},
+    {"id": "R013-04", "requirement": "Shop and delivery remain combat support rather than a company-management protagonist loop."},
+    {"id": "R013-05", "requirement": "Character/weapon gacha, first-day guarantees, first-copy functionality and mastery/overflow are represented without fixing unvalidated rates."},
+    {"id": "R013-06", "requirement": "Every persistent entity uses a registered stable ID or a declared read-only migration alias; display names are not IDs."},
+    {"id": "R013-07", "requirement": "S01-S12 normal, loading, pending, failure, retry, reload, multi-tab, refund, revocation and restore responsibilities are closed."},
+    {"id": "R013-08", "requirement": "Draw, payment, ad, login, reset, evolution, mastery/exchange, account link and deletion have idempotent server-authoritative transitions."},
+    {"id": "R013-09", "requirement": "STEP2_DEPENDENCY_CLOSURE defines all fields, enums, IDs, units, invariants, fixtures, migrations, validator requirements and output evidence needed for implementation without guessing."},
+    {"id": "R013-10", "requirement": "Old V1 candidate/schema/validator/workflows remain unchanged, non-executable and non-promotable."},
+    {"id": "R013-11", "requirement": "No runtime, asset, backend, payment, ad-network, PR or Production operation occurs."},
+    {"id": "R013-12", "requirement": "Route-specific critic and checkpoint judge leave unresolved P0/P1 at zero before PASS."
+    }
+  ],
+  "failureConditions": [
+    "finite tower or Floor 10/100 ending",
+    "specific RR-UR required for core progression",
+    "first copy missing advertised function",
+    "unsafe JavaScript Number accepted for unbounded values",
+    "unregistered persistent ID",
+    "Step 2 implementation started before Step 1 seal",
+    "missing error or recovery state",
+    "forbidden path change"
+  ],
+  "step2Allowed": false
+}
