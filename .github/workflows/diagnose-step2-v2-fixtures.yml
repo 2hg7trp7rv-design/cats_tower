@@ -1,0 +1,34 @@
+name: Diagnose Step 2 V2 adversarial fixtures
+
+on:
+  push:
+    branches: [kimi]
+    paths:
+      - '.github/workflows/diagnose-step2-v2-fixtures.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: diagnose-step2-v2-fixtures-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax
+        run: find simulation -name '*.mjs' -print0 | xargs -0 -n1 node --check
+      - name: Existing fixture regression
+        run: node simulation/fixtures/v2/validate-fixtures.mjs
+      - name: Execution and result adversarial fixtures
+        run: node simulation/fixtures/v2/validate-execution-fixtures.mjs
