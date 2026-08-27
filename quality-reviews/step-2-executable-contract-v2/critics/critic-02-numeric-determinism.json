@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-v2-critic-02-numeric-determinism",
+  "reviewedDate": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "role": "INDEPENDENT_CRITIC",
+  "perspective": "numeric-determinism-and-reproducibility",
+  "reviewedSemanticHead": "724d04940f9f3794b993cddbc5af3a7163a0395b",
+  "reviewedSemanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
+  "evidencePaths": [
+    "simulation/engine-v2/numeric.mjs",
+    "simulation/engine-v2/rng.mjs",
+    "simulation/engine-v2/hash.mjs",
+    "simulation/engine-v2/tower.mjs",
+    "simulation/engine-v2/run-scenario.mjs",
+    "simulation/engine-v2/statistics.mjs",
+    "simulation/fixtures/v2/cross-runtime-golden.json",
+    "simulation/fixtures/v2/boundary.json",
+    "quality-reviews/step-2-executable-contract-v2/qualification-result.json"
+  ],
+  "checks": [
+    {
+      "id": "NUMERIC-NO-NUMBER-OVERFLOW",
+      "verdict": "PASS",
+      "basis": "Gameplay-scale quantities use unsigned decimal strings, BigInt and exact rational arithmetic instead of JavaScript Number for authoritative large-number values."
+    },
+    {
+      "id": "NUMERIC-ROUNDING",
+      "verdict": "PASS",
+      "basis": "Rounding behavior is versioned and exact-rational operations are used for progression calculations; no NaN or Infinity representation is accepted by the sealed contracts."
+    },
+    {
+      "id": "DETERMINISTIC-SCENARIO-ID",
+      "verdict": "PASS",
+      "basis": "Scenario namespace, partition, build, persona, ordinal and seed are canonical inputs; scenario/input digests are SHA-256 bound and qualification regeneration is deterministic."
+    },
+    {
+      "id": "DETERMINISTIC-PARTITION-SEPARATION",
+      "verdict": "PASS",
+      "basis": "Qualification, calibration and unseen holdout use distinct namespaces and smoke validation reports zero scenario/input digest overlap."
+    }
+  ],
+  "findings": [
+    {
+      "id": "S2-P2-NUMERIC-RUNTIME-001",
+      "severity": "P2",
+      "status": "TRACKED_NONBLOCKING",
+      "finding": "Step 2 reproducibility evidence is contract- and Node-runtime-focused; browser-engine and physical-device long-duration numeric behavior remains outside this seal.",
+      "requiredNextStage": "Keep browser/runtime and physical-iPhone validation in their later authorized stages; do not reinterpret this Step 2 seal as device validation."
+    }
+  ],
+  "unresolved": {"P0": 0, "P1": 0, "P2": 1},
+  "verdict": "PASS_STEP2_SCOPE",
+  "step2Blocking": false
+}
