@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 2,
-  "artifactId": "cats-tower-stable-id-registry-v2-preseal",
+  "schemaVersion": 3,
+  "artifactId": "cats-tower-stable-id-registry-round-008-preseal",
   "asOf": "2026-08-27",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
@@ -10,517 +10,120 @@
   "format": {
     "pattern": "^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+$",
     "displayNameIsId": false,
+    "canonicalWritesAcceptAliases": false,
+    "aliasesAreReadOnlyMigrationInputs": true,
     "deletePolicy": "RETIRED_TOMBSTONE",
-    "aliasWriteAllowed": false
+    "unboundedNumericSegments": "normalized unsigned decimal strings; never unsafe JavaScript Number"
   },
   "rarities": [
-    {
-      "id": "rarity.n",
-      "code": "N",
-      "rank": 0
-    },
-    {
-      "id": "rarity.r",
-      "code": "R",
-      "rank": 1
-    },
-    {
-      "id": "rarity.rr",
-      "code": "RR",
-      "rank": 2
-    },
-    {
-      "id": "rarity.sr",
-      "code": "SR",
-      "rank": 3
-    },
-    {
-      "id": "rarity.ssr",
-      "code": "SSR",
-      "rank": 4
-    },
-    {
-      "id": "rarity.ur",
-      "code": "UR",
-      "rank": 5
-    }
+    {"id": "rarity.n", "code": "N", "rank": 0},
+    {"id": "rarity.r", "code": "R", "rank": 1},
+    {"id": "rarity.rr", "code": "RR", "rank": 2},
+    {"id": "rarity.sr", "code": "SR", "rank": 3},
+    {"id": "rarity.ssr", "code": "SSR", "rank": 4},
+    {"id": "rarity.ur", "code": "UR", "rank": 5}
   ],
-  "characters": [
-    {
-      "id": "character.launch.001",
-      "slot": 1,
-      "status": "ACTIVE_RESERVED",
-      "displayName": "ムギ",
-      "acquisition": "DETERMINISTIC_NON_GACHA"
+  "reservations": {
+    "characters": {
+      "prefix": "character.launch.",
+      "first": 1,
+      "last": 24,
+      "width": 3,
+      "count": 24,
+      "membersAreReserved": true
     },
-    {
-      "id": "character.launch.002",
-      "slot": 2,
-      "status": "ACTIVE_RESERVED",
-      "displayName": "ルナ",
-      "acquisition": "DETERMINISTIC_NON_GACHA"
-    },
-    {
-      "id": "character.launch.003",
-      "slot": 3,
-      "status": "ACTIVE_RESERVED",
-      "displayName": "トト",
-      "acquisition": "DETERMINISTIC_NON_GACHA"
-    },
-    {
-      "id": "character.launch.004",
-      "slot": 4,
-      "status": "ACTIVE_RESERVED",
-      "displayName": "コハク",
-      "acquisition": "DETERMINISTIC_NON_GACHA"
-    },
-    {
-      "id": "character.launch.005",
-      "slot": 5,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.006",
-      "slot": 6,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.007",
-      "slot": 7,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.008",
-      "slot": 8,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.009",
-      "slot": 9,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.010",
-      "slot": 10,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.011",
-      "slot": 11,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.012",
-      "slot": 12,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.013",
-      "slot": 13,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.014",
-      "slot": 14,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.015",
-      "slot": 15,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.016",
-      "slot": 16,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.017",
-      "slot": 17,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.018",
-      "slot": 18,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.019",
-      "slot": 19,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.020",
-      "slot": 20,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.021",
-      "slot": 21,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.022",
-      "slot": 22,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.023",
-      "slot": 23,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
-    },
-    {
-      "id": "character.launch.024",
-      "slot": 24,
-      "status": "ACTIVE_RESERVED",
-      "displayNameStatus": "TO_BE_NAMED_WITHOUT_ID_CHANGE"
+    "weapons": {
+      "prefix": "weapon.launch.",
+      "first": 1,
+      "last": 36,
+      "width": 3,
+      "count": 36,
+      "membersAreReserved": true
     }
+  },
+  "coreCharacters": [
+    {"id": "character.launch.001", "displayName": "ムギ", "baseRarity": "rarity.n", "acquisition": "DETERMINISTIC_NON_GACHA", "role": "frontline-control"},
+    {"id": "character.launch.002", "displayName": "ルナ", "baseRarity": "rarity.r", "acquisition": "DETERMINISTIC_NON_GACHA", "role": "ranged-anti-air"},
+    {"id": "character.launch.003", "displayName": "トト", "baseRarity": "rarity.n", "acquisition": "DETERMINISTIC_NON_GACHA", "role": "healing-support"},
+    {"id": "character.launch.004", "displayName": "コハク", "baseRarity": "rarity.r", "acquisition": "DETERMINISTIC_NON_GACHA", "role": "runner-backline-disruption"}
   ],
-  "weapons": [
-    {
-      "id": "weapon.launch.001",
-      "slot": 1,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.002",
-      "slot": 2,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.003",
-      "slot": 3,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.004",
-      "slot": 4,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.005",
-      "slot": 5,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.006",
-      "slot": 6,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.007",
-      "slot": 7,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.008",
-      "slot": 8,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.009",
-      "slot": 9,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.010",
-      "slot": 10,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.011",
-      "slot": 11,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.012",
-      "slot": 12,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.013",
-      "slot": 13,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.014",
-      "slot": 14,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.015",
-      "slot": 15,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.016",
-      "slot": 16,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.017",
-      "slot": 17,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.018",
-      "slot": 18,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.019",
-      "slot": 19,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.020",
-      "slot": 20,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.021",
-      "slot": 21,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.022",
-      "slot": 22,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.023",
-      "slot": 23,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.024",
-      "slot": 24,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.025",
-      "slot": 25,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.026",
-      "slot": 26,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.027",
-      "slot": 27,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.028",
-      "slot": 28,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.029",
-      "slot": 29,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.030",
-      "slot": 30,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.031",
-      "slot": 31,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.032",
-      "slot": 32,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.033",
-      "slot": 33,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.034",
-      "slot": 34,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.035",
-      "slot": 35,
-      "status": "ACTIVE_RESERVED"
-    },
-    {
-      "id": "weapon.launch.036",
-      "slot": 36,
-      "status": "ACTIVE_RESERVED"
-    }
-  ],
+  "firstTenSlice": {
+    "characters": ["character.launch.001", "character.launch.002", "character.launch.003", "character.launch.004", "character.launch.005", "character.launch.006"],
+    "weapons": ["weapon.launch.001", "weapon.launch.002", "weapon.launch.003", "weapon.launch.004", "weapon.launch.005", "weapon.launch.006"],
+    "shops": ["shop.launch.001", "shop.launch.002", "shop.launch.003", "shop.launch.004"],
+    "temporarySupports": ["support.launch.001", "support.launch.002", "support.launch.003"],
+    "normalEnemies": ["enemy.normal.001", "enemy.normal.002", "enemy.normal.003", "enemy.normal.004", "enemy.normal.005", "enemy.normal.006"],
+    "eliteEnemies": ["enemy.elite.001", "enemy.elite.002"],
+    "districtWall": "enemy.wall.001",
+    "districtBoss": "tower.boss.d01.kagetsubasa",
+    "district": "tower.district.001",
+    "cycle": "tower.cycle.000001"
+  },
   "namespaces": {
-    "evolution": [
-      "evolution.character.stage"
-    ],
-    "characterMastery": [
-      "mastery.character.track",
-      "mastery.character.node",
-      "mastery.character.overflow"
-    ],
-    "weaponMastery": [
-      "mastery.weapon.track",
-      "mastery.weapon.node",
-      "mastery.weapon.overflow"
-    ],
-    "wallet": [
-      "wallet.ruby.paid",
-      "wallet.ruby.free.reset",
-      "wallet.ruby.free.ad",
-      "wallet.ruby.free.other",
-      "wallet.coin.run"
-    ],
-    "tickets": [
-      "ticket.character.standard",
-      "ticket.weapon.standard",
-      "ticket.pickup.character",
-      "ticket.pickup.weapon"
-    ],
-    "banner": [
-      "banner.character.standard",
-      "banner.weapon.standard",
-      "banner.character.featured",
-      "banner.weapon.featured"
-    ],
-    "pity": [
-      "pity.character.standard",
-      "pity.weapon.standard",
-      "pity.character.featured",
-      "pity.weapon.featured",
-      "guarantee.featured.character",
-      "guarantee.featured.weapon"
-    ],
-    "exchange": [
-      "exchange.character.selector",
-      "exchange.weapon.selector",
-      "exchange.character.fragment",
-      "exchange.weapon.fragment",
-      "exchange.banner.medal"
-    ],
-    "duplicateOverflow": [
-      "overflow.character.mastery",
-      "overflow.weapon.mastery"
-    ],
-    "productCatalog": [
-      "product.ruby.pack",
-      "product.monthly.entitlement",
-      "product.starter.bundle"
-    ],
-    "entitlement": [
-      "entitlement.monthly"
-    ],
-    "loginCampaign": [
-      "login.newcomer",
-      "login.monthly",
-      "login.returner"
-    ],
-    "rewardClaim": [
-      "reward.claim.login",
-      "reward.claim.inbox",
-      "reward.claim.milestone"
-    ],
-    "advertisementReward": [
-      "ad.reward.daily.draw",
-      "ad.reward.offline_boost"
-    ],
-    "reset": [
-      "reset.tower_return"
-    ],
-    "tower": [
-      "tower.district",
-      "tower.cycle",
-      "tower.milestone",
-      "tower.modifier",
-      "tower.boss"
-    ],
-    "transaction": [
-      "transaction.wallet",
-      "transaction.draw",
-      "transaction.payment",
-      "transaction.reset",
-      "transaction.claim",
-      "transaction.ad"
-    ],
-    "audit": [
-      "audit.rng",
-      "audit.payment",
-      "audit.reward",
-      "audit.migration",
-      "audit.security"
-    ]
+    "evolution": ["evolution.character.stage"],
+    "characterMastery": ["mastery.character.track", "mastery.character.node", "mastery.character.overflow"],
+    "weaponMastery": ["mastery.weapon.track", "mastery.weapon.node", "mastery.weapon.overflow"],
+    "wallet": ["wallet.ruby.paid", "wallet.ruby.free.reset", "wallet.ruby.free.ad", "wallet.ruby.free.other", "wallet.coin.run"],
+    "tickets": ["ticket.character.standard", "ticket.weapon.standard", "ticket.pickup.character", "ticket.pickup.weapon"],
+    "banner": ["banner.character.standard", "banner.weapon.standard", "banner.character.featured", "banner.weapon.featured"],
+    "pity": ["pity.character.standard", "pity.weapon.standard", "pity.character.featured", "pity.weapon.featured"],
+    "guarantee": ["guarantee.featured.character", "guarantee.featured.weapon"],
+    "exchange": ["exchange.character.selector", "exchange.weapon.selector", "exchange.character.fragment", "exchange.weapon.fragment", "exchange.banner.medal"],
+    "duplicateOverflow": ["overflow.character.mastery", "overflow.weapon.mastery"],
+    "productCatalog": ["product.ruby.pack", "product.monthly.entitlement", "product.starter.bundle", "product.ticket.pack", "product.cosmetic.pack"],
+    "entitlement": ["entitlement.monthly", "entitlement.cosmetic"],
+    "loginCampaign": ["login.newcomer", "login.monthly", "login.returner"],
+    "rewardClaim": ["reward.claim.login", "reward.claim.inbox", "reward.claim.milestone"],
+    "advertisementReward": ["ad.reward.daily.draw", "ad.reward.offline_boost"],
+    "reset": ["reset.tower_return"],
+    "tower": ["tower.district", "tower.cycle", "tower.milestone", "tower.modifier", "tower.boss"],
+    "shops": ["shop.launch"],
+    "supports": ["support.launch"],
+    "enemies": ["enemy.normal", "enemy.elite", "enemy.wall"],
+    "builds": ["build.combat", "build.reinforcement", "build.commerce"],
+    "account": ["account.guest", "account.registered", "account.deletion"],
+    "catalog": ["catalog.product", "catalog.banner", "catalog.rate_table"],
+    "receipt": ["receipt.apple", "receipt.google", "receipt.ad"],
+    "transaction": ["transaction.wallet", "transaction.draw", "transaction.payment", "transaction.reset", "transaction.claim", "transaction.ad", "transaction.evolution", "transaction.exchange", "transaction.account"],
+    "audit": ["audit.rng", "audit.payment", "audit.reward", "audit.migration", "audit.security", "audit.support"]
+  },
+  "instanceRules": {
+    "evolutionStage": "evolution.character.stage.<positive-decimal-string>",
+    "towerDistrict": "tower.district.<positive-zero-padded-decimal-string>",
+    "towerCycle": "tower.cycle.<positive-zero-padded-decimal-string>",
+    "towerMilestone": "tower.milestone.floor.<normalized-decimal-string>",
+    "transaction": "transaction.<entity>.<uuidv7-or-ulid>",
+    "audit": "audit.<domain>.<uuidv7-or-ulid>",
+    "claim": "reward.claim.<domain>.<uuidv7-or-ulid>",
+    "catalogVersion": "catalog.<domain>.<version-string>"
   },
   "migrationAliases": [
-    {
-      "alias": "cat.mugi",
-      "canonical": "character.launch.001",
-      "mode": "READ_ONLY"
-    },
-    {
-      "alias": "cat.luna",
-      "canonical": "character.launch.002",
-      "mode": "READ_ONLY"
-    },
-    {
-      "alias": "cat.toto",
-      "canonical": "character.launch.003",
-      "mode": "READ_ONLY"
-    },
-    {
-      "alias": "cat.kohaku",
-      "canonical": "character.launch.004",
-      "mode": "READ_ONLY"
-    },
-    {
-      "alias": "dawn",
-      "canonical": "reset.tower_return",
-      "mode": "READ_ONLY_REVIEW_REQUIRED"
-    },
-    {
-      "alias": "dawn.reset",
-      "canonical": "reset.tower_return",
-      "mode": "READ_ONLY_REVIEW_REQUIRED"
-    },
-    {
-      "alias": "currency.dawn_shard",
-      "canonical": "wallet.ruby.free.reset",
-      "mode": "READ_ONLY_PROVENANCE_REVIEW_REQUIRED"
-    }
+    {"alias": "cat.mugi", "canonical": "character.launch.001", "mode": "READ_ONLY"},
+    {"alias": "cat.luna", "canonical": "character.launch.002", "mode": "READ_ONLY"},
+    {"alias": "cat.toto", "canonical": "character.launch.003", "mode": "READ_ONLY"},
+    {"alias": "cat.kohaku", "canonical": "character.launch.004", "mode": "READ_ONLY"},
+    {"alias": "dawn", "canonical": "reset.tower_return", "mode": "READ_ONLY_REVIEW_REQUIRED"},
+    {"alias": "dawn.reset", "canonical": "reset.tower_return", "mode": "READ_ONLY_REVIEW_REQUIRED"},
+    {"alias": "currency.dawn_shard", "canonical": "wallet.ruby.free.reset", "mode": "READ_ONLY_PROVENANCE_REVIEW_REQUIRED"},
+    {"alias": "shop.staff_reception", "canonical": "shop.launch.001", "mode": "READ_ONLY"},
+    {"alias": "shop.fish_diner", "canonical": "shop.launch.002", "mode": "READ_ONLY"},
+    {"alias": "shop.claw_forge", "canonical": "shop.launch.003", "mode": "READ_ONLY"},
+    {"alias": "shop.toy_workshop", "canonical": "shop.launch.004", "mode": "READ_ONLY"}
   ],
-  "invariants": [
-    "IDs never depend on display name",
-    "24 character slots and 36 weapon slots are stable reservations",
-    "aliases are accepted only on migration input",
-    "new writes never emit dawn.*",
-    "legacy currency migration preserves source provenance",
-    "retired IDs are not reused",
-    "this registry cannot authorize Step 2 until the Round 008 seal validates it"
+  "migrationInvariants": [
+    "Alias input is normalized once and canonical ID is written thereafter.",
+    "Legacy ruby-like value retains source provenance and is not silently merged into aggregate ruby.",
+    "Migration is idempotent and preserves an immutable raw backup.",
+    "Unknown IDs fail closed and are never silently discarded.",
+    "Display-name changes never require persistence migration."
+  ],
+  "globalInvariants": [
+    "IDs never depend on display name.",
+    "Every member of the 24-character and 36-weapon reservation ranges is stable and cannot be reused.",
+    "Base rarity and evolution are separate axes.",
+    "Aliases are accepted only on migration input.",
+    "New writes never emit dawn or legacy cat aliases.",
+    "Retired IDs remain tombstones.",
+    "This registry cannot authorize Step 2 until the Round 008 seal validates it."
   ]
 }
