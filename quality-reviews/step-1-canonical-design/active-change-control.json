@@ -1,16 +1,17 @@
 {
   "schemaVersion": 1,
   "artifactId": "step-1-canonical-design-active-change-control",
-  "revision": 6,
+  "revision": 7,
   "createdAt": "2026-08-26",
-  "updatedAt": "2026-08-27",
+  "updatedAt": "2026-08-28",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "status": "PASS",
   "verdict": "PASS",
   "advanceAllowed": true,
   "step2Allowed": true,
-  "trigger": "Activate the exact Round 008 unbounded-tower, gacha, monetization, mastery, server-authority and twelve-screen Step 1 seal after ten critics, P0/P1 repair, final judge and direct-descendant mirror synchronization.",
+  "step3Allowed": true,
+  "trigger": "Advance repository governance from the activated Round 008 Step 1 seal through the exact sealed Step 2 executable contract and authorize Step 3 large-scale validation. Repair stale mirrors and separate legacy Round 7 historical assertions from current status assertions without restoring obsolete markers.",
   "projectInstructions": {
     "activePath": "CHATGPT_PROJECT_INSTRUCTIONS1.md",
     "status": "ACTIVE_COMPLETE_REPLACEMENT",
@@ -26,17 +27,45 @@
     "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce",
     "finalJudgeCommit": "cd57005ef12c5ca4c923f436c2bcce0a5cc8aadf",
     "unresolvedP0": 0,
-    "unresolvedP1": 0
+    "unresolvedP1": 0,
+    "status": "PASS"
+  },
+  "activeStep2Seal": {
+    "path": "simulation/executable-seal-v2.json",
+    "blob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
+    "semanticCommit": "724d04940f9f3794b993cddbc5af3a7163a0395b",
+    "semanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
+    "activationCommit": "89174eeebb033fe807a0592c8df0279c2a7b9a6f",
+    "activationTree": "ccf444df436d63d86fd4da0355f20349753b0546",
+    "workflow": ".github/workflows/verify-step-2-v2.yml",
+    "workflowRunId": "33104391753",
+    "jobId": "98630217077",
+    "conclusion": "SUCCESS",
+    "validatorVerdict": "PASS_EXECUTABLE_SEAL_V2",
+    "criticCount": 5,
+    "unresolvedP0": 0,
+    "unresolvedP1": 0,
+    "trackedP2": 6,
+    "balanceVerdict": "NOT_EVALUATED_STEP2",
+    "status": "PASS_SEALED"
   },
   "activationEvidence": {
-    "latestAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-013.json",
-    "completion": "quality-reviews/step-1-reseal-round-008/activation-completion-evidence-round-008.json",
-    "liveReadback": "quality-reviews/step-1-reseal-round-008/live-readback-round-008.json"
+    "latestAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-014.json",
+    "step1Completion": "quality-reviews/step-1-reseal-round-008/activation-completion-evidence-round-008.json",
+    "step1LiveReadback": "quality-reviews/step-1-reseal-round-008/live-readback-round-008.json",
+    "step2Completion": "quality-reviews/step-2-executable-contract-v2/completion-evidence.json",
+    "step2ActivationReadback": "quality-reviews/step-2-executable-contract-v2/live-readback.json",
+    "step2FinalReadback": "quality-reviews/step-2-executable-contract-v2/final-live-readback.json",
+    "governanceRepairAcceptance": "quality-reviews/step-2-governance-repair-round-001/acceptance-matrix.json",
+    "governanceRepairCompletion": "quality-reviews/step-2-governance-repair-round-001/completion-evidence.json",
+    "governanceRepairLiveReadback": "quality-reviews/step-2-governance-repair-round-001/live-readback.json"
   },
   "historicalEvidence": {
     "finite100FNoGachaPassesRemainImmutable": true,
     "mayAuthorizeCurrentProduct": false,
-    "mayAuthorizeStep2": false
+    "mayAuthorizeStep2OrStep3": false,
+    "round7CurrentMarkerMayBeRestoredToLiveFiles": false,
+    "round7ValidationMode": "IMMUTABLE_HISTORICAL_WORKTREE_ONLY"
   },
   "productBoundary": {
     "tower": "no player-visible maximum; 100F is the first major milestone and 101F+ is normal progression",
@@ -59,52 +88,60 @@
     "numeric": "versioned arbitrary precision with deterministic serialization and rounding"
   },
   "completedCheckpoints": {
-    "route010": "PASS",
-    "route011": "PASS",
-    "route012": "PASS",
-    "route013": "PASS",
-    "route014": {
+    "step1Round008": {
       "status": "PASS",
       "criticCount": 10,
-      "initialP1": 5,
-      "resolvedP1": 5,
       "unresolvedP0": 0,
       "unresolvedP1": 0,
       "trackedP2": 6
+    },
+    "step2ExecutableContractV2": {
+      "status": "PASS_SEALED",
+      "criticCount": 5,
+      "unresolvedP0": 0,
+      "unresolvedP1": 0,
+      "trackedP2": 6,
+      "qualificationScenarios": 30,
+      "balanceVerdict": "NOT_EVALUATED_STEP2"
     }
   },
   "authorizedExecutionSequence": [
     {"order": 1, "name": "canonical-integration-and-reseal", "status": "PASS"},
-    {"order": 2, "name": "executable-contract-and-simulation", "status": "READY_TO_START"},
-    {"order": 3, "name": "large-scale-validation", "status": "BLOCKED_UNTIL_STEP2_PASS"},
+    {"order": 2, "name": "executable-contract-and-simulation", "status": "PASS"},
+    {"order": 3, "name": "large-scale-validation", "status": "READY_TO_START"},
     {"order": 4, "name": "twelve-screen-final-mockups", "status": "BLOCKED_UNTIL_STEP3_PASS"},
     {"order": 5, "name": "first-production-slice-and-backend-implementation", "status": "BLOCKED_UNTIL_PRIOR_GATES"},
     {"order": 6, "name": "physical-iphone-validation", "status": "BLOCKED_UNTIL_ELIGIBLE_BUILD"}
   ],
-  "step2Boundary": {
-    "requiredSource": "canonical/STEP2_DEPENDENCY_CLOSURE.json",
-    "requiredNewArtifacts": [
-      "simulation/candidate-v2.json",
-      "simulation/candidate-v2.schema.json",
-      "simulation/validate-candidate-v2.mjs",
-      "simulation/run-plan-v2.json",
-      "simulation/result-v2.schema.json",
-      "simulation/validate-result-v2.mjs",
-      "simulation/engine-v2/**",
-      "simulation/fixtures/v2/**",
-      "simulation/migrations/v1-to-v2/**",
-      "simulation/executable-seal-v2.json",
-      "simulation/executable-seal-v2.schema.json",
-      "simulation/validate-executable-seal-v2.mjs"
+  "step3Boundary": {
+    "requiredRunPlan": "simulation/run-plan-v2.json",
+    "minimumGameplayScenarios": 15000,
+    "calibrationScenarios": 12000,
+    "unseenHoldoutScenarios": 3000,
+    "requiredHighVolumeSuites": [
+      "gacha-tails",
+      "pity-conformance",
+      "duplicate-skew-overflow",
+      "refund-replay-race",
+      "state-machine-model",
+      "large-number-properties"
     ],
-    "oldV1MayExecuteForPromotion": false,
-    "oldV1MayExtendInPlace": false,
-    "observedHoldoutMayBeReused": false,
-    "allowed": ["V2 executable contract, validators, simulator, fixtures, migrations, result schema, dedicated Step 2 workflow and quality evidence"],
-    "forbidden": ["runtime", "assets", "backend", "payment provider", "ad network", "PR operation", "Production alias", "Step 3 simulation before Step 2 PASS"]
+    "holdoutMayBeReusedForTuning": false,
+    "step2QualificationMayBeClaimedAsBalancePass": false,
+    "allowed": ["Step 3 large-scale validation artifacts and evidence"],
+    "forbidden": ["runtime", "assets", "backend", "payment provider", "ad network", "PR operation", "Production alias", "physical-iPhone PASS claim"]
   },
-  "nextAuthorizedChat": "02_無制限塔・経済・リセットシミュレーション",
-  "nextAuthorizedAction": "Create a new Step 2 Acceptance before any V2 implementation, bind all source digests, implement the V2 executable contract, separate calibration and holdout, run Step 2 validation, critics, final judge and executable seal. Do not start Step 3 until Step 2 PASS.",
+  "governanceRepair": {
+    "acceptancePath": "quality-reviews/step-2-governance-repair-round-001/acceptance-matrix.json",
+    "acceptanceBlob": "fd4ad16e056370bdf0b3c6e2e4ed8b97ca91db64",
+    "workflow": ".github/workflows/verify-main.yml",
+    "historicalJob": "historical-round7-evidence",
+    "currentJob": "current-governance",
+    "completionPath": "quality-reviews/step-2-governance-repair-round-001/completion-evidence.json",
+    "liveReadbackPath": "quality-reviews/step-2-governance-repair-round-001/live-readback.json"
+  },
+  "nextAuthorizedChat": "03_3ビルド・ガチャ・重複熟練・進化・課金検証",
+  "nextAuthorizedAction": "After governance repair completion and terminal live read-back, execute the sealed Step 3 plan. Do not treat Step 2 qualification as balance PASS.",
   "physicalIPhoneVerified": false,
   "productionAliasChanged": false
 }
