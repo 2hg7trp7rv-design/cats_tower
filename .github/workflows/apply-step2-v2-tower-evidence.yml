@@ -1,0 +1,114 @@
+name: Apply validated Step 2 V2 tower evidence implementation
+
+on:
+  push:
+    branches: [kimi]
+    paths:
+      - '.github/workflows/apply-step2-v2-tower-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apply-step2-v2-tower-evidence
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Assert exact kimi invocation
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = "refs/heads/kimi"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git fetch --no-tags origin kimi
+          test "$(git rev-parse origin/kimi)" = "$GITHUB_SHA"
+          test -z "$(git status --porcelain --untracked-files=all)"
+      - name: Apply the no-write-validated implementation exactly
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import textwrap
+
+          source_path = Path('.github/workflows/diagnose-step2-v2-tower-evidence-final.yml')
+          source = source_path.read_text(encoding='utf-8')
+          start_marker = "          python - <<'PY'\n"
+          end_marker = "\n          PY\n"
+          start = source.find(start_marker)
+          if start < 0:
+              raise SystemExit('final diagnostic python start marker missing')
+          start += len(start_marker)
+          end = source.find(end_marker, start)
+          if end < 0:
+              raise SystemExit('final diagnostic python end marker missing')
+          script = textwrap.dedent(source[start:end])
+          exec(compile(script, str(source_path), 'exec'), {'__name__': '__main__'})
+
+          scenario_path = Path('simulation/engine-v2/run-scenario.mjs')
+          scenario_path.write_text(scenario_path.read_text(encoding='utf-8').rstrip() + '\n', encoding='utf-8')
+          PY
+      - name: Regenerate source-bound qualification evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          node simulation/engine-v2/run-plan.mjs --mode qualification --output quality-reviews/step-2-executable-contract-v2/qualification-result.json
+      - name: Re-run the complete Step 2 verifier before commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          node simulation/verify-step2-v2.mjs | tee "$RUNNER_TEMP/step2-verification.json"
+          grep -F '"verdict": "CONTENT_PHASE_PASS_STEP2_IN_PROGRESS"' "$RUNNER_TEMP/step2-verification.json"
+      - name: Remove temporary tower diagnostic workflows
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rm \
+            .github/workflows/diagnose-step2-v2-tower-evidence.yml \
+            .github/workflows/diagnose-step2-v2-tower-evidence-resume.yml \
+            .github/workflows/diagnose-step2-v2-tower-evidence-final.yml \
+            .github/workflows/apply-step2-v2-tower-evidence.yml
+      - name: Confirm exact implementation boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          changed="$(git status --short | sed -E 's/^.. //' | sed -E 's/.* -> //')"
+          printf '%s\n' "$changed"
+          test -n "$changed"
+          while IFS= read -r path; do
+            case "$path" in
+              simulation/*|quality-reviews/step-2-executable-contract-v2/qualification-result.json|.github/workflows/diagnose-step2-v2-tower-evidence.yml|.github/workflows/diagnose-step2-v2-tower-evidence-resume.yml|.github/workflows/diagnose-step2-v2-tower-evidence-final.yml|.github/workflows/apply-step2-v2-tower-evidence.yml)
+                ;;
+              *)
+                echo "validated implementation escaped Step 2 boundary: $path" >&2
+                exit 1
+                ;;
+            esac
+          done <<< "$changed"
+          git diff --check
+      - name: Commit and push only the validated implementation to existing kimi
+        shell: bash
+        env:
+          EXPECTED_BASE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name 'cats-tower-step2-bot'
+          git config user.email 'cats-tower-step2-bot@users.noreply.github.com'
+          git add simulation quality-reviews/step-2-executable-contract-v2/qualification-result.json .github/workflows
+          test -n "$(git diff --cached --name-only)"
+          git fetch --no-tags origin kimi
+          test "$(git rev-parse origin/kimi)" = "$EXPECTED_BASE_SHA"
+          git commit -m 'fix: bind tower sequence and scenario input evidence'
+          git push origin HEAD:kimi
