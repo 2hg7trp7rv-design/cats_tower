@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-governance-repair-round-001-acceptance",
+  "createdAt": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "status": "ACTIVE_BEFORE_REPAIR",
+  "verdict": "PENDING",
+  "entry": {
+    "head": "510157c97e7e94456df8d45c3af20082e71aced6",
+    "tree": "abf80556382c1e795036c989b3bf87a50714826b",
+    "step1": "PASS",
+    "step2EvidenceVerdict": "PASS_FINAL_LIVE_READBACK_STEP2_SEALED",
+    "step3Executed": false,
+    "physicalIPhoneVerified": false,
+    "productionChanged": false
+  },
+  "authority": {
+    "projectInstructions": "CHATGPT_PROJECT_INSTRUCTIONS1.md",
+    "step1Seal": {
+      "path": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
+      "blob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
+      "commit": "0b17f9b5b8decdab8ce329287a4dc073790c4bf7",
+      "tree": "9eac6b6103d65cf8bcb13859d00e43cd3389fa8a"
+    },
+    "step2Seal": {
+      "path": "simulation/executable-seal-v2.json",
+      "blob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
+      "semanticCommit": "724d04940f9f3794b993cddbc5af3a7163a0395b",
+      "semanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6"
+    },
+    "step2FinalReadback": {
+      "path": "quality-reviews/step-2-executable-contract-v2/final-live-readback.json",
+      "blob": "4d26695cc6359ad933249ac6fdf2eddca9be9c6f",
+      "verdict": "PASS_FINAL_LIVE_READBACK_STEP2_SEALED"
+    }
+  },
+  "problem": {
+    "classification": "CURRENT_STATUS_MIRROR_AND_LEGACY_ROUND7_VALIDATION_COLLISION",
+    "currentCorrectState": {
+      "step1": "PASS",
+      "step2": "PASS_SEALED",
+      "step3": "READY_TO_START",
+      "balance": "NOT_EVALUATED_STEP2"
+    },
+    "stalePaths": [
+      "quality-reviews/step-1-canonical-design/active-change-control.json",
+      "AI_PROJECT_POLICY.json",
+      "QUALITY_GATE.md",
+      ".github/workflows/CURRENT_STATUS.md"
+    ],
+    "workflowFailure": {
+      "path": ".github/workflows/verify-main.yml",
+      "runId": "33105086118",
+      "jobId": "98632705236",
+      "failingAssertion": "Round 7 validator required a historical Step 1A PASS marker in live AGENTS.md",
+      "requiredRepair": "Run Round 7 assertions against immutable historical worktrees and validate current Round 008/Step 2 state independently."
+    }
+  },
+  "scope": {
+    "allowed": [
+      "status and governance mirrors",
+      "a new active-change-control addendum",
+      "verify-main governance separation",
+      "a current-state governance validator",
+      "repair evidence and live read-back"
+    ],
+    "forbidden": [
+      "runtime",
+      "assets",
+      "Step 1 sealed product semantics",
+      "Step 2 candidate, schemas, engine, fixtures, migrations or executable seal",
+      "backend",
+      "payment provider",
+      "ad network",
+      "Production alias",
+      "physical-iPhone PASS claim",
+      "Step 3 gameplay or high-volume execution"
+    ]
+  },
+  "acceptanceCriteria": [
+    {
+      "id": "GOV-01",
+      "severity": "P0",
+      "requirement": "active-change-control and a new numbered addendum state Step 1 PASS, Step 2 PASS/SEALED and Step 3 READY_TO_START while preserving balance NOT_EVALUATED_STEP2."
+    },
+    {
+      "id": "GOV-02",
+      "severity": "P0",
+      "requirement": "AI_PROJECT_POLICY.json, QUALITY_GATE.md, .github/workflows/CURRENT_STATUS.md, PROJECT_STATUS.json, simulation/CURRENT_STATUS.json, AGENTS.md and PROJECT_HANDOVER.md agree on the current execution state."
+    },
+    {
+      "id": "GOV-03",
+      "severity": "P0",
+      "requirement": "verify-main.yml separates immutable Round 7 historical validation from current Round 008/Step 2 governance validation and never restores obsolete markers to live files."
+    },
+    {
+      "id": "GOV-04",
+      "severity": "P0",
+      "requirement": "The dedicated Step 2 executable verifier and the new current-governance verifier pass on the exact repair content commit."
+    },
+    {
+      "id": "GOV-05",
+      "severity": "P0",
+      "requirement": "The legacy Round 7 validator passes only against immutable historical worktrees and does not assert historical current-state markers against live kimi."
+    },
+    {
+      "id": "GOV-06",
+      "severity": "P0",
+      "requirement": "No forbidden runtime, asset, backend, provider, Production or Step 3 result path changes occur relative to entry HEAD."
+    },
+    {
+      "id": "GOV-07",
+      "severity": "P0",
+      "requirement": "Completion evidence binds the exact repair content commit/tree, all current mirror blobs, workflow run/job and unchanged Step 1/Step 2 seals."
+    },
+    {
+      "id": "GOV-08",
+      "severity": "P0",
+      "requirement": "A later live branch read-back confirms the completion evidence, current HEAD ancestry, Step 3 READY_TO_START, step3Executed=false, Production unchanged and physical iPhone NOT_VERIFIED."
+    }
+  ],
+  "completionRule": "PASS requires all GOV-01 through GOV-08, unresolved P0/P1=0 and a terminal live read-back. Files existing or a single workflow success alone are insufficient."
+}
