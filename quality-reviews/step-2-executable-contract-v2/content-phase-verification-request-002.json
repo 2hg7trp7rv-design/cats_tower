@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-v2-gacha-item-selection-verification-request",
+  "requestedAt": "2026-08-27T23:54:00+09:00",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "repairedContentCommit": "079570b1b909732b07edd31d241aa8080cfb6ac3",
+  "repairedContentTree": "611054e2b5e00c980a01544f2f9c81123e731f17",
+  "repairApplyRun": {
+    "runId": "33084491046",
+    "jobId": "98560298018",
+    "verdictBeforeCommit": "PASS"
+  },
+  "requiredWorkflow": ".github/workflows/verify-step-2-v2.yml",
+  "requiredCheckout": "exact github.sha",
+  "expectedVerifierVerdict": "CONTENT_PHASE_PASS_STEP2_IN_PROGRESS",
+  "repairScope": [
+    "rarity-rate and pity-bound concrete character item selection",
+    "rarity-rate and pity-bound concrete weapon item selection",
+    "featured outcome bound to exact sealed UR stable item",
+    "non-featured UR excludes the featured stable item",
+    "character and weapon duplicate mastery consume the executable gacha stream",
+    "rarity draw totals, item mapping and catalog coverage are fail-closed",
+    "N and R acquisition labels mean guaranteed non-gacha route, not exclusive gacha ineligibility"
+  ],
+  "step2Completed": false,
+  "step3Authorized": false,
+  "writeBoundary": {
+    "runtimeChanged": false,
+    "assetChanged": false,
+    "backendChanged": false,
+    "productionChanged": false
+  }
+}
