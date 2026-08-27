@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-final-repository-postcheck",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "status": "PASS_BEFORE_FINAL_JUDGE",
+  "scope": "Refresh the earlier base-bound path and current-claim proofs for the repaired semantic set and all Route 01-4 evidence created before this postcheck.",
+  "reviewedSemanticContent": {
+    "commit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+    "tree": "99084efa0e6055977b01cf507d7d7e2a391c74ce"
+  },
+  "reviewedEvidenceHead": {
+    "commit": "8d63326002411dd716ff8f07d131ab3b2fb49a0d",
+    "tree": "72918209578778feee6b1f06b854bc665343bbae",
+    "aheadOfOriginalFrozenContentBy": 21,
+    "behindBy": 0
+  },
+  "method": {
+    "basePathProof": "quality-reviews/step-1-reseal-round-008/path-classification.json at fd67384350fb2891f435786c0656dc65167d5ce1",
+    "baseClaimProof": "quality-reviews/step-1-reseal-round-008/current-authority-zero-proof.json and claim-match-register.json",
+    "refresh": "Compared fd67384350fb2891f435786c0656dc65167d5ce1 and 5da274ddc63876565d3d210a7e2b5a87afca6730 to the reviewed evidence head, directly re-read every modified current-authority semantic file and classified every added Route 01-4 path.",
+    "jsonValidationMode": "DIRECT_UTF8_READBACK_AND_MANUAL_STRICT_JSON_STRUCTURE_REVIEW",
+    "codeSearchAuthority": false,
+    "futureSelfReferentialEvidenceRule": "This postcheck classifies its own path and the exact remaining judge/seal/activation/readback paths as reserved C2 evidence; later commits must not introduce an unlisted path without a new postcheck."
+  },
+  "finalClassificationOverlay": {
+    "C1CurrentAuthorityExact": [
+      "CHATGPT_PROJECT_INSTRUCTIONS1.md",
+      "MASTER_SPEC.md",
+      "FLOORS_1_10_DESIGN.md",
+      "canonical/STABLE_ID_REGISTRY.json",
+      "canonical/SCREEN_STATE_REGISTRY.json",
+      "canonical/STATE_TRANSITION_CONTRACT.json",
+      "canonical/POLICY_RELEASE_GATES.json",
+      "canonical/STEP2_DEPENDENCY_CLOSURE.json",
+      "quality-reviews/step-1-canonical-design/active-change-control.json",
+      "quality-reviews/step-1-hero-merchant-large-idle-integration/acceptance.json",
+      "quality-reviews/step-1-hero-merchant-large-idle-integration/monetization-acceptance-round-002.json",
+      "quality-reviews/step-1-hero-merchant-large-idle-integration/progression-acceptance-round-003.json",
+      "quality-reviews/step-1-hero-merchant-large-idle-integration/reward-cadence-acceptance-round-004.json",
+      "quality-reviews/step-1-hero-merchant-large-idle-integration/user-decision-lock-round-004.json",
+      "quality-reviews/step-1-hero-merchant-large-idle-integration/user-decision-lock-round-005.json"
+    ],
+    "C1ActiveAddendumPattern": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-<latest>.json",
+    "C2ActiveMirrorExact": [
+      "PROJECT_STATUS.json",
+      "QUALITY_GATE.md",
+      "PROJECT_HANDOVER.md",
+      "AGENTS.md",
+      "AI_PROJECT_POLICY.json",
+      "README.md",
+      "CHATGPT_PROJECT_BOOTSTRAP.md",
+      "CUSTOM_GPT_CONFIGURATION.md",
+      "simulation/INPUT_CONTRACT.md",
+      "simulation/CURRENT_STATUS.json",
+      ".github/workflows/CURRENT_STATUS.md"
+    ],
+    "C2RouteEvidencePrefix": "quality-reviews/step-1-reseal-round-008/",
+    "C3SupersededExecutable": [
+      "simulation/candidate-v1.json",
+      "simulation/candidate.schema.json",
+      "simulation/validate-candidate.mjs",
+      "simulation/executable-seal.schema.json",
+      "simulation/validate-executable-seal.mjs",
+      ".github/workflows/verify-main.yml",
+      ".github/workflows/verify-step-1-artifacts.yml"
+    ],
+    "C4LegacyImplementationPrefixes": ["assets/", "tests/", "scripts/"],
+    "C4LegacyImplementationExact": ["app.js", "game-core.js", "game-data.js", "index.html", "manifest.webmanifest", "styles.css", "sw.js", "vercel.json", ".vercelignore", ".gitignore"],
+    "C5HistoricalPrefixes": [
+      ".github/baselines/",
+      "quality-reviews/chatgpt-project-governance/",
+      "quality-reviews/step-1-legacy-baseline/",
+      "quality-reviews/step-1-legacy-baseline-round-007/"
+    ]
+  },
+  "route014ChangedPathsFromOriginalFrozenContent": [
+    "FLOORS_1_10_DESIGN.md",
+    "MASTER_SPEC.md",
+    "canonical/SCREEN_STATE_REGISTRY.json",
+    "canonical/STABLE_ID_REGISTRY.json",
+    "canonical/STATE_TRANSITION_CONTRACT.json",
+    "canonical/STEP2_DEPENDENCY_CLOSURE.json",
+    "quality-reviews/step-1-reseal-round-008/canonical-coverage-matrix.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-01-product-originality.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-02-merchant-combat.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-03-unbounded-big-number-reset.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-04-economy-probability-monetization.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-05-duplicate-mastery.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-06-server-authority-fraud.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-07-platform-japan.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-08-privacy-minors.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-09-screens-mobile-density.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-10-repository-canonical-consistency.json",
+    "quality-reviews/step-1-reseal-round-008/deployment-evidence-route-01-4.json",
+    "quality-reviews/step-1-reseal-round-008/route-01-4-acceptance.json"
+  ],
+  "reservedRemainingPaths": [
+    "quality-reviews/step-1-reseal-round-008/final-repository-postcheck.json",
+    "quality-reviews/step-1-reseal-round-008/critic-summary-route-01-4.json",
+    "quality-reviews/step-1-reseal-round-008/final-judge.json",
+    "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
+    "quality-reviews/step-1-reseal-round-008/activation-completion-evidence-round-008.json",
+    "quality-reviews/step-1-reseal-round-008/live-readback-round-008.json",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-013.json"
+  ],
+  "claimFamilies": {
+    "count": 13,
+    "currentAssertions": 0,
+    "unclassifiedMatches": 0,
+    "families": [
+      "finite 1F-100F final product",
+      "Floor 101 prohibited",
+      "100F product ending",
+      "gacha, premium ruby, login, payment or ads forbidden",
+      "exactly two spendable currencies",
+      "Dawn remains an independent reset",
+      "exactly nine canonical screens",
+      "all characters deterministic; no character or weapon gacha",
+      "no duplicate mastery",
+      "exactly 3,000 scenarios sufficient",
+      "localStorage alone owns permanent economy",
+      "merchant chairman or company-management protagonist",
+      "old PASS or Vercel READY authorizes current Step 2 or Product Ready"
+    ],
+    "currentDisposition": "All occurrences in current authority are prohibition, invalidation or historical explanation; active product assertions use unbounded tower, separate gacha, one reset, paid/free ledgers, twelve screens, server authority and 15,000-plus later scenarios."
+  },
+  "referenceChecks": {
+    "floor5Boss": {"id": "tower.boss.d01.mid.001", "sliceReference": true, "stableRegistryReference": true, "result": "PASS"},
+    "floor10Boss": {"id": "tower.boss.d01.kagetsubasa", "sliceReference": true, "stableRegistryReference": true, "result": "PASS"},
+    "floor100Milestone": {"id": "tower.milestone.floor.100", "sliceReference": true, "stableRegistryReference": true, "leadingZeroCanonicalVariantAllowed": false, "result": "PASS"},
+    "districtAndCycleFormatting": {"minimumWidthsFixed": true, "overflowWidthDeterministic": true, "result": "PASS"},
+    "adOfferVersion": {"stableNamespace": true, "screenState": true, "transitionBinding": true, "step2FieldsFixturesValidators": true, "result": "PASS"},
+    "loginCampaignVersion": {"stableNamespace": true, "screenState": true, "transitionBinding": true, "step2FieldsFixturesValidators": true, "result": "PASS"},
+    "refundDeficit": {"screenState": true, "transitionStateAndPolicy": true, "step2EnumFixturesValidators": true, "silentFreeLedgerDebitForbidden": true, "result": "PASS"}
+  },
+  "jsonReadback": {
+    "pathsReviewed": [
+      "canonical/STABLE_ID_REGISTRY.json",
+      "canonical/SCREEN_STATE_REGISTRY.json",
+      "canonical/STATE_TRANSITION_CONTRACT.json",
+      "canonical/POLICY_RELEASE_GATES.json",
+      "canonical/STEP2_DEPENDENCY_CLOSURE.json",
+      "quality-reviews/step-1-reseal-round-008/canonical-coverage-matrix.json",
+      "quality-reviews/step-1-reseal-round-008/route-01-4-acceptance.json",
+      "quality-reviews/step-1-reseal-round-008/critics/critic-01-product-originality.json",
+      "quality-reviews/step-1-reseal-round-008/critics/critic-02-merchant-combat.json",
+      "quality-reviews/step-1-reseal-round-008/critics/critic-03-unbounded-big-number-reset.json",
+      "quality-reviews/step-1-reseal-round-008/critics/critic-04-economy-probability-monetization.json",
+      "quality-reviews/step-1-reseal-round-008/critics/critic-05-duplicate-mastery.json",
+      "quality-reviews/step-1-reseal-round-008/critics/critic-06-server-authority-fraud.json",
+      "quality-reviews/step-1-reseal-round-008/critics/critic-07-platform-japan.json",
+      "quality-reviews/step-1-reseal-round-008/critics/critic-08-privacy-minors.json",
+      "quality-reviews/step-1-reseal-round-008/critics/critic-09-screens-mobile-density.json",
+      "quality-reviews/step-1-reseal-round-008/critics/critic-10-repository-canonical-consistency.json",
+      "quality-reviews/step-1-reseal-round-008/deployment-evidence-route-01-4.json"
+    ],
+    "malformedJsonFound": false,
+    "duplicateTopLevelKeyFound": false,
+    "repositoryOrBranchMismatchFound": false
+  },
+  "historyIntegrity": {
+    "historicalEvidencePathsChangedSinceOriginalFrozenContent": [],
+    "checkpointEvidenceRewrittenByRoute014": false,
+    "oldPassMayAuthorizeCurrentProduct": false,
+    "connectorProbeFilePresent": false,
+    "priorFalseCompletionIncidentStillDisclosed": true,
+    "result": "PASS"
+  },
+  "forbiddenBoundary": {
+    "runtimeChanged": false,
+    "assetsChanged": false,
+    "v1CandidateChanged": false,
+    "v1SchemaChanged": false,
+    "v1ValidatorChanged": false,
+    "workflowYamlChanged": false,
+    "backendChanged": false,
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "pullRequestOperation": false,
+    "productionAliasChanged": false,
+    "result": "PASS"
+  },
+  "deployment": {
+    "path": "quality-reviews/step-1-reseal-round-008/deployment-evidence-route-01-4.json",
+    "id": "dpl_712tz3ij7ruB8cRe5JqudmMYFtdu",
+    "state": "READY",
+    "target": null,
+    "commitMatch": true,
+    "branchMatch": true,
+    "qualityPassInferred": false
+  },
+  "result": {
+    "allExistingAndReservedPathsClassified": true,
+    "unclassifiedPathCount": 0,
+    "currentAuthorityContradictionCount": 0,
+    "unclassifiedCurrentMatchCount": 0,
+    "persistentReferenceFailureCount": 0,
+    "forbiddenChangedPathCount": 0,
+    "unresolvedP0": 0,
+    "unresolvedP1": 0,
+    "verdict": "PASS"
+  }
+}
