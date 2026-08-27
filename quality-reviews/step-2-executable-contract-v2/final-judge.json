@@ -9,8 +9,8 @@
   "acceptancePath": "quality-reviews/step-2-executable-contract-v2/acceptance-matrix.json",
   "acceptanceBlob": "f8986a3d436e93a003ff0f7e07f6a5d28d6faf2f",
   "criticSummaryPath": "quality-reviews/step-2-executable-contract-v2/critic-summary.json",
-  "criticSummaryBlob": "d0b90e5937a8d2dc40497e7dd9822c7f1d8fd2d5",
-  "unresolved": {"P0": 0, "P1": 0, "P2": 5},
+  "criticSummaryBlob": "4d85d95c0b00b3e2aed4aecc6025ceea9253308e",
+  "unresolved": {"P0": 0, "P1": 0, "P2": 6},
   "acceptanceAssessment": {
     "semanticCoverage": "PASS",
     "determinismAndNumericContract": "PASS",
