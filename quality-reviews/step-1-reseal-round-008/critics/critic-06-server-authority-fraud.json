@@ -2,16 +2,17 @@
   "schemaVersion": 1,
   "artifactId": "step-1-reseal-round-008-critic-06-server-authority-fraud",
   "createdAt": "2026-08-27",
+  "rerunAt": "2026-08-27",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "role": "independent server authority, ledger and fraud critic",
   "reviewedContent": {
-    "commit": "5da274ddc63876565d3d210a7e2b5a87afca6730",
-    "tree": "b479c92bab43581f3ec293fecbb16ce9592a9dfa"
+    "commit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+    "tree": "99084efa0e6055977b01cf507d7d7e2a391c74ce"
   },
   "method": [
-    "Cross-read wallet, draw, payment, ad, login, reset, evolution, mastery and account machines against screen states and Step 2 fields.",
-    "Attempted rejection for client-minted value, timeout-as-failure, reroll, duplicate callbacks, stale offers, multiple-tab divergence, out-of-order refund events and paid/free ledger destruction."
+    "Re-read wallet, payment, ad and login semantics across MASTER_SPEC, stable IDs, screen states, transition machines and Step 2 closure.",
+    "Retested stale offer/campaign behavior, retry after accepted version, multiple-tab convergence, spent-paid-grant refund/revocation, free-ledger isolation and explicit deficit auditing."
   ],
   "checks": {
     "serverOwnsPermanentEconomy": "PASS",
@@ -19,31 +20,44 @@
     "timeoutPendingReconciliation": "PASS",
     "gachaNoRerollAndAtomicPityGrant": "PASS",
     "multipleTabConvergence": "PASS",
-    "adAndLoginConfigurationVersionBinding": "FAIL",
-    "refundAfterSpentPaidGrantDeficitPolicy": "FAIL"
+    "adAndLoginConfigurationVersionBinding": "PASS",
+    "staleConfigurationRejectedBeforeAcceptance": "PASS",
+    "acceptedIntentNotRepricedOnRetry": "PASS",
+    "refundAfterSpentPaidGrantDeficitPolicy": "PASS",
+    "unrelatedFreeLedgersNotSilentlyDebited": "PASS"
   },
-  "findings": [
+  "resolvedFindings": [
     {
       "id": "C06-P1-001",
-      "severity": "P1",
-      "paths": ["canonical/STABLE_ID_REGISTRY.json", "canonical/SCREEN_STATE_REGISTRY.json", "canonical/STATE_TRANSITION_CONTRACT.json", "canonical/STEP2_DEPENDENCY_CLOSURE.json"],
-      "finding": "Commerce and gacha bind catalog/rate versions, but rewarded-ad offers and login campaigns do not have equally explicit immutable offer/campaign version fields or canonical catalog namespaces at acceptance time.",
-      "risk": "A stale client, retry or multi-tab request can be evaluated against a different reward/cap/campaign definition, forcing Step 2 to invent reconciliation semantics.",
-      "requiredRepair": "Add canonical ad-offer and login-campaign catalog IDs; bind ad offer version and login campaign version in screen state, transition envelope/machines, candidate fields, validators and stale-version fixtures.",
-      "blocking": true
+      "previousSeverity": "P1",
+      "status": "RESOLVED",
+      "repairs": [
+        "Registered `catalog.ad_offer` and `catalog.login_campaign` namespaces.",
+        "S11/S12 and transition envelopes bind immutable offer/campaign versions.",
+        "Step 2 fields, invariants, validators and stale-version fixtures now fail closed."
+      ]
     },
     {
       "id": "C06-P1-002",
-      "severity": "P1",
-      "paths": ["canonical/STATE_TRANSITION_CONTRACT.json", "canonical/STEP2_DEPENDENCY_CLOSURE.json"],
-      "finding": "Refund/revocation says to reverse or suspend an affected paid grant according to policy, but does not fix the required representation when paid ruby has already been spent and the direct reversal would underflow.",
-      "risk": "Implementations can silently debit unrelated free ruby, create an impossible negative unsigned ledger, or disagree across providers and retries.",
-      "requiredRepair": "Require an explicit refund-deficit state/policy, prohibit silent debit of unrelated free ledgers, preserve audit provenance and add spent-grant refund/revocation/restore fixtures and semantic validation.",
-      "blocking": true
+      "previousSeverity": "P1",
+      "status": "RESOLVED",
+      "repairs": [
+        "Payment transition now has `REFUND_DEFICIT_RECORDED` and a versioned explicit deficit policy.",
+        "Unsigned underflow, silent free-ledger debit, unrelated entitlement deletion and client-only negative balance are forbidden.",
+        "Step 2 must validate spent-grant refund/revocation/restore fixtures and report deficit violations."
+      ]
     }
   ],
-  "verdict": "FAIL_PENDING_P1_REPAIR",
-  "unresolved": {"P0": 0, "P1": 2, "P2": 0, "P3": 0},
-  "sealEligibleFromThisCritic": false,
-  "rerunRequired": true
+  "repairBlobs": {
+    "MASTER_SPEC.md": "4e7df4a4a3d0ae199a1bb907796e5a16fb3aa9e8",
+    "canonical/STABLE_ID_REGISTRY.json": "0a835e778b27ca1cfab47c8b1b4e7797fdc1a3fd",
+    "canonical/SCREEN_STATE_REGISTRY.json": "0cf6337da2ed3993136dbf4a9e4918efac501d2e",
+    "canonical/STATE_TRANSITION_CONTRACT.json": "fb730c31eaf978b3e56f528f99c28172dbb4e8bc",
+    "canonical/STEP2_DEPENDENCY_CLOSURE.json": "d23ea91754f6b11e4d452312752fc8850bd7ab9b"
+  },
+  "findings": [],
+  "verdict": "PASS_AFTER_RERUN",
+  "unresolved": {"P0": 0, "P1": 0, "P2": 0, "P3": 0},
+  "sealEligibleFromThisCritic": true,
+  "rerunRequired": false
 }
