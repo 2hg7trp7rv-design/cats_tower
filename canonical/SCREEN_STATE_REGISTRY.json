@@ -15,6 +15,7 @@
     "errorStateCannotHideEconomicOutcome": true,
     "serverTimeForClaims": true,
     "economicTimeoutMeansFailure": false,
+    "immutableOfferAndCampaignVersions": true,
     "physicalIPhone": "NOT_VERIFIED",
     "mobileReview": ["320x667", "375x667", "390x844", "safe-area", "large text", "reduced motion"]
   },
@@ -24,6 +25,7 @@
     "multiple tabs converge by transaction, claim or entity version",
     "timeout never retries as a new economic operation",
     "partial completion exposes pending or recovery instead of duplicating grant",
+    "stale catalog, rate, ad-offer or login-campaign versions are rejected or reconciled without changing an accepted result",
     "support-visible audit ID is available for permanent-economy operations"
   ],
   "screens": [
@@ -122,18 +124,18 @@
       "name": "store-ruby-ads",
       "responsibilities": ["paid/free wallet", "products", "payment", "rewarded ads", "entitlements"],
       "authority": "server wallet/catalog/receipt/ad/entitlement",
-      "requiredState": ["walletSubLedgers", "catalogVersion", "products", "purchaseState", "adAvailability", "adDailyCap", "entitlements", "auditId"],
+      "requiredState": ["walletSubLedgers", "catalogVersion", "products", "purchaseState", "refundDeficitState", "adOfferCatalogId", "adOfferVersion", "adAvailability", "adDailyCap", "entitlements", "auditId"],
       "uiStates": ["READY", "LOADING", "CATALOG_STALE", "PURCHASE_CONFIRM", "PURCHASE_PENDING", "PURCHASE_RECONCILIATION", "VERIFICATION_FAILED", "REFUNDED", "REVOKED", "RESTORE_PENDING", "RESTORED", "AD_OPT_IN", "AD_PENDING", "AD_GRANTED", "AD_CAP_REACHED", "OFFLINE"],
-      "serverOwnedState": ["wallet", "catalog", "receipts", "entitlements", "ad receipts", "refund/revocation/restore"]
+      "serverOwnedState": ["wallet", "product catalog", "ad-offer catalog", "receipts", "entitlements", "ad receipts", "refund/revocation/restore", "paid-ruby refund deficit"]
     },
     {
       "id": "S12",
       "name": "login-inbox",
       "responsibilities": ["newcomer", "monthly", "returner", "inbox", "claim history"],
       "authority": "server time/eligibility/claim/inbox history",
-      "requiredState": ["campaigns", "serverTime", "eligibility", "claimable", "inbox", "claimHistory"],
+      "requiredState": ["campaignCatalogId", "campaignVersion", "campaigns", "serverTime", "eligibility", "claimable", "inbox", "claimHistory"],
       "uiStates": ["READY", "LOADING", "CLAIM_PENDING", "GRANTED", "ALREADY_CLAIMED", "NOT_ELIGIBLE", "EXPIRED", "SERVER_TIME_ERROR", "DUPLICATE_REQUEST", "RECOVERED", "OFFLINE"],
-      "serverOwnedState": ["server time", "eligibility", "claim history", "grants"]
+      "serverOwnedState": ["login-campaign catalog", "server time", "eligibility", "claim history", "grants"]
     }
   ],
   "globalInvariants": [
@@ -141,6 +143,8 @@
     "All permanent-economy writes expose pending and reconciliation states.",
     "No tap-damage state exists.",
     "Purchase, draw, reset and claim never infer failure or success from client timeout.",
+    "Rewarded-ad and login claims display and submit the exact immutable offer or campaign version used for eligibility and grant.",
+    "A paid-ruby refund deficit is explicit and never hidden by silently consuming unrelated free ruby.",
     "Account deletion and legally retained records are visible rather than implicit.",
     "This registry cannot authorize Step 2 until the Round 008 seal validates it."
   ]
