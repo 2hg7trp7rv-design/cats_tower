@@ -1,0 +1,592 @@
+name: Diagnose Step 2 V2 tower sequence and input evidence
+
+on:
+  push:
+    branches: [kimi]
+    paths:
+      - '.github/workflows/diagnose-step2-v2-tower-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: diagnose-step2-v2-tower-evidence-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply tower sequence and input-evidence repairs in working tree only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          import json
+
+          def replace_once(path, old, new):
+              file = Path(path)
+              text = file.read_text(encoding='utf-8')
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{path}: expected one source fragment, found {count}: {old[:120]}')
+              file.write_text(text.replace(old, new), encoding='utf-8')
+
+          tower = r'''import { assertUnsigned, ceilDiv, parseExactDecimal, powRational, roundRational, toBigInt } from './numeric.mjs';
+          import { sha256Text } from './hash.mjs';
+
+          const MODIFIER_PERMUTATION_CACHE = new Map();
+
+          export function padMinimum(value, minimum) {
+            const text = String(value);
+            return text.length >= minimum ? text : `${'0'.repeat(minimum - text.length)}${text}`;
+          }
+
+          export function districtForFloor(floor) {
+            const f = toBigInt(assertUnsigned(floor, 'floor', { positive: true }));
+            return ceilDiv(f, 10n).toString();
+          }
+
+          export function cycleForFloor(floor) {
+            const f = toBigInt(assertUnsigned(floor, 'floor', { positive: true }));
+            return ceilDiv(f, 100n).toString();
+          }
+
+          export function districtId(floor) {
+            return `tower.district.${padMinimum(districtForFloor(floor), 3)}`;
+          }
+
+          export function cycleId(floor) {
+            return `tower.cycle.${padMinimum(cycleForFloor(floor), 6)}`;
+          }
+
+          export function milestoneId(floor) {
+            const f = assertUnsigned(floor, 'floor', { positive: true });
+            return `tower.milestone.floor.${padMinimum(f, 6)}`;
+          }
+
+          export function isCanonicalDistrictId(value) {
+            const match = /^tower\.district\.([0-9]+)$/.exec(value);
+            if (!match || match[1].length < 3 || (match[1].length > 3 && match[1].startsWith('0'))) return false;
+            return BigInt(match[1]) >= 1n;
+          }
+
+          export function isCanonicalCycleId(value) {
+            const match = /^tower\.cycle\.([0-9]+)$/.exec(value);
+            if (!match || match[1].length < 6 || (match[1].length > 6 && match[1].startsWith('0'))) return false;
+            return BigInt(match[1]) >= 1n;
+          }
+
+          export function isCanonicalMilestoneId(value) {
+            const match = /^tower\.milestone\.floor\.([0-9]+)$/.exec(value);
+            if (!match || match[1].length < 6 || (match[1].length > 6 && match[1].startsWith('0'))) return false;
+            return BigInt(match[1]) >= 1n;
+          }
+
+          function combinations(values, count, start = 0, prefix = [], output = []) {
+            if (prefix.length === count) {
+              output.push(prefix.slice());
+              return output;
+            }
+            for (let index = start; index <= values.length - (count - prefix.length); index += 1) {
+              prefix.push(values[index]);
+              combinations(values, count, index + 1, prefix, output);
+              prefix.pop();
+            }
+            return output;
+          }
+
+          function modifierBasePermutation(poolIds, count) {
+            if (!Array.isArray(poolIds) || new Set(poolIds).size !== poolIds.length) throw new Error('MODIFIER_POOL_IDS_MUST_BE_UNIQUE');
+            if (!Number.isInteger(count) || count <= 0 || count > poolIds.length) throw new RangeError('INVALID_MODIFIER_SELECTION_COUNT');
+            const cacheKey = `${count}|${poolIds.join('|')}`;
+            if (MODIFIER_PERMUTATION_CACHE.has(cacheKey)) return MODIFIER_PERMUTATION_CACHE.get(cacheKey);
+            const ordered = combinations(poolIds, count)
+              .map((ids) => ({ ids, rank: sha256Text(`tower-modifier-combination-v1|${cacheKey}|${ids.join('|')}`) }))
+              .sort((left, right) => left.rank.localeCompare(right.rank) || left.ids.join('|').localeCompare(right.ids.join('|')))
+              .map((entry) => Object.freeze(entry.ids.slice()));
+            if (ordered.length < 2) throw new Error('MODIFIER_COMBINATION_SPACE_TOO_SMALL');
+            const frozen = Object.freeze(ordered);
+            MODIFIER_PERMUTATION_CACHE.set(cacheKey, frozen);
+            return frozen;
+          }
+
+          export function selectModifiers(floor, poolIds, count = 2) {
+            const f = toBigInt(assertUnsigned(floor, 'floor', { positive: true }));
+            const base = modifierBasePermutation(poolIds, count);
+            const size = BigInt(base.length);
+            const zeroBased = f - 1n;
+            const block = zeroBased / size;
+            const position = zeroBased % size;
+            const index = Number((block + position) % size);
+            return base[index].slice();
+          }
+
+          export function auditModifierSequence(candidate, startFloor = '1', length = candidate.tower.modifierRepetition.windowSize) {
+            const start = toBigInt(assertUnsigned(startFloor, 'startFloor', { positive: true }));
+            const count = Number(toBigInt(assertUnsigned(String(length), 'length', { positive: true })));
+            if (!Number.isSafeInteger(count) || count > 10000) throw new RangeError('MODIFIER_AUDIT_LENGTH_UNSAFE');
+            const selectionCount = Number(candidate.tower.modifierPool.selectionCount);
+            const windowSize = Number(candidate.tower.modifierRepetition.windowSize);
+            const adjacentLimit = Number(candidate.tower.modifierRepetition.adjacentRepeatMaximum);
+            const windowLimit = Number(candidate.tower.modifierRepetition.windowRepeatMaximum);
+            const keys = [];
+            let previous = null;
+            let adjacentRun = 0;
+            let maximumAdjacentRun = 0;
+            for (let index = 0; index < count; index += 1) {
+              const pair = selectModifiers((start + BigInt(index)).toString(), candidate.tower.modifierPool.ids, selectionCount);
+              const key = pair.join('|');
+              keys.push(key);
+              adjacentRun = key === previous ? adjacentRun + 1 : 1;
+              if (adjacentRun > maximumAdjacentRun) maximumAdjacentRun = adjacentRun;
+              previous = key;
+            }
+            let maximumWindowOccurrences = 0;
+            for (let startIndex = 0; startIndex < keys.length; startIndex += 1) {
+              const counts = new Map();
+              for (const key of keys.slice(startIndex, startIndex + windowSize)) counts.set(key, (counts.get(key) ?? 0) + 1);
+              for (const value of counts.values()) if (value > maximumWindowOccurrences) maximumWindowOccurrences = value;
+            }
+            return {
+              startFloor: start.toString(),
+              length: String(count),
+              adjacentRepeatMaximumConfigured: String(adjacentLimit),
+              adjacentRepeatMaximumObserved: String(maximumAdjacentRun),
+              windowSize: String(windowSize),
+              windowRepeatMaximumConfigured: String(windowLimit),
+              windowRepeatMaximumObserved: String(maximumWindowOccurrences),
+              passed: maximumAdjacentRun <= adjacentLimit && maximumWindowOccurrences <= windowLimit,
+            };
+          }
+
+          export function backgroundForFloor(candidate, floor) {
+            const f = toBigInt(assertUnsigned(floor, 'floor', { positive: true }));
+            const districtCadence = toBigInt(assertUnsigned(candidate.tower.backgroundCadence.districtChangeEveryFloors, 'districtChangeEveryFloors', { positive: true }));
+            const majorCadence = toBigInt(assertUnsigned(candidate.tower.backgroundCadence.majorThemeCycleEveryFloors, 'majorThemeCycleEveryFloors', { positive: true }));
+            return {
+              districtThemeIndex: ceilDiv(f, districtCadence).toString(),
+              majorThemeCycleIndex: ceilDiv(f, majorCadence).toString(),
+            };
+          }
+
+          export function bossForFloor(candidate, floor) {
+            const f = toBigInt(assertUnsigned(floor, 'floor', { positive: true }));
+            const district = districtForFloor(f.toString());
+            if (f === 10n) return { id: 'tower.boss.d01.kagetsubasa', kind: 'district', mechanicId: 'tower.boss.mechanic.district' };
+            if (f % 10n === 0n) return { id: `tower.boss.d${padMinimum(district, 2)}.end.001`, kind: 'district', mechanicId: 'tower.boss.mechanic.district' };
+            if (f % 10n === 5n) return { id: `tower.boss.d${padMinimum(district, 2)}.mid.001`, kind: 'mid', mechanicId: 'tower.boss.mechanic.mid' };
+            return { id: 'tower.boss.none', kind: 'none', mechanicId: 'tower.boss.mechanic.none' };
+          }
+
+          export function floorPower(candidate, floor, field) {
+            const f = toBigInt(assertUnsigned(floor, 'floor', { positive: true }));
+            const scaling = candidate.tower.scaling[field];
+            if (!scaling) throw new Error(`UNKNOWN_TOWER_SCALING:${field}`);
+            const base = toBigInt(scaling.base);
+            const growth = parseExactDecimal(scaling.growthPerFloor);
+            const steps = f - 1n;
+            if (steps <= toBigInt(candidate.tower.scaling.expandedIntegerMaximumFloor)) {
+              const factor = powRational(growth, steps);
+              return { representation: 'expanded-integer', value: roundRational({ n: base * factor.n, d: factor.d }, scaling.rounding).toString(), floor: f.toString() };
+            }
+            return { representation: 'exact-symbolic-power', base: base.toString(), growth: scaling.growthPerFloor, exponent: steps.toString(), rounding: scaling.rounding, floor: f.toString() };
+          }
+
+          export function generateFloor(candidate, floor) {
+            const f = assertUnsigned(floor, 'floor', { positive: true });
+            const district = districtForFloor(f);
+            const cycle = cycleForFloor(f);
+            return {
+              generatorVersion: candidate.tower.generatorVersion,
+              floor: f,
+              district,
+              districtId: districtId(f),
+              cycle,
+              cycleId: cycleId(f),
+              milestoneId: milestoneId(f),
+              hp: floorPower(candidate, f, 'enemyHp'),
+              attack: floorPower(candidate, f, 'enemyAttack'),
+              coin: floorPower(candidate, f, 'coinDrop'),
+              modifiers: selectModifiers(f, candidate.tower.modifierPool.ids, Number(candidate.tower.modifierPool.selectionCount)),
+              background: backgroundForFloor(candidate, f),
+              boss: bossForFloor(candidate, f),
+            };
+          }
+          '''
+          Path('simulation/engine-v2/tower.mjs').write_text(tower + '\n', encoding='utf-8')
+
+          scenario = r'''import { DeterministicRng } from './rng.mjs';
+          import { generateFloor } from './tower.mjs';
+          import { featuredGuaranteeDay, resetRubyQuote, evolutionCost, masteryOverflow } from './economy.mjs';
+          import { parseExactDecimal, rational, roundRational, toBigInt } from './numeric.mjs';
+          import { sha256Canonical } from './hash.mjs';
+
+          function clampMinimum(value, minimum) {
+            const parsed = toBigInt(value);
+            const floor = toBigInt(minimum);
+            return (parsed < floor ? floor : parsed).toString();
+          }
+
+          function randomSignedInclusive(rng, minimum, maximum) {
+            const min = BigInt(minimum);
+            const max = BigInt(maximum);
+            if (min > max) throw new RangeError('SIGNED_RANGE_REVERSED');
+            return min + rng.nextBelow(max - min + 1n);
+          }
+
+          function divideByMultipliers(base, buildMultiplier, personaMultiplier, jitterBasisPoints, minimumMinutes) {
+            const build = parseExactDecimal(buildMultiplier);
+            const persona = parseExactDecimal(personaMultiplier);
+            const jitter = rational(10000n + BigInt(jitterBasisPoints), 10000n);
+            if (jitter.n <= 0n) throw new RangeError('NON_POSITIVE_PROGRESSION_JITTER');
+            const effective = { n: build.n * persona.n * jitter.n, d: build.d * persona.d * jitter.d };
+            const minutes = roundRational({ n: toBigInt(base) * effective.d, d: effective.n }, 'ceil').toString();
+            return clampMinimum(minutes, minimumMinutes);
+          }
+
+          function horizonMetrics(candidate, execution, build, persona, rng, horizon) {
+            const progression = execution.model.progression;
+            const jitter = randomSignedInclusive(rng, progression.jitterMinimumBasisPoints, progression.jitterMaximumBasisPoints);
+            const target = horizon.targetFloor;
+            const generated = generateFloor(candidate, target);
+            const baseline = progression.baselineMinutesByHorizon[horizon.id];
+            if (!baseline) throw new Error(`MISSING_HORIZON_BASELINE:${horizon.id}`);
+            const metrics = {
+              horizonId: horizon.id,
+              targetFloor: target,
+              estimatedReachMinutes: divideByMultipliers(baseline, build.powerMultiplier, persona.progressMultiplier, jitter, progression.minimumMinutes),
+              targetFloorDigest: sha256Canonical(generated),
+              targetFloorRepresentation: generated.hp.representation,
+              districtId: generated.districtId,
+              cycleId: generated.cycleId,
+              bossId: generated.boss.id,
+              modifierIds: generated.modifiers,
+              backgroundDistrictThemeIndex: generated.background.districtThemeIndex,
+              backgroundMajorThemeCycleIndex: generated.background.majorThemeCycleIndex,
+            };
+            if (horizon.mode === 'five-resets') {
+              const repeated = execution.model.repeatedReset;
+              const reclear = parseExactDecimal(build.reclearMultiplier);
+              const sequence = [];
+              let current = BigInt(execution.model.firstReset.personaBaseMinutes[persona.id]);
+              for (let index = 0; index < Number(repeated.runCount); index += 1) {
+                sequence.push(clampMinimum(current.toString(), repeated.minimumMinutes));
+                current = roundRational({ n: current * reclear.d, d: reclear.n }, 'ceil');
+                if (current < BigInt(repeated.minimumMinutes)) current = BigInt(repeated.minimumMinutes);
+              }
+              metrics.resetMinutes = sequence;
+            }
+            if (horizon.mode === 'economy-45d') {
+              metrics.featuredGuaranteeDay = featuredGuaranteeDay(persona.dailyFeaturedProgress, candidate.gacha.featuredGuarantee.draws);
+              metrics.characterDraws45d = (toBigInt(persona.dailyCharacterDraws) * 45n).toString();
+              metrics.weaponDraws45d = (toBigInt(persona.dailyWeaponDraws) * 45n).toString();
+            }
+            return metrics;
+          }
+
+          export function runScenario(candidate, plan, execution, { buildId, personaId, namespace, partition, seed, ordinal }) {
+            const build = candidate.builds.find((entry) => entry.id === buildId);
+            const persona = candidate.personas.find((entry) => entry.id === personaId);
+            if (!build || !persona) throw new Error('UNKNOWN_BUILD_OR_PERSONA');
+            if (!namespace || !partition) throw new Error('SCENARIO_NAMESPACE_AND_PARTITION_REQUIRED');
+            const input = {
+              candidateId: candidate.meta.candidateId,
+              namespace,
+              partition,
+              scenarioAlgorithmVersion: execution.scenarioAlgorithmVersion,
+              executionVersion: execution.executionVersion,
+              buildId,
+              personaId,
+              seed,
+              ordinal: String(ordinal),
+            };
+            const inputDigest = sha256Canonical(input);
+            const rng = new DeterministicRng(seed);
+            const resetModel = execution.model.firstReset;
+            const resetJitter = randomSignedInclusive(rng, resetModel.jitterMinimumMinutes, resetModel.jitterMaximumMinutes);
+            const firstResetRaw = BigInt(resetModel.personaBaseMinutes[persona.id]) + BigInt(resetModel.buildAdjustmentMinutes[build.id]) + resetJitter;
+            const firstResetMinutes = clampMinimum(firstResetRaw.toString(), resetModel.minimumMinutes);
+            const resetQuote = resetRubyQuote({ previousBest: '0', newBest: '30', firstEffectiveMinimum: candidate.reset.reward.firstEffectiveMinimum });
+            const firstEvolutionCost = evolutionCost(candidate, '1');
+            const horizons = plan.horizons.map((horizon) => horizonMetrics(candidate, execution, build, persona, rng, horizon));
+            const mastery20 = masteryOverflow(candidate.characterMastery, '20');
+            const mastery25 = masteryOverflow(candidate.characterMastery, '25');
+            const deterministic = {
+              scenarioId: `${namespace}|${partition}|${buildId}|${personaId}|${ordinal}`,
+              inputDigest,
+              partition,
+              scenarioAlgorithmVersion: execution.scenarioAlgorithmVersion,
+              executionVersion: execution.executionVersion,
+              buildId,
+              personaId,
+              seed,
+              ordinal: String(ordinal),
+              firstResetMinutes,
+              firstResetRuby: resetQuote.reward,
+              firstEvolutionCost,
+              firstEvolutionCovered: toBigInt(resetQuote.reward) >= toBigInt(firstEvolutionCost),
+              featuredGuaranteeDay: featuredGuaranteeDay(persona.dailyFeaturedProgress, candidate.gacha.featuredGuarantee.draws),
+              masteryAt20: mastery20,
+              masteryOverflowAt25: mastery25,
+              horizons,
+            };
+            return { ...deterministic, scenarioDigest: sha256Canonical(deterministic) };
+          }
+          '''
+          Path('simulation/engine-v2/run-scenario.mjs').write_text(scenario + '\n', encoding='utf-8')
+
+          def deep_replace(value, old, new):
+              if isinstance(value, dict):
+                  return {key: deep_replace(item, old, new) for key, item in value.items()}
+              if isinstance(value, list):
+                  return [deep_replace(item, old, new) for item in value]
+              return new if value == old else value
+
+          for path in ['simulation/execution-contract-v2.json','simulation/run-plan-v2.json']:
+              file = Path(path)
+              data = json.loads(file.read_text(encoding='utf-8'))
+              data = deep_replace(data, 'cats-tower-scenario-v2.1.0', 'cats-tower-scenario-v2.2.0')
+              data = deep_replace(data, 'cats-tower-step3-executor-v1.0.0', 'cats-tower-step3-executor-v1.1.0')
+              if path.endswith('execution-contract-v2.json'):
+                  data['model']['towerSequence'] = {
+                      'modifierPairAlgorithm': 'block-rotated-combination-permutation-v1',
+                      'modifierCombinationOrdering': 'sha256-stable-combination-v1',
+                      'adjacentRepeatMaximum': '1',
+                      'windowSize': '10',
+                      'windowRepeatMaximum': '3',
+                      'backgroundIndexAlgorithm': 'ceil-floor-over-cadence-v1',
+                      'scenarioInputDigest': 'sha256-canonical-json-v1',
+                  }
+              file.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          for path in ['simulation/execution-contract-v2.schema.json','simulation/result-v2.schema.json','simulation/gameplay-result-v2.schema.json','simulation/high-volume-result-v2.schema.json']:
+              file = Path(path)
+              data = json.loads(file.read_text(encoding='utf-8'))
+              data = deep_replace(data, 'cats-tower-scenario-v2.1.0', 'cats-tower-scenario-v2.2.0')
+              data = deep_replace(data, 'cats-tower-step3-executor-v1.0.0', 'cats-tower-step3-executor-v1.1.0')
+              if path.endswith('execution-contract-v2.schema.json'):
+                  model = data['properties']['model']
+                  if 'towerSequence' not in model['required']:
+                      model['required'].append('towerSequence')
+                  model['properties']['towerSequence'] = {
+                      'type': 'object',
+                      'additionalProperties': False,
+                      'required': ['modifierPairAlgorithm','modifierCombinationOrdering','adjacentRepeatMaximum','windowSize','windowRepeatMaximum','backgroundIndexAlgorithm','scenarioInputDigest'],
+                      'properties': {
+                          'modifierPairAlgorithm': {'const': 'block-rotated-combination-permutation-v1'},
+                          'modifierCombinationOrdering': {'const': 'sha256-stable-combination-v1'},
+                          'adjacentRepeatMaximum': {'const': '1'},
+                          'windowSize': {'const': '10'},
+                          'windowRepeatMaximum': {'const': '3'},
+                          'backgroundIndexAlgorithm': {'const': 'ceil-floor-over-cadence-v1'},
+                          'scenarioInputDigest': {'const': 'sha256-canonical-json-v1'},
+                      },
+                  }
+              elif path.endswith('result-v2.schema.json'):
+                  scenario_schema = data['properties']['deterministicPayload']['properties']['scenarios']['items']
+                  if 'inputDigest' not in scenario_schema['required']:
+                      scenario_schema['required'].insert(1, 'inputDigest')
+                  scenario_schema['properties']['inputDigest'] = {'$ref': '#/$defs/digest'}
+                  horizon = data['$defs']['horizon']
+                  for key in ['modifierIds','backgroundDistrictThemeIndex','backgroundMajorThemeCycleIndex']:
+                      if key not in horizon['required']:
+                          horizon['required'].append(key)
+                  horizon['properties']['modifierIds'] = {'type': 'array', 'minItems': 2, 'maxItems': 2, 'uniqueItems': True, 'items': {'type': 'string', 'pattern': '^modifier\\.[a-z0-9_.-]+$'}}
+                  horizon['properties']['backgroundDistrictThemeIndex'] = {'type': 'string', 'pattern': '^[1-9][0-9]*$'}
+                  horizon['properties']['backgroundMajorThemeCycleIndex'] = {'type': 'string', 'pattern': '^[1-9][0-9]*$'}
+              elif path.endswith('gameplay-result-v2.schema.json'):
+                  cell = data['$defs']['cell']
+                  if 'scenarioInputDigests' not in cell['required']:
+                      cell['required'].insert(cell['required'].index('scenarioDigests'), 'scenarioInputDigests')
+                  cell['properties']['scenarioInputDigests'] = {'type': 'array', 'minItems': 1, 'items': {'$ref': '#/$defs/digest'}}
+              file.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          replace_once('simulation/validate-run-plan-v2.mjs', "check(plan.scenarioAlgorithmVersion === 'cats-tower-scenario-v2.1.0', 'RUN_PLAN_SCENARIO_ALGORITHM', 'scenarioAlgorithmVersion mismatch');", "check(plan.scenarioAlgorithmVersion === 'cats-tower-scenario-v2.2.0', 'RUN_PLAN_SCENARIO_ALGORITHM', 'scenarioAlgorithmVersion mismatch');")
+          replace_once('simulation/validate-run-plan-v2.mjs', "check(plan.executionVersion === 'cats-tower-step3-executor-v1.0.0', 'RUN_PLAN_EXECUTION_VERSION', 'executionVersion mismatch');", "check(plan.executionVersion === 'cats-tower-step3-executor-v1.1.0', 'RUN_PLAN_EXECUTION_VERSION', 'executionVersion mismatch');")
+
+          replace_once('simulation/validate-execution-contract-v2.mjs', "exactKeys(contract.model, ['firstReset','progression','repeatedReset','gachaItemSelection'], '#/model');", "exactKeys(contract.model, ['firstReset','progression','repeatedReset','gachaItemSelection','towerSequence'], '#/model');")
+          tower_validation = '''const towerSequence = contract.model?.towerSequence;
+          exactKeys(towerSequence, ['modifierPairAlgorithm','modifierCombinationOrdering','adjacentRepeatMaximum','windowSize','windowRepeatMaximum','backgroundIndexAlgorithm','scenarioInputDigest'], '#/model/towerSequence');
+          check(towerSequence?.modifierPairAlgorithm === 'block-rotated-combination-permutation-v1' && towerSequence?.modifierCombinationOrdering === 'sha256-stable-combination-v1' && towerSequence?.backgroundIndexAlgorithm === 'ceil-floor-over-cadence-v1' && towerSequence?.scenarioInputDigest === 'sha256-canonical-json-v1', 'EXEC_TOWER_SEQUENCE_ALGORITHM', 'tower sequence algorithm mismatch');
+          check(towerSequence?.adjacentRepeatMaximum === candidate.tower.modifierRepetition.adjacentRepeatMaximum && towerSequence?.windowSize === candidate.tower.modifierRepetition.windowSize && towerSequence?.windowRepeatMaximum === candidate.tower.modifierRepetition.windowRepeatMaximum, 'EXEC_TOWER_SEQUENCE_LIMITS', 'tower sequence limits differ from candidate');
+          check(candidate.tower.backgroundCadence.districtChangeEveryFloors === '10' && candidate.tower.backgroundCadence.majorThemeCycleEveryFloors === '100', 'EXEC_BACKGROUND_CADENCE', 'background cadence differs from sealed 10/100 rule');
+
+          '''
+          replace_once('simulation/validate-execution-contract-v2.mjs', "exactKeys(contract.statistics, ['method','percentiles','sort','emptyInput'], '#/statistics');", tower_validation + "exactKeys(contract.statistics, ['method','percentiles','sort','emptyInput'], '#/statistics');")
+
+          replace_once('simulation/engine-v2/run-plan.mjs', "    scenarioDigests: scenarios.map((entry) => entry.scenarioDigest),", "    scenarioInputDigests: scenarios.map((entry) => entry.inputDigest),\n    scenarioDigests: scenarios.map((entry) => entry.scenarioDigest),")
+
+          input_validation = '''  const expectedInput = {
+            candidateId: payload.candidateId,
+            namespace: execution.partitions.qualification.namespace,
+            partition: 'qualification',
+            scenarioAlgorithmVersion: execution.scenarioAlgorithmVersion,
+            executionVersion: execution.executionVersion,
+            buildId: scenario.buildId,
+            personaId: scenario.personaId,
+            seed: scenario.seed,
+            ordinal: scenario.ordinal,
+          };
+          check(scenario.inputDigest === sha256Canonical(expectedInput), 'SCENARIO_INPUT_DIGEST', scenario.scenarioId);
+          '''
+          replace_once('simulation/validate-result-v2.mjs', "  const { scenarioDigest, ...scenarioPayload } = scenario;\n  check(scenarioDigest === sha256Canonical(scenarioPayload), 'SCENARIO_DIGEST', scenario.scenarioId);", "  const { scenarioDigest, ...scenarioPayload } = scenario;\n  check(scenarioDigest === sha256Canonical(scenarioPayload), 'SCENARIO_DIGEST', scenario.scenarioId);\n" + input_validation)
+          horizon_validation = '''  for (const horizon of scenario.horizons) {
+            check(Array.isArray(horizon.modifierIds) && horizon.modifierIds.length === 2 && new Set(horizon.modifierIds).size === 2, 'HORIZON_MODIFIERS', `${scenario.scenarioId}|${horizon.horizonId}`);
+            const floor = BigInt(horizon.targetFloor);
+            const expectedDistrictTheme = ((floor - 1n) / BigInt(candidate.tower.backgroundCadence.districtChangeEveryFloors) + 1n).toString();
+            const expectedMajorTheme = ((floor - 1n) / BigInt(candidate.tower.backgroundCadence.majorThemeCycleEveryFloors) + 1n).toString();
+            check(horizon.backgroundDistrictThemeIndex === expectedDistrictTheme && horizon.backgroundMajorThemeCycleIndex === expectedMajorTheme, 'HORIZON_BACKGROUND_CADENCE', `${scenario.scenarioId}|${horizon.horizonId}`);
+          }
+          '''
+          replace_once('simulation/validate-result-v2.mjs', "  const floor10000 = scenario.horizons.find((entry) => entry.horizonId === '10000F-or-equivalent');", horizon_validation + "  const floor10000 = scenario.horizons.find((entry) => entry.horizonId === '10000F-or-equivalent');")
+
+          replace_once('simulation/validate-gameplay-result-v2.mjs', "const allDigests = new Set();", "const allInputDigests = new Set();\nconst allDigests = new Set();")
+          replace_once('simulation/validate-gameplay-result-v2.mjs', "  check(cell.scenarioDigests.length === Number(seedsPerCell), 'GAMEPLAY_DIGEST_COUNT', `scenario digest count mismatch for ${identity}`);", "  check(cell.scenarioInputDigests.length === Number(seedsPerCell), 'GAMEPLAY_INPUT_DIGEST_COUNT', `scenario input digest count mismatch for ${identity}`);\n  for (const digest of cell.scenarioInputDigests) check(!allInputDigests.has(digest) && allInputDigests.add(digest), 'GAMEPLAY_INPUT_DIGEST_UNIQUE', `duplicate scenario input digest ${digest}`);\n  check(cell.scenarioDigests.length === Number(seedsPerCell), 'GAMEPLAY_DIGEST_COUNT', `scenario digest count mismatch for ${identity}`);")
+          replace_once('simulation/validate-gameplay-result-v2.mjs', "check(allDigests.size === Number(scenarioCount), 'GAMEPLAY_GLOBAL_DIGEST_COUNT', 'global scenario digest count mismatch');", "check(allInputDigests.size === Number(scenarioCount), 'GAMEPLAY_GLOBAL_INPUT_DIGEST_COUNT', 'global scenario input digest count mismatch');\ncheck(allDigests.size === Number(scenarioCount), 'GAMEPLAY_GLOBAL_DIGEST_COUNT', 'global scenario digest count mismatch');")
+
+          replace_once('simulation/verify-step2-v2.mjs', "    const flatten = (result) => result.deterministicPayload.cells.flatMap((cell) => cell.scenarioDigests);\n    const calibrationDigests = new Set(flatten(gameplayResults.calibration));\n    const holdoutDigests = flatten(gameplayResults.holdout);\n    const overlap = holdoutDigests.filter((digest) => calibrationDigests.has(digest));\n    if (overlap.length === 0 && gameplayResults.calibration.deterministicPayload.seedNamespace !== gameplayResults.holdout.deterministicPayload.seedNamespace) {", "    const flatten = (result, field) => result.deterministicPayload.cells.flatMap((cell) => cell[field]);\n    const calibrationDigests = new Set(flatten(gameplayResults.calibration, 'scenarioDigests'));\n    const holdoutDigests = flatten(gameplayResults.holdout, 'scenarioDigests');\n    const overlap = holdoutDigests.filter((digest) => calibrationDigests.has(digest));\n    const calibrationInputs = new Set(flatten(gameplayResults.calibration, 'scenarioInputDigests'));\n    const holdoutInputs = flatten(gameplayResults.holdout, 'scenarioInputDigests');\n    const inputOverlap = holdoutInputs.filter((digest) => calibrationInputs.has(digest));\n    if (overlap.length === 0 && inputOverlap.length === 0 && gameplayResults.calibration.deterministicPayload.seedNamespace !== gameplayResults.holdout.deterministicPayload.seedNamespace) {")
+          replace_once('simulation/verify-step2-v2.mjs', "      pass('calibration-holdout-smoke-disjointness', { calibrationScenarios: gameplayResults.calibration.deterministicPayload.scenarioCount, holdoutScenarios: gameplayResults.holdout.deterministicPayload.scenarioCount, overlap: '0' });", "      pass('calibration-holdout-smoke-disjointness', { calibrationScenarios: gameplayResults.calibration.deterministicPayload.scenarioCount, holdoutScenarios: gameplayResults.holdout.deterministicPayload.scenarioCount, scenarioDigestOverlap: '0', inputDigestOverlap: '0' });")
+          replace_once('simulation/verify-step2-v2.mjs', "      fail('calibration-holdout-smoke-disjointness', { namespaceOverlap: gameplayResults.calibration.deterministicPayload.seedNamespace === gameplayResults.holdout.deterministicPayload.seedNamespace, digestOverlap: overlap.slice(0, 20) });", "      fail('calibration-holdout-smoke-disjointness', { namespaceOverlap: gameplayResults.calibration.deterministicPayload.seedNamespace === gameplayResults.holdout.deterministicPayload.seedNamespace, digestOverlap: overlap.slice(0, 20), inputDigestOverlap: inputOverlap.slice(0, 20) });")
+
+          replace_once('simulation/engine-v2/high-volume.mjs', "import { generateFloor, isCanonicalDistrictId, isCanonicalCycleId } from './tower.mjs';", "import { generateFloor, isCanonicalDistrictId, isCanonicalCycleId, auditModifierSequence } from './tower.mjs';")
+          large_number = '''function largeNumberProperties(candidate, _execution, samples, namespace) {
+            const floorDigits = new UnsignedHistogram();
+            const districtDigits = new UnsignedHistogram();
+            const counters = { symbolicRepresentations: 0n, expandedRepresentations: 0n, canonicalIdPass: 0n, canonicalIdFail: 0n, adjacentModifierRepeatViolations: 0n, windowModifierRepeatViolations: 0n, backgroundDistrictMismatches: 0n, backgroundCycleMismatches: 0n, maximumDigits: 0n };
+            for (let sample = 0; sample < samples; sample += 1) {
+              const rng = new DeterministicRng(`${namespace}|${sample}`);
+              const length = Number(rng.nextBelow(120n)) + 30;
+              let floor = String(rng.nextBelow(9n) + 1n);
+              for (let index = 1; index < length; index += 1) floor += String(rng.nextBelow(10n));
+              const generated = generateFloor(candidate, floor);
+              if (generated.hp.representation === 'exact-symbolic-power') counters.symbolicRepresentations += 1n; else counters.expandedRepresentations += 1n;
+              if (isCanonicalDistrictId(generated.districtId) && isCanonicalCycleId(generated.cycleId)) counters.canonicalIdPass += 1n; else counters.canonicalIdFail += 1n;
+              const audit = auditModifierSequence(candidate, floor, candidate.tower.modifierRepetition.windowSize);
+              if (BigInt(audit.adjacentRepeatMaximumObserved) > BigInt(audit.adjacentRepeatMaximumConfigured)) counters.adjacentModifierRepeatViolations += 1n;
+              if (BigInt(audit.windowRepeatMaximumObserved) > BigInt(audit.windowRepeatMaximumConfigured)) counters.windowModifierRepeatViolations += 1n;
+              const f = BigInt(floor);
+              const expectedDistrict = ((f - 1n) / BigInt(candidate.tower.backgroundCadence.districtChangeEveryFloors) + 1n).toString();
+              const expectedCycle = ((f - 1n) / BigInt(candidate.tower.backgroundCadence.majorThemeCycleEveryFloors) + 1n).toString();
+              if (generated.background.districtThemeIndex !== expectedDistrict) counters.backgroundDistrictMismatches += 1n;
+              if (generated.background.majorThemeCycleIndex !== expectedCycle) counters.backgroundCycleMismatches += 1n;
+              const digits = BigInt(floor.length);
+              if (digits > counters.maximumDigits) counters.maximumDigits = digits;
+              floorDigits.add(digits.toString());
+              districtDigits.add(generated.district.length.toString());
+            }
+            return { primary: floorDigits.summary(), secondary: districtDigits.summary(), counters };
+          }
+
+          '''
+          start = 'function largeNumberProperties('
+          end = 'const SUITES = {'
+          text = Path('simulation/engine-v2/high-volume.mjs').read_text(encoding='utf-8')
+          left = text.find(start)
+          right = text.find(end, left)
+          if left < 0 or right < 0:
+              raise SystemExit('largeNumberProperties markers missing')
+          Path('simulation/engine-v2/high-volume.mjs').write_text(text[:left] + large_number + text[right:], encoding='utf-8')
+
+          replace_once('simulation/validate-high-volume-result-v2.mjs', "  'large-number-properties': ['symbolicRepresentations','expandedRepresentations','canonicalIdPass','canonicalIdFail','maximumDigits'],", "  'large-number-properties': ['symbolicRepresentations','expandedRepresentations','canonicalIdPass','canonicalIdFail','adjacentModifierRepeatViolations','windowModifierRepeatViolations','backgroundDistrictMismatches','backgroundCycleMismatches','maximumDigits'],")
+          replace_once('simulation/validate-high-volume-result-v2.mjs', "  check(counters.symbolicRepresentations === sampleCount && counters.expandedRepresentations === 0n && counters.canonicalIdPass === sampleCount && counters.canonicalIdFail === 0n, 'HV_LARGE_NUMBER', 'large-number representation or generated ID invariant failed');", "  check(counters.symbolicRepresentations === sampleCount && counters.expandedRepresentations === 0n && counters.canonicalIdPass === sampleCount && counters.canonicalIdFail === 0n && counters.adjacentModifierRepeatViolations === 0n && counters.windowModifierRepeatViolations === 0n && counters.backgroundDistrictMismatches === 0n && counters.backgroundCycleMismatches === 0n, 'HV_LARGE_NUMBER', 'large-number representation, generated ID, modifier repetition or background cadence invariant failed');")
+
+          boundary_path = Path('simulation/fixtures/v2/boundary.json')
+          boundary = json.loads(boundary_path.read_text(encoding='utf-8'))
+          boundary['modifierSequenceCases'] = [
+              {'id': 'opening-40-floors', 'startFloor': '1', 'length': '40'},
+              {'id': 'combination-block-boundary', 'startFloor': '12', 'length': '20'},
+              {'id': 'district-and-cycle-boundary', 'startFloor': '95', 'length': '20'},
+              {'id': 'huge-floor-window', 'startFloor': '99999999999999999999999999999999999999999999999999', 'length': '20'},
+          ]
+          boundary['backgroundCases'] = [
+              {'floor': '1', 'districtThemeIndex': '1', 'majorThemeCycleIndex': '1'},
+              {'floor': '10', 'districtThemeIndex': '1', 'majorThemeCycleIndex': '1'},
+              {'floor': '11', 'districtThemeIndex': '2', 'majorThemeCycleIndex': '1'},
+              {'floor': '100', 'districtThemeIndex': '10', 'majorThemeCycleIndex': '1'},
+              {'floor': '101', 'districtThemeIndex': '11', 'majorThemeCycleIndex': '2'},
+              {'floor': '10000', 'districtThemeIndex': '1000', 'majorThemeCycleIndex': '100'},
+          ]
+          boundary_path.write_text(json.dumps(boundary, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          replace_once('simulation/fixtures/v2/validate-fixtures.mjs', "import { generateFloor, isCanonicalDistrictId, isCanonicalCycleId, isCanonicalMilestoneId } from '../../engine-v2/tower.mjs';", "import { generateFloor, isCanonicalDistrictId, isCanonicalCycleId, isCanonicalMilestoneId, auditModifierSequence, backgroundForFloor } from '../../engine-v2/tower.mjs';")
+          replace_once('simulation/fixtures/v2/validate-fixtures.mjs', "for(const test of boundary.carryoverCases??[]){", "for(const test of boundary.modifierSequenceCases??[]){\n  const actual=auditModifierSequence(candidate,test.startFloor,test.length);\n  check(actual.passed===true,'BOUNDARY_MODIFIER_SEQUENCE',test.id);\n}\nfor(const test of boundary.backgroundCases??[]){\n  const actual=backgroundForFloor(candidate,test.floor);\n  check(actual.districtThemeIndex===test.districtThemeIndex&&actual.majorThemeCycleIndex===test.majorThemeCycleIndex,'BOUNDARY_BACKGROUND',test.floor);\n}\nfor(const test of boundary.carryoverCases??[]){")
+          replace_once('simulation/fixtures/v2/validate-fixtures.mjs', "console.log(JSON.stringify({ok:true,fixtureFiles:manifest.files.length,positiveCases:positive.cases.length,boundaryTowerCases:boundary.towerCases.length,boundaryPityCases:boundary.pityCases.length,boundaryCarryoverCases:(boundary.carryoverCases??[]).length,negativeCases:negative.cases.length,stateSuccessCases:state.successSequences.length,stateInvalidCases:state.invalidSequences.length,loginPeriodCases:(state.loginPeriodCases??[]).length,goldenNumericCases:golden.numeric.length,runPlanNegativeCases:runPlanNegative.cases.length}));", "console.log(JSON.stringify({ok:true,fixtureFiles:manifest.files.length,positiveCases:positive.cases.length,boundaryTowerCases:boundary.towerCases.length,boundaryModifierSequenceCases:(boundary.modifierSequenceCases??[]).length,boundaryBackgroundCases:(boundary.backgroundCases??[]).length,boundaryPityCases:boundary.pityCases.length,boundaryCarryoverCases:(boundary.carryoverCases??[]).length,negativeCases:negative.cases.length,stateSuccessCases:state.successSequences.length,stateInvalidCases:state.invalidSequences.length,loginPeriodCases:(state.loginPeriodCases??[]).length,goldenNumericCases:golden.numeric.length,runPlanNegativeCases:runPlanNegative.cases.length}));")
+
+          execution_fixture = Path('simulation/fixtures/v2/execution-contract-negative.json')
+          negative = json.loads(execution_fixture.read_text(encoding='utf-8'))
+          negative['cases'] = [case for case in negative['cases'] if case['id'] not in {'tower-adjacent-limit-diverges','tower-background-algorithm-changed'}]
+          negative['cases'].extend([
+              {'id': 'tower-adjacent-limit-diverges', 'mutation': {'op': 'set', 'path': '/model/towerSequence/adjacentRepeatMaximum', 'value': '2'}, 'expectedCodes': ['SCHEMA','EXEC_TOWER_SEQUENCE_LIMITS']},
+              {'id': 'tower-background-algorithm-changed', 'mutation': {'op': 'set', 'path': '/model/towerSequence/backgroundIndexAlgorithm', 'value': 'floor-modulo-v1'}, 'expectedCodes': ['SCHEMA','EXEC_TOWER_SEQUENCE_ALGORITHM']},
+          ])
+          negative['caseCount'] = str(len(negative['cases']))
+          execution_fixture.write_text(json.dumps(negative, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          fixture_validator = Path('simulation/fixtures/v2/validate-execution-fixtures.mjs')
+          fixture_text = fixture_validator.read_text(encoding='utf-8')
+          marker = "    {\n      id: 'duplicate-scenario-digest',"
+          extra = "    {\n      id: 'duplicate-scenario-input-digest',\n      mutations: [{ op: 'set', path: '/deterministicPayload/cells/0/scenarioInputDigests/1', value: gameplayBase.deterministicPayload.cells[0].scenarioInputDigests[0] }],\n      expectedCodes: ['GAMEPLAY_INPUT_DIGEST_UNIQUE'],\n    },\n    {\n      id: 'scenario-input-digest-count-mismatch',\n      mutations: [{ op: 'delete', path: '/deterministicPayload/cells/0/scenarioInputDigests/1' }],\n      expectedCodes: ['GAMEPLAY_INPUT_DIGEST_COUNT','GAMEPLAY_GLOBAL_INPUT_DIGEST_COUNT'],\n    },\n"
+          if extra.strip() not in fixture_text:
+              if marker not in fixture_text:
+                  raise SystemExit('gameplay negative insertion marker missing')
+              fixture_text = fixture_text.replace(marker, extra + marker, 1)
+          fixture_text = fixture_text.replace('  gameplayResultNegativeCases: 10,', '  gameplayResultNegativeCases: 12,')
+          fixture_text = fixture_text.replace('  totalNewNegativeCases: executionNegative.cases.length + 25,', '  totalNewNegativeCases: executionNegative.cases.length + 27,')
+          fixture_validator.write_text(fixture_text, encoding='utf-8')
+
+          manifest_path = Path('simulation/fixtures/v2/manifest.json')
+          manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+          coverage = manifest.setdefault('negativeCoverage', {})
+          coverage['executionContractNegativeCaseCount'] = str(len(negative['cases']))
+          coverage['gameplayResultNegativeCaseCount'] = '12'
+          coverage['towerModifierSequenceCaseCount'] = str(len(boundary['modifierSequenceCases']))
+          coverage['towerBackgroundCadenceCaseCount'] = str(len(boundary['backgroundCases']))
+          coverage['scenarioInputDigestNegativeCaseCount'] = '2'
+          for entry in manifest['files']:
+              data = Path(entry['path']).read_bytes()
+              entry['sha256'] = hashlib.sha256(data).hexdigest()
+              entry['bytes'] = str(len(data))
+          manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          PY
+      - name: Regenerate qualification evidence for updated tower and input contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          node simulation/engine-v2/run-plan.mjs --mode qualification --output quality-reviews/step-2-executable-contract-v2/qualification-result.json
+      - name: Run complete Step 2 verifier on repaired working tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          node simulation/verify-step2-v2.mjs
+      - name: Confirm bounded repair and no forbidden files
+        shell: bash
+        run: |
+          set -euo pipefail
+          changed="$(git status --short | sed -E 's/^.. //' | sed -E 's/.* -> //')"
+          printf '%s\n' "$changed"
+          test -n "$changed"
+          while IFS= read -r path; do
+            case "$path" in
+              simulation/*|quality-reviews/step-2-executable-contract-v2/qualification-result.json|.github/workflows/diagnose-step2-v2-tower-evidence.yml)
+                ;;
+              *)
+                echo "tower evidence repair escaped Step 2 boundary: $path" >&2
+                exit 1
+                ;;
+            esac
+          done <<< "$changed"
+          git diff --check
+          git diff --stat
+          echo 'TOWER_SEQUENCE_AND_INPUT_EVIDENCE_VALIDATED_WITHOUT_WRITE=true'
