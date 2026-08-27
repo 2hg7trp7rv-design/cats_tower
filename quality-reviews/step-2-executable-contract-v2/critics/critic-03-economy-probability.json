@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-v2-critic-03-economy-probability",
+  "reviewedDate": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "role": "INDEPENDENT_CRITIC",
+  "perspective": "economy-probability-and-entitlement-contract",
+  "reviewedSemanticHead": "724d04940f9f3794b993cddbc5af3a7163a0395b",
+  "reviewedSemanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
+  "evidencePaths": [
+    "simulation/candidate-v2.json",
+    "simulation/engine-v2/economy.mjs",
+    "simulation/engine-v2/high-volume.mjs",
+    "simulation/execution-contract-v2.json",
+    "simulation/fixtures/v2/boundary.json",
+    "simulation/fixtures/v2/negative.json"
+  ],
+  "checks": [
+    {
+      "id": "ECONOMY-RATES",
+      "verdict": "PASS",
+      "basis": "Character and weapon rarity tables are separated and each exact probability table sums to one under exact decimal arithmetic."
+    },
+    {
+      "id": "ECONOMY-PITY",
+      "verdict": "PASS",
+      "basis": "Hard pity forces UR at 100 and featured guarantee forces a featured UR at 200; featured and UR counters reset according to the sealed outcome contract."
+    },
+    {
+      "id": "ECONOMY-CARRYOVER",
+      "verdict": "PASS",
+      "basis": "Compatible carryover families preserve pity progress while incompatible destinations do not silently consume source-family progress."
+    },
+    {
+      "id": "ECONOMY-RUBY-PROVENANCE",
+      "verdict": "PASS",
+      "basis": "Paid, reset-free, ad-free and other-free ruby ledgers are distinct; paid ruby is consumed last and refunds do not silently debit free ledgers."
+    },
+    {
+      "id": "ECONOMY-REFUND-DEFICIT",
+      "verdict": "PASS",
+      "basis": "Refund processing rejects alreadySpent greater than the affected grant and represents spent paid-value shortfall as an explicit audited deficit rather than negative unsigned balance mutation."
+    },
+    {
+      "id": "ECONOMY-MASTERY",
+      "verdict": "PASS",
+      "basis": "First copy is functional, marginal mastery gains diminish, full mastery is long-term and overflow converts to a retained currency."
+    }
+  ],
+  "findings": [
+    {
+      "id": "S2-P2-ECONOMY-OUTCOME-001",
+      "severity": "P2",
+      "status": "EXPECTED_STEP3_WORK_NOT_STEP2_DEFECT",
+      "finding": "The contract defines p50/p90/p99 and long-horizon economy targets, but Step 2 has not executed the full high-volume distributions needed to accept those targets as balanced.",
+      "requiredNextStage": "Run the sealed Step 3 gameplay and Monte Carlo volumes and reject/tune any candidate that misses the acceptance ranges without reusing the holdout for tuning."
+    }
+  ],
+  "unresolved": {"P0": 0, "P1": 0, "P2": 1},
+  "verdict": "PASS_STEP2_SCOPE",
+  "step2Blocking": false,
+  "balanceVerdict": "NOT_EVALUATED_STEP2"
+}
