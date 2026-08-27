@@ -12,8 +12,10 @@ Updated: **2026-08-28**
 - physical iPhone: `NOT_VERIFIED`
 - Production change: `false`
 
-Active Step 1 seal: `quality-reviews/step-1-reseal-round-008/seal-round-008.json`  
-Active Step 2 seal: `simulation/executable-seal-v2.json`  
+Active Step 1 seal: `quality-reviews/step-1-reseal-round-008/seal-round-008.json`
+
+Active Step 2 seal: `simulation/executable-seal-v2.json`
+
 Step 2 terminal read-back: `quality-reviews/step-2-executable-contract-v2/final-live-readback.json`
 
 ## Workflow responsibility split
