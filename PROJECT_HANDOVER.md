@@ -1,12 +1,27 @@
 # Cat's Tower 引き継ぎ書
 
-更新日: **2026-08-27**  
+更新日: **2026-08-28**  
 Repository: `2hg7trp7rv-design/cats_tower`  
 Branch: existing `kimi` only  
-Current: **Step 1 Round 008 — PASS**  
-Next: **Step 2 — READY_TO_START**  
-Step 3〜6: **BLOCKED BY PRIOR GATES**  
-Physical iPhone: **NOT_VERIFIED**
+Current: **Step 2 — IN_PROGRESS_CONTENT_PHASE_PASS**  
+Step 3: **BLOCKED_UNTIL_STEP2_PASS**  
+Physical iPhone: **NOT_VERIFIED**  
+Vercel / Production: **変更なし**
+
+## 現在の結論
+
+Step 2のV2実行コンテンツは、live `kimi`へ実装済みであり、exact-SHAの専用CIでsource-bound再現検証までPASSした。
+
+ただし、これはStep 2の最終PASSではない。次が未完了のため、Step 3は開始禁止のまま維持する。
+
+- executable seal
+- 独立critic一式
+- critic指摘修正と回帰
+- final judge
+- completion evidence
+- final live read-back
+
+バランス判定は`NOT_EVALUATED_STEP2`であり、30件qualificationをゲームバランス合格として扱ってはならない。
 
 ## Step 1 seal
 
@@ -18,68 +33,115 @@ Physical iPhone: **NOT_VERIFIED**
 - seal commit: `0b17f9b5b8decdab8ce329287a4dc073790c4bf7`
 - seal tree: `9eac6b6103d65cf8bcb13859d00e43cd3389fa8a`
 - unresolved P0/P1: `0 / 0`
-- tracked P2: `6`, all with owner and blocking condition
 
-## Verified completed checkpoints
+## Step 2 content implementation
 
-- Route 01-0 governance recovery: PASS
-- Route 01-1 exact path/contradiction inventory: PASS
-- Route 01-2 competitor/platform/Japan research and policy gates: PASS
-- Route 01-3 first-ten/stable-ID/screens/transitions/Step2 dependency closure: PASS
-- Route 01-4 mirror review, 10 critics, repair, regression, final judge and seal: PASS
+- content commit: `408ce59760945ec032bec6e2b87e4b9bc824848e`
+- content tree: `3c2fc02fc55eff6aeec2016cb9d014148aec5b11`
+- evidence commit: `e7bdc2ffa530e65d5416789429f54de645fe7fc7`
+- evidence tree: `db96b8c03e9315b2e6f6c82c7389adbc1e568374`
+- evidence path: `quality-reviews/step-2-executable-contract-v2/tower-sequence-input-evidence-anchor.json`
+- dedicated workflow: `.github/workflows/verify-step-2-v2.yml`
+- exact workflow run: `33094611846`
+- exact job: `98596129603`
+- CI conclusion: `SUCCESS`
+- verifier verdict: `CONTENT_PHASE_PASS_STEP2_IN_PROGRESS`
+- runtime: `v22.23.2`
+- source read-back: `FULL_GIT_BLOB_READBACK`
 
-## Route 01-4 repairs
+## 実装した主要契約
 
-1. `tower.milestone.floor.100`へ正規化し、district/cycle IDのminimum widthとoverflow ruleを固定。
-2. 5F boss `tower.boss.d01.mid.001`をstable registryとsliceへ登録。
-3. rewarded-ad offerとlogin campaignへimmutable catalog/version bindingを追加。
-4. 使用済み有償rubyのrefund/revocationを明示的deficit／制限状態で扱い、無関係なfree ledgerの黙示消費を禁止。
-5. final repository postcheckでcurrent old-claim=0、unclassified path/match=0、forbidden path=0を再確認。
+1. **塔の修飾子シーケンス**
+   - `tower.modifier.*`のcanonical IDへ統一。
+   - floorから決定論的に修飾子組合せを選択。
+   - adjacent repeatとwindow repeatを実際の連続階シーケンスとして監査。
+   - 反復抑制を単発hash選択ではなく、再現可能なpermutation contractへ変更。
 
-## Canonical Step 2 input
+2. **背景cadence**
+   - district cadenceとmajor theme cycleをfloor入力から決定論的に算出。
+   - qualification resultへ各horizonの背景証拠を保持。
 
-Step 2は次だけを入口にする。
+3. **scenario入力証拠**
+   - horizonごとのfloor、district、cycle、boss、modifier、backgroundをresultへ記録。
+   - scenario input digestを追加し、calibrationとholdoutの入力重複を検査。
+   - calibration / holdout smokeでscenario digest overlap=`0`、input digest overlap=`0`を確認。
 
-- `CHATGPT_PROJECT_INSTRUCTIONS1.md`
-- active change-controlとlatest addendum
-- `quality-reviews/step-1-reseal-round-008/seal-round-008.json`
-- `MASTER_SPEC.md`
-- `canonical/STABLE_ID_REGISTRY.json`
-- `canonical/SCREEN_STATE_REGISTRY.json`
-- `canonical/STATE_TRANSITION_CONTRACT.json`
-- `canonical/POLICY_RELEASE_GATES.json`
-- `canonical/STEP2_DEPENDENCY_CLOSURE.json`
+4. **schema・validator**
+   - run-plan、execution-contract、qualification result、gameplay result、high-volume resultを新しいscenario contractへ結合。
+   - `modifier.*`ではなく`tower.modifier.*`を受理するschemaへ修正。
+   - candidateの`modifierPools`を正本としてvalidatorとengineの参照先を統一。
 
-旧V1 candidate/schema/validator/workflowはhistorical `BLOCKED_SUPERSEDED_INPUT`。promotion実行、in-place延命、observed holdout再利用を禁止する。
+5. **high-volume large-number**
+   - large-number property suiteへ正しいsample countを渡す。
+   - 30〜149桁のfloorで、symbolic representation、canonical ID、modifier sequence、background cadenceを検証。
 
-## Step 2 required sequence
+## 内部監査で発見して修正した点
 
-1. live `kimi` HEAD/tree、seal、completion/read-backを再検証。
-2. Step 2専用Acceptance Matrixを変更前に作成。
-3. new V2 candidate/schema/validator/simulator/result/run-plan/fixtures/migrations/executable-seal chainを作る。
-4. exact source/blob/digest、seed、rounding、calibration/holdoutを固定。
-5. Step 2 validator、fixture、workflow、critics、final judge、completion evidenceをPASSさせる。
-6. Step 2 PASS前にStep 3を開始しない。
+- `result-v2.schema.json`のsuffix判定が`gameplay-result-v2.schema.json`にも誤一致し、存在しない`scenarios`を参照していた。
+- 初期patchが存在しない`ceilDiv`と`powRational`をimportしていた。
+- candidate正本は`modifierPools`なのに、patchが存在しない`modifierRepetition`を参照していた。
+- result schemaのmodifier ID prefixがcanonical registryと不一致だった。
+- `largeNumberProperties`の関数引数がずれ、histogramが空になっていた。
+- 生成ファイル末尾の余分な空行を除去し、`git diff --check`を通過させた。
+- 一時診断・適用workflowは最終treeから削除した。
 
-## Tracked P2
+## exact-SHA検証結果
 
-- reset表示名・未命名slice characterのpublic naming review: Step 4/5
-- ruby consumption order/catalog values: Step 2
-- mastery/overflow exact coefficients: Step 2/3
-- submission-time platform/Japan refresh and specialist review: release
-- target age/age assurance/spend caps: provider/release
-- mobile mockup/physical iPhone: Step 4/6
+- required content paths: `43`
+- simulation `.mjs` syntax files: `25`
+- qualification scenarios: `30`
+- qualification digest: `a24fa5a4a12cf132ac477c80e77431cd0b97ab070bbbef83c3881c160f42562c`
+- scenario algorithm: `cats-tower-scenario-v2.2.0`
+- execution version: `cats-tower-step3-executor-v1.1.0`
+- qualification reproduced: `true`
+- balance verdict: `NOT_EVALUATED_STEP2`
+- tower boundary cases: `8`
+- modifier sequence boundary cases: `4`
+- background boundary cases: `6`
+- execution-contract negative cases: `18`
+- gameplay-result negative cases: `12`
+- high-volume-result negative cases: `15`
+- total new adversarial cases: `45`
+- high-volume contract-smoke suites: `6 / 6 PASS`
+- migration idempotency: `PASS`
+- raw legacy backup verification: `PASS`
+- Step 3 owner/environment guards: `PASS`
 
-## Unchanged forbidden scope
+## 現在のstatus mirror
 
-runtime、assets、V1 executable、workflow YAML、backend、payment provider、ad network、PR、Production aliasはStep 1で変更していない。Vercel `READY`はPreview build証拠だけで、製品品質や実機品質を意味しない。
+- `simulation/CURRENT_STATUS.json`
+  - current step: `2`
+  - status: `IN_PROGRESS`
+  - phase: `CONTENT_PHASE_PASS`
+  - Step 3 allowed: `false`
 
-## Incident record
+- `PROJECT_STATUS.json`
+  - current step: `2`
+  - current status: `IN_PROGRESS_CONTENT_PHASE_PASS`
+  - advance allowed: `false`
+  - Step 3 allowed: `false`
 
-過去の未裏付け「Step 1完了」報告とconnector probe削除履歴は隠していない。`DO_NOT_CREATE.tmp`はcurrent treeに存在しない。historical evidenceは改変していない。
+## 次に許可される作業
 
-## Next authorized chat
+同じ`02_無制限塔・経済・リセットシミュレーション`で、以下のみ進める。
 
-`02_無制限塔・経済・リセットシミュレーション`
+1. 独立criticを実行する。
+2. P0/P1をすべて修正する。
+3. 全source-bound CIと回帰を再実行する。
+4. executable sealを作成・検証する。
+5. final judgeを作成する。
+6. completion evidenceとfinal live read-backを結合する。
+7. その全チェーンがPASSした場合だけStep 2を`PASS`へ変更し、Step 3を許可する。
 
-Step 2 Acceptanceを先に固定し、V2 executable contractを作る。`03`はStep 2 PASS後のみ許可する。
+## 変更していない範囲
+
+- runtime
+- assets
+- backend
+- payment provider
+- ad network
+- Vercel deployment / alias
+- Production
+- physical iPhone検証
+
+旧V1 executable artifactsはhistorical `BLOCKED_SUPERSEDED_INPUT`のままで、現行promotionへ使用しない。

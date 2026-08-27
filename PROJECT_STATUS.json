@@ -1,6 +1,6 @@
 {
   "statusDocumentSchemaVersion": 12,
-  "updatedDate": "2026-08-27",
+  "updatedDate": "2026-08-28",
   "project": "Cat's Tower",
   "canonicalRepository": "2hg7trp7rv-design/cats_tower",
   "canonicalBranch": "kimi",
@@ -14,12 +14,12 @@
     "status": "ACTIVE_COMPLETE_REPLACEMENT",
     "oldPathStatus": "DELETED_FROM_LIVE_KIMI"
   },
-  "currentChat": "01_正本仕様・競合調査",
-  "currentStep": 1,
-  "currentStepName": "canonical-integration-and-reseal",
-  "currentStepStatus": "PASS",
-  "currentCheckpoint": "round-008-activated",
-  "advanceAllowed": true,
+  "currentChat": "02_無制限塔・経済・リセットシミュレーション",
+  "currentStep": 2,
+  "currentStepName": "executable-contract-and-simulation",
+  "currentStepStatus": "IN_PROGRESS_CONTENT_PHASE_PASS",
+  "currentCheckpoint": "v2-content-phase-pass-exact-sha-ci",
+  "advanceAllowed": false,
   "step2Allowed": true,
   "step3Allowed": false,
   "physicalIPhoneVerified": false,
@@ -51,8 +51,18 @@
     "singleResetId": "reset.tower_return",
     "coinLevelCap": null,
     "evolutionEligibilityEveryLevels": 100,
-    "rarities": ["N", "R", "RR", "SR", "SSR", "UR"],
-    "catalogTargets": {"characters": 24, "weapons": 36},
+    "rarities": [
+      "N",
+      "R",
+      "RR",
+      "SR",
+      "SSR",
+      "UR"
+    ],
+    "catalogTargets": {
+      "characters": 24,
+      "weapons": 36
+    },
     "characterAndWeaponGachaSeparated": true,
     "hardPityTarget": 100,
     "featuredGuaranteeTarget": 200,
@@ -60,27 +70,88 @@
     "canonicalScreenCount": 12,
     "serverAuthoritativePermanentEconomy": true
   },
+  "step2ContentEvidence": {
+    "acceptancePath": "quality-reviews/step-2-executable-contract-v2/acceptance-matrix.json",
+    "contentCommit": "408ce59760945ec032bec6e2b87e4b9bc824848e",
+    "contentTree": "3c2fc02fc55eff6aeec2016cb9d014148aec5b11",
+    "evidenceCommit": "e7bdc2ffa530e65d5416789429f54de645fe7fc7",
+    "evidenceTree": "db96b8c03e9315b2e6f6c82c7389adbc1e568374",
+    "evidencePath": "quality-reviews/step-2-executable-contract-v2/tower-sequence-input-evidence-anchor.json",
+    "dedicatedWorkflow": ".github/workflows/verify-step-2-v2.yml",
+    "workflowRunId": "33094611846",
+    "jobId": "98596129603",
+    "ciConclusion": "SUCCESS",
+    "verifierVerdict": "CONTENT_PHASE_PASS_STEP2_IN_PROGRESS",
+    "qualificationScenarioCount": "30",
+    "qualificationDigest": "a24fa5a4a12cf132ac477c80e77431cd0b97ab070bbbef83c3881c160f42562c",
+    "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+    "executionVersion": "cats-tower-step3-executor-v1.1.0",
+    "balanceVerdict": "NOT_EVALUATED_STEP2",
+    "completionClaimed": false,
+    "step3Authorized": false
+  },
   "authorizedExecutionSequence": [
-    {"order": 1, "name": "canonical-integration-and-reseal", "status": "PASS"},
-    {"order": 2, "name": "executable-contract-and-simulation", "status": "READY_TO_START"},
-    {"order": 3, "name": "large-scale-validation", "status": "BLOCKED_UNTIL_STEP2_PASS"},
-    {"order": 4, "name": "twelve-screen-final-mockups", "status": "BLOCKED_UNTIL_STEP3_PASS"},
-    {"order": 5, "name": "first-production-slice-and-backend-implementation", "status": "BLOCKED_UNTIL_PRIOR_GATES"},
-    {"order": 6, "name": "physical-iphone-validation", "status": "BLOCKED_UNTIL_ELIGIBLE_BUILD"}
+    {
+      "order": 1,
+      "name": "canonical-integration-and-reseal",
+      "status": "PASS"
+    },
+    {
+      "order": 2,
+      "name": "executable-contract-and-simulation",
+      "status": "IN_PROGRESS_CONTENT_PHASE_PASS"
+    },
+    {
+      "order": 3,
+      "name": "large-scale-validation",
+      "status": "BLOCKED_UNTIL_STEP2_PASS"
+    },
+    {
+      "order": 4,
+      "name": "twelve-screen-final-mockups",
+      "status": "BLOCKED_UNTIL_STEP3_PASS"
+    },
+    {
+      "order": 5,
+      "name": "first-production-slice-and-backend-implementation",
+      "status": "BLOCKED_UNTIL_PRIOR_GATES"
+    },
+    {
+      "order": 6,
+      "name": "physical-iphone-validation",
+      "status": "BLOCKED_UNTIL_ELIGIBLE_BUILD"
+    }
   ],
   "step2Entry": {
     "source": "canonical/STEP2_DEPENDENCY_CLOSURE.json",
-    "status": "READY_TO_START",
+    "status": "IN_PROGRESS_CONTENT_PHASE_PASS",
     "acceptanceRequiredBeforeWrites": true,
+    "acceptanceSatisfied": true,
     "newV2ArtifactsRequired": true,
+    "newV2ContentMaterialized": true,
+    "sourceBoundCiPassed": true,
     "legacyV1Usable": false,
     "observedHoldoutReusable": false,
     "step3MayStartBeforeStep2Seal": false
   },
   "nextAuthorizedChat": "02_無制限塔・経済・リセットシミュレーション",
-  "nextAction": "Create and commit the Step 2 Acceptance Matrix, then implement and validate the new V2 executable contract without running Step 3.",
+  "nextAction": "Run independent Step 2 critics and repairs, create and validate the executable seal, then complete the final judge, completion evidence and live read-back chain. Do not start Step 3 before that chain passes.",
   "writeBoundary": {
-    "allowedNext": ["Step 2 V2 candidate/schema/validator/simulator/result/run-plan/fixtures/migrations/workflow/quality evidence"],
-    "forbidden": ["runtime", "assets", "backend", "payment provider", "ad network", "PR operation", "Production alias", "Step 3 before Step 2 PASS"]
+    "allowedNext": [
+      "Step 2 independent critics and critic repairs",
+      "Step 2 executable seal and validator",
+      "Step 2 final judge, completion evidence and live read-back",
+      "Step 2 status mirrors and handover"
+    ],
+    "forbidden": [
+      "runtime",
+      "assets",
+      "backend",
+      "payment provider",
+      "ad network",
+      "PR operation",
+      "Production alias",
+      "Step 3 before Step 2 PASS"
+    ]
   }
 }
