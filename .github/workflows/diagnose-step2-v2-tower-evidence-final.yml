@@ -1,0 +1,96 @@
+name: Diagnose Step 2 V2 tower evidence final
+
+on:
+  push:
+    branches: [kimi]
+    paths:
+      - '.github/workflows/diagnose-step2-v2-tower-evidence-final.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: diagnose-step2-v2-tower-evidence-final-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply validated tower patch plus final exact fixes in working tree only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          import textwrap
+
+          source_path = Path('.github/workflows/diagnose-step2-v2-tower-evidence-resume.yml')
+          source = source_path.read_text(encoding='utf-8')
+          start_marker = "          python - <<'PY'\n"
+          end_marker = "\n          PY\n"
+          start = source.find(start_marker)
+          if start < 0:
+              raise SystemExit('resume diagnostic python start marker missing')
+          start += len(start_marker)
+          end = source.find(end_marker, start)
+          if end < 0:
+              raise SystemExit('resume diagnostic python end marker missing')
+          script = textwrap.dedent(source[start:end])
+          exec(compile(script, str(source_path), 'exec'), {'__name__': '__main__'})
+
+          schema_path = Path('simulation/result-v2.schema.json')
+          schema = json.loads(schema_path.read_text(encoding='utf-8'))
+          modifier_items = schema['$defs']['horizon']['properties']['modifierIds']['items']
+          modifier_items['pattern'] = r'^tower\.modifier\.[a-z0-9_.-]+$'
+          schema_path.write_text(json.dumps(schema, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          high_volume_path = Path('simulation/engine-v2/high-volume.mjs')
+          high_volume = high_volume_path.read_text(encoding='utf-8')
+          old = 'function largeNumberProperties(candidate, _execution, samples, namespace) {'
+          new = 'function largeNumberProperties(candidate, samples, namespace) {'
+          count = high_volume.count(old)
+          if count != 1:
+              raise SystemExit(f'expected one largeNumberProperties signature, found {count}')
+          high_volume_path.write_text(high_volume.replace(old, new, 1), encoding='utf-8')
+          PY
+      - name: Regenerate qualification evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          node simulation/engine-v2/run-plan.mjs --mode qualification --output quality-reviews/step-2-executable-contract-v2/qualification-result.json
+      - name: Run complete Step 2 verifier
+        shell: bash
+        run: |
+          set -euo pipefail
+          node simulation/verify-step2-v2.mjs
+      - name: Confirm bounded repair and no forbidden files
+        shell: bash
+        run: |
+          set -euo pipefail
+          changed="$(git status --short | sed -E 's/^.. //' | sed -E 's/.* -> //')"
+          printf '%s\n' "$changed"
+          test -n "$changed"
+          while IFS= read -r path; do
+            case "$path" in
+              simulation/*|quality-reviews/step-2-executable-contract-v2/qualification-result.json)
+                ;;
+              *)
+                echo "tower evidence repair escaped Step 2 boundary: $path" >&2
+                exit 1
+                ;;
+            esac
+          done <<< "$changed"
+          git diff --check
+          git diff --stat
+          echo 'TOWER_SEQUENCE_AND_INPUT_EVIDENCE_FINAL_VALIDATED_WITHOUT_WRITE=true'
