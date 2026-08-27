@@ -1,16 +1,20 @@
 {
-  "schemaVersion": "2.0.0",
+  "schemaVersion": "2.1.0",
   "resultId": "cats-tower-step2-v2-qualification-001",
   "deterministicPayload": {
     "mode": "STEP2_QUALIFICATION_ONLY",
     "candidateId": "cats-tower-v2-candidate-001",
-    "algorithmVersion": "cats-tower-simulator-v2.0.0",
+    "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+    "executionVersion": "cats-tower-step3-executor-v1.0.0",
     "roundingVersion": "ct-rational-half-even-v1",
     "seedNamespace": "cats-tower-v2-qualification",
     "scenarioCount": "30",
     "scenarios": [
       {
-        "scenarioId": "cats-tower-v2-qualification|build.combat|no-ad-f2p|0",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|no-ad-f2p|0",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.combat",
         "personaId": "no-ad-f2p",
         "seed": "0e38035aaaf106b5b9172d1fca42fb7e51fecf4a021722171e67831857188c33",
@@ -102,10 +106,13 @@
             "weaponDraws45d": "990"
           }
         ],
-        "scenarioDigest": "365df95fed7127062925accf46b9b9b1ae6c1edfca75ca122d86403947e21481"
+        "scenarioDigest": "81416763bfd73e18a4c58463d87bafb387f329860dbb691edaf7c9d75f18f790"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.combat|no-ad-f2p|1",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|no-ad-f2p|1",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.combat",
         "personaId": "no-ad-f2p",
         "seed": "ce264641efc319e89f6812ea9e8568d698108cd6d955f9e722aa8b52033e43d3",
@@ -197,10 +204,13 @@
             "weaponDraws45d": "990"
           }
         ],
-        "scenarioDigest": "5fc323110f1f3aba0364096f90294219d6f504e5f49b88f1626ed2c20fa03a99"
+        "scenarioDigest": "e8315e54cb82044b67ae26cfdf668c2cc98949114839f7e285b96b8e355fc77e"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.combat|rewarded-ad-f2p|0",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|rewarded-ad-f2p|0",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.combat",
         "personaId": "rewarded-ad-f2p",
         "seed": "7c599258a4f676992bc9cbe4632b1f7a39154e4e934a9d7080f0e81145ab9a13",
@@ -292,10 +302,13 @@
             "weaponDraws45d": "1440"
           }
         ],
-        "scenarioDigest": "02d40158d7c151a63e7a8438652de9bf43ba98b75c93b1b702d60e24ff111d86"
+        "scenarioDigest": "01cc652b49bcbcebf4850bcde242cf3951331e682f88bfddc674a346604de908"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.combat|rewarded-ad-f2p|1",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|rewarded-ad-f2p|1",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.combat",
         "personaId": "rewarded-ad-f2p",
         "seed": "3ec48b4963924ced59e3d482bba60b49aa51148a2c7065a64c7df3d40488b5da",
@@ -387,10 +400,13 @@
             "weaponDraws45d": "1440"
           }
         ],
-        "scenarioDigest": "49eae744c356acad60f3dbef50d09d7dec67a60951825d3a1567c679fe489873"
+        "scenarioDigest": "f8fd3c6fb9a7d432038fb73a1bf77ab0560389b07c6f0231b616821d52fe4e36"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.combat|monthly-pass|0",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|monthly-pass|0",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.combat",
         "personaId": "monthly-pass",
         "seed": "6550951dc03a4c5d375ff8a3371b002f31e6f8a21449c60c79f82bff465a6577",
@@ -482,10 +498,13 @@
             "weaponDraws45d": "1800"
           }
         ],
-        "scenarioDigest": "99bfaa95f4c55cad5e24c0644a406fc1df344a75b4153c591595459c17d26d8b"
+        "scenarioDigest": "d81410b496c28c10ac8a7f520e22be9316f5dd959a7a1ed2c93b5c7742f95dbe"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.combat|monthly-pass|1",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|monthly-pass|1",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.combat",
         "personaId": "monthly-pass",
         "seed": "19540ac388a6f51165be2963b2e2459c73c3273a2ab2ca9457d51c3aaabcc2f8",
@@ -577,10 +596,13 @@
             "weaponDraws45d": "1800"
           }
         ],
-        "scenarioDigest": "f7b7f746ef492122156513730486577753d3e5e6202f436b4827cedddcf1a974"
+        "scenarioDigest": "95271bb2553a5efef39b538f4bfbc88337fc54b1c3d25b99d2872cf7a00ab345"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.combat|controlled-payer|0",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|controlled-payer|0",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.combat",
         "personaId": "controlled-payer",
         "seed": "38b8cded32ef1ac8cefea5f524758b5a796b00ae804615ed45ecc9b12675caef",
@@ -672,10 +694,13 @@
             "weaponDraws45d": "2475"
           }
         ],
-        "scenarioDigest": "afe5f800b17b2627ff606b97349127dcc2c65475b7a22e322fc9a29a37ab2828"
+        "scenarioDigest": "74739024e968ab27c6ea4063c124cfcddf666ef952febec08d52b6833a56eae8"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.combat|controlled-payer|1",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|controlled-payer|1",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.combat",
         "personaId": "controlled-payer",
         "seed": "4f2d9b8a356492a17626d324f93187e66e8e35931c09fe5b4976169a8ba97def",
@@ -767,10 +792,13 @@
             "weaponDraws45d": "2475"
           }
         ],
-        "scenarioDigest": "5c6a091a713c6a4be95daac09b96694075a23f4449cbaeb192d6fc369b8fc716"
+        "scenarioDigest": "beaad78272d70f4e5e024ec88673d6b0618a284f69f3ef7a5aa917b73aa60c68"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.combat|high-spend-stress|0",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|high-spend-stress|0",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.combat",
         "personaId": "high-spend-stress",
         "seed": "100cfc16df86edd13a5ae2a6b25a4bdf730a96c425e4e2d5e5f46a9624a9dee9",
@@ -862,10 +890,13 @@
             "weaponDraws45d": "3600"
           }
         ],
-        "scenarioDigest": "1b5d31b0e2e01cc7cfaa92c97e88217b4f66db129e7a952aa5f9cae204190a5a"
+        "scenarioDigest": "e8f75afb44ec04253e23e8f5e8cb3951c83b6106bbe4443bdbb23a5b7323fb6d"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.combat|high-spend-stress|1",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|high-spend-stress|1",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.combat",
         "personaId": "high-spend-stress",
         "seed": "fd953e0ab4cd76defea41acc0f7e12d50c368512db352e6cc38d46ee822c5698",
@@ -957,10 +988,13 @@
             "weaponDraws45d": "3600"
           }
         ],
-        "scenarioDigest": "c854d5266e755a29286966c942cc5ea3f91e30fe220b3c51ff56ecd62fec0ab7"
+        "scenarioDigest": "2486341073318a73fc25fac9af7dc2b17a87cdba70b4ee05e67b45bd9ecab1c3"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.reinforcement|no-ad-f2p|0",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|no-ad-f2p|0",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.reinforcement",
         "personaId": "no-ad-f2p",
         "seed": "7d746ed0066c849c3547829d3cff019b3742d6ce2358ba2bb45aea29fdb7c536",
@@ -1052,10 +1086,13 @@
             "weaponDraws45d": "990"
           }
         ],
-        "scenarioDigest": "5840c1907f92edd01d6ad15b7f6b1aa1a66830364377517dd85dcbc2623d001e"
+        "scenarioDigest": "29891df3c56b43c426ca5933485f677a4ce0c6b542be48bb55fdd23b07736c53"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.reinforcement|no-ad-f2p|1",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|no-ad-f2p|1",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.reinforcement",
         "personaId": "no-ad-f2p",
         "seed": "d6dceafe49ff63be0a68a2cddf827d096bffe0204df9e024a19950c3be1e243a",
@@ -1147,10 +1184,13 @@
             "weaponDraws45d": "990"
           }
         ],
-        "scenarioDigest": "cc32bc864753067394a4b5c0baa942130eda54b8f034dd83646241b5bae9f00b"
+        "scenarioDigest": "d27b0f0bf90094eeb3783ea5548614c1b39cb5d695ec4534e0986b063730db4a"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.reinforcement|rewarded-ad-f2p|0",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|rewarded-ad-f2p|0",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.reinforcement",
         "personaId": "rewarded-ad-f2p",
         "seed": "ccd6f1a0b2fca66832eeb07b314ed4b8deb6dc4663f311e982735d943ee7685d",
@@ -1242,10 +1282,13 @@
             "weaponDraws45d": "1440"
           }
         ],
-        "scenarioDigest": "14c3036472d2b01271a389b905d0008b2add9138674c16d307f50f1d501cdc0c"
+        "scenarioDigest": "088ff690523fa0a8f75770df3f3e4f83507ca03ceb3fee59d43e6749749d258f"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.reinforcement|rewarded-ad-f2p|1",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|rewarded-ad-f2p|1",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.reinforcement",
         "personaId": "rewarded-ad-f2p",
         "seed": "e10fb32aee0222d9956f4f8f40eba80a97a47aa1058193d86eed0644bfcf1e0a",
@@ -1337,10 +1380,13 @@
             "weaponDraws45d": "1440"
           }
         ],
-        "scenarioDigest": "e2a64283fa01da5455a8a4bc6ea82b993c2231e95eb23b7a6c763ff2ac9e0971"
+        "scenarioDigest": "caf30375f33f7ca56be6b8ca04c9a15659fbe1f6b126f1d427c1a466fa09e5e0"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.reinforcement|monthly-pass|0",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|monthly-pass|0",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.reinforcement",
         "personaId": "monthly-pass",
         "seed": "36f8c0d32579504f6cb412322a7387060f02f52f5583d5df889e34e84ad67970",
@@ -1432,10 +1478,13 @@
             "weaponDraws45d": "1800"
           }
         ],
-        "scenarioDigest": "227e7628870671c0b1266caf44bb6048c600a33c5def14dc24424e0bbda980e6"
+        "scenarioDigest": "ac256cb7a270ba0d7d39c4d4f00e2f5992b38a8b85880725d0b1fdc2b4efbf24"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.reinforcement|monthly-pass|1",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|monthly-pass|1",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.reinforcement",
         "personaId": "monthly-pass",
         "seed": "9faa1e0d31f3f66ecd0d042fe4829a6f696b7082d63eeaa893fc39ecd7ce13bb",
@@ -1527,10 +1576,13 @@
             "weaponDraws45d": "1800"
           }
         ],
-        "scenarioDigest": "c5281d8746a7a542bf6db6802e7342568ceaeb2476c060bf4bd3b813b39453e1"
+        "scenarioDigest": "c6e7d9879352602fe0e36d98bbb093983d0e3906f85f12d30af23605bb1f601e"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.reinforcement|controlled-payer|0",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|controlled-payer|0",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.reinforcement",
         "personaId": "controlled-payer",
         "seed": "b081898c738a7940b6e5a19276a7d0b859ef715bc6bff7b9a21d9cf462b6ef67",
@@ -1622,10 +1674,13 @@
             "weaponDraws45d": "2475"
           }
         ],
-        "scenarioDigest": "558df8f934cb7144038a8c0fa0c0da3784fc05573038dba39ba0ce67bc4c5c15"
+        "scenarioDigest": "d0a5acad3daa483cd18c15f6e2742bf77e17478fe69c90c4b1e57f0ca6536518"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.reinforcement|controlled-payer|1",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|controlled-payer|1",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.reinforcement",
         "personaId": "controlled-payer",
         "seed": "059f8b5029a42876c344410bb92ab2a06c890f584a6a6242bd0c2396aa9118a3",
@@ -1717,10 +1772,13 @@
             "weaponDraws45d": "2475"
           }
         ],
-        "scenarioDigest": "651a1ceb754d31af1012037a0de49eb37ba3a6beffd374a68d93a9d59ad72f25"
+        "scenarioDigest": "9945192d05346f1fc587972f1ee80fba1e0a112ead037403debca2b650913454"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.reinforcement|high-spend-stress|0",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|high-spend-stress|0",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.reinforcement",
         "personaId": "high-spend-stress",
         "seed": "70879baab581c88f15b3971cab96fb2e61ad6b4006f8209554e70a102f53e9ec",
@@ -1812,10 +1870,13 @@
             "weaponDraws45d": "3600"
           }
         ],
-        "scenarioDigest": "093c8b90c9500006d2ebf3b1564a7166935825a3e650863ed22f4dc4b88425a0"
+        "scenarioDigest": "c04bd7bfcdcb30196da862f9c07dc1692bce51dc47288d2f87c8524beb6089d1"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.reinforcement|high-spend-stress|1",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|high-spend-stress|1",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.reinforcement",
         "personaId": "high-spend-stress",
         "seed": "f4277393f07007892e87d56c9ac86e37edc22522c314a93c8b361d4c4d405584",
@@ -1907,10 +1968,13 @@
             "weaponDraws45d": "3600"
           }
         ],
-        "scenarioDigest": "19ca3464f09f3397cf08ade0cd382ba0b9b478b194511355f8d775963dbffebe"
+        "scenarioDigest": "602ca46e3a7f769d40cea9e5eabd825bd021d31b96c02375688f0add9cdacf07"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.commerce|no-ad-f2p|0",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|no-ad-f2p|0",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.commerce",
         "personaId": "no-ad-f2p",
         "seed": "bc33a7c92c8c14c6365eed96a156cf5337333b65b35ce08ca46765c34c7b1545",
@@ -2002,10 +2066,13 @@
             "weaponDraws45d": "990"
           }
         ],
-        "scenarioDigest": "d46e54a03a49aeda9bcf25660690662f97688db487d184b4109908b8391bf975"
+        "scenarioDigest": "0038cfbe38ba2a7366b59f981023fcd0f4bf79d0ee2ebd022d798419ba32ec7f"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.commerce|no-ad-f2p|1",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|no-ad-f2p|1",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.commerce",
         "personaId": "no-ad-f2p",
         "seed": "5e641f1b88c9b589b47411d5394c48b414698398fc5873a6fa3a22f2672c00b2",
@@ -2097,10 +2164,13 @@
             "weaponDraws45d": "990"
           }
         ],
-        "scenarioDigest": "c787b10f70073c329dd3678c8fa7d0005c8727a7346fe29931b27a42d268467b"
+        "scenarioDigest": "299192e0f6f108b23eecc026c1df8e46ae347ae0d96249101b1876b9b6cf1dab"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.commerce|rewarded-ad-f2p|0",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|rewarded-ad-f2p|0",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.commerce",
         "personaId": "rewarded-ad-f2p",
         "seed": "fa9a0adacfb639aadba3564db5a8c61c1f5e0f0436c6c725ff873c4d2198dafc",
@@ -2192,10 +2262,13 @@
             "weaponDraws45d": "1440"
           }
         ],
-        "scenarioDigest": "62345f778614365cb62b63b5a3926ab2c34a82059b07daa7192e5afd6fa9eba0"
+        "scenarioDigest": "3bf850f79b5152bfdd248cdcbbe8df70c75b75b325e8c1fecc802a46300b59e8"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.commerce|rewarded-ad-f2p|1",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|rewarded-ad-f2p|1",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.commerce",
         "personaId": "rewarded-ad-f2p",
         "seed": "895c85f7bca225904c455390308e4c24d5e7dad221bf89c43a4ab02e7f20bb47",
@@ -2287,10 +2360,13 @@
             "weaponDraws45d": "1440"
           }
         ],
-        "scenarioDigest": "e01c54c9390ee118074d27a5812881c3a5e261d8729aabfe54e8e2d5ac036cd9"
+        "scenarioDigest": "a1357396478327aede44da7c0294576555aa872d8f8616308bb5bef79e6f949c"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.commerce|monthly-pass|0",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|monthly-pass|0",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.commerce",
         "personaId": "monthly-pass",
         "seed": "78b9b5177b01eedb47c691fbfddd7c1a8c49b959d12f2643299c1aed35250809",
@@ -2382,10 +2458,13 @@
             "weaponDraws45d": "1800"
           }
         ],
-        "scenarioDigest": "a602d2453c58c6f6009964dbf45993f8fb972496e0b5cd1844146eb9c8445b21"
+        "scenarioDigest": "d2155b127b40fb8b5987bd0c248dfba4d7dddf1da7482fd1e0162a5ac824efc8"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.commerce|monthly-pass|1",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|monthly-pass|1",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.commerce",
         "personaId": "monthly-pass",
         "seed": "cd5111f743bb7bb1c3854e1fc3dc7fc094283ea4b7b34d6124b19a67eeb01b01",
@@ -2477,10 +2556,13 @@
             "weaponDraws45d": "1800"
           }
         ],
-        "scenarioDigest": "a1a0598c849594ea37e73f81038fb2d35204cbf443eb8990e402e07d20e640c5"
+        "scenarioDigest": "40b367ebd8279aeb9d4c296ca71144b296035d107a4f753ca5f9e6495e781ce6"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.commerce|controlled-payer|0",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|controlled-payer|0",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.commerce",
         "personaId": "controlled-payer",
         "seed": "cdb9ba55aec5e24f64178264a9366356b3de1a6efe0f4ec4e2d4445e8ad4c68b",
@@ -2572,10 +2654,13 @@
             "weaponDraws45d": "2475"
           }
         ],
-        "scenarioDigest": "ce10c1e233341efee793856cdaf656190d0a38be005d5b8c950cc629d7cc8fd6"
+        "scenarioDigest": "728f3e53769afb07edb2c50e9a8aefa6b28d776244835bd53603f5aa1f89b94a"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.commerce|controlled-payer|1",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|controlled-payer|1",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.commerce",
         "personaId": "controlled-payer",
         "seed": "b1dd9c419067e3ae51e66d71b75b8bb435f84aa0c1b640cdbd9104ecd358abf8",
@@ -2667,10 +2752,13 @@
             "weaponDraws45d": "2475"
           }
         ],
-        "scenarioDigest": "130172c5694365c296ccf776aebb1f0e8ced5b8521b8f3d3507e47e13a57c875"
+        "scenarioDigest": "c952bad323682f0552894a58e103e23d06b42be8f29205ebb4350d8d6ad776af"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.commerce|high-spend-stress|0",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|high-spend-stress|0",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.commerce",
         "personaId": "high-spend-stress",
         "seed": "4edde55a9b11ba9c0e70e89fcde40dc97090e69ec42c45b68efb9383515c238b",
@@ -2762,10 +2850,13 @@
             "weaponDraws45d": "3600"
           }
         ],
-        "scenarioDigest": "465f970f2deee55224e3e6871374c21b4b07dd63b39a0ae293c2ccf2507faadd"
+        "scenarioDigest": "b1efebaf83d303951b2ab6028dc90f5b30cbfd2e8ba1cb58a54d1467959c83cd"
       },
       {
-        "scenarioId": "cats-tower-v2-qualification|build.commerce|high-spend-stress|1",
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|high-spend-stress|1",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+        "executionVersion": "cats-tower-step3-executor-v1.0.0",
         "buildId": "build.commerce",
         "personaId": "high-spend-stress",
         "seed": "7040353dd25d5f1b8a9b7f4fe98105774ab82936600d34c9c75eb1139f9ee2e1",
@@ -2857,7 +2948,7 @@
             "weaponDraws45d": "3600"
           }
         ],
-        "scenarioDigest": "3bb78359f28602a79f90dacd098ef57eff844ede786db3564bcdc182fa15c3da"
+        "scenarioDigest": "81d2dde05dcccfa1a19cf641243a7fa2af5c27b06019d70d0ae193755f977727"
       }
     ],
     "summary": {
@@ -2875,14 +2966,15 @@
   },
   "hashes": {
     "candidateSha256": "4a908482466236bda39d9d6fbce927cef4b7707c70140a332b656d79ffae877d",
-    "runPlanSha256": "adcb0dfe260205fc3cc1202bcfbb290916f950be9d485e793fc34ef28429c828",
-    "deterministicPayloadSha256": "83009807d3e24bd548c13a73830946b764e2a5f9294fcdeb4292eedb18a24423"
+    "runPlanSha256": "57a9b899de8899bcd5ee1b7e5e061d9e0845b04bf770c86ea5701b5e291709c7",
+    "executionContractSha256": "e1b0eb54bbf021a7dcf909e151f7cce56b94db35b3d4020db0eb7e182ff33065",
+    "deterministicPayloadSha256": "e73d5fb82ff43afb9d08083c07022988a0f1571e1dbb318fdf443cdfdfe3bd29"
   },
   "evidence": {
     "runtimeVersion": "v22.23.2",
-    "executedAt": "2026-08-27T13:21:07.581Z",
+    "executedAt": "2026-08-27T13:55:48.739Z",
     "reproductionCommand": "node simulation/engine-v2/run-plan.mjs --mode qualification --output quality-reviews/step-2-executable-contract-v2/qualification-result.json",
-    "canonicalJsonSha256": "83009807d3e24bd548c13a73830946b764e2a5f9294fcdeb4292eedb18a24423"
+    "canonicalJsonSha256": "e73d5fb82ff43afb9d08083c07022988a0f1571e1dbb318fdf443cdfdfe3bd29"
   },
   "verdict": {
     "contractQualification": "PASS",

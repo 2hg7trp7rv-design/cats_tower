@@ -3,7 +3,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import process from 'node:process';
 import { DeterministicRng } from './rng.mjs';
-import { parseExactDecimal, toBigInt } from './numeric.mjs';
+import { parseExactDecimal, normalizeUnsigned } from './numeric.mjs';
 import { pityOutcome, masteryOverflow, applyPaidRubyRefund } from './economy.mjs';
 import { idempotentResult, replaySequence, TRANSITIONS } from './state-machines.mjs';
 import { generateFloor, isCanonicalDistrictId, isCanonicalCycleId } from './tower.mjs';
@@ -71,7 +71,7 @@ function gachaTails(candidate, execution, samples, namespace) {
   return { primary: firstUr.summary(), secondary: firstFeatured.summary(), counters };
 }
 
-function pityConformance(candidate, samples, namespace) {
+function pityConformance(candidate, _execution, samples, namespace) {
   const hardRemaining = new UnsignedHistogram();
   const featuredRemaining = new UnsignedHistogram();
   const counters = { hardBoundaryCases: 0n, hardBoundaryPass: 0n, featuredBoundaryCases: 0n, featuredBoundaryPass: 0n, earlyHardFalse: 0n, earlyFeaturedFalse: 0n, boundaryViolations: 0n };
@@ -96,7 +96,7 @@ function pityConformance(candidate, samples, namespace) {
   return { primary: hardRemaining.summary(), secondary: featuredRemaining.summary(), counters };
 }
 
-function duplicateSkew(candidate, samples, namespace) {
+function duplicateSkew(candidate, _execution, samples, namespace) {
   const catalogSize = candidate.characters.catalog.length;
   const copies = Array.from({ length: catalogSize }, () => 0n);
   const effectiveCopies = new UnsignedHistogram();
@@ -217,7 +217,7 @@ export async function runHighVolumeSuite({ suiteId, contractSmoke = false, owner
   if (!Number.isSafeInteger(sampleCount) || sampleCount <= 0) throw new Error('HIGH_VOLUME_SAMPLE_COUNT_UNSAFE');
   const namespace = `cats-tower-v2-high-volume|${suiteId}`;
   const rawMetrics = SUITES[suiteId](candidate, execution, sampleCount, namespace);
-  const counters = Object.fromEntries(Object.entries(rawMetrics.counters).map(([key, value]) => [key, toBigInt(value).toString()]));
+  const counters = Object.fromEntries(Object.entries(rawMetrics.counters).map(([key, value]) => [key, normalizeUnsigned(value)]));
   const metricsWithoutDigest = { primary: rawMetrics.primary, secondary: rawMetrics.secondary, counters };
   const metrics = { ...metricsWithoutDigest, suiteDigest: sha256Canonical({ suiteId, ...metricsWithoutDigest }) };
   const violations = [];
