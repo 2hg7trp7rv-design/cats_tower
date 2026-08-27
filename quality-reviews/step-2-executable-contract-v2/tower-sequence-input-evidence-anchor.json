@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0.0",
+  "recordId": "cats-tower-step2-tower-sequence-input-evidence-anchor-001",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "contentCommit": "408ce59760945ec032bec6e2b87e4b9bc824848e",
+  "contentTree": "3c2fc02fc55eff6aeec2016cb9d014148aec5b11",
+  "purpose": "EXACT_SHA_STEP2_CI_ANCHOR",
+  "claimsCompletion": false,
+  "balanceQualification": "NOT_EVALUATED_STEP2",
+  "step3AuthorizationClaimed": false,
+  "productionChanged": false
+}
