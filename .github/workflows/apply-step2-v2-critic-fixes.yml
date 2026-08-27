@@ -1,22 +1,21 @@
-name: Apply Step 2 V2 critic fixes
+name: Validate Step 2 V2 critic payload
 
 on:
   push:
     branches: [kimi]
     paths:
-      - 'quality-reviews/step-2-executable-contract-v2/patch/READY'
       - '.github/workflows/apply-step2-v2-critic-fixes.yml'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: apply-step2-v2-critic-fixes-kimi
+  group: validate-step2-v2-critic-payload-kimi
   cancel-in-progress: false
 
 jobs:
-  apply-and-verify:
+  validate-without-write:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -27,12 +26,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Diagnose, verify and extract bounded patch
+      - name: Validate live payload bytes and bounded archive
         shell: bash
         run: |
           set -euo pipefail
           PATCH='quality-reviews/step-2-executable-contract-v2/patch'
-          EXPECTED_GZIP_SHA='66db88e7dbb32ea72da42c3f2415604e0e1e09f8ead7863d1e178d0134be9fe4'
+          EXPECTED_LIVE_BASE64_SHA='c4fffeaa5cf3f5d9f0b930723dc1e8fbae6ec9317438251d6b770f91b81266a2'
+          EXPECTED_LIVE_GZIP_SHA='86edb96ebcd5782bd344be6db7b0d5b6dcb25680e9ef9fb882eeba9c7298d874'
           expected_chunks=(
             chunk-000.txt
             chunk-001.txt
@@ -44,6 +44,9 @@ jobs:
 
           for chunk in "${expected_chunks[@]}"; do
             test -f "$PATCH/$chunk" || { echo "missing payload chunk: $chunk" >&2; exit 1; }
+            chunk_sha="$(sha256sum "$PATCH/$chunk" | awk '{print $1}')"
+            chunk_bytes="$(wc -c < "$PATCH/$chunk" | tr -d ' ')"
+            echo "chunk=$chunk sha256=$chunk_sha bytes=$chunk_bytes"
           done
           actual_chunk_count="$(find "$PATCH" -maxdepth 1 -type f -name 'chunk-[0-9][0-9][0-9].txt' | wc -l | tr -d ' ')"
           test "$actual_chunk_count" = "${#expected_chunks[@]}" || {
@@ -55,23 +58,27 @@ jobs:
           for chunk in "${expected_chunks[@]}"; do
             tr -d '\r\n\t ' < "$PATCH/$chunk" >> "$RUNNER_TEMP/step2-fixes.b64"
           done
-
           actual_b64_sha="$(sha256sum "$RUNNER_TEMP/step2-fixes.b64" | awk '{print $1}')"
           actual_b64_bytes="$(wc -c < "$RUNNER_TEMP/step2-fixes.b64" | tr -d ' ')"
           echo "actual_base64_sha256=$actual_b64_sha"
           echo "actual_base64_bytes=$actual_b64_bytes"
+          test "$actual_b64_sha" = "$EXPECTED_LIVE_BASE64_SHA" || {
+            echo "live base64 digest changed during validation" >&2
+            exit 1
+          }
 
           base64 --decode "$RUNNER_TEMP/step2-fixes.b64" > "$RUNNER_TEMP/step2-fixes.tar.gz"
           actual_gzip_sha="$(sha256sum "$RUNNER_TEMP/step2-fixes.tar.gz" | awk '{print $1}')"
           actual_gzip_bytes="$(wc -c < "$RUNNER_TEMP/step2-fixes.tar.gz" | tr -d ' ')"
           echo "actual_gzip_sha256=$actual_gzip_sha"
           echo "actual_gzip_bytes=$actual_gzip_bytes"
-          test "$actual_gzip_sha" = "$EXPECTED_GZIP_SHA" || {
-            echo "gzip payload digest mismatch: expected=$EXPECTED_GZIP_SHA actual=$actual_gzip_sha" >&2
+          test "$actual_gzip_sha" = "$EXPECTED_LIVE_GZIP_SHA" || {
+            echo "live gzip digest changed during validation" >&2
             exit 1
           }
 
           python - <<'PY'
+          import hashlib
           import os
           import tarfile
           from pathlib import PurePosixPath
@@ -81,6 +88,7 @@ jobs:
               members = archive.getmembers()
               if not members:
                   raise SystemExit('empty patch archive')
+              regular_files = 0
               for member in members:
                   path = PurePosixPath(member.name)
                   if path.is_absolute() or '..' in path.parts:
@@ -89,12 +97,24 @@ jobs:
                       raise SystemExit(f'out-of-bound archive path: {member.name}')
                   if member.issym() or member.islnk() or member.isdev():
                       raise SystemExit(f'unsupported archive member type: {member.name}')
+                  if not (member.isdir() or member.isfile()):
+                      raise SystemExit(f'unsupported archive member: {member.name}')
+                  if member.isfile():
+                      regular_files += 1
+                      source = archive.extractfile(member)
+                      if source is None:
+                          raise SystemExit(f'cannot read archive member: {member.name}')
+                      digest = hashlib.sha256(source.read()).hexdigest()
+                      print(f'archive_file={member.name} size={member.size} sha256={digest}')
+                  else:
+                      print(f'archive_dir={member.name}')
+              if regular_files == 0:
+                  raise SystemExit('patch archive contains no regular files')
               print(f'archive_member_count={len(members)}')
-              for member in members:
-                  print(f'archive_member={member.name}')
+              print(f'archive_file_count={regular_files}')
               archive.extractall('.', filter='data')
           PY
-      - name: Run complete content-phase verification
+      - name: Run complete content-phase verification without repository write
         shell: bash
         run: |
           set -euo pipefail
@@ -106,29 +126,24 @@ jobs:
           node simulation/engine-v2/run-plan.mjs --mode qualification --output quality-reviews/step-2-executable-contract-v2/qualification-result.json
           node simulation/validate-result-v2.mjs quality-reviews/step-2-executable-contract-v2/qualification-result.json --reproduce
           node simulation/verify-step2-v2.mjs
-      - name: Commit verified fixes only to existing kimi
+      - name: Audit resulting working-tree boundary
         shell: bash
         run: |
           set -euo pipefail
-          rm -rf quality-reviews/step-2-executable-contract-v2/patch
-          rm -f .github/workflows/apply-step2-v2-critic-fixes.yml
-          git config user.name 'cats-tower-step2-bot'
-          git config user.email 'cats-tower-step2-bot@users.noreply.github.com'
-          git add -A simulation quality-reviews/step-2-executable-contract-v2 .github/workflows/apply-step2-v2-critic-fixes.yml
-
-          staged="$(git diff --cached --name-only)"
-          test -n "$staged" || { echo 'no verified critic-fix changes to commit' >&2; exit 1; }
-          printf '%s\n' "$staged"
+          changed="$(git status --short | sed -E 's/^.. //' | sed -E 's/.* -> //' || true)"
+          printf '%s\n' "$changed"
+          test -n "$changed" || { echo 'payload produced no working-tree changes' >&2; exit 1; }
           while IFS= read -r path; do
+            test -n "$path" || continue
             case "$path" in
-              simulation/*|quality-reviews/step-2-executable-contract-v2/qualification-result.json|quality-reviews/step-2-executable-contract-v2/patch/*|.github/workflows/apply-step2-v2-critic-fixes.yml)
+              simulation/*|quality-reviews/step-2-executable-contract-v2/qualification-result.json)
                 ;;
               *)
-                echo "staged path escapes Step 2 repair boundary: $path" >&2
+                echo "payload or verification escaped Step 2 repair boundary: $path" >&2
                 exit 1
                 ;;
             esac
-          done <<< "$staged"
-
-          git commit -m 'fix: close Step 2 V2 critic defects'
-          git push origin HEAD:kimi
+          done <<< "$changed"
+          git diff --stat
+          git diff --numstat
+          echo 'VALIDATED_WITHOUT_WRITE=true'
