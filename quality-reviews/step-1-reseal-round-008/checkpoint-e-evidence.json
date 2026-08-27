@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-route-01-3-checkpoint-e-evidence",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "scope": "First-ten canonical redline, stable IDs, S01-S12 states, permanent-economy transitions and Step 2 dependency closure",
+  "base": {
+    "commit": "112130245a9a8a00ba3e121c7062f429478665f3"
+  },
+  "content": {
+    "commit": "c96792728eab1a8fde8ada8df60a31f204ec8f4a",
+    "tree": "4e5e430f43f692ca5d44dc3011eb2cdc09c71299",
+    "aheadBy": 7,
+    "behindBy": 0,
+    "changedPaths": [
+      "FLOORS_1_10_DESIGN.md",
+      "canonical/SCREEN_STATE_REGISTRY.json",
+      "canonical/STABLE_ID_REGISTRY.json",
+      "canonical/STATE_TRANSITION_CONTRACT.json",
+      "canonical/STEP2_DEPENDENCY_CLOSURE.json",
+      "quality-reviews/step-1-reseal-round-008/canonical-coverage-matrix.json",
+      "quality-reviews/step-1-reseal-round-008/route-01-3-acceptance.json"
+    ],
+    "changedPathCount": 7,
+    "changedPathSetExact": true
+  },
+  "deployment": {
+    "id": "dpl_9TSPt2d4BfEXatkX1s9vvhPFAe8n",
+    "url": "https://catstower-pzbl8jet4-shinyaaas-projects.vercel.app",
+    "state": "READY",
+    "target": null,
+    "githubCommit": "c96792728eab1a8fde8ada8df60a31f204ec8f4a",
+    "githubBranch": "kimi",
+    "commitMatch": true,
+    "branchMatch": true,
+    "combinedStatusState": "success",
+    "readyMeaning": "documentation deployment only; not overall Step 1 or product PASS"
+  },
+  "verification": {
+    "firstTenContinuesToFloor11": true,
+    "floor100IsMilestoneNotEnding": true,
+    "corePartySize": 4,
+    "temporarySupportSeparate": true,
+    "NRCoreRolesComplete": true,
+    "tapDirectDamage": 0,
+    "mandatoryCollectionOrRefillTapping": false,
+    "stableCharacterReservations": 24,
+    "stableWeaponReservations": 36,
+    "persistentSliceIdsRegistered": true,
+    "screenCount": 12,
+    "accountDeletionStateCovered": true,
+    "economicTimeoutInferenceProhibited": true,
+    "Step2FieldClosureComplete": true,
+    "Step2EnumsUnitsInvariantsFixturesMigrationsValidatorsOutputsCovered": true,
+    "oldV1ExecutableChanged": false,
+    "runtimeChanged": false,
+    "assetsChanged": false,
+    "backendChanged": false,
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "workflowYamlChanged": false,
+    "pullRequestOperation": false,
+    "productionAliasChanged": false
+  },
+  "acceptanceResults": [
+    {"id": "R013-01", "result": "PASS"},
+    {"id": "R013-02", "result": "PASS"},
+    {"id": "R013-03", "result": "PASS"},
+    {"id": "R013-04", "result": "PASS"},
+    {"id": "R013-05", "result": "PASS"},
+    {"id": "R013-06", "result": "PASS"},
+    {"id": "R013-07", "result": "PASS"},
+    {"id": "R013-08", "result": "PASS"},
+    {"id": "R013-09", "result": "PASS"},
+    {"id": "R013-10", "result": "PASS"},
+    {"id": "R013-11", "result": "PASS"},
+    {"id": "R013-12", "result": "PASS"}
+  ],
+  "roles": {
+    "creator": "Produced the first-ten redline and machine-readable canonical/dependency contracts.",
+    "independentCritic": "Attempted rejection for finite-tower leakage, high-rarity gates, unsafe numbers, unregistered IDs, missing recovery, missing account deletion and Step 2 guessing.",
+    "checkpointJudge": "PASS for Route 01-3 only; overall Step 1 remains IN_PROGRESS until mirror sync, ten final critics, judge and seal."
+  },
+  "verdicts": {
+    "route013": "PASS",
+    "route013UnresolvedP0": 0,
+    "route013UnresolvedP1": 0,
+    "overallStep1": "IN_PROGRESS",
+    "step2Allowed": false,
+    "physicalIPhoneVerified": false
+  },
+  "nextAuthorizedWork": "Synchronize active mirrors, run ten separated final critics, repair findings, run final judge, bind exact content/evidence and create Round 008 seal."
+}
