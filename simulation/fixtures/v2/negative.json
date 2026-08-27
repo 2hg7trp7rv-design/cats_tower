@@ -1,7 +1,7 @@
 {
   "schemaVersion": "2.0.0",
   "fixtureSetId": "cats-tower-v2-negative",
-  "caseCount": "82",
+  "caseCount": "85",
   "cases": [
     {
       "id": "missing-top-meta",
@@ -903,6 +903,38 @@
       },
       "expectedCodes": [
         "STEP2_BALANCE_VERDICT"
+      ]
+    },
+    {
+      "id": "missing-source-binding",
+      "mutation": {
+        "op": "delete",
+        "path": "/meta/sourceBindings/0"
+      },
+      "expectedCodes": [
+        "SOURCE_BINDING_SET"
+      ]
+    },
+    {
+      "id": "wrong-step1-seal-path",
+      "mutation": {
+        "op": "set",
+        "path": "/meta/sourceStep1Seal/path",
+        "value": "quality-reviews/step-1-reseal-round-008/not-the-seal.json"
+      },
+      "expectedCodes": [
+        "STEP1_SEAL_BINDING"
+      ]
+    },
+    {
+      "id": "wrong-acceptance-path",
+      "mutation": {
+        "op": "set",
+        "path": "/meta/acceptance/path",
+        "value": "quality-reviews/step-2-executable-contract-v2/not-acceptance.json"
+      },
+      "expectedCodes": [
+        "ACCEPTANCE_BINDING"
       ]
     }
   ]

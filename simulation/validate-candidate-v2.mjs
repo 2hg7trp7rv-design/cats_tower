@@ -32,23 +32,39 @@ if (missingTop.length) {
 check(candidate.meta.candidateId==='cats-tower-v2-candidate-001','CANDIDATE_ID','unexpected candidate ID');
 check(candidate.meta.schemaVersion==='2.0.0','SCHEMA_VERSION','schemaVersion must be 2.0.0');
 check(candidate.meta.algorithmVersion==='cats-tower-simulator-v2.0.0','ALGORITHM_VERSION','algorithmVersion must be V2');
-check(candidate.meta.sourceStep1Seal.gitBlob==='0a959de0383b57ad6cd1f33c124b398aa51c1e00','STEP1_SEAL','Step 1 seal blob mismatch');
-check(candidate.meta.acceptance.gitBlob==='f8986a3d436e93a003ff0f7e07f6a5d28d6faf2f','ACCEPTANCE_BLOB','Step 2 Acceptance blob mismatch');
-check(candidate.meta.acceptance.commit==='e02a9af48aaab1a82b1ac4563a4c03f4922eb388','ACCEPTANCE_COMMIT','Step 2 Acceptance commit mismatch');
+const step1Seal={path:'quality-reviews/step-1-reseal-round-008/seal-round-008.json',gitBlob:'0a959de0383b57ad6cd1f33c124b398aa51c1e00',commit:'0b17f9b5b8decdab8ce329287a4dc073790c4bf7',semanticCommit:'4b4d8abbf5388637101f7c5634d1ce5d60413fce',semanticTree:'99084efa0e6055977b01cf507d7d7e2a391c74ce'};
+const step2Acceptance={path:'quality-reviews/step-2-executable-contract-v2/acceptance-matrix.json',gitBlob:'f8986a3d436e93a003ff0f7e07f6a5d28d6faf2f',commit:'e02a9af48aaab1a82b1ac4563a4c03f4922eb388'};
+const expectedBindings=[
+  {path:'CHATGPT_PROJECT_INSTRUCTIONS1.md',gitBlob:'2b42e9907bf19724dd5eb3342872aaa931424be9',role:'project-governance'},
+  {path:'MASTER_SPEC.md',gitBlob:'5d1e5ff37ba8d79f4c23e6051740c4c6957f1dbc',role:'canonical-product-specification'},
+  {path:'canonical/STABLE_ID_REGISTRY.json',gitBlob:'0a835e778b27ca1cfab47c8b1b4e7797fdc1a3fd',role:'stable-ids'},
+  {path:'canonical/SCREEN_STATE_REGISTRY.json',gitBlob:'0cf6337da2ed3993136dbf4a9e4918efac501d2e',role:'screen-states'},
+  {path:'canonical/STATE_TRANSITION_CONTRACT.json',gitBlob:'fb730c31eaf978b3e56f528f99c28172dbb4e8bc',role:'state-transitions'},
+  {path:'canonical/POLICY_RELEASE_GATES.json',gitBlob:'e50fbb73ac8095dc9681b150d3f902b236f87b9a',role:'policy-release-gates'},
+  {path:'canonical/STEP2_DEPENDENCY_CLOSURE.json',gitBlob:'d23ea91754f6b11e4d452312752fc8850bd7ab9b',role:'step2-dependency-closure'},
+  {path:'quality-reviews/step-1-hero-merchant-large-idle-integration/user-decision-lock-round-005.json',gitBlob:'35f1f545765d12b3f4ed84f9a6e549a24fefb8a1',role:'latest-sealed-user-decisions'},
+  {...step2Acceptance,role:'step2-acceptance'},
+].map(({path,gitBlob,role})=>({path,gitBlob,role}));
+check(eq(candidate.meta.sourceStep1Seal,step1Seal),'STEP1_SEAL_BINDING','Step 1 seal path/blob/commit/tree binding mismatch');
+check(eq(candidate.meta.acceptance,step2Acceptance),'ACCEPTANCE_BINDING','Step 2 Acceptance path/blob/commit binding mismatch');
+check(eq(candidate.meta.sourceBindings,expectedBindings),'SOURCE_BINDING_SET','source bindings must equal the complete sealed path/blob/role set in canonical order');
+check(new Set((candidate.meta.sourceBindings??[]).map((x)=>x.path)).size===(candidate.meta.sourceBindings??[]).length,'SOURCE_BINDING_DUPLICATE','source binding paths must be unique');
 check(candidate.meta.seedContract.v1ObservedSeedReuse===false,'V1_HOLDOUT_REUSE','V1 observed seeds may not be reused');
 check(candidate.meta.roundingVersion==='ct-rational-half-even-v1','ROUNDING_VERSION','rounding version is not fixed');
 
-for (const binding of candidate.meta.sourceBindings) {
+async function readback(path,expected,kind){
   try {
-    const bytes=await readFile(resolve(binding.path));
-    const actual=gitBlobSha(bytes);
-    sourceReadback.push({path:binding.path,expected:binding.gitBlob,actual,status:actual===binding.gitBlob?'PASS':'FAIL'});
-    check(actual===binding.gitBlob,'SOURCE_BLOB_MISMATCH',`${binding.path} expected ${binding.gitBlob} got ${actual}`);
+    const actual=gitBlobSha(await readFile(resolve(path)));
+    sourceReadback.push({kind,path,expected,actual,status:actual===expected?'PASS':'FAIL'});
+    check(actual===expected,'SOURCE_BLOB_MISMATCH',`${path} expected ${expected} got ${actual}`);
   } catch (error) {
-    sourceReadback.push({path:binding.path,expected:binding.gitBlob,actual:'UNREADABLE',status:developmentManifestOnly?'DEVELOPMENT_SKIPPED':'FAIL'});
-    if (!developmentManifestOnly) errors.push({code:'SOURCE_UNREADABLE',message:`${binding.path}: ${error.message}`});
+    sourceReadback.push({kind,path,expected,actual:'UNREADABLE',status:developmentManifestOnly?'DEVELOPMENT_SKIPPED':'FAIL'});
+    if (!developmentManifestOnly) errors.push({code:'SOURCE_UNREADABLE',message:`${path}: ${error.message}`});
   }
 }
+await readback(step1Seal.path,step1Seal.gitBlob,'STEP1_SEAL');
+await readback(step2Acceptance.path,step2Acceptance.gitBlob,'STEP2_ACCEPTANCE');
+for (const binding of expectedBindings) await readback(binding.path,binding.gitBlob,'CANONICAL_SOURCE');
 
 function scan(value,path='#') {
   if (typeof value==='number') check(Number.isFinite(value)&&Number.isSafeInteger(value),'UNSAFE_JSON_NUMBER',`${path} must be a finite safe integer or a decimal string`);
@@ -172,7 +188,7 @@ check(candidate.stateTransitions.serverAuthority&&candidate.stateTransitions.cli
 check(candidate.migrations.legacyDawnMergedInto==='reset.tower_return'&&candidate.migrations.legacyCurrencyTo==='wallet.ruby.free.reset'&&candidate.migrations.rawBackup&&candidate.migrations.unknownOwnershipFailsClosed,'MIGRATION_CONTRACT','migration contract mismatch');
 check(candidate.output.balanceVerdictAllowedInStep2===false,'STEP2_BALANCE_VERDICT','Step 2 may not issue balance PASS');
 
-for (const path of [candidate.fixtures.positive,candidate.fixtures.boundary,candidate.fixtures.negative,candidate.fixtures.stateTransitions,candidate.fixtures.crossRuntime,candidate.fixtures.manifest,candidate.migrations.path,'simulation/run-plan-v2.json','simulation/result-v2.schema.json','simulation/validate-result-v2.mjs','simulation/engine-v2/index.mjs']) {
+for (const path of [candidate.fixtures.positive,candidate.fixtures.boundary,candidate.fixtures.negative,candidate.fixtures.stateTransitions,candidate.fixtures.crossRuntime,candidate.fixtures.manifest,candidate.migrations.path,'simulation/run-plan-v2.json','simulation/validate-run-plan-v2.mjs','simulation/result-v2.schema.json','simulation/validate-result-v2.mjs','simulation/engine-v2/index.mjs']) {
   try { await access(resolve(path)); } catch { errors.push({code:'DEPENDENCY_MISSING',message:path}); }
 }
 

@@ -100,9 +100,11 @@
       "kind": "pity",
       "drawsSinceUR": "0",
       "featuredProgress": "199",
-      "naturalRarity": "UR",
+      "naturalRarity": "N",
       "expectedFeatured": true,
-      "expectedGuarantee": true
+      "expectedGuarantee": true,
+      "naturalFeatured": false,
+      "expectedRarity": "UR"
     }
   ]
 }

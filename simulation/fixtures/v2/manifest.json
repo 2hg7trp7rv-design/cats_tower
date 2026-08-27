@@ -4,23 +4,28 @@
   "files": [
     {
       "path": "simulation/fixtures/v2/positive.json",
-      "sha256": "721403252a18d0908b1f68281fea52f63bdb1bdd8218ba0aa4eeeb87d49c2223",
-      "bytes": "2499"
+      "sha256": "6d24ed3ebe6958251f58666d6e37849b1ac1d91629a68bbb0c790bb2db0cf724",
+      "bytes": "2560"
     },
     {
       "path": "simulation/fixtures/v2/boundary.json",
-      "sha256": "cc1aa183b3e990f1121ae71a2210fff6c4cbc1aa564e2d8548fb94f58037c5cb",
-      "bytes": "4517"
+      "sha256": "7271522aaf818a66843491e8d40c2563f58c171bcddb1166b5047f82cf1d11bf",
+      "bytes": "4805"
     },
     {
       "path": "simulation/fixtures/v2/negative.json",
-      "sha256": "ca24fd769e8d23b6371591ecc3cbeb65c9196b894239e9dbb3c5157714451e19",
-      "bytes": "18185"
+      "sha256": "325feeabf5ef482ac22c8dbaf1e8833628a2a95efe53535295c9041f6b6366a6",
+      "bytes": "18965"
+    },
+    {
+      "path": "simulation/fixtures/v2/run-plan-negative.json",
+      "sha256": "ccaf347a35ee4284b50aa578bd1ddd103cc3b3bcc074266852ad089b871857bc",
+      "bytes": "2922"
     },
     {
       "path": "simulation/fixtures/v2/state-transitions.json",
-      "sha256": "d694c56a0ca37e3dee4361bd92c5cbbc02c97d904fc80b42a779a26967b8f4af",
-      "bytes": "4970"
+      "sha256": "2e980774a02721ebdadf0252403c8258d944b7e9f401452e35941d3b240901e2",
+      "bytes": "5435"
     },
     {
       "path": "simulation/fixtures/v2/cross-runtime-golden.json",
@@ -64,7 +69,9 @@
       "invariants",
       "output"
     ],
-    "semanticInvariantCaseCount": "49",
-    "allRequiredFamiliesCovered": true
+    "semanticInvariantCaseCount": "52",
+    "allRequiredFamiliesCovered": true,
+    "runPlanSemanticInvariantCaseCount": "12",
+    "candidateCaseCount": "85"
   }
 }

@@ -18,6 +18,7 @@ const boundary=await load('simulation/fixtures/v2/boundary.json');
 const negative=await load('simulation/fixtures/v2/negative.json');
 const state=await load('simulation/fixtures/v2/state-transitions.json');
 const golden=await load('simulation/fixtures/v2/cross-runtime-golden.json');
+const runPlanNegative=await load('simulation/fixtures/v2/run-plan-negative.json');
 const errors=[];
 const check=(condition,code,message)=>{if(!condition)errors.push({code,message});};
 
@@ -27,6 +28,7 @@ for(const entry of manifest.files){
   check(Buffer.byteLength(text,'utf8').toString()===entry.bytes,'MANIFEST_BYTES',entry.path);
 }
 check(negative.cases.length.toString()===negative.caseCount,'NEGATIVE_COUNT','negative case count mismatch');
+check(runPlanNegative.cases.length.toString()===runPlanNegative.caseCount,'RUN_PLAN_NEGATIVE_COUNT','run-plan negative case count mismatch');
 check(manifest.negativeCoverage.allRequiredFamiliesCovered===true,'NEGATIVE_COVERAGE','manifest does not assert full family coverage');
 
 for(const test of positive.cases){
@@ -76,6 +78,13 @@ for(const test of boundary.idCases){
 for(const test of boundary.pityCases){
   const actual=pityOutcome({...test,hardPity:candidate.gacha.hardPity.draws,featuredGuarantee:candidate.gacha.featuredGuarantee.draws});
   check(actual.hardPityTriggered===test.hardPityTriggered&&actual.featuredGuaranteeTriggered===test.featuredGuaranteeTriggered,'BOUNDARY_PITY',JSON.stringify(test));
+  if(test.expectedRarity!==undefined)check(actual.rarity===test.expectedRarity,'BOUNDARY_PITY_RARITY',JSON.stringify(test));
+  if(test.expectedFeatured!==undefined)check(actual.featured===test.expectedFeatured,'BOUNDARY_PITY_FEATURED',JSON.stringify(test));
+}
+for(const test of boundary.refundCases??[]){
+  let rejected=false;
+  try{applyPaidRubyRefund({...test,transactionId:'transaction.payment.fixture',policyVersion:'refund-deficit-v2'});}catch(error){rejected=error.message.includes(test.expectedError);}
+  check(rejected,'BOUNDARY_REFUND_REJECTION',test.id);
 }
 for(const test of boundary.evolutionCases){
   const actual=evolutionEligibility(test.level,test.purchasedStages);
@@ -122,12 +131,19 @@ function mutate(base,mutation){
 const temp=await mkdtemp(join(tmpdir(),'cats-tower-v2-negative-'));
 try{
   for(const test of negative.cases){
-    const path=join(temp,`${test.id}.json`);await writeFile(path,JSON.stringify(mutate(candidate,test.mutation),null,2)+'\n','utf8');
+    const path=join(temp,`candidate-${test.id}.json`);await writeFile(path,JSON.stringify(mutate(candidate,test.mutation),null,2)+'\n','utf8');
     const run=spawnSync(process.execPath,['simulation/validate-candidate-v2.mjs',path,'--development-source-manifest-only'],{cwd:resolve('.'),encoding:'utf8',timeout:30000});
     check(run.status!==0,'NEGATIVE_ACCEPTED',test.id);
-    check(test.expectedCodes.some((code)=>run.stderr.includes(`\"code\": \"${code}\"`)||run.stderr.includes(`\"code\":\"${code}\"`)),'NEGATIVE_WRONG_REASON',`${test.id}:${test.expectedCodes.join('|')}:${run.stderr.slice(0,300)}`);
+    check(test.expectedCodes.some((code)=>run.stderr.includes(`"code": "${code}"`)||run.stderr.includes(`"code":"${code}"`)),'NEGATIVE_WRONG_REASON',`${test.id}:${test.expectedCodes.join('|')}:${run.stderr.slice(0,300)}`);
+  }
+  const runPlan=await load('simulation/run-plan-v2.json');
+  for(const test of runPlanNegative.cases){
+    const path=join(temp,`run-plan-${test.id}.json`);await writeFile(path,JSON.stringify(mutate(runPlan,test.mutation),null,2)+'\n','utf8');
+    const run=spawnSync(process.execPath,['simulation/validate-run-plan-v2.mjs',path],{cwd:resolve('.'),encoding:'utf8',timeout:30000});
+    check(run.status!==0,'RUN_PLAN_NEGATIVE_ACCEPTED',test.id);
+    check(test.expectedCodes.some((code)=>run.stderr.includes(`"code": "${code}"`)||run.stderr.includes(`"code":"${code}"`)),'RUN_PLAN_NEGATIVE_WRONG_REASON',`${test.id}:${test.expectedCodes.join('|')}:${run.stderr.slice(0,300)}`);
   }
 }finally{await rm(temp,{recursive:true,force:true});}
 
 if(errors.length){console.error(JSON.stringify({ok:false,errorCount:errors.length,errors},null,2));process.exit(1);}
-console.log(JSON.stringify({ok:true,fixtureFiles:manifest.files.length,positiveCases:positive.cases.length,boundaryTowerCases:boundary.towerCases.length,negativeCases:negative.cases.length,stateSuccessCases:state.successSequences.length,stateInvalidCases:state.invalidSequences.length,goldenNumericCases:golden.numeric.length}));
+console.log(JSON.stringify({ok:true,fixtureFiles:manifest.files.length,positiveCases:positive.cases.length,boundaryTowerCases:boundary.towerCases.length,negativeCases:negative.cases.length,stateSuccessCases:state.successSequences.length,stateInvalidCases:state.invalidSequences.length,goldenNumericCases:golden.numeric.length,runPlanNegativeCases:runPlanNegative.cases.length}));

@@ -19,6 +19,10 @@ check(result.hashes.candidateSha256===sha256Text(candidateText),'CANDIDATE_DIGES
 check(result.hashes.runPlanSha256===sha256Text(planText),'RUN_PLAN_DIGEST','run-plan digest mismatch');
 check(result.hashes.deterministicPayloadSha256===sha256Canonical(result.deterministicPayload),'PAYLOAD_DIGEST','deterministic payload digest mismatch');
 check(result.evidence.canonicalJsonSha256===result.hashes.deterministicPayloadSha256,'CANONICAL_DIGEST','canonical JSON digest mismatch');
+const executedAtMs=Date.parse(result.evidence.executedAt);
+check(Number.isFinite(executedAtMs),'EVIDENCE_TIME','executedAt must be a valid UTC timestamp');
+check(executedAtMs<=Date.now()+5*60*1000,'EVIDENCE_TIME_FUTURE','executedAt is implausibly in the future');
+check(result.evidence.reproductionCommand==='node simulation/engine-v2/run-plan.mjs --mode qualification --output quality-reviews/step-2-executable-contract-v2/qualification-result.json','REPRODUCTION_COMMAND','unexpected reproduction command');
 
 const scenarios=result.deterministicPayload.scenarios;
 check(BigInt(result.deterministicPayload.scenarioCount)===BigInt(scenarios.length),'SCENARIO_COUNT','scenario count field mismatch');

@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-v2-payload-digest-reconciliation",
+  "recordedAt": "2026-08-27T13:21:15.647302Z",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "originalReady": {
+    "path": "quality-reviews/step-2-executable-contract-v2/patch/READY",
+    "blob": "16bbd4d55b930757f58d79fe3926d3032de51c6b",
+    "declaredBase64Sha256": "004c3373a85e639417ae025cf3d761638c4cbe3336e97ed027231d88fce265aa",
+    "declaredGzipSha256": "66db88e7dbb32ea72da42c3f2415604e0e1e09f8ead7863d1e178d0134be9fe4",
+    "status": "DECLARED_DIGESTS_DID_NOT_MATCH_LIVE_CHUNKS"
+  },
+  "observedLivePayload": {
+    "sourceParts": "6",
+    "base64Bytes": "39688",
+    "base64Sha256": "c4fffeaa5cf3f5d9f0b930723dc1e8fbae6ec9317438251d6b770f91b81266a2",
+    "gzipBytes": "29765",
+    "gzipSha256": "86edb96ebcd5782bd344be6db7b0d5b6dcb25680e9ef9fb882eeba9c7298d874",
+    "archiveMemberCount": "23",
+    "archiveFileCount": "17",
+    "chunks": [
+      {
+        "path": "quality-reviews/step-2-executable-contract-v2/patch/chunk-000.txt",
+        "bytes": "7000",
+        "sha256": "4026e665e0f1bf62be15a1557cd554e14e3c209b68549045b6f7abb23b1e2f88"
+      },
+      {
+        "path": "quality-reviews/step-2-executable-contract-v2/patch/chunk-001.txt",
+        "bytes": "7000",
+        "sha256": "e5f9f5072597e44ca20546a22f70042ea80c652b582cbf08c5ef366340dab83f"
+      },
+      {
+        "path": "quality-reviews/step-2-executable-contract-v2/patch/chunk-002.txt",
+        "bytes": "7000",
+        "sha256": "036e88e40fd5dee495e096d23fb8fdcf07e996f38d75325933a1b1e58229ded6"
+      },
+      {
+        "path": "quality-reviews/step-2-executable-contract-v2/patch/chunk-003.txt",
+        "bytes": "7000",
+        "sha256": "397b2ea95511d4158651e7f51c19ac7e1cf890639b4912a91891e7cd53bd4866"
+      },
+      {
+        "path": "quality-reviews/step-2-executable-contract-v2/patch/chunk-004.txt",
+        "bytes": "7000",
+        "sha256": "e7fb6637d426f157956e3d3bdbf498e01b277a0b88d9f824d33c50be656661f2"
+      },
+      {
+        "path": "quality-reviews/step-2-executable-contract-v2/patch/chunk-005.txt",
+        "bytes": "4688",
+        "sha256": "f551c45606684601f1654dcea6fea969a8ec18510cbf248df575919aff38f6f0"
+      }
+    ],
+    "files": [
+      {
+        "path": "simulation/validate-run-plan-v2.mjs",
+        "bytes": "9177",
+        "sha256": "fe281166f1be9eefea1a410435cd6d65b87391da4a03a48cd024067632c2a456"
+      },
+      {
+        "path": "simulation/validate-candidate-v2.mjs",
+        "bytes": "21031",
+        "sha256": "55e99f8201dff3f377fa01831cf7e8601995563f4049b72363648043e4e5c49d"
+      },
+      {
+        "path": "simulation/result-v2.schema.json",
+        "bytes": "7067",
+        "sha256": "e93ff31f457649d4c5623180b7150dae3b7197a496190f6b67b5303f038e1338"
+      },
+      {
+        "path": "simulation/engine-v2/state-machines.mjs",
+        "bytes": "4325",
+        "sha256": "4c2f7ef81862c2fe786cedc83ab3c7e2e45dbe6a15f5ef35cbd49a9121d4bbcb"
+      },
+      {
+        "path": "simulation/engine-v2/run-plan.mjs",
+        "bytes": "3818",
+        "sha256": "e69ab71dc733610419928e9941c125afaa46e916962aff634179ce842230f7ef"
+      },
+      {
+        "path": "simulation/engine-v2/economy.mjs",
+        "bytes": "6462",
+        "sha256": "ee35518f853d2dec11646bad9251577ea93df5a2982763ce93acf1ee71d03f50"
+      },
+      {
+        "path": "simulation/fixtures/v2/validate-fixtures.mjs",
+        "bytes": "12365",
+        "sha256": "9e03ae71b9671787a3f21b5d1f27bb757fb689ea2590a6affe0c64c6de326720"
+      },
+      {
+        "path": "simulation/fixtures/v2/negative.json",
+        "bytes": "18965",
+        "sha256": "325feeabf5ef482ac22c8dbaf1e8833628a2a95efe53535295c9041f6b6366a6"
+      },
+      {
+        "path": "simulation/fixtures/v2/boundary.json",
+        "bytes": "4805",
+        "sha256": "7271522aaf818a66843491e8d40c2563f58c171bcddb1166b5047f82cf1d11bf"
+      },
+      {
+        "path": "simulation/fixtures/v2/run-plan-negative.json",
+        "bytes": "2922",
+        "sha256": "ccaf347a35ee4284b50aa578bd1ddd103cc3b3bcc074266852ad089b871857bc"
+      },
+      {
+        "path": "simulation/fixtures/v2/positive.json",
+        "bytes": "2560",
+        "sha256": "6d24ed3ebe6958251f58666d6e37849b1ac1d91629a68bbb0c790bb2db0cf724"
+      },
+      {
+        "path": "simulation/fixtures/v2/state-transitions.json",
+        "bytes": "5435",
+        "sha256": "2e980774a02721ebdadf0252403c8258d944b7e9f401452e35941d3b240901e2"
+      },
+      {
+        "path": "simulation/fixtures/v2/manifest.json",
+        "bytes": "1983",
+        "sha256": "5bd87ad91a6b27e2c454dd70a9a9ec93dac0bbe817450c12f5d1107f89449b47"
+      },
+      {
+        "path": "simulation/verify-step2-v2.mjs",
+        "bytes": "5963",
+        "sha256": "ecd472b8635c44a37e2c5d5ca4248a8cf56b7894634ce1c095ba77b96f8d2af2"
+      },
+      {
+        "path": "simulation/migrations/v1-to-v2/fixtures.json",
+        "bytes": "3899",
+        "sha256": "3629673443ded4eec0568562352068dd9f85575e2dd173e90150f8efe2dd3fad"
+      },
+      {
+        "path": "simulation/migrations/v1-to-v2/migrate.mjs",
+        "bytes": "3535",
+        "sha256": "d5401b9c6040ce033fca1e32d4781aa113a0a93c97244782fec3e8a0f8812865"
+      },
+      {
+        "path": "simulation/validate-result-v2.mjs",
+        "bytes": "5450",
+        "sha256": "00afcae087a854687b32645fc49516349629e8d44d5c904c92aea3e84d91848c"
+      }
+    ]
+  },
+  "failedRuns": [
+    {
+      "runId": "33069958416",
+      "jobId": "98509346515",
+      "failure": "DECLARED_BASE64_DIGEST_MISMATCH"
+    },
+    {
+      "runId": "33075817950",
+      "jobId": "98529599452",
+      "failure": "DECLARED_GZIP_DIGEST_MISMATCH",
+      "measuredBase64Sha256": "c4fffeaa5cf3f5d9f0b930723dc1e8fbae6ec9317438251d6b770f91b81266a2",
+      "measuredGzipSha256": "86edb96ebcd5782bd344be6db7b0d5b6dcb25680e9ef9fb882eeba9c7298d874"
+    }
+  ],
+  "independentNoWriteValidation": {
+    "runId": "33076175208",
+    "jobId": "98530830012",
+    "headSha": "3d894af871c330b4a98ecc8b38a3b8038fcf5fc3",
+    "verdict": "PASS",
+    "checks": {
+      "archiveSafetyAndScope": "PASS",
+      "syntax": "PASS",
+      "fullGitBlobSourceReadback": "PASS",
+      "candidate": "PASS",
+      "runPlan": "PASS",
+      "fixtures": "PASS",
+      "migration": "PASS",
+      "qualificationReproduction": "PASS",
+      "workingTreeBoundary": "PASS"
+    },
+    "fixtureCounts": {
+      "positive": "12",
+      "boundaryTower": "8",
+      "negative": "85",
+      "stateSuccess": "11",
+      "stateInvalid": "6",
+      "goldenNumeric": "7",
+      "runPlanNegative": "12",
+      "migrationPositive": "2",
+      "migrationNegative": "6"
+    },
+    "qualificationScenarioCount": "30",
+    "qualificationDeterministicPayloadSha256": "83009807d3e24bd548c13a73830946b764e2a5f9294fcdeb4292eedb18a24423",
+    "balanceVerdict": "NOT_EVALUATED_STEP2"
+  },
+  "application": {
+    "runId": "33076348991",
+    "sourceHeadSha": "0f241470f26e6cf463e97efda24dad16d09781cf",
+    "contentPhaseVerdict": "CONTENT_PHASE_PASS_STEP2_IN_PROGRESS"
+  },
+  "decision": {
+    "verdict": "RECONCILED_AND_ACCEPTED_AFTER_EXACT_LIVE_BYTE_VALIDATION",
+    "basis": "The original declared digests were rejected. The observed live bytes were separately pinned, decoded, constrained to simulation/**, inspected file-by-file, and passed the full no-write content verification before application.",
+    "originalDeclaredArchiveIdentityClaimed": false,
+    "step2Completed": false,
+    "step3Authorized": false
+  },
+  "writeBoundary": {
+    "runtimeChanged": false,
+    "assetChanged": false,
+    "backendChanged": false,
+    "productionChanged": false
+  }
+}

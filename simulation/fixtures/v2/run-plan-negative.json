@@ -1,0 +1,141 @@
+{
+  "schemaVersion": "2.0.0",
+  "fixtureSetId": "cats-tower-v2-run-plan-negative",
+  "caseCount": "12",
+  "cases": [
+    {
+      "id": "missing-build",
+      "mutation": {
+        "op": "delete",
+        "path": "/builds/2"
+      },
+      "expectedCodes": [
+        "RUN_PLAN_BUILDS",
+        "RUN_PLAN_FULL_COUNT"
+      ]
+    },
+    {
+      "id": "wrong-persona",
+      "mutation": {
+        "op": "set",
+        "path": "/personas/0",
+        "value": "unknown-persona"
+      },
+      "expectedCodes": [
+        "RUN_PLAN_PERSONAS"
+      ]
+    },
+    {
+      "id": "wrong-seed-partition",
+      "mutation": {
+        "op": "set",
+        "path": "/seeds/holdoutPerCell",
+        "value": "199"
+      },
+      "expectedCodes": [
+        "RUN_PLAN_SEED_PARTITION"
+      ]
+    },
+    {
+      "id": "namespace-overlap",
+      "mutation": {
+        "op": "set",
+        "path": "/seeds/holdoutNamespace",
+        "value": "cats-tower-v2-calibration"
+      },
+      "expectedCodes": [
+        "RUN_PLAN_NAMESPACES",
+        "RUN_PLAN_NAMESPACE_OVERLAP",
+        "RUN_PLAN_SEED_COLLISION"
+      ]
+    },
+    {
+      "id": "v1-reuse",
+      "mutation": {
+        "op": "set",
+        "path": "/seeds/v1ObservedReuse",
+        "value": true
+      },
+      "expectedCodes": [
+        "RUN_PLAN_V1_REUSE"
+      ]
+    },
+    {
+      "id": "wrong-full-count",
+      "mutation": {
+        "op": "set",
+        "path": "/scenarioCount/fullGameplayMatrix",
+        "value": "14999"
+      },
+      "expectedCodes": [
+        "RUN_PLAN_FULL_COUNT"
+      ]
+    },
+    {
+      "id": "missing-horizon",
+      "mutation": {
+        "op": "delete",
+        "path": "/horizons/5"
+      },
+      "expectedCodes": [
+        "RUN_PLAN_HORIZON_COUNT",
+        "RUN_PLAN_HORIZON"
+      ]
+    },
+    {
+      "id": "suite-not-step3",
+      "mutation": {
+        "op": "set",
+        "path": "/highVolumeSuites/0/execution",
+        "value": "STEP2"
+      },
+      "expectedCodes": [
+        "RUN_PLAN_SUITE"
+      ]
+    },
+    {
+      "id": "holdout-visible-to-tuning",
+      "mutation": {
+        "op": "set",
+        "path": "/holdoutPolicy/tuningOutputContainsHoldout",
+        "value": true
+      },
+      "expectedCodes": [
+        "RUN_PLAN_HOLDOUT_TUNING"
+      ]
+    },
+    {
+      "id": "full-execution-owned-by-step2",
+      "mutation": {
+        "op": "set",
+        "path": "/fullExecutionOwner",
+        "value": "STEP2"
+      },
+      "expectedCodes": [
+        "RUN_PLAN_STEP3_OWNER"
+      ]
+    },
+    {
+      "id": "hash-disabled",
+      "mutation": {
+        "op": "set",
+        "path": "/output/hashEachScenario",
+        "value": false
+      },
+      "expectedCodes": [
+        "RUN_PLAN_OUTPUT_HASHING"
+      ]
+    },
+    {
+      "id": "unknown-top-field",
+      "mutation": {
+        "op": "set",
+        "path": "/unsealed",
+        "value": true
+      },
+      "expectedCodes": [
+        "RUN_PLAN_FIELDS"
+      ]
+    }
+  ]
+}

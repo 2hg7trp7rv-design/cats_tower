@@ -171,6 +171,24 @@
         "GRANTED"
       ],
       "expectedError": "INVALID_TRANSITION"
+    },
+    {
+      "id": "evolution-post-debit-cannot-fail-terminal",
+      "machineId": "transition.evolution.v2",
+      "states": [
+        "RUBY_DEBITED",
+        "FAILED"
+      ],
+      "expectedError": "INVALID_TRANSITION"
+    },
+    {
+      "id": "mastery-post-debit-cannot-fail-terminal",
+      "machineId": "transition.mastery_exchange.v2",
+      "states": [
+        "RESOURCE_DEBITED",
+        "FAILED"
+      ],
+      "expectedError": "INVALID_TRANSITION"
     }
   ],
   "idempotencyCases": [

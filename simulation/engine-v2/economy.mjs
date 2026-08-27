@@ -20,7 +20,7 @@ export function pityOutcome({ drawsSinceUR, featuredProgress, naturalRarity = 'N
   const nextFeatured = toBigInt(assertUnsigned(featuredProgress)) + 1n;
   const forcedUR = nextDraw >= toBigInt(hardPity);
   const forcedFeatured = nextFeatured >= toBigInt(featuredGuarantee);
-  const rarity = forcedUR ? 'UR' : naturalRarity;
+  const rarity = forcedUR || forcedFeatured ? 'UR' : naturalRarity;
   const featured = rarity === 'UR' && (forcedFeatured || naturalFeatured);
   return {
     rarity,
@@ -98,6 +98,7 @@ export function applyPaidRubyRefund({ paidBalance, affectedGrant, alreadySpent, 
   const balance = toBigInt(assertUnsigned(paidBalance));
   const grant = toBigInt(assertUnsigned(affectedGrant));
   const spent = toBigInt(assertUnsigned(alreadySpent));
+  if (spent > grant) throw new RangeError('ALREADY_SPENT_EXCEEDS_AFFECTED_GRANT');
   const reversible = grant > spent ? grant - spent : 0n;
   const debit = reversible < balance ? reversible : balance;
   const deficit = grant - debit;

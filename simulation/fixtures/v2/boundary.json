@@ -121,10 +121,12 @@
     {
       "drawsSinceUR": "0",
       "featuredProgress": "199",
-      "naturalRarity": "UR",
+      "naturalRarity": "N",
       "naturalFeatured": false,
       "hardPityTriggered": false,
-      "featuredGuaranteeTriggered": true
+      "featuredGuaranteeTriggered": true,
+      "expectedRarity": "UR",
+      "expectedFeatured": true
     }
   ],
   "evolutionCases": [
@@ -177,6 +179,15 @@
       "newBest": "101",
       "eligible": true,
       "minimumReward": "0"
+    }
+  ],
+  "refundCases": [
+    {
+      "id": "spent-exceeds-grant-rejected",
+      "paidBalance": "0",
+      "affectedGrant": "100",
+      "alreadySpent": "101",
+      "expectedError": "ALREADY_SPENT_EXCEEDS_AFFECTED_GRANT"
     }
   ]
 }

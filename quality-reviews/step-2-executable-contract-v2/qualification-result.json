@@ -2879,8 +2879,8 @@
     "deterministicPayloadSha256": "83009807d3e24bd548c13a73830946b764e2a5f9294fcdeb4292eedb18a24423"
   },
   "evidence": {
-    "runtimeVersion": "v22.16.0",
-    "executedAt": "2026-08-27T00:00:00Z",
+    "runtimeVersion": "v22.23.2",
+    "executedAt": "2026-08-27T13:21:07.581Z",
     "reproductionCommand": "node simulation/engine-v2/run-plan.mjs --mode qualification --output quality-reviews/step-2-executable-contract-v2/qualification-result.json",
     "canonicalJsonSha256": "83009807d3e24bd548c13a73830946b764e2a5f9294fcdeb4292eedb18a24423"
   },

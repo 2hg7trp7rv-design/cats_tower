@@ -45,7 +45,7 @@ export async function runQualification({candidatePath='simulation/candidate-v2.j
     resultId:'cats-tower-step2-v2-qualification-001',
     deterministicPayload,
     hashes:{candidateSha256:sha256Text(candidateText),runPlanSha256:sha256Text(planText),deterministicPayloadSha256:sha256Canonical(deterministicPayload)},
-    evidence:{runtimeVersion:process.version,executedAt:'2026-08-27T00:00:00Z',reproductionCommand:'node simulation/engine-v2/run-plan.mjs --mode qualification --output quality-reviews/step-2-executable-contract-v2/qualification-result.json',canonicalJsonSha256:sha256Text(canonicalJson(deterministicPayload))},
+    evidence:{runtimeVersion:process.version,executedAt:new Date().toISOString(),reproductionCommand:'node simulation/engine-v2/run-plan.mjs --mode qualification --output quality-reviews/step-2-executable-contract-v2/qualification-result.json',canonicalJsonSha256:sha256Text(canonicalJson(deterministicPayload))},
     verdict:{contractQualification:'PASS',balanceQualification:'NOT_RUN_STEP3_REQUIRED',step3AuthorizedByThisResult:false},
   };
 }

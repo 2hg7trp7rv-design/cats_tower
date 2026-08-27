@@ -32,9 +32,9 @@ function run(name,args,env={}){
 }
 
 const required=[
-  'simulation/candidate-v2.json','simulation/candidate-v2.schema.json','simulation/validate-candidate-v2.mjs','simulation/run-plan-v2.json','simulation/result-v2.schema.json','simulation/validate-result-v2.mjs',
+  'simulation/candidate-v2.json','simulation/candidate-v2.schema.json','simulation/validate-candidate-v2.mjs','simulation/run-plan-v2.json','simulation/validate-run-plan-v2.mjs','simulation/result-v2.schema.json','simulation/validate-result-v2.mjs',
   'simulation/engine-v2/index.mjs','simulation/engine-v2/numeric.mjs','simulation/engine-v2/rng.mjs','simulation/engine-v2/tower.mjs','simulation/engine-v2/economy.mjs','simulation/engine-v2/state-machines.mjs','simulation/engine-v2/hash.mjs','simulation/engine-v2/run-scenario.mjs','simulation/engine-v2/run-plan.mjs',
-  'simulation/fixtures/v2/manifest.json','simulation/fixtures/v2/positive.json','simulation/fixtures/v2/boundary.json','simulation/fixtures/v2/negative.json','simulation/fixtures/v2/state-transitions.json','simulation/fixtures/v2/cross-runtime-golden.json','simulation/fixtures/v2/validate-fixtures.mjs',
+  'simulation/fixtures/v2/manifest.json','simulation/fixtures/v2/positive.json','simulation/fixtures/v2/boundary.json','simulation/fixtures/v2/negative.json','simulation/fixtures/v2/run-plan-negative.json','simulation/fixtures/v2/state-transitions.json','simulation/fixtures/v2/cross-runtime-golden.json','simulation/fixtures/v2/validate-fixtures.mjs',
   'simulation/migrations/v1-to-v2/migration-map.json','simulation/migrations/v1-to-v2/migrate.mjs','simulation/migrations/v1-to-v2/fixtures.json','simulation/migrations/v1-to-v2/validate-migration.mjs',
   'quality-reviews/step-2-executable-contract-v2/qualification-result.json'
 ];
@@ -43,6 +43,7 @@ if(missing.length)fail('required-content-paths',missing);else pass('required-con
 await verifyLegacyLock();
 const sourceEnv=process.env.CT_DEV_SOURCE_MANIFEST_ONLY==='1'?{CT_DEV_SOURCE_MANIFEST_ONLY:'1'}:{};
 run('candidate-schema-and-semantics',['simulation/validate-candidate-v2.mjs'],sourceEnv);
+run('run-plan-schema-semantics-and-seed-partition',['simulation/validate-run-plan-v2.mjs']);
 run('positive-boundary-negative-state-golden-fixtures',['simulation/fixtures/v2/validate-fixtures.mjs'],sourceEnv);
 run('v1-to-v2-migration',['simulation/migrations/v1-to-v2/validate-migration.mjs']);
 run('committed-result-schema-and-reproduction',['simulation/validate-result-v2.mjs','quality-reviews/step-2-executable-contract-v2/qualification-result.json','--reproduce']);

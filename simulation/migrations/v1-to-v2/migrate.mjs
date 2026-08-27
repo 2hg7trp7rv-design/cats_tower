@@ -27,6 +27,8 @@ export function migrateV1ToV2(input) {
   if(!input||typeof input!=='object'||Array.isArray(input)) throw new Error('LEGACY_INPUT_OBJECT_REQUIRED');
   if(input.migration?.version===map.migrationId){
     if(!input.migration.rawBackup||!input.migration.rawBackupSha256) throw new Error('MIGRATION_MARKER_WITHOUT_RAW_BACKUP');
+    if(sha256Text(input.migration.rawBackup)!==input.migration.rawBackupSha256) throw new Error('MIGRATION_RAW_BACKUP_DIGEST_MISMATCH');
+    if(input.schemaVersion!=='2.0.0'||input.migration.idempotent!==true) throw new Error('MIGRATION_MARKER_STATE_INVALID');
     return structuredClone(input);
   }
   const raw=canonicalJson(input);
