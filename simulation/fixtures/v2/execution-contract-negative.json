@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "2.1.0",
+  "fixtureSetId": "cats-tower-v2-execution-contract-negative",
+  "caseCount": "14",
+  "cases": [
+    {
+      "id": "unknown-top-field",
+      "mutation": {
+        "op": "set",
+        "path": "/unsealed",
+        "value": true
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "EXEC_FIELDS"
+      ]
+    },
+    {
+      "id": "qualification-seeds-changed",
+      "mutation": {
+        "op": "set",
+        "path": "/partitions/qualification/seedsPerBuildPersona",
+        "value": "3"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "EXEC_PARTITION",
+        "EXEC_QUALIFICATION_BINDING"
+      ]
+    },
+    {
+      "id": "calibration-namespace-overlap",
+      "mutation": {
+        "op": "set",
+        "path": "/partitions/calibration/namespace",
+        "value": "cats-tower-v2-qualification"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "EXEC_PARTITION",
+        "EXEC_CALIBRATION_BINDING",
+        "EXEC_NAMESPACE_OVERLAP"
+      ]
+    },
+    {
+      "id": "holdout-visible-to-tuning",
+      "mutation": {
+        "op": "set",
+        "path": "/partitions/holdout/tuningVisible",
+        "value": true
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "EXEC_PARTITION"
+      ]
+    },
+    {
+      "id": "reset-jitter-reversed",
+      "mutation": {
+        "op": "set",
+        "path": "/model/firstReset/jitterMinimumMinutes",
+        "value": "2"
+      },
+      "expectedCodes": [
+        "EXEC_RESET_JITTER_ORDER"
+      ]
+    },
+    {
+      "id": "progression-jitter-nonpositive",
+      "mutation": {
+        "op": "set",
+        "path": "/model/progression/jitterMinimumBasisPoints",
+        "value": "-10000"
+      },
+      "expectedCodes": [
+        "EXEC_PROGRESSION_JITTER"
+      ]
+    },
+    {
+      "id": "zero-horizon-baseline",
+      "mutation": {
+        "op": "set",
+        "path": "/model/progression/baselineMinutesByHorizon/100F",
+        "value": "0"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "EXEC_POSITIVE"
+      ]
+    },
+    {
+      "id": "smoke-not-smaller-than-full",
+      "mutation": {
+        "op": "set",
+        "path": "/highVolumeSuites/0/contractSmokeSamples",
+        "value": "200000"
+      },
+      "expectedCodes": [
+        "EXEC_SUITE_SMOKE_BOUND"
+      ]
+    },
+    {
+      "id": "suite-plan-count-diverges",
+      "mutation": {
+        "op": "set",
+        "path": "/highVolumeSuites/0/plannedSamples",
+        "value": "199999"
+      },
+      "expectedCodes": [
+        "EXEC_SUITE_PLAN_BINDING"
+      ]
+    },
+    {
+      "id": "missing-result-validator",
+      "mutation": {
+        "op": "set",
+        "path": "/resultContracts/highVolumeValidator",
+        "value": "simulation/missing-high-volume-validator.mjs"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "EXEC_RESULT_DEPENDENCY"
+      ]
+    },
+    {
+      "id": "full-execution-owned-by-step2",
+      "mutation": {
+        "op": "set",
+        "path": "/executionGuard/fullExecutionOwner",
+        "value": "STEP2"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "EXEC_GUARD"
+      ]
+    },
+    {
+      "id": "gameplay-schema-bound-to-qualification",
+      "mutation": {
+        "op": "set",
+        "path": "/resultContracts/gameplaySchema",
+        "value": "simulation/result-v2.schema.json"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "EXEC_RESULT_PLAN_BINDING"
+      ]
+    },
+    {
+      "id": "wrong-repeated-reset-count",
+      "mutation": {
+        "op": "set",
+        "path": "/model/repeatedReset/runCount",
+        "value": "4"
+      },
+      "expectedCodes": [
+        "EXEC_RESET_RUN_COUNT"
+      ]
+    },
+    {
+      "id": "wrong-acceptance-source-path",
+      "mutation": {
+        "op": "set",
+        "path": "/sourcePaths/acceptance",
+        "value": "quality-reviews/step-2-executable-contract-v2/not-acceptance.json"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "EXEC_SOURCE_PATHS"
+      ]
+    }
+  ]
+}
