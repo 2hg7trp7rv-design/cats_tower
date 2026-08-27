@@ -1,11 +1,9 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "artifactId": "cats-tower-step2-v2-live-readback",
   "recordedDate": "2026-08-28",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
-  "observedLiveHead": "9d55828439ba20aa5914964898e775f6be8c5778",
-  "observedLiveTree": "ffd91a691dc27caaf9243892809ce086c0e0ca84",
   "semanticCommit": "724d04940f9f3794b993cddbc5af3a7163a0395b",
   "semanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
   "completionEvidence": {
@@ -27,24 +25,42 @@
   "qualityGate": {
     "criticSummaryBlob": "4d85d95c0b00b3e2aed4aecc6025ceea9253308e",
     "finalJudgeBlob": "44fe4c83e3ea1ceefba836200100b6d6628028d1",
+    "criticCount": 5,
     "unresolvedP0": 0,
     "unresolvedP1": 0,
     "trackedP2": 6
   },
-  "observedStatusBeforeActivation": {
-    "simulationStatus": "IN_PROGRESS",
-    "simulationStep3Allowed": false,
-    "projectStatus": "IN_PROGRESS_CONTENT_PHASE_PASS",
-    "projectStep3Allowed": false
+  "statusActivation": {
+    "commit": "36916026cb1871e4c3f48fefdf03e509546fff96",
+    "tree": "98700bf07cbfee8c039fed291644feced0298e43",
+    "workflow": ".github/workflows/verify-step-2-v2.yml",
+    "workflowRunId": "33104708951",
+    "jobId": "98631310447",
+    "conclusion": "SUCCESS",
+    "verifierVerdict": "PASS",
+    "simulationStatus": "PASS",
+    "simulationStep3Allowed": true,
+    "projectStatus": "PASS",
+    "projectStep3Allowed": true,
+    "completionChainComplete": true
   },
+  "statusMirrorBlobs": {
+    "simulationCurrentStatus": "9a853ea7edccda91ea52525392389a37a913d6d6",
+    "projectStatus": "bec2334e9fd1da7e0760a06545094fbe538ef8be",
+    "agents": "c502319772187da75f1920bc7ef864fa5ebe61fb",
+    "handover": "34369dc1bdcaa46f08880cec0434d4a5c1ecb654"
+  },
+  "observedLiveHeadBeforeFinalReadbackCommit": "36916026cb1871e4c3f48fefdf03e509546fff96",
+  "observedLiveTreeBeforeFinalReadbackCommit": "98700bf07cbfee8c039fed291644feced0298e43",
   "qualification": {
     "scenarioCount": "30",
     "digest": "a24fa5a4a12cf132ac477c80e77431cd0b97ab070bbbef83c3881c160f42562c",
     "balanceVerdict": "NOT_EVALUATED_STEP2"
   },
-  "statusActivationAuthorized": true,
+  "step2Pass": true,
+  "step3Ready": true,
   "step3Executed": false,
   "physicalIPhoneVerified": false,
   "productionChanged": false,
-  "verdict": "PASS_CHAIN_READY_FOR_STATUS_ACTIVATION"
+  "verdict": "PASS_FINAL_LIVE_READBACK_STEP2_SEALED"
 }
