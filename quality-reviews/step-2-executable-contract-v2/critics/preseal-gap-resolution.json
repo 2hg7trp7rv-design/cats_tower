@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-v2-preseal-gap-resolution",
+  "reviewedDate": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "historicalCriticPath": "quality-reviews/step-2-executable-contract-v2/critics/critic-00-preseal-gap-review.json",
+  "historicalCriticBlob": "c110da742d52506a73841e49a1c8f25363ed5ef6",
+  "reviewedHead": "724d04940f9f3794b993cddbc5af3a7163a0395b",
+  "reviewedTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
+  "resolutions": [
+    {
+      "findingId": "S2-P0-EXECUTION-READY-001",
+      "priorSeverity": "P0",
+      "status": "RESOLVED",
+      "evidence": [
+        "simulation/run-plan-v2.json",
+        "simulation/execution-contract-v2.json",
+        "simulation/gameplay-result-v2.schema.json",
+        "simulation/validate-gameplay-result-v2.mjs",
+        "simulation/high-volume-result-v2.schema.json",
+        "simulation/validate-high-volume-result-v2.mjs",
+        "simulation/engine-v2/run-plan.mjs",
+        "simulation/engine-v2/high-volume.mjs"
+      ],
+      "resolution": "The committed V2 execution contract now closes calibration, unseen holdout, the 15000-scenario matrix, and all six Step-3-owned high-volume suites. Step 2 executes bounded contract-smoke only and guards full execution behind STEP3 ownership and CT_STEP3_AUTHORIZED=1."
+    },
+    {
+      "findingId": "S2-P1-MODEL-SOURCE-001",
+      "priorSeverity": "P1",
+      "status": "RESOLVED",
+      "evidence": [
+        "simulation/execution-contract-v2.json",
+        "simulation/execution-contract-v2.schema.json",
+        "simulation/validate-execution-contract-v2.mjs",
+        "simulation/engine-v2/run-scenario.mjs"
+      ],
+      "resolution": "First-reset persona baselines, build adjustments, jitter bounds, horizon baseline minutes and repeated-reset parameters are sealed in execution-contract-v2.json and consumed by run-scenario.mjs rather than hidden engine constants."
+    },
+    {
+      "findingId": "S2-P1-SCENARIO-ID-001",
+      "priorSeverity": "P1",
+      "status": "RESOLVED",
+      "evidence": [
+        "simulation/engine-v2/run-scenario.mjs",
+        "simulation/execution-contract-v2.json",
+        "simulation/engine-v2/run-plan.mjs"
+      ],
+      "resolution": "runScenario requires explicit namespace and partition, includes both in scenarioId and canonical inputDigest, and the plan defines disjoint qualification, calibration and unseen-holdout namespaces."
+    },
+    {
+      "findingId": "S2-P1-TAIL-CONTRACT-001",
+      "priorSeverity": "P1",
+      "status": "RESOLVED",
+      "evidence": [
+        "simulation/gameplay-result-v2.schema.json",
+        "simulation/validate-gameplay-result-v2.mjs",
+        "simulation/high-volume-result-v2.schema.json",
+        "simulation/validate-high-volume-result-v2.mjs",
+        "simulation/engine-v2/statistics.mjs",
+        "simulation/execution-contract-v2.json"
+      ],
+      "resolution": "Strict gameplay and high-volume result contracts now represent partition evidence, sample counts, p50/p90/p99 nearest-rank statistics and no-partial-promotion rules."
+    },
+    {
+      "findingId": "S2-P1-CI-EXACT-001",
+      "priorSeverity": "P1",
+      "status": "RESOLVED",
+      "evidence": [
+        ".github/workflows/verify-step-2-v2.yml",
+        "GitHub Actions run 33096225509",
+        "GitHub Actions job 98601730666"
+      ],
+      "resolution": "The dedicated Step 2 workflow completed successfully on exact live kimi head 724d04940f9f3794b993cddbc5af3a7163a0395b."
+    },
+    {
+      "findingId": "S2-P2-MIGRATION-TIME-001",
+      "priorSeverity": "P2",
+      "status": "TRACKED_NONBLOCKING",
+      "evidence": [
+        "simulation/migrations/v1-to-v2/migrate.mjs",
+        "simulation/migrations/v1-to-v2/validate-migration.mjs"
+      ],
+      "resolution": "The deterministic transformed payload remains intentionally separated from the future production audit envelope. Backend implementation must inject server audit time and audit ID without changing transformed payload semantics."
+    }
+  ],
+  "unresolved": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 1
+  },
+  "verdict": "HISTORICAL_P0_P1_RESOLVED",
+  "step2PassAllowedByThisResolutionOnly": true,
+  "step3ExecutionPerformed": false
+}
