@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-governance-repair-round-001-completion",
+  "recordedAt": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "repairEntry": {
+    "commit": "510157c97e7e94456df8d45c3af20082e71aced6",
+    "tree": "abf80556382c1e795036c989b3bf87a50714826b"
+  },
+  "acceptance": {
+    "path": "quality-reviews/step-2-governance-repair-round-001/acceptance-matrix.json",
+    "blob": "fd4ad16e056370bdf0b3c6e2e4ed8b97ca91db64",
+    "commit": "b5ebe4bfff4fc216c41c09c8410c4eaeb2edd1c6"
+  },
+  "content": {
+    "commit": "df557ca6a245d073f20d5cb865386f762c938124",
+    "tree": "f8cfba2154c5cb31a5ff95126d59f480bcdef6dc",
+    "aheadOfEntryBy": 13,
+    "behindEntryBy": 0,
+    "changedPaths": [
+      ".github/workflows/CURRENT_STATUS.md",
+      ".github/workflows/verify-main.yml",
+      "AI_PROJECT_POLICY.json",
+      "QUALITY_GATE.md",
+      "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-014.json",
+      "quality-reviews/step-1-canonical-design/active-change-control.json",
+      "quality-reviews/step-2-governance-repair-round-001/acceptance-matrix.json",
+      "tests/governance/verify-current-step2-state.mjs"
+    ]
+  },
+  "contentBlobs": {
+    "quality-reviews/step-1-canonical-design/active-change-control.json": "3c127442bbd7c0e81a8afe22b589697b1ec11692",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-014.json": "6e698b51262b6ff935088a238607d3e7df9a2c04",
+    "AI_PROJECT_POLICY.json": "811ccc4f72d5b33659576007ca4abd5f02255db0",
+    "QUALITY_GATE.md": "93217248da5aed105bc2fa110753591c91e41a55",
+    ".github/workflows/CURRENT_STATUS.md": "f2e908943b5bb6f82512f3bb00d17524249e3ae7",
+    ".github/workflows/verify-main.yml": "a4bcbb095dacacc3a481380b81d3ff3b6f83008f",
+    "quality-reviews/step-2-governance-repair-round-001/acceptance-matrix.json": "fd4ad16e056370bdf0b3c6e2e4ed8b97ca91db64",
+    "tests/governance/verify-current-step2-state.mjs": "4e2631041daf9b76ab7c6e167d5480e6c4eff566"
+  },
+  "unchangedCurrentMirrors": {
+    "PROJECT_STATUS.json": "bec2334e9fd1da7e0760a06545094fbe538ef8be",
+    "simulation/CURRENT_STATUS.json": "9a853ea7edccda91ea52525392389a37a913d6d6",
+    "AGENTS.md": "c502319772187da75f1920bc7ef864fa5ebe61fb",
+    "PROJECT_HANDOVER.md": "34369dc1bdcaa46f08880cec0434d4a5c1ecb654"
+  },
+  "immutableAuthority": {
+    "projectInstructions": {
+      "path": "CHATGPT_PROJECT_INSTRUCTIONS1.md",
+      "blob": "2b42e9907bf19724dd5eb3342872aaa931424be9"
+    },
+    "masterSpec": {
+      "path": "MASTER_SPEC.md",
+      "blob": "5d1e5ff37ba8d79f4c23e6051740c4c6957f1dbc"
+    },
+    "step1Seal": {
+      "path": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
+      "blob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
+      "commit": "0b17f9b5b8decdab8ce329287a4dc073790c4bf7",
+      "tree": "9eac6b6103d65cf8bcb13859d00e43cd3389fa8a",
+      "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+      "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce"
+    },
+    "step2Seal": {
+      "path": "simulation/executable-seal-v2.json",
+      "blob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
+      "semanticCommit": "724d04940f9f3794b993cddbc5af3a7163a0395b",
+      "semanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
+      "activationCommit": "89174eeebb033fe807a0592c8df0279c2a7b9a6f",
+      "activationTree": "ccf444df436d63d86fd4da0355f20349753b0546"
+    },
+    "step2FinalReadback": {
+      "path": "quality-reviews/step-2-executable-contract-v2/final-live-readback.json",
+      "blob": "4d26695cc6359ad933249ac6fdf2eddca9be9c6f",
+      "verdict": "PASS_FINAL_LIVE_READBACK_STEP2_SEALED"
+    }
+  },
+  "workflowVerification": {
+    "workflow": ".github/workflows/verify-main.yml",
+    "runId": "33116217154",
+    "headSha": "df557ca6a245d073f20d5cb865386f762c938124",
+    "conclusion": "SUCCESS",
+    "historicalRound7Job": {
+      "jobId": "98671417240",
+      "conclusion": "SUCCESS",
+      "verdict": "PASS_HISTORICAL_ROUND7_IMMUTABLE_WORKTREES",
+      "validationBoundary": "C1 validator against immutable C3 worktree plus exact completion-path, audit-record, SHA-256 and blob validation"
+    },
+    "currentGovernanceJob": {
+      "jobId": "98671417099",
+      "conclusion": "SUCCESS",
+      "currentStateVerdict": "PASS_CURRENT_STEP2_GOVERNANCE",
+      "step2Regression": "SUCCESS",
+      "patchCheck": "SUCCESS"
+    }
+  },
+  "qualityGate": {
+    "unresolvedP0": 0,
+    "unresolvedP1": 0,
+    "step1": "PASS",
+    "step2": "PASS_SEALED",
+    "step3": "READY_TO_START",
+    "step3Executed": false,
+    "balanceVerdict": "NOT_EVALUATED_STEP2"
+  },
+  "scopeAssertions": {
+    "runtimeChanged": false,
+    "assetsChanged": false,
+    "step1SemanticContentChanged": false,
+    "step2ExecutableContentChanged": false,
+    "backendChanged": false,
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "pullRequestOperationPerformed": false,
+    "otherBranchWritten": false,
+    "step3Executed": false
+  },
+  "verdict": "PASS_COMPLETION_EVIDENCE_READY_FOR_LIVE_READBACK",
+  "completionClaimBeforeTerminalReadback": false,
+  "nextRequiredEvidence": "quality-reviews/step-2-governance-repair-round-001/live-readback.json"
+}
