@@ -54,7 +54,7 @@ check(eq(plan.builds, builds) && eq(candidate.builds.map((entry) => entry.id), b
 check(eq(plan.personas, personas) && eq(candidate.personas.map((entry) => entry.id), personas), 'EXEC_PERSONAS', 'persona set mismatch');
 check(eq(plan.horizons.map((entry) => entry.id), horizons), 'EXEC_HORIZONS', 'horizon set mismatch');
 
-exactKeys(contract.model, ['firstReset','progression','repeatedReset'], '#/model');
+exactKeys(contract.model, ['firstReset','progression','repeatedReset','gachaItemSelection'], '#/model');
 const firstReset = contract.model?.firstReset;
 exactKeys(firstReset, ['personaBaseMinutes','buildAdjustmentMinutes','jitterMinimumMinutes','jitterMaximumMinutes','minimumMinutes'], '#/model/firstReset');
 check(eq(Object.keys(firstReset?.personaBaseMinutes ?? {}), personas), 'EXEC_PERSONA_BASE_KEYS', 'first reset persona keys mismatch');
@@ -84,6 +84,42 @@ check(unsigned(contract.model?.repeatedReset?.runCount, '#/model/repeatedReset/r
 check(unsigned(contract.model?.repeatedReset?.minimumMinutes, '#/model/repeatedReset/minimumMinutes', { positive: true }) === 6n, 'EXEC_RESET_MINIMUM', 'repeated reset minimum must be six minutes');
 check(contract.model?.repeatedReset?.usesBuildReclearMultiplier === true, 'EXEC_RECLEAR_BINDING', 'repeated reset must use the candidate build reclear multiplier');
 
+const gachaSelection = contract.model?.gachaItemSelection;
+exactKeys(gachaSelection, ['catalogEligibility','acquisitionFieldSemantics','selectionWithinRarity','nonFeaturedUrExcludesFeatured','character','weapon'], '#/model/gachaItemSelection');
+check(gachaSelection?.catalogEligibility === 'all-catalog-items-by-rarity-v1' && gachaSelection?.acquisitionFieldSemantics === 'guaranteed-route-not-exclusive-v1' && gachaSelection?.selectionWithinRarity === 'uniform-stable-id-v1' && gachaSelection?.nonFeaturedUrExcludesFeatured === true, 'EXEC_GACHA_SELECTION_POLICY', 'gacha item-selection policy mismatch');
+const allBanners = [...candidate.gacha.characterPools, ...candidate.gacha.weaponPools];
+const gachaKinds = {
+  character: {
+    catalog: candidate.characters.catalog,
+    banners: candidate.gacha.characterPools,
+    expected: ['characters.catalog','banner.character.standard','banner.character.featured','character.launch.024'],
+  },
+  weapon: {
+    catalog: candidate.weapons.catalog,
+    banners: candidate.gacha.weaponPools,
+    expected: ['weapons.catalog','banner.weapon.standard','banner.weapon.featured','weapon.launch.036'],
+  },
+};
+for (const [kind, binding] of Object.entries(gachaKinds)) {
+  const config = gachaSelection?.[kind];
+  exactKeys(config, ['catalogPath','standardBannerId','featuredBannerId','featuredItemId'], `#/model/gachaItemSelection/${kind}`);
+  check(eq([config?.catalogPath, config?.standardBannerId, config?.featuredBannerId, config?.featuredItemId], binding.expected), 'EXEC_GACHA_SELECTION_POLICY', `${kind} gacha item-selection binding mismatch`);
+  const standardBanner = allBanners.find((entry) => entry.id === config?.standardBannerId);
+  const featuredBanner = allBanners.find((entry) => entry.id === config?.featuredBannerId);
+  check(Boolean(standardBanner) && Boolean(featuredBanner) && binding.banners.some((entry) => entry.id === config?.standardBannerId) && binding.banners.some((entry) => entry.id === config?.featuredBannerId), 'EXEC_GACHA_BANNER', `${kind} standard or featured banner is missing from its pool`);
+  check(standardBanner?.kind === kind && featuredBanner?.kind === kind, 'EXEC_GACHA_BANNER_KIND', `${kind} banner kind mismatch`);
+  const featuredItem = binding.catalog.find((entry) => entry.id === config?.featuredItemId);
+  check(Boolean(featuredItem) && featuredItem?.baseRarity === 'UR', 'EXEC_GACHA_FEATURED_ITEM', `${kind} featured item must exist and be UR`);
+  const rateTable = candidate.gacha.rates.find((entry) => entry.id === featuredBanner?.rateTable);
+  check(Boolean(rateTable), 'EXEC_GACHA_RATE_TABLE', `${kind} featured banner rate table is missing`);
+  const rarities = rateTable?.entries?.map((entry) => entry.rarity) ?? [];
+  for (const rarity of rarities) {
+    check(binding.catalog.some((entry) => entry.baseRarity === rarity), 'EXEC_GACHA_RARITY_COVERAGE', `${kind} has no item for rarity ${rarity}`);
+  }
+  const nonFeaturedUr = binding.catalog.filter((entry) => entry.baseRarity === 'UR' && entry.id !== config?.featuredItemId);
+  check(nonFeaturedUr.length > 0, 'EXEC_GACHA_NONFEATURED_UR_POOL', `${kind} requires at least one non-featured UR item`);
+}
+
 exactKeys(contract.statistics, ['method','percentiles','sort','emptyInput'], '#/statistics');
 check(contract.statistics?.method === 'nearest-rank-v1' && eq(contract.statistics?.percentiles, ['0.50','0.90','0.99']) && contract.statistics?.sort === 'unsigned-decimal-ascending' && contract.statistics?.emptyInput === 'FAIL_CLOSED', 'EXEC_STATISTICS', 'statistics contract mismatch');
 
@@ -107,9 +143,9 @@ check(new Set(Object.values(contract.partitions).map((entry) => entry.namespace)
 
 const suiteIds = ['gacha-tails','pity-conformance','duplicate-skew-overflow','refund-replay-race','state-machine-model','large-number-properties'];
 const expectedSuiteVersions = {
-  'gacha-tails': 'gacha-tails-v2',
+  'gacha-tails': 'gacha-tails-v3',
   'pity-conformance': 'pity-conformance-v1',
-  'duplicate-skew-overflow': 'duplicate-skew-overflow-v2',
+  'duplicate-skew-overflow': 'duplicate-skew-overflow-v3',
   'refund-replay-race': 'refund-replay-race-v2',
   'state-machine-model': 'state-machine-model-v1',
   'large-number-properties': 'large-number-properties-v1',

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "2.1.0",
   "fixtureSetId": "cats-tower-v2-execution-contract-negative",
-  "caseCount": "14",
+  "caseCount": "16",
   "cases": [
     {
       "id": "unknown-top-field",
@@ -167,6 +167,33 @@
       "expectedCodes": [
         "SCHEMA",
         "EXEC_SOURCE_PATHS"
+      ]
+    },
+    {
+      "id": "character-featured-item-not-ur",
+      "mutation": {
+        "op": "set",
+        "path": "/model/gachaItemSelection/character/featuredItemId",
+        "value": "character.launch.001"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "EXEC_GACHA_SELECTION_POLICY",
+        "EXEC_GACHA_FEATURED_ITEM"
+      ]
+    },
+    {
+      "id": "weapon-featured-banner-kind-mismatch",
+      "mutation": {
+        "op": "set",
+        "path": "/model/gachaItemSelection/weapon/featuredBannerId",
+        "value": "banner.character.featured"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "EXEC_GACHA_SELECTION_POLICY",
+        "EXEC_GACHA_BANNER",
+        "EXEC_GACHA_BANNER_KIND"
       ]
     }
   ]

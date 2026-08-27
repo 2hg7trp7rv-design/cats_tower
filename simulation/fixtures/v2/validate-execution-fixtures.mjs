@@ -235,14 +235,41 @@ try {
       expectedCodes: ['HV_GACHA_MAXIMUM'],
     },
     {
+      id: 'character-featured-item-mapping-tamper',
+      mutations: [{ op: 'set', path: '/deterministicPayload/metrics/counters/characterFeaturedItemMismatches', value: '1' }],
+      expectedCodes: ['HV_GACHA_ITEM_MAPPING'],
+    },
+    {
       id: 'wrong-result-id',
       mutations: [{ op: 'set', path: '/resultId', value: 'cats-tower-step3-high-volume-gacha-tails-001' }],
       expectedCodes: ['HV_SMOKE_ID'],
     },
   ];
   for (const test of highVolumeCases) {
-    await expectRejected(temp, 'high-volume', test.id, mutateMany(highVolumeBase, test.mutations), ['simulation/validate-high-volume-result-v2.mjs', '--allow-contract-smoke'], test.expectedCodes);
-  }
+  await expectRejected(temp, 'high-volume', test.id, mutateMany(highVolumeBase, test.mutations), ['simulation/validate-high-volume-result-v2.mjs', '--allow-contract-smoke'], test.expectedCodes);
+}
+
+const duplicateBase = await runHighVolumeSuite({ suiteId: 'duplicate-skew-overflow', contractSmoke: true, owner: 'STEP2' });
+const duplicatePositivePath = join(temp, 'duplicate-positive.json');
+await writeFile(duplicatePositivePath, `${JSON.stringify(duplicateBase, null, 2)}
+`, 'utf8');
+const duplicatePositive = runNode(['simulation/validate-high-volume-result-v2.mjs', duplicatePositivePath, '--allow-contract-smoke', '--reproduce']);
+check(duplicatePositive.status === 0, 'DUPLICATE_POSITIVE_REJECTED', (duplicatePositive.stderr ?? '').slice(0, 1000));
+const duplicateCases = [
+  {
+    id: 'character-rarity-count-sum-mismatch',
+    mutations: [{ op: 'set', path: '/deterministicPayload/metrics/counters/characterRarityNDraws', value: (BigInt(duplicateBase.deterministicPayload.metrics.counters.characterRarityNDraws) + 1n).toString() }],
+    expectedCodes: ['HV_DUPLICATE_RARITY_COVERAGE'],
+  },
+  {
+    id: 'weapon-featured-item-mapping-tamper',
+    mutations: [{ op: 'set', path: '/deterministicPayload/metrics/counters/weaponFeaturedItemMismatches', value: '1' }],
+    expectedCodes: ['HV_DUPLICATE_ITEM_MAPPING'],
+  },
+];
+for (const test of duplicateCases) {
+  await expectRejected(temp, 'duplicate', test.id, mutateMany(duplicateBase, test.mutations), ['simulation/validate-high-volume-result-v2.mjs', '--allow-contract-smoke'], test.expectedCodes);
+}
 } finally {
   await rm(temp, { recursive: true, force: true });
 }
@@ -255,7 +282,7 @@ console.log(JSON.stringify({
   ok: true,
   executionContractNegativeCases: executionNegative.cases.length,
   gameplayResultNegativeCases: 10,
-  highVolumeResultNegativeCases: 12,
+  highVolumeResultNegativeCases: 15,
   modelBindingCases: 7,
-  totalNewNegativeCases: executionNegative.cases.length + 22,
+  totalNewNegativeCases: executionNegative.cases.length + 25,
 }));

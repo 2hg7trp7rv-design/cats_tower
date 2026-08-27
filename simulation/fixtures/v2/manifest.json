@@ -24,8 +24,8 @@
     },
     {
       "path": "simulation/fixtures/v2/execution-contract-negative.json",
-      "sha256": "209588a5631b57e20f23d332f1653db1010786bcd48226aa24809a8448a6f870",
-      "bytes": "3977"
+      "sha256": "435d8cd894d1f6eef565d2f1ce010585cc250a750a57874fa722de531e6c51ab",
+      "bytes": "4702"
     },
     {
       "path": "simulation/fixtures/v2/state-transitions.json",
@@ -78,12 +78,14 @@
     "allRequiredFamiliesCovered": true,
     "runPlanSemanticInvariantCaseCount": "12",
     "candidateCaseCount": "85",
-    "executionContractNegativeCaseCount": "14",
+    "executionContractNegativeCaseCount": "16",
     "gameplayResultNegativeCaseCount": "10",
-    "highVolumeResultNegativeCaseCount": "12",
+    "highVolumeResultNegativeCaseCount": "15",
     "modelBindingCaseCount": "7",
     "pityCarryoverCaseCount": "4",
     "stateRecoveryAndStaleSequenceCount": "8",
-    "loginServerPeriodCaseCount": "4"
+    "loginServerPeriodCaseCount": "4",
+    "gachaStableItemMappingCaseCount": "5",
+    "duplicateRarityBindingCaseCount": "2"
   }
 }

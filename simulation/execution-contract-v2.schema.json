@@ -4,92 +4,285 @@
   "title": "Cat's Tower Step 3 execution contract sealed by Step 2",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "contractId", "candidateId", "scenarioAlgorithmVersion", "executionVersion", "roundingVersion", "sourcePaths", "model", "statistics", "partitions", "highVolumeSuites", "resultContracts", "executionGuard"],
+  "required": [
+    "schemaVersion",
+    "contractId",
+    "candidateId",
+    "scenarioAlgorithmVersion",
+    "executionVersion",
+    "roundingVersion",
+    "sourcePaths",
+    "model",
+    "statistics",
+    "partitions",
+    "highVolumeSuites",
+    "resultContracts",
+    "executionGuard"
+  ],
   "properties": {
-    "schemaVersion": {"const": "2.1.0"},
-    "contractId": {"const": "cats-tower-step3-execution-contract-v2"},
-    "candidateId": {"const": "cats-tower-v2-candidate-001"},
-    "scenarioAlgorithmVersion": {"const": "cats-tower-scenario-v2.1.0"},
-    "executionVersion": {"const": "cats-tower-step3-executor-v1.0.0"},
-    "roundingVersion": {"const": "ct-rational-half-even-v1"},
+    "schemaVersion": {
+      "const": "2.1.0"
+    },
+    "contractId": {
+      "const": "cats-tower-step3-execution-contract-v2"
+    },
+    "candidateId": {
+      "const": "cats-tower-v2-candidate-001"
+    },
+    "scenarioAlgorithmVersion": {
+      "const": "cats-tower-scenario-v2.1.0"
+    },
+    "executionVersion": {
+      "const": "cats-tower-step3-executor-v1.0.0"
+    },
+    "roundingVersion": {
+      "const": "ct-rational-half-even-v1"
+    },
     "sourcePaths": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["candidate", "runPlan", "acceptance"],
+      "required": [
+        "candidate",
+        "runPlan",
+        "acceptance"
+      ],
       "properties": {
-        "candidate": {"const": "simulation/candidate-v2.json"},
-        "runPlan": {"const": "simulation/run-plan-v2.json"},
-        "acceptance": {"const": "quality-reviews/step-2-executable-contract-v2/acceptance-matrix.json"}
+        "candidate": {
+          "const": "simulation/candidate-v2.json"
+        },
+        "runPlan": {
+          "const": "simulation/run-plan-v2.json"
+        },
+        "acceptance": {
+          "const": "quality-reviews/step-2-executable-contract-v2/acceptance-matrix.json"
+        }
       }
     },
     "model": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["firstReset", "progression", "repeatedReset"],
+      "required": [
+        "firstReset",
+        "progression",
+        "repeatedReset",
+        "gachaItemSelection"
+      ],
       "properties": {
         "firstReset": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["personaBaseMinutes", "buildAdjustmentMinutes", "jitterMinimumMinutes", "jitterMaximumMinutes", "minimumMinutes"],
+          "required": [
+            "personaBaseMinutes",
+            "buildAdjustmentMinutes",
+            "jitterMinimumMinutes",
+            "jitterMaximumMinutes",
+            "minimumMinutes"
+          ],
           "properties": {
             "personaBaseMinutes": {
               "type": "object",
               "additionalProperties": false,
-              "required": ["no-ad-f2p", "rewarded-ad-f2p", "monthly-pass", "controlled-payer", "high-spend-stress"],
+              "required": [
+                "no-ad-f2p",
+                "rewarded-ad-f2p",
+                "monthly-pass",
+                "controlled-payer",
+                "high-spend-stress"
+              ],
               "properties": {
-                "no-ad-f2p": {"$ref": "#/$defs/positive"},
-                "rewarded-ad-f2p": {"$ref": "#/$defs/positive"},
-                "monthly-pass": {"$ref": "#/$defs/positive"},
-                "controlled-payer": {"$ref": "#/$defs/positive"},
-                "high-spend-stress": {"$ref": "#/$defs/positive"}
+                "no-ad-f2p": {
+                  "$ref": "#/$defs/positive"
+                },
+                "rewarded-ad-f2p": {
+                  "$ref": "#/$defs/positive"
+                },
+                "monthly-pass": {
+                  "$ref": "#/$defs/positive"
+                },
+                "controlled-payer": {
+                  "$ref": "#/$defs/positive"
+                },
+                "high-spend-stress": {
+                  "$ref": "#/$defs/positive"
+                }
               }
             },
             "buildAdjustmentMinutes": {
               "type": "object",
               "additionalProperties": false,
-              "required": ["build.combat", "build.reinforcement", "build.commerce"],
+              "required": [
+                "build.combat",
+                "build.reinforcement",
+                "build.commerce"
+              ],
               "properties": {
-                "build.combat": {"$ref": "#/$defs/signed"},
-                "build.reinforcement": {"$ref": "#/$defs/signed"},
-                "build.commerce": {"$ref": "#/$defs/signed"}
+                "build.combat": {
+                  "$ref": "#/$defs/signed"
+                },
+                "build.reinforcement": {
+                  "$ref": "#/$defs/signed"
+                },
+                "build.commerce": {
+                  "$ref": "#/$defs/signed"
+                }
               }
             },
-            "jitterMinimumMinutes": {"$ref": "#/$defs/signed"},
-            "jitterMaximumMinutes": {"$ref": "#/$defs/signed"},
-            "minimumMinutes": {"$ref": "#/$defs/positive"}
+            "jitterMinimumMinutes": {
+              "$ref": "#/$defs/signed"
+            },
+            "jitterMaximumMinutes": {
+              "$ref": "#/$defs/signed"
+            },
+            "minimumMinutes": {
+              "$ref": "#/$defs/positive"
+            }
           }
         },
         "progression": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["baselineMinutesByHorizon", "jitterMinimumBasisPoints", "jitterMaximumBasisPoints", "minimumMinutes"],
+          "required": [
+            "baselineMinutesByHorizon",
+            "jitterMinimumBasisPoints",
+            "jitterMaximumBasisPoints",
+            "minimumMinutes"
+          ],
           "properties": {
             "baselineMinutesByHorizon": {
               "type": "object",
               "additionalProperties": false,
-              "required": ["1-10F", "100F", "1000F", "10000F-or-equivalent", "repeated-resets", "30-45-day-economy"],
+              "required": [
+                "1-10F",
+                "100F",
+                "1000F",
+                "10000F-or-equivalent",
+                "repeated-resets",
+                "30-45-day-economy"
+              ],
               "properties": {
-                "1-10F": {"$ref": "#/$defs/positive"},
-                "100F": {"$ref": "#/$defs/positive"},
-                "1000F": {"$ref": "#/$defs/positive"},
-                "10000F-or-equivalent": {"$ref": "#/$defs/positive"},
-                "repeated-resets": {"$ref": "#/$defs/positive"},
-                "30-45-day-economy": {"$ref": "#/$defs/positive"}
+                "1-10F": {
+                  "$ref": "#/$defs/positive"
+                },
+                "100F": {
+                  "$ref": "#/$defs/positive"
+                },
+                "1000F": {
+                  "$ref": "#/$defs/positive"
+                },
+                "10000F-or-equivalent": {
+                  "$ref": "#/$defs/positive"
+                },
+                "repeated-resets": {
+                  "$ref": "#/$defs/positive"
+                },
+                "30-45-day-economy": {
+                  "$ref": "#/$defs/positive"
+                }
               }
             },
-            "jitterMinimumBasisPoints": {"$ref": "#/$defs/signed"},
-            "jitterMaximumBasisPoints": {"$ref": "#/$defs/signed"},
-            "minimumMinutes": {"$ref": "#/$defs/positive"}
+            "jitterMinimumBasisPoints": {
+              "$ref": "#/$defs/signed"
+            },
+            "jitterMaximumBasisPoints": {
+              "$ref": "#/$defs/signed"
+            },
+            "minimumMinutes": {
+              "$ref": "#/$defs/positive"
+            }
           }
         },
         "repeatedReset": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["runCount", "minimumMinutes", "usesBuildReclearMultiplier"],
+          "required": [
+            "runCount",
+            "minimumMinutes",
+            "usesBuildReclearMultiplier"
+          ],
           "properties": {
-            "runCount": {"$ref": "#/$defs/positive"},
-            "minimumMinutes": {"$ref": "#/$defs/positive"},
-            "usesBuildReclearMultiplier": {"const": true}
+            "runCount": {
+              "$ref": "#/$defs/positive"
+            },
+            "minimumMinutes": {
+              "$ref": "#/$defs/positive"
+            },
+            "usesBuildReclearMultiplier": {
+              "const": true
+            }
+          }
+        },
+        "gachaItemSelection": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "catalogEligibility",
+            "acquisitionFieldSemantics",
+            "selectionWithinRarity",
+            "nonFeaturedUrExcludesFeatured",
+            "character",
+            "weapon"
+          ],
+          "properties": {
+            "catalogEligibility": {
+              "const": "all-catalog-items-by-rarity-v1"
+            },
+            "acquisitionFieldSemantics": {
+              "const": "guaranteed-route-not-exclusive-v1"
+            },
+            "selectionWithinRarity": {
+              "const": "uniform-stable-id-v1"
+            },
+            "nonFeaturedUrExcludesFeatured": {
+              "const": true
+            },
+            "character": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "catalogPath",
+                "standardBannerId",
+                "featuredBannerId",
+                "featuredItemId"
+              ],
+              "properties": {
+                "catalogPath": {
+                  "const": "characters.catalog"
+                },
+                "standardBannerId": {
+                  "const": "banner.character.standard"
+                },
+                "featuredBannerId": {
+                  "const": "banner.character.featured"
+                },
+                "featuredItemId": {
+                  "const": "character.launch.024"
+                }
+              }
+            },
+            "weapon": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "catalogPath",
+                "standardBannerId",
+                "featuredBannerId",
+                "featuredItemId"
+              ],
+              "properties": {
+                "catalogPath": {
+                  "const": "weapons.catalog"
+                },
+                "standardBannerId": {
+                  "const": "banner.weapon.standard"
+                },
+                "featuredBannerId": {
+                  "const": "banner.weapon.featured"
+                },
+                "featuredItemId": {
+                  "const": "weapon.launch.036"
+                }
+              }
+            }
           }
         }
       }
@@ -97,59 +290,128 @@
     "statistics": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["method", "percentiles", "sort", "emptyInput"],
+      "required": [
+        "method",
+        "percentiles",
+        "sort",
+        "emptyInput"
+      ],
       "properties": {
-        "method": {"const": "nearest-rank-v1"},
+        "method": {
+          "const": "nearest-rank-v1"
+        },
         "percentiles": {
           "type": "array",
           "minItems": 3,
           "maxItems": 3,
           "uniqueItems": true,
-          "items": {"enum": ["0.50", "0.90", "0.99"]}
+          "items": {
+            "enum": [
+              "0.50",
+              "0.90",
+              "0.99"
+            ]
+          }
         },
-        "sort": {"const": "unsigned-decimal-ascending"},
-        "emptyInput": {"const": "FAIL_CLOSED"}
+        "sort": {
+          "const": "unsigned-decimal-ascending"
+        },
+        "emptyInput": {
+          "const": "FAIL_CLOSED"
+        }
       }
     },
     "partitions": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["qualification", "calibration", "holdout"],
+      "required": [
+        "qualification",
+        "calibration",
+        "holdout"
+      ],
       "properties": {
         "qualification": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["namespace", "seedsPerBuildPersona", "owner", "tuningVisible", "promotionEligible"],
+          "required": [
+            "namespace",
+            "seedsPerBuildPersona",
+            "owner",
+            "tuningVisible",
+            "promotionEligible"
+          ],
           "properties": {
-            "namespace": {"const": "cats-tower-v2-qualification"},
-            "seedsPerBuildPersona": {"const": "2"},
-            "owner": {"const": "STEP2"},
-            "tuningVisible": {"const": true},
-            "promotionEligible": {"const": false}
+            "namespace": {
+              "const": "cats-tower-v2-qualification"
+            },
+            "seedsPerBuildPersona": {
+              "const": "2"
+            },
+            "owner": {
+              "const": "STEP2"
+            },
+            "tuningVisible": {
+              "const": true
+            },
+            "promotionEligible": {
+              "const": false
+            }
           }
         },
         "calibration": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["namespace", "seedsPerBuildPersona", "owner", "tuningVisible", "promotionEligible"],
+          "required": [
+            "namespace",
+            "seedsPerBuildPersona",
+            "owner",
+            "tuningVisible",
+            "promotionEligible"
+          ],
           "properties": {
-            "namespace": {"const": "cats-tower-v2-calibration"},
-            "seedsPerBuildPersona": {"const": "800"},
-            "owner": {"const": "STEP3"},
-            "tuningVisible": {"const": true},
-            "promotionEligible": {"const": false}
+            "namespace": {
+              "const": "cats-tower-v2-calibration"
+            },
+            "seedsPerBuildPersona": {
+              "const": "800"
+            },
+            "owner": {
+              "const": "STEP3"
+            },
+            "tuningVisible": {
+              "const": true
+            },
+            "promotionEligible": {
+              "const": false
+            }
           }
         },
         "holdout": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["namespace", "seedsPerBuildPersona", "owner", "tuningVisible", "promotionEligible"],
+          "required": [
+            "namespace",
+            "seedsPerBuildPersona",
+            "owner",
+            "tuningVisible",
+            "promotionEligible"
+          ],
           "properties": {
-            "namespace": {"const": "cats-tower-v2-holdout-unseen"},
-            "seedsPerBuildPersona": {"const": "200"},
-            "owner": {"const": "STEP3"},
-            "tuningVisible": {"const": false},
-            "promotionEligible": {"const": true}
+            "namespace": {
+              "const": "cats-tower-v2-holdout-unseen"
+            },
+            "seedsPerBuildPersona": {
+              "const": "200"
+            },
+            "owner": {
+              "const": "STEP3"
+            },
+            "tuningVisible": {
+              "const": false
+            },
+            "promotionEligible": {
+              "const": true
+            }
           }
         }
       }
@@ -161,44 +423,109 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "plannedSamples", "contractSmokeSamples", "implementationVersion"],
+        "required": [
+          "id",
+          "plannedSamples",
+          "contractSmokeSamples",
+          "implementationVersion"
+        ],
         "properties": {
-          "id": {"enum": ["gacha-tails", "pity-conformance", "duplicate-skew-overflow", "refund-replay-race", "state-machine-model", "large-number-properties"]},
-          "plannedSamples": {"$ref": "#/$defs/positive"},
-          "contractSmokeSamples": {"$ref": "#/$defs/positive"},
-          "implementationVersion": {"type": "string", "pattern": "^[a-z0-9-]+-v[0-9]+$"}
+          "id": {
+            "enum": [
+              "gacha-tails",
+              "pity-conformance",
+              "duplicate-skew-overflow",
+              "refund-replay-race",
+              "state-machine-model",
+              "large-number-properties"
+            ]
+          },
+          "plannedSamples": {
+            "$ref": "#/$defs/positive"
+          },
+          "contractSmokeSamples": {
+            "$ref": "#/$defs/positive"
+          },
+          "implementationVersion": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+-v[0-9]+$"
+          }
         }
       }
     },
     "resultContracts": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["qualificationSchema", "qualificationValidator", "gameplaySchema", "gameplayValidator", "highVolumeSchema", "highVolumeValidator"],
+      "required": [
+        "qualificationSchema",
+        "qualificationValidator",
+        "gameplaySchema",
+        "gameplayValidator",
+        "highVolumeSchema",
+        "highVolumeValidator"
+      ],
       "properties": {
-        "qualificationSchema": {"const": "simulation/result-v2.schema.json"},
-        "qualificationValidator": {"const": "simulation/validate-result-v2.mjs"},
-        "gameplaySchema": {"const": "simulation/gameplay-result-v2.schema.json"},
-        "gameplayValidator": {"const": "simulation/validate-gameplay-result-v2.mjs"},
-        "highVolumeSchema": {"const": "simulation/high-volume-result-v2.schema.json"},
-        "highVolumeValidator": {"const": "simulation/validate-high-volume-result-v2.mjs"}
+        "qualificationSchema": {
+          "const": "simulation/result-v2.schema.json"
+        },
+        "qualificationValidator": {
+          "const": "simulation/validate-result-v2.mjs"
+        },
+        "gameplaySchema": {
+          "const": "simulation/gameplay-result-v2.schema.json"
+        },
+        "gameplayValidator": {
+          "const": "simulation/validate-gameplay-result-v2.mjs"
+        },
+        "highVolumeSchema": {
+          "const": "simulation/high-volume-result-v2.schema.json"
+        },
+        "highVolumeValidator": {
+          "const": "simulation/validate-high-volume-result-v2.mjs"
+        }
       }
     },
     "executionGuard": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["fullExecutionOwner", "requiredOwnerArgument", "requiredEnvironment", "contractSmokeOwner", "partialResultPromotionForbidden", "holdoutMayNotEnterTuningOutput"],
+      "required": [
+        "fullExecutionOwner",
+        "requiredOwnerArgument",
+        "requiredEnvironment",
+        "contractSmokeOwner",
+        "partialResultPromotionForbidden",
+        "holdoutMayNotEnterTuningOutput"
+      ],
       "properties": {
-        "fullExecutionOwner": {"const": "STEP3"},
-        "requiredOwnerArgument": {"const": "STEP3"},
-        "requiredEnvironment": {"const": "CT_STEP3_AUTHORIZED=1"},
-        "contractSmokeOwner": {"const": "STEP2"},
-        "partialResultPromotionForbidden": {"const": true},
-        "holdoutMayNotEnterTuningOutput": {"const": true}
+        "fullExecutionOwner": {
+          "const": "STEP3"
+        },
+        "requiredOwnerArgument": {
+          "const": "STEP3"
+        },
+        "requiredEnvironment": {
+          "const": "CT_STEP3_AUTHORIZED=1"
+        },
+        "contractSmokeOwner": {
+          "const": "STEP2"
+        },
+        "partialResultPromotionForbidden": {
+          "const": true
+        },
+        "holdoutMayNotEnterTuningOutput": {
+          "const": true
+        }
       }
     }
   },
   "$defs": {
-    "positive": {"type": "string", "pattern": "^[1-9][0-9]*$"},
-    "signed": {"type": "string", "pattern": "^-?(0|[1-9][0-9]*)$"}
+    "positive": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*$"
+    },
+    "signed": {
+      "type": "string",
+      "pattern": "^-?(0|[1-9][0-9]*)$"
+    }
   }
 }

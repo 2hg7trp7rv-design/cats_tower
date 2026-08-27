@@ -45,6 +45,24 @@
       "runCount": "5",
       "minimumMinutes": "6",
       "usesBuildReclearMultiplier": true
+    },
+    "gachaItemSelection": {
+      "catalogEligibility": "all-catalog-items-by-rarity-v1",
+      "acquisitionFieldSemantics": "guaranteed-route-not-exclusive-v1",
+      "selectionWithinRarity": "uniform-stable-id-v1",
+      "nonFeaturedUrExcludesFeatured": true,
+      "character": {
+        "catalogPath": "characters.catalog",
+        "standardBannerId": "banner.character.standard",
+        "featuredBannerId": "banner.character.featured",
+        "featuredItemId": "character.launch.024"
+      },
+      "weapon": {
+        "catalogPath": "weapons.catalog",
+        "standardBannerId": "banner.weapon.standard",
+        "featuredBannerId": "banner.weapon.featured",
+        "featuredItemId": "weapon.launch.036"
+      }
     }
   },
   "statistics": {
@@ -85,7 +103,7 @@
       "id": "gacha-tails",
       "plannedSamples": "200000",
       "contractSmokeSamples": "1000",
-      "implementationVersion": "gacha-tails-v2"
+      "implementationVersion": "gacha-tails-v3"
     },
     {
       "id": "pity-conformance",
@@ -97,7 +115,7 @@
       "id": "duplicate-skew-overflow",
       "plannedSamples": "200000",
       "contractSmokeSamples": "1000",
-      "implementationVersion": "duplicate-skew-overflow-v2"
+      "implementationVersion": "duplicate-skew-overflow-v3"
     },
     {
       "id": "refund-replay-race",

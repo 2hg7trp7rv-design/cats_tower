@@ -38,14 +38,89 @@ function sampleProbability(rng, decimal) {
   return rng.nextBelow(probability.d) < probability.n;
 }
 
-function simulateGachaPool(candidate, samples, namespace, poolKind) {
-  const tableId = poolKind === 'character' ? 'catalog.rate_table.character.v2' : 'catalog.rate_table.weapon.v2';
-  const rateTable = candidate.gacha.rates.find((entry) => entry.id === tableId);
-  if (!rateTable) throw new Error(`MISSING_GACHA_RATE_TABLE:${tableId}`);
-  const table = distribution(rateTable.entries);
+const RARITIES = ['N','R','RR','SR','SSR','UR'];
+
+function gachaItemContext(candidate, execution, kind) {
+  const selection = execution.model?.gachaItemSelection?.[kind];
+  if (!selection) throw new Error(`MISSING_GACHA_ITEM_SELECTION:${kind}`);
+  const catalog = (kind === 'character' ? candidate.characters.catalog : candidate.weapons.catalog).slice().sort((left, right) => left.id.localeCompare(right.id));
+  const banners = kind === 'character' ? candidate.gacha.characterPools : candidate.gacha.weaponPools;
+  const standardBanner = banners.find((entry) => entry.id === selection.standardBannerId);
+  const featuredBanner = banners.find((entry) => entry.id === selection.featuredBannerId);
+  const featuredItem = catalog.find((entry) => entry.id === selection.featuredItemId);
+  if (!standardBanner || !featuredBanner || standardBanner.kind !== kind || featuredBanner.kind !== kind) throw new Error(`INVALID_GACHA_BANNER_BINDING:${kind}`);
+  if (!featuredItem || featuredItem.baseRarity !== 'UR') throw new Error(`INVALID_GACHA_FEATURED_ITEM:${kind}`);
+  const rateTable = candidate.gacha.rates.find((entry) => entry.id === featuredBanner.rateTable);
+  if (!rateTable) throw new Error(`MISSING_GACHA_RATE_TABLE:${featuredBanner.rateTable}`);
+  const byRarity = new Map(RARITIES.map((rarity) => [rarity, catalog.filter((entry) => entry.baseRarity === rarity)]));
+  for (const rarity of rateTable.entries.map((entry) => entry.rarity)) {
+    if ((byRarity.get(rarity) ?? []).length === 0) throw new Error(`EMPTY_GACHA_RARITY_POOL:${kind}:${rarity}`);
+  }
+  if (selection.nonFeaturedUrExcludesFeatured !== undefined) throw new Error(`UNEXPECTED_KIND_LEVEL_SELECTION_POLICY:${kind}`);
+  const nonFeaturedUr = (byRarity.get('UR') ?? []).filter((entry) => entry.id !== featuredItem.id);
+  if (execution.model.gachaItemSelection.nonFeaturedUrExcludesFeatured && nonFeaturedUr.length === 0) throw new Error(`EMPTY_NONFEATURED_UR_POOL:${kind}`);
+  return {
+    kind,
+    selection,
+    catalog,
+    byRarity,
+    featuredItem,
+    featuredBanner,
+    rateTable,
+    rateDistribution: distribution(rateTable.entries),
+  };
+}
+
+function selectGachaItem(rng, execution, context, rarity, featured) {
+  if (featured) {
+    if (rarity !== 'UR') throw new Error(`FEATURED_NON_UR_RESULT:${context.kind}:${rarity}`);
+    return context.featuredItem;
+  }
+  let pool = context.byRarity.get(rarity) ?? [];
+  if (rarity === 'UR' && execution.model.gachaItemSelection.nonFeaturedUrExcludesFeatured) pool = pool.filter((entry) => entry.id !== context.featuredItem.id);
+  if (pool.length === 0) throw new Error(`EMPTY_GACHA_ITEM_POOL:${context.kind}:${rarity}:${featured}`);
+  return pool[Number(rng.nextBelow(BigInt(pool.length)))];
+}
+
+function drawGachaItem(candidate, execution, context, rng, drawsSinceUR, featuredProgress) {
+  const naturalRarity = sampleDistribution(rng, context.rateDistribution);
+  const nextDraw = BigInt(drawsSinceUR) + 1n;
+  const nextFeatured = BigInt(featuredProgress) + 1n;
+  const willBeUR = naturalRarity === 'UR' || nextDraw >= BigInt(candidate.gacha.hardPity.draws) || nextFeatured >= BigInt(candidate.gacha.featuredGuarantee.draws);
+  const featuredRollHit = willBeUR && nextFeatured < BigInt(candidate.gacha.featuredGuarantee.draws) && sampleProbability(rng, candidate.gacha.featuredGuarantee.featuredShareWithinUR);
+  const outcome = pityOutcome({
+    drawsSinceUR,
+    featuredProgress,
+    naturalRarity,
+    featuredRollHit,
+    hardPity: candidate.gacha.hardPity.draws,
+    featuredGuarantee: candidate.gacha.featuredGuarantee.draws,
+  });
+  const item = selectGachaItem(rng, execution, context, outcome.rarity, outcome.featured);
+  return { naturalRarity, featuredRollHit, outcome, item };
+}
+
+function zeroRarityCounts() {
+  return Object.fromEntries(RARITIES.map((rarity) => [rarity, 0n]));
+}
+
+function simulateGachaPool(candidate, execution, samples, namespace, poolKind) {
+  const context = gachaItemContext(candidate, execution, poolKind);
   const firstUr = new UnsignedHistogram();
   const firstFeatured = new UnsignedHistogram();
-  const counters = { hardPityTriggered: 0n, featuredGuaranteeTriggered: 0n, featuredRollHits: 0n, maximumDrawsToFeatured: 0n, boundaryViolations: 0n };
+  const seen = new Set();
+  const rarityCounts = zeroRarityCounts();
+  const counters = {
+    totalDraws: 0n,
+    featuredOutputs: 0n,
+    featuredItemMismatches: 0n,
+    nonFeaturedUrFeaturedViolations: 0n,
+    hardPityTriggered: 0n,
+    featuredGuaranteeTriggered: 0n,
+    featuredRollHits: 0n,
+    maximumDrawsToFeatured: 0n,
+    boundaryViolations: 0n,
+  };
   const hardPity = candidate.gacha.hardPity.draws;
   const featuredGuarantee = candidate.gacha.featuredGuarantee.draws;
   for (let sample = 0; sample < samples; sample += 1) {
@@ -55,15 +130,19 @@ function simulateGachaPool(candidate, samples, namespace, poolKind) {
     let firstUrDraw = 0n;
     let featuredDraw = 0n;
     for (let draw = 1n; draw <= BigInt(featuredGuarantee); draw += 1n) {
-      const naturalRarity = sampleDistribution(rng, table);
-      const nextDraw = BigInt(drawsSinceUR) + 1n;
-      const nextFeatured = BigInt(featuredProgress) + 1n;
-      const willBeUR = naturalRarity === 'UR' || nextDraw >= BigInt(hardPity) || nextFeatured >= BigInt(featuredGuarantee);
-      const featuredRollHit = willBeUR && nextFeatured < BigInt(featuredGuarantee) && sampleProbability(rng, candidate.gacha.featuredGuarantee.featuredShareWithinUR);
-      const outcome = pityOutcome({ drawsSinceUR, featuredProgress, naturalRarity, featuredRollHit, hardPity, featuredGuarantee });
+      const result = drawGachaItem(candidate, execution, context, rng, drawsSinceUR, featuredProgress);
+      const { outcome, item, featuredRollHit } = result;
+      counters.totalDraws += 1n;
+      rarityCounts[outcome.rarity] += 1n;
+      seen.add(item.id);
       if (outcome.hardPityTriggered) counters.hardPityTriggered += 1n;
       if (outcome.featuredGuaranteeTriggered) counters.featuredGuaranteeTriggered += 1n;
       if (featuredRollHit && outcome.featured) counters.featuredRollHits += 1n;
+      if (outcome.featured) {
+        counters.featuredOutputs += 1n;
+        if (item.id !== context.featuredItem.id) counters.featuredItemMismatches += 1n;
+      }
+      if (outcome.rarity === 'UR' && !outcome.featured && item.id === context.featuredItem.id) counters.nonFeaturedUrFeaturedViolations += 1n;
       if (outcome.rarity === 'UR' && firstUrDraw === 0n) firstUrDraw = draw;
       drawsSinceUR = outcome.nextDrawsSinceUR;
       featuredProgress = outcome.nextFeaturedProgress;
@@ -74,28 +153,42 @@ function simulateGachaPool(candidate, samples, namespace, poolKind) {
     firstUr.add(firstUrDraw.toString());
     firstFeatured.add(featuredDraw.toString());
   }
-  return { firstUr: firstUr.summary(), firstFeatured: firstFeatured.summary(), counters };
+  return { context, firstUr: firstUr.summary(), firstFeatured: firstFeatured.summary(), seen, rarityCounts, counters };
 }
 
-function gachaTails(candidate, _execution, samples, namespace) {
-  const character = simulateGachaPool(candidate, samples, namespace, 'character');
-  const weapon = simulateGachaPool(candidate, samples, namespace, 'weapon');
+function gachaPoolCounters(prefix, result, samples) {
+  return {
+    [`${prefix}Samples`]: BigInt(samples),
+    [`${prefix}PoolItemCount`]: BigInt(result.context.catalog.length),
+    [`${prefix}TotalDraws`]: result.counters.totalDraws,
+    [`${prefix}UniqueItemsSeen`]: BigInt(result.seen.size),
+    [`${prefix}FeaturedOutputs`]: result.counters.featuredOutputs,
+    [`${prefix}FeaturedItemMismatches`]: result.counters.featuredItemMismatches,
+    [`${prefix}NonFeaturedUrFeaturedViolations`]: result.counters.nonFeaturedUrFeaturedViolations,
+    [`${prefix}HardPityTriggered`]: result.counters.hardPityTriggered,
+    [`${prefix}FeaturedGuaranteeTriggered`]: result.counters.featuredGuaranteeTriggered,
+    [`${prefix}FeaturedRollHits`]: result.counters.featuredRollHits,
+    [`${prefix}MaximumDrawsToFeatured`]: result.counters.maximumDrawsToFeatured,
+    [`${prefix}RarityNDraws`]: result.rarityCounts.N,
+    [`${prefix}RarityRDraws`]: result.rarityCounts.R,
+    [`${prefix}RarityRRDraws`]: result.rarityCounts.RR,
+    [`${prefix}RaritySRDraws`]: result.rarityCounts.SR,
+    [`${prefix}RaritySSRDraws`]: result.rarityCounts.SSR,
+    [`${prefix}RarityURDraws`]: result.rarityCounts.UR,
+  };
+}
+
+function gachaTails(candidate, execution, samples, namespace) {
+  const character = simulateGachaPool(candidate, execution, samples, namespace, 'character');
+  const weapon = simulateGachaPool(candidate, execution, samples, namespace, 'weapon');
   return {
     primary: character.firstUr,
     secondary: character.firstFeatured,
     tertiary: weapon.firstUr,
     quaternary: weapon.firstFeatured,
     counters: {
-      characterSamples: BigInt(samples),
-      characterHardPityTriggered: character.counters.hardPityTriggered,
-      characterFeaturedGuaranteeTriggered: character.counters.featuredGuaranteeTriggered,
-      characterFeaturedRollHits: character.counters.featuredRollHits,
-      characterMaximumDrawsToFeatured: character.counters.maximumDrawsToFeatured,
-      weaponSamples: BigInt(samples),
-      weaponHardPityTriggered: weapon.counters.hardPityTriggered,
-      weaponFeaturedGuaranteeTriggered: weapon.counters.featuredGuaranteeTriggered,
-      weaponFeaturedRollHits: weapon.counters.featuredRollHits,
-      weaponMaximumDrawsToFeatured: weapon.counters.maximumDrawsToFeatured,
+      ...gachaPoolCounters('character', character, samples),
+      ...gachaPoolCounters('weapon', weapon, samples),
       maximumDrawsToFeatured: character.counters.maximumDrawsToFeatured > weapon.counters.maximumDrawsToFeatured ? character.counters.maximumDrawsToFeatured : weapon.counters.maximumDrawsToFeatured,
       boundaryViolations: character.counters.boundaryViolations + weapon.counters.boundaryViolations,
     },
@@ -129,56 +222,100 @@ function pityConformance(candidate, _execution, samples, namespace) {
   return { primary: hardRemaining.summary(), secondary: featuredRemaining.summary(), counters };
 }
 
-function simulateDuplicateTrack(catalog, track, samples, namespace, kind) {
-  const catalogSize = catalog.length;
-  const copies = Array.from({ length: catalogSize }, () => 0n);
+function simulateDuplicateTrack(candidate, execution, track, samples, namespace, kind) {
+  const context = gachaItemContext(candidate, execution, kind);
+  const copies = new Map(context.catalog.map((entry) => [entry.id, 0n]));
   const effectiveCopies = new UnsignedHistogram();
   const overflowCredit = new UnsignedHistogram();
+  const rarityCounts = zeroRarityCounts();
+  let drawsSinceUR = '0';
+  let featuredProgress = '0';
+  let featuredCopies = 0n;
+  let featuredItemMismatches = 0n;
+  let nonFeaturedUrFeaturedViolations = 0n;
+  let hardPityTriggered = 0n;
+  let featuredGuaranteeTriggered = 0n;
+  let featuredRollHits = 0n;
+  const rng = new DeterministicRng(`${namespace}|${kind}|draw-stream`);
   for (let sample = 0; sample < samples; sample += 1) {
-    const rng = new DeterministicRng(`${namespace}|${kind}|${sample}`);
-    const index = Number(rng.nextBelow(BigInt(catalogSize)));
-    copies[index] += 1n;
-    const additional = copies[index] > 0n ? copies[index] - 1n : 0n;
-    const overflow = masteryOverflow(track, additional.toString());
+    const result = drawGachaItem(candidate, execution, context, rng, drawsSinceUR, featuredProgress);
+    const { outcome, item, featuredRollHit } = result;
+    rarityCounts[outcome.rarity] += 1n;
+    if (outcome.hardPityTriggered) hardPityTriggered += 1n;
+    if (outcome.featuredGuaranteeTriggered) featuredGuaranteeTriggered += 1n;
+    if (featuredRollHit && outcome.featured) featuredRollHits += 1n;
+    if (outcome.featured) {
+      featuredCopies += 1n;
+      if (item.id !== context.featuredItem.id) featuredItemMismatches += 1n;
+    }
+    if (outcome.rarity === 'UR' && !outcome.featured && item.id === context.featuredItem.id) nonFeaturedUrFeaturedViolations += 1n;
+    drawsSinceUR = outcome.nextDrawsSinceUR;
+    featuredProgress = outcome.nextFeaturedProgress;
+    const nextCopies = (copies.get(item.id) ?? 0n) + 1n;
+    copies.set(item.id, nextCopies);
+    const overflow = masteryOverflow(track, (nextCopies - 1n).toString());
     effectiveCopies.add(overflow.masteredCopies);
     overflowCredit.add(overflow.overflowCredit);
   }
   const full = BigInt(track.fullMastery.minimumAdditionalEffectiveCopies);
   return {
+    context,
     mastered: effectiveCopies.summary(),
     overflow: overflowCredit.summary(),
+    rarityCounts,
     counters: {
       samples: BigInt(samples),
-      catalogSize: BigInt(catalogSize),
-      uniqueItemsSeen: BigInt(copies.filter((value) => value > 0n).length),
-      itemsAtFullMastery: BigInt(copies.filter((value) => value > full).length),
-      itemsWithOverflow: BigInt(copies.filter((value) => value - 1n > full).length),
-      maximumCopies: copies.reduce((maximum, value) => value > maximum ? value : maximum, 0n),
+      catalogSize: BigInt(context.catalog.length),
+      poolItemCount: BigInt(context.catalog.length),
+      uniqueItemsSeen: BigInt([...copies.values()].filter((value) => value > 0n).length),
+      itemsAtFullMastery: BigInt([...copies.values()].filter((value) => value > full).length),
+      itemsWithOverflow: BigInt([...copies.values()].filter((value) => value - 1n > full).length),
+      maximumCopies: [...copies.values()].reduce((maximum, value) => value > maximum ? value : maximum, 0n),
+      featuredCopies,
+      featuredItemMismatches,
+      nonFeaturedUrFeaturedViolations,
+      hardPityTriggered,
+      featuredGuaranteeTriggered,
+      featuredRollHits,
     },
   };
 }
 
-function duplicateSkew(candidate, _execution, samples, namespace) {
-  const character = simulateDuplicateTrack(candidate.characters.catalog, candidate.characterMastery, samples, namespace, 'character');
-  const weapon = simulateDuplicateTrack(candidate.weapons.catalog, candidate.weaponMastery, samples, namespace, 'weapon');
+function duplicateTrackCounters(prefix, result) {
+  return {
+    [`${prefix}Samples`]: result.counters.samples,
+    [`${prefix}CatalogSize`]: result.counters.catalogSize,
+    [`${prefix}PoolItemCount`]: result.counters.poolItemCount,
+    [`${prefix}UniqueItemsSeen`]: result.counters.uniqueItemsSeen,
+    [`${prefix}ItemsAtFullMastery`]: result.counters.itemsAtFullMastery,
+    [`${prefix}ItemsWithOverflow`]: result.counters.itemsWithOverflow,
+    [`${prefix}MaximumCopies`]: result.counters.maximumCopies,
+    [`${prefix}FeaturedCopies`]: result.counters.featuredCopies,
+    [`${prefix}FeaturedItemMismatches`]: result.counters.featuredItemMismatches,
+    [`${prefix}NonFeaturedUrFeaturedViolations`]: result.counters.nonFeaturedUrFeaturedViolations,
+    [`${prefix}HardPityTriggered`]: result.counters.hardPityTriggered,
+    [`${prefix}FeaturedGuaranteeTriggered`]: result.counters.featuredGuaranteeTriggered,
+    [`${prefix}FeaturedRollHits`]: result.counters.featuredRollHits,
+    [`${prefix}RarityNDraws`]: result.rarityCounts.N,
+    [`${prefix}RarityRDraws`]: result.rarityCounts.R,
+    [`${prefix}RarityRRDraws`]: result.rarityCounts.RR,
+    [`${prefix}RaritySRDraws`]: result.rarityCounts.SR,
+    [`${prefix}RaritySSRDraws`]: result.rarityCounts.SSR,
+    [`${prefix}RarityURDraws`]: result.rarityCounts.UR,
+  };
+}
+
+function duplicateSkew(candidate, execution, samples, namespace) {
+  const character = simulateDuplicateTrack(candidate, execution, candidate.characterMastery, samples, namespace, 'character');
+  const weapon = simulateDuplicateTrack(candidate, execution, candidate.weaponMastery, samples, namespace, 'weapon');
   return {
     primary: character.mastered,
     secondary: character.overflow,
     tertiary: weapon.mastered,
     quaternary: weapon.overflow,
     counters: {
-      characterSamples: character.counters.samples,
-      characterCatalogSize: character.counters.catalogSize,
-      characterUniqueItemsSeen: character.counters.uniqueItemsSeen,
-      characterItemsAtFullMastery: character.counters.itemsAtFullMastery,
-      characterItemsWithOverflow: character.counters.itemsWithOverflow,
-      characterMaximumCopies: character.counters.maximumCopies,
-      weaponSamples: weapon.counters.samples,
-      weaponCatalogSize: weapon.counters.catalogSize,
-      weaponUniqueItemsSeen: weapon.counters.uniqueItemsSeen,
-      weaponItemsAtFullMastery: weapon.counters.itemsAtFullMastery,
-      weaponItemsWithOverflow: weapon.counters.itemsWithOverflow,
-      weaponMaximumCopies: weapon.counters.maximumCopies,
+      ...duplicateTrackCounters('character', character),
+      ...duplicateTrackCounters('weapon', weapon),
     },
   };
 }
