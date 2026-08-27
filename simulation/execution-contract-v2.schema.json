@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cats-tower.invalid/schema/execution-contract-v2.schema.json",
+  "title": "Cat's Tower Step 3 execution contract sealed by Step 2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "contractId", "candidateId", "scenarioAlgorithmVersion", "executionVersion", "roundingVersion", "sourcePaths", "model", "statistics", "partitions", "highVolumeSuites", "resultContracts", "executionGuard"],
+  "properties": {
+    "schemaVersion": {"const": "2.1.0"},
+    "contractId": {"const": "cats-tower-step3-execution-contract-v2"},
+    "candidateId": {"const": "cats-tower-v2-candidate-001"},
+    "scenarioAlgorithmVersion": {"const": "cats-tower-scenario-v2.1.0"},
+    "executionVersion": {"const": "cats-tower-step3-executor-v1.0.0"},
+    "roundingVersion": {"const": "ct-rational-half-even-v1"},
+    "sourcePaths": {"type": "object", "additionalProperties": false, "required": ["candidate", "runPlan", "acceptance"]},
+    "model": {"type": "object", "additionalProperties": false, "required": ["firstReset", "progression", "repeatedReset"]},
+    "statistics": {"type": "object", "additionalProperties": false, "required": ["method", "percentiles", "sort", "emptyInput"]},
+    "partitions": {"type": "object", "additionalProperties": false, "required": ["qualification", "calibration", "holdout"]},
+    "highVolumeSuites": {"type": "array", "minItems": 6, "maxItems": 6, "items": {"type": "object", "additionalProperties": false, "required": ["id", "plannedSamples", "contractSmokeSamples", "implementationVersion"]}},
+    "resultContracts": {"type": "object", "additionalProperties": false, "required": ["qualificationSchema", "qualificationValidator", "gameplaySchema", "gameplayValidator", "highVolumeSchema", "highVolumeValidator"]},
+    "executionGuard": {"type": "object", "additionalProperties": false, "required": ["fullExecutionOwner", "requiredOwnerArgument", "requiredEnvironment", "contractSmokeOwner", "partialResultPromotionForbidden", "holdoutMayNotEnterTuningOutput"]}
+  }
+}
