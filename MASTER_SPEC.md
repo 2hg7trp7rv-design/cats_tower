@@ -1,20 +1,23 @@
 # Cat's Tower 統合正本仕様書
 
-文書状態: **STEP 1 IN_PROGRESS — ROUND 008 FINAL PRESEAL REVIEW**  
+文書状態: **STEP 1 ROUND 008 — SEALED PASS**  
 更新日: **2026-08-27**  
 Repository: `2hg7trp7rv-design/cats_tower`  
 書込みbranch: **既存の`kimi`のみ**  
-現在チャット: **`01_正本仕様・競合調査`**  
-Step 2〜6: **BLOCKED UNTIL LIVE ROUND 008 SEAL**  
+Step 1: **PASS**  
+Step 2: **READY_TO_START**  
+Step 3〜6: **BLOCKED BY PRIOR GATES**  
 物理iPhone: **NOT_VERIFIED**
 
-本書は、猫・戦闘・無制限塔・育成を主役とするCat's TowerのStep 1正本候補である。有限100F、非ガチャ、独立Dawn、9画面、localStorage恒久経済を前提とした旧仕様・旧PASSは履歴証拠であり、現行製品やStep 2を承認しない。
+本書は、猫・戦闘・無制限塔・育成を主役とするCat's TowerのStep 1正本である。有限100F、非ガチャ、独立Dawn、9画面、localStorage恒久経済を前提とした旧仕様・旧PASSは履歴証拠であり、現行製品やStep 2/3を単独承認しない。
 
 ## 0. 権威と封印
 
-競合時の順序は、最新ユーザー決定、`CHATGPT_PROJECT_INSTRUCTIONS1.md`、live active change-control/addendum/decision lock、liveで検証されたRound 008 seal、seal対象正本、現行Acceptance/critic/judge/evidence、下位契約、過去証拠とする。
+競合時の順序は、最新ユーザー決定、`CHATGPT_PROJECT_INSTRUCTIONS1.md`、live active change-control/addendum/decision lock、liveで検証されたRound 008 seal、本書とseal対象canonical、現行Acceptance/critic/judge/evidence、Step 2 executable contract、過去証拠とする。
 
-現在の正本候補はすべて`PRESEAL_DRAFT`である。内容完成やVercel `READY`だけではStep 2を許可しない。`quality-reviews/step-1-reseal-round-008/seal-round-008.json`がexact content commit/tree、critic/judge、Preview、completion evidenceへ一致した場合だけStep 1 PASSが有効になる。
+有効sealは`quality-reviews/step-1-reseal-round-008/seal-round-008.json`。seal済みsemantic commit/treeは`4b4d8abbf5388637101f7c5634d1ce5d60413fce` / `99084efa0e6055977b01cf507d7d7e2a391c74ce`、seal commit/treeは`0b17f9b5b8decdab8ce329287a4dc073790c4bf7` / `9eac6b6103d65cf8bcb13859d00e43cd3389fa8a`である。
+
+Step 2 `READY_TO_START`は製品完成やsimulation合格を意味しない。Step 2専用Acceptanceを最初のwrite前に作成し、新V2 executable chainを封印するまでStep 3開始は禁止。Vercel `READY`だけでは品質PASSにならない。
 
 ## 1. 製品定義
 
@@ -140,13 +143,13 @@ required state、authority、normal/error/retry/reload/multi-tab/refund/revocati
 
 ## 12. Step 1 / Step 2 boundary
 
-Step 1はproduct meaning、ID、state、screen、trust boundary、prohibition、policy gates、field/enum/unit/invariant/fixture/migration/validator/result requirementsを固定する。Step 2は`canonical/STEP2_DEPENDENCY_CLOSURE.json`に従い、new candidate/schema/validator/simulator/result/run plan/fixtures/executable sealを実装する。
+Step 1はproduct meaning、ID、state、screen、trust boundary、prohibition、policy gates、field/enum/unit/invariant/fixture/migration/validator/result requirementsを固定した。Step 2は`canonical/STEP2_DEPENDENCY_CLOSURE.json`に従い、new candidate/schema/validator/simulator/result/run plan/fixtures/executable sealを実装する。
 
 旧V1 candidate/schema/validator/workflowは`BLOCKED_SUPERSEDED_INPUT`で、in-place延命、promotion実行、old observed holdout再利用を禁止する。
 
 Step 2最低検証設計は3 builds × 5 personas × 1,000 seeds = 15,000 scenarios以上。horizonsは1〜10F、100F、1,000F、10,000F相当、repeated resets、30〜45日経済。別枠でgacha/mastery tails、pity、refund/replay/race、state-machine、large-number property testsを行う。
 
-## 13. Step 1 PASS条件
+## 13. Step 1 PASS証拠と次工程条件
 
 - repository-wide current-authority旧主張0、未分類path/match 0
 - active canon/mirror一致
@@ -155,6 +158,6 @@ Step 2最低検証設計は3 builds × 5 personas × 1,000 seeds = 15,000 scenar
 - 10独立critic＋final judgeのunresolved P0/P1=0
 - 過去証拠不変
 - runtime、asset、V1 executable、backend、provider、Production不変
-- exact frozen content commit/tree、critic/judge evidence、matching `kimi` Preview、seal、activation evidenceの結合
+- exact semantic commit/tree、critic/judge evidence、matching `kimi` Preview、seal、activation evidenceの結合
 
-現在はfinal mirror syncとcritic/judge/seal中であり、Step 1は`IN_PROGRESS`、Step 2は`BLOCKED`。Vercel `READY`はbuild/deployment証拠だけである。
+Step 1は`PASS`。Step 2は`READY_TO_START`だが、専用Acceptance Matrixがない状態でV2 file作成を開始しない。Step 3はStep 2 executable sealとcompletion evidenceがPASSするまで`BLOCKED`。Vercel `READY`はbuild/deployment証拠だけである。
