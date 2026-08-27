@@ -1,12 +1,22 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "updatedDate": "2026-08-27",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
-  "currentStep": 1,
-  "status": "BLOCKED_SUPERSEDED_INPUT",
-  "step2Allowed": false,
-  "reason": "Round 008 final critics, judge, seal and activation evidence are not yet valid live authority.",
+  "currentStep": 2,
+  "status": "READY_TO_START",
+  "step1": {
+    "status": "PASS",
+    "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+    "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce",
+    "sealPath": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
+    "sealBlob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
+    "sealCommit": "0b17f9b5b8decdab8ce329287a4dc073790c4bf7",
+    "sealTree": "9eac6b6103d65cf8bcb13859d00e43cd3389fa8a"
+  },
+  "step2Allowed": true,
+  "step3Allowed": false,
+  "reason": "Step 1 Round 008 is sealed and active. Step 2 may begin only by committing a dedicated Acceptance Matrix and creating the new V2 chain defined by the sealed dependency closure.",
   "v1Artifacts": {
     "candidate": "simulation/candidate-v1.json",
     "schema": "simulation/candidate.schema.json",
@@ -18,18 +28,22 @@
   },
   "dependencyClosure": {
     "path": "canonical/STEP2_DEPENDENCY_CLOSURE.json",
-    "status": "PRESEAL_DRAFT_COMPLETE",
-    "mayAuthorizeStep2WithoutSeal": false
+    "blob": "d23ea91754f6b11e4d452312752fc8850bd7ab9b",
+    "status": "SEALED_STEP2_INPUT",
+    "mayAuthorizeStep2WithActiveSeal": true
   },
   "v2Artifacts": {
+    "acceptance": "NOT_CREATED",
     "candidate": "NOT_CREATED",
     "schema": "NOT_CREATED",
     "validator": "NOT_CREATED",
     "simulator": "NOT_CREATED",
     "resultSchema": "NOT_CREATED",
+    "resultValidator": "NOT_CREATED",
     "runPlan": "NOT_CREATED",
     "fixtures": "NOT_CREATED",
     "migrations": "NOT_CREATED",
+    "dedicatedWorkflow": "NOT_CREATED",
     "executableSeal": "NOT_CREATED"
   },
   "minimumLaterValidation": {
@@ -43,13 +57,15 @@
     "horizons": ["1-10F", "100F", "1000F", "10000F-or-equivalent", "repeated-resets", "30-45-day-economy"]
   },
   "writeBoundary": {
-    "candidateChanged": false,
-    "schemaChanged": false,
-    "validatorChanged": false,
-    "simulatorChanged": false,
+    "allowed": ["Step 2 V2 executable contract and quality evidence"],
     "runtimeChanged": false,
+    "assetChanged": false,
+    "v1Changed": false,
     "backendChanged": false,
-    "productionChanged": false
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "productionChanged": false,
+    "step3MayRun": false
   },
-  "nextAuthorizedWork": "Complete Step 1 final critics, judge, seal and activation before creating any V2 executable artifact."
+  "nextAuthorizedWork": "Create Step 2 Acceptance before the first V2 artifact, then implement and validate the new V2 executable contract."
 }
