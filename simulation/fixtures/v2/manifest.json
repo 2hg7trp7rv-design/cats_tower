@@ -9,8 +9,8 @@
     },
     {
       "path": "simulation/fixtures/v2/boundary.json",
-      "sha256": "4fdebc09d65bd4ffaa66046547adc9dae71547503eacc0e6fc2d26526ea18928",
-      "bytes": "7436"
+      "sha256": "cbbf7ae42335a55b1e3954ea79813263e5fe5b66a7efae2b078c14cec7631001",
+      "bytes": "8551"
     },
     {
       "path": "simulation/fixtures/v2/negative.json",
@@ -24,8 +24,8 @@
     },
     {
       "path": "simulation/fixtures/v2/execution-contract-negative.json",
-      "sha256": "435d8cd894d1f6eef565d2f1ce010585cc250a750a57874fa722de531e6c51ab",
-      "bytes": "4702"
+      "sha256": "6f0d229b2bde19d261df13326371a0c89c8408f3ea8d540d95e364f0e6ac26f7",
+      "bytes": "5285"
     },
     {
       "path": "simulation/fixtures/v2/state-transitions.json",
@@ -78,14 +78,17 @@
     "allRequiredFamiliesCovered": true,
     "runPlanSemanticInvariantCaseCount": "12",
     "candidateCaseCount": "85",
-    "executionContractNegativeCaseCount": "16",
-    "gameplayResultNegativeCaseCount": "10",
+    "executionContractNegativeCaseCount": "18",
+    "gameplayResultNegativeCaseCount": "12",
     "highVolumeResultNegativeCaseCount": "15",
     "modelBindingCaseCount": "7",
     "pityCarryoverCaseCount": "4",
     "stateRecoveryAndStaleSequenceCount": "8",
     "loginServerPeriodCaseCount": "4",
     "gachaStableItemMappingCaseCount": "5",
-    "duplicateRarityBindingCaseCount": "2"
+    "duplicateRarityBindingCaseCount": "2",
+    "towerModifierSequenceCaseCount": "4",
+    "towerBackgroundCadenceCaseCount": "6",
+    "scenarioInputDigestNegativeCaseCount": "2"
   }
 }

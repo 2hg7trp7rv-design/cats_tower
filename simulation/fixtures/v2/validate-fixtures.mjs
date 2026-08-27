@@ -7,7 +7,7 @@ import process from 'node:process';
 import { sha256Text, canonicalJson } from '../../engine-v2/hash.mjs';
 import { addUnsigned, subtractUnsigned, multiplyUnsigned, divideUnsigned, roundRational, rational, displayAbbreviation, toBigInt } from '../../engine-v2/numeric.mjs';
 import { assertProbabilityTable, resetRubyQuote, evolutionEligibility, masteryOverflow, applyPaidRubyRefund, pityOutcome, pityCarryoverOutcome } from '../../engine-v2/economy.mjs';
-import { generateFloor, isCanonicalDistrictId, isCanonicalCycleId, isCanonicalMilestoneId } from '../../engine-v2/tower.mjs';
+import { generateFloor, isCanonicalDistrictId, isCanonicalCycleId, isCanonicalMilestoneId, auditModifierSequence, backgroundForFloor } from '../../engine-v2/tower.mjs';
 import { replaySequence, idempotentResult, exactlyOnceReceipt, acceptedVersionRetry, loginClaimDecision } from '../../engine-v2/state-machines.mjs';
 
 const load=async(path)=>JSON.parse(await readFile(resolve(path),'utf8'));
@@ -80,6 +80,14 @@ for(const test of boundary.pityCases){
   check(actual.hardPityTriggered===test.hardPityTriggered&&actual.featuredGuaranteeTriggered===test.featuredGuaranteeTriggered,'BOUNDARY_PITY',JSON.stringify(test));
   if(test.expectedRarity!==undefined)check(actual.rarity===test.expectedRarity,'BOUNDARY_PITY_RARITY',JSON.stringify(test));
   if(test.expectedFeatured!==undefined)check(actual.featured===test.expectedFeatured,'BOUNDARY_PITY_FEATURED',JSON.stringify(test));
+}
+for(const test of boundary.modifierSequenceCases??[]){
+  const actual=auditModifierSequence(candidate,test.startFloor,test.length);
+  check(actual.passed===true,'BOUNDARY_MODIFIER_SEQUENCE',test.id);
+}
+for(const test of boundary.backgroundCases??[]){
+  const actual=backgroundForFloor(candidate,test.floor);
+  check(actual.districtThemeIndex===test.districtThemeIndex&&actual.majorThemeCycleIndex===test.majorThemeCycleIndex,'BOUNDARY_BACKGROUND',test.floor);
 }
 for(const test of boundary.carryoverCases??[]){
   const actual=pityCarryoverOutcome(candidate,test);
@@ -158,4 +166,4 @@ try{
 }finally{await rm(temp,{recursive:true,force:true});}
 
 if(errors.length){console.error(JSON.stringify({ok:false,errorCount:errors.length,errors},null,2));process.exit(1);}
-console.log(JSON.stringify({ok:true,fixtureFiles:manifest.files.length,positiveCases:positive.cases.length,boundaryTowerCases:boundary.towerCases.length,boundaryPityCases:boundary.pityCases.length,boundaryCarryoverCases:(boundary.carryoverCases??[]).length,negativeCases:negative.cases.length,stateSuccessCases:state.successSequences.length,stateInvalidCases:state.invalidSequences.length,loginPeriodCases:(state.loginPeriodCases??[]).length,goldenNumericCases:golden.numeric.length,runPlanNegativeCases:runPlanNegative.cases.length}));
+console.log(JSON.stringify({ok:true,fixtureFiles:manifest.files.length,positiveCases:positive.cases.length,boundaryTowerCases:boundary.towerCases.length,boundaryModifierSequenceCases:(boundary.modifierSequenceCases??[]).length,boundaryBackgroundCases:(boundary.backgroundCases??[]).length,boundaryPityCases:boundary.pityCases.length,boundaryCarryoverCases:(boundary.carryoverCases??[]).length,negativeCases:negative.cases.length,stateSuccessCases:state.successSequences.length,stateInvalidCases:state.invalidSequences.length,loginPeriodCases:(state.loginPeriodCases??[]).length,goldenNumericCases:golden.numeric.length,runPlanNegativeCases:runPlanNegative.cases.length}));

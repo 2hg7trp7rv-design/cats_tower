@@ -191,14 +191,17 @@ try {
     }
   }
   if (gameplayResults.calibration && gameplayResults.holdout) {
-    const flatten = (result) => result.deterministicPayload.cells.flatMap((cell) => cell.scenarioDigests);
-    const calibrationDigests = new Set(flatten(gameplayResults.calibration));
-    const holdoutDigests = flatten(gameplayResults.holdout);
+    const flatten = (result, field) => result.deterministicPayload.cells.flatMap((cell) => cell[field]);
+    const calibrationDigests = new Set(flatten(gameplayResults.calibration, 'scenarioDigests'));
+    const holdoutDigests = flatten(gameplayResults.holdout, 'scenarioDigests');
     const overlap = holdoutDigests.filter((digest) => calibrationDigests.has(digest));
-    if (overlap.length === 0 && gameplayResults.calibration.deterministicPayload.seedNamespace !== gameplayResults.holdout.deterministicPayload.seedNamespace) {
-      pass('calibration-holdout-smoke-disjointness', { calibrationScenarios: gameplayResults.calibration.deterministicPayload.scenarioCount, holdoutScenarios: gameplayResults.holdout.deterministicPayload.scenarioCount, overlap: '0' });
+    const calibrationInputs = new Set(flatten(gameplayResults.calibration, 'scenarioInputDigests'));
+    const holdoutInputs = flatten(gameplayResults.holdout, 'scenarioInputDigests');
+    const inputOverlap = holdoutInputs.filter((digest) => calibrationInputs.has(digest));
+    if (overlap.length === 0 && inputOverlap.length === 0 && gameplayResults.calibration.deterministicPayload.seedNamespace !== gameplayResults.holdout.deterministicPayload.seedNamespace) {
+      pass('calibration-holdout-smoke-disjointness', { calibrationScenarios: gameplayResults.calibration.deterministicPayload.scenarioCount, holdoutScenarios: gameplayResults.holdout.deterministicPayload.scenarioCount, scenarioDigestOverlap: '0', inputDigestOverlap: '0' });
     } else {
-      fail('calibration-holdout-smoke-disjointness', { namespaceOverlap: gameplayResults.calibration.deterministicPayload.seedNamespace === gameplayResults.holdout.deterministicPayload.seedNamespace, digestOverlap: overlap.slice(0, 20) });
+      fail('calibration-holdout-smoke-disjointness', { namespaceOverlap: gameplayResults.calibration.deterministicPayload.seedNamespace === gameplayResults.holdout.deterministicPayload.seedNamespace, digestOverlap: overlap.slice(0, 20), inputDigestOverlap: inputOverlap.slice(0, 20) });
     }
   }
 

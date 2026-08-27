@@ -30,10 +30,10 @@
       "const": "cats-tower-v2-candidate-001"
     },
     "scenarioAlgorithmVersion": {
-      "const": "cats-tower-scenario-v2.1.0"
+      "const": "cats-tower-scenario-v2.2.0"
     },
     "executionVersion": {
-      "const": "cats-tower-step3-executor-v1.0.0"
+      "const": "cats-tower-step3-executor-v1.1.0"
     },
     "roundingVersion": {
       "const": "ct-rational-half-even-v1"
@@ -65,7 +65,8 @@
         "firstReset",
         "progression",
         "repeatedReset",
-        "gachaItemSelection"
+        "gachaItemSelection",
+        "towerSequence"
       ],
       "properties": {
         "firstReset": {
@@ -282,6 +283,42 @@
                   "const": "weapon.launch.036"
                 }
               }
+            }
+          }
+        },
+        "towerSequence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "modifierPairAlgorithm",
+            "modifierCombinationOrdering",
+            "adjacentRepeatMaximum",
+            "windowSize",
+            "windowRepeatMaximum",
+            "backgroundIndexAlgorithm",
+            "scenarioInputDigest"
+          ],
+          "properties": {
+            "modifierPairAlgorithm": {
+              "const": "block-rotated-combination-permutation-v1"
+            },
+            "modifierCombinationOrdering": {
+              "const": "sha256-stable-combination-v1"
+            },
+            "adjacentRepeatMaximum": {
+              "const": "1"
+            },
+            "windowSize": {
+              "const": "10"
+            },
+            "windowRepeatMaximum": {
+              "const": "3"
+            },
+            "backgroundIndexAlgorithm": {
+              "const": "ceil-floor-over-cadence-v1"
+            },
+            "scenarioInputDigest": {
+              "const": "sha256-canonical-json-v1"
             }
           }
         }

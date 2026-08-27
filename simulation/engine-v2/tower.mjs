@@ -1,8 +1,16 @@
 import { assertUnsigned, toBigInt, exactPowerExpression, evaluatePowerExpression } from './numeric.mjs';
 import { sha256Text } from './hash.mjs';
 
-function ceilDiv(n, d) { return (n + d - 1n) / d; }
-function padMinimum(value, width) { return value.toString().padStart(width, '0'); }
+const MODIFIER_PERMUTATION_CACHE = new Map();
+
+function ceilDiv(n, d) {
+  if (d <= 0n) throw new RangeError('CEIL_DIVISOR_MUST_BE_POSITIVE');
+  return (n + d - 1n) / d;
+}
+
+function padMinimum(value, width) {
+  return value.toString().padStart(width, '0');
+}
 
 export function districtForFloor(floor) {
   const f = toBigInt(assertUnsigned(floor, 'floor', { positive: true }));
@@ -48,6 +56,93 @@ export function isCanonicalMilestoneId(id) {
   return Boolean(match && match[1] !== '0');
 }
 
+function combinations(values, count, start = 0, prefix = [], output = []) {
+  if (prefix.length === count) {
+    output.push(prefix.slice());
+    return output;
+  }
+  for (let index = start; index <= values.length - (count - prefix.length); index += 1) {
+    prefix.push(values[index]);
+    combinations(values, count, index + 1, prefix, output);
+    prefix.pop();
+  }
+  return output;
+}
+
+function modifierBasePermutation(poolIds, count) {
+  if (!Array.isArray(poolIds) || new Set(poolIds).size !== poolIds.length) throw new Error('MODIFIER_POOL_IDS_MUST_BE_UNIQUE');
+  if (!Number.isInteger(count) || count <= 0 || count > poolIds.length) throw new RangeError('INVALID_MODIFIER_SELECTION_COUNT');
+  const cacheKey = `${count}|${poolIds.join('|')}`;
+  if (MODIFIER_PERMUTATION_CACHE.has(cacheKey)) return MODIFIER_PERMUTATION_CACHE.get(cacheKey);
+  const ordered = combinations(poolIds, count)
+    .map((ids) => ({ ids, rank: sha256Text(`tower-modifier-combination-v1|${cacheKey}|${ids.join('|')}`) }))
+    .sort((left, right) => left.rank.localeCompare(right.rank) || left.ids.join('|').localeCompare(right.ids.join('|')))
+    .map((entry) => Object.freeze(entry.ids.slice()));
+  if (ordered.length < 2) throw new Error('MODIFIER_COMBINATION_SPACE_TOO_SMALL');
+  const frozen = Object.freeze(ordered);
+  MODIFIER_PERMUTATION_CACHE.set(cacheKey, frozen);
+  return frozen;
+}
+
+export function selectModifiers(floor, poolIds, count = 2) {
+  const f = toBigInt(assertUnsigned(floor, 'floor', { positive: true }));
+  const base = modifierBasePermutation(poolIds, count);
+  const size = BigInt(base.length);
+  const zeroBased = f - 1n;
+  const block = zeroBased / size;
+  const position = zeroBased % size;
+  const index = Number((block + position) % size);
+  return base[index].slice();
+}
+
+export function auditModifierSequence(candidate, startFloor = '1', length = candidate.tower.modifierPools.windowSize) {
+  const start = toBigInt(assertUnsigned(startFloor, 'startFloor', { positive: true }));
+  const count = Number(toBigInt(assertUnsigned(String(length), 'length', { positive: true })));
+  if (!Number.isSafeInteger(count) || count > 10000) throw new RangeError('MODIFIER_AUDIT_LENGTH_UNSAFE');
+  const selectionCount = Number(candidate.tower.modifierPools.selectionCount);
+  const windowSize = Number(candidate.tower.modifierPools.windowSize);
+  const adjacentLimit = Number(candidate.tower.modifierPools.adjacentRepeatMaximum);
+  const windowLimit = Number(candidate.tower.modifierPools.windowRepeatMaximum);
+  const keys = [];
+  let previous = null;
+  let adjacentRun = 0;
+  let maximumAdjacentRun = 0;
+  for (let index = 0; index < count; index += 1) {
+    const pair = selectModifiers((start + BigInt(index)).toString(), candidate.tower.modifierPools.poolIds, selectionCount);
+    const key = pair.join('|');
+    keys.push(key);
+    adjacentRun = key === previous ? adjacentRun + 1 : 1;
+    if (adjacentRun > maximumAdjacentRun) maximumAdjacentRun = adjacentRun;
+    previous = key;
+  }
+  let maximumWindowOccurrences = 0;
+  for (let startIndex = 0; startIndex < keys.length; startIndex += 1) {
+    const counts = new Map();
+    for (const key of keys.slice(startIndex, startIndex + windowSize)) counts.set(key, (counts.get(key) ?? 0) + 1);
+    for (const value of counts.values()) if (value > maximumWindowOccurrences) maximumWindowOccurrences = value;
+  }
+  return {
+    startFloor: start.toString(),
+    length: String(count),
+    adjacentRepeatMaximumConfigured: String(adjacentLimit),
+    adjacentRepeatMaximumObserved: String(maximumAdjacentRun),
+    windowSize: String(windowSize),
+    windowRepeatMaximumConfigured: String(windowLimit),
+    windowRepeatMaximumObserved: String(maximumWindowOccurrences),
+    passed: maximumAdjacentRun <= adjacentLimit && maximumWindowOccurrences <= windowLimit,
+  };
+}
+
+export function backgroundForFloor(candidate, floor) {
+  const f = toBigInt(assertUnsigned(floor, 'floor', { positive: true }));
+  const districtCadence = toBigInt(assertUnsigned(candidate.tower.backgroundCadence.districtChangeEveryFloors, 'districtChangeEveryFloors', { positive: true }));
+  const majorCadence = toBigInt(assertUnsigned(candidate.tower.backgroundCadence.majorThemeCycleEveryFloors, 'majorThemeCycleEveryFloors', { positive: true }));
+  return {
+    districtThemeIndex: ceilDiv(f, districtCadence).toString(),
+    majorThemeCycleIndex: ceilDiv(f, majorCadence).toString(),
+  };
+}
+
 export function bossForFloor(floor) {
   const f = toBigInt(assertUnsigned(floor, 'floor', { positive: true }));
   const district = ceilDiv(f, 10n);
@@ -72,12 +167,6 @@ function stat(base, growth, floor, exactMaximum) {
   return { representation: 'exact-symbolic-power', value: 'SYMBOLIC', expression };
 }
 
-export function selectModifiers(floor, poolIds, count = 2) {
-  const f = assertUnsigned(floor, 'floor', { positive: true });
-  const ranked = poolIds.map((id) => ({ id, key: sha256Text(`${f}|${id}`) })).sort((a, b) => a.key.localeCompare(b.key));
-  return ranked.slice(0, count).map((x) => x.id);
-}
-
 export function generateFloor(candidate, floor) {
   const f = assertUnsigned(floor, 'floor', { positive: true });
   const district = districtForFloor(f);
@@ -93,6 +182,7 @@ export function generateFloor(candidate, floor) {
     milestoneId: candidate.tower.milestones.includes(f) ? milestoneId(f) : 'NONE',
     boss: bossForFloor(f),
     modifiers,
+    background: backgroundForFloor(candidate, f),
     hp: stat(generator.hpBase, generator.hpGrowth, f, generator.exactExpansionMaximumFloor),
     attack: stat(generator.attackBase, generator.attackGrowth, f, generator.exactExpansionMaximumFloor),
     coin: stat(generator.coinBase, generator.coinGrowth, f, generator.exactExpansionMaximumFloor),

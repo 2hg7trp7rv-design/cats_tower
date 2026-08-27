@@ -1,7 +1,7 @@
 {
   "schemaVersion": "2.1.0",
   "fixtureSetId": "cats-tower-v2-execution-contract-negative",
-  "caseCount": "16",
+  "caseCount": "18",
   "cases": [
     {
       "id": "unknown-top-field",
@@ -194,6 +194,30 @@
         "EXEC_GACHA_SELECTION_POLICY",
         "EXEC_GACHA_BANNER",
         "EXEC_GACHA_BANNER_KIND"
+      ]
+    },
+    {
+      "id": "tower-adjacent-limit-diverges",
+      "mutation": {
+        "op": "set",
+        "path": "/model/towerSequence/adjacentRepeatMaximum",
+        "value": "2"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "EXEC_TOWER_SEQUENCE_LIMITS"
+      ]
+    },
+    {
+      "id": "tower-background-algorithm-changed",
+      "mutation": {
+        "op": "set",
+        "path": "/model/towerSequence/backgroundIndexAlgorithm",
+        "value": "floor-modulo-v1"
+      },
+      "expectedCodes": [
+        "SCHEMA",
+        "EXEC_TOWER_SEQUENCE_ALGORITHM"
       ]
     }
   ]

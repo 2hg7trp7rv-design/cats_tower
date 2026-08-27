@@ -54,7 +54,7 @@ check(eq(plan.builds, builds) && eq(candidate.builds.map((entry) => entry.id), b
 check(eq(plan.personas, personas) && eq(candidate.personas.map((entry) => entry.id), personas), 'EXEC_PERSONAS', 'persona set mismatch');
 check(eq(plan.horizons.map((entry) => entry.id), horizons), 'EXEC_HORIZONS', 'horizon set mismatch');
 
-exactKeys(contract.model, ['firstReset','progression','repeatedReset','gachaItemSelection'], '#/model');
+exactKeys(contract.model, ['firstReset','progression','repeatedReset','gachaItemSelection','towerSequence'], '#/model');
 const firstReset = contract.model?.firstReset;
 exactKeys(firstReset, ['personaBaseMinutes','buildAdjustmentMinutes','jitterMinimumMinutes','jitterMaximumMinutes','minimumMinutes'], '#/model/firstReset');
 check(eq(Object.keys(firstReset?.personaBaseMinutes ?? {}), personas), 'EXEC_PERSONA_BASE_KEYS', 'first reset persona keys mismatch');
@@ -119,6 +119,12 @@ for (const [kind, binding] of Object.entries(gachaKinds)) {
   const nonFeaturedUr = binding.catalog.filter((entry) => entry.baseRarity === 'UR' && entry.id !== config?.featuredItemId);
   check(nonFeaturedUr.length > 0, 'EXEC_GACHA_NONFEATURED_UR_POOL', `${kind} requires at least one non-featured UR item`);
 }
+
+const towerSequence = contract.model?.towerSequence;
+exactKeys(towerSequence, ['modifierPairAlgorithm','modifierCombinationOrdering','adjacentRepeatMaximum','windowSize','windowRepeatMaximum','backgroundIndexAlgorithm','scenarioInputDigest'], '#/model/towerSequence');
+check(towerSequence?.modifierPairAlgorithm === 'block-rotated-combination-permutation-v1' && towerSequence?.modifierCombinationOrdering === 'sha256-stable-combination-v1' && towerSequence?.backgroundIndexAlgorithm === 'ceil-floor-over-cadence-v1' && towerSequence?.scenarioInputDigest === 'sha256-canonical-json-v1', 'EXEC_TOWER_SEQUENCE_ALGORITHM', 'tower sequence algorithm mismatch');
+check(towerSequence?.adjacentRepeatMaximum === candidate.tower.modifierPools.adjacentRepeatMaximum && towerSequence?.windowSize === candidate.tower.modifierPools.windowSize && towerSequence?.windowRepeatMaximum === candidate.tower.modifierPools.windowRepeatMaximum, 'EXEC_TOWER_SEQUENCE_LIMITS', 'tower sequence limits differ from candidate');
+check(candidate.tower.backgroundCadence.districtChangeEveryFloors === '10' && candidate.tower.backgroundCadence.majorThemeCycleEveryFloors === '100', 'EXEC_BACKGROUND_CADENCE', 'background cadence differs from sealed 10/100 rule');
 
 exactKeys(contract.statistics, ['method','percentiles','sort','emptyInput'], '#/statistics');
 check(contract.statistics?.method === 'nearest-rank-v1' && eq(contract.statistics?.percentiles, ['0.50','0.90','0.99']) && contract.statistics?.sort === 'unsigned-decimal-ascending' && contract.statistics?.emptyInput === 'FAIL_CLOSED', 'EXEC_STATISTICS', 'statistics contract mismatch');

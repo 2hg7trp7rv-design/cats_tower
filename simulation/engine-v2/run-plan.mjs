@@ -81,6 +81,7 @@ function summarizeCell(partitionName, buildId, personaId, scenarios, horizons) {
     buildId,
     personaId,
     seedCount: String(scenarios.length),
+    scenarioInputDigests: scenarios.map((entry) => entry.inputDigest),
     scenarioDigests: scenarios.map((entry) => entry.scenarioDigest),
     metrics: {
       firstResetMinutes: summarizeUnsigned(scenarios.map((entry) => entry.firstResetMinutes)),

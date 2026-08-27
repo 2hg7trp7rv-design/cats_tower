@@ -265,5 +265,59 @@
       "expectedTargetFeaturedProgress": "0",
       "expectedSourceProgressRetained": true
     }
+  ],
+  "modifierSequenceCases": [
+    {
+      "id": "opening-40-floors",
+      "startFloor": "1",
+      "length": "40"
+    },
+    {
+      "id": "combination-block-boundary",
+      "startFloor": "12",
+      "length": "20"
+    },
+    {
+      "id": "district-and-cycle-boundary",
+      "startFloor": "95",
+      "length": "20"
+    },
+    {
+      "id": "huge-floor-window",
+      "startFloor": "99999999999999999999999999999999999999999999999999",
+      "length": "20"
+    }
+  ],
+  "backgroundCases": [
+    {
+      "floor": "1",
+      "districtThemeIndex": "1",
+      "majorThemeCycleIndex": "1"
+    },
+    {
+      "floor": "10",
+      "districtThemeIndex": "1",
+      "majorThemeCycleIndex": "1"
+    },
+    {
+      "floor": "11",
+      "districtThemeIndex": "2",
+      "majorThemeCycleIndex": "1"
+    },
+    {
+      "floor": "100",
+      "districtThemeIndex": "10",
+      "majorThemeCycleIndex": "1"
+    },
+    {
+      "floor": "101",
+      "districtThemeIndex": "11",
+      "majorThemeCycleIndex": "2"
+    },
+    {
+      "floor": "10000",
+      "districtThemeIndex": "1000",
+      "majorThemeCycleIndex": "100"
+    }
   ]
 }

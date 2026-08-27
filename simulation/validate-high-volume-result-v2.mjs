@@ -90,7 +90,7 @@ const expectedCounterKeys = {
   'duplicate-skew-overflow': ['characterSamples','characterCatalogSize','characterPoolItemCount','characterUniqueItemsSeen','characterItemsAtFullMastery','characterItemsWithOverflow','characterMaximumCopies','characterFeaturedCopies','characterFeaturedItemMismatches','characterNonFeaturedUrFeaturedViolations','characterHardPityTriggered','characterFeaturedGuaranteeTriggered','characterFeaturedRollHits','characterRarityNDraws','characterRarityRDraws','characterRarityRRDraws','characterRaritySRDraws','characterRaritySSRDraws','characterRarityURDraws','weaponSamples','weaponCatalogSize','weaponPoolItemCount','weaponUniqueItemsSeen','weaponItemsAtFullMastery','weaponItemsWithOverflow','weaponMaximumCopies','weaponFeaturedCopies','weaponFeaturedItemMismatches','weaponNonFeaturedUrFeaturedViolations','weaponHardPityTriggered','weaponFeaturedGuaranteeTriggered','weaponFeaturedRollHits','weaponRarityNDraws','weaponRarityRDraws','weaponRarityRRDraws','weaponRaritySRDraws','weaponRaritySSRDraws','weaponRarityURDraws'],
   'refund-replay-race': ['validRefunds','invalidSpentRejected','idempotentReplayMatches','exactlyOnceReceiptMatches','outOfOrderRestoreMatches','acceptedVersionRetryMatches','freeLedgerDebitViolations','deficitStateCount'],
   'state-machine-model': ['validAccepted','invalidRejected','unexpectedAccept','unexpectedReject','machineCount'],
-  'large-number-properties': ['symbolicRepresentations','expandedRepresentations','canonicalIdPass','canonicalIdFail','maximumDigits'],
+  'large-number-properties': ['symbolicRepresentations','expandedRepresentations','canonicalIdPass','canonicalIdFail','adjacentModifierRepeatViolations','windowModifierRepeatViolations','backgroundDistrictMismatches','backgroundCycleMismatches','maximumDigits'],
 };
 check(eq(Object.keys(payload.metrics.counters ?? {}), expectedCounterKeys[payload.suiteId]), 'HV_COUNTER_FIELDS', 'suite counter fields or order mismatch');
 const rarityDrawSum = (prefix) => ['N','R','RR','SR','SSR','UR'].reduce((sum, rarity) => sum + (counters[`${prefix}Rarity${rarity}Draws`] ?? 0n), 0n);
@@ -129,7 +129,7 @@ if (payload.suiteId === 'state-machine-model') {
 }
 if (!['gacha-tails','duplicate-skew-overflow'].includes(payload.suiteId)) check(payload.metrics.tertiary === undefined && payload.metrics.quaternary === undefined, 'HV_METRIC_SHAPE', 'suite contains unexpected tertiary or quaternary metrics');
 if (payload.suiteId === 'large-number-properties') {
-  check(counters.symbolicRepresentations === sampleCount && counters.expandedRepresentations === 0n && counters.canonicalIdPass === sampleCount && counters.canonicalIdFail === 0n, 'HV_LARGE_NUMBER', 'large-number representation or generated ID invariant failed');
+  check(counters.symbolicRepresentations === sampleCount && counters.expandedRepresentations === 0n && counters.canonicalIdPass === sampleCount && counters.canonicalIdFail === 0n && counters.adjacentModifierRepeatViolations === 0n && counters.windowModifierRepeatViolations === 0n && counters.backgroundDistrictMismatches === 0n && counters.backgroundCycleMismatches === 0n, 'HV_LARGE_NUMBER', 'large-number representation, generated ID, modifier repetition or background cadence invariant failed');
 }
 
 if (reproduce && (smoke || process.env.CT_STEP3_AUTHORIZED === '1')) {

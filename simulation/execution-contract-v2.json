@@ -2,8 +2,8 @@
   "schemaVersion": "2.1.0",
   "contractId": "cats-tower-step3-execution-contract-v2",
   "candidateId": "cats-tower-v2-candidate-001",
-  "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
-  "executionVersion": "cats-tower-step3-executor-v1.0.0",
+  "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+  "executionVersion": "cats-tower-step3-executor-v1.1.0",
   "roundingVersion": "ct-rational-half-even-v1",
   "sourcePaths": {
     "candidate": "simulation/candidate-v2.json",
@@ -63,6 +63,15 @@
         "featuredBannerId": "banner.weapon.featured",
         "featuredItemId": "weapon.launch.036"
       }
+    },
+    "towerSequence": {
+      "modifierPairAlgorithm": "block-rotated-combination-permutation-v1",
+      "modifierCombinationOrdering": "sha256-stable-combination-v1",
+      "adjacentRepeatMaximum": "1",
+      "windowSize": "10",
+      "windowRepeatMaximum": "3",
+      "backgroundIndexAlgorithm": "ceil-floor-over-cadence-v1",
+      "scenarioInputDigest": "sha256-canonical-json-v1"
     }
   },
   "statistics": {

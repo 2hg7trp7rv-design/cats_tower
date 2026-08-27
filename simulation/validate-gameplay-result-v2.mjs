@@ -81,12 +81,15 @@ const personas = ['no-ad-f2p','rewarded-ad-f2p','monthly-pass','controlled-payer
 const horizons = ['1-10F','100F','1000F','10000F-or-equivalent','repeated-resets','30-45-day-economy'];
 const expectedCells = new Set();
 for (const build of builds) for (const persona of personas) expectedCells.add(`${build}|${persona}`);
+const allInputDigests = new Set();
 const allDigests = new Set();
 for (const [index, cell] of (payload.cells ?? []).entries()) {
   const identity = `${cell.buildId}|${cell.personaId}`;
   check(expectedCells.delete(identity), 'GAMEPLAY_CELL_IDENTITY', `duplicate or unknown cell ${identity}`);
   check(cell.cellId === `${payload.partition}|${identity}`, 'GAMEPLAY_CELL_ID', `cellId mismatch at ${index}`);
   check(BigInt(cell.seedCount) === seedsPerCell, 'GAMEPLAY_CELL_SEEDS', `seedCount mismatch for ${identity}`);
+  check(cell.scenarioInputDigests.length === Number(seedsPerCell), 'GAMEPLAY_INPUT_DIGEST_COUNT', `scenario input digest count mismatch for ${identity}`);
+  for (const digest of cell.scenarioInputDigests) check(!allInputDigests.has(digest) && allInputDigests.add(digest), 'GAMEPLAY_INPUT_DIGEST_UNIQUE', `duplicate scenario input digest ${digest}`);
   check(cell.scenarioDigests.length === Number(seedsPerCell), 'GAMEPLAY_DIGEST_COUNT', `scenario digest count mismatch for ${identity}`);
   for (const digest of cell.scenarioDigests) check(!allDigests.has(digest) && allDigests.add(digest), 'GAMEPLAY_DIGEST_UNIQUE', `duplicate scenario digest ${digest}`);
   checkSummary(cell.metrics.firstResetMinutes, seedsPerCell, `#/cells/${index}/metrics/firstResetMinutes`);
@@ -101,6 +104,7 @@ for (const [index, cell] of (payload.cells ?? []).entries()) {
   }
 }
 check(expectedCells.size === 0, 'GAMEPLAY_CELL_COVERAGE', `missing cells: ${[...expectedCells].join(',')}`);
+check(allInputDigests.size === Number(scenarioCount), 'GAMEPLAY_GLOBAL_INPUT_DIGEST_COUNT', 'global scenario input digest count mismatch');
 check(allDigests.size === Number(scenarioCount), 'GAMEPLAY_GLOBAL_DIGEST_COUNT', 'global scenario digest count mismatch');
 checkSummary(payload.summary.firstResetMinutes, scenarioCount, '#/deterministicPayload/summary/firstResetMinutes');
 checkSummary(payload.summary.featuredGuaranteeDay, scenarioCount, '#/deterministicPayload/summary/featuredGuaranteeDay');

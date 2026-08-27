@@ -6,7 +6,7 @@ import { DeterministicRng } from './rng.mjs';
 import { parseExactDecimal, normalizeUnsigned } from './numeric.mjs';
 import { pityOutcome, masteryOverflow, applyPaidRubyRefund } from './economy.mjs';
 import { idempotentResult, replaySequence, TRANSITIONS, exactlyOnceReceipt, acceptedVersionRetry } from './state-machines.mjs';
-import { generateFloor, isCanonicalDistrictId, isCanonicalCycleId } from './tower.mjs';
+import { generateFloor, isCanonicalDistrictId, isCanonicalCycleId, auditModifierSequence } from './tower.mjs';
 import { UnsignedHistogram } from './statistics.mjs';
 import { canonicalJson, sha256Canonical, sha256Text } from './hash.mjs';
 
@@ -388,7 +388,7 @@ function stateMachineModel(samples, namespace) {
 function largeNumberProperties(candidate, samples, namespace) {
   const floorDigits = new UnsignedHistogram();
   const districtDigits = new UnsignedHistogram();
-  const counters = { symbolicRepresentations: 0n, expandedRepresentations: 0n, canonicalIdPass: 0n, canonicalIdFail: 0n, maximumDigits: 0n };
+  const counters = { symbolicRepresentations: 0n, expandedRepresentations: 0n, canonicalIdPass: 0n, canonicalIdFail: 0n, adjacentModifierRepeatViolations: 0n, windowModifierRepeatViolations: 0n, backgroundDistrictMismatches: 0n, backgroundCycleMismatches: 0n, maximumDigits: 0n };
   for (let sample = 0; sample < samples; sample += 1) {
     const rng = new DeterministicRng(`${namespace}|${sample}`);
     const length = Number(rng.nextBelow(120n)) + 30;
@@ -397,6 +397,14 @@ function largeNumberProperties(candidate, samples, namespace) {
     const generated = generateFloor(candidate, floor);
     if (generated.hp.representation === 'exact-symbolic-power') counters.symbolicRepresentations += 1n; else counters.expandedRepresentations += 1n;
     if (isCanonicalDistrictId(generated.districtId) && isCanonicalCycleId(generated.cycleId)) counters.canonicalIdPass += 1n; else counters.canonicalIdFail += 1n;
+    const audit = auditModifierSequence(candidate, floor, candidate.tower.modifierPools.windowSize);
+    if (BigInt(audit.adjacentRepeatMaximumObserved) > BigInt(audit.adjacentRepeatMaximumConfigured)) counters.adjacentModifierRepeatViolations += 1n;
+    if (BigInt(audit.windowRepeatMaximumObserved) > BigInt(audit.windowRepeatMaximumConfigured)) counters.windowModifierRepeatViolations += 1n;
+    const f = BigInt(floor);
+    const expectedDistrict = ((f - 1n) / BigInt(candidate.tower.backgroundCadence.districtChangeEveryFloors) + 1n).toString();
+    const expectedCycle = ((f - 1n) / BigInt(candidate.tower.backgroundCadence.majorThemeCycleEveryFloors) + 1n).toString();
+    if (generated.background.districtThemeIndex !== expectedDistrict) counters.backgroundDistrictMismatches += 1n;
+    if (generated.background.majorThemeCycleIndex !== expectedCycle) counters.backgroundCycleMismatches += 1n;
     const digits = BigInt(floor.length);
     if (digits > counters.maximumDigits) counters.maximumDigits = digits;
     floorDigits.add(digits.toString());

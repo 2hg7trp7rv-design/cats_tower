@@ -43,6 +43,9 @@ function horizonMetrics(candidate, execution, build, persona, rng, horizon) {
     districtId: generated.districtId,
     cycleId: generated.cycleId,
     bossId: generated.boss.id,
+    modifierIds: generated.modifiers,
+    backgroundDistrictThemeIndex: generated.background.districtThemeIndex,
+    backgroundMajorThemeCycleIndex: generated.background.majorThemeCycleIndex,
   };
   if (horizon.mode === 'five-resets') {
     const repeated = execution.model.repeatedReset;
@@ -69,6 +72,18 @@ export function runScenario(candidate, plan, execution, { buildId, personaId, na
   const persona = candidate.personas.find((entry) => entry.id === personaId);
   if (!build || !persona) throw new Error('UNKNOWN_BUILD_OR_PERSONA');
   if (!namespace || !partition) throw new Error('SCENARIO_NAMESPACE_AND_PARTITION_REQUIRED');
+  const input = {
+    candidateId: candidate.meta.candidateId,
+    namespace,
+    partition,
+    scenarioAlgorithmVersion: execution.scenarioAlgorithmVersion,
+    executionVersion: execution.executionVersion,
+    buildId,
+    personaId,
+    seed,
+    ordinal: String(ordinal),
+  };
+  const inputDigest = sha256Canonical(input);
   const rng = new DeterministicRng(seed);
   const resetModel = execution.model.firstReset;
   const resetJitter = randomSignedInclusive(rng, resetModel.jitterMinimumMinutes, resetModel.jitterMaximumMinutes);
@@ -81,6 +96,7 @@ export function runScenario(candidate, plan, execution, { buildId, personaId, na
   const mastery25 = masteryOverflow(candidate.characterMastery, '25');
   const deterministic = {
     scenarioId: `${namespace}|${partition}|${buildId}|${personaId}|${ordinal}`,
+    inputDigest,
     partition,
     scenarioAlgorithmVersion: execution.scenarioAlgorithmVersion,
     executionVersion: execution.executionVersion,

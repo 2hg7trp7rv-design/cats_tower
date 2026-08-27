@@ -62,6 +62,19 @@ const horizonOrder = plan.horizons.map((entry) => entry.id);
 for (const scenario of scenarios) {
   const { scenarioDigest, ...scenarioPayload } = scenario;
   check(scenarioDigest === sha256Canonical(scenarioPayload), 'SCENARIO_DIGEST', scenario.scenarioId);
+  const expectedInput = {
+  candidateId: payload.candidateId,
+  namespace: execution.partitions.qualification.namespace,
+  partition: 'qualification',
+  scenarioAlgorithmVersion: execution.scenarioAlgorithmVersion,
+  executionVersion: execution.executionVersion,
+  buildId: scenario.buildId,
+  personaId: scenario.personaId,
+  seed: scenario.seed,
+  ordinal: scenario.ordinal,
+};
+check(scenario.inputDigest === sha256Canonical(expectedInput), 'SCENARIO_INPUT_DIGEST', scenario.scenarioId);
+
   check(scenario.partition === 'qualification', 'SCENARIO_PARTITION', scenario.scenarioId);
   check(scenario.scenarioAlgorithmVersion === execution.scenarioAlgorithmVersion && scenario.executionVersion === execution.executionVersion, 'SCENARIO_VERSION', scenario.scenarioId);
   const identity = `${scenario.buildId}|${scenario.personaId}|${scenario.ordinal}`;
@@ -75,6 +88,13 @@ for (const scenario of scenarios) {
   check(scenario.masteryAt20.masteredCopies === '20' && scenario.masteryAt20.overflowCopies === '0', 'MASTERY_20', scenario.scenarioId);
   check(scenario.masteryOverflowAt25.masteredCopies === '20' && scenario.masteryOverflowAt25.overflowCopies === '5' && scenario.masteryOverflowAt25.overflowCredit === '500', 'MASTERY_OVERFLOW', scenario.scenarioId);
   check(eq(scenario.horizons.map((entry) => entry.horizonId), horizonOrder), 'HORIZONS', scenario.scenarioId);
+  for (const horizon of scenario.horizons) {
+  check(Array.isArray(horizon.modifierIds) && horizon.modifierIds.length === 2 && new Set(horizon.modifierIds).size === 2, 'HORIZON_MODIFIERS', `${scenario.scenarioId}|${horizon.horizonId}`);
+  const floor = BigInt(horizon.targetFloor);
+  const expectedDistrictTheme = ((floor - 1n) / BigInt(candidate.tower.backgroundCadence.districtChangeEveryFloors) + 1n).toString();
+  const expectedMajorTheme = ((floor - 1n) / BigInt(candidate.tower.backgroundCadence.majorThemeCycleEveryFloors) + 1n).toString();
+  check(horizon.backgroundDistrictThemeIndex === expectedDistrictTheme && horizon.backgroundMajorThemeCycleIndex === expectedMajorTheme, 'HORIZON_BACKGROUND_CADENCE', `${scenario.scenarioId}|${horizon.horizonId}`);
+}
   const floor10000 = scenario.horizons.find((entry) => entry.horizonId === '10000F-or-equivalent');
   check(floor10000?.targetFloorRepresentation === 'exact-symbolic-power', 'LARGE_FLOOR_REPRESENTATION', scenario.scenarioId);
   if (scenario.personaId === 'no-ad-f2p') {

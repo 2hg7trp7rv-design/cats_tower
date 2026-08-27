@@ -63,10 +63,10 @@
           "const": "cats-tower-v2-candidate-001"
         },
         "scenarioAlgorithmVersion": {
-          "const": "cats-tower-scenario-v2.1.0"
+          "const": "cats-tower-scenario-v2.2.0"
         },
         "executionVersion": {
-          "const": "cats-tower-step3-executor-v1.0.0"
+          "const": "cats-tower-step3-executor-v1.1.0"
         },
         "roundingVersion": {
           "const": "ct-rational-half-even-v1"

@@ -163,6 +163,16 @@ try {
       expectedCodes: ['GAMEPLAY_VIOLATIONS'],
     },
     {
+      id: 'duplicate-scenario-input-digest',
+      mutations: [{ op: 'set', path: '/deterministicPayload/cells/0/scenarioInputDigests/1', value: gameplayBase.deterministicPayload.cells[0].scenarioInputDigests[0] }],
+      expectedCodes: ['GAMEPLAY_INPUT_DIGEST_UNIQUE'],
+    },
+    {
+      id: 'scenario-input-digest-count-mismatch',
+      mutations: [{ op: 'delete', path: '/deterministicPayload/cells/0/scenarioInputDigests/1' }],
+      expectedCodes: ['GAMEPLAY_INPUT_DIGEST_COUNT','GAMEPLAY_GLOBAL_INPUT_DIGEST_COUNT'],
+    },
+    {
       id: 'duplicate-scenario-digest',
       mutations: [{ op: 'set', path: '/deterministicPayload/cells/0/scenarioDigests/1', value: gameplayBase.deterministicPayload.cells[0].scenarioDigests[0] }],
       expectedCodes: ['GAMEPLAY_DIGEST_UNIQUE'],
@@ -281,8 +291,8 @@ if (errors.length) {
 console.log(JSON.stringify({
   ok: true,
   executionContractNegativeCases: executionNegative.cases.length,
-  gameplayResultNegativeCases: 10,
+  gameplayResultNegativeCases: 12,
   highVolumeResultNegativeCases: 15,
   modelBindingCases: 7,
-  totalNewNegativeCases: executionNegative.cases.length + 25,
+  totalNewNegativeCases: executionNegative.cases.length + 27,
 }));
