@@ -6,9 +6,9 @@ import { spawnSync } from 'node:child_process';
 import process from 'node:process';
 import { sha256Text, canonicalJson } from '../../engine-v2/hash.mjs';
 import { addUnsigned, subtractUnsigned, multiplyUnsigned, divideUnsigned, roundRational, rational, displayAbbreviation, toBigInt } from '../../engine-v2/numeric.mjs';
-import { assertProbabilityTable, resetRubyQuote, evolutionEligibility, masteryOverflow, applyPaidRubyRefund, pityOutcome } from '../../engine-v2/economy.mjs';
+import { assertProbabilityTable, resetRubyQuote, evolutionEligibility, masteryOverflow, applyPaidRubyRefund, pityOutcome, pityCarryoverOutcome } from '../../engine-v2/economy.mjs';
 import { generateFloor, isCanonicalDistrictId, isCanonicalCycleId, isCanonicalMilestoneId } from '../../engine-v2/tower.mjs';
-import { replaySequence, idempotentResult, exactlyOnceReceipt, acceptedVersionRetry } from '../../engine-v2/state-machines.mjs';
+import { replaySequence, idempotentResult, exactlyOnceReceipt, acceptedVersionRetry, loginClaimDecision } from '../../engine-v2/state-machines.mjs';
 
 const load=async(path)=>JSON.parse(await readFile(resolve(path),'utf8'));
 const candidate=await load('simulation/candidate-v2.json');
@@ -81,6 +81,13 @@ for(const test of boundary.pityCases){
   if(test.expectedRarity!==undefined)check(actual.rarity===test.expectedRarity,'BOUNDARY_PITY_RARITY',JSON.stringify(test));
   if(test.expectedFeatured!==undefined)check(actual.featured===test.expectedFeatured,'BOUNDARY_PITY_FEATURED',JSON.stringify(test));
 }
+for(const test of boundary.carryoverCases??[]){
+  const actual=pityCarryoverOutcome(candidate,test);
+  check(actual.compatible===test.expectedCompatible,'BOUNDARY_CARRYOVER_COMPATIBILITY',test.id);
+  check(actual.outcome===test.expectedOutcome,'BOUNDARY_CARRYOVER_OUTCOME',test.id);
+  check(actual.targetDrawsSinceUR===test.expectedTargetDrawsSinceUR&&actual.targetFeaturedProgress===test.expectedTargetFeaturedProgress,'BOUNDARY_CARRYOVER_TARGET',test.id);
+  check(actual.sourceProgressRetained===test.expectedSourceProgressRetained,'BOUNDARY_CARRYOVER_SOURCE',test.id);
+}
 for(const test of boundary.refundCases??[]){
   let rejected=false;
   try{applyPaidRubyRefund({...test,transactionId:'transaction.payment.fixture',policyVersion:'refund-deficit-v2'});}catch(error){rejected=error.message.includes(test.expectedError);}
@@ -104,6 +111,11 @@ for(const test of state.idempotencyCases){
   else {const store=new Map();let operations=0;idempotentResult(store,test.key,()=>({n:++operations}));idempotentResult(store,test.key,()=>({n:++operations}));check(operations.toString()===test.expectedOperationCount,'IDEMPOTENCY_ONCE',test.id);}
 }
 for(const test of state.versionCases){const actual=acceptedVersionRetry(test);check(actual.outcome===test.expected,'VERSION_BINDING',test.id);}
+for(const test of state.loginPeriodCases??[]){
+  const actual=loginClaimDecision(test.input);
+  check(actual.outcome===test.expectedOutcome&&actual.nextTrackIndex===test.expectedNextTrackIndex,'LOGIN_PERIOD_OUTCOME',test.id);
+  check(actual.serverTimeAuthoritative===true&&actual.missedDayResetsTrack===false,'LOGIN_PERIOD_AUTHORITY',test.id);
+}
 
 for(const test of golden.numeric){
   let actual;
@@ -146,4 +158,4 @@ try{
 }finally{await rm(temp,{recursive:true,force:true});}
 
 if(errors.length){console.error(JSON.stringify({ok:false,errorCount:errors.length,errors},null,2));process.exit(1);}
-console.log(JSON.stringify({ok:true,fixtureFiles:manifest.files.length,positiveCases:positive.cases.length,boundaryTowerCases:boundary.towerCases.length,negativeCases:negative.cases.length,stateSuccessCases:state.successSequences.length,stateInvalidCases:state.invalidSequences.length,goldenNumericCases:golden.numeric.length,runPlanNegativeCases:runPlanNegative.cases.length}));
+console.log(JSON.stringify({ok:true,fixtureFiles:manifest.files.length,positiveCases:positive.cases.length,boundaryTowerCases:boundary.towerCases.length,boundaryPityCases:boundary.pityCases.length,boundaryCarryoverCases:(boundary.carryoverCases??[]).length,negativeCases:negative.cases.length,stateSuccessCases:state.successSequences.length,stateInvalidCases:state.invalidSequences.length,loginPeriodCases:(state.loginPeriodCases??[]).length,goldenNumericCases:golden.numeric.length,runPlanNegativeCases:runPlanNegative.cases.length}));

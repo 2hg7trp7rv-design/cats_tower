@@ -40,7 +40,8 @@ const suite = execution.highVolumeSuites.find((entry) => entry.id === payload.su
 check(Boolean(suite), 'HV_SUITE', 'suite is not present in the execution contract');
 check(payload.candidateId === candidate.meta.candidateId, 'HV_CANDIDATE_ID', 'candidateId mismatch');
 check(payload.scenarioAlgorithmVersion === execution.scenarioAlgorithmVersion && payload.executionVersion === execution.executionVersion && payload.roundingVersion === execution.roundingVersion, 'HV_VERSION', 'execution version mismatch');
-check(payload.metricContract === `${payload.suiteId}-metrics-v1`, 'HV_METRIC_CONTRACT', 'metric contract mismatch');
+const implementationVersion = suite?.implementationVersion?.match(/-(v[0-9]+)$/)?.[1];
+check(Boolean(implementationVersion) && payload.metricContract === `${payload.suiteId}-metrics-${implementationVersion}`, 'HV_METRIC_CONTRACT', 'metric contract mismatch');
 check(payload.seedNamespace === `cats-tower-v2-high-volume|${payload.suiteId}`, 'HV_NAMESPACE', 'seed namespace mismatch');
 check(result.hashes.candidateSha256 === sha256Text(candidateText), 'HV_CANDIDATE_DIGEST', 'candidate digest mismatch');
 check(result.hashes.runPlanSha256 === sha256Text(planText), 'HV_PLAN_DIGEST', 'run-plan digest mismatch');
@@ -70,38 +71,52 @@ if (smoke) {
 check(result.verdict.contractValidation === 'PASS' && result.verdict.step3PromotionAllowed === false && result.verdict.partialResultPromotion === false, 'HV_PROMOTION', 'suite result may not authorize promotion');
 summary(payload.metrics.primary, sampleCount, '#/deterministicPayload/metrics/primary');
 summary(payload.metrics.secondary, sampleCount, '#/deterministicPayload/metrics/secondary');
+if (payload.metrics.tertiary !== undefined) summary(payload.metrics.tertiary, sampleCount, '#/deterministicPayload/metrics/tertiary');
+if (payload.metrics.quaternary !== undefined) summary(payload.metrics.quaternary, sampleCount, '#/deterministicPayload/metrics/quaternary');
 const counters = Object.fromEntries(Object.entries(payload.metrics.counters ?? {}).map(([key, value]) => [key, unsigned(value, `#/deterministicPayload/metrics/counters/${key}`)]));
-const metricsWithoutDigest = { primary: payload.metrics.primary, secondary: payload.metrics.secondary, counters: payload.metrics.counters };
+const metricsWithoutDigest = {
+  primary: payload.metrics.primary,
+  secondary: payload.metrics.secondary,
+  ...(payload.metrics.tertiary !== undefined ? { tertiary: payload.metrics.tertiary } : {}),
+  ...(payload.metrics.quaternary !== undefined ? { quaternary: payload.metrics.quaternary } : {}),
+  counters: payload.metrics.counters,
+};
 check(payload.metrics.suiteDigest === sha256Canonical({ suiteId: payload.suiteId, ...metricsWithoutDigest }), 'HV_SUITE_DIGEST', 'suite metrics digest mismatch');
 check(payload.violations.length === 0, 'HV_VIOLATIONS', 'suite contains invariant violations');
 
 const expectedCounterKeys = {
-  'gacha-tails': ['hardPityTriggered','featuredGuaranteeTriggered','naturalFeatured','maximumDrawsToFeatured','boundaryViolations'],
+  'gacha-tails': ['characterSamples','characterHardPityTriggered','characterFeaturedGuaranteeTriggered','characterFeaturedRollHits','characterMaximumDrawsToFeatured','weaponSamples','weaponHardPityTriggered','weaponFeaturedGuaranteeTriggered','weaponFeaturedRollHits','weaponMaximumDrawsToFeatured','maximumDrawsToFeatured','boundaryViolations'],
   'pity-conformance': ['hardBoundaryCases','hardBoundaryPass','featuredBoundaryCases','featuredBoundaryPass','earlyHardFalse','earlyFeaturedFalse','boundaryViolations'],
-  'duplicate-skew-overflow': ['catalogSize','uniqueItemsSeen','itemsAtFullMastery','itemsWithOverflow','maximumCopies'],
-  'refund-replay-race': ['validRefunds','invalidSpentRejected','idempotentReplayMatches','freeLedgerDebitViolations','deficitStateCount'],
+  'duplicate-skew-overflow': ['characterSamples','characterCatalogSize','characterUniqueItemsSeen','characterItemsAtFullMastery','characterItemsWithOverflow','characterMaximumCopies','weaponSamples','weaponCatalogSize','weaponUniqueItemsSeen','weaponItemsAtFullMastery','weaponItemsWithOverflow','weaponMaximumCopies'],
+  'refund-replay-race': ['validRefunds','invalidSpentRejected','idempotentReplayMatches','exactlyOnceReceiptMatches','outOfOrderRestoreMatches','acceptedVersionRetryMatches','freeLedgerDebitViolations','deficitStateCount'],
   'state-machine-model': ['validAccepted','invalidRejected','unexpectedAccept','unexpectedReject','machineCount'],
   'large-number-properties': ['symbolicRepresentations','expandedRepresentations','canonicalIdPass','canonicalIdFail','maximumDigits'],
 };
 check(eq(Object.keys(payload.metrics.counters ?? {}), expectedCounterKeys[payload.suiteId]), 'HV_COUNTER_FIELDS', 'suite counter fields or order mismatch');
 if (payload.suiteId === 'gacha-tails') {
-  check(counters.boundaryViolations === 0n && counters.maximumDrawsToFeatured <= 200n, 'HV_GACHA_BOUNDARY', 'gacha tail crossed a sealed pity boundary');
-  check(BigInt(payload.metrics.primary.maximum) <= 100n && BigInt(payload.metrics.secondary.maximum) <= 200n, 'HV_GACHA_MAXIMUM', 'gacha percentile input crossed pity bounds');
+  check(payload.metrics.tertiary !== undefined && payload.metrics.quaternary !== undefined, 'HV_GACHA_POOL_COVERAGE', 'gacha tails must independently represent character and weapon results');
+  check(counters.characterSamples === sampleCount && counters.weaponSamples === sampleCount, 'HV_GACHA_SAMPLE_COVERAGE', 'gacha pool sample counts differ from sealed sampleCount');
+  check(counters.boundaryViolations === 0n && counters.characterMaximumDrawsToFeatured <= 200n && counters.weaponMaximumDrawsToFeatured <= 200n && counters.maximumDrawsToFeatured <= 200n, 'HV_GACHA_BOUNDARY', 'character or weapon gacha tail crossed a sealed pity boundary');
+  check(BigInt(payload.metrics.primary.maximum) <= 100n && BigInt(payload.metrics.secondary.maximum) <= 200n && BigInt(payload.metrics.tertiary.maximum) <= 100n && BigInt(payload.metrics.quaternary.maximum) <= 200n, 'HV_GACHA_MAXIMUM', 'character or weapon gacha percentile input crossed pity bounds');
 }
 if (payload.suiteId === 'pity-conformance') {
   check(counters.boundaryViolations === 0n, 'HV_PITY_BOUNDARY', 'pity boundary conformance failed');
   check(counters.hardBoundaryPass === counters.hardBoundaryCases && counters.featuredBoundaryPass === counters.featuredBoundaryCases, 'HV_PITY_PASS_COUNT', 'pity boundary pass counts differ from cases');
 }
 if (payload.suiteId === 'duplicate-skew-overflow') {
-  check(counters.catalogSize === BigInt(candidate.characters.catalog.length) && counters.uniqueItemsSeen <= counters.catalogSize && counters.itemsWithOverflow <= counters.itemsAtFullMastery, 'HV_DUPLICATE_COUNTERS', 'duplicate counters violate catalog or mastery ordering');
+  check(payload.metrics.tertiary !== undefined && payload.metrics.quaternary !== undefined, 'HV_DUPLICATE_POOL_COVERAGE', 'duplicate skew must independently represent character and weapon mastery');
+  check(counters.characterSamples === sampleCount && counters.weaponSamples === sampleCount, 'HV_DUPLICATE_SAMPLE_COVERAGE', 'duplicate sample counts differ from sealed sampleCount');
+  check(counters.characterCatalogSize === BigInt(candidate.characters.catalog.length) && counters.characterUniqueItemsSeen <= counters.characterCatalogSize && counters.characterItemsWithOverflow <= counters.characterItemsAtFullMastery, 'HV_CHARACTER_DUPLICATE_COUNTERS', 'character duplicate counters violate catalog or mastery ordering');
+  check(counters.weaponCatalogSize === BigInt(candidate.weapons.catalog.length) && counters.weaponUniqueItemsSeen <= counters.weaponCatalogSize && counters.weaponItemsWithOverflow <= counters.weaponItemsAtFullMastery, 'HV_WEAPON_DUPLICATE_COUNTERS', 'weapon duplicate counters violate catalog or mastery ordering');
 }
 if (payload.suiteId === 'refund-replay-race') {
   check(counters.validRefunds + counters.invalidSpentRejected === sampleCount, 'HV_REFUND_COVERAGE', 'refund valid/rejected counts do not cover all samples');
-  check(counters.idempotentReplayMatches === counters.validRefunds && counters.freeLedgerDebitViolations === 0n, 'HV_REFUND_INVARIANT', 'refund replay or free-ledger invariant failed');
+  check(counters.idempotentReplayMatches === counters.validRefunds && counters.exactlyOnceReceiptMatches === counters.validRefunds && counters.outOfOrderRestoreMatches === counters.validRefunds && counters.acceptedVersionRetryMatches === counters.validRefunds && counters.freeLedgerDebitViolations === 0n, 'HV_REFUND_INVARIANT', 'refund replay, receipt, out-of-order restore, version binding or free-ledger invariant failed');
 }
 if (payload.suiteId === 'state-machine-model') {
   check(counters.validAccepted + counters.invalidRejected === sampleCount && counters.unexpectedAccept === 0n && counters.unexpectedReject === 0n, 'HV_STATE_MODEL', 'state-machine model accepted or rejected an unexpected transition');
 }
+if (!['gacha-tails','duplicate-skew-overflow'].includes(payload.suiteId)) check(payload.metrics.tertiary === undefined && payload.metrics.quaternary === undefined, 'HV_METRIC_SHAPE', 'suite contains unexpected tertiary or quaternary metrics');
 if (payload.suiteId === 'large-number-properties') {
   check(counters.symbolicRepresentations === sampleCount && counters.expandedRepresentations === 0n && counters.canonicalIdPass === sampleCount && counters.canonicalIdFail === 0n, 'HV_LARGE_NUMBER', 'large-number representation or generated ID invariant failed');
 }

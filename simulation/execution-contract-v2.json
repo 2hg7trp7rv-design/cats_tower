@@ -85,7 +85,7 @@
       "id": "gacha-tails",
       "plannedSamples": "200000",
       "contractSmokeSamples": "1000",
-      "implementationVersion": "gacha-tails-v1"
+      "implementationVersion": "gacha-tails-v2"
     },
     {
       "id": "pity-conformance",
@@ -97,13 +97,13 @@
       "id": "duplicate-skew-overflow",
       "plannedSamples": "200000",
       "contractSmokeSamples": "1000",
-      "implementationVersion": "duplicate-skew-overflow-v1"
+      "implementationVersion": "duplicate-skew-overflow-v2"
     },
     {
       "id": "refund-replay-race",
       "plannedSamples": "100000",
       "contractSmokeSamples": "1000",
-      "implementationVersion": "refund-replay-race-v1"
+      "implementationVersion": "refund-replay-race-v2"
     },
     {
       "id": "state-machine-model",

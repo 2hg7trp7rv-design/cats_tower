@@ -15,13 +15,14 @@ export function assertProbabilityTable(entries) {
   if (compare(sumProbabilities(entries), rational(1n)) !== 0) throw new Error('probability table must sum exactly to 1');
 }
 
-export function pityOutcome({ drawsSinceUR, featuredProgress, naturalRarity = 'N', naturalFeatured = false, hardPity = '100', featuredGuarantee = '200' }) {
+export function pityOutcome({ drawsSinceUR, featuredProgress, naturalRarity = 'N', naturalFeatured = false, featuredRollHit = naturalFeatured, hardPity = '100', featuredGuarantee = '200' }) {
+  if (typeof featuredRollHit !== 'boolean') throw new TypeError('FEATURED_ROLL_MUST_BE_BOOLEAN');
   const nextDraw = toBigInt(assertUnsigned(drawsSinceUR)) + 1n;
   const nextFeatured = toBigInt(assertUnsigned(featuredProgress)) + 1n;
   const forcedUR = nextDraw >= toBigInt(hardPity);
   const forcedFeatured = nextFeatured >= toBigInt(featuredGuarantee);
   const rarity = forcedUR || forcedFeatured ? 'UR' : naturalRarity;
-  const featured = rarity === 'UR' && (forcedFeatured || naturalFeatured);
+  const featured = rarity === 'UR' && (forcedFeatured || featuredRollHit);
   return {
     rarity,
     featured,
@@ -29,6 +30,41 @@ export function pityOutcome({ drawsSinceUR, featuredProgress, naturalRarity = 'N
     featuredGuaranteeTriggered: forcedFeatured,
     nextDrawsSinceUR: rarity === 'UR' ? '0' : nextDraw.toString(),
     nextFeaturedProgress: featured ? '0' : nextFeatured.toString(),
+  };
+}
+
+function allGachaBanners(candidate) {
+  return [...candidate.gacha.characterPools, ...candidate.gacha.weaponPools];
+}
+
+export function pityCarryoverOutcome(candidate, { fromBannerId, toBannerId, drawsSinceUR, featuredProgress, fromExpired = false }) {
+  if (typeof fromExpired !== 'boolean') throw new TypeError('FROM_EXPIRED_MUST_BE_BOOLEAN');
+  const sourceDraws = assertUnsigned(drawsSinceUR, 'drawsSinceUR');
+  const sourceFeatured = assertUnsigned(featuredProgress, 'featuredProgress');
+  const banners = allGachaBanners(candidate);
+  const from = banners.find((entry) => entry.id === fromBannerId);
+  const to = banners.find((entry) => entry.id === toBannerId);
+  if (!from) throw new Error(`UNKNOWN_GACHA_BANNER:${fromBannerId}`);
+  if (!to) throw new Error(`UNKNOWN_GACHA_BANNER:${toBannerId}`);
+  if (candidate.gacha.carryoverFamilies.compatibleOnly !== true || candidate.gacha.carryoverFamilies.expiresOnAccountDeletionOnly !== true) throw new Error('GACHA_CARRYOVER_POLICY_NOT_SEALED');
+  const compatible = from.kind === to.kind && from.carryoverFamily === to.carryoverFamily;
+  return {
+    fromBannerId,
+    toBannerId,
+    fromExpired,
+    fromKind: from.kind,
+    toKind: to.kind,
+    fromCarryoverFamily: from.carryoverFamily,
+    toCarryoverFamily: to.carryoverFamily,
+    compatible,
+    outcome: compatible
+      ? (fromExpired ? 'TRANSFERRED_FROM_EXPIRED_COMPATIBLE_BANNER' : 'TRANSFERRED_COMPATIBLE_BANNER')
+      : 'INCOMPATIBLE_RETAINED_IN_SOURCE_FAMILY',
+    targetDrawsSinceUR: compatible ? sourceDraws : '0',
+    targetFeaturedProgress: compatible ? sourceFeatured : '0',
+    sourceDrawsSinceUR: sourceDraws,
+    sourceFeaturedProgress: sourceFeatured,
+    sourceProgressRetained: true,
   };
 }
 

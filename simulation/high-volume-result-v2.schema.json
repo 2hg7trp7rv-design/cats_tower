@@ -4,90 +4,252 @@
   "title": "Cat's Tower Step 3 high-volume suite result",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "resultId", "deterministicPayload", "hashes", "evidence", "verdict"],
+  "required": [
+    "schemaVersion",
+    "resultId",
+    "deterministicPayload",
+    "hashes",
+    "evidence",
+    "verdict"
+  ],
   "properties": {
-    "schemaVersion": {"const": "2.1.0"},
-    "resultId": {"type": "string", "pattern": "^cats-tower-(step2-contract-smoke|step3)-high-volume-[a-z0-9-]+-[0-9]{3}$"},
+    "schemaVersion": {
+      "const": "2.1.0"
+    },
+    "resultId": {
+      "type": "string",
+      "pattern": "^cats-tower-(step2-contract-smoke|step3)-high-volume-[a-z0-9-]+-[0-9]{3}$"
+    },
     "deterministicPayload": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["mode", "suiteId", "metricContract", "candidateId", "scenarioAlgorithmVersion", "executionVersion", "roundingVersion", "seedNamespace", "expectedSamples", "sampleCount", "complete", "metrics", "violations"],
+      "required": [
+        "mode",
+        "suiteId",
+        "metricContract",
+        "candidateId",
+        "scenarioAlgorithmVersion",
+        "executionVersion",
+        "roundingVersion",
+        "seedNamespace",
+        "expectedSamples",
+        "sampleCount",
+        "complete",
+        "metrics",
+        "violations"
+      ],
       "properties": {
-        "mode": {"enum": ["STEP2_STEP3_CONTRACT_SMOKE", "STEP3_HIGH_VOLUME_SUITE"]},
-        "suiteId": {"enum": ["gacha-tails", "pity-conformance", "duplicate-skew-overflow", "refund-replay-race", "state-machine-model", "large-number-properties"]},
-        "metricContract": {"type": "string", "pattern": "^[a-z0-9-]+-metrics-v1$"},
-        "candidateId": {"const": "cats-tower-v2-candidate-001"},
-        "scenarioAlgorithmVersion": {"const": "cats-tower-scenario-v2.1.0"},
-        "executionVersion": {"const": "cats-tower-step3-executor-v1.0.0"},
-        "roundingVersion": {"const": "ct-rational-half-even-v1"},
-        "seedNamespace": {"type": "string", "pattern": "^cats-tower-v2-high-volume\\|[a-z0-9-]+$"},
-        "expectedSamples": {"$ref": "#/$defs/positive"},
-        "sampleCount": {"$ref": "#/$defs/positive"},
-        "complete": {"type": "boolean"},
+        "mode": {
+          "enum": [
+            "STEP2_STEP3_CONTRACT_SMOKE",
+            "STEP3_HIGH_VOLUME_SUITE"
+          ]
+        },
+        "suiteId": {
+          "enum": [
+            "gacha-tails",
+            "pity-conformance",
+            "duplicate-skew-overflow",
+            "refund-replay-race",
+            "state-machine-model",
+            "large-number-properties"
+          ]
+        },
+        "metricContract": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+-metrics-v[0-9]+$"
+        },
+        "candidateId": {
+          "const": "cats-tower-v2-candidate-001"
+        },
+        "scenarioAlgorithmVersion": {
+          "const": "cats-tower-scenario-v2.1.0"
+        },
+        "executionVersion": {
+          "const": "cats-tower-step3-executor-v1.0.0"
+        },
+        "roundingVersion": {
+          "const": "ct-rational-half-even-v1"
+        },
+        "seedNamespace": {
+          "type": "string",
+          "pattern": "^cats-tower-v2-high-volume\\|[a-z0-9-]+$"
+        },
+        "expectedSamples": {
+          "$ref": "#/$defs/positive"
+        },
+        "sampleCount": {
+          "$ref": "#/$defs/positive"
+        },
+        "complete": {
+          "type": "boolean"
+        },
         "metrics": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["primary", "secondary", "counters", "suiteDigest"],
+          "required": [
+            "primary",
+            "secondary",
+            "counters",
+            "suiteDigest"
+          ],
           "properties": {
-            "primary": {"$ref": "#/$defs/summary"},
-            "secondary": {"$ref": "#/$defs/summary"},
-            "counters": {"type": "object", "additionalProperties": {"$ref": "#/$defs/unsigned"}},
-            "suiteDigest": {"$ref": "#/$defs/digest"}
+            "primary": {
+              "$ref": "#/$defs/summary"
+            },
+            "secondary": {
+              "$ref": "#/$defs/summary"
+            },
+            "tertiary": {
+              "$ref": "#/$defs/summary"
+            },
+            "quaternary": {
+              "$ref": "#/$defs/summary"
+            },
+            "counters": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/unsigned"
+              }
+            },
+            "suiteDigest": {
+              "$ref": "#/$defs/digest"
+            }
           }
         },
-        "violations": {"type": "array", "items": {"type": "object"}}
+        "violations": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
       }
     },
     "hashes": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["candidateSha256", "runPlanSha256", "executionContractSha256", "deterministicPayloadSha256"],
+      "required": [
+        "candidateSha256",
+        "runPlanSha256",
+        "executionContractSha256",
+        "deterministicPayloadSha256"
+      ],
       "properties": {
-        "candidateSha256": {"$ref": "#/$defs/digest"},
-        "runPlanSha256": {"$ref": "#/$defs/digest"},
-        "executionContractSha256": {"$ref": "#/$defs/digest"},
-        "deterministicPayloadSha256": {"$ref": "#/$defs/digest"}
+        "candidateSha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "runPlanSha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "executionContractSha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "deterministicPayloadSha256": {
+          "$ref": "#/$defs/digest"
+        }
       }
     },
     "evidence": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["runtimeVersion", "executedAt", "reproductionCommand", "canonicalJsonSha256"],
+      "required": [
+        "runtimeVersion",
+        "executedAt",
+        "reproductionCommand",
+        "canonicalJsonSha256"
+      ],
       "properties": {
-        "runtimeVersion": {"type": "string", "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+"},
-        "executedAt": {"type": "string", "pattern": "^20[0-9]{2}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"},
-        "reproductionCommand": {"type": "string"},
-        "canonicalJsonSha256": {"$ref": "#/$defs/digest"}
+        "runtimeVersion": {
+          "type": "string",
+          "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+"
+        },
+        "executedAt": {
+          "type": "string",
+          "pattern": "^20[0-9]{2}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "reproductionCommand": {
+          "type": "string"
+        },
+        "canonicalJsonSha256": {
+          "$ref": "#/$defs/digest"
+        }
       }
     },
     "verdict": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["contractValidation", "balanceQualification", "suiteComplete", "step3PromotionAllowed", "partialResultPromotion"],
+      "required": [
+        "contractValidation",
+        "balanceQualification",
+        "suiteComplete",
+        "step3PromotionAllowed",
+        "partialResultPromotion"
+      ],
       "properties": {
-        "contractValidation": {"const": "PASS"},
-        "balanceQualification": {"enum": ["NOT_EVALUATED_CONTRACT_SMOKE", "PENDING_STEP3_FINAL_JUDGE"]},
-        "suiteComplete": {"type": "boolean"},
-        "step3PromotionAllowed": {"const": false},
-        "partialResultPromotion": {"const": false}
+        "contractValidation": {
+          "const": "PASS"
+        },
+        "balanceQualification": {
+          "enum": [
+            "NOT_EVALUATED_CONTRACT_SMOKE",
+            "PENDING_STEP3_FINAL_JUDGE"
+          ]
+        },
+        "suiteComplete": {
+          "type": "boolean"
+        },
+        "step3PromotionAllowed": {
+          "const": false
+        },
+        "partialResultPromotion": {
+          "const": false
+        }
       }
     }
   },
   "$defs": {
-    "unsigned": {"type": "string", "pattern": "^(0|[1-9][0-9]*)$"},
-    "positive": {"type": "string", "pattern": "^[1-9][0-9]*$"},
-    "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "unsigned": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "positive": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
     "summary": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["count", "minimum", "maximum", "p50", "p90", "p99"],
+      "required": [
+        "count",
+        "minimum",
+        "maximum",
+        "p50",
+        "p90",
+        "p99"
+      ],
       "properties": {
-        "count": {"$ref": "#/$defs/positive"},
-        "minimum": {"$ref": "#/$defs/unsigned"},
-        "maximum": {"$ref": "#/$defs/unsigned"},
-        "p50": {"$ref": "#/$defs/unsigned"},
-        "p90": {"$ref": "#/$defs/unsigned"},
-        "p99": {"$ref": "#/$defs/unsigned"}
+        "count": {
+          "$ref": "#/$defs/positive"
+        },
+        "minimum": {
+          "$ref": "#/$defs/unsigned"
+        },
+        "maximum": {
+          "$ref": "#/$defs/unsigned"
+        },
+        "p50": {
+          "$ref": "#/$defs/unsigned"
+        },
+        "p90": {
+          "$ref": "#/$defs/unsigned"
+        },
+        "p99": {
+          "$ref": "#/$defs/unsigned"
+        }
       }
     }
   }

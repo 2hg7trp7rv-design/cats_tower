@@ -225,6 +225,16 @@ try {
       expectedCodes: ['HV_GACHA_MAXIMUM'],
     },
     {
+      id: 'weapon-gacha-boundary-counter-tamper',
+      mutations: [{ op: 'set', path: '/deterministicPayload/metrics/counters/weaponMaximumDrawsToFeatured', value: '201' }],
+      expectedCodes: ['HV_GACHA_BOUNDARY'],
+    },
+    {
+      id: 'weapon-gacha-summary-crosses-guarantee',
+      mutations: [{ op: 'set', path: '/deterministicPayload/metrics/quaternary/maximum', value: '201' }],
+      expectedCodes: ['HV_GACHA_MAXIMUM'],
+    },
+    {
       id: 'wrong-result-id',
       mutations: [{ op: 'set', path: '/resultId', value: 'cats-tower-step3-high-volume-gacha-tails-001' }],
       expectedCodes: ['HV_SMOKE_ID'],
@@ -245,7 +255,7 @@ console.log(JSON.stringify({
   ok: true,
   executionContractNegativeCases: executionNegative.cases.length,
   gameplayResultNegativeCases: 10,
-  highVolumeResultNegativeCases: 10,
+  highVolumeResultNegativeCases: 12,
   modelBindingCases: 7,
-  totalNewNegativeCases: executionNegative.cases.length + 20,
+  totalNewNegativeCases: executionNegative.cases.length + 22,
 }));

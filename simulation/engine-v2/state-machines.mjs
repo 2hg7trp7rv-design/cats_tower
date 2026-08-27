@@ -60,4 +60,26 @@ export function exactlyOnceReceipt(store, receiptId, grant) {
   return { duplicate:false, grant };
 }
 
+export function loginClaimDecision({ accountId, campaignId, campaignVersion, serverPeriodId, claimedPeriodIds = [], claimedCount = '0', campaignDays }) {
+  for (const [name, value] of Object.entries({ accountId, campaignId, campaignVersion, serverPeriodId })) {
+    if (typeof value !== 'string' || value.length === 0) throw new Error(`LOGIN_${name.toUpperCase()}_REQUIRED`);
+  }
+  if (!Array.isArray(claimedPeriodIds) || claimedPeriodIds.some((value) => typeof value !== 'string' || value.length === 0)) throw new Error('LOGIN_CLAIMED_PERIODS_INVALID');
+  if (!/^(0|[1-9][0-9]*)$/.test(String(claimedCount))) throw new Error('LOGIN_CLAIMED_COUNT_INVALID');
+  if (!/^[1-9][0-9]*$/.test(String(campaignDays))) throw new Error('LOGIN_CAMPAIGN_DAYS_INVALID');
+  const count = BigInt(claimedCount);
+  const days = BigInt(campaignDays);
+  if (count > days) throw new Error('LOGIN_CLAIMED_COUNT_EXCEEDS_CAMPAIGN');
+  const alreadyClaimed = claimedPeriodIds.includes(serverPeriodId);
+  const next = alreadyClaimed ? count : (count < days ? count + 1n : days);
+  return {
+    outcome: alreadyClaimed ? 'ALREADY_CLAIMED' : 'ELIGIBLE',
+    claimKey: `${accountId}|${campaignId}|${campaignVersion}|${serverPeriodId}`,
+    serverPeriodId,
+    serverTimeAuthoritative: true,
+    missedDayResetsTrack: false,
+    nextTrackIndex: next.toString(),
+  };
+}
+
 export { TRANSITIONS };

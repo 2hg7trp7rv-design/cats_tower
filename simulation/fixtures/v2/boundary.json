@@ -127,6 +127,28 @@
       "featuredGuaranteeTriggered": true,
       "expectedRarity": "UR",
       "expectedFeatured": true
+    },
+    {
+      "id": "hard-pity-featured-roll-hit",
+      "drawsSinceUR": "99",
+      "featuredProgress": "0",
+      "naturalRarity": "N",
+      "featuredRollHit": true,
+      "hardPityTriggered": true,
+      "featuredGuaranteeTriggered": false,
+      "expectedRarity": "UR",
+      "expectedFeatured": true
+    },
+    {
+      "id": "hard-pity-featured-roll-miss",
+      "drawsSinceUR": "99",
+      "featuredProgress": "0",
+      "naturalRarity": "N",
+      "featuredRollHit": false,
+      "hardPityTriggered": true,
+      "featuredGuaranteeTriggered": false,
+      "expectedRarity": "UR",
+      "expectedFeatured": false
     }
   ],
   "evolutionCases": [
@@ -188,6 +210,60 @@
       "affectedGrant": "100",
       "alreadySpent": "101",
       "expectedError": "ALREADY_SPENT_EXCEEDS_AFFECTED_GRANT"
+    }
+  ],
+  "carryoverCases": [
+    {
+      "id": "expired-character-featured-reissue-retains",
+      "fromBannerId": "banner.character.featured",
+      "toBannerId": "banner.character.featured",
+      "fromExpired": true,
+      "drawsSinceUR": "73",
+      "featuredProgress": "155",
+      "expectedCompatible": true,
+      "expectedOutcome": "TRANSFERRED_FROM_EXPIRED_COMPATIBLE_BANNER",
+      "expectedTargetDrawsSinceUR": "73",
+      "expectedTargetFeaturedProgress": "155",
+      "expectedSourceProgressRetained": true
+    },
+    {
+      "id": "expired-weapon-featured-reissue-retains",
+      "fromBannerId": "banner.weapon.featured",
+      "toBannerId": "banner.weapon.featured",
+      "fromExpired": true,
+      "drawsSinceUR": "44",
+      "featuredProgress": "199",
+      "expectedCompatible": true,
+      "expectedOutcome": "TRANSFERRED_FROM_EXPIRED_COMPATIBLE_BANNER",
+      "expectedTargetDrawsSinceUR": "44",
+      "expectedTargetFeaturedProgress": "199",
+      "expectedSourceProgressRetained": true
+    },
+    {
+      "id": "standard-to-featured-incompatible-retains-source",
+      "fromBannerId": "banner.character.standard",
+      "toBannerId": "banner.character.featured",
+      "fromExpired": false,
+      "drawsSinceUR": "88",
+      "featuredProgress": "122",
+      "expectedCompatible": false,
+      "expectedOutcome": "INCOMPATIBLE_RETAINED_IN_SOURCE_FAMILY",
+      "expectedTargetDrawsSinceUR": "0",
+      "expectedTargetFeaturedProgress": "0",
+      "expectedSourceProgressRetained": true
+    },
+    {
+      "id": "character-to-weapon-incompatible-retains-source",
+      "fromBannerId": "banner.character.featured",
+      "toBannerId": "banner.weapon.featured",
+      "fromExpired": true,
+      "drawsSinceUR": "99",
+      "featuredProgress": "198",
+      "expectedCompatible": false,
+      "expectedOutcome": "INCOMPATIBLE_RETAINED_IN_SOURCE_FAMILY",
+      "expectedTargetDrawsSinceUR": "0",
+      "expectedTargetFeaturedProgress": "0",
+      "expectedSourceProgressRetained": true
     }
   ]
 }

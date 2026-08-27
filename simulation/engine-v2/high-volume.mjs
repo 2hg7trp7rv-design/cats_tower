@@ -5,7 +5,7 @@ import process from 'node:process';
 import { DeterministicRng } from './rng.mjs';
 import { parseExactDecimal, normalizeUnsigned } from './numeric.mjs';
 import { pityOutcome, masteryOverflow, applyPaidRubyRefund } from './economy.mjs';
-import { idempotentResult, replaySequence, TRANSITIONS } from './state-machines.mjs';
+import { idempotentResult, replaySequence, TRANSITIONS, exactlyOnceReceipt, acceptedVersionRetry } from './state-machines.mjs';
 import { generateFloor, isCanonicalDistrictId, isCanonicalCycleId } from './tower.mjs';
 import { UnsignedHistogram } from './statistics.mjs';
 import { canonicalJson, sha256Canonical, sha256Text } from './hash.mjs';
@@ -38,26 +38,32 @@ function sampleProbability(rng, decimal) {
   return rng.nextBelow(probability.d) < probability.n;
 }
 
-function gachaTails(candidate, execution, samples, namespace) {
-  const table = distribution(candidate.gacha.rates.find((entry) => entry.id === 'catalog.rate_table.character.v2').entries);
+function simulateGachaPool(candidate, samples, namespace, poolKind) {
+  const tableId = poolKind === 'character' ? 'catalog.rate_table.character.v2' : 'catalog.rate_table.weapon.v2';
+  const rateTable = candidate.gacha.rates.find((entry) => entry.id === tableId);
+  if (!rateTable) throw new Error(`MISSING_GACHA_RATE_TABLE:${tableId}`);
+  const table = distribution(rateTable.entries);
   const firstUr = new UnsignedHistogram();
   const firstFeatured = new UnsignedHistogram();
-  const counters = { hardPityTriggered: 0n, featuredGuaranteeTriggered: 0n, naturalFeatured: 0n, maximumDrawsToFeatured: 0n, boundaryViolations: 0n };
+  const counters = { hardPityTriggered: 0n, featuredGuaranteeTriggered: 0n, featuredRollHits: 0n, maximumDrawsToFeatured: 0n, boundaryViolations: 0n };
   const hardPity = candidate.gacha.hardPity.draws;
   const featuredGuarantee = candidate.gacha.featuredGuarantee.draws;
   for (let sample = 0; sample < samples; sample += 1) {
-    const rng = new DeterministicRng(`${namespace}|${sample}`);
+    const rng = new DeterministicRng(`${namespace}|${poolKind}|${sample}`);
     let drawsSinceUR = '0';
     let featuredProgress = '0';
     let firstUrDraw = 0n;
     let featuredDraw = 0n;
     for (let draw = 1n; draw <= BigInt(featuredGuarantee); draw += 1n) {
       const naturalRarity = sampleDistribution(rng, table);
-      const naturalFeatured = naturalRarity === 'UR' && sampleProbability(rng, candidate.gacha.featuredGuarantee.featuredShareWithinUR);
-      const outcome = pityOutcome({ drawsSinceUR, featuredProgress, naturalRarity, naturalFeatured, hardPity, featuredGuarantee });
+      const nextDraw = BigInt(drawsSinceUR) + 1n;
+      const nextFeatured = BigInt(featuredProgress) + 1n;
+      const willBeUR = naturalRarity === 'UR' || nextDraw >= BigInt(hardPity) || nextFeatured >= BigInt(featuredGuarantee);
+      const featuredRollHit = willBeUR && nextFeatured < BigInt(featuredGuarantee) && sampleProbability(rng, candidate.gacha.featuredGuarantee.featuredShareWithinUR);
+      const outcome = pityOutcome({ drawsSinceUR, featuredProgress, naturalRarity, featuredRollHit, hardPity, featuredGuarantee });
       if (outcome.hardPityTriggered) counters.hardPityTriggered += 1n;
       if (outcome.featuredGuaranteeTriggered) counters.featuredGuaranteeTriggered += 1n;
-      if (naturalFeatured && outcome.featured) counters.naturalFeatured += 1n;
+      if (featuredRollHit && outcome.featured) counters.featuredRollHits += 1n;
       if (outcome.rarity === 'UR' && firstUrDraw === 0n) firstUrDraw = draw;
       drawsSinceUR = outcome.nextDrawsSinceUR;
       featuredProgress = outcome.nextFeaturedProgress;
@@ -68,7 +74,32 @@ function gachaTails(candidate, execution, samples, namespace) {
     firstUr.add(firstUrDraw.toString());
     firstFeatured.add(featuredDraw.toString());
   }
-  return { primary: firstUr.summary(), secondary: firstFeatured.summary(), counters };
+  return { firstUr: firstUr.summary(), firstFeatured: firstFeatured.summary(), counters };
+}
+
+function gachaTails(candidate, _execution, samples, namespace) {
+  const character = simulateGachaPool(candidate, samples, namespace, 'character');
+  const weapon = simulateGachaPool(candidate, samples, namespace, 'weapon');
+  return {
+    primary: character.firstUr,
+    secondary: character.firstFeatured,
+    tertiary: weapon.firstUr,
+    quaternary: weapon.firstFeatured,
+    counters: {
+      characterSamples: BigInt(samples),
+      characterHardPityTriggered: character.counters.hardPityTriggered,
+      characterFeaturedGuaranteeTriggered: character.counters.featuredGuaranteeTriggered,
+      characterFeaturedRollHits: character.counters.featuredRollHits,
+      characterMaximumDrawsToFeatured: character.counters.maximumDrawsToFeatured,
+      weaponSamples: BigInt(samples),
+      weaponHardPityTriggered: weapon.counters.hardPityTriggered,
+      weaponFeaturedGuaranteeTriggered: weapon.counters.featuredGuaranteeTriggered,
+      weaponFeaturedRollHits: weapon.counters.featuredRollHits,
+      weaponMaximumDrawsToFeatured: weapon.counters.maximumDrawsToFeatured,
+      maximumDrawsToFeatured: character.counters.maximumDrawsToFeatured > weapon.counters.maximumDrawsToFeatured ? character.counters.maximumDrawsToFeatured : weapon.counters.maximumDrawsToFeatured,
+      boundaryViolations: character.counters.boundaryViolations + weapon.counters.boundaryViolations,
+    },
+  };
 }
 
 function pityConformance(candidate, _execution, samples, namespace) {
@@ -89,43 +120,75 @@ function pityConformance(candidate, _execution, samples, namespace) {
     hardRemaining.add((100n - drawsSinceUR).toString());
     featuredRemaining.add((200n - featuredProgress).toString());
   }
-  const fixedHard = pityOutcome({ drawsSinceUR: '99', featuredProgress: '0', naturalRarity: 'N', naturalFeatured: false });
-  const fixedFeatured = pityOutcome({ drawsSinceUR: '0', featuredProgress: '199', naturalRarity: 'N', naturalFeatured: false });
-  if (!(fixedHard.hardPityTriggered && fixedHard.rarity === 'UR')) counters.boundaryViolations += 1n;
+  const fixedHardFeatured = pityOutcome({ drawsSinceUR: '99', featuredProgress: '0', naturalRarity: 'N', featuredRollHit: true });
+  const fixedHardNonFeatured = pityOutcome({ drawsSinceUR: '99', featuredProgress: '0', naturalRarity: 'N', featuredRollHit: false });
+  const fixedFeatured = pityOutcome({ drawsSinceUR: '0', featuredProgress: '199', naturalRarity: 'N', featuredRollHit: false });
+  if (!(fixedHardFeatured.hardPityTriggered && fixedHardFeatured.rarity === 'UR' && fixedHardFeatured.featured)) counters.boundaryViolations += 1n;
+  if (!(fixedHardNonFeatured.hardPityTriggered && fixedHardNonFeatured.rarity === 'UR' && !fixedHardNonFeatured.featured)) counters.boundaryViolations += 1n;
   if (!(fixedFeatured.featuredGuaranteeTriggered && fixedFeatured.rarity === 'UR' && fixedFeatured.featured)) counters.boundaryViolations += 1n;
   return { primary: hardRemaining.summary(), secondary: featuredRemaining.summary(), counters };
 }
 
-function duplicateSkew(candidate, _execution, samples, namespace) {
-  const catalogSize = candidate.characters.catalog.length;
+function simulateDuplicateTrack(catalog, track, samples, namespace, kind) {
+  const catalogSize = catalog.length;
   const copies = Array.from({ length: catalogSize }, () => 0n);
   const effectiveCopies = new UnsignedHistogram();
   const overflowCredit = new UnsignedHistogram();
   for (let sample = 0; sample < samples; sample += 1) {
-    const rng = new DeterministicRng(`${namespace}|${sample}`);
+    const rng = new DeterministicRng(`${namespace}|${kind}|${sample}`);
     const index = Number(rng.nextBelow(BigInt(catalogSize)));
     copies[index] += 1n;
     const additional = copies[index] > 0n ? copies[index] - 1n : 0n;
-    const overflow = masteryOverflow(candidate.characterMastery, additional.toString());
+    const overflow = masteryOverflow(track, additional.toString());
     effectiveCopies.add(overflow.masteredCopies);
     overflowCredit.add(overflow.overflowCredit);
   }
-  const full = BigInt(candidate.characterMastery.fullMastery.minimumAdditionalEffectiveCopies);
-  const counters = {
-    catalogSize: BigInt(catalogSize),
-    uniqueItemsSeen: BigInt(copies.filter((value) => value > 0n).length),
-    itemsAtFullMastery: BigInt(copies.filter((value) => value > full).length),
-    itemsWithOverflow: BigInt(copies.filter((value) => value - 1n > full).length),
-    maximumCopies: copies.reduce((maximum, value) => value > maximum ? value : maximum, 0n),
+  const full = BigInt(track.fullMastery.minimumAdditionalEffectiveCopies);
+  return {
+    mastered: effectiveCopies.summary(),
+    overflow: overflowCredit.summary(),
+    counters: {
+      samples: BigInt(samples),
+      catalogSize: BigInt(catalogSize),
+      uniqueItemsSeen: BigInt(copies.filter((value) => value > 0n).length),
+      itemsAtFullMastery: BigInt(copies.filter((value) => value > full).length),
+      itemsWithOverflow: BigInt(copies.filter((value) => value - 1n > full).length),
+      maximumCopies: copies.reduce((maximum, value) => value > maximum ? value : maximum, 0n),
+    },
   };
-  return { primary: effectiveCopies.summary(), secondary: overflowCredit.summary(), counters };
+}
+
+function duplicateSkew(candidate, _execution, samples, namespace) {
+  const character = simulateDuplicateTrack(candidate.characters.catalog, candidate.characterMastery, samples, namespace, 'character');
+  const weapon = simulateDuplicateTrack(candidate.weapons.catalog, candidate.weaponMastery, samples, namespace, 'weapon');
+  return {
+    primary: character.mastered,
+    secondary: character.overflow,
+    tertiary: weapon.mastered,
+    quaternary: weapon.overflow,
+    counters: {
+      characterSamples: character.counters.samples,
+      characterCatalogSize: character.counters.catalogSize,
+      characterUniqueItemsSeen: character.counters.uniqueItemsSeen,
+      characterItemsAtFullMastery: character.counters.itemsAtFullMastery,
+      characterItemsWithOverflow: character.counters.itemsWithOverflow,
+      characterMaximumCopies: character.counters.maximumCopies,
+      weaponSamples: weapon.counters.samples,
+      weaponCatalogSize: weapon.counters.catalogSize,
+      weaponUniqueItemsSeen: weapon.counters.uniqueItemsSeen,
+      weaponItemsAtFullMastery: weapon.counters.itemsAtFullMastery,
+      weaponItemsWithOverflow: weapon.counters.itemsWithOverflow,
+      weaponMaximumCopies: weapon.counters.maximumCopies,
+    },
+  };
 }
 
 function refundReplay(samples, namespace) {
   const deficits = new UnsignedHistogram();
   const paidAfter = new UnsignedHistogram();
-  const counters = { validRefunds: 0n, invalidSpentRejected: 0n, idempotentReplayMatches: 0n, freeLedgerDebitViolations: 0n, deficitStateCount: 0n };
+  const counters = { validRefunds: 0n, invalidSpentRejected: 0n, idempotentReplayMatches: 0n, exactlyOnceReceiptMatches: 0n, outOfOrderRestoreMatches: 0n, acceptedVersionRetryMatches: 0n, freeLedgerDebitViolations: 0n, deficitStateCount: 0n };
   const store = new Map();
+  const receiptStore = new Map();
   for (let sample = 0; sample < samples; sample += 1) {
     const rng = new DeterministicRng(`${namespace}|${sample}`);
     const grant = rng.nextBelow(1000n) + 1n;
@@ -144,6 +207,15 @@ function refundReplay(samples, namespace) {
     const replay = idempotentResult(store, `refund-${sample}`, operation);
     counters.validRefunds += 1n;
     if (replay.replayed && JSON.stringify(first.result) === JSON.stringify(replay.result)) counters.idempotentReplayMatches += 1n;
+    const receiptFirst = exactlyOnceReceipt(receiptStore, `receipt-${sample}`, first.result);
+    const receiptReplay = exactlyOnceReceipt(receiptStore, `receipt-${sample}`, { forbidden: true });
+    if (!receiptFirst.duplicate && receiptReplay.duplicate && JSON.stringify(receiptReplay.grant) === JSON.stringify(first.result)) counters.exactlyOnceReceiptMatches += 1n;
+    const sequence = sample % 2 === 0
+      ? ['STORE_PURCHASED', 'REFUNDED', 'RESTORED']
+      : ['STORE_PURCHASED', 'REVOKED', 'RESTORED'];
+    if (replaySequence('transition.payment.v2', sequence).finalState === 'RESTORED') counters.outOfOrderRestoreMatches += 1n;
+    const version = acceptedVersionRetry({ acceptedVersion: 'catalog.v1', currentVersion: 'catalog.v2', accepted: true });
+    if (version.outcome === 'RECONCILE_ACCEPTED_VERSION' && version.version === 'catalog.v1') counters.acceptedVersionRetryMatches += 1n;
     if (first.result.freeLedgersDebited) counters.freeLedgerDebitViolations += 1n;
     if (first.result.state === 'paid-ruby-deficit') counters.deficitStateCount += 1n;
     deficits.add(first.result.deficit.magnitude);
@@ -211,6 +283,8 @@ export async function runHighVolumeSuite({ suiteId, contractSmoke = false, owner
   const execution = JSON.parse(executionText);
   const suite = execution.highVolumeSuites.find((entry) => entry.id === suiteId);
   if (!suite || !SUITES[suiteId]) throw new Error(`UNKNOWN_HIGH_VOLUME_SUITE:${suiteId}`);
+  const implementationVersion = suite.implementationVersion.match(/-(v[0-9]+)$/)?.[1];
+  if (!implementationVersion) throw new Error(`INVALID_HIGH_VOLUME_IMPLEMENTATION_VERSION:${suite.implementationVersion}`);
   if (!contractSmoke && (owner !== 'STEP3' || process.env.CT_STEP3_AUTHORIZED !== '1')) throw new Error('STEP3_HIGH_VOLUME_EXECUTION_NOT_AUTHORIZED');
   const expectedSamples = contractSmoke ? suite.contractSmokeSamples : suite.plannedSamples;
   const sampleCount = Number(expectedSamples);
@@ -218,7 +292,13 @@ export async function runHighVolumeSuite({ suiteId, contractSmoke = false, owner
   const namespace = `cats-tower-v2-high-volume|${suiteId}`;
   const rawMetrics = SUITES[suiteId](candidate, execution, sampleCount, namespace);
   const counters = Object.fromEntries(Object.entries(rawMetrics.counters).map(([key, value]) => [key, normalizeUnsigned(value)]));
-  const metricsWithoutDigest = { primary: rawMetrics.primary, secondary: rawMetrics.secondary, counters };
+  const metricsWithoutDigest = {
+    primary: rawMetrics.primary,
+    secondary: rawMetrics.secondary,
+    ...(rawMetrics.tertiary ? { tertiary: rawMetrics.tertiary } : {}),
+    ...(rawMetrics.quaternary ? { quaternary: rawMetrics.quaternary } : {}),
+    counters,
+  };
   const metrics = { ...metricsWithoutDigest, suiteDigest: sha256Canonical({ suiteId, ...metricsWithoutDigest }) };
   const violations = [];
   if (counters.boundaryViolations && counters.boundaryViolations !== '0') violations.push({ code: 'PITY_BOUNDARY', count: counters.boundaryViolations });
@@ -230,7 +310,7 @@ export async function runHighVolumeSuite({ suiteId, contractSmoke = false, owner
   const deterministicPayload = {
     mode,
     suiteId,
-    metricContract: `${suiteId}-metrics-v1`,
+    metricContract: `${suiteId}-metrics-${implementationVersion}`,
     candidateId: candidate.meta.candidateId,
     scenarioAlgorithmVersion: execution.scenarioAlgorithmVersion,
     executionVersion: execution.executionVersion,

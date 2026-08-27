@@ -133,6 +133,95 @@
         "ENTITLEMENT_RECONCILIATION",
         "DELETED"
       ]
+    },
+    {
+      "id": "payment-refund-before-verification-restore",
+      "machineId": "transition.payment.v2",
+      "states": [
+        "CREATED",
+        "STORE_PENDING",
+        "STORE_PURCHASED",
+        "REFUNDED",
+        "RESTORED"
+      ]
+    },
+    {
+      "id": "payment-refund-during-verification-restore",
+      "machineId": "transition.payment.v2",
+      "states": [
+        "CREATED",
+        "STORE_PENDING",
+        "STORE_PURCHASED",
+        "SERVER_VERIFYING",
+        "REFUNDED",
+        "RESTORED"
+      ]
+    },
+    {
+      "id": "payment-revocation-restore",
+      "machineId": "transition.payment.v2",
+      "states": [
+        "CREATED",
+        "STORE_PENDING",
+        "STORE_PURCHASED",
+        "REVOKED",
+        "RESTORED"
+      ]
+    },
+    {
+      "id": "ad-cap-rejected",
+      "machineId": "transition.rewarded_ad.v2",
+      "states": [
+        "OFFERED",
+        "OPTED_IN",
+        "CONSENT_CHECKED",
+        "STARTED",
+        "NETWORK_COMPLETED",
+        "SERVER_VERIFYING",
+        "CAP_REJECTED"
+      ]
+    },
+    {
+      "id": "ad-stale-before-start",
+      "machineId": "transition.rewarded_ad.v2",
+      "states": [
+        "OFFERED",
+        "OPTED_IN",
+        "OFFER_STALE"
+      ]
+    },
+    {
+      "id": "login-campaign-stale",
+      "machineId": "transition.login_claim.v2",
+      "states": [
+        "ELIGIBLE",
+        "CLAIM_REQUESTED",
+        "CAMPAIGN_STALE"
+      ]
+    },
+    {
+      "id": "reset-post-commit-recovery",
+      "machineId": "transition.reset.v2",
+      "states": [
+        "NOT_ELIGIBLE",
+        "QUOTE_ISSUED",
+        "CONFIRMED",
+        "COMMITTING",
+        "RECOVERY_REQUIRED",
+        "APPLIED"
+      ]
+    },
+    {
+      "id": "account-deletion-retention-exception",
+      "machineId": "transition.account_deletion.v1",
+      "states": [
+        "ACTIVE",
+        "DELETE_QUOTE_ISSUED",
+        "CONFIRMED",
+        "DELETION_PENDING",
+        "ENTITLEMENT_RECONCILIATION",
+        "RETENTION_EXCEPTION_RECORDED"
+      ]
     }
   ],
   "invalidSequences": [
@@ -236,6 +325,70 @@
       "acceptedVersion": "1",
       "currentVersion": "2",
       "expected": "RECONCILE_ACCEPTED_VERSION"
+    }
+  ],
+  "loginPeriodCases": [
+    {
+      "id": "same-server-period-already-claimed",
+      "input": {
+        "accountId": "account.fixture",
+        "campaignId": "catalog.login_campaign.v1",
+        "campaignVersion": "2026-08-27.1",
+        "serverPeriodId": "period.2026-08-27",
+        "claimedPeriodIds": [
+          "period.2026-08-27"
+        ],
+        "claimedCount": "4",
+        "campaignDays": "28"
+      },
+      "expectedOutcome": "ALREADY_CLAIMED",
+      "expectedNextTrackIndex": "4"
+    },
+    {
+      "id": "server-period-rollover-eligible",
+      "input": {
+        "accountId": "account.fixture",
+        "campaignId": "catalog.login_campaign.v1",
+        "campaignVersion": "2026-08-27.1",
+        "serverPeriodId": "period.2026-08-28",
+        "claimedPeriodIds": [
+          "period.2026-08-27"
+        ],
+        "claimedCount": "4",
+        "campaignDays": "28"
+      },
+      "expectedOutcome": "ELIGIBLE",
+      "expectedNextTrackIndex": "5"
+    },
+    {
+      "id": "missed-day-does-not-reset-track",
+      "input": {
+        "accountId": "account.fixture",
+        "campaignId": "catalog.login_campaign.v1",
+        "campaignVersion": "2026-08-27.1",
+        "serverPeriodId": "period.2026-08-30",
+        "claimedPeriodIds": [
+          "period.2026-08-27"
+        ],
+        "claimedCount": "4",
+        "campaignDays": "28"
+      },
+      "expectedOutcome": "ELIGIBLE",
+      "expectedNextTrackIndex": "5"
+    },
+    {
+      "id": "campaign-track-cap-remains-capped",
+      "input": {
+        "accountId": "account.fixture",
+        "campaignId": "catalog.login_campaign.v1",
+        "campaignVersion": "2026-08-27.1",
+        "serverPeriodId": "period.2026-09-30",
+        "claimedPeriodIds": [],
+        "claimedCount": "28",
+        "campaignDays": "28"
+      },
+      "expectedOutcome": "ELIGIBLE",
+      "expectedNextTrackIndex": "28"
     }
   ]
 }

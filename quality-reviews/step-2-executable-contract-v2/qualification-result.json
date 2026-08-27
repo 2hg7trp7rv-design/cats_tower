@@ -2967,12 +2967,12 @@
   "hashes": {
     "candidateSha256": "4a908482466236bda39d9d6fbce927cef4b7707c70140a332b656d79ffae877d",
     "runPlanSha256": "57a9b899de8899bcd5ee1b7e5e061d9e0845b04bf770c86ea5701b5e291709c7",
-    "executionContractSha256": "e1b0eb54bbf021a7dcf909e151f7cce56b94db35b3d4020db0eb7e182ff33065",
+    "executionContractSha256": "b3315b8da683742b97d7be3d4aff244497b69637ad6fa56103d36c5c66d7a76f",
     "deterministicPayloadSha256": "e73d5fb82ff43afb9d08083c07022988a0f1571e1dbb318fdf443cdfdfe3bd29"
   },
   "evidence": {
     "runtimeVersion": "v22.23.2",
-    "executedAt": "2026-08-27T13:55:48.739Z",
+    "executedAt": "2026-08-27T14:34:19.004Z",
     "reproductionCommand": "node simulation/engine-v2/run-plan.mjs --mode qualification --output quality-reviews/step-2-executable-contract-v2/qualification-result.json",
     "canonicalJsonSha256": "e73d5fb82ff43afb9d08083c07022988a0f1571e1dbb318fdf443cdfdfe3bd29"
   },

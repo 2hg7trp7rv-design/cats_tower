@@ -106,6 +106,14 @@ check(BigInt(plan.scenarioCount.holdout) === 15n * BigInt(contract.partitions.ho
 check(new Set(Object.values(contract.partitions).map((entry) => entry.namespace)).size === 3, 'EXEC_NAMESPACE_OVERLAP', 'partition namespaces overlap');
 
 const suiteIds = ['gacha-tails','pity-conformance','duplicate-skew-overflow','refund-replay-race','state-machine-model','large-number-properties'];
+const expectedSuiteVersions = {
+  'gacha-tails': 'gacha-tails-v2',
+  'pity-conformance': 'pity-conformance-v1',
+  'duplicate-skew-overflow': 'duplicate-skew-overflow-v2',
+  'refund-replay-race': 'refund-replay-race-v2',
+  'state-machine-model': 'state-machine-model-v1',
+  'large-number-properties': 'large-number-properties-v1',
+};
 check(eq(contract.highVolumeSuites?.map((entry) => entry.id), suiteIds), 'EXEC_SUITE_ORDER', 'high-volume suite set or order mismatch');
 for (const [index, id] of suiteIds.entries()) {
   const suite = contract.highVolumeSuites?.[index];
@@ -113,7 +121,7 @@ for (const [index, id] of suiteIds.entries()) {
   const smoke = unsigned(suite?.contractSmokeSamples, `#/highVolumeSuites/${index}/contractSmokeSamples`, { positive: true });
   check(suite?.plannedSamples === plan.highVolumeSuites?.[index]?.plannedSamples, 'EXEC_SUITE_PLAN_BINDING', `${id} planned samples differ from run plan`);
   check(smoke < planned, 'EXEC_SUITE_SMOKE_BOUND', `${id} contract smoke must be smaller than the Step 3 sample count`);
-  check(suite?.implementationVersion === `${id}-v1`, 'EXEC_SUITE_VERSION', `${id} implementation version mismatch`);
+  check(suite?.implementationVersion === expectedSuiteVersions[id], 'EXEC_SUITE_VERSION', `${id} implementation version mismatch`);
 }
 
 exactKeys(contract.resultContracts, ['qualificationSchema','qualificationValidator','gameplaySchema','gameplayValidator','highVolumeSchema','highVolumeValidator'], '#/resultContracts');

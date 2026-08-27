@@ -9,8 +9,8 @@
     },
     {
       "path": "simulation/fixtures/v2/boundary.json",
-      "sha256": "7271522aaf818a66843491e8d40c2563f58c171bcddb1166b5047f82cf1d11bf",
-      "bytes": "4805"
+      "sha256": "4fdebc09d65bd4ffaa66046547adc9dae71547503eacc0e6fc2d26526ea18928",
+      "bytes": "7436"
     },
     {
       "path": "simulation/fixtures/v2/negative.json",
@@ -29,8 +29,8 @@
     },
     {
       "path": "simulation/fixtures/v2/state-transitions.json",
-      "sha256": "2e980774a02721ebdadf0252403c8258d944b7e9f401452e35941d3b240901e2",
-      "bytes": "5435"
+      "sha256": "b66a8f371067eb7895a94bf02aace949cd3b5c6fd7347f0dccfcca4b4b5345ab",
+      "bytes": "9321"
     },
     {
       "path": "simulation/fixtures/v2/cross-runtime-golden.json",
@@ -80,7 +80,10 @@
     "candidateCaseCount": "85",
     "executionContractNegativeCaseCount": "14",
     "gameplayResultNegativeCaseCount": "10",
-    "highVolumeResultNegativeCaseCount": "10",
-    "modelBindingCaseCount": "7"
+    "highVolumeResultNegativeCaseCount": "12",
+    "modelBindingCaseCount": "7",
+    "pityCarryoverCaseCount": "4",
+    "stateRecoveryAndStaleSequenceCount": "8",
+    "loginServerPeriodCaseCount": "4"
   }
 }
