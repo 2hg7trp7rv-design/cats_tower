@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "sealId": "cats-tower-step2-executable-seal-v2-001",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "semanticCommit": "724d04940f9f3794b993cddbc5af3a7163a0395b",
+  "semanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
+  "acceptance": {
+    "path": "quality-reviews/step-2-executable-contract-v2/acceptance-matrix.json",
+    "blob": "f8986a3d436e93a003ff0f7e07f6a5d28d6faf2f"
+  },
+  "qualification": {
+    "path": "quality-reviews/step-2-executable-contract-v2/qualification-result.json",
+    "blob": "c5517eaf8765f4ae008eead2794c8dcf8bd16c3f",
+    "scenarioCount": "30",
+    "digest": "a24fa5a4a12cf132ac477c80e77431cd0b97ab070bbbef83c3881c160f42562c",
+    "balanceVerdict": "NOT_EVALUATED_STEP2"
+  },
+  "critics": {
+    "summary": {
+      "path": "quality-reviews/step-2-executable-contract-v2/critic-summary.json",
+      "blob": "d0b90e5937a8d2dc40497e7dd9822c7f1d8fd2d5"
+    },
+    "count": 5,
+    "unresolvedP0": 0,
+    "unresolvedP1": 0
+  },
+  "finalJudge": {
+    "path": "quality-reviews/step-2-executable-contract-v2/final-judge.json",
+    "blob": "1c148ae4f9f2f9748673e47ab5996f641db6efa9"
+  },
+  "bindings": [
+    {"path":"canonical/STEP2_DEPENDENCY_CLOSURE.json","blob":"d23ea91754f6b11e4d452312752fc8850bd7ab9b"},
+    {"path":"quality-reviews/step-2-executable-contract-v2/acceptance-matrix.json","blob":"f8986a3d436e93a003ff0f7e07f6a5d28d6faf2f"},
+    {"path":"simulation/candidate-v2.json","blob":"1e633de1c6ecb1f98cee262b88575387816cf310"},
+    {"path":"simulation/candidate-v2.schema.json","blob":"1b9946b123748b379e3656e61d4c53cfca525dfa"},
+    {"path":"simulation/validate-candidate-v2.mjs","blob":"554083654b0c8e641600416025cc44f9b87ff5dd"},
+    {"path":"simulation/run-plan-v2.json","blob":"a04632e41d78dd15b36e95cd6998e8a8648b9a6c"},
+    {"path":"simulation/execution-contract-v2.json","blob":"82685b646358129d7e66a810b267777d6bf5af92"},
+    {"path":"simulation/result-v2.schema.json","blob":"4c239317119996da62ec36d0cbc5343dab3f9fa3"},
+    {"path":"simulation/validate-result-v2.mjs","blob":"0c5a50b70cf82abeae10ec7c24d2aaa5288a260e"},
+    {"path":"simulation/engine-v2/run-scenario.mjs","blob":"e0136df1dbd753f7fb5327ef8ad9ec465349c1e4"},
+    {"path":"simulation/engine-v2/high-volume.mjs","blob":"c324a9500652ed92a7f0ae798aa68d28cf0429be"},
+    {"path":"simulation/fixtures/v2/manifest.json","blob":"5418f64f6510c70555774fd1825b789e009fd6e2"},
+    {"path":"simulation/migrations/v1-to-v2/migration-map.json","blob":"77b95070f3c441a611ca5c02b06e04087c3a5462"},
+    {"path":"quality-reviews/step-2-executable-contract-v2/qualification-result.json","blob":"c5517eaf8765f4ae008eead2794c8dcf8bd16c3f"},
+    {"path":"quality-reviews/step-2-executable-contract-v2/critic-summary.json","blob":"d0b90e5937a8d2dc40497e7dd9822c7f1d8fd2d5"},
+    {"path":"quality-reviews/step-2-executable-contract-v2/final-judge.json","blob":"1c148ae4f9f2f9748673e47ab5996f641db6efa9"}
+  ],
+  "verdict": "SEALED_STEP2_EXECUTABLE_CONTRACT"
+}
