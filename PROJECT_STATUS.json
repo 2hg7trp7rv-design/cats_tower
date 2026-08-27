@@ -1,5 +1,5 @@
 {
-  "statusDocumentSchemaVersion": 8,
+  "statusDocumentSchemaVersion": 9,
   "updatedDate": "2026-08-27",
   "project": "Cat's Tower",
   "canonicalRepository": "2hg7trp7rv-design/cats_tower",
@@ -18,7 +18,7 @@
   "currentStep": 1,
   "currentStepName": "canonical-integration-and-reseal",
   "currentStepStatus": "IN_PROGRESS",
-  "currentCheckpoint": "round-008-route-01-2-competitive-platform-japan-research",
+  "currentCheckpoint": "round-008-route-01-2-content-ready-pending-evidence",
   "advanceAllowed": false,
   "step2Allowed": false,
   "firstTenPreviewReady": false,
@@ -46,25 +46,20 @@
   },
   "activeCheckpoint": {
     "id": "route012",
-    "status": "IN_PROGRESS",
-    "baseHead": "68cb3f6a4689869538340f5f1a186bed3efac7e2",
-    "baseTree": "95d05a27ce739c3f1e525348c13a6955baf5b721",
+    "status": "CONTENT_READY_PENDING_EVIDENCE",
     "researchCutoff": "2026-08-26T23:59:59+09:00",
     "acceptance": "quality-reviews/step-1-reseal-round-008/route-01-2-acceptance.json",
-    "activeAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-011.json",
-    "requiredOutputs": [
-      "quality-reviews/step-1-reseal-round-008/source-register-route-01-2.json",
-      "quality-reviews/step-1-reseal-round-008/competitive-research.md",
-      "quality-reviews/step-1-reseal-round-008/platform-policy-audit.md",
-      "canonical/POLICY_RELEASE_GATES.json",
-      "quality-reviews/step-1-reseal-round-008/checkpoint-d-evidence.json"
-    ]
+    "sourceRegister": "quality-reviews/step-1-reseal-round-008/source-register-route-01-2.json",
+    "competitiveResearch": "quality-reviews/step-1-reseal-round-008/competitive-research.md",
+    "platformPolicyAudit": "quality-reviews/step-1-reseal-round-008/platform-policy-audit.md",
+    "policyRegistry": "canonical/POLICY_RELEASE_GATES.json",
+    "evidence": "quality-reviews/step-1-reseal-round-008/checkpoint-d-evidence.json"
   },
   "currentCanonicalization": {
     "status": "IN_PROGRESS",
     "newStep1SealExists": false,
     "repositoryWideContradictionInventoryComplete": true,
-    "competitiveAndPolicyResearchComplete": false,
+    "competitiveAndPolicyResearchComplete": true,
     "allLowerDocumentsRedlined": false,
     "step2DependencyClosureComplete": false,
     "independentCritiquesComplete": false,
@@ -77,7 +72,7 @@
     "canonical/SCREEN_STATE_REGISTRY.json": "PRESEAL_DRAFT",
     "canonical/STATE_TRANSITION_CONTRACT.json": "PRESEAL_DRAFT",
     "FLOORS_1_10_DESIGN.md": "PENDING_REVALIDATION",
-    "canonical/POLICY_RELEASE_GATES.json": "PLANNED_ROUTE_01_2",
+    "canonical/POLICY_RELEASE_GATES.json": "PRESEAL_DRAFT",
     "canonical/STEP2_DEPENDENCY_CLOSURE.json": "PLANNED_NOT_CREATED",
     "quality-reviews/step-1-reseal-round-008/seal-round-008.json": "NOT_CREATED"
   },
@@ -115,5 +110,5 @@
     "forbidden": ["runtime", "assets", "V1 candidate/schema/validator/simulator", "backend", "payment provider", "ad network", "PR operation", "Production alias"]
   },
   "nextAuthorizedChat": "01_正本仕様・競合調査",
-  "nextAction": "complete-route-01-2-research-and-policy-release-gates"
+  "nextAction": "bind-route-01-2-evidence-then-complete-first-ten-redline-and-step2-dependency-closure"
 }
