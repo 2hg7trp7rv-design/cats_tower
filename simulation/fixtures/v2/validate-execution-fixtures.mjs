@@ -62,7 +62,7 @@ function hasCode(stderr, code) {
 async function expectRejected(temp, group, id, value, validatorArgs, expectedCodes) {
   const path = join(temp, `${group}-${id}.json`);
   await writeFile(path, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
-  const run = runNode([...validatorArgs, path]);
+  const run = runNode([validatorArgs[0], path, ...validatorArgs.slice(1)]);
   check(run.status !== 0, `${group.toUpperCase()}_NEGATIVE_ACCEPTED`, id);
   check(expectedCodes.some((code) => hasCode(run.stderr ?? '', code)), `${group.toUpperCase()}_NEGATIVE_WRONG_REASON`, `${id}:${expectedCodes.join('|')}:${(run.stderr ?? '').slice(0, 1000)}`);
 }
