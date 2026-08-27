@@ -2,42 +2,95 @@
   "schemaVersion": 1,
   "artifactId": "step-1-canonical-design-active-change-control-addendum-round-013",
   "createdAt": "2026-08-27",
+  "activatedAt": "2026-08-27",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "parentChangeControl": "quality-reviews/step-1-canonical-design/active-change-control.json",
   "previousAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-012.json",
-  "trigger": "The repaired Round 008 semantic content, ten separated critics, final repository postcheck and final judge reached unresolved P0/P1 zero and an exact Step 1 seal was created.",
+  "trigger": "Activate the exact Round 008 Step 1 seal after all active mirrors were synchronized without changing product meaning or any forbidden implementation/provider/Production scope.",
   "seal": {
     "path": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
     "blob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
     "commit": "0b17f9b5b8decdab8ce329287a4dc073790c4bf7",
     "tree": "9eac6b6103d65cf8bcb13859d00e43cd3389fa8a",
-    "verdict": "PASS_PENDING_ACTIVATION"
+    "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+    "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce",
+    "statusAfterThisAddendum": "ACTIVE"
   },
-  "status": "ACTIVATION_IN_PROGRESS",
-  "verdict": "IN_PROGRESS",
-  "advanceAllowed": false,
-  "step2Allowed": false,
+  "mirrorSync": {
+    "commit": "3e2c132d5b1a6e57b5524d4b0626b39eab547bf4",
+    "tree": "8b9cc92f3c36de7b50bf0cd4de88f283bce4ef58",
+    "sealAncestor": true,
+    "aheadOfSealBy": 14,
+    "changedPaths": [
+      ".github/workflows/CURRENT_STATUS.md",
+      "AGENTS.md",
+      "AI_PROJECT_POLICY.json",
+      "CHATGPT_PROJECT_BOOTSTRAP.md",
+      "CUSTOM_GPT_CONFIGURATION.md",
+      "MASTER_SPEC.md",
+      "PROJECT_HANDOVER.md",
+      "PROJECT_STATUS.json",
+      "QUALITY_GATE.md",
+      "README.md",
+      "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-013.json",
+      "quality-reviews/step-1-canonical-design/active-change-control.json",
+      "simulation/CURRENT_STATUS.json",
+      "simulation/INPUT_CONTRACT.md"
+    ],
+    "onlySealListedActivationPaths": true,
+    "productMeaningChanged": false
+  },
+  "status": "PASS",
+  "verdict": "PASS",
+  "advanceAllowed": true,
+  "step2Allowed": true,
+  "step3Allowed": false,
   "route014": {
-    "status": "PASS_PENDING_MIRROR_SYNC_AND_COMPLETION_EVIDENCE",
+    "status": "PASS",
     "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
     "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce",
     "finalJudgeCommit": "cd57005ef12c5ca4c923f436c2bcce0a5cc8aadf",
+    "criticCount": 10,
+    "initialP1": 5,
+    "resolvedP1": 5,
     "unresolvedP0": 0,
     "unresolvedP1": 0,
     "trackedP2": 6
   },
-  "requiredBeforeActivationComplete": [
-    "synchronize active change control and every active status/handover/simulation/workflow mirror",
-    "record exact activation content commit/tree and changed paths",
-    "record completion evidence",
-    "perform live HEAD/tree/status/seal read-back",
-    "confirm no V2 artifact, runtime, provider or Production change occurred"
-  ],
-  "writeBoundary": {
-    "allowed": ["lifecycle/status routing in seal-listed activationMutablePaths", "activation/completion/read-back evidence"],
-    "forbidden": ["product meaning change", "runtime", "assets", "V1 executable", "V2 artifact creation before activation", "workflow YAML", "backend", "payment provider", "ad network", "PR operation", "Production alias"]
+  "completion": {
+    "path": "quality-reviews/step-1-reseal-round-008/activation-completion-evidence-round-008.json",
+    "liveReadback": "quality-reviews/step-1-reseal-round-008/live-readback-round-008.json",
+    "thisFinalAddendumCommitAndTreeAreBoundByCompletionEvidence": true
   },
-  "nextAuthorizedWork": "Complete activation mirrors and evidence only. Step 2 remains blocked until this addendum is finalized to PASS and live read-back succeeds.",
+  "executionState": [
+    {"step": 1, "status": "PASS"},
+    {"step": 2, "status": "READY_TO_START"},
+    {"step": 3, "status": "BLOCKED_UNTIL_STEP2_PASS"},
+    {"step": 4, "status": "BLOCKED_UNTIL_STEP3_PASS"},
+    {"step": 5, "status": "BLOCKED_UNTIL_PRIOR_GATES"},
+    {"step": 6, "status": "BLOCKED_UNTIL_ELIGIBLE_BUILD"}
+  ],
+  "step2Boundary": {
+    "acceptanceRequiredBeforeFirstWrite": true,
+    "source": "canonical/STEP2_DEPENDENCY_CLOSURE.json",
+    "newV2ChainRequired": true,
+    "oldV1MayPromote": false,
+    "observedHoldoutMayBeReused": false,
+    "step3MayStartBeforeStep2Pass": false
+  },
+  "forbiddenChanges": {
+    "runtime": false,
+    "assets": false,
+    "v1Executable": false,
+    "workflowYaml": false,
+    "backend": false,
+    "paymentProvider": false,
+    "adNetwork": false,
+    "pullRequestOperation": false,
+    "productionAlias": false
+  },
+  "nextAuthorizedChat": "02_無制限塔・経済・リセットシミュレーション",
+  "nextAuthorizedWork": "Create the Step 2 Acceptance Matrix before any V2 write, then implement and seal the new V2 executable contract. Do not start Step 3 before Step 2 PASS.",
   "physicalIPhoneVerified": false
 }
