@@ -66,8 +66,8 @@ jobs:
           COMPLETION_COMMIT=$(first_addition "$COMPLETION")
 
           test "$C1_COMMIT" = '88fb46b1d1cdbd5c071804275c92dc51a8c59913'
+          test "$COMPLETION_COMMIT" = '23ba6d47dc2de04ca21d10454e87cacd9079533e'
           test -n "$ROUND_COMMIT"
-          test -n "$COMPLETION_COMMIT"
           git merge-base --is-ancestor "$C1_COMMIT" HEAD
           git merge-base --is-ancestor "$ROUND_COMMIT" HEAD
           git merge-base --is-ancestor "$COMPLETION_COMMIT" HEAD
@@ -85,9 +85,9 @@ jobs:
           test "$(git -C "$COMPLETION_DIR" cat-file -t "HEAD:$ROUND")" = 'blob'
           test "$(git -C "$COMPLETION_DIR" cat-file -t "HEAD:$COMPLETION")" = 'blob'
 
-          jq -e '.repository == "2hg7trp7rv-design/cats_tower"' "$C1_DIR/$ACCEPTANCE" >/dev/null
-          jq -e '.repository == "2hg7trp7rv-design/cats_tower"' "$COMPLETION_DIR/$ROUND" >/dev/null
-          jq -e '.repository == "2hg7trp7rv-design/cats_tower"' "$COMPLETION_DIR/$COMPLETION" >/dev/null
+          jq -e '.artifactId == "step-1-legacy-baseline-round-007" and .status == "FROZEN_AT_C1"' "$C1_DIR/$ACCEPTANCE" >/dev/null
+          jq -e '.artifactId == "step-1-legacy-baseline-round-007" and .round == 7 and .overallStatus == "EXTERNAL_PENDING"' "$COMPLETION_DIR/$ROUND" >/dev/null
+          jq -e '.artifactId == "step-1-legacy-baseline-round-007" and .round == 7 and .status == "PASS" and .canonicalStatus == "PASS"' "$COMPLETION_DIR/$COMPLETION" >/dev/null
 
           (
             cd "$C1_DIR"
