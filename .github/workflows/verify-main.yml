@@ -73,26 +73,50 @@ jobs:
           git merge-base --is-ancestor "$COMPLETION_COMMIT" HEAD
 
           C1_DIR="$RUNNER_TEMP/round7-c1"
+          ROUND_DIR="$RUNNER_TEMP/round7-c3"
           COMPLETION_DIR="$RUNNER_TEMP/round7-completion"
           test ! -e "$C1_DIR"
+          test ! -e "$ROUND_DIR"
           test ! -e "$COMPLETION_DIR"
           git worktree add --detach "$C1_DIR" "$C1_COMMIT"
+          git worktree add --detach "$ROUND_DIR" "$ROUND_COMMIT"
           git worktree add --detach "$COMPLETION_DIR" "$COMPLETION_COMMIT"
 
           test "$(git -C "$C1_DIR" rev-parse HEAD)" = "$C1_COMMIT"
+          test "$(git -C "$ROUND_DIR" rev-parse HEAD)" = "$ROUND_COMMIT"
           test "$(git -C "$COMPLETION_DIR" rev-parse HEAD)" = "$COMPLETION_COMMIT"
           test "$(git -C "$C1_DIR" cat-file -t "HEAD:$ACCEPTANCE")" = 'blob'
-          test "$(git -C "$COMPLETION_DIR" cat-file -t "HEAD:$ROUND")" = 'blob'
+          test "$(git -C "$ROUND_DIR" cat-file -t "HEAD:$ROUND")" = 'blob'
           test "$(git -C "$COMPLETION_DIR" cat-file -t "HEAD:$COMPLETION")" = 'blob'
 
           jq -e '.artifactId == "step-1-legacy-baseline-round-007" and .status == "FROZEN_AT_C1"' "$C1_DIR/$ACCEPTANCE" >/dev/null
-          jq -e '.artifactId == "step-1-legacy-baseline-round-007" and .round == 7 and .overallStatus == "EXTERNAL_PENDING"' "$COMPLETION_DIR/$ROUND" >/dev/null
+          jq -e '.artifactId == "step-1-legacy-baseline-round-007" and .round == 7 and .overallStatus == "EXTERNAL_PENDING"' "$ROUND_DIR/$ROUND" >/dev/null
           jq -e '.artifactId == "step-1-legacy-baseline-round-007" and .round == 7 and .status == "PASS" and .canonicalStatus == "PASS"' "$COMPLETION_DIR/$COMPLETION" >/dev/null
 
           (
             cd "$C1_DIR"
-            CATS_REPO_ROOT="$COMPLETION_DIR" node tests/verify-step-1-baseline.mjs
+            CATS_REPO_ROOT="$ROUND_DIR" node tests/verify-step-1-baseline.mjs
           )
+
+          INITIAL_MERGE=$(jq -r '.initialMerge' "$COMPLETION_DIR/$COMPLETION")
+          test "$INITIAL_MERGE" = '455fdc40ea1b2644a6280ab28916fd8294ff01f2'
+          test "$(git rev-parse "$COMPLETION_COMMIT^")" = "$INITIAL_MERGE"
+          git merge-base --is-ancestor "$INITIAL_MERGE" "$COMPLETION_COMMIT"
+
+          EXPECTED_PATHS="$RUNNER_TEMP/round7-completion-expected.txt"
+          ACTUAL_PATHS="$RUNNER_TEMP/round7-completion-actual.txt"
+          jq -r '.completionAllowedPaths[]' "$C1_DIR/$ACCEPTANCE" | sort > "$EXPECTED_PATHS"
+          git diff-tree --no-commit-id --name-only -r "$COMPLETION_COMMIT" | sort > "$ACTUAL_PATHS"
+          diff -u "$EXPECTED_PATHS" "$ACTUAL_PATHS"
+
+          AUDIT_PATH=$(jq -r '.externalAuditRecord.path' "$COMPLETION_DIR/$COMPLETION")
+          AUDIT_SHA=$(jq -r '.externalAuditRecord.sha256' "$COMPLETION_DIR/$COMPLETION")
+          test -f "$COMPLETION_DIR/$AUDIT_PATH"
+          test "$(sha256sum "$COMPLETION_DIR/$AUDIT_PATH" | awk '{print $1}')" = "$AUDIT_SHA"
+          jq -e '.status == "PASS" and .materialBlockers == []' "$COMPLETION_DIR/$AUDIT_PATH" >/dev/null
+
+          test "$(git -C "$ROUND_DIR" rev-parse "HEAD:$ROUND")" = 'a045967c6046256bf5576ac56bbc6090e455b6de'
+          test "$(git -C "$COMPLETION_DIR" rev-parse "HEAD:$COMPLETION")" = '9071044e64dfdb4cfa3f66f52da01d110d4512d3'
 
           echo 'PASS_HISTORICAL_ROUND7_IMMUTABLE_WORKTREES'
 
