@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-route-01-2-checkpoint-d-evidence",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "scope": "Route 01-2 competitor, Apple, Google, Japan, privacy and minor-protection research only",
+  "base": {
+    "commit": "543520a7be636836cd48877b08859034cfdf4b02",
+    "tree": "4bf271b007a07c0f225d63f9a213b6ef53a02bbc",
+    "note": "The accidental DO_NOT_CREATE.tmp connector probe was removed before this checkpoint."
+  },
+  "content": {
+    "commit": "9433ab08d6c46cbab46980ad960e0c3f2ef8f090",
+    "tree": "f719ec026869beab4ad1cac6b6b079ad23d7ec95",
+    "aheadBy": 5,
+    "behindBy": 0,
+    "changedPaths": [
+      "PROJECT_STATUS.json",
+      "canonical/POLICY_RELEASE_GATES.json",
+      "quality-reviews/step-1-reseal-round-008/competitive-research.md",
+      "quality-reviews/step-1-reseal-round-008/platform-policy-audit.md",
+      "quality-reviews/step-1-reseal-round-008/source-register-route-01-2.json"
+    ],
+    "changedPathCount": 5,
+    "changedPathSetExact": true
+  },
+  "deployment": {
+    "id": "dpl_42a7k1NmMBXi35zxLasYgYQviMHb",
+    "url": "https://catstower-ed5xwuj05-shinyaaas-projects.vercel.app",
+    "state": "READY",
+    "target": null,
+    "githubCommit": "9433ab08d6c46cbab46980ad960e0c3f2ef8f090",
+    "githubBranch": "kimi",
+    "commitMatch": true,
+    "branchMatch": true,
+    "combinedStatusContext": "Vercel",
+    "combinedStatusState": "success",
+    "readyMeaning": "documentation deployment only; not overall Step 1 or product PASS"
+  },
+  "verification": {
+    "sourceClassSeparation": "PASS",
+    "sixCompetitorsCovered": "PASS",
+    "unsupportedExactCompetitorValues": "NOT_PUBLICLY_VERIFIED",
+    "ApplePrimaryPolicyUsed": true,
+    "GooglePrimaryPolicyUsed": true,
+    "JapanPrimarySourcesUsed": true,
+    "legalConclusionClaimed": false,
+    "submissionTimeRefreshRequired": true,
+    "policyRegistryAuthority": "PRESEAL_DRAFT",
+    "policyRegistryMayAuthorizeStep2": false,
+    "runtimeChanged": false,
+    "assetsChanged": false,
+    "candidateChanged": false,
+    "schemaChanged": false,
+    "validatorChanged": false,
+    "simulatorChanged": false,
+    "workflowYamlChanged": false,
+    "backendChanged": false,
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "pullRequestOperation": false,
+    "productionAliasChanged": false
+  },
+  "acceptanceResults": [
+    {"id": "R012-01", "result": "PASS", "evidence": "Every material source entry records class, publisher, title, observed date, update date when available, URL, support and limits."},
+    {"id": "R012-02", "result": "PASS", "evidence": "Official, store, policy, regulator, review and inference claims are separated."},
+    {"id": "R012-03", "result": "PASS", "evidence": "All six competitors are covered; unsupported rates, pity, prices and formulas are not guessed."},
+    {"id": "R012-04", "result": "PASS", "evidence": "Comparison matrix and explicit evidence gaps cover the requested dimensions."},
+    {"id": "R012-05", "result": "PASS", "evidence": "Adoption and rejection use abstract structures and preserve the Cat's Tower boundary."},
+    {"id": "R012-06", "result": "PASS", "evidence": "Apple and Google gates are grounded in first-party policy or documentation."},
+    {"id": "R012-07", "result": "PASS", "evidence": "Japan gates use CAA, FSA, PPC and NCAC primary public material."},
+    {"id": "R012-08", "result": "PASS", "evidence": "No legal advice or approval guarantee; expert review and policy refresh remain release blockers."},
+    {"id": "R012-09", "result": "PASS", "evidence": "POLICY_RELEASE_GATES.json is machine-readable PRESEAL_DRAFT and cannot authorize Step 2."},
+    {"id": "R012-10", "result": "PASS", "evidence": "Forbidden implementation and external-operation paths are unchanged."},
+    {"id": "R012-11", "result": "PASS", "evidence": "Independent critic found no unsupported exact value, source-class collapse or legal conclusion; checkpoint judge leaves P0/P1 at zero."},
+    {"id": "R012-12", "result": "PASS", "evidence": "Exact content commit, tree, changed paths and matching kimi Preview are recorded."
+    }
+  ],
+  "roles": {
+    "creator": "Produced source register, comparison research, policy audit and policy gate registry.",
+    "independentCritic": "Attempted rejection for unsupported competitor mechanics, review anecdotes treated as facts, stale policy, legal overclaim, copied expression and missing release gates.",
+    "checkpointJudge": "PASS for Route 01-2 only. Overall Step 1 remains IN_PROGRESS and Step 2 remains BLOCKED."
+  },
+  "verdicts": {
+    "route012": "PASS",
+    "route012UnresolvedP0": 0,
+    "route012UnresolvedP1": 0,
+    "overallStep1": "IN_PROGRESS",
+    "step2Allowed": false,
+    "physicalIPhoneVerified": false
+  },
+  "nextAuthorizedChat": "01_正本仕様・競合調査",
+  "nextAuthorizedWork": "Complete FLOORS_1_10 redline, Step 2 dependency closure, lower-mirror sync, independent Step 1 critics, final judge and Round 008 seal."
+}
