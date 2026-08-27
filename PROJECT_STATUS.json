@@ -1,5 +1,5 @@
 {
-  "statusDocumentSchemaVersion": 11,
+  "statusDocumentSchemaVersion": 12,
   "updatedDate": "2026-08-27",
   "project": "Cat's Tower",
   "canonicalRepository": "2hg7trp7rv-design/cats_tower",
@@ -17,70 +17,36 @@
   "currentChat": "01_正本仕様・競合調査",
   "currentStep": 1,
   "currentStepName": "canonical-integration-and-reseal",
-  "currentStepStatus": "IN_PROGRESS",
-  "currentCheckpoint": "round-008-route-01-4-mirror-sync-and-final-critics",
-  "advanceAllowed": false,
-  "step2Allowed": false,
-  "firstTenPreviewReady": false,
-  "unboundedProductReady": false,
+  "currentStepStatus": "PASS",
+  "currentCheckpoint": "round-008-activated",
+  "advanceAllowed": true,
+  "step2Allowed": true,
+  "step3Allowed": false,
   "physicalIPhoneVerified": false,
   "productionChangedByCurrentWork": false,
-  "completedCheckpoints": {
-    "route010": {"status": "PASS", "contentCommit": "77df8b720733e4af6e22220e39950d2e9ff25df4", "evidenceCommit": "ea5a060c23b7e4a18bc179b4289beb8f1502f4a6"},
-    "route011": {"status": "PASS", "contentCommit": "a6211855428a54240bf48b586fc08cc85db0d6eb", "evidenceCommit": "68cb3f6a4689869538340f5f1a186bed3efac7e2", "currentAuthoritySupersededAssertionCount": 0, "unclassifiedPathCount": 0, "unclassifiedMatchCount": 0, "unresolvedP0": 0, "unresolvedP1": 0},
-    "route012": {"status": "PASS", "contentCommit": "9433ab08d6c46cbab46980ad960e0c3f2ef8f090", "evidenceCommit": "56c3f03a2542ec0e7ba579c4d4a3025887ecb69c", "deploymentId": "dpl_42a7k1NmMBXi35zxLasYgYQviMHb", "unresolvedP0": 0, "unresolvedP1": 0},
-    "route013": {"status": "PASS", "contentCommit": "c96792728eab1a8fde8ada8df60a31f204ec8f4a", "contentTree": "4e5e430f43f692ca5d44dc3011eb2cdc09c71299", "evidenceCommit": "06360cff04b2d1184da028310a9b249e4245ef56", "evidence": "quality-reviews/step-1-reseal-round-008/checkpoint-e-evidence.json", "deploymentId": "dpl_9TSPt2d4BfEXatkX1s9vvhPFAe8n", "unresolvedP0": 0, "unresolvedP1": 0}
-  },
-  "activeCheckpoint": {
-    "id": "route014",
-    "status": "IN_PROGRESS",
-    "purpose": "Synchronize every active entry/status/workflow mirror, run ten separated independent critics, repair accepted findings, run final judge, bind exact content/evidence and create the Round 008 seal.",
-    "requiredOutputs": [
-      "MASTER_SPEC.md",
-      "QUALITY_GATE.md",
-      "README.md",
-      "AGENTS.md",
-      "AI_PROJECT_POLICY.json",
-      "CHATGPT_PROJECT_BOOTSTRAP.md",
-      "CUSTOM_GPT_CONFIGURATION.md",
-      "PROJECT_HANDOVER.md",
-      "simulation/INPUT_CONTRACT.md",
-      "simulation/CURRENT_STATUS.json",
-      ".github/workflows/CURRENT_STATUS.md",
-      "quality-reviews/step-1-reseal-round-008/critics/**",
-      "quality-reviews/step-1-reseal-round-008/final-judge.json",
-      "quality-reviews/step-1-reseal-round-008/seal-round-008.json"
-    ]
-  },
-  "currentCanonicalization": {
-    "status": "IN_PROGRESS",
-    "newStep1SealExists": false,
-    "repositoryWideContradictionInventoryComplete": true,
-    "competitiveAndPolicyResearchComplete": true,
-    "allLowerDocumentsRedlined": true,
-    "step2DependencyClosureComplete": true,
-    "independentCritiquesComplete": false,
+  "round008": {
+    "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+    "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce",
+    "sealPath": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
+    "sealBlob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
+    "sealCommit": "0b17f9b5b8decdab8ce329287a4dc073790c4bf7",
+    "sealTree": "9eac6b6103d65cf8bcb13859d00e43cd3389fa8a",
+    "finalJudgeCommit": "cd57005ef12c5ca4c923f436c2bcce0a5cc8aadf",
+    "criticCount": 10,
+    "initialP1": 5,
+    "resolvedP1": 5,
     "unresolvedP0": 0,
-    "unresolvedP1": "FINAL_CRITICS_NOT_YET_COMPLETE"
+    "unresolvedP1": 0,
+    "trackedP2": 6,
+    "completionEvidence": "quality-reviews/step-1-reseal-round-008/activation-completion-evidence-round-008.json",
+    "liveReadback": "quality-reviews/step-1-reseal-round-008/live-readback-round-008.json"
   },
-  "canonicalArtifacts": {
-    "MASTER_SPEC.md": "PRESEAL_DRAFT",
-    "FLOORS_1_10_DESIGN.md": "PRESEAL_DRAFT",
-    "canonical/STABLE_ID_REGISTRY.json": "PRESEAL_DRAFT",
-    "canonical/SCREEN_STATE_REGISTRY.json": "PRESEAL_DRAFT",
-    "canonical/STATE_TRANSITION_CONTRACT.json": "PRESEAL_DRAFT",
-    "canonical/POLICY_RELEASE_GATES.json": "PRESEAL_DRAFT",
-    "canonical/STEP2_DEPENDENCY_CLOSURE.json": "PRESEAL_DRAFT",
-    "quality-reviews/step-1-reseal-round-008/seal-round-008.json": "NOT_CREATED"
-  },
-  "approvedProductBoundary": {
+  "canonicalProductBoundary": {
     "playerVisibleTowerMaximum": null,
     "floor100Role": "first-major-milestone-not-ending",
     "floor101Exists": true,
-    "playableSpecies": ["cat", "catfolk"],
     "activeNamedPartySize": 4,
-    "temporaryReinforcementSeparateFromParty": true,
-    "merchantChairmanIdentityAllowed": false,
+    "temporaryReinforcementSeparate": true,
     "directTapDamage": 0,
     "singleResetId": "reset.tower_return",
     "coinLevelCap": null,
@@ -95,17 +61,26 @@
     "serverAuthoritativePermanentEconomy": true
   },
   "authorizedExecutionSequence": [
-    {"order": 1, "name": "canonical-integration-and-reseal", "status": "IN_PROGRESS"},
-    {"order": 2, "name": "executable-contract-and-simulation", "status": "BLOCKED"},
-    {"order": 3, "name": "large-scale-validation", "status": "BLOCKED"},
-    {"order": 4, "name": "twelve-screen-final-mockups", "status": "BLOCKED"},
-    {"order": 5, "name": "floors-1-through-10-and-backend-implementation", "status": "BLOCKED"},
-    {"order": 6, "name": "physical-iphone-validation", "status": "BLOCKED"}
+    {"order": 1, "name": "canonical-integration-and-reseal", "status": "PASS"},
+    {"order": 2, "name": "executable-contract-and-simulation", "status": "READY_TO_START"},
+    {"order": 3, "name": "large-scale-validation", "status": "BLOCKED_UNTIL_STEP2_PASS"},
+    {"order": 4, "name": "twelve-screen-final-mockups", "status": "BLOCKED_UNTIL_STEP3_PASS"},
+    {"order": 5, "name": "first-production-slice-and-backend-implementation", "status": "BLOCKED_UNTIL_PRIOR_GATES"},
+    {"order": 6, "name": "physical-iphone-validation", "status": "BLOCKED_UNTIL_ELIGIBLE_BUILD"}
   ],
-  "writeBoundary": {
-    "allowed": ["Step 1 canonical documentation", "status mirrors", "independent critiques", "quality and seal evidence"],
-    "forbidden": ["runtime", "assets", "V1 candidate/schema/validator/simulator", "backend", "payment provider", "ad network", "PR operation", "Production alias"]
+  "step2Entry": {
+    "source": "canonical/STEP2_DEPENDENCY_CLOSURE.json",
+    "status": "READY_TO_START",
+    "acceptanceRequiredBeforeWrites": true,
+    "newV2ArtifactsRequired": true,
+    "legacyV1Usable": false,
+    "observedHoldoutReusable": false,
+    "step3MayStartBeforeStep2Seal": false
   },
-  "nextAuthorizedChat": "01_正本仕様・競合調査",
-  "nextAction": "complete-route-01-4-mirror-sync-final-critics-judge-and-seal"
+  "nextAuthorizedChat": "02_無制限塔・経済・リセットシミュレーション",
+  "nextAction": "Create and commit the Step 2 Acceptance Matrix, then implement and validate the new V2 executable contract without running Step 3.",
+  "writeBoundary": {
+    "allowedNext": ["Step 2 V2 candidate/schema/validator/simulator/result/run-plan/fixtures/migrations/workflow/quality evidence"],
+    "forbidden": ["runtime", "assets", "backend", "payment provider", "ad network", "PR operation", "Production alias", "Step 3 before Step 2 PASS"]
+  }
 }
