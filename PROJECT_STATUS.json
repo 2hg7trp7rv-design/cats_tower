@@ -1,5 +1,5 @@
 {
-  "statusDocumentSchemaVersion": 12,
+  "statusDocumentSchemaVersion": 13,
   "updatedDate": "2026-08-28",
   "project": "Cat's Tower",
   "canonicalRepository": "2hg7trp7rv-design/cats_tower",
@@ -17,11 +17,11 @@
   "currentChat": "02_無制限塔・経済・リセットシミュレーション",
   "currentStep": 2,
   "currentStepName": "executable-contract-and-simulation",
-  "currentStepStatus": "IN_PROGRESS_CONTENT_PHASE_PASS",
-  "currentCheckpoint": "v2-content-phase-pass-exact-sha-ci",
-  "advanceAllowed": false,
+  "currentStepStatus": "PASS",
+  "currentCheckpoint": "step2-sealed-status-activation",
+  "advanceAllowed": true,
   "step2Allowed": true,
-  "step3Allowed": false,
+  "step3Allowed": true,
   "physicalIPhoneVerified": false,
   "productionChangedByCurrentWork": false,
   "round008": {
@@ -32,37 +32,19 @@
     "sealCommit": "0b17f9b5b8decdab8ce329287a4dc073790c4bf7",
     "sealTree": "9eac6b6103d65cf8bcb13859d00e43cd3389fa8a",
     "finalJudgeCommit": "cd57005ef12c5ca4c923f436c2bcce0a5cc8aadf",
-    "criticCount": 10,
-    "initialP1": 5,
-    "resolvedP1": 5,
     "unresolvedP0": 0,
-    "unresolvedP1": 0,
-    "trackedP2": 6,
-    "completionEvidence": "quality-reviews/step-1-reseal-round-008/activation-completion-evidence-round-008.json",
-    "liveReadback": "quality-reviews/step-1-reseal-round-008/live-readback-round-008.json"
+    "unresolvedP1": 0
   },
   "canonicalProductBoundary": {
     "playerVisibleTowerMaximum": null,
     "floor100Role": "first-major-milestone-not-ending",
     "floor101Exists": true,
     "activeNamedPartySize": 4,
-    "temporaryReinforcementSeparate": true,
     "directTapDamage": 0,
     "singleResetId": "reset.tower_return",
     "coinLevelCap": null,
     "evolutionEligibilityEveryLevels": 100,
-    "rarities": [
-      "N",
-      "R",
-      "RR",
-      "SR",
-      "SSR",
-      "UR"
-    ],
-    "catalogTargets": {
-      "characters": 24,
-      "weapons": 36
-    },
+    "rarities": ["N", "R", "RR", "SR", "SSR", "UR"],
     "characterAndWeaponGachaSeparated": true,
     "hardPityTarget": 100,
     "featuredGuaranteeTarget": 200,
@@ -70,99 +52,73 @@
     "canonicalScreenCount": 12,
     "serverAuthoritativePermanentEconomy": true
   },
-  "step2ContentEvidence": {
+  "step2Evidence": {
     "acceptancePath": "quality-reviews/step-2-executable-contract-v2/acceptance-matrix.json",
-    "contentCommit": "408ce59760945ec032bec6e2b87e4b9bc824848e",
-    "contentTree": "3c2fc02fc55eff6aeec2016cb9d014148aec5b11",
-    "evidenceCommit": "e7bdc2ffa530e65d5416789429f54de645fe7fc7",
-    "evidenceTree": "db96b8c03e9315b2e6f6c82c7389adbc1e568374",
-    "evidencePath": "quality-reviews/step-2-executable-contract-v2/tower-sequence-input-evidence-anchor.json",
+    "semanticCommit": "724d04940f9f3794b993cddbc5af3a7163a0395b",
+    "semanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
+    "sealPath": "simulation/executable-seal-v2.json",
+    "sealBlob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
+    "sealActivationCommit": "89174eeebb033fe807a0592c8df0279c2a7b9a6f",
+    "sealActivationTree": "ccf444df436d63d86fd4da0355f20349753b0546",
     "dedicatedWorkflow": ".github/workflows/verify-step-2-v2.yml",
-    "workflowRunId": "33094611846",
-    "jobId": "98596129603",
+    "workflowRunId": "33104391753",
+    "jobId": "98630217077",
     "ciConclusion": "SUCCESS",
-    "verifierVerdict": "CONTENT_PHASE_PASS_STEP2_IN_PROGRESS",
+    "sealValidatorVerdict": "PASS_EXECUTABLE_SEAL_V2",
+    "criticSummaryPath": "quality-reviews/step-2-executable-contract-v2/critic-summary.json",
+    "criticSummaryBlob": "4d85d95c0b00b3e2aed4aecc6025ceea9253308e",
+    "criticCount": 5,
+    "unresolvedP0": 0,
+    "unresolvedP1": 0,
+    "trackedP2": 6,
+    "finalJudgePath": "quality-reviews/step-2-executable-contract-v2/final-judge.json",
+    "finalJudgeBlob": "44fe4c83e3ea1ceefba836200100b6d6628028d1",
+    "completionEvidencePath": "quality-reviews/step-2-executable-contract-v2/completion-evidence.json",
+    "completionEvidenceBlob": "1f771b02f0982c879e038bfd36925ed889142d95",
+    "liveReadbackPath": "quality-reviews/step-2-executable-contract-v2/live-readback.json",
+    "liveReadbackBlob": "cfec952f14680482409ff621e9c89ed36cf4e6d6",
     "qualificationScenarioCount": "30",
     "qualificationDigest": "a24fa5a4a12cf132ac477c80e77431cd0b97ab070bbbef83c3881c160f42562c",
-    "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
-    "executionVersion": "cats-tower-step3-executor-v1.1.0",
     "balanceVerdict": "NOT_EVALUATED_STEP2",
-    "completionClaimed": false,
-    "step3Authorized": false
+    "completionClaimed": true,
+    "step3Authorized": true
   },
   "authorizedExecutionSequence": [
-    {
-      "order": 1,
-      "name": "canonical-integration-and-reseal",
-      "status": "PASS"
-    },
-    {
-      "order": 2,
-      "name": "executable-contract-and-simulation",
-      "status": "IN_PROGRESS_CONTENT_PHASE_PASS"
-    },
-    {
-      "order": 3,
-      "name": "large-scale-validation",
-      "status": "BLOCKED_UNTIL_STEP2_PASS"
-    },
-    {
-      "order": 4,
-      "name": "twelve-screen-final-mockups",
-      "status": "BLOCKED_UNTIL_STEP3_PASS"
-    },
-    {
-      "order": 5,
-      "name": "first-production-slice-and-backend-implementation",
-      "status": "BLOCKED_UNTIL_PRIOR_GATES"
-    },
-    {
-      "order": 6,
-      "name": "physical-iphone-validation",
-      "status": "BLOCKED_UNTIL_ELIGIBLE_BUILD"
-    }
+    {"order": 1, "name": "canonical-integration-and-reseal", "status": "PASS"},
+    {"order": 2, "name": "executable-contract-and-simulation", "status": "PASS"},
+    {"order": 3, "name": "large-scale-validation", "status": "READY_TO_START"},
+    {"order": 4, "name": "twelve-screen-final-mockups", "status": "BLOCKED_UNTIL_STEP3_PASS"},
+    {"order": 5, "name": "first-production-slice-and-backend-implementation", "status": "BLOCKED_UNTIL_PRIOR_GATES"},
+    {"order": 6, "name": "physical-iphone-validation", "status": "BLOCKED_UNTIL_ELIGIBLE_BUILD"}
   ],
   "step2Entry": {
     "source": "canonical/STEP2_DEPENDENCY_CLOSURE.json",
-    "status": "IN_PROGRESS_CONTENT_PHASE_PASS",
-    "acceptanceRequiredBeforeWrites": true,
+    "status": "PASS",
     "acceptanceSatisfied": true,
-    "newV2ArtifactsRequired": true,
     "newV2ContentMaterialized": true,
     "sourceBoundCiPassed": true,
+    "executableSealPassed": true,
+    "criticGatePassed": true,
+    "completionChainPassed": true,
     "legacyV1Usable": false,
     "observedHoldoutReusable": false,
     "step3MayStartBeforeStep2Seal": false
   },
-  "nextAuthorizedChat": "02_無制限塔・経済・リセットシミュレーション",
-  "nextAction": "Run independent Step 2 critics and repairs, create and validate the executable seal, then complete the final judge, completion evidence and live read-back chain. Do not start Step 3 before that chain passes.",
+  "nextAuthorizedChat": "03_3ビルド・ガチャ・重複熟練・進化・課金検証",
+  "nextAction": "Execute the sealed Step 3 large-scale validation: minimum 15,000 gameplay scenarios plus separate gacha-tail, pity, duplicate, refund/replay/race, state-transition and large-number suites. Do not treat Step 2 qualification as a balance PASS.",
   "writeBoundary": {
-    "allowedNext": [
-      "Step 2 independent critics and critic repairs",
-      "Step 2 executable seal and validator",
-      "Step 2 final judge, completion evidence and live read-back",
-      "Step 2 status mirrors and handover"
-    ],
-    "forbidden": [
-      "runtime",
-      "assets",
-      "backend",
-      "payment provider",
-      "ad network",
-      "PR operation",
-      "Production alias",
-      "Step 3 before Step 2 PASS"
-    ]
+    "allowedNext": ["Step 3 large-scale validation artifacts and evidence"],
+    "forbiddenUntilLaterGates": ["runtime", "assets", "backend", "payment provider", "ad network", "Production alias", "physical-iPhone PASS claim"]
   },
   "knownCiDiscrepancy": {
     "workflow": ".github/workflows/verify-main.yml",
-    "workflowRunId": "33095422270",
-    "conclusion": "FAILURE",
-    "failingAssertion": "AGENTS.md must retain exactly one Step 1A PASS marker line",
-    "classification": "LEGACY_ROUND7_CURRENT_STATUS_ASSERTION_INCOMPATIBLE_WITH_ROUND008_STEP2_STATUS",
+    "conclusion": "FAILURE_EXPECTED_UNTIL_GOVERNANCE_REPAIR",
+    "failingAssertion": "legacy Round 7 current-state Step 1A PASS marker assertion",
+    "classification": "LEGACY_ROUND7_CURRENT_STATUS_ASSERTION_INCOMPATIBLE_WITH_ROUND008_AND_LATER_STATUS",
     "dedicatedStep2WorkflowConclusion": "SUCCESS",
-    "dedicatedStep2WorkflowRunId": "33095418197",
-    "step3StillBlocked": true,
-    "productionImpact": false
+    "dedicatedStep2WorkflowRunId": "33104391753",
+    "affectsStep2SealVerdict": false,
+    "productionImpact": false,
+    "remediation": "Separate historical Round 7 evidence validation from current-status validation; do not restore obsolete markers."
   }
 }
