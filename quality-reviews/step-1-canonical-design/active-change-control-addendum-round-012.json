@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-canonical-design-active-change-control-addendum-round-012",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "parentChangeControl": "quality-reviews/step-1-canonical-design/active-change-control.json",
+  "previousAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-011.json",
+  "trigger": "Routes 01-0 through 01-3 passed their scoped checkpoints. Freeze the final preseal canon and all active mirrors, then run ten separated critics, final judge and exact seal activation.",
+  "status": "IN_PROGRESS",
+  "advanceAllowed": false,
+  "step2Allowed": false,
+  "completedScopedCheckpoints": ["route010", "route011", "route012", "route013"],
+  "route014": {
+    "status": "IN_PROGRESS",
+    "required": [
+      "all active mirrors synchronized",
+      "frozen content commit/tree and matching kimi Preview",
+      "ten separated critics",
+      "accepted findings repaired and regression checked",
+      "unresolved P0/P1 zero",
+      "final judge SEAL_ELIGIBLE",
+      "seal-round-008.json",
+      "direct-descendant activation/completion evidence and live read-back"
+    ]
+  },
+  "writeBoundary": {
+    "allowed": ["Step 1 canonical documentation", "status mirrors", "critic/judge/seal evidence"],
+    "forbidden": ["runtime", "assets", "V1 candidate/schema/validator/simulator", "workflow YAML", "backend", "payment provider", "ad network", "PR operation", "Production alias"]
+  },
+  "incidentDisclosure": {
+    "priorFalseCompletionReport": true,
+    "liveSealWasAbsent": true,
+    "accidentalProbeFileRemoved": true,
+    "probeRemovalCommit": "543520a7be636836cd48877b08859034cfdf4b02",
+    "currentTreeContainsProbeFile": false,
+    "mustBeReviewedByRepositoryCritic": true
+  },
+  "nextAuthorizedChat": "01_正本仕様・競合調査",
+  "nextAuthorizedWork": "Complete Route 01-4. Do not start Step 2 until a valid live seal and activation evidence exist.",
+  "physicalIPhoneVerified": false
+}

@@ -2,67 +2,49 @@
 
 更新日: **2026-08-27**  
 Repository: `2hg7trp7rv-design/cats_tower`  
-Branch: **既存の`kimi`のみ**  
-現在工程: **Step 1 — IN_PROGRESS**  
-現在checkpoint: **Route 01-2 competitor/platform/Japan research**  
+Branch: existing `kimi` only  
+Current: **Step 1 Round 008 final preseal review — IN_PROGRESS**  
 Step 2〜6: **BLOCKED**  
-物理iPhone: **NOT_VERIFIED**
+Physical iPhone: **NOT_VERIFIED**
 
-## 完了checkpoint
+## Verified completed checkpoints
 
-### Route 01-0
+- Route 01-0 governance recovery: PASS
+- Route 01-1 exact path/contradiction inventory: PASS
+- Route 01-2 competitor/platform/Japan research and policy gates: PASS
+- Route 01-3 first-ten/stable-ID/screens/transitions/Step2 dependency closure: PASS
 
-- status: `PASS`
-- content: `77df8b720733e4af6e22220e39950d2e9ff25df4`
-- evidence: `ea5a060c23b7e4a18bc179b4289beb8f1502f4a6`
+各checkpointはscope限定。Step 1全体を単独でPASSにしない。
 
-### Route 01-1
+## Current PRESEAL set
 
-- status: `PASS`
-- content: `a6211855428a54240bf48b586fc08cc85db0d6eb`
-- content tree: `e6569c6f94222279db061a9f56558140694c7551`
-- evidence: `68cb3f6a4689869538340f5f1a186bed3efac7e2`
-- evidence tree: `95d05a27ce739c3f1e525348c13a6955baf5b721`
-- current-authority old assertion: `0`
-- unclassified path/match: `0 / 0`
-- P0/P1: `0 / 0`
-
-## Route 01-2
-
-調査基準: `2026-08-26T23:59:59+09:00`
-
-Acceptance:
-
-- `quality-reviews/step-1-reseal-round-008/route-01-2-acceptance.json`
-
-必須分離:
-
-- official developer
-- store listing
-- platform policy
-- Japanese primary source
-- industry analysis
-- user review
-- Cat's Tower inference
-
-必須成果:
-
-- source register
-- competitor comparison
-- platform/Japan audit
+- `MASTER_SPEC.md`
+- `FLOORS_1_10_DESIGN.md`
+- `canonical/STABLE_ID_REGISTRY.json`
+- `canonical/SCREEN_STATE_REGISTRY.json`
+- `canonical/STATE_TRANSITION_CONTRACT.json`
 - `canonical/POLICY_RELEASE_GATES.json`
-- exact checkpoint-d evidence
-
-## 残るStep 1 blocker
-
-- Route 01-2調査・policy gate
-- `FLOORS_1_10_DESIGN.md`完全redline
 - `canonical/STEP2_DEPENDENCY_CLOSURE.json`
-- 下位mirror最終統合
-- 11独立criticと修正
-- final judge、evidence、seal
+- `quality-reviews/step-1-reseal-round-008/canonical-coverage-matrix.json`
 
-## 禁止範囲
+## Remaining before Step 1 PASS
 
-runtime、assets、V1 candidate/schema/validator/simulator、backend、payment/ad provider、他branch、PR、Production aliasは変更しない。
+1. active entry/status/simulation/workflow mirrors final synchronization
+2. frozen content commit/tree and matching `kimi` Preview
+3. ten separated independent critics
+4. accepted finding repairs and regression
+5. final judge with unresolved P0/P1=0
+6. `seal-round-008.json`
+7. direct-descendant activation/completion evidence and live read-back
 
+## Forbidden unchanged scope
+
+runtime、assets、V1 candidate/schema/validator/simulator、workflow YAML、backend、payment provider、ad network、PR、Production aliasを変更しない。過去Acceptance/PASS/audit/deployment evidenceを改変しない。
+
+## Incident record
+
+前回の「Step 1完了」報告はlive status/sealに裏付けられていなかった。connector probe file `DO_NOT_CREATE.tmp`はcommit `543520a7be636836cd48877b08859034cfdf4b02`で削除済み。probe履歴は残るがcurrent treeには存在しない。この事実を隠さずfinal repository critic/evidenceへ含める。
+
+## Next authorized work
+
+`01_正本仕様・競合調査`のfinal review/sealのみ。valid live sealが確認されるまで02を開始しない。

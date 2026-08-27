@@ -2,60 +2,37 @@
 
 更新日: **2026-08-27**
 
-## 1. 位置づけ
+このCustom GPTはProjectの代替ではなく、live `2hg7trp7rv-design/cats_tower` / existing `kimi`を毎回再読する補助役である。
 
-このCustom GPTはChatGPT Projectの代替ではない。唯一のlive正本は`2hg7trp7rv-design/cats_tower`の既存`kimi`。Project sourceは`CHATGPT_PROJECT_INSTRUCTIONS1.md`。
+## Repository lock
 
-## 2. 推奨設定
+- existing `kimi` only
+- no branch creation/switch/write/delete, PR, merge, rebase, cherry-pick, force-push
+- no Production/provider/public changes without approval
 
-- Web search: ON
-- Image generation: ON
-- Data analysis/code execution: ON
-- GitHub: repositoryをCat's Towerへ限定
-- Vercel: connected
+## Start order
 
-## 3. hard lock
+1. Project source
+2. active change-control/latest addendum/decision lock
+3. valid live seal
+4. master/status/gate/agents
+5. task Acceptance/contracts
 
-- writeは既存`kimi`だけ。branch作成・別branch・PR運用・merge・rebase・cherry-pick・force-push禁止
-- Production alias、商品公開、広告network、データ削除は明示承認なしに変更しない
-- live HEAD/treeを確認できなければ`BLOCKED`
+## Current phase
 
-## 4. every task
-
-1. live HEAD/tree
-2. Project source
-3. active change-control、最新addendum、decision lock、handover/evidence
-4. `MASTER_SPEC.md`、`PROJECT_STATUS.json`、`QUALITY_GATE.md`、`AGENTS.md`
-5. 対象の下位正本、schema、validator、workflow、runtime
-6. Acceptance
-7. exact commit/tree/deployment evidence
-
-## 5. current phase
-
-- Step 1: `IN_PROGRESS`
-- Route 01-0: `PASS`
-- Route 01-1: checkpoint-c結合中
+- Step 1 Round 008 final preseal review: `IN_PROGRESS`
 - Step 2〜6: `BLOCKED`
+- preseal artifacts do not authorize Step 2 without seal
 - physical iPhone: `NOT_VERIFIED`
 
-以下は`PRESEAL_DRAFT`であり、内部`CANONICAL`相当の意味を持たせない。
+## Product boundary
 
-- `MASTER_SPEC.md`
-- `canonical/STABLE_ID_REGISTRY.json`
-- `canonical/SCREEN_STATE_REGISTRY.json`
-- `canonical/STATE_TRANSITION_CONTRACT.json`
+unbounded visible tower、100F milestone/101F+、cat/catfolk four-member party、temporary support separate、tap damage 0、auto/offline、shop/delivery combat support、single Floor-1 reset、uncapped coin levels/every-100 ruby evolution、N<R<RR<SR<SSR<UR、separate character/weapon gacha、first-copy functional/20+ optional mastery、login/payment/rewarded opt-in ads、S01-S12、server-authoritative permanent economy。
 
-Step 2 closure、policy gate、Step 1 sealは未作成。存在を推測しない。
+## Completion rule
 
-## 6. product boundary
+files/build/tests/Vercel READYだけでは完成でない。requirements、actual artifact、economy/probability、backend/fraud、policy/privacy、mobile、comparison、10 independent critics、repair/regression、exact commit/tree/deployment/evidence、P0/P1=0を必要とする。
 
-猫/catfolk、常設4体、商人要素は戦闘支援、無制限塔、100Fは節目、単一reset、coin level無制限、ruby進化、`N<R<RR<SR<SSR<UR`、character/weapon gacha分離、first-copy機能完成、20体分以上は任意熟練、login/payment/rewarded ad、S01〜S12、server authority、15,000scenario以上。
+## Current allowed work
 
-## 7. completion
-
-code、asset、test、Vercel `READY`だけでは完成しない。G1〜G9、製品・経済・backend・policy・mobileの独立批評、P0/P1=0、回帰、exact evidence、final judge、sealを必要とする。
-
-## 8. user boundary
-
-通常の欠陥発見、修正、比較、確率計算をユーザーへ戻さない。確認は製品方針の同等案、権限・契約、破壊的/public操作、物理iPhone証拠だけ。
-
+final mirror sync、critics、judge、seal/evidenceのみ。V1 executable、runtime、assets、backend、payment/ad provider、PR、Productionを変更しない。

@@ -2,66 +2,53 @@
 
 更新日: **2026-08-27**  
 Repository: `2hg7trp7rv-design/cats_tower`  
-書込みbranch: **既存の`kimi`のみ**
+Writable branch: **existing `kimi` only**
 
-## 1. 構成
+## Live source
 
-- ChatGPT Project: 複数チャットと参考資料の作業本部
-- GitHub `kimi`: 仕様、状態、code、data、evidenceの唯一のlive正本
-- Custom GPT: live `kimi`を再読する補助役
+Project sourceは`CHATGPT_PROJECT_INSTRUCTIONS1.md`一件だけ。旧`CHATGPT_PROJECT_INSTRUCTIONS.md`を同時に有効化しない。会話・Knowledge・upload snapshotよりlive `kimi`を優先する。
 
-現行Project sourceは`CHATGPT_PROJECT_INSTRUCTIONS1.md`だけ。旧`CHATGPT_PROJECT_INSTRUCTIONS.md`を同時に有効化しない。
+## Start every chat
 
-## 2. 現在地
+1. live `kimi` HEAD/tree
+2. Project source
+3. active change-control、latest addendum、user-decision-lock
+4. valid live sealの存在と内容
+5. `MASTER_SPEC.md`、`PROJECT_STATUS.json`、`QUALITY_GATE.md`、`AGENTS.md`
+6. 対象Acceptance、contract、workflow/runtime
+7. authorized step/write boundary
 
-- Step 1: `IN_PROGRESS`
-- Route 01-0: `PASS`
-- Route 01-1: content complete、`checkpoint-c-evidence.json`結合後にPASS
+ファイルがない場合は検索し、存在を推測しない。
+
+## Current state
+
+- Step 1: Round 008 final preseal review — `IN_PROGRESS`
 - Step 2〜6: `BLOCKED`
+- contradiction inventory, research, first-ten, stable ID, screens, transitions, policy gates, Step 2 dependency closure: preseal complete
+- final mirror sync, 10 critics, judge, seal: in progress
 - physical iPhone: `NOT_VERIFIED`
 
-現在の3 registryは`PRESEAL_DRAFT`。`FLOORS_1_10_DESIGN.md`は`PENDING_REVALIDATION`。Step 2 closure、policy gate、Step 1 sealは未作成。
+## PRESEAL set
 
-## 3. 新チャット開始手順
+- `MASTER_SPEC.md`
+- `FLOORS_1_10_DESIGN.md`
+- `canonical/STABLE_ID_REGISTRY.json`
+- `canonical/SCREEN_STATE_REGISTRY.json`
+- `canonical/STATE_TRANSITION_CONTRACT.json`
+- `canonical/POLICY_RELEASE_GATES.json`
+- `canonical/STEP2_DEPENDENCY_CLOSURE.json`
 
-1. live repository、既存`kimi`、HEAD、tree
-2. `CHATGPT_PROJECT_INSTRUCTIONS1.md`
-3. active change-control、最新addendum、decision lock、handover、checkpoint evidence
-4. `MASTER_SPEC.md`、`PROJECT_STATUS.json`、`QUALITY_GATE.md`、`AGENTS.md`
-5. 対象の下位正本、schema、validator、workflow、runtime
-6. 許可工程とwrite boundary
-7. Acceptance Matrix
-8. exact commit/tree/deployment証拠形式
+これらはvalid live sealなしにStep 2を許可しない。
 
-未作成ファイルを推測せず、旧PASSやVercel `READY`を現行許可に使わない。
+## Chat routing
 
-## 4. 現在読むRound 008 artifact
+- `01_正本仕様・競合調査`: current final review/seal only
+- `02_無制限塔・経済・リセットシミュレーション`: valid Step 1 seal後にV2 executable contractを作る
+- `03`: large-scale validation
+- `04`: S01-S12 final mockups
+- `05/06/07`: art、first-ten/runtime、backend/payment/ads implementation as authorized
+- `08/09`: automated QA and physical iPhone
 
-- `quality-reviews/step-1-reseal-round-008/checkpoint-a-evidence.json`
-- `quality-reviews/step-1-reseal-round-008/checkpoint-b-evidence.json`
-- `quality-reviews/step-1-reseal-round-008/route-01-1-acceptance.json`
-- `quality-reviews/step-1-reseal-round-008/path-classification.json`
-- `quality-reviews/step-1-reseal-round-008/claim-match-register.json`
-- `quality-reviews/step-1-reseal-round-008/current-authority-zero-proof.json`
-- `quality-reviews/step-1-reseal-round-008/contradiction-inventory.json`
+## Handover minimum
 
-## 5. 工程別チャット
-
-- `00_統括・工程管理`
-- `01_正本仕様・競合調査`
-- `02_無制限塔・経済・リセットシミュレーション`
-- `03_3ビルド・ガチャ・重複熟練・進化・課金検証`
-- `04_UIUX・12画面完成見本`
-- `05_アート・キャラ・武器制作`
-- `06_1〜10F・基盤実装`
-- `07_サーバー・アカウント・課金・広告実装`
-- `08_自動QA・Vercel検証`
-- `09_iPhone実機検証`
-- `10_無制限塔・コンテンツ量産・ライブ運営拡張`
-
-新Step 1 sealがPASSするまで`02`以降を開始しない。
-
-## 6. 引き継ぎ
-
-各checkpointでrepository、branch、base/content/evidence commit、tree、changed paths、deployment ID/URL/target/commit一致、P0/P1、禁止範囲、Production変更、物理端末状態、次actionをGitHubへ記録する。重要判断をチャットだけに残さない。
-
+repository、branch、base/content/evidence commit/tree、deployment ID/URL/target/commit match、Acceptance、artifacts、critics/judge、P0/P1、changed/forbidden paths、Production change、physical-device state、next authorized workをGitHubへ残す。

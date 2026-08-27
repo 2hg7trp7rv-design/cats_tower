@@ -1,41 +1,33 @@
 # Cat's Tower workflow status
 
-更新日: **2026-08-26**
+Updated: **2026-08-27**
 
 ## Current verdict
 
-Existing workflow YAML files and their successful runs were designed around the superseded finite-100F, Dawn, no-gacha, 3,000-scenario product or around the V0.8.2 legacy baseline.
+Existing workflow YAML and successful runs validate the legacy V0.8.2/finite-100F/V1 contract only. They cannot authorize the current unbounded monetized product.
 
-They remain useful as historical repository and baseline evidence, but they **cannot authorize** the current unbounded, monetized product.
+- Step 1: Round 008 final preseal review — `IN_PROGRESS`
+- Step 2〜6: `BLOCKED`
+- old workflow success may set current Step 1 PASS: `false`
+- old workflow success may start current Step 2: `false`
+- workflow YAML changed by Step 1 Round 008: `false`
 
-- Current Step 1: `IN_PROGRESS`
-- Current Step 2〜6: `BLOCKED`
-- Next authorized chat: `01_正本仕様・競合調査`
-- Old workflow success may set current Step 1 PASS: `false`
-- Old workflow success may start current Step 2: `false`
-- Production alias changed by this status file: `false`
+## Fail-closed promotion
 
-## Fail-closed rule
+Before Step 2, a valid live Round 008 seal must bind:
 
-Until a new exact commit/tree-bound Step 1 seal exists, any workflow result that still assumes one or more of the following is historical-only:
+- frozen content commit/tree
+- contradiction/path zero proof
+- first-ten and all canonical contracts
+- policy/competitive evidence
+- ten separated critics and final judge, P0/P1=0
+- matching `kimi` Preview
+- activation/completion evidence
 
-- 100F is the final product
-- Floor 101 is forbidden
-- Dawn is the active independent reset
-- gacha, premium currency, login bonus and ads are absent
-- nine canonical screens
-- exactly 3,000 scenarios are sufficient
-- local-only permanent economy
+Step 2 must implement a new V2 candidate/schema/validator/simulator/result/run-plan/fixture/migration/executable-seal chain. V1 success, observed holdout bank or historical executable seal cannot promote V2.
 
-## 01 responsibility
+## Later workflow requirements
 
-`01_正本仕様・競合調査` must:
+When Step 2 authorizes workflow changes, new preflight must fail closed on missing source/schema/fixture/result-validator digests, old IDs/versions, unsafe numeric serialization, missing state-machine fixtures, incomplete 3×5×1000 matrix, holdout overlap or invalid seal ancestry.
 
-1. inventory every workflow mirror and the files it reads;
-2. classify legacy-baseline checks separately from current-product checks;
-3. define the Step 2 dependency closure and new fail-closed preflight;
-4. prevent old candidate/schema/validator results from promoting the new product;
-5. bind the new Step 1 seal to an exact content commit and tree;
-6. retain historical workflow evidence without presenting it as current approval.
-
-Actual candidate, schema, validator and simulator semantics are implemented in Step 2 after the new Step 1 seal. This Markdown file does not alter workflow execution.
+This Markdown mirror does not modify workflow execution.
