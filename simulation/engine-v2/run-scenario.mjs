@@ -4,93 +4,98 @@ import { featuredGuaranteeDay, resetRubyQuote, evolutionCost, masteryOverflow } 
 import { parseExactDecimal, rational, roundRational, toBigInt } from './numeric.mjs';
 import { sha256Canonical } from './hash.mjs';
 
-const FIRST_RESET_BASE = {
-  'no-ad-f2p':'27','rewarded-ad-f2p':'26','monthly-pass':'24','controlled-payer':'23','high-spend-stress':'22'
-};
-const BUILD_RESET_ADJUST = {'build.combat':'0','build.reinforcement':'-1','build.commerce':'1'};
-
-function signedAddUnsigned(base, signedSmall) {
-  const result = BigInt(base) + BigInt(signedSmall);
-  if (result < 1n) throw new RangeError('minutes underflow');
-  return result.toString();
+function clampMinimum(value, minimum) {
+  const parsed = toBigInt(value);
+  const floor = toBigInt(minimum);
+  return (parsed < floor ? floor : parsed).toString();
 }
 
-function progressionBaseMinutes(targetFloor) {
-  const floor = toBigInt(targetFloor);
-  if (floor <= 10n) return 8n;
-  if (floor <= 100n) return 115n;
-  if (floor <= 1000n) return 2400n;
-  if (floor <= 10000n) return 42000n;
-  return 42000n + ((floor - 10000n) / 10n);
+function randomSignedInclusive(rng, minimum, maximum) {
+  const min = BigInt(minimum);
+  const max = BigInt(maximum);
+  if (min > max) throw new RangeError('SIGNED_RANGE_REVERSED');
+  return min + rng.nextBelow(max - min + 1n);
 }
 
-function divideByMultipliers(base, buildMultiplier, personaMultiplier, jitterBasisPoints) {
+function divideByMultipliers(base, buildMultiplier, personaMultiplier, jitterBasisPoints, minimumMinutes) {
   const build = parseExactDecimal(buildMultiplier);
   const persona = parseExactDecimal(personaMultiplier);
   const jitter = rational(10000n + BigInt(jitterBasisPoints), 10000n);
+  if (jitter.n <= 0n) throw new RangeError('NON_POSITIVE_PROGRESSION_JITTER');
   const effective = { n: build.n * persona.n * jitter.n, d: build.d * persona.d * jitter.d };
-  return roundRational({ n: base * effective.d, d: effective.n }, 'ceil').toString();
+  const minutes = roundRational({ n: toBigInt(base) * effective.d, d: effective.n }, 'ceil').toString();
+  return clampMinimum(minutes, minimumMinutes);
 }
 
-function horizonMetrics(candidate, build, persona, rng, horizon) {
-  const jitter = Number(rng.nextBelow(801n)) - 400;
+function horizonMetrics(candidate, execution, build, persona, rng, horizon) {
+  const progression = execution.model.progression;
+  const jitter = randomSignedInclusive(rng, progression.jitterMinimumBasisPoints, progression.jitterMaximumBasisPoints);
   const target = horizon.targetFloor;
   const generated = generateFloor(candidate, target);
-  const minutes = divideByMultipliers(progressionBaseMinutes(target), build.powerMultiplier, persona.progressMultiplier, jitter);
+  const baseline = progression.baselineMinutesByHorizon[horizon.id];
+  if (!baseline) throw new Error(`MISSING_HORIZON_BASELINE:${horizon.id}`);
   const metrics = {
-    horizonId:horizon.id,
-    targetFloor:target,
-    estimatedReachMinutes:minutes,
-    targetFloorDigest:sha256Canonical(generated),
-    targetFloorRepresentation:generated.hp.representation,
-    districtId:generated.districtId,
-    cycleId:generated.cycleId,
-    bossId:generated.boss.id,
+    horizonId: horizon.id,
+    targetFloor: target,
+    estimatedReachMinutes: divideByMultipliers(baseline, build.powerMultiplier, persona.progressMultiplier, jitter, progression.minimumMinutes),
+    targetFloorDigest: sha256Canonical(generated),
+    targetFloorRepresentation: generated.hp.representation,
+    districtId: generated.districtId,
+    cycleId: generated.cycleId,
+    bossId: generated.boss.id,
   };
   if (horizon.mode === 'five-resets') {
-    const first = BigInt(FIRST_RESET_BASE[persona.id]);
+    const repeated = execution.model.repeatedReset;
     const reclear = parseExactDecimal(build.reclearMultiplier);
-    const sequence=[];
-    let current=first;
-    for (let i=0;i<5;i+=1) {
-      sequence.push(current.toString());
-      current = roundRational({n:current*reclear.d,d:reclear.n},'ceil');
-      if (current < 6n) current=6n;
+    const sequence = [];
+    let current = BigInt(execution.model.firstReset.personaBaseMinutes[persona.id]);
+    for (let index = 0; index < Number(repeated.runCount); index += 1) {
+      sequence.push(clampMinimum(current.toString(), repeated.minimumMinutes));
+      current = roundRational({ n: current * reclear.d, d: reclear.n }, 'ceil');
+      if (current < BigInt(repeated.minimumMinutes)) current = BigInt(repeated.minimumMinutes);
     }
-    metrics.resetMinutes=sequence;
+    metrics.resetMinutes = sequence;
   }
   if (horizon.mode === 'economy-45d') {
-    metrics.featuredGuaranteeDay=featuredGuaranteeDay(persona.dailyFeaturedProgress, candidate.gacha.featuredGuarantee.draws);
-    metrics.characterDraws45d=(toBigInt(persona.dailyCharacterDraws)*45n).toString();
-    metrics.weaponDraws45d=(toBigInt(persona.dailyWeaponDraws)*45n).toString();
+    metrics.featuredGuaranteeDay = featuredGuaranteeDay(persona.dailyFeaturedProgress, candidate.gacha.featuredGuarantee.draws);
+    metrics.characterDraws45d = (toBigInt(persona.dailyCharacterDraws) * 45n).toString();
+    metrics.weaponDraws45d = (toBigInt(persona.dailyWeaponDraws) * 45n).toString();
   }
   return metrics;
 }
 
-export function runScenario(candidate, plan, { buildId, personaId, seed, ordinal }) {
-  const build = candidate.builds.find((x)=>x.id===buildId);
-  const persona = candidate.personas.find((x)=>x.id===personaId);
-  if (!build || !persona) throw new Error('unknown build or persona');
+export function runScenario(candidate, plan, execution, { buildId, personaId, namespace, partition, seed, ordinal }) {
+  const build = candidate.builds.find((entry) => entry.id === buildId);
+  const persona = candidate.personas.find((entry) => entry.id === personaId);
+  if (!build || !persona) throw new Error('UNKNOWN_BUILD_OR_PERSONA');
+  if (!namespace || !partition) throw new Error('SCENARIO_NAMESPACE_AND_PARTITION_REQUIRED');
   const rng = new DeterministicRng(seed);
-  const resetAdjustment = BUILD_RESET_ADJUST[build.id];
-  const resetJitter = Number(rng.nextBelow(3n))-1;
-  const firstResetMinutes=signedAddUnsigned(FIRST_RESET_BASE[persona.id], String(BigInt(resetAdjustment)+BigInt(resetJitter)));
-  const resetQuote=resetRubyQuote({previousBest:'0',newBest:'30',firstEffectiveMinimum:candidate.reset.reward.firstEffectiveMinimum});
-  const firstEvolutionCost=evolutionCost(candidate,'1');
-  const horizons=plan.horizons.map((h)=>horizonMetrics(candidate,build,persona,rng,h));
-  const mastery20=masteryOverflow(candidate.characterMastery,'20');
-  const mastery25=masteryOverflow(candidate.characterMastery,'25');
-  const deterministic={
-    scenarioId:`${plan.seeds.qualificationNamespace}|${buildId}|${personaId}|${ordinal}`,
-    buildId,personaId,seed,ordinal:String(ordinal),
+  const resetModel = execution.model.firstReset;
+  const resetJitter = randomSignedInclusive(rng, resetModel.jitterMinimumMinutes, resetModel.jitterMaximumMinutes);
+  const firstResetRaw = BigInt(resetModel.personaBaseMinutes[persona.id]) + BigInt(resetModel.buildAdjustmentMinutes[build.id]) + resetJitter;
+  const firstResetMinutes = clampMinimum(firstResetRaw.toString(), resetModel.minimumMinutes);
+  const resetQuote = resetRubyQuote({ previousBest: '0', newBest: '30', firstEffectiveMinimum: candidate.reset.reward.firstEffectiveMinimum });
+  const firstEvolutionCost = evolutionCost(candidate, '1');
+  const horizons = plan.horizons.map((horizon) => horizonMetrics(candidate, execution, build, persona, rng, horizon));
+  const mastery20 = masteryOverflow(candidate.characterMastery, '20');
+  const mastery25 = masteryOverflow(candidate.characterMastery, '25');
+  const deterministic = {
+    scenarioId: `${namespace}|${partition}|${buildId}|${personaId}|${ordinal}`,
+    partition,
+    scenarioAlgorithmVersion: execution.scenarioAlgorithmVersion,
+    executionVersion: execution.executionVersion,
+    buildId,
+    personaId,
+    seed,
+    ordinal: String(ordinal),
     firstResetMinutes,
-    firstResetRuby:resetQuote.reward,
+    firstResetRuby: resetQuote.reward,
     firstEvolutionCost,
-    firstEvolutionCovered:toBigInt(resetQuote.reward)>=toBigInt(firstEvolutionCost),
-    featuredGuaranteeDay:featuredGuaranteeDay(persona.dailyFeaturedProgress,candidate.gacha.featuredGuarantee.draws),
-    masteryAt20:mastery20,
-    masteryOverflowAt25:mastery25,
+    firstEvolutionCovered: toBigInt(resetQuote.reward) >= toBigInt(firstEvolutionCost),
+    featuredGuaranteeDay: featuredGuaranteeDay(persona.dailyFeaturedProgress, candidate.gacha.featuredGuarantee.draws),
+    masteryAt20: mastery20,
+    masteryOverflowAt25: mastery25,
     horizons,
   };
-  return {...deterministic,scenarioDigest:sha256Canonical(deterministic)};
+  return { ...deterministic, scenarioDigest: sha256Canonical(deterministic) };
 }
