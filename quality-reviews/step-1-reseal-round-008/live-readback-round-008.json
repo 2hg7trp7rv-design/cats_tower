@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-final-live-readback",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "verdict": "PASS",
+  "readbackParent": {
+    "commit": "6270b33729654b4d7efcff2833ba761ef5dace73",
+    "tree": "e6525f57302d968dcfadceef984661bd5853be13",
+    "message": "docs: bind Round 008 activation completion evidence",
+    "parent": "001c04ebfa01a8a26b231730b6164f33657ba5e2"
+  },
+  "requiredArtifactsReadBack": {
+    "PROJECT_STATUS.json": {
+      "blob": "c4a6eba9c49517629a7892d0e8bf1bd26f503be4",
+      "step1": "PASS",
+      "step2": "READY_TO_START",
+      "step3Allowed": false,
+      "nextChat": "02_無制限塔・経済・リセットシミュレーション"
+    },
+    "quality-reviews/step-1-canonical-design/active-change-control.json": {
+      "blob": "2a0a5181aa27da38c4cf37884c30bd71f2c11378",
+      "status": "PASS",
+      "advanceAllowed": true,
+      "step2Allowed": true,
+      "unresolvedP0": 0,
+      "unresolvedP1": 0
+    },
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-013.json": {
+      "blob": "8a78e8772af9738a0d6efe1122069585e1b9927e",
+      "status": "PASS",
+      "verdict": "PASS",
+      "step2Allowed": true,
+      "step3Allowed": false
+    },
+    "quality-reviews/step-1-reseal-round-008/seal-round-008.json": {
+      "blob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
+      "commit": "0b17f9b5b8decdab8ce329287a4dc073790c4bf7",
+      "tree": "9eac6b6103d65cf8bcb13859d00e43cd3389fa8a",
+      "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+      "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce",
+      "activatedBy": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-013.json"
+    },
+    "quality-reviews/step-1-reseal-round-008/activation-completion-evidence-round-008.json": {
+      "blob": "3f6e3906c3074a3aa565096b886b9fa0b54b9c36",
+      "commit": "6270b33729654b4d7efcff2833ba761ef5dace73",
+      "tree": "e6525f57302d968dcfadceef984661bd5853be13",
+      "verdict": "PASS_PENDING_FINAL_LIVE_READBACK"
+    },
+    "simulation/CURRENT_STATUS.json": {
+      "blob": "7c12388e8b1da6db0549fbbc4f1743ead0df8261",
+      "currentStep": 2,
+      "status": "READY_TO_START",
+      "step2Allowed": true,
+      "step3Allowed": false
+    },
+    ".github/workflows/CURRENT_STATUS.md": {
+      "blob": "356652c77eba9bc264a98d9e63f6e247cdb983c8",
+      "step1": "PASS",
+      "step2": "READY_TO_START",
+      "legacyWorkflowMayPromoteV2": false
+    },
+    "MASTER_SPEC.md": {
+      "blob": "5d1e5ff37ba8d79f4c23e6051740c4c6957f1dbc",
+      "lifecycleStatus": "STEP 1 ROUND 008 SEALED PASS"
+    },
+    "PROJECT_HANDOVER.md": {
+      "blob": "794fc4478d3307b4e7194fd39f23f3952724fdd4",
+      "nextChat": "02_無制限塔・経済・リセットシミュレーション"
+    }
+  },
+  "simulationDirectoryReadback": {
+    "entries": [
+      "simulation/CURRENT_STATUS.json",
+      "simulation/INPUT_CONTRACT.md",
+      "simulation/candidate-v1.json",
+      "simulation/candidate.schema.json",
+      "simulation/executable-seal.schema.json",
+      "simulation/validate-candidate.mjs",
+      "simulation/validate-executable-seal.mjs"
+    ],
+    "candidateV2Present": false,
+    "schemaV2Present": false,
+    "validatorV2Present": false,
+    "engineV2Present": false,
+    "resultV2Present": false,
+    "runPlanV2Present": false,
+    "fixturesV2Present": false,
+    "migrationsV2Present": false,
+    "executableSealV2Present": false,
+    "step2AcceptancePresent": false,
+    "legacyV1ExecutedForCurrentPromotion": false
+  },
+  "ancestryAndBoundaryReadback": {
+    "sealCommit": "0b17f9b5b8decdab8ce329287a4dc073790c4bf7",
+    "observedHead": "6270b33729654b4d7efcff2833ba761ef5dace73",
+    "comparisonStatus": "ahead",
+    "aheadBy": 16,
+    "behindBy": 0,
+    "changedPathsAfterSeal": [
+      ".github/workflows/CURRENT_STATUS.md",
+      "AGENTS.md",
+      "AI_PROJECT_POLICY.json",
+      "CHATGPT_PROJECT_BOOTSTRAP.md",
+      "CUSTOM_GPT_CONFIGURATION.md",
+      "MASTER_SPEC.md",
+      "PROJECT_HANDOVER.md",
+      "PROJECT_STATUS.json",
+      "QUALITY_GATE.md",
+      "README.md",
+      "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-013.json",
+      "quality-reviews/step-1-canonical-design/active-change-control.json",
+      "quality-reviews/step-1-reseal-round-008/activation-completion-evidence-round-008.json",
+      "simulation/CURRENT_STATUS.json",
+      "simulation/INPUT_CONTRACT.md"
+    ],
+    "allChangedPathsAllowedBySealActivationBoundary": true,
+    "runtimeChanged": false,
+    "assetsChanged": false,
+    "v1ExecutableChanged": false,
+    "workflowYamlChanged": false,
+    "backendChanged": false,
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "pullRequestOperation": false,
+    "productionAliasOperation": false
+  },
+  "vercelReadback": {
+    "semanticPreview": {
+      "deploymentId": "dpl_712tz3ij7ruB8cRe5JqudmMYFtdu",
+      "url": "https://catstower-46sbgrdcg-shinyaaas-projects.vercel.app",
+      "state": "READY",
+      "target": null,
+      "source": "git",
+      "githubCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+      "githubBranch": "kimi",
+      "commitMatch": true,
+      "branchMatch": true
+    },
+    "completionEvidencePreview": {
+      "deploymentId": "dpl_J1AMdPBdQK8FfPytbHEzHzBTxqz6",
+      "url": "https://catstower-ng5abga2n-shinyaaas-projects.vercel.app",
+      "state": "READY",
+      "target": null,
+      "source": "git",
+      "githubCommit": "6270b33729654b4d7efcff2833ba761ef5dace73",
+      "githubBranch": "kimi",
+      "commitMatch": true,
+      "branchMatch": true
+    },
+    "projectId": "prj_3Ip3e0eYMy9SchP1vS36ibjJP9LB",
+    "teamId": "team_6odZCZQ1QxjzhPdC9sgEtoCM",
+    "productionDomains": [
+      "cats-tau-dusky.vercel.app",
+      "catstower-shinyaaas-projects.vercel.app",
+      "catstower-git-main-shinyaaas-projects.vercel.app"
+    ],
+    "productionDomainSetChangedByRoute014": false,
+    "productionTargetDeploymentCreated": false,
+    "readyAloneIsQualityPass": false
+  },
+  "finalGateReadback": {
+    "requirementsCovered": 21,
+    "uncoveredRequirements": 0,
+    "criticCount": 10,
+    "initialP0": 0,
+    "initialP1": 5,
+    "resolvedP1": 5,
+    "unresolvedP0": 0,
+    "unresolvedP1": 0,
+    "trackedP2": 6,
+    "currentAuthorityOldClaimAssertions": 0,
+    "unclassifiedPaths": 0,
+    "unclassifiedCurrentMatches": 0,
+    "persistentReferenceFailures": 0,
+    "historicalEvidenceModified": false,
+    "physicalIPhone": "NOT_VERIFIED"
+  },
+  "stateAfterReadback": {
+    "step1": "PASS",
+    "step2": "READY_TO_START",
+    "step3": "BLOCKED_UNTIL_STEP2_PASS",
+    "productComplete": false,
+    "simulationValidated": false,
+    "runtimeImplemented": false,
+    "backendImplemented": false,
+    "paymentAndAdsImplemented": false,
+    "physicalIPhoneVerified": false
+  },
+  "completionDecision": "Round 008 Step 1 seal and activation are live and internally consistent. Step 2 may start only with a dedicated Acceptance Matrix. Step 3 remains blocked until a valid Step 2 executable seal and completion evidence pass.",
+  "nextAuthorizedChat": "02_無制限塔・経済・リセットシミュレーション",
+  "creationRule": "The commit creating this artifact must be a direct child of readbackParent.commit. Final reporting binds that creation commit/tree through a subsequent branch read-back."
+}
