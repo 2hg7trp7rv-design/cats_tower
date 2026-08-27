@@ -2,44 +2,65 @@
   "schemaVersion": 1,
   "artifactId": "step-1-reseal-round-008-critic-10-repository-canonical-consistency",
   "createdAt": "2026-08-27",
+  "rerunAt": "2026-08-27",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "role": "independent repository, canonical and evidence consistency critic",
   "reviewedContent": {
-    "commit": "5da274ddc63876565d3d210a7e2b5a87afca6730",
-    "tree": "b479c92bab43581f3ec293fecbb16ce9592a9dfa"
+    "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+    "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce",
+    "postcheckCommit": "3fb949dbf50d18dd32f4caf739ca3953ba8c69a7",
+    "postcheckTree": "6e1710f671b2b059875d77c444bfa6ba1445e096"
   },
   "method": [
-    "Read back live kimi, the frozen commit/tree, active control/addendum, status mirrors, canonical set, checkpoint evidence and matching Vercel Preview.",
-    "Compared the earlier path/claim proofs to later Route 01-3 additions and attempted rejection for unregistered IDs, stale zero-proof, historical evidence promotion, missing final paths, forbidden-path changes and deployment mismatch."
+    "Re-read the repaired first-ten and stable-ID references.",
+    "Reviewed the final repository postcheck overlay, original-base and Route 01-4 comparisons, current-claim disposition, historical immutability, forbidden boundary and matching repaired-content Preview.",
+    "Attempted rejection for missing or ambiguous IDs, stale base-only proof, unclassified new evidence, legacy promotion, forbidden implementation changes, deployment mismatch and incident concealment."
   ],
   "checks": {
-    "frozenCommitTreeMatchesLiveAtReviewStart": "PASS",
+    "semanticCommitTreeExact": "PASS",
     "matchingKimiPreview": "PASS",
     "historicalPassNotCurrentAuthority": "PASS",
     "v1ExecutableBlocked": "PASS",
-    "finalCurrentTreePathAndClaimPostcheck": "FAIL",
-    "allFirstTenPersistentReferencesRegistered": "FAIL",
-    "activationAndCompletionExactPaths": "PASS_AFTER_ROUTE_01_4_ACCEPTANCE"
+    "finalCurrentTreePathAndClaimPostcheck": "PASS",
+    "allExistingAndReservedPathsClassified": "PASS",
+    "currentAuthorityOldClaimAssertionsZero": "PASS",
+    "allFirstTenPersistentReferencesRegistered": "PASS",
+    "forbiddenChangedPathsZero": "PASS",
+    "activationAndCompletionExactPathsReserved": "PASS"
   },
-  "findings": [
+  "resolvedFindings": [
     {
       "id": "C10-P1-001",
-      "severity": "P1",
-      "paths": ["FLOORS_1_10_DESIGN.md", "canonical/STABLE_ID_REGISTRY.json"],
-      "finding": "Floor 5 is defined as the first milestone boss, but the first-ten stable-ID set registers only the Floor 10 district boss. The Floor 5 persistent boss reference has no canonical ID.",
-      "risk": "Encounter data, screen state, analytics and migration would invent different identifiers in Step 2/5.",
-      "requiredRepair": "Register one canonical Floor 5 mid-boss ID and reference it explicitly in the slice document without changing the one-reset or tower semantics.",
-      "blocking": true
+      "previousSeverity": "P1",
+      "status": "RESOLVED",
+      "repairs": [
+        "Registered `tower.boss.d01.mid.001` in the first-ten stable set.",
+        "Referenced the same ID in the Floor 5 encounter and stable examples.",
+        "Kept the Floor 10 district boss as a separate registered ID."
+      ],
+      "repairBlobs": {
+        "FLOORS_1_10_DESIGN.md": "faf7aa7853b903b2328f63cc77a0d3060c6ad93f",
+        "canonical/STABLE_ID_REGISTRY.json": "0a835e778b27ca1cfab47c8b1b4e7797fdc1a3fd"
+      }
     },
     {
       "id": "C10-P1-002",
-      "severity": "P1",
-      "paths": ["quality-reviews/step-1-reseal-round-008/path-classification.json", "quality-reviews/step-1-reseal-round-008/current-authority-zero-proof.json", "quality-reviews/step-1-reseal-round-008/contradiction-inventory.json"],
-      "finding": "The existing path classification and zero-proof are valid only for earlier base commit `fd673...`; they predate addenda 011/012, policy and dependency closures, final critics and seal artifacts. They cannot prove the final tree has zero unclassified paths or current-authority contradictions.",
-      "risk": "A seal could rely on stale checkpoint evidence and omit newly introduced authority or review files.",
-      "requiredRepair": "Create a final repository postcheck bound to the repaired content/evidence ancestry, classify every post-base addition, re-evaluate the thirteen old-claim families and record forbidden-path/history integrity before final judge.",
-      "blocking": true
+      "previousSeverity": "P1",
+      "status": "RESOLVED",
+      "repairs": [
+        "Created `quality-reviews/step-1-reseal-round-008/final-repository-postcheck.json`.",
+        "Extended classification to policy/dependency contracts, addenda 011/012 and every Route 01-4 existing/reserved path.",
+        "Re-evaluated all thirteen old-claim families, persistent references, history integrity and forbidden boundaries against the repaired evidence ancestry."
+      ],
+      "postcheck": {
+        "commit": "3fb949dbf50d18dd32f4caf739ca3953ba8c69a7",
+        "tree": "6e1710f671b2b059875d77c444bfa6ba1445e096",
+        "unclassifiedPathCount": 0,
+        "currentAuthorityContradictionCount": 0,
+        "unclassifiedCurrentMatchCount": 0,
+        "forbiddenChangedPathCount": 0
+      }
     }
   ],
   "incidentReview": {
@@ -48,8 +69,19 @@
     "probeAbsentFromReviewedTree": true,
     "finding": "No concealment or current-tree probe residue found."
   },
-  "verdict": "FAIL_PENDING_P1_REPAIR_AND_FINAL_POSTCHECK",
-  "unresolved": {"P0": 0, "P1": 2, "P2": 0, "P3": 0},
-  "sealEligibleFromThisCritic": false,
-  "rerunRequired": true
+  "deployment": {
+    "id": "dpl_712tz3ij7ruB8cRe5JqudmMYFtdu",
+    "state": "READY",
+    "target": null,
+    "githubCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+    "githubBranch": "kimi",
+    "commitMatch": true,
+    "branchMatch": true,
+    "qualityPassInferred": false
+  },
+  "findings": [],
+  "verdict": "PASS_AFTER_RERUN",
+  "unresolved": {"P0": 0, "P1": 0, "P2": 0, "P3": 0},
+  "sealEligibleFromThisCritic": true,
+  "rerunRequired": false
 }
