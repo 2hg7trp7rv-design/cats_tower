@@ -1,0 +1,86 @@
+name: Diagnose Step 2 V2 tower evidence resume
+
+on:
+  push:
+    branches: [kimi]
+    paths:
+      - '.github/workflows/diagnose-step2-v2-tower-evidence-resume.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: diagnose-step2-v2-tower-evidence-resume-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Execute corrected tower sequence and input-evidence patch in working tree only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import textwrap
+
+          source_path = Path('.github/workflows/diagnose-step2-v2-tower-evidence.yml')
+          source = source_path.read_text(encoding='utf-8')
+          start_marker = "          python - <<'PY'\n"
+          end_marker = "\n          PY\n"
+          start = source.find(start_marker)
+          if start < 0:
+              raise SystemExit('tower diagnostic python start marker missing')
+          start += len(start_marker)
+          end = source.find(end_marker, start)
+          if end < 0:
+              raise SystemExit('tower diagnostic python end marker missing')
+          script = textwrap.dedent(source[start:end])
+          broken = "elif path.endswith('result-v2.schema.json'):"
+          corrected = "elif path == 'simulation/result-v2.schema.json':"
+          count = script.count(broken)
+          if count != 1:
+              raise SystemExit(f'expected one ambiguous result schema condition, found {count}')
+          script = script.replace(broken, corrected, 1)
+          exec(compile(script, str(source_path), 'exec'), {'__name__': '__main__'})
+          PY
+      - name: Regenerate qualification evidence for updated tower and input contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          node simulation/engine-v2/run-plan.mjs --mode qualification --output quality-reviews/step-2-executable-contract-v2/qualification-result.json
+      - name: Run complete Step 2 verifier on repaired working tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          node simulation/verify-step2-v2.mjs
+      - name: Confirm bounded repair and no forbidden files
+        shell: bash
+        run: |
+          set -euo pipefail
+          changed="$(git status --short | sed -E 's/^.. //' | sed -E 's/.* -> //')"
+          printf '%s\n' "$changed"
+          test -n "$changed"
+          while IFS= read -r path; do
+            case "$path" in
+              simulation/*|quality-reviews/step-2-executable-contract-v2/qualification-result.json)
+                ;;
+              *)
+                echo "tower evidence repair escaped Step 2 boundary: $path" >&2
+                exit 1
+                ;;
+            esac
+          done <<< "$changed"
+          git diff --check
+          git diff --stat
+          echo 'TOWER_SEQUENCE_AND_INPUT_EVIDENCE_RESUME_VALIDATED_WITHOUT_WRITE=true'
