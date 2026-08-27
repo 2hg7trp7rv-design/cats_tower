@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-critic-07-platform-japan",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "role": "independent Apple, Google Play and Japan policy critic",
+  "reviewedContent": {
+    "commit": "5da274ddc63876565d3d210a7e2b5a87afca6730",
+    "tree": "b479c92bab43581f3ec293fecbb16ce9592a9dfa"
+  },
+  "method": [
+    "Verified that policy-release gates map to the dated source register and distinguish platform policy, regulator guidance, user reviews and inference.",
+    "Attempted rejection for comp gacha, undisclosed randomized items, expiring paid currency, missing restore/deletion, disruptive ads, misleading value and unsupported legal/store-approval conclusions."
+  ],
+  "checks": {
+    "iapAndBillingGates": "PASS",
+    "randomizedItemDisclosureGates": "PASS",
+    "refundRevocationRestoreGates": "PASS",
+    "accountDeletionGates": "PASS",
+    "rewardedOnlyAdsDesignGate": "PASS",
+    "japanCardMatchingProhibition": "PASS",
+    "prepaidInstrumentExpertReviewGate": "PASS",
+    "misrepresentationAndMinorProtectionGates": "PASS",
+    "submissionTimeRefreshRequired": "PASS"
+  },
+  "findings": [
+    {
+      "id": "C07-P2-001",
+      "severity": "P2",
+      "paths": ["canonical/POLICY_RELEASE_GATES.json"],
+      "finding": "Submission-time Apple/Google refresh and Japanese specialist review remain NOT_STARTED by design.",
+      "whyNotBlockingStep1": "Step 1 is a design seal, not a release approval; the gate is explicitly fail-closed and cannot be converted into a legal conclusion or store approval claim.",
+      "owner": "Release owner before submission and after material provider/catalog change",
+      "blockingCondition": "Blocks release PASS, not Step 1 or Step 2 start."
+    }
+  ],
+  "verdict": "PASS_WITH_TRACKED_RELEASE_P2",
+  "unresolved": {"P0": 0, "P1": 0, "P2": 1, "P3": 0},
+  "sealEligibleFromThisCritic": true
+}
