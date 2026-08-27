@@ -66,7 +66,7 @@ jobs:
           COMPLETION_COMMIT=$(first_addition "$COMPLETION")
 
           test "$C1_COMMIT" = '88fb46b1d1cdbd5c071804275c92dc51a8c59913'
-          test "$COMPLETION_COMMIT" = '23ba6d47dc2de04ca21d10454e87cacd9079533e'
+          test "$COMPLETION_COMMIT" = '23ba6d4c815fe8bf4a40f7b848d4cc67b9e0c995'
           test -n "$ROUND_COMMIT"
           git merge-base --is-ancestor "$C1_COMMIT" HEAD
           git merge-base --is-ancestor "$ROUND_COMMIT" HEAD
