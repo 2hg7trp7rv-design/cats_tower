@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-v2-critic-01-product-semantics",
+  "reviewedDate": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "role": "INDEPENDENT_CRITIC",
+  "perspective": "product-semantics-and-step-boundary",
+  "reviewedSemanticHead": "724d04940f9f3794b993cddbc5af3a7163a0395b",
+  "reviewedSemanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
+  "evidencePaths": [
+    "CHATGPT_PROJECT_INSTRUCTIONS1.md",
+    "MASTER_SPEC.md",
+    "canonical/STEP2_DEPENDENCY_CLOSURE.json",
+    "quality-reviews/step-2-executable-contract-v2/acceptance-matrix.json",
+    "simulation/candidate-v2.json",
+    "simulation/run-plan-v2.json",
+    "simulation/execution-contract-v2.json"
+  ],
+  "checks": [
+    {
+      "id": "PRODUCT-UNBOUNDED-TOWER",
+      "verdict": "PASS",
+      "basis": "Candidate and execution contracts preserve an unbounded player-visible tower, 100F as milestone rather than ending, 101F+, deterministic district/cycle/modifier/background generation and arbitrary-precision floor handling."
+    },
+    {
+      "id": "PRODUCT-RESET-EVOLUTION",
+      "verdict": "PASS",
+      "basis": "A single reset.tower_return returns to Floor 1, repeat-best ruby is zero, evolution is every 100 levels, catch-up is ordered and evolution does not block level continuation."
+    },
+    {
+      "id": "PRODUCT-GACHA-MASTERY",
+      "verdict": "PASS",
+      "basis": "Character and weapon pools are separated, 100/200 guarantees are modeled, first copy is functional, full mastery requires 20 additional effective copies and overflow is not discarded."
+    },
+    {
+      "id": "PRODUCT-STEP-BOUNDARY",
+      "verdict": "PASS",
+      "basis": "Step 2 seals executable semantics and bounded qualification only. The 15000-scenario balance matrix and full high-volume statistical qualification remain explicitly owned by Step 3."
+    }
+  ],
+  "findings": [
+    {
+      "id": "S2-P2-PRODUCT-BALANCE-001",
+      "severity": "P2",
+      "status": "EXPECTED_STEP3_WORK_NOT_STEP2_DEFECT",
+      "finding": "Actual balance outcomes for first-reset timing distributions, 30-45 day F2P guarantee reach, build parity and payer acceleration have not been accepted from full sample volumes.",
+      "requiredNextStage": "Execute and judge the sealed 15000-scenario gameplay matrix and high-volume suites in Step 3 before claiming balance quality."
+    }
+  ],
+  "unresolved": {"P0": 0, "P1": 0, "P2": 1},
+  "verdict": "PASS_STEP2_SCOPE",
+  "step2Blocking": false,
+  "step3Executed": false
+}
