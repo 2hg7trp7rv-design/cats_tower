@@ -4,7 +4,7 @@
   "createdAt": "2026-08-27",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
-  "status": "COMPLETE_PRESEAL",
+  "status": "COMPLETE_PRESEAL_AFTER_ROUTE_01_4_REPAIR",
   "coverage": [
     {"id": "CV-001", "requirement": "cat/catfolk idle incremental RPG; four named active members; temporary support separate", "authority": ["MASTER_SPEC.md", "FLOORS_1_10_DESIGN.md", "canonical/SCREEN_STATE_REGISTRY.json"], "status": "COVERED"},
     {"id": "CV-002", "requirement": "merchant systems support combat and do not make company management the protagonist", "authority": ["MASTER_SPEC.md", "FLOORS_1_10_DESIGN.md"], "status": "COVERED"},
@@ -25,10 +25,11 @@
     {"id": "CV-017", "requirement": "competitor adoption/rejection/transformation and copy-prohibited boundary", "authority": ["quality-reviews/step-1-reseal-round-008/competitive-research.md", "quality-reviews/step-1-reseal-round-008/source-register-route-01-2.json"], "status": "COVERED"},
     {"id": "CV-018", "requirement": "Step 2 fields, enums, units, invariants, fixtures, migrations, validator and result/evidence closure", "authority": ["canonical/STEP2_DEPENDENCY_CLOSURE.json"], "status": "COVERED"},
     {"id": "CV-019", "requirement": "minimum 3 builds x 5 personas x 1000 seeds plus separate Monte Carlo/state tests and long horizons", "authority": ["canonical/STEP2_DEPENDENCY_CLOSURE.json"], "status": "COVERED_NOT_EXECUTED_IN_STEP1"},
-    {"id": "CV-020", "requirement": "old V1 executable and old workflow cannot promote current product", "authority": ["simulation/INPUT_CONTRACT.md", "simulation/CURRENT_STATUS.json", ".github/workflows/CURRENT_STATUS.md", "canonical/STEP2_DEPENDENCY_CLOSURE.json"], "status": "COVERED"}
+    {"id": "CV-020", "requirement": "old V1 executable and old workflow cannot promote current product", "authority": ["simulation/INPUT_CONTRACT.md", "simulation/CURRENT_STATUS.json", ".github/workflows/CURRENT_STATUS.md", "canonical/STEP2_DEPENDENCY_CLOSURE.json"], "status": "COVERED"},
+    {"id": "CV-021", "requirement": "unique generated tower IDs, registered Floor 5 boss, immutable ad/login versions and explicit spent-paid-grant refund deficit semantics", "authority": ["MASTER_SPEC.md", "FLOORS_1_10_DESIGN.md", "canonical/STABLE_ID_REGISTRY.json", "canonical/SCREEN_STATE_REGISTRY.json", "canonical/STATE_TRANSITION_CONTRACT.json", "canonical/STEP2_DEPENDENCY_CLOSURE.json"], "status": "COVERED_AFTER_ROUTE_01_4_P1_REPAIR"}
   ],
   "summary": {
-    "requirementCount": 20,
+    "requirementCount": 21,
     "uncoveredCount": 0,
     "implementationDeferredCount": 2,
     "implementationDeferredMeaning": "Semantics are fixed in Step 1; executable simulation or release implementation remains assigned to later authorized steps."
