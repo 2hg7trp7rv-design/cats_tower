@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-v2-completion-evidence",
+  "recordedDate": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "semanticCommit": "724d04940f9f3794b993cddbc5af3a7163a0395b",
+  "semanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
+  "acceptance": {
+    "path": "quality-reviews/step-2-executable-contract-v2/acceptance-matrix.json",
+    "blob": "f8986a3d436e93a003ff0f7e07f6a5d28d6faf2f"
+  },
+  "critics": {
+    "summaryPath": "quality-reviews/step-2-executable-contract-v2/critic-summary.json",
+    "summaryBlob": "4d85d95c0b00b3e2aed4aecc6025ceea9253308e",
+    "criticCount": 5,
+    "unresolvedP0": 0,
+    "unresolvedP1": 0,
+    "trackedP2": 6
+  },
+  "finalJudge": {
+    "path": "quality-reviews/step-2-executable-contract-v2/final-judge.json",
+    "blob": "44fe4c83e3ea1ceefba836200100b6d6628028d1",
+    "verdict": "PASS_STEP2_QUALITY_REVIEW_PENDING_SEAL_ACTIVATION"
+  },
+  "executableSeal": {
+    "path": "simulation/executable-seal-v2.json",
+    "blob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
+    "schemaPath": "simulation/executable-seal-v2.schema.json",
+    "schemaBlob": "0fc7d5279c038e05e21366d3b17927c61b8c7e96",
+    "validatorPath": "simulation/validate-executable-seal-v2.mjs",
+    "validatorBlob": "343bd73b54dc1ed23dde950f621e30a8186d7802",
+    "verdict": "PASS_EXECUTABLE_SEAL_V2"
+  },
+  "sealActivation": {
+    "commit": "89174eeebb033fe807a0592c8df0279c2a7b9a6f",
+    "tree": "ccf444df436d63d86fd4da0355f20349753b0546",
+    "workflow": ".github/workflows/verify-step-2-v2.yml",
+    "workflowRunId": "33104391753",
+    "jobId": "98630217077",
+    "headSha": "89174eeebb033fe807a0592c8df0279c2a7b9a6f",
+    "conclusion": "SUCCESS",
+    "verifierVerdict": "QUALITY_PHASE_PASS_STEP2_IN_PROGRESS",
+    "sourceReadbackMode": "FULL_GIT_BLOB_READBACK",
+    "runtimeVersion": "v22.23.2"
+  },
+  "qualification": {
+    "scenarioCount": "30",
+    "digest": "a24fa5a4a12cf132ac477c80e77431cd0b97ab070bbbef83c3881c160f42562c",
+    "reproduced": true,
+    "balanceVerdict": "NOT_EVALUATED_STEP2"
+  },
+  "scopeAssertions": {
+    "step3Executed": false,
+    "runtimeChanged": false,
+    "assetsChanged": false,
+    "backendChanged": false,
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "vercelChanged": false,
+    "productionChanged": false,
+    "physicalIPhoneVerified": false
+  },
+  "verdict": "PASS_COMPLETION_EVIDENCE_READY_FOR_LIVE_READBACK",
+  "claimsStep2PassBeforeLiveReadback": false,
+  "step3AuthorizationBeforeStatusActivation": false
+}
