@@ -27,20 +27,27 @@ jobs:
         run: |
           set -euo pipefail
           BOOT='quality-reviews/step-2-executable-contract-v2/bootstrap'
-          cat "$BOOT"/chunk-*.txt > "$RUNNER_TEMP/step2.b64"
+          cat "$BOOT"/chunk-*.txt | tr -d '\r\n\t ' > "$RUNNER_TEMP/step2.b64"
           echo '3030f4e0fa4a65d8bbe3124df6d14e0424df2c4999253435ddc644b32ba42a96  '"$RUNNER_TEMP/step2.b64" | sha256sum -c -
           base64 --decode "$RUNNER_TEMP/step2.b64" > "$RUNNER_TEMP/step2.tar.gz"
           echo '760a9e1eeb7ecaa74ee22f929ac5ae5d9dd15d3c68657c522110b9db6a9e683a  '"$RUNNER_TEMP/step2.tar.gz" | sha256sum -c -
           python - <<'PY'
+          import os
           import tarfile
           from pathlib import PurePosixPath
-          archive = tarfile.open('/home/runner/work/_temp/step2.tar.gz', 'r:gz')
-          allowed = ('simulation/', 'quality-reviews/step-2-executable-contract-v2/qualification-result.json')
+
+          archive_path = os.path.join(os.environ['RUNNER_TEMP'], 'step2.tar.gz')
+          archive = tarfile.open(archive_path, 'r:gz')
+          qualification = 'quality-reviews/step-2-executable-contract-v2/qualification-result.json'
           for member in archive.getmembers():
               path = PurePosixPath(member.name)
               if path.is_absolute() or '..' in path.parts:
                   raise SystemExit(f'unsafe archive path: {member.name}')
-              if not (member.name == 'simulation' or member.name.startswith('simulation/') or member.name == allowed[1]):
+              if not (
+                  member.name == 'simulation'
+                  or member.name.startswith('simulation/')
+                  or member.name == qualification
+              ):
                   raise SystemExit(f'out-of-bound archive path: {member.name}')
           archive.extractall('.')
           PY
