@@ -1,5 +1,5 @@
 {
-  "statusDocumentSchemaVersion": 9,
+  "statusDocumentSchemaVersion": 10,
   "updatedDate": "2026-08-27",
   "project": "Cat's Tower",
   "canonicalRepository": "2hg7trp7rv-design/cats_tower",
@@ -18,7 +18,7 @@
   "currentStep": 1,
   "currentStepName": "canonical-integration-and-reseal",
   "currentStepStatus": "IN_PROGRESS",
-  "currentCheckpoint": "round-008-route-01-2-content-ready-pending-evidence",
+  "currentCheckpoint": "round-008-route-01-3-canonical-redline-and-step2-dependency-closure",
   "advanceAllowed": false,
   "step2Allowed": false,
   "firstTenPreviewReady": false,
@@ -42,18 +42,29 @@
       "unclassifiedMatchCount": 0,
       "unresolvedP0": 0,
       "unresolvedP1": 0
+    },
+    "route012": {
+      "status": "PASS",
+      "contentCommit": "9433ab08d6c46cbab46980ad960e0c3f2ef8f090",
+      "contentTree": "f719ec026869beab4ad1cac6b6b079ad23d7ec95",
+      "evidenceCommit": "56c3f03a2542ec0e7ba579c4d4a3025887ecb69c",
+      "evidence": "quality-reviews/step-1-reseal-round-008/checkpoint-d-evidence.json",
+      "deploymentId": "dpl_42a7k1NmMBXi35zxLasYgYQviMHb",
+      "deploymentUrl": "https://catstower-ed5xwuj05-shinyaaas-projects.vercel.app",
+      "unresolvedP0": 0,
+      "unresolvedP1": 0
     }
   },
   "activeCheckpoint": {
-    "id": "route012",
-    "status": "CONTENT_READY_PENDING_EVIDENCE",
-    "researchCutoff": "2026-08-26T23:59:59+09:00",
-    "acceptance": "quality-reviews/step-1-reseal-round-008/route-01-2-acceptance.json",
-    "sourceRegister": "quality-reviews/step-1-reseal-round-008/source-register-route-01-2.json",
-    "competitiveResearch": "quality-reviews/step-1-reseal-round-008/competitive-research.md",
-    "platformPolicyAudit": "quality-reviews/step-1-reseal-round-008/platform-policy-audit.md",
-    "policyRegistry": "canonical/POLICY_RELEASE_GATES.json",
-    "evidence": "quality-reviews/step-1-reseal-round-008/checkpoint-d-evidence.json"
+    "id": "route013",
+    "status": "IN_PROGRESS",
+    "purpose": "Complete FLOORS_1_10, Step 2 dependency closure, canonical coverage and lower-mirror synchronization before independent final critics.",
+    "requiredOutputs": [
+      "FLOORS_1_10_DESIGN.md",
+      "canonical/STEP2_DEPENDENCY_CLOSURE.json",
+      "quality-reviews/step-1-reseal-round-008/canonical-coverage-matrix.json",
+      "quality-reviews/step-1-reseal-round-008/route-01-3-acceptance.json"
+    ]
   },
   "currentCanonicalization": {
     "status": "IN_PROGRESS",
@@ -106,9 +117,9 @@
     {"order": 6, "name": "physical-iphone-validation", "status": "BLOCKED"}
   ],
   "writeBoundary": {
-    "allowed": ["Step 1 documentation", "research", "preseal policy registry", "status mirrors", "quality evidence"],
+    "allowed": ["Step 1 canonical documentation", "dependency specifications", "status mirrors", "quality evidence"],
     "forbidden": ["runtime", "assets", "V1 candidate/schema/validator/simulator", "backend", "payment provider", "ad network", "PR operation", "Production alias"]
   },
   "nextAuthorizedChat": "01_正本仕様・競合調査",
-  "nextAction": "bind-route-01-2-evidence-then-complete-first-ten-redline-and-step2-dependency-closure"
+  "nextAction": "complete-route-01-3-first-ten-redline-and-step2-dependency-closure"
 }
