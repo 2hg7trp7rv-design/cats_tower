@@ -26,9 +26,26 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Apply known test-harness correction in memory
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('simulation/fixtures/v2/validate-execution-fixtures.mjs')
+          text = path.read_text(encoding='utf-8')
+          old = "const run = runNode([...validatorArgs, path]);"
+          new = "const run = runNode([validatorArgs[0], path, ...validatorArgs.slice(1)]);"
+          if old not in text:
+              raise SystemExit('expected fixture harness line not found')
+          path.write_text(text.replace(old, new), encoding='utf-8')
+          PY
       - name: Syntax
         run: find simulation -name '*.mjs' -print0 | xargs -0 -n1 node --check
       - name: Existing fixture regression
         run: node simulation/fixtures/v2/validate-fixtures.mjs
       - name: Execution and result adversarial fixtures
         run: node simulation/fixtures/v2/validate-execution-fixtures.mjs
+      - name: Working tree boundary
+        if: always()
+        run: git status --short
