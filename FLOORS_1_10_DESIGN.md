@@ -1,109 +1,160 @@
-# Cat's Tower 1〜10F設計 — 01再統合待ち
+# Cat's Tower — 1〜10F canonical slice
 
-文書状態: **PENDING_REVALIDATION — NOT_AUTHORIZED_FOR_IMPLEMENTATION_OR_SIMULATION**  
-更新日: **2026-08-26**  
-作業branch: **既存の`kimi`のみ**  
-上位正本: [`MASTER_SPEC.md`](./MASTER_SPEC.md)  
-現在工程: **Step 1 正本統合・再封印 — IN_PROGRESS**  
-次の担当: **`01_正本仕様・競合調査`**
+文書状態: **ROUND 008 PRESEAL CANONICAL DRAFT**  
+更新日: **2026-08-27**  
+Repository: `2hg7trp7rv-design/cats_tower`  
+Branch: `kimi`  
+上位権威: `CHATGPT_PROJECT_INSTRUCTIONS1.md`、active change-control、`MASTER_SPEC.md`、`PROJECT_STATUS.json`
 
-このファイルの2026年8月25日版は、有限100F・公開条件のみの猫解放・Dawn・9画面・3,000scenarioを前提とした旧下位正本だった。現在の製品境界と競合するため、旧`PASS — STEP1_CANONICAL_FREEZE`を失効させる。
+この文書は最初の実装sliceを定義する。塔全体はプレイヤーから見て上限なしであり、10Fも100Fもendingではない。数値曲線、抽選確率、報酬量、reset unlockのexact値はStep 2 simulationで決定する。
 
-旧詳細はGit履歴のcommit `d3f617fcd9b992a83ec95214a93ad2ce1a2682af`以前から参照できる。履歴証拠は削除しないが、現行実装・simulation・画面制作の入力にしない。
+## 1. Sliceの製品役割
 
-## 1. この文書の現在の役割
+1〜10Fは、課金・ガチャ画面より先に次を理解させる。
 
-01で次を再設計・再封印するためのscope guardである。
+1. 猫と猫人が移動・接敵・射程・攻撃・弾着を伴って自動戦闘する。
+2. 常設の名前付き4体を今周coinで育てる。
+3. 店舗・配送・一時増援が戦闘を支援する。
+4. 10Fの地区boss後も11Fへ上がり、100F以降も続く。
+5. 行き詰まり後は一つの`reset.tower_return`で1Fから高速再攻略する。
 
-- 最初のproduction sliceを1F〜10Fに限定
-- 無制限塔の第1地区としての役割
-- 戦闘、店舗、配送、キャラ、武器、進化、reset、gacha、loginの初回導線
-- S01〜S12との対応
-- server-owned状態とlocal gameplay状態の境界
-- 既存の敵、店舗、猫、boss、物語の再利用可否
+Tapによる敵への直接damageは0。通常進行にcollect-all、個別回収、在庫補充、長押し連打を要求しない。
 
-具体的な階別配置、解放条件、報酬、数値、演出時間は、01のredlineとStep 2の検証前に確定扱いしない。
+## 2. Stable IDs
 
-## 2. 現在固定されている上位境界
+### Tower and encounter
 
-- 塔はプレイヤーから見て上限なし
-- 100Fは最初の大型節目。101F以降も継続
-- 1〜10Fは最初の実装sliceであり、塔全体の終点ではない
-- プレイアブルは猫と猫人
-- 常設編成は4体。一時増援は別layer
-- tapによる直接damageは0
-- auto battleとoffline progressを基礎にする
-- resetは一つだけ。旧Dawnは統合・改名・廃止
-- reset後は1Fから高速再攻略
-- コインlevel無制限、100levelごとにruby進化資格
-- character/weapon rarityは`N < R < RR < SR < SSR < UR`
-- character gachaとweapon gachaを分離
-- 初回入手で機能完成、20体分以上は任意の長期完全熟練
-- S01〜S12を使用
-- 恒久経済・抽選・権利はserver authority
+- district: `tower.district.001`
+- cycle: `tower.cycle.000001`
+- Floor 10 boss: `tower.boss.d01.kagetsubasa`
+- first 100F milestone: `tower.milestone.floor.0000000100`
+- normal enemies: `enemy.normal.001`〜`enemy.normal.006`
+- elites: `enemy.elite.001`〜`enemy.elite.002`
+- district wall: `enemy.wall.001`
 
-## 3. 1〜10Fで保持する最低scope
+### Characters and weapons
 
-次は上位正本から継承する最低境界であり、01で削除する場合は新しいユーザー決定が必要。
+- deterministic core: `character.launch.001`〜`character.launch.004`
+- slice higher-rarity examples: `character.launch.005`〜`character.launch.006`
+- slice weapons: `weapon.launch.001`〜`weapon.launch.006`
 
-| 分類 | 最低境界 |
-|---|---|
-| core cats | ムギ、ルナ、トト、コハクに無料・確定経路を持たせる |
-| active party | 4体 |
-| temporary reinforcement | 3役割以上 |
-| normal enemies | 6種を目標下限として再検証 |
-| elite enemies | 2種を目標下限として再検証 |
-| district wall | 1遭遇。追加の敵species水増しにしない |
-| district boss | 3phase以上を候補として再検証 |
-| selectable shops | 4種以上を候補として再検証 |
-| support facilities | 2種以上を候補として再検証 |
-| tower browse | 制圧済み・現在・次の節目を閲覧可能 |
-| shop loop | 比較、配置、配送、再配置、自動復元 |
-| first reset | 20〜35分目標の最初の有効resetを含める |
-| first evolution | 最初のreset由来無料rubyで支払える |
-| beginner acquisition | character/weapon gachaの初回状態を含める |
-| first-day guarantee | SSR character 1体＋SR以上weapon 1本 |
-| save/resume | 戦闘・選択・通信境界を復元可能にする |
+### Shops and support
 
-上表の数値は最低scopeまたは再検証候補であり、旧階別表の復活を意味しない。
+- selectable shops: `shop.launch.001`〜`shop.launch.004`
+- temporary support: `support.launch.001`〜`support.launch.003`
+- build axes: `build.combat`, `build.reinforcement`, `build.commerce`
 
-## 4. 01で必ず再設計する項目
+### Reset
 
-- 1F〜10Fの各floor roleとtutorial順序
-- 4体編成の加入・選択・gacha導線
-- 無料core catsとRR〜UR取得の境界
-- weapon初回取得、装備、duplicate mastery
-- level 100到達、ruby表示、最初のevolution
-- 最初のstrong new gameの提示、lose/keep/gain、1F再開
-- newcomer loginと初日保証
-- S10〜S12を含む画面遷移
-- network failure、claim retry、draw retry、purchase pending、refund/restoreの状態
-- 既存店舗・敵・boss・物語の採用、変換、不採用
-- local saveとserver account/walletの分離
-- 大数、seed、ID、analytics、support audit ID
+- canonical reset ID: `reset.tower_return`
+- display name candidate: 「塔還り」
 
-## 5. 現在禁止する旧前提
+旧`cat.mugi`、`cat.luna`、`cat.toto`、`cat.kohaku`、`dawn*`等はread-only migration aliasであり、新規writeに使用しない。表示名は永続IDにしない。
 
-- 10F後は100Fで終了すると教える
-- 101F以降を禁止する
-- 猫取得を公開条件だけに限定し、gachaを持たない
-- 3択Dawnを独立resetとして維持する
-- 9画面だけで完結させる
-- 100F・3,000scenarioの旧candidateへ直結する
-- 旧数値を実装定数として使用する
-- localStorageだけでruby、draw、pity、entitlementを管理する
+## 3. 1〜10F roster truth
 
-## 6. 完了条件
+| ID | 表示名 | 基礎rarity | 役割 | 確定経路 | 初回入手で使える機能 |
+|---|---|---|---|---|---|
+| `character.launch.001` | ムギ | N | 前衛・制御 | 開始時 | 接敵、挑発、短い防御 |
+| `character.launch.002` | ルナ | R | 遠距離・対空 | 3F救出 | 対空、単体射撃 |
+| `character.launch.003` | トト | N | 支援・回復 | 5F救出 | 基本回復、状態解除1種 |
+| `character.launch.004` | コハク | R | 走者・後衛妨害 | 8F救援 | 後衛接近、短い妨害 |
+| `character.launch.005` | 未命名 | SR候補 | slice追加戦術 | newcomer選択箱候補 | 広告どおりの基本skill |
+| `character.launch.006` | 未命名 | SSR候補 | 初日保証枠 | 明示されたnewcomer保証 | 広告どおりの基本skill |
 
-このファイルは、01で以下を満たした場合だけ再び正本へ昇格できる。
+N/Rだけで前衛、対空、回復、後衛干渉を満たす。SR/SSRは速度と戦術選択を増やすが、本編、進化、reset、必須戦闘機能を解除する鍵にしない。常設戦闘編成は4体、一時増援は別層。
 
-- repository-wide contradiction inventoryと対応
-- `MASTER_SPEC.md`、`PROJECT_STATUS.json`、S01〜S12と一致
-- floorごとの正常・異常stateを定義
-- stable IDとmigration aliasを定義
-- backend trust boundaryを定義
-- Step 2 dependency closureを作成
-- 独立批評の未解決P0/P1が0
-- exact commit/tree-bound Step 1 seal
+`weapon.launch.001`〜`weapon.launch.004`はN/Rの確定入手で4役を覆う。`weapon.launch.005`〜`weapon.launch.006`はslice内の上位選択肢。各常設characterは1本だけ装備する。初期sliceにrandom substat、装備分解迷路、基本役割のduplicate人質化を入れない。
 
-それまでは`PENDING_REVALIDATION`であり、実装・simulation・完成見本を許可しない。
+## 4. Floor progression
+
+| Floor | 主目的 | 戦闘・敵 | 解放・報酬 | 必須screen/state |
+|---|---|---|---|---|
+| 1F | auto battleの価値を5秒で理解 | `enemy.normal.001`。ムギが移動・接敵・攻撃 | ムギ、`weapon.launch.001`、coin level | S02 tutorial/normal battle |
+| 2F | 強化の因果 | 近接＋小型遠距離 | coin level、bulk purchase preview | S06 coin-level |
+| 3F | 遠距離・対空 | 飛行敵を混ぜる | ルナ救出、最初のshop選択 | S04 rescue、S05 placement |
+| 4F | shop→delivery→combat | 配送到着で一時buff | `weapon.launch.002`、delivery forecast | S02/S05 delivery |
+| 5F | 最初の節目boss | 予告→攻撃→break | トト救出、N/R core 3役 | S08 intro/telegraph/reward |
+| 6F | recruitmentは補助 | 複数敵と役割比較 | S10解放、newcomer保証進捗、無料ticket | S10 odds/pity/exchange/history |
+| 7F | first copyとmasteryを分離 | 同一役割の別解を提示 | mastery tutorial、universal fragment preview | S06/S07 mastery |
+| 8F | deliveryとrunner統合 | 前衛＋後衛支援＋`enemy.wall.001` | コハク救援、`weapon.launch.004` | S04 rescue、S05 reconfigure |
+| 9F | build選択 | modifier 1つを選択、後から変更可 | combat/reinforcement/commerce比較 | S07 build comparison |
+| 10F | 地区bossと次地区接続 | `tower.boss.d01.kagetsubasa` 3 phase | district clear、11F解放、S09 forecast | S08 phases/failure/reward、S03 next district |
+
+10F後は11Fへ通常進行する。S09はloss/keep/gainと予測再攻略時間を表示するが、10F到達だけで意味のないresetを強制しない。最初の有効resetの階・報酬式は20〜35分目標に合わせてStep 2で決める。
+
+## 5. Shop, delivery and support
+
+店舗は戦闘の主役を奪わず、制圧済み階から上階へ支援を送る。
+
+- `shop.launch.001`〜`004`は前線damage、生存、coin flow、再攻略速度の異なる支援を持つ。
+- `support.launch.001`〜`003`は一時増援で、常設4体枠を増やさない。
+- placement/reconfigureは無料または事前表示されたcost。誤tapで恒久損失を作らない。
+- deliveryは自動。collect-allや在庫補充を通常必須作業にしない。
+- communication failureではserver確定前のrewardをpendingとし、clientが恒久報酬を発行しない。
+- offline中は既知設定で進むが、未見story choice、gacha、evolution、reset、purchaseを自動決定しない。
+
+## 6. Combat causality and failure diagnosis
+
+攻撃は予備動作→接触/弾着→damage表示→HP減少→hit reaction→復帰の順。遠距離は弾着前にHPを減らさない。active inputは編成、強化、任意skill timing、店舗最適化に限定する。
+
+敗北時は推奨戦力だけで済ませず、前衛崩壊、対空不足、回復不足、時間切れ、配送未着、装備不一致を診断する。特定RR〜URの取得を固定解決策として表示しない。
+
+## 7. Gacha and newcomer guarantee
+
+S10は6F以降に解放し、猫・戦闘・塔の価値を先に見せる。character/weapon bannerは分離する。draw前に確率、hard pity、featured guarantee、carryover family、exchange、duplicate conversion、ending rule、historyを表示する。
+
+最初の10分50〜100draw等はsimulation候補であり、この文書で確定しない。初日SSR character 1体とSR以上weapon 1本の保証は、課金・広告なしで完了可能にする。
+
+First copyだけでadvertised core roleを使用できる。初期〜中期duplicateは実用育成、20体分以上は任意の長期完全熟練。後半ほど限界効用を逓減し、cap後duplicateはoverflowへ変換する。
+
+## 8. Level, evolution and tower return
+
+coin levelは上限なし。100 levelごとにruby evolution資格を得るが、未進化でも101、201、301以降へ進める。未購入stageは後から順番にcatch upできる。最初の進化費用は最初の有効塔還りの無料rubyで賄える設計とする。
+
+`reset.tower_return`は一つだけ。Floor 1へ戻る。保存済み編成、shop設定、automation、bulk purchase、known-floor accelerationを残す。同じ最高階を繰り返しただけでは新しいreset由来rubyを得ない。
+
+## 9. Authority and recovery
+
+Server authority:
+
+- ruby sub-ledgers、tickets
+- draw、RNG audit ID、pity、history
+- character/weapon acquisition、mastery、overflow
+- evolution、reset、highest floor
+- login claim、ad receipt
+- purchase、refund、revocation、restore、entitlement
+
+Local authority:
+
+- preferences、accessibility
+- temporary render cache
+- acknowledged run snapshot
+
+retry/reload/multiple tabではserver transaction IDとidempotency keyで収束する。partial completionはpending、result recovery、history reconciliationのいずれかへ遷移し、reroll・double grantを起こさない。
+
+## 10. Step 2 parameters not sealed here
+
+Step 2で決めるもの:
+
+- HP/ATK/coin/cost curves
+- exact gacha odds、soft pity、ticket supply
+- mastery coefficients、ruby reset formula
+- offline cap、reset unlock floor/time
+- modifier weights、boss timing
+- N/R utility and UR dominance thresholds
+- paid acceleration distributions
+
+すべてcanonical decimal stringまたは明示任意精度型、rounding rule、seed、fixture、result schemaを持つ。
+
+## 11. Slice acceptance
+
+- 10Fと100Fをendingにしない。
+- 常設4体と一時増援を混同しない。
+- N/Rだけで主要役割を完結する。
+- tap damage 0、auto battle/offlineを基礎とする。
+- shop/deliveryはcombat supportであり、会社経営を主役にしない。
+- S01〜S12とnormal/error/recovery stateへ接続する。
+- server-owned permanent economyをlocalStorageで代替しない。
+- persistent IDは`canonical/STABLE_ID_REGISTRY.json`へ登録する。
+- Step 2は`canonical/STEP2_DEPENDENCY_CLOSURE.json`から推測なしで実装する。
