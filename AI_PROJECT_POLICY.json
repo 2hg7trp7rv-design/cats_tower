@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 4,
-  "updatedDate": "2026-08-27",
+  "schemaVersion": 5,
+  "updatedDate": "2026-08-28",
   "repository": {
     "fullName": "2hg7trp7rv-design/cats_tower",
     "allowedBranch": "kimi",
@@ -16,18 +16,24 @@
     "latest user-decision-lock",
     "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
     "MASTER_SPEC.md and sealed canonical contracts",
-    "PROJECT_STATUS.json, QUALITY_GATE.md and AGENTS.md",
-    "task Acceptance, critics, judge, handover, deployment and completion evidence",
-    "Step 2 executable contract",
+    "simulation/executable-seal-v2.json and its completion/read-back chain",
+    "PROJECT_STATUS.json, simulation/CURRENT_STATUS.json, QUALITY_GATE.md and AGENTS.md",
+    "task Acceptance, critics, judge, handover, workflow and completion evidence",
     "historical Acceptance/PASS/audits and legacy runtime",
     "chat history and competitor references"
   ],
   "currentPhase": {
     "step": 2,
     "name": "executable-contract-and-simulation",
-    "status": "READY_TO_START",
+    "status": "PASS",
+    "phase": "SEALED",
     "step1Status": "PASS",
-    "step3Allowed": false,
+    "step3Allowed": true,
+    "nextStep": 3,
+    "nextStepName": "large-scale-validation",
+    "nextStepStatus": "READY_TO_START",
+    "balanceVerdict": "NOT_EVALUATED_STEP2",
+    "step3Executed": false,
     "physicalIPhone": "NOT_VERIFIED"
   },
   "activeStep1Seal": {
@@ -38,29 +44,54 @@
     "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
     "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce",
     "unresolvedP0": 0,
-    "unresolvedP1": 0
+    "unresolvedP1": 0,
+    "status": "PASS"
   },
-  "step2Rule": {
-    "acceptanceBeforeFirstWrite": true,
-    "dependencySource": "canonical/STEP2_DEPENDENCY_CLOSURE.json",
-    "newV2ChainRequired": true,
-    "legacyV1MayPromote": false,
-    "legacyV1MayExtendInPlace": false,
-    "observedHoldoutMayBeReused": false,
-    "step3BeforeStep2Pass": false,
+  "activeStep2Seal": {
+    "path": "simulation/executable-seal-v2.json",
+    "blob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
+    "semanticCommit": "724d04940f9f3794b993cddbc5af3a7163a0395b",
+    "semanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
+    "activationCommit": "89174eeebb033fe807a0592c8df0279c2a7b9a6f",
+    "activationTree": "ccf444df436d63d86fd4da0355f20349753b0546",
+    "workflow": ".github/workflows/verify-step-2-v2.yml",
+    "workflowRunId": "33104391753",
+    "jobId": "98630217077",
+    "conclusion": "SUCCESS",
+    "validatorVerdict": "PASS_EXECUTABLE_SEAL_V2",
+    "criticCount": 5,
+    "unresolvedP0": 0,
+    "unresolvedP1": 0,
+    "trackedP2": 6,
+    "qualificationScenarios": 30,
+    "balanceVerdict": "NOT_EVALUATED_STEP2",
+    "status": "PASS_SEALED"
+  },
+  "governanceRepair": {
+    "acceptance": "quality-reviews/step-2-governance-repair-round-001/acceptance-matrix.json",
+    "latestAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-014.json",
+    "completion": "quality-reviews/step-2-governance-repair-round-001/completion-evidence.json",
+    "liveReadback": "quality-reviews/step-2-governance-repair-round-001/live-readback.json",
+    "legacyRound7Mode": "IMMUTABLE_HISTORICAL_WORKTREE_ONLY",
+    "currentStatusMode": "ROUND008_AND_STEP2_LIVE_MIRRORS",
+    "obsoleteMarkerRestorationAllowed": false
+  },
+  "step3Rule": {
+    "requiredRunPlan": "simulation/run-plan-v2.json",
+    "minimumGameplayScenarios": 15000,
+    "calibrationScenarios": 12000,
+    "unseenHoldoutScenarios": 3000,
+    "separateHighVolumeSuitesRequired": true,
+    "holdoutMayBeUsedForTuning": false,
+    "step2QualificationMayBeClaimedAsBalancePass": false,
     "requiredArtifacts": [
-      "simulation/candidate-v2.json",
-      "simulation/candidate-v2.schema.json",
-      "simulation/validate-candidate-v2.mjs",
-      "simulation/run-plan-v2.json",
-      "simulation/result-v2.schema.json",
-      "simulation/validate-result-v2.mjs",
-      "simulation/engine-v2/**",
-      "simulation/fixtures/v2/**",
-      "simulation/migrations/v1-to-v2/**",
-      "simulation/executable-seal-v2.json",
-      "simulation/executable-seal-v2.schema.json",
-      "simulation/validate-executable-seal-v2.mjs"
+      "quality-reviews/step-3-large-scale-validation/gameplay-calibration-result.json",
+      "quality-reviews/step-3-large-scale-validation/gameplay-holdout-result.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/**",
+      "quality-reviews/step-3-large-scale-validation/critic-summary.json",
+      "quality-reviews/step-3-large-scale-validation/final-judge.json",
+      "quality-reviews/step-3-large-scale-validation/completion-evidence.json",
+      "quality-reviews/step-3-large-scale-validation/live-readback.json"
     ]
   },
   "permanentEconomyAuthority": "server",
@@ -74,13 +105,15 @@
       "calibration and unseen holdout separation",
       "independent critics and final judge",
       "unresolved P0/P1 zero",
-      "exact commit/tree/deployment/evidence binding",
+      "exact commit/tree/workflow/evidence binding",
       "forbidden path and Production changes zero"
     ]
   },
   "writeBoundary": {
-    "currentAllowed": ["Step 2 V2 candidate/schema/validator/simulator/result/run-plan/fixtures/migrations/dedicated workflow and quality evidence"],
-    "currentForbidden": ["runtime", "assets", "backend", "payment provider", "ad network", "PR operation", "Production alias", "Step 3 simulation before Step 2 PASS"]
+    "currentAllowed": ["Step 3 large-scale validation artifacts and evidence"],
+    "currentForbidden": ["runtime", "assets", "backend", "payment provider", "ad network", "PR operation", "Production alias", "physical-iPhone PASS claim"],
+    "step3MayRun": true,
+    "productionChanged": false
   },
   "userBoundary": {
     "chatgptOwns": ["research", "specification", "implementation when authorized", "tests", "defect discovery", "repair", "regression", "handover"],
@@ -88,7 +121,7 @@
     "forbiddenDelegation": "Do not ask the user to write code or diagnose ordinary defects."
   },
   "reporting": {
-    "required": ["repository", "branch", "content/evidence commit and tree", "deployment ID/URL/target/commit match", "phase/verdict", "P0/P1", "changed paths", "Production change", "physical iPhone state"],
+    "required": ["repository", "branch", "content/evidence commit and tree", "workflow run/job", "phase/verdict", "P0/P1", "changed paths", "Production change", "physical iPhone state"],
     "forbiddenWithoutPass": ["完成", "OK", "問題なし", "Preview Ready", "Production Ready", "実機確認済み"]
   }
 }
