@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-critic-08-privacy-minors",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "role": "independent privacy and minors critic",
+  "reviewedContent": {
+    "commit": "5da274ddc63876565d3d210a7e2b5a87afca6730",
+    "tree": "b479c92bab43581f3ec293fecbb16ce9592a9dfa"
+  },
+  "method": [
+    "Reviewed account deletion, consent, tracking, data map, retention, cross-border, spend warning and support evidence requirements.",
+    "Attempted rejection for hidden tracking, core-play consent coercion, data-deletion ambiguity, unbounded minor spending and privacy declarations detached from actual SDK/backend flows."
+  ],
+  "checks": {
+    "trackingConsentDoesNotGateCorePlay": "PASS",
+    "sdkAndBackendDataMapRequired": "PASS",
+    "accountDeletionAndRetentionVisibility": "PASS",
+    "crossBorderAndProcessorReviewRequired": "PASS",
+    "minorPurchaseProtectionGate": "PASS",
+    "supportAndAuditHistoryRequired": "PASS"
+  },
+  "findings": [
+    {
+      "id": "C08-P2-001",
+      "severity": "P2",
+      "paths": ["canonical/POLICY_RELEASE_GATES.json", "quality-reviews/step-1-reseal-round-008/platform-policy-audit.md"],
+      "finding": "Target age, exact age-assurance method and concrete spend caps are intentionally not fixed because business region, provider and legal review are not yet known.",
+      "whyNotBlockingStep1": "The design remains fail-closed: these unknowns are explicit expert-reviewed release blockers and are not represented as completed implementation.",
+      "owner": "Product/legal/provider implementation before store submission",
+      "blockingCondition": "Blocks provider configuration and release approval when target audience and regions are selected."
+    }
+  ],
+  "verdict": "PASS_WITH_TRACKED_RELEASE_P2",
+  "unresolved": {"P0": 0, "P1": 0, "P2": 1, "P3": 0},
+  "sealEligibleFromThisCritic": true
+}
