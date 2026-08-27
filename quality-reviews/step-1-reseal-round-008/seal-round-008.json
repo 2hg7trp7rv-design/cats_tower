@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-seal",
+  "sealId": "cats-tower-step1-round008",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "status": "SEALED_PENDING_DIRECT_DESCENDANT_ACTIVATION",
+  "verdict": "PASS_PENDING_ACTIVATION",
+  "authorityBoundary": "This seal freezes the reviewed Step 1 semantic content and evidence. Step 1 PASS becomes active and Step 2 becomes READY_TO_START only after the direct-descendant active-control/status activation and completion/live read-back required below.",
+  "ancestry": {
+    "originalFrozenContent": {
+      "commit": "5da274ddc63876565d3d210a7e2b5a87afca6730",
+      "tree": "b479c92bab43581f3ec293fecbb16ce9592a9dfa"
+    },
+    "acceptanceCommit": "ad8be1d304e5a34f7ba197aeec193884aebef5cb",
+    "repairedSemanticContent": {
+      "commit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+      "tree": "99084efa0e6055977b01cf507d7d7e2a391c74ce"
+    },
+    "criticEvidenceHead": {
+      "commit": "9991e6f4ce3389c5f8dfa9c09dcc80c969b7f5f4",
+      "tree": "b0b15112b3628444aa7e4d1971324bef3fe35a91"
+    },
+    "summaryEvidenceHead": {
+      "commit": "d7ff506315c3838b24b621d1a8336e4b4458fe85",
+      "tree": "c77f45d7f5558c9b8fda1697ea8035320e318fd0"
+    },
+    "finalJudgeCommit": {
+      "commit": "cd57005ef12c5ca4c923f436c2bcce0a5cc8aadf",
+      "tree": "c98ea4e083ebee9ae3e0e2004ab7d8acb7a3ba5f",
+      "parent": "d7ff506315c3838b24b621d1a8336e4b4458fe85"
+    }
+  },
+  "semanticBlobs": [
+    {"path": "CHATGPT_PROJECT_INSTRUCTIONS1.md", "blob": "2b42e9907bf19724dd5eb3342872aaa931424be9", "role": "project source"},
+    {"path": "MASTER_SPEC.md", "blob": "4e7df4a4a3d0ae199a1bb907796e5a16fb3aa9e8", "role": "integrated master semantic content"},
+    {"path": "FLOORS_1_10_DESIGN.md", "blob": "faf7aa7853b903b2328f63cc77a0d3060c6ad93f", "role": "first production slice semantics"},
+    {"path": "canonical/STABLE_ID_REGISTRY.json", "blob": "0a835e778b27ca1cfab47c8b1b4e7797fdc1a3fd", "role": "stable IDs and migration aliases"},
+    {"path": "canonical/SCREEN_STATE_REGISTRY.json", "blob": "0cf6337da2ed3993136dbf4a9e4918efac501d2e", "role": "S01-S12 authority and recovery states"},
+    {"path": "canonical/STATE_TRANSITION_CONTRACT.json", "blob": "fb730c31eaf978b3e56f528f99c28172dbb4e8bc", "role": "permanent-economy state transitions"},
+    {"path": "canonical/POLICY_RELEASE_GATES.json", "blob": "e50fbb73ac8095dc9681b150d3f902b236f87b9a", "role": "platform, Japan, privacy and minors release gates"},
+    {"path": "canonical/STEP2_DEPENDENCY_CLOSURE.json", "blob": "d23ea91754f6b11e4d452312752fc8850bd7ab9b", "role": "complete Step 2 dependency contract"},
+    {"path": "quality-reviews/step-1-reseal-round-008/canonical-coverage-matrix.json", "blob": "d1130f9e2a44edac4ebd8a9b61878318a62c7bcc", "role": "requirements coverage"},
+    {"path": "quality-reviews/step-1-reseal-round-008/source-register-route-01-2.json", "blob": "0f0767b5f22eb0c797e51a74a990be05fbe153ee", "role": "dated source register"},
+    {"path": "quality-reviews/step-1-reseal-round-008/competitive-research.md", "blob": "0806835597c6c54372827c8953f608b5ce6d3d6b", "role": "competitive abstraction and copy boundary"},
+    {"path": "quality-reviews/step-1-reseal-round-008/platform-policy-audit.md", "blob": "9b64b2932094a902503bb41843a2da3909392cf0", "role": "policy and Japan audit"},
+    {"path": "quality-reviews/step-1-hero-merchant-large-idle-integration/user-decision-lock-round-005.json", "blob": "35f1f545765d12b3f4ed84f9a6e549a24fefb8a1", "role": "latest user product decisions"},
+    {"path": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-012.json", "blob": "d71ebc7e6a7caa54c3bf0c812fecdb91ef4ef020", "role": "preseal route authority"}
+  ],
+  "evidenceBlobs": {
+    "acceptance": {"path": "quality-reviews/step-1-reseal-round-008/route-01-4-acceptance.json", "blob": "b36becb7da9af2bd5daee933dd5d1be78dda1e3c"},
+    "deployment": {"path": "quality-reviews/step-1-reseal-round-008/deployment-evidence-route-01-4.json", "blob": "41ee3479c4e2ab790a20d27c40a07a90a74f4830"},
+    "repositoryPostcheck": {"path": "quality-reviews/step-1-reseal-round-008/final-repository-postcheck.json", "blob": "c75c2e64576192fc78db9442efe5ad2f2ea981b6"},
+    "criticSummary": {"path": "quality-reviews/step-1-reseal-round-008/critic-summary-route-01-4.json", "blob": "6599b7c91d32f3ca72b3e5ea6a7f235783b943af"},
+    "finalJudge": {"path": "quality-reviews/step-1-reseal-round-008/final-judge.json", "blob": "2ad50c69ed022c78b6b18fe336d64d763ae360a5"}
+  },
+  "criticBlobs": [
+    {"id": 1, "blob": "7ffe1296c10f2150f053416bc9ac8555d2883d43", "verdict": "PASS_WITH_TRACKED_P2"},
+    {"id": 2, "blob": "44d58a2757993ab03d3257c5f26865541131dfa5", "verdict": "PASS"},
+    {"id": 3, "blob": "953594b24af9933abed3760a9d13fbdd5abe4eab", "verdict": "PASS_AFTER_RERUN"},
+    {"id": 4, "blob": "2df8d5541faab6e034a699850eb96ffd5c8b2ce1", "verdict": "PASS_WITH_TRACKED_P2"},
+    {"id": 5, "blob": "62c05f6fc46dfb2437c53213e635b782143f5f6c", "verdict": "PASS_WITH_TRACKED_P2"},
+    {"id": 6, "blob": "60241c09c37dc813456a9b218783aae1274804ed", "verdict": "PASS_AFTER_RERUN"},
+    {"id": 7, "blob": "0c6d1c5a47762723205bd9958a54ad8dfa9a3fc8", "verdict": "PASS_WITH_TRACKED_RELEASE_P2"},
+    {"id": 8, "blob": "91a3996da6d67d0e2108cc270e2290c9d8917427", "verdict": "PASS_WITH_TRACKED_RELEASE_P2"},
+    {"id": 9, "blob": "c08c3007a5e064d10de7b8d9034e17305b580bde", "verdict": "PASS_WITH_TRACKED_P2"},
+    {"id": 10, "blob": "873a3c0bae698aa7778ad5bede8894ea6e688519", "verdict": "PASS_AFTER_RERUN"}
+  ],
+  "verifiedResults": {
+    "requirementsCovered": 21,
+    "uncoveredRequirements": 0,
+    "criticCount": 10,
+    "initialP0": 0,
+    "initialP1": 5,
+    "resolvedP1": 5,
+    "unresolvedP0": 0,
+    "unresolvedP1": 0,
+    "trackedP2": 6,
+    "currentAuthorityOldClaimAssertions": 0,
+    "unclassifiedPaths": 0,
+    "unclassifiedCurrentMatches": 0,
+    "persistentReferenceFailures": 0,
+    "forbiddenChangedPaths": 0,
+    "historicalEvidenceModified": false
+  },
+  "deployment": {
+    "id": "dpl_712tz3ij7ruB8cRe5JqudmMYFtdu",
+    "url": "https://catstower-46sbgrdcg-shinyaaas-projects.vercel.app",
+    "state": "READY",
+    "target": null,
+    "githubCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+    "githubBranch": "kimi",
+    "commitMatch": true,
+    "branchMatch": true,
+    "productionAliasChanged": false,
+    "readyAloneIsPass": false
+  },
+  "forbiddenChanges": {
+    "runtime": false,
+    "assets": false,
+    "v1Executable": false,
+    "workflowYaml": false,
+    "backend": false,
+    "paymentProvider": false,
+    "adNetwork": false,
+    "pullRequestOperation": false,
+    "productionAlias": false
+  },
+  "activationMutablePaths": {
+    "purpose": "After this seal, only lifecycle/status routing may change before completion evidence; product meaning and bound semantic blobs may not be changed silently.",
+    "paths": [
+      "MASTER_SPEC.md",
+      "PROJECT_STATUS.json",
+      "QUALITY_GATE.md",
+      "PROJECT_HANDOVER.md",
+      "AGENTS.md",
+      "AI_PROJECT_POLICY.json",
+      "README.md",
+      "CHATGPT_PROJECT_BOOTSTRAP.md",
+      "CUSTOM_GPT_CONFIGURATION.md",
+      "simulation/INPUT_CONTRACT.md",
+      "simulation/CURRENT_STATUS.json",
+      ".github/workflows/CURRENT_STATUS.md",
+      "quality-reviews/step-1-canonical-design/active-change-control.json",
+      "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-013.json",
+      "quality-reviews/step-1-reseal-round-008/activation-completion-evidence-round-008.json",
+      "quality-reviews/step-1-reseal-round-008/live-readback-round-008.json"
+    ],
+    "allowedChange": "Step 1 lifecycle PASS activation, Step 2 READY_TO_START routing, exact seal/evidence references and historical incident disclosure only.",
+    "productMeaningChangeAllowed": false,
+    "v2ArtifactCreationAllowedBeforeActivation": false
+  },
+  "requiredActivation": {
+    "latestAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-013.json",
+    "completionEvidence": "quality-reviews/step-1-reseal-round-008/activation-completion-evidence-round-008.json",
+    "liveReadback": "quality-reviews/step-1-reseal-round-008/live-readback-round-008.json",
+    "requiredState": {
+      "step1": "PASS",
+      "step2": "READY_TO_START",
+      "step3": "BLOCKED_UNTIL_STEP2_PASS",
+      "physicalIPhone": "NOT_VERIFIED"
+    }
+  },
+  "physicalIPhoneVerified": false,
+  "nextAction": "Create direct-descendant activation and completion evidence. Do not create or execute V2 artifacts until activation is live and read back."
+}
