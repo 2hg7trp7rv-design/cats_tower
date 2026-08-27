@@ -1,214 +1,122 @@
 {
-  "schemaVersion": 2,
-  "artifactId": "cats-tower-state-transition-contract-v2-preseal",
+  "schemaVersion": 3,
+  "artifactId": "cats-tower-state-transition-contract-round-008-preseal",
   "asOf": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
   "authority": "PRESEAL_DRAFT",
   "step1SealRequired": true,
   "mayAuthorizeStep2": false,
-  "globalStates": [
-    "READY",
-    "PENDING",
-    "COMMITTED",
-    "PENDING_RECONCILIATION",
-    "REJECTED",
-    "COMPENSATING",
-    "RECOVERED"
-  ],
+  "commonEnvelope": {
+    "requestId": "UUIDv7 or ULID",
+    "idempotencyKey": "stable per user intent",
+    "accountId": "server resolved",
+    "catalogVersion": "required for commerce and gacha",
+    "clientObservedEntityVersion": "required for optimistic concurrency",
+    "transactionId": "immutable on accepted permanent-economy operation",
+    "auditId": "immutable on committed or rejected auditable result"
+  },
   "globalRules": {
     "serverAuthority": true,
-    "idempotencyRequired": true,
     "clientTimeoutMeansFailure": false,
-    "multiTabLock": "ACCOUNT_ENTITY_VERSION",
-    "auditIdRequired": true,
-    "partialCompletion": "RESUME_OR_COMPENSATE; NEVER_REROLL"
+    "clientMayMintPermanentValue": false,
+    "multiTabConvergence": "transaction, claim or account entity version",
+    "partialCompletion": "resume or compensate; never reroll or double grant",
+    "duplicateRequest": "return the original result or original terminal failure",
+    "outOfOrderExternalEvents": "reconcile by provider event time, transaction identity and current entitlement state",
+    "supportAuditVisibility": true
   },
-  "transitions": [
-    {
-      "id": "transition.draw.v1",
-      "entity": "draw",
-      "initial": "READY",
-      "happyPath": [
-        "CLIENT_CONFIRM",
-        "REQUEST_ACCEPTED",
-        "RNG_COMMITTED",
-        "LEDGER_COMMITTED",
-        "RESULT_AVAILABLE"
-      ],
-      "idempotency": "clientRequestId unique per account/banner; duplicate returns same result",
-      "failureAndRecovery": [
-        "timeout->PENDING_RECONCILIATION",
-        "reload->query transaction",
-        "multiple tab->same request dedupe",
-        "banner ended before accept->REJECTED"
-      ],
-      "compensation": [
-        "partial after RNG commit resumes ledger commit; never reroll"
-      ]
+  "machines": {
+    "gachaDraw": {
+      "id": "transition.draw.v2",
+      "states": ["CREATED", "VALIDATING", "RESOURCES_RESERVED", "RNG_COMMITTED", "RESULT_GRANTED", "RECORDED", "FAILED_BEFORE_COMMIT", "RECOVERY_REQUIRED"],
+      "terminal": ["RECORDED", "FAILED_BEFORE_COMMIT"],
+      "retry": "same idempotency key returns the same result or same pre-commit failure; never rerolls",
+      "reload": "query by transactionId and recover committed result",
+      "multiTab": "one accepted intent; duplicates return original result",
+      "partial": "RNG_COMMITTED without response resumes ledger and history commit",
+      "invariants": ["character and weapon pools never mix", "rate table and pity family are fixed at validation", "pity and grant commit atomically", "history is durable before dependent exchange"]
     },
-    {
-      "id": "transition.payment.v1",
-      "entity": "payment",
-      "initial": "CATALOG_READY",
-      "happyPath": [
-        "PURCHASE_STARTED",
-        "STORE_RECEIPT_RECEIVED",
-        "SERVER_VERIFIED",
-        "ENTITLEMENT_OR_WALLET_APPLIED",
-        "ACKNOWLEDGED"
-      ],
-      "idempotency": "store transaction ID unique",
-      "failureAndRecovery": [
-        "network loss->server reconciliation",
-        "duplicate webhook->no duplicate grant",
-        "refund/revocation->ledger or entitlement adjustment",
-        "restore->rebuild entitlements"
-      ],
-      "compensation": [
-        "negative balance or suspended entitlement is explicit; support path"
-      ]
+    "payment": {
+      "id": "transition.payment.v2",
+      "states": ["CREATED", "STORE_PENDING", "STORE_PURCHASED", "SERVER_VERIFYING", "ENTITLEMENT_GRANTED", "ACKNOWLEDGED", "REFUNDED", "REVOKED", "RESTORED", "FAILED"],
+      "retry": "provider transaction/token uniqueness grants exactly once",
+      "partial": "PENDING grants nothing; PURCHASED must verify server-side",
+      "refund": "reverse or suspend the affected paid grant according to disclosed policy without silently deleting unrelated free balance",
+      "revocation": "entitlement and paid ledger reconcile to provider truth with audit trail",
+      "restore": "rebuild restorable entitlement from provider truth",
+      "invariants": ["catalog version and displayed contents are immutable for the purchase", "paid ruby provenance remains", "provider webhook ordering may be out of order"]
     },
-    {
-      "id": "transition.rewarded_ad.v1",
-      "entity": "ad reward",
-      "initial": "AVAILABLE",
-      "happyPath": [
-        "CONSENT_CHECKED",
-        "AD_STARTED",
-        "NETWORK_CALLBACK",
-        "SERVER_VERIFIED",
-        "REWARD_GRANTED"
-      ],
-      "idempotency": "ad impression or receipt ID unique",
-      "failureAndRecovery": [
-        "callback replay->same grant",
-        "client close->NO_REWARD unless verified",
-        "offline->not available",
-        "partial->reconcile receipt"
-      ],
-      "compensation": [
-        "fraud rejection with audit ID; no punitive hidden debit"
-      ]
+    "rewardedAd": {
+      "id": "transition.rewarded_ad.v2",
+      "states": ["OFFERED", "OPTED_IN", "CONSENT_CHECKED", "STARTED", "NETWORK_COMPLETED", "SERVER_VERIFYING", "GRANTED", "CAP_REJECTED", "FAILED"],
+      "retry": "ad receipt or nonce is accepted exactly once",
+      "partial": "network completion without server verification remains pending",
+      "invariants": ["initial product has no forced interstitial or banner", "reward and daily cap are shown before opt-in", "no ad during battle, boss, gacha result, purchase or save recovery"]
     },
-    {
-      "id": "transition.login_claim.v1",
-      "entity": "login claim",
-      "initial": "ELIGIBLE",
-      "happyPath": [
-        "CLAIM_REQUESTED",
-        "SERVER_ELIGIBILITY_LOCKED",
-        "GRANT_COMMITTED",
-        "HISTORY_WRITTEN"
-      ],
-      "idempotency": "campaign+period+account unique",
-      "failureAndRecovery": [
-        "retry/reload->same result",
-        "multiple tabs->one grant",
-        "campaign expired before lock->REJECTED"
-      ],
-      "compensation": [
-        "history repair from transaction log"
-      ]
+    "loginClaim": {
+      "id": "transition.login_claim.v2",
+      "states": ["ELIGIBLE", "CLAIM_REQUESTED", "GRANTED", "ALREADY_CLAIMED", "NOT_ELIGIBLE", "EXPIRED", "SERVER_TIME_ERROR"],
+      "retry": "campaign plus period plus account is unique",
+      "multiTab": "second claim reads the first grant",
+      "invariants": ["server time defines the period", "one missed day does not reset an entire track unless the disclosed campaign explicitly says so", "claim history is queryable"]
     },
-    {
-      "id": "transition.reset.v1",
-      "entity": "tower return",
-      "initial": "ELIGIBLE",
-      "happyPath": [
-        "PREVIEW_ISSUED",
-        "CONFIRMED",
-        "RUN_ARCHIVED",
-        "RUBY_GRANTED",
-        "NEW_RUN_CREATED",
-        "CLIENT_RESUMED"
-      ],
-      "idempotency": "reset request ID unique; best-floor anti-farm snapshot immutable",
-      "failureAndRecovery": [
-        "timeout->PENDING_RECONCILIATION",
-        "reload->resume transaction",
-        "multiple tabs->single accepted",
-        "partial->resume at committed step"
-      ],
-      "compensation": [
-        "never roll back granted ruby without audit; support repair"
-      ]
+    "towerReturn": {
+      "id": "transition.reset.v2",
+      "states": ["NOT_ELIGIBLE", "QUOTE_ISSUED", "CONFIRMED", "COMMITTING", "APPLIED", "QUOTE_EXPIRED", "FAILED_BEFORE_COMMIT", "RECOVERY_REQUIRED"],
+      "retry": "same reset transaction yields the same post-reset profile",
+      "partial": "after commit, reload returns APPLIED; never applies twice",
+      "invariants": ["restart Floor 1", "repeat same best grants zero new reset ruby", "loss, keep and gain match quote", "highest-floor update and ruby grant are atomic", "saved formation, shop automation and known-floor acceleration persist"]
     },
-    {
-      "id": "transition.evolution.v1",
-      "entity": "evolution",
-      "initial": "ELIGIBLE",
-      "happyPath": [
-        "COST_QUOTED",
-        "CONFIRMED",
-        "RUBY_DEBITED",
-        "STAGE_APPLIED",
-        "HISTORY_WRITTEN"
-      ],
-      "idempotency": "character+target stage+request unique",
-      "failureAndRecovery": [
-        "insufficient balance->REJECTED",
-        "partial->resume after debit",
-        "refund does not retroactively remove free evolution without policy"
-      ],
-      "compensation": [
-        "ledger-driven repair"
-      ]
+    "evolution": {
+      "id": "transition.evolution.v2",
+      "states": ["NOT_ELIGIBLE", "ELIGIBLE", "QUOTE_ISSUED", "CONFIRMED", "RUBY_DEBITED", "EVOLUTION_GRANTED", "RECORDED", "QUOTE_EXPIRED", "FAILED"],
+      "retry": "same quote and idempotency key never double debit",
+      "partial": "debit without response resumes grant and history",
+      "invariants": ["stages are purchased in ascending missing order", "level continuation is never blocked", "first required evolution is covered by free reset ruby target", "base rarity does not change"]
     },
-    {
-      "id": "transition.mastery_exchange.v1",
-      "entity": "mastery/exchange",
-      "initial": "READY",
-      "happyPath": [
-        "QUOTE",
-        "CONFIRM",
-        "RESOURCE_DEBIT",
-        "NODE_OR_ITEM_GRANT",
-        "OVERFLOW_CONVERT"
-      ],
-      "idempotency": "request ID and quote version unique",
-      "failureAndRecovery": [
-        "stale quote->REQUOTE",
-        "retry->same transaction",
-        "max mastery->overflow"
-      ],
-      "compensation": [
-        "resource debit and grant atomic or resumable"
-      ]
+    "masteryExchange": {
+      "id": "transition.mastery_exchange.v2",
+      "states": ["QUOTE_ISSUED", "CONFIRMED", "RESOURCE_DEBITED", "MASTERY_APPLIED", "CAP_REACHED", "OVERFLOW_CREDITED", "RECORDED", "QUOTE_STALE", "FAILED"],
+      "retry": "request and quote version are unique",
+      "partial": "resource debit and grant are atomic or resumable",
+      "invariants": ["first copy is functionally complete", "late mastery has diminishing marginal power", "full mastery is not a normal PvE prerequisite", "post-cap duplicate never disappears"]
     },
-    {
-      "id": "transition.account_link.v1",
-      "entity": "account link",
-      "initial": "GUEST_READY",
-      "happyPath": [
-        "AUTHENTICATED",
-        "SERVER_SNAPSHOT_FETCHED",
-        "CONFLICT_PRESENTED",
-        "MERGE_POLICY_APPLIED",
-        "BOUND"
-      ],
-      "idempotency": "link operation ID unique",
-      "failureAndRecovery": [
-        "cancel->guest unchanged",
-        "network loss->resume",
-        "multiple devices->server lock"
-      ],
-      "compensation": [
-        "raw guest backup retained; no duplicate premium grant"
-      ]
+    "accountLink": {
+      "id": "transition.account_link.v2",
+      "states": ["GUEST", "AUTHENTICATING", "SERVER_SNAPSHOT_FETCHED", "CONFLICT_REVIEW", "MERGING", "LINKED", "CANCELLED", "RECOVERY_REQUIRED"],
+      "retry": "link operation ID is idempotent",
+      "partial": "raw guest backup remains until LINKED is durable",
+      "invariants": ["guest merge does not duplicate grants", "paid entitlement follows server/provider truth", "conflict outcome is explicit", "multiple devices use server lock"]
+    },
+    "accountDeletion": {
+      "id": "transition.account_deletion.v1",
+      "states": ["ACTIVE", "DELETE_QUOTE_ISSUED", "CONFIRMED", "DELETION_PENDING", "ENTITLEMENT_RECONCILIATION", "DELETED", "RETENTION_EXCEPTION_RECORDED", "CANCELLED", "FAILED"],
+      "retry": "deletion request ID is idempotent",
+      "partial": "reload shows pending progress; repeated confirm does not duplicate provider cancellation or data erasure",
+      "invariants": ["in-app initiation is discoverable", "full account rather than suspension is deleted when no legal retention applies", "retained payment/fraud records record purpose and period", "subscription and refund handling are disclosed", "public web deletion resource is available for Google Play release"]
     }
-  ],
+  },
   "requiredFixtures": [
-    "normal",
+    "normal success",
     "duplicate request",
     "reload after accept",
-    "multiple tab race",
-    "network timeout before/after commit",
+    "multiple-tab race",
+    "network timeout before and after commit",
     "partial completion",
     "refund",
     "revocation",
     "restore",
+    "out-of-order webhook or RTDN",
     "older client",
     "migration alias",
-    "fraud/replay"
+    "fraud and replay",
+    "account deletion with and without legal retention"
   ],
-  "presealInvariant": "This contract cannot authorize Step 2 until the Round 008 seal validates it."
+  "globalInvariants": [
+    "Every persistent operation has an idempotency key, transaction ID and support-visible audit result.",
+    "Client uncertainty is represented as pending reconciliation rather than guessed success or failure.",
+    "Permanent economy and entitlement state is server authoritative.",
+    "This contract cannot authorize Step 2 until the Round 008 seal validates it."
+  ]
 }
