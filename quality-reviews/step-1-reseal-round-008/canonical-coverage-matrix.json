@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-canonical-coverage-matrix",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "status": "COMPLETE_PRESEAL",
+  "coverage": [
+    {"id": "CV-001", "requirement": "cat/catfolk idle incremental RPG; four named active members; temporary support separate", "authority": ["MASTER_SPEC.md", "FLOORS_1_10_DESIGN.md", "canonical/SCREEN_STATE_REGISTRY.json"], "status": "COVERED"},
+    {"id": "CV-002", "requirement": "merchant systems support combat and do not make company management the protagonist", "authority": ["MASTER_SPEC.md", "FLOORS_1_10_DESIGN.md"], "status": "COVERED"},
+    {"id": "CV-003", "requirement": "tap direct damage zero; auto battle and offline progress foundational; no mandatory collection/refill tapping", "authority": ["MASTER_SPEC.md", "FLOORS_1_10_DESIGN.md", "canonical/SCREEN_STATE_REGISTRY.json"], "status": "COVERED"},
+    {"id": "CV-004", "requirement": "unbounded visible tower; 100F milestone; 101F+ normal; data-driven districts/cycles/modifiers/repetition control", "authority": ["MASTER_SPEC.md", "FLOORS_1_10_DESIGN.md", "canonical/STEP2_DEPENDENCY_CLOSURE.json"], "status": "COVERED"},
+    {"id": "CV-005", "requirement": "arbitrary-precision representation and no unsafe Number, NaN, Infinity or silent rounding", "authority": ["MASTER_SPEC.md", "canonical/STEP2_DEPENDENCY_CLOSURE.json"], "status": "COVERED"},
+    {"id": "CV-006", "requirement": "one reset only; Floor 1 restart; loss/keep/gain; repeat same best gives no new ruby; fast reclear", "authority": ["MASTER_SPEC.md", "FLOORS_1_10_DESIGN.md", "canonical/STATE_TRANSITION_CONTRACT.json", "canonical/STEP2_DEPENDENCY_CLOSURE.json"], "status": "COVERED"},
+    {"id": "CV-007", "requirement": "uncapped coin levels, every-100 ruby evolution, delayed catch-up, continuation without evolution", "authority": ["MASTER_SPEC.md", "FLOORS_1_10_DESIGN.md", "canonical/STATE_TRANSITION_CONTRACT.json"], "status": "COVERED"},
+    {"id": "CV-008", "requirement": "rarity order N-R-RR-SR-SSR-UR; N/R deterministic, role-complete and long-term useful; no high-rarity core gate", "authority": ["MASTER_SPEC.md", "FLOORS_1_10_DESIGN.md", "canonical/STABLE_ID_REGISTRY.json", "canonical/STEP2_DEPENDENCY_CLOSURE.json"], "status": "COVERED"},
+    {"id": "CV-009", "requirement": "24 characters, 36 weapons, one weapon per active character and honest first-ten subset", "authority": ["canonical/STABLE_ID_REGISTRY.json", "FLOORS_1_10_DESIGN.md"], "status": "COVERED"},
+    {"id": "CV-010", "requirement": "separate character/weapon gacha; tickets; 100/200 targets; carryover; exchange; history; first-day SSR and SR+ weapon", "authority": ["MASTER_SPEC.md", "FLOORS_1_10_DESIGN.md", "canonical/SCREEN_STATE_REGISTRY.json", "canonical/STEP2_DEPENDENCY_CLOSURE.json"], "status": "COVERED"},
+    {"id": "CV-011", "requirement": "first-copy functionality, practical breakpoint, 20+ optional full mastery, diminishing returns and overflow", "authority": ["MASTER_SPEC.md", "FLOORS_1_10_DESIGN.md", "canonical/STABLE_ID_REGISTRY.json", "canonical/STATE_TRANSITION_CONTRACT.json", "canonical/STEP2_DEPENDENCY_CLOSURE.json"], "status": "COVERED"},
+    {"id": "CV-012", "requirement": "paid/free ruby ledgers, login tracks, payment, rewarded opt-in ads, no-ad F2P goals and bounded paid acceleration", "authority": ["MASTER_SPEC.md", "canonical/STABLE_ID_REGISTRY.json", "canonical/SCREEN_STATE_REGISTRY.json", "canonical/STATE_TRANSITION_CONTRACT.json", "canonical/STEP2_DEPENDENCY_CLOSURE.json"], "status": "COVERED"},
+    {"id": "CV-013", "requirement": "S01-S12 responsibilities and normal/error/retry/reload/multi-tab/refund/revocation/restore states", "authority": ["canonical/SCREEN_STATE_REGISTRY.json", "canonical/STATE_TRANSITION_CONTRACT.json"], "status": "COVERED"},
+    {"id": "CV-014", "requirement": "server authority for wallet, draw, pity, ownership, mastery, evolution, reset, login, ads, payment and entitlement", "authority": ["MASTER_SPEC.md", "canonical/STATE_TRANSITION_CONTRACT.json", "canonical/STEP2_DEPENDENCY_CLOSURE.json"], "status": "COVERED"},
+    {"id": "CV-015", "requirement": "stable IDs, read-only aliases, provenance-preserving migration and unknown-ID fail-closed", "authority": ["canonical/STABLE_ID_REGISTRY.json", "canonical/STEP2_DEPENDENCY_CLOSURE.json"], "status": "COVERED"},
+    {"id": "CV-016", "requirement": "Apple, Google, Japan, privacy, minor protection and release refresh gates", "authority": ["canonical/POLICY_RELEASE_GATES.json", "quality-reviews/step-1-reseal-round-008/platform-policy-audit.md"], "status": "COVERED_PRESEAL_RELEASE_IMPLEMENTATION_DEFERRED"},
+    {"id": "CV-017", "requirement": "competitor adoption/rejection/transformation and copy-prohibited boundary", "authority": ["quality-reviews/step-1-reseal-round-008/competitive-research.md", "quality-reviews/step-1-reseal-round-008/source-register-route-01-2.json"], "status": "COVERED"},
+    {"id": "CV-018", "requirement": "Step 2 fields, enums, units, invariants, fixtures, migrations, validator and result/evidence closure", "authority": ["canonical/STEP2_DEPENDENCY_CLOSURE.json"], "status": "COVERED"},
+    {"id": "CV-019", "requirement": "minimum 3 builds x 5 personas x 1000 seeds plus separate Monte Carlo/state tests and long horizons", "authority": ["canonical/STEP2_DEPENDENCY_CLOSURE.json"], "status": "COVERED_NOT_EXECUTED_IN_STEP1"},
+    {"id": "CV-020", "requirement": "old V1 executable and old workflow cannot promote current product", "authority": ["simulation/INPUT_CONTRACT.md", "simulation/CURRENT_STATUS.json", ".github/workflows/CURRENT_STATUS.md", "canonical/STEP2_DEPENDENCY_CLOSURE.json"], "status": "COVERED"}
+  ],
+  "summary": {
+    "requirementCount": 20,
+    "uncoveredCount": 0,
+    "implementationDeferredCount": 2,
+    "implementationDeferredMeaning": "Semantics are fixed in Step 1; executable simulation or release implementation remains assigned to later authorized steps."
+  },
+  "sealRule": "Covered PRESEAL artifacts become current sealed canon only when the Round 008 final judge, exact content/evidence binding and seal pass with unresolved P0/P1 zero."
+}
