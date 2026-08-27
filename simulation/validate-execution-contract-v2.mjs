@@ -5,16 +5,12 @@ import process from 'node:process';
 import { assertSchema } from './lib-v2/schema-validator.mjs';
 
 const contractPath = resolve(process.argv[2] ?? 'simulation/execution-contract-v2.json');
-const schemaPath = resolve('simulation/execution-contract-v2.schema.json');
-const candidatePath = resolve('simulation/candidate-v2.json');
-const planPath = resolve('simulation/run-plan-v2.json');
 const [contract, schema, candidate, plan] = await Promise.all([
   readFile(contractPath, 'utf8').then(JSON.parse),
-  readFile(schemaPath, 'utf8').then(JSON.parse),
-  readFile(candidatePath, 'utf8').then(JSON.parse),
-  readFile(planPath, 'utf8').then(JSON.parse),
+  readFile(resolve('simulation/execution-contract-v2.schema.json'), 'utf8').then(JSON.parse),
+  readFile(resolve('simulation/candidate-v2.json'), 'utf8').then(JSON.parse),
+  readFile(resolve('simulation/run-plan-v2.json'), 'utf8').then(JSON.parse),
 ]);
-
 const errors = [];
 const check = (condition, code, message) => { if (!condition) errors.push({ code, message }); };
 const eq = (left, right) => JSON.stringify(left) === JSON.stringify(right);
@@ -30,18 +26,26 @@ const unsigned = (value, path, { positive = false } = {}) => {
   return parsed;
 };
 const signed = (value, path) => {
-  check(typeof value === 'string' && /^-?(0|[1-9][0-9]*)$/.test(value) && value !== '-0', 'EXEC_SIGNED', `${path} must be a canonical signed integer string`);
-  return typeof value === 'string' && /^-?(0|[1-9][0-9]*)$/.test(value) && value !== '-0' ? BigInt(value) : 0n;
+  const valid = typeof value === 'string' && /^-?(0|[1-9][0-9]*)$/.test(value) && value !== '-0';
+  check(valid, 'EXEC_SIGNED', `${path} must be a canonical signed integer string`);
+  return valid ? BigInt(value) : 0n;
 };
 
-try { assertSchema(contract, schema); } catch (error) {
+try {
+  assertSchema(contract, schema);
+} catch (error) {
   for (const detail of error.errors ?? [{ path: '#', keyword: 'schema', message: error.message }]) errors.push({ code: 'SCHEMA', message: `${detail.path} ${detail.keyword}: ${detail.message}` });
 }
 
 exactKeys(contract, ['schemaVersion','contractId','candidateId','scenarioAlgorithmVersion','executionVersion','roundingVersion','sourcePaths','model','statistics','partitions','highVolumeSuites','resultContracts','executionGuard'], '#');
-check(contract.candidateId === candidate.meta.candidateId, 'EXEC_CANDIDATE_ID', 'candidateId differs from candidate-v2');
+check(contract.schemaVersion === '2.1.0' && plan.schemaVersion === '2.1.0', 'EXEC_SCHEMA_VERSION', 'execution contract and run plan must both be 2.1.0');
+check(contract.candidateId === candidate.meta.candidateId && contract.candidateId === plan.candidateId, 'EXEC_CANDIDATE_ID', 'candidateId binding mismatch');
+check(contract.scenarioAlgorithmVersion === plan.scenarioAlgorithmVersion, 'EXEC_SCENARIO_VERSION', 'scenario algorithm differs from run plan');
+check(contract.executionVersion === plan.executionVersion, 'EXEC_EXECUTION_VERSION', 'execution version differs from run plan');
 check(contract.roundingVersion === candidate.meta.roundingVersion && contract.roundingVersion === plan.roundingVersion, 'EXEC_ROUNDING', 'rounding version mismatch');
-check(contract.sourcePaths?.candidate === 'simulation/candidate-v2.json' && contract.sourcePaths?.runPlan === 'simulation/run-plan-v2.json' && contract.sourcePaths?.acceptance === 'quality-reviews/step-2-executable-contract-v2/acceptance-matrix.json', 'EXEC_SOURCE_PATHS', 'source paths mismatch');
+exactKeys(contract.sourcePaths, ['candidate','runPlan','acceptance'], '#/sourcePaths');
+check(eq(contract.sourcePaths, { candidate: 'simulation/candidate-v2.json', runPlan: 'simulation/run-plan-v2.json', acceptance: 'quality-reviews/step-2-executable-contract-v2/acceptance-matrix.json' }), 'EXEC_SOURCE_PATHS', 'source paths mismatch');
+check(eq(plan.executionContract, { path: 'simulation/execution-contract-v2.json', schemaPath: 'simulation/execution-contract-v2.schema.json', validatorPath: 'simulation/validate-execution-contract-v2.mjs' }), 'EXEC_PLAN_BINDING', 'run-plan executionContract binding mismatch');
 
 const builds = ['build.combat','build.reinforcement','build.commerce'];
 const personas = ['no-ad-f2p','rewarded-ad-f2p','monthly-pass','controlled-payer','high-spend-stress'];
@@ -50,6 +54,7 @@ check(eq(plan.builds, builds) && eq(candidate.builds.map((entry) => entry.id), b
 check(eq(plan.personas, personas) && eq(candidate.personas.map((entry) => entry.id), personas), 'EXEC_PERSONAS', 'persona set mismatch');
 check(eq(plan.horizons.map((entry) => entry.id), horizons), 'EXEC_HORIZONS', 'horizon set mismatch');
 
+exactKeys(contract.model, ['firstReset','progression','repeatedReset'], '#/model');
 const firstReset = contract.model?.firstReset;
 exactKeys(firstReset, ['personaBaseMinutes','buildAdjustmentMinutes','jitterMinimumMinutes','jitterMaximumMinutes','minimumMinutes'], '#/model/firstReset');
 check(eq(Object.keys(firstReset?.personaBaseMinutes ?? {}), personas), 'EXEC_PERSONA_BASE_KEYS', 'first reset persona keys mismatch');
@@ -96,6 +101,8 @@ for (const [name, expected] of Object.entries(expectedPartitions)) {
 check(contract.partitions.qualification.namespace === plan.seeds.qualificationNamespace && contract.partitions.qualification.seedsPerBuildPersona === plan.seeds.qualificationPerCell, 'EXEC_QUALIFICATION_BINDING', 'qualification partition differs from run plan');
 check(contract.partitions.calibration.namespace === plan.seeds.calibrationNamespace && contract.partitions.calibration.seedsPerBuildPersona === plan.seeds.calibrationPerCell, 'EXEC_CALIBRATION_BINDING', 'calibration partition differs from run plan');
 check(contract.partitions.holdout.namespace === plan.seeds.holdoutNamespace && contract.partitions.holdout.seedsPerBuildPersona === plan.seeds.holdoutPerCell, 'EXEC_HOLDOUT_BINDING', 'holdout partition differs from run plan');
+check(BigInt(plan.scenarioCount.calibration) === 15n * BigInt(contract.partitions.calibration.seedsPerBuildPersona), 'EXEC_CALIBRATION_COUNT', 'calibration scenario count differs from partition contract');
+check(BigInt(plan.scenarioCount.holdout) === 15n * BigInt(contract.partitions.holdout.seedsPerBuildPersona), 'EXEC_HOLDOUT_COUNT', 'holdout scenario count differs from partition contract');
 check(new Set(Object.values(contract.partitions).map((entry) => entry.namespace)).size === 3, 'EXEC_NAMESPACE_OVERLAP', 'partition namespaces overlap');
 
 const suiteIds = ['gacha-tails','pity-conformance','duplicate-skew-overflow','refund-replay-race','state-machine-model','large-number-properties'];
@@ -110,11 +117,12 @@ for (const [index, id] of suiteIds.entries()) {
 }
 
 exactKeys(contract.resultContracts, ['qualificationSchema','qualificationValidator','gameplaySchema','gameplayValidator','highVolumeSchema','highVolumeValidator'], '#/resultContracts');
+check(contract.resultContracts.qualificationSchema === plan.output.qualificationSchemaPath && contract.resultContracts.gameplaySchema === plan.output.gameplaySchemaPath && contract.resultContracts.highVolumeSchema === plan.output.highVolumeSchemaPath, 'EXEC_RESULT_PLAN_BINDING', 'result schemas differ from run plan');
 for (const path of Object.values(contract.resultContracts ?? {})) {
   try { await access(resolve(path)); } catch { errors.push({ code: 'EXEC_RESULT_DEPENDENCY', message: `missing result dependency ${path}` }); }
 }
 exactKeys(contract.executionGuard, ['fullExecutionOwner','requiredOwnerArgument','requiredEnvironment','contractSmokeOwner','partialResultPromotionForbidden','holdoutMayNotEnterTuningOutput'], '#/executionGuard');
-check(contract.executionGuard?.fullExecutionOwner === 'STEP3' && contract.executionGuard?.requiredOwnerArgument === 'STEP3' && contract.executionGuard?.requiredEnvironment === 'CT_STEP3_AUTHORIZED=1' && contract.executionGuard?.contractSmokeOwner === 'STEP2' && contract.executionGuard?.partialResultPromotionForbidden === true && contract.executionGuard?.holdoutMayNotEnterTuningOutput === true, 'EXEC_GUARD', 'execution guard mismatch');
+check(contract.executionGuard?.fullExecutionOwner === plan.fullExecutionOwner && contract.executionGuard?.requiredOwnerArgument === 'STEP3' && contract.executionGuard?.requiredEnvironment === 'CT_STEP3_AUTHORIZED=1' && contract.executionGuard?.contractSmokeOwner === 'STEP2' && contract.executionGuard?.partialResultPromotionForbidden === true && contract.executionGuard?.holdoutMayNotEnterTuningOutput === true, 'EXEC_GUARD', 'execution guard mismatch');
 
 if (errors.length) {
   console.error(JSON.stringify({ ok: false, executionContract: contractPath, errorCount: errors.length, errors }, null, 2));
