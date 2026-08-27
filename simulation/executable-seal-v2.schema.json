@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cats-tower-executable-seal-v2.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion","sealId","repository","branch","semanticCommit","semanticTree","acceptance","qualification","critics","finalJudge","bindings","verdict"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "sealId": {"type": "string", "minLength": 1},
+    "repository": {"const": "2hg7trp7rv-design/cats_tower"},
+    "branch": {"const": "kimi"},
+    "semanticCommit": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "semanticTree": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "acceptance": {"$ref": "#/$defs/binding"},
+    "qualification": {"type": "object", "additionalProperties": false, "required": ["path","blob","scenarioCount","digest","balanceVerdict"], "properties": {"path":{"type":"string"},"blob":{"type":"string","pattern":"^[a-f0-9]{40}$"},"scenarioCount":{"const":"30"},"digest":{"type":"string","pattern":"^[a-f0-9]{64}$"},"balanceVerdict":{"const":"NOT_EVALUATED_STEP2"}}},
+    "critics": {"type":"object","additionalProperties":false,"required":["summary","count","unresolvedP0","unresolvedP1"],"properties":{"summary":{"$ref":"#/$defs/binding"},"count":{"minimum":5,"type":"integer"},"unresolvedP0":{"const":0},"unresolvedP1":{"const":0}}},
+    "finalJudge": {"$ref": "#/$defs/binding"},
+    "bindings": {"type":"array","minItems":12,"items":{"$ref":"#/$defs/binding"}},
+    "verdict": {"const": "SEALED_STEP2_EXECUTABLE_CONTRACT"}
+  },
+  "$defs": {
+    "binding": {"type":"object","additionalProperties":false,"required":["path","blob"],"properties":{"path":{"type":"string","minLength":1},"blob":{"type":"string","pattern":"^[a-f0-9]{40}$"}}}
+  }
+}
