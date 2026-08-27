@@ -1,13 +1,51 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "recordId": "cats-tower-step2-tower-sequence-input-evidence-anchor-001",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "contentCommit": "408ce59760945ec032bec6e2b87e4b9bc824848e",
   "contentTree": "3c2fc02fc55eff6aeec2016cb9d014148aec5b11",
-  "purpose": "EXACT_SHA_STEP2_CI_ANCHOR",
+  "evidenceAnchorCommit": "3ff079656869ceb0b0f9fdff94c9762b1036f133",
+  "evidenceAnchorTree": "b8cad1ff924d8cb9dcb4a8b37c01c240d44010ec",
+  "dedicatedCi": {
+    "workflowPath": ".github/workflows/verify-step-2-v2.yml",
+    "workflowRunId": "33094437192",
+    "jobId": "98595529506",
+    "headSha": "3ff079656869ceb0b0f9fdff94c9762b1036f133",
+    "conclusion": "SUCCESS",
+    "runtimeVersion": "v22.23.2",
+    "sourceReadbackMode": "FULL_GIT_BLOB_READBACK",
+    "verifierVerdict": "CONTENT_PHASE_PASS_STEP2_IN_PROGRESS"
+  },
+  "qualificationEvidence": {
+    "scenarioCount": "30",
+    "digest": "a24fa5a4a12cf132ac477c80e77431cd0b97ab070bbbef83c3881c160f42562c",
+    "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+    "executionVersion": "cats-tower-step3-executor-v1.1.0",
+    "reproduced": true,
+    "balanceVerdict": "NOT_EVALUATED_STEP2"
+  },
+  "verificationCoverage": {
+    "requiredContentPathCount": "43",
+    "simulationModuleSyntaxCount": "25",
+    "boundaryModifierSequenceCaseCount": "4",
+    "boundaryBackgroundCaseCount": "6",
+    "executionContractNegativeCaseCount": "18",
+    "gameplayResultNegativeCaseCount": "12",
+    "highVolumeResultNegativeCaseCount": "15",
+    "totalNewAdversarialCaseCount": "45",
+    "calibrationHoldoutScenarioDigestOverlap": "0",
+    "calibrationHoldoutInputDigestOverlap": "0",
+    "highVolumeContractSmokeSuiteCount": "6",
+    "migrationIdempotent": true,
+    "rawLegacyBackupVerified": true,
+    "step3ExecutionGuardsVerified": true
+  },
+  "purpose": "IMPLEMENTATION_AND_EXACT_SHA_CI_EVIDENCE",
   "claimsCompletion": false,
   "balanceQualification": "NOT_EVALUATED_STEP2",
   "step3AuthorizationClaimed": false,
+  "physicalIPhoneVerification": "NOT_VERIFIED",
+  "vercelChanged": false,
   "productionChanged": false
 }
