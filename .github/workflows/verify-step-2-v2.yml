@@ -1,0 +1,32 @@
+name: Verify Step 2 V2 executable contract
+
+on:
+  push:
+    branches: [kimi]
+    paths:
+      - 'simulation/**'
+      - 'quality-reviews/step-2-executable-contract-v2/**'
+      - '.github/workflows/verify-step-2-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: step2-v2-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify-step2-v2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: kimi
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify source-bound V2 contract
+        run: node simulation/verify-step2-v2.mjs
