@@ -1,0 +1,586 @@
+name: Diagnose Step 2 V2 gacha item-selection binding
+
+on:
+  push:
+    branches: [kimi]
+    paths:
+      - '.github/workflows/diagnose-step2-v2-gacha-item-selection.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: diagnose-step2-v2-gacha-item-selection-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply gacha item-selection repairs in working tree only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          import json
+
+          def replace_once(path, old, new):
+              file = Path(path)
+              text = file.read_text(encoding='utf-8')
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{path}: expected one source fragment, found {count}: {old[:120]}')
+              file.write_text(text.replace(old, new), encoding='utf-8')
+
+          def replace_between(path, start, end, replacement):
+              file = Path(path)
+              text = file.read_text(encoding='utf-8')
+              left = text.find(start)
+              if left < 0:
+                  raise SystemExit(f'{path}: start marker not found: {start}')
+              right = text.find(end, left)
+              if right < 0:
+                  raise SystemExit(f'{path}: end marker not found: {end}')
+              file.write_text(text[:left] + replacement + text[right:], encoding='utf-8')
+
+          execution_path = Path('simulation/execution-contract-v2.json')
+          execution = json.loads(execution_path.read_text(encoding='utf-8'))
+          execution['model']['gachaItemSelection'] = {
+              'catalogEligibility': 'all-catalog-items-by-rarity-v1',
+              'acquisitionFieldSemantics': 'guaranteed-route-not-exclusive-v1',
+              'selectionWithinRarity': 'uniform-stable-id-v1',
+              'nonFeaturedUrExcludesFeatured': True,
+              'character': {
+                  'catalogPath': 'characters.catalog',
+                  'standardBannerId': 'banner.character.standard',
+                  'featuredBannerId': 'banner.character.featured',
+                  'featuredItemId': 'character.launch.024',
+              },
+              'weapon': {
+                  'catalogPath': 'weapons.catalog',
+                  'standardBannerId': 'banner.weapon.standard',
+                  'featuredBannerId': 'banner.weapon.featured',
+                  'featuredItemId': 'weapon.launch.036',
+              },
+          }
+          for suite in execution['highVolumeSuites']:
+              if suite['id'] == 'gacha-tails':
+                  suite['implementationVersion'] = 'gacha-tails-v3'
+              elif suite['id'] == 'duplicate-skew-overflow':
+                  suite['implementationVersion'] = 'duplicate-skew-overflow-v3'
+          execution_path.write_text(json.dumps(execution, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          schema_path = Path('simulation/execution-contract-v2.schema.json')
+          schema = json.loads(schema_path.read_text(encoding='utf-8'))
+          model_schema = schema['properties']['model']
+          if 'gachaItemSelection' not in model_schema['required']:
+              model_schema['required'].append('gachaItemSelection')
+          model_schema['properties']['gachaItemSelection'] = {
+              'type': 'object',
+              'additionalProperties': False,
+              'required': ['catalogEligibility','acquisitionFieldSemantics','selectionWithinRarity','nonFeaturedUrExcludesFeatured','character','weapon'],
+              'properties': {
+                  'catalogEligibility': {'const': 'all-catalog-items-by-rarity-v1'},
+                  'acquisitionFieldSemantics': {'const': 'guaranteed-route-not-exclusive-v1'},
+                  'selectionWithinRarity': {'const': 'uniform-stable-id-v1'},
+                  'nonFeaturedUrExcludesFeatured': {'const': True},
+                  'character': {
+                      'type': 'object',
+                      'additionalProperties': False,
+                      'required': ['catalogPath','standardBannerId','featuredBannerId','featuredItemId'],
+                      'properties': {
+                          'catalogPath': {'const': 'characters.catalog'},
+                          'standardBannerId': {'const': 'banner.character.standard'},
+                          'featuredBannerId': {'const': 'banner.character.featured'},
+                          'featuredItemId': {'const': 'character.launch.024'},
+                      },
+                  },
+                  'weapon': {
+                      'type': 'object',
+                      'additionalProperties': False,
+                      'required': ['catalogPath','standardBannerId','featuredBannerId','featuredItemId'],
+                      'properties': {
+                          'catalogPath': {'const': 'weapons.catalog'},
+                          'standardBannerId': {'const': 'banner.weapon.standard'},
+                          'featuredBannerId': {'const': 'banner.weapon.featured'},
+                          'featuredItemId': {'const': 'weapon.launch.036'},
+                      },
+                  },
+              },
+          }
+          schema_path.write_text(json.dumps(schema, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          replace_once(
+              'simulation/validate-execution-contract-v2.mjs',
+              "exactKeys(contract.model, ['firstReset','progression','repeatedReset'], '#/model');",
+              "exactKeys(contract.model, ['firstReset','progression','repeatedReset','gachaItemSelection'], '#/model');",
+          )
+          gacha_validation = '''const gachaSelection = contract.model?.gachaItemSelection;
+          exactKeys(gachaSelection, ['catalogEligibility','acquisitionFieldSemantics','selectionWithinRarity','nonFeaturedUrExcludesFeatured','character','weapon'], '#/model/gachaItemSelection');
+          check(gachaSelection?.catalogEligibility === 'all-catalog-items-by-rarity-v1' && gachaSelection?.acquisitionFieldSemantics === 'guaranteed-route-not-exclusive-v1' && gachaSelection?.selectionWithinRarity === 'uniform-stable-id-v1' && gachaSelection?.nonFeaturedUrExcludesFeatured === true, 'EXEC_GACHA_SELECTION_POLICY', 'gacha item-selection policy mismatch');
+          const allBanners = [...candidate.gacha.characterPools, ...candidate.gacha.weaponPools];
+          const gachaKinds = {
+            character: {
+              catalog: candidate.characters.catalog,
+              banners: candidate.gacha.characterPools,
+              expected: ['characters.catalog','banner.character.standard','banner.character.featured','character.launch.024'],
+            },
+            weapon: {
+              catalog: candidate.weapons.catalog,
+              banners: candidate.gacha.weaponPools,
+              expected: ['weapons.catalog','banner.weapon.standard','banner.weapon.featured','weapon.launch.036'],
+            },
+          };
+          for (const [kind, binding] of Object.entries(gachaKinds)) {
+            const config = gachaSelection?.[kind];
+            exactKeys(config, ['catalogPath','standardBannerId','featuredBannerId','featuredItemId'], `#/model/gachaItemSelection/${kind}`);
+            check(eq([config?.catalogPath, config?.standardBannerId, config?.featuredBannerId, config?.featuredItemId], binding.expected), 'EXEC_GACHA_SELECTION_POLICY', `${kind} gacha item-selection binding mismatch`);
+            const standardBanner = allBanners.find((entry) => entry.id === config?.standardBannerId);
+            const featuredBanner = allBanners.find((entry) => entry.id === config?.featuredBannerId);
+            check(Boolean(standardBanner) && Boolean(featuredBanner) && binding.banners.some((entry) => entry.id === config?.standardBannerId) && binding.banners.some((entry) => entry.id === config?.featuredBannerId), 'EXEC_GACHA_BANNER', `${kind} standard or featured banner is missing from its pool`);
+            check(standardBanner?.kind === kind && featuredBanner?.kind === kind, 'EXEC_GACHA_BANNER_KIND', `${kind} banner kind mismatch`);
+            const featuredItem = binding.catalog.find((entry) => entry.id === config?.featuredItemId);
+            check(Boolean(featuredItem) && featuredItem?.baseRarity === 'UR', 'EXEC_GACHA_FEATURED_ITEM', `${kind} featured item must exist and be UR`);
+            const rateTable = candidate.gacha.rates.find((entry) => entry.id === featuredBanner?.rateTable);
+            check(Boolean(rateTable), 'EXEC_GACHA_RATE_TABLE', `${kind} featured banner rate table is missing`);
+            const rarities = rateTable?.entries?.map((entry) => entry.rarity) ?? [];
+            for (const rarity of rarities) {
+              check(binding.catalog.some((entry) => entry.baseRarity === rarity), 'EXEC_GACHA_RARITY_COVERAGE', `${kind} has no item for rarity ${rarity}`);
+            }
+            const nonFeaturedUr = binding.catalog.filter((entry) => entry.baseRarity === 'UR' && entry.id !== config?.featuredItemId);
+            check(nonFeaturedUr.length > 0, 'EXEC_GACHA_NONFEATURED_UR_POOL', `${kind} requires at least one non-featured UR item`);
+          }
+
+          '''
+          replace_once(
+              'simulation/validate-execution-contract-v2.mjs',
+              "exactKeys(contract.statistics, ['method','percentiles','sort','emptyInput'], '#/statistics');",
+              gacha_validation + "exactKeys(contract.statistics, ['method','percentiles','sort','emptyInput'], '#/statistics');",
+          )
+          replace_once(
+              'simulation/validate-execution-contract-v2.mjs',
+              "  'gacha-tails': 'gacha-tails-v2',",
+              "  'gacha-tails': 'gacha-tails-v3',",
+          )
+          replace_once(
+              'simulation/validate-execution-contract-v2.mjs',
+              "  'duplicate-skew-overflow': 'duplicate-skew-overflow-v2',",
+              "  'duplicate-skew-overflow': 'duplicate-skew-overflow-v3',",
+          )
+
+          gacha_engine = '''const RARITIES = ['N','R','RR','SR','SSR','UR'];
+
+          function gachaItemContext(candidate, execution, kind) {
+            const selection = execution.model?.gachaItemSelection?.[kind];
+            if (!selection) throw new Error(`MISSING_GACHA_ITEM_SELECTION:${kind}`);
+            const catalog = (kind === 'character' ? candidate.characters.catalog : candidate.weapons.catalog).slice().sort((left, right) => left.id.localeCompare(right.id));
+            const banners = kind === 'character' ? candidate.gacha.characterPools : candidate.gacha.weaponPools;
+            const standardBanner = banners.find((entry) => entry.id === selection.standardBannerId);
+            const featuredBanner = banners.find((entry) => entry.id === selection.featuredBannerId);
+            const featuredItem = catalog.find((entry) => entry.id === selection.featuredItemId);
+            if (!standardBanner || !featuredBanner || standardBanner.kind !== kind || featuredBanner.kind !== kind) throw new Error(`INVALID_GACHA_BANNER_BINDING:${kind}`);
+            if (!featuredItem || featuredItem.baseRarity !== 'UR') throw new Error(`INVALID_GACHA_FEATURED_ITEM:${kind}`);
+            const rateTable = candidate.gacha.rates.find((entry) => entry.id === featuredBanner.rateTable);
+            if (!rateTable) throw new Error(`MISSING_GACHA_RATE_TABLE:${featuredBanner.rateTable}`);
+            const byRarity = new Map(RARITIES.map((rarity) => [rarity, catalog.filter((entry) => entry.baseRarity === rarity)]));
+            for (const rarity of rateTable.entries.map((entry) => entry.rarity)) {
+              if ((byRarity.get(rarity) ?? []).length === 0) throw new Error(`EMPTY_GACHA_RARITY_POOL:${kind}:${rarity}`);
+            }
+            if (selection.nonFeaturedUrExcludesFeatured !== undefined) throw new Error(`UNEXPECTED_KIND_LEVEL_SELECTION_POLICY:${kind}`);
+            const nonFeaturedUr = (byRarity.get('UR') ?? []).filter((entry) => entry.id !== featuredItem.id);
+            if (execution.model.gachaItemSelection.nonFeaturedUrExcludesFeatured && nonFeaturedUr.length === 0) throw new Error(`EMPTY_NONFEATURED_UR_POOL:${kind}`);
+            return {
+              kind,
+              selection,
+              catalog,
+              byRarity,
+              featuredItem,
+              featuredBanner,
+              rateTable,
+              rateDistribution: distribution(rateTable.entries),
+            };
+          }
+
+          function selectGachaItem(rng, execution, context, rarity, featured) {
+            if (featured) {
+              if (rarity !== 'UR') throw new Error(`FEATURED_NON_UR_RESULT:${context.kind}:${rarity}`);
+              return context.featuredItem;
+            }
+            let pool = context.byRarity.get(rarity) ?? [];
+            if (rarity === 'UR' && execution.model.gachaItemSelection.nonFeaturedUrExcludesFeatured) pool = pool.filter((entry) => entry.id !== context.featuredItem.id);
+            if (pool.length === 0) throw new Error(`EMPTY_GACHA_ITEM_POOL:${context.kind}:${rarity}:${featured}`);
+            return pool[Number(rng.nextBelow(BigInt(pool.length)))];
+          }
+
+          function drawGachaItem(candidate, execution, context, rng, drawsSinceUR, featuredProgress) {
+            const naturalRarity = sampleDistribution(rng, context.rateDistribution);
+            const nextDraw = BigInt(drawsSinceUR) + 1n;
+            const nextFeatured = BigInt(featuredProgress) + 1n;
+            const willBeUR = naturalRarity === 'UR' || nextDraw >= BigInt(candidate.gacha.hardPity.draws) || nextFeatured >= BigInt(candidate.gacha.featuredGuarantee.draws);
+            const featuredRollHit = willBeUR && nextFeatured < BigInt(candidate.gacha.featuredGuarantee.draws) && sampleProbability(rng, candidate.gacha.featuredGuarantee.featuredShareWithinUR);
+            const outcome = pityOutcome({
+              drawsSinceUR,
+              featuredProgress,
+              naturalRarity,
+              featuredRollHit,
+              hardPity: candidate.gacha.hardPity.draws,
+              featuredGuarantee: candidate.gacha.featuredGuarantee.draws,
+            });
+            const item = selectGachaItem(rng, execution, context, outcome.rarity, outcome.featured);
+            return { naturalRarity, featuredRollHit, outcome, item };
+          }
+
+          function zeroRarityCounts() {
+            return Object.fromEntries(RARITIES.map((rarity) => [rarity, 0n]));
+          }
+
+          function simulateGachaPool(candidate, execution, samples, namespace, poolKind) {
+            const context = gachaItemContext(candidate, execution, poolKind);
+            const firstUr = new UnsignedHistogram();
+            const firstFeatured = new UnsignedHistogram();
+            const seen = new Set();
+            const rarityCounts = zeroRarityCounts();
+            const counters = {
+              totalDraws: 0n,
+              featuredOutputs: 0n,
+              featuredItemMismatches: 0n,
+              nonFeaturedUrFeaturedViolations: 0n,
+              hardPityTriggered: 0n,
+              featuredGuaranteeTriggered: 0n,
+              featuredRollHits: 0n,
+              maximumDrawsToFeatured: 0n,
+              boundaryViolations: 0n,
+            };
+            const hardPity = candidate.gacha.hardPity.draws;
+            const featuredGuarantee = candidate.gacha.featuredGuarantee.draws;
+            for (let sample = 0; sample < samples; sample += 1) {
+              const rng = new DeterministicRng(`${namespace}|${poolKind}|${sample}`);
+              let drawsSinceUR = '0';
+              let featuredProgress = '0';
+              let firstUrDraw = 0n;
+              let featuredDraw = 0n;
+              for (let draw = 1n; draw <= BigInt(featuredGuarantee); draw += 1n) {
+                const result = drawGachaItem(candidate, execution, context, rng, drawsSinceUR, featuredProgress);
+                const { outcome, item, featuredRollHit } = result;
+                counters.totalDraws += 1n;
+                rarityCounts[outcome.rarity] += 1n;
+                seen.add(item.id);
+                if (outcome.hardPityTriggered) counters.hardPityTriggered += 1n;
+                if (outcome.featuredGuaranteeTriggered) counters.featuredGuaranteeTriggered += 1n;
+                if (featuredRollHit && outcome.featured) counters.featuredRollHits += 1n;
+                if (outcome.featured) {
+                  counters.featuredOutputs += 1n;
+                  if (item.id !== context.featuredItem.id) counters.featuredItemMismatches += 1n;
+                }
+                if (outcome.rarity === 'UR' && !outcome.featured && item.id === context.featuredItem.id) counters.nonFeaturedUrFeaturedViolations += 1n;
+                if (outcome.rarity === 'UR' && firstUrDraw === 0n) firstUrDraw = draw;
+                drawsSinceUR = outcome.nextDrawsSinceUR;
+                featuredProgress = outcome.nextFeaturedProgress;
+                if (outcome.featured) { featuredDraw = draw; break; }
+              }
+              if (firstUrDraw === 0n || firstUrDraw > BigInt(hardPity) || featuredDraw === 0n || featuredDraw > BigInt(featuredGuarantee)) counters.boundaryViolations += 1n;
+              if (featuredDraw > counters.maximumDrawsToFeatured) counters.maximumDrawsToFeatured = featuredDraw;
+              firstUr.add(firstUrDraw.toString());
+              firstFeatured.add(featuredDraw.toString());
+            }
+            return { context, firstUr: firstUr.summary(), firstFeatured: firstFeatured.summary(), seen, rarityCounts, counters };
+          }
+
+          function gachaPoolCounters(prefix, result, samples) {
+            return {
+              [`${prefix}Samples`]: BigInt(samples),
+              [`${prefix}PoolItemCount`]: BigInt(result.context.catalog.length),
+              [`${prefix}TotalDraws`]: result.counters.totalDraws,
+              [`${prefix}UniqueItemsSeen`]: BigInt(result.seen.size),
+              [`${prefix}FeaturedOutputs`]: result.counters.featuredOutputs,
+              [`${prefix}FeaturedItemMismatches`]: result.counters.featuredItemMismatches,
+              [`${prefix}NonFeaturedUrFeaturedViolations`]: result.counters.nonFeaturedUrFeaturedViolations,
+              [`${prefix}HardPityTriggered`]: result.counters.hardPityTriggered,
+              [`${prefix}FeaturedGuaranteeTriggered`]: result.counters.featuredGuaranteeTriggered,
+              [`${prefix}FeaturedRollHits`]: result.counters.featuredRollHits,
+              [`${prefix}MaximumDrawsToFeatured`]: result.counters.maximumDrawsToFeatured,
+              [`${prefix}RarityNDraws`]: result.rarityCounts.N,
+              [`${prefix}RarityRDraws`]: result.rarityCounts.R,
+              [`${prefix}RarityRRDraws`]: result.rarityCounts.RR,
+              [`${prefix}RaritySRDraws`]: result.rarityCounts.SR,
+              [`${prefix}RaritySSRDraws`]: result.rarityCounts.SSR,
+              [`${prefix}RarityURDraws`]: result.rarityCounts.UR,
+            };
+          }
+
+          function gachaTails(candidate, execution, samples, namespace) {
+            const character = simulateGachaPool(candidate, execution, samples, namespace, 'character');
+            const weapon = simulateGachaPool(candidate, execution, samples, namespace, 'weapon');
+            return {
+              primary: character.firstUr,
+              secondary: character.firstFeatured,
+              tertiary: weapon.firstUr,
+              quaternary: weapon.firstFeatured,
+              counters: {
+                ...gachaPoolCounters('character', character, samples),
+                ...gachaPoolCounters('weapon', weapon, samples),
+                maximumDrawsToFeatured: character.counters.maximumDrawsToFeatured > weapon.counters.maximumDrawsToFeatured ? character.counters.maximumDrawsToFeatured : weapon.counters.maximumDrawsToFeatured,
+                boundaryViolations: character.counters.boundaryViolations + weapon.counters.boundaryViolations,
+              },
+            };
+          }
+
+          '''
+          replace_between('simulation/engine-v2/high-volume.mjs', 'function simulateGachaPool(', 'function pityConformance(', gacha_engine)
+
+          duplicate_engine = '''function simulateDuplicateTrack(candidate, execution, track, samples, namespace, kind) {
+            const context = gachaItemContext(candidate, execution, kind);
+            const copies = new Map(context.catalog.map((entry) => [entry.id, 0n]));
+            const effectiveCopies = new UnsignedHistogram();
+            const overflowCredit = new UnsignedHistogram();
+            const rarityCounts = zeroRarityCounts();
+            let drawsSinceUR = '0';
+            let featuredProgress = '0';
+            let featuredCopies = 0n;
+            let featuredItemMismatches = 0n;
+            let nonFeaturedUrFeaturedViolations = 0n;
+            let hardPityTriggered = 0n;
+            let featuredGuaranteeTriggered = 0n;
+            let featuredRollHits = 0n;
+            const rng = new DeterministicRng(`${namespace}|${kind}|draw-stream`);
+            for (let sample = 0; sample < samples; sample += 1) {
+              const result = drawGachaItem(candidate, execution, context, rng, drawsSinceUR, featuredProgress);
+              const { outcome, item, featuredRollHit } = result;
+              rarityCounts[outcome.rarity] += 1n;
+              if (outcome.hardPityTriggered) hardPityTriggered += 1n;
+              if (outcome.featuredGuaranteeTriggered) featuredGuaranteeTriggered += 1n;
+              if (featuredRollHit && outcome.featured) featuredRollHits += 1n;
+              if (outcome.featured) {
+                featuredCopies += 1n;
+                if (item.id !== context.featuredItem.id) featuredItemMismatches += 1n;
+              }
+              if (outcome.rarity === 'UR' && !outcome.featured && item.id === context.featuredItem.id) nonFeaturedUrFeaturedViolations += 1n;
+              drawsSinceUR = outcome.nextDrawsSinceUR;
+              featuredProgress = outcome.nextFeaturedProgress;
+              const nextCopies = (copies.get(item.id) ?? 0n) + 1n;
+              copies.set(item.id, nextCopies);
+              const overflow = masteryOverflow(track, (nextCopies - 1n).toString());
+              effectiveCopies.add(overflow.masteredCopies);
+              overflowCredit.add(overflow.overflowCredit);
+            }
+            const full = BigInt(track.fullMastery.minimumAdditionalEffectiveCopies);
+            return {
+              context,
+              mastered: effectiveCopies.summary(),
+              overflow: overflowCredit.summary(),
+              rarityCounts,
+              counters: {
+                samples: BigInt(samples),
+                catalogSize: BigInt(context.catalog.length),
+                poolItemCount: BigInt(context.catalog.length),
+                uniqueItemsSeen: BigInt([...copies.values()].filter((value) => value > 0n).length),
+                itemsAtFullMastery: BigInt([...copies.values()].filter((value) => value > full).length),
+                itemsWithOverflow: BigInt([...copies.values()].filter((value) => value - 1n > full).length),
+                maximumCopies: [...copies.values()].reduce((maximum, value) => value > maximum ? value : maximum, 0n),
+                featuredCopies,
+                featuredItemMismatches,
+                nonFeaturedUrFeaturedViolations,
+                hardPityTriggered,
+                featuredGuaranteeTriggered,
+                featuredRollHits,
+              },
+            };
+          }
+
+          function duplicateTrackCounters(prefix, result) {
+            return {
+              [`${prefix}Samples`]: result.counters.samples,
+              [`${prefix}CatalogSize`]: result.counters.catalogSize,
+              [`${prefix}PoolItemCount`]: result.counters.poolItemCount,
+              [`${prefix}UniqueItemsSeen`]: result.counters.uniqueItemsSeen,
+              [`${prefix}ItemsAtFullMastery`]: result.counters.itemsAtFullMastery,
+              [`${prefix}ItemsWithOverflow`]: result.counters.itemsWithOverflow,
+              [`${prefix}MaximumCopies`]: result.counters.maximumCopies,
+              [`${prefix}FeaturedCopies`]: result.counters.featuredCopies,
+              [`${prefix}FeaturedItemMismatches`]: result.counters.featuredItemMismatches,
+              [`${prefix}NonFeaturedUrFeaturedViolations`]: result.counters.nonFeaturedUrFeaturedViolations,
+              [`${prefix}HardPityTriggered`]: result.counters.hardPityTriggered,
+              [`${prefix}FeaturedGuaranteeTriggered`]: result.counters.featuredGuaranteeTriggered,
+              [`${prefix}FeaturedRollHits`]: result.counters.featuredRollHits,
+              [`${prefix}RarityNDraws`]: result.rarityCounts.N,
+              [`${prefix}RarityRDraws`]: result.rarityCounts.R,
+              [`${prefix}RarityRRDraws`]: result.rarityCounts.RR,
+              [`${prefix}RaritySRDraws`]: result.rarityCounts.SR,
+              [`${prefix}RaritySSRDraws`]: result.rarityCounts.SSR,
+              [`${prefix}RarityURDraws`]: result.rarityCounts.UR,
+            };
+          }
+
+          function duplicateSkew(candidate, execution, samples, namespace) {
+            const character = simulateDuplicateTrack(candidate, execution, candidate.characterMastery, samples, namespace, 'character');
+            const weapon = simulateDuplicateTrack(candidate, execution, candidate.weaponMastery, samples, namespace, 'weapon');
+            return {
+              primary: character.mastered,
+              secondary: character.overflow,
+              tertiary: weapon.mastered,
+              quaternary: weapon.overflow,
+              counters: {
+                ...duplicateTrackCounters('character', character),
+                ...duplicateTrackCounters('weapon', weapon),
+              },
+            };
+          }
+
+          '''
+          replace_between('simulation/engine-v2/high-volume.mjs', 'function simulateDuplicateTrack(', 'function refundReplay(', duplicate_engine)
+
+          validator_counter_block = '''const expectedCounterKeys = {
+            'gacha-tails': ['characterSamples','characterPoolItemCount','characterTotalDraws','characterUniqueItemsSeen','characterFeaturedOutputs','characterFeaturedItemMismatches','characterNonFeaturedUrFeaturedViolations','characterHardPityTriggered','characterFeaturedGuaranteeTriggered','characterFeaturedRollHits','characterMaximumDrawsToFeatured','characterRarityNDraws','characterRarityRDraws','characterRarityRRDraws','characterRaritySRDraws','characterRaritySSRDraws','characterRarityURDraws','weaponSamples','weaponPoolItemCount','weaponTotalDraws','weaponUniqueItemsSeen','weaponFeaturedOutputs','weaponFeaturedItemMismatches','weaponNonFeaturedUrFeaturedViolations','weaponHardPityTriggered','weaponFeaturedGuaranteeTriggered','weaponFeaturedRollHits','weaponMaximumDrawsToFeatured','weaponRarityNDraws','weaponRarityRDraws','weaponRarityRRDraws','weaponRaritySRDraws','weaponRaritySSRDraws','weaponRarityURDraws','maximumDrawsToFeatured','boundaryViolations'],
+            'pity-conformance': ['hardBoundaryCases','hardBoundaryPass','featuredBoundaryCases','featuredBoundaryPass','earlyHardFalse','earlyFeaturedFalse','boundaryViolations'],
+            'duplicate-skew-overflow': ['characterSamples','characterCatalogSize','characterPoolItemCount','characterUniqueItemsSeen','characterItemsAtFullMastery','characterItemsWithOverflow','characterMaximumCopies','characterFeaturedCopies','characterFeaturedItemMismatches','characterNonFeaturedUrFeaturedViolations','characterHardPityTriggered','characterFeaturedGuaranteeTriggered','characterFeaturedRollHits','characterRarityNDraws','characterRarityRDraws','characterRarityRRDraws','characterRaritySRDraws','characterRaritySSRDraws','characterRarityURDraws','weaponSamples','weaponCatalogSize','weaponPoolItemCount','weaponUniqueItemsSeen','weaponItemsAtFullMastery','weaponItemsWithOverflow','weaponMaximumCopies','weaponFeaturedCopies','weaponFeaturedItemMismatches','weaponNonFeaturedUrFeaturedViolations','weaponHardPityTriggered','weaponFeaturedGuaranteeTriggered','weaponFeaturedRollHits','weaponRarityNDraws','weaponRarityRDraws','weaponRarityRRDraws','weaponRaritySRDraws','weaponRaritySSRDraws','weaponRarityURDraws'],
+            'refund-replay-race': ['validRefunds','invalidSpentRejected','idempotentReplayMatches','exactlyOnceReceiptMatches','outOfOrderRestoreMatches','acceptedVersionRetryMatches','freeLedgerDebitViolations','deficitStateCount'],
+            'state-machine-model': ['validAccepted','invalidRejected','unexpectedAccept','unexpectedReject','machineCount'],
+            'large-number-properties': ['symbolicRepresentations','expandedRepresentations','canonicalIdPass','canonicalIdFail','maximumDigits'],
+          };
+          check(eq(Object.keys(payload.metrics.counters ?? {}), expectedCounterKeys[payload.suiteId]), 'HV_COUNTER_FIELDS', 'suite counter fields or order mismatch');
+          const rarityDrawSum = (prefix) => ['N','R','RR','SR','SSR','UR'].reduce((sum, rarity) => sum + (counters[`${prefix}Rarity${rarity}Draws`] ?? 0n), 0n);
+          '''
+          replace_between('simulation/validate-high-volume-result-v2.mjs', 'const expectedCounterKeys = {', "if (payload.suiteId === 'gacha-tails') {", validator_counter_block)
+
+          gacha_validator = '''if (payload.suiteId === 'gacha-tails') {
+            check(payload.metrics.tertiary !== undefined && payload.metrics.quaternary !== undefined, 'HV_GACHA_POOL_COVERAGE', 'gacha tails must independently represent character and weapon results');
+            check(counters.characterSamples === sampleCount && counters.weaponSamples === sampleCount, 'HV_GACHA_SAMPLE_COVERAGE', 'gacha pool sample counts differ from sealed sampleCount');
+            check(counters.characterPoolItemCount === BigInt(candidate.characters.catalog.length) && counters.weaponPoolItemCount === BigInt(candidate.weapons.catalog.length), 'HV_GACHA_CATALOG_BINDING', 'gacha pool item count differs from candidate catalog');
+            check(counters.characterUniqueItemsSeen <= counters.characterPoolItemCount && counters.weaponUniqueItemsSeen <= counters.weaponPoolItemCount, 'HV_GACHA_UNIQUE_ITEM_COVERAGE', 'gacha unique item count exceeds its pool');
+            check(counters.characterFeaturedOutputs === sampleCount && counters.weaponFeaturedOutputs === sampleCount, 'HV_GACHA_FEATURED_OUTPUTS', 'each gacha-tail sample must terminate on one featured item');
+            check(counters.characterFeaturedItemMismatches === 0n && counters.weaponFeaturedItemMismatches === 0n && counters.characterNonFeaturedUrFeaturedViolations === 0n && counters.weaponNonFeaturedUrFeaturedViolations === 0n, 'HV_GACHA_ITEM_MAPPING', 'featured or non-featured UR mapped to the wrong stable item ID');
+            check(rarityDrawSum('character') === counters.characterTotalDraws && rarityDrawSum('weapon') === counters.weaponTotalDraws, 'HV_GACHA_RARITY_COVERAGE', 'gacha rarity counts do not cover every concrete item result');
+            check(counters.characterTotalDraws >= sampleCount && counters.characterTotalDraws <= sampleCount * 200n && counters.weaponTotalDraws >= sampleCount && counters.weaponTotalDraws <= sampleCount * 200n, 'HV_GACHA_DRAW_COVERAGE', 'gacha total draws are outside sealed tail bounds');
+            check(counters.characterRarityURDraws >= counters.characterFeaturedOutputs && counters.weaponRarityURDraws >= counters.weaponFeaturedOutputs, 'HV_GACHA_UR_FEATURED_COVERAGE', 'featured output count exceeds UR results');
+            check(counters.boundaryViolations === 0n && counters.characterMaximumDrawsToFeatured <= 200n && counters.weaponMaximumDrawsToFeatured <= 200n && counters.maximumDrawsToFeatured <= 200n, 'HV_GACHA_BOUNDARY', 'character or weapon gacha tail crossed a sealed pity boundary');
+            check(BigInt(payload.metrics.primary.maximum) <= 100n && BigInt(payload.metrics.secondary.maximum) <= 200n && BigInt(payload.metrics.tertiary.maximum) <= 100n && BigInt(payload.metrics.quaternary.maximum) <= 200n, 'HV_GACHA_MAXIMUM', 'character or weapon gacha percentile input crossed pity bounds');
+          }
+          '''
+          replace_between('simulation/validate-high-volume-result-v2.mjs', "if (payload.suiteId === 'gacha-tails') {", "if (payload.suiteId === 'pity-conformance') {", gacha_validator)
+
+          duplicate_validator = '''if (payload.suiteId === 'duplicate-skew-overflow') {
+            check(payload.metrics.tertiary !== undefined && payload.metrics.quaternary !== undefined, 'HV_DUPLICATE_POOL_COVERAGE', 'duplicate skew must independently represent character and weapon mastery');
+            check(counters.characterSamples === sampleCount && counters.weaponSamples === sampleCount, 'HV_DUPLICATE_SAMPLE_COVERAGE', 'duplicate sample counts differ from sealed sampleCount');
+            check(counters.characterCatalogSize === BigInt(candidate.characters.catalog.length) && counters.characterPoolItemCount === counters.characterCatalogSize && counters.characterUniqueItemsSeen <= counters.characterPoolItemCount && counters.characterItemsWithOverflow <= counters.characterItemsAtFullMastery, 'HV_CHARACTER_DUPLICATE_COUNTERS', 'character duplicate counters violate catalog, pool or mastery ordering');
+            check(counters.weaponCatalogSize === BigInt(candidate.weapons.catalog.length) && counters.weaponPoolItemCount === counters.weaponCatalogSize && counters.weaponUniqueItemsSeen <= counters.weaponPoolItemCount && counters.weaponItemsWithOverflow <= counters.weaponItemsAtFullMastery, 'HV_WEAPON_DUPLICATE_COUNTERS', 'weapon duplicate counters violate catalog, pool or mastery ordering');
+            check(rarityDrawSum('character') === sampleCount && rarityDrawSum('weapon') === sampleCount, 'HV_DUPLICATE_RARITY_COVERAGE', 'duplicate rarity counts do not cover the sealed draw count');
+            check(counters.characterFeaturedCopies <= counters.characterRarityURDraws && counters.weaponFeaturedCopies <= counters.weaponRarityURDraws, 'HV_DUPLICATE_FEATURED_UR_COVERAGE', 'featured copies exceed UR results');
+            check(counters.characterFeaturedItemMismatches === 0n && counters.weaponFeaturedItemMismatches === 0n && counters.characterNonFeaturedUrFeaturedViolations === 0n && counters.weaponNonFeaturedUrFeaturedViolations === 0n, 'HV_DUPLICATE_ITEM_MAPPING', 'duplicate stream mapped a featured or non-featured UR to the wrong stable item ID');
+          }
+          '''
+          replace_between('simulation/validate-high-volume-result-v2.mjs', "if (payload.suiteId === 'duplicate-skew-overflow') {", "if (payload.suiteId === 'refund-replay-race') {", duplicate_validator)
+
+          fixture_path = Path('simulation/fixtures/v2/execution-contract-negative.json')
+          fixture = json.loads(fixture_path.read_text(encoding='utf-8'))
+          fixture['cases'] = [case for case in fixture['cases'] if case['id'] not in {'character-featured-item-not-ur','weapon-featured-banner-kind-mismatch'}]
+          fixture['cases'].extend([
+              {
+                  'id': 'character-featured-item-not-ur',
+                  'mutation': {'op': 'set', 'path': '/model/gachaItemSelection/character/featuredItemId', 'value': 'character.launch.001'},
+                  'expectedCodes': ['SCHEMA','EXEC_GACHA_SELECTION_POLICY','EXEC_GACHA_FEATURED_ITEM'],
+              },
+              {
+                  'id': 'weapon-featured-banner-kind-mismatch',
+                  'mutation': {'op': 'set', 'path': '/model/gachaItemSelection/weapon/featuredBannerId', 'value': 'banner.character.featured'},
+                  'expectedCodes': ['SCHEMA','EXEC_GACHA_SELECTION_POLICY','EXEC_GACHA_BANNER','EXEC_GACHA_BANNER_KIND'],
+              },
+          ])
+          fixture['caseCount'] = str(len(fixture['cases']))
+          fixture_path.write_text(json.dumps(fixture, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          execution_fixture_path = Path('simulation/fixtures/v2/validate-execution-fixtures.mjs')
+          fixture_text = execution_fixture_path.read_text(encoding='utf-8')
+          marker = "    {\n      id: 'wrong-result-id',"
+          gacha_case = "    {\n      id: 'character-featured-item-mapping-tamper',\n      mutations: [{ op: 'set', path: '/deterministicPayload/metrics/counters/characterFeaturedItemMismatches', value: '1' }],\n      expectedCodes: ['HV_GACHA_ITEM_MAPPING'],\n    },\n"
+          if gacha_case.strip() not in fixture_text:
+              if marker not in fixture_text:
+                  raise SystemExit('validate-execution-fixtures: wrong-result-id marker missing')
+              fixture_text = fixture_text.replace(marker, gacha_case + marker, 1)
+          duplicate_insert_marker = "  for (const test of highVolumeCases) {\n    await expectRejected(temp, 'high-volume', test.id, mutateMany(highVolumeBase, test.mutations), ['simulation/validate-high-volume-result-v2.mjs', '--allow-contract-smoke'], test.expectedCodes);\n  }\n"
+          duplicate_cases = '''  for (const test of highVolumeCases) {
+            await expectRejected(temp, 'high-volume', test.id, mutateMany(highVolumeBase, test.mutations), ['simulation/validate-high-volume-result-v2.mjs', '--allow-contract-smoke'], test.expectedCodes);
+          }
+
+          const duplicateBase = await runHighVolumeSuite({ suiteId: 'duplicate-skew-overflow', contractSmoke: true, owner: 'STEP2' });
+          const duplicatePositivePath = join(temp, 'duplicate-positive.json');
+          await writeFile(duplicatePositivePath, `${JSON.stringify(duplicateBase, null, 2)}\n`, 'utf8');
+          const duplicatePositive = runNode(['simulation/validate-high-volume-result-v2.mjs', duplicatePositivePath, '--allow-contract-smoke', '--reproduce']);
+          check(duplicatePositive.status === 0, 'DUPLICATE_POSITIVE_REJECTED', (duplicatePositive.stderr ?? '').slice(0, 1000));
+          const duplicateCases = [
+            {
+              id: 'character-rarity-count-sum-mismatch',
+              mutations: [{ op: 'set', path: '/deterministicPayload/metrics/counters/characterRarityNDraws', value: (BigInt(duplicateBase.deterministicPayload.metrics.counters.characterRarityNDraws) + 1n).toString() }],
+              expectedCodes: ['HV_DUPLICATE_RARITY_COVERAGE'],
+            },
+            {
+              id: 'weapon-featured-item-mapping-tamper',
+              mutations: [{ op: 'set', path: '/deterministicPayload/metrics/counters/weaponFeaturedItemMismatches', value: '1' }],
+              expectedCodes: ['HV_DUPLICATE_ITEM_MAPPING'],
+            },
+          ];
+          for (const test of duplicateCases) {
+            await expectRejected(temp, 'duplicate', test.id, mutateMany(duplicateBase, test.mutations), ['simulation/validate-high-volume-result-v2.mjs', '--allow-contract-smoke'], test.expectedCodes);
+          }
+          '''
+          if 'const duplicateBase = await runHighVolumeSuite' not in fixture_text:
+              if duplicate_insert_marker not in fixture_text:
+                  raise SystemExit('validate-execution-fixtures: high-volume loop marker missing')
+              fixture_text = fixture_text.replace(duplicate_insert_marker, duplicate_cases, 1)
+          fixture_text = fixture_text.replace('  highVolumeResultNegativeCases: 12,', '  highVolumeResultNegativeCases: 15,')
+          fixture_text = fixture_text.replace('  totalNewNegativeCases: executionNegative.cases.length + 22,', '  totalNewNegativeCases: executionNegative.cases.length + 25,')
+          execution_fixture_path.write_text(fixture_text, encoding='utf-8')
+
+          manifest_path = Path('simulation/fixtures/v2/manifest.json')
+          manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+          coverage = manifest.setdefault('negativeCoverage', {})
+          coverage['executionContractNegativeCaseCount'] = str(len(fixture['cases']))
+          coverage['highVolumeResultNegativeCaseCount'] = '15'
+          coverage['gachaStableItemMappingCaseCount'] = '5'
+          coverage['duplicateRarityBindingCaseCount'] = '2'
+          for entry in manifest['files']:
+              data = Path(entry['path']).read_bytes()
+              entry['sha256'] = hashlib.sha256(data).hexdigest()
+              entry['bytes'] = str(len(data))
+          manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          PY
+      - name: Regenerate qualification evidence for the updated execution contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          node simulation/engine-v2/run-plan.mjs --mode qualification --output quality-reviews/step-2-executable-contract-v2/qualification-result.json
+      - name: Run complete Step 2 verifier on repaired working tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          node simulation/verify-step2-v2.mjs
+      - name: Confirm bounded repair and no forbidden files
+        shell: bash
+        run: |
+          set -euo pipefail
+          changed="$(git status --short | sed -E 's/^.. //' | sed -E 's/.* -> //')"
+          printf '%s\n' "$changed"
+          test -n "$changed"
+          while IFS= read -r path; do
+            case "$path" in
+              simulation/*|quality-reviews/step-2-executable-contract-v2/qualification-result.json|.github/workflows/diagnose-step2-v2-gacha-item-selection.yml)
+                ;;
+              *)
+                echo "gacha item-selection repair escaped Step 2 boundary: $path" >&2
+                exit 1
+                ;;
+            esac
+          done <<< "$changed"
+          git diff --check
+          git diff --stat
+          echo 'GACHA_ITEM_SELECTION_REPAIR_VALIDATED_WITHOUT_WRITE=true'
