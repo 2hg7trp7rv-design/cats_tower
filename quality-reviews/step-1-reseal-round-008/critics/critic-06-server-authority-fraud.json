@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-critic-06-server-authority-fraud",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "role": "independent server authority, ledger and fraud critic",
+  "reviewedContent": {
+    "commit": "5da274ddc63876565d3d210a7e2b5a87afca6730",
+    "tree": "b479c92bab43581f3ec293fecbb16ce9592a9dfa"
+  },
+  "method": [
+    "Cross-read wallet, draw, payment, ad, login, reset, evolution, mastery and account machines against screen states and Step 2 fields.",
+    "Attempted rejection for client-minted value, timeout-as-failure, reroll, duplicate callbacks, stale offers, multiple-tab divergence, out-of-order refund events and paid/free ledger destruction."
+  ],
+  "checks": {
+    "serverOwnsPermanentEconomy": "PASS",
+    "transactionAndIdempotencyModel": "PASS",
+    "timeoutPendingReconciliation": "PASS",
+    "gachaNoRerollAndAtomicPityGrant": "PASS",
+    "multipleTabConvergence": "PASS",
+    "adAndLoginConfigurationVersionBinding": "FAIL",
+    "refundAfterSpentPaidGrantDeficitPolicy": "FAIL"
+  },
+  "findings": [
+    {
+      "id": "C06-P1-001",
+      "severity": "P1",
+      "paths": ["canonical/STABLE_ID_REGISTRY.json", "canonical/SCREEN_STATE_REGISTRY.json", "canonical/STATE_TRANSITION_CONTRACT.json", "canonical/STEP2_DEPENDENCY_CLOSURE.json"],
+      "finding": "Commerce and gacha bind catalog/rate versions, but rewarded-ad offers and login campaigns do not have equally explicit immutable offer/campaign version fields or canonical catalog namespaces at acceptance time.",
+      "risk": "A stale client, retry or multi-tab request can be evaluated against a different reward/cap/campaign definition, forcing Step 2 to invent reconciliation semantics.",
+      "requiredRepair": "Add canonical ad-offer and login-campaign catalog IDs; bind ad offer version and login campaign version in screen state, transition envelope/machines, candidate fields, validators and stale-version fixtures.",
+      "blocking": true
+    },
+    {
+      "id": "C06-P1-002",
+      "severity": "P1",
+      "paths": ["canonical/STATE_TRANSITION_CONTRACT.json", "canonical/STEP2_DEPENDENCY_CLOSURE.json"],
+      "finding": "Refund/revocation says to reverse or suspend an affected paid grant according to policy, but does not fix the required representation when paid ruby has already been spent and the direct reversal would underflow.",
+      "risk": "Implementations can silently debit unrelated free ruby, create an impossible negative unsigned ledger, or disagree across providers and retries.",
+      "requiredRepair": "Require an explicit refund-deficit state/policy, prohibit silent debit of unrelated free ledgers, preserve audit provenance and add spent-grant refund/revocation/restore fixtures and semantic validation.",
+      "blocking": true
+    }
+  ],
+  "verdict": "FAIL_PENDING_P1_REPAIR",
+  "unresolved": {"P0": 0, "P1": 2, "P2": 0, "P3": 0},
+  "sealEligibleFromThisCritic": false,
+  "rerunRequired": true
+}
