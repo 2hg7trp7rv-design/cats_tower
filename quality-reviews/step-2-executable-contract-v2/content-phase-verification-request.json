@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-v2-content-phase-verification-request",
+  "requestedAt": "2026-08-27T23:36:00+09:00",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "repairedContentCommit": "33df5da216fcd14afa809ab7b4da45dd2e95109b",
+  "repairedContentTree": "85d23e93f70d280ee9a885afdd2b77303fad5c20",
+  "repairApplyRun": {
+    "runId": "33082958760",
+    "jobId": "98554833517",
+    "verdictBeforeCommit": "PASS"
+  },
+  "requiredWorkflow": ".github/workflows/verify-step-2-v2.yml",
+  "requiredCheckout": "exact github.sha",
+  "expectedVerifierVerdict": "CONTENT_PHASE_PASS_STEP2_IN_PROGRESS",
+  "repairScope": [
+    "character and weapon gacha-tail separation",
+    "character and weapon duplicate-mastery separation",
+    "hard-pity featured-share semantics",
+    "compatible pity carryover and expired-banner retention",
+    "refund replay, exactly-once receipt and out-of-order restore coverage",
+    "rewarded-ad cap/stale, login stale/rollover, reset recovery and deletion-retention fixtures"
+  ],
+  "step2Completed": false,
+  "step3Authorized": false,
+  "writeBoundary": {
+    "runtimeChanged": false,
+    "assetChanged": false,
+    "backendChanged": false,
+    "productionChanged": false
+  }
+}
