@@ -1,11 +1,17 @@
 {
-  "schemaVersion": "2.0.0",
+  "schemaVersion": "2.1.0",
   "planId": "cats-tower-run-plan-v2",
   "candidateId": "cats-tower-v2-candidate-001",
-  "algorithmVersion": "cats-tower-simulator-v2.0.0",
+  "scenarioAlgorithmVersion": "cats-tower-scenario-v2.1.0",
+  "executionVersion": "cats-tower-step3-executor-v1.0.0",
   "roundingVersion": "ct-rational-half-even-v1",
   "step2Mode": "QUALIFICATION_ONLY",
   "fullExecutionOwner": "STEP3",
+  "executionContract": {
+    "path": "simulation/execution-contract-v2.json",
+    "schemaPath": "simulation/execution-contract-v2.schema.json",
+    "validatorPath": "simulation/validate-execution-contract-v2.mjs"
+  },
   "builds": [
     "build.combat",
     "build.reinforcement",
@@ -31,6 +37,8 @@
   },
   "scenarioCount": {
     "fullGameplayMatrix": "15000",
+    "calibration": "12000",
+    "holdout": "3000",
     "qualification": "30"
   },
   "horizons": [
@@ -112,7 +120,12 @@
   },
   "output": {
     "qualificationPath": "quality-reviews/step-2-executable-contract-v2/qualification-result.json",
-    "schemaPath": "simulation/result-v2.schema.json",
+    "calibrationPath": "quality-reviews/step-3-large-scale-validation/gameplay-calibration-result.json",
+    "holdoutPath": "quality-reviews/step-3-large-scale-validation/gameplay-holdout-result.json",
+    "highVolumeDirectory": "quality-reviews/step-3-large-scale-validation/high-volume",
+    "qualificationSchemaPath": "simulation/result-v2.schema.json",
+    "gameplaySchemaPath": "simulation/gameplay-result-v2.schema.json",
+    "highVolumeSchemaPath": "simulation/high-volume-result-v2.schema.json",
     "canonicalJson": true,
     "hashEachScenario": true
   }
