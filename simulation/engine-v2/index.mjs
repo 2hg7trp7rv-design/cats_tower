@@ -4,5 +4,7 @@ export * from './tower.mjs';
 export * from './economy.mjs';
 export * from './state-machines.mjs';
 export * from './hash.mjs';
+export * from './statistics.mjs';
 export * from './run-scenario.mjs';
 export * from './run-plan.mjs';
+export * from './high-volume.mjs';
