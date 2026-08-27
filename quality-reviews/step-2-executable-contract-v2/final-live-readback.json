@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-v2-final-live-readback",
+  "recordedDate": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "semanticCommit": "724d04940f9f3794b993cddbc5af3a7163a0395b",
+  "semanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
+  "seal": {
+    "path": "simulation/executable-seal-v2.json",
+    "blob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
+    "activationCommit": "89174eeebb033fe807a0592c8df0279c2a7b9a6f",
+    "activationTree": "ccf444df436d63d86fd4da0355f20349753b0546",
+    "activationWorkflowRunId": "33104391753",
+    "activationJobId": "98630217077",
+    "validatorVerdict": "PASS_EXECUTABLE_SEAL_V2"
+  },
+  "completionEvidence": {
+    "path": "quality-reviews/step-2-executable-contract-v2/completion-evidence.json",
+    "blob": "1f771b02f0982c879e038bfd36925ed889142d95"
+  },
+  "activationReadback": {
+    "path": "quality-reviews/step-2-executable-contract-v2/live-readback.json",
+    "blob": "cfec952f14680482409ff621e9c89ed36cf4e6d6",
+    "verdict": "PASS_CHAIN_READY_FOR_STATUS_ACTIVATION"
+  },
+  "statusActivation": {
+    "commit": "36916026cb1871e4c3f48fefdf03e509546fff96",
+    "tree": "98700bf07cbfee8c039fed291644feced0298e43",
+    "workflowRunId": "33104708951",
+    "jobId": "98631310447",
+    "conclusion": "SUCCESS",
+    "verifierVerdict": "PASS"
+  },
+  "postActivationVerification": {
+    "commit": "40faf62d693df27811185d0da7c5bbf3deefbe50",
+    "tree": "d9bbc8e6e29f23f82f5f1bee422367b2ca036f84",
+    "workflowRunId": "33104906726",
+    "jobId": "98632040804",
+    "conclusion": "SUCCESS"
+  },
+  "observedLiveBeforeThisEvidence": {
+    "head": "81897202827a473ffa53d23ea02863b9ec984a9c",
+    "tree": "98700bf07cbfee8c039fed291644feced0298e43",
+    "simulationStatusBlob": "9a853ea7edccda91ea52525392389a37a913d6d6",
+    "projectStatusBlob": "bec2334e9fd1da7e0760a06545094fbe538ef8be",
+    "agentsBlob": "c502319772187da75f1920bc7ef864fa5ebe61fb",
+    "handoverBlob": "34369dc1bdcaa46f08880cec0434d4a5c1ecb654"
+  },
+  "qualityGate": {
+    "criticCount": 5,
+    "unresolvedP0": 0,
+    "unresolvedP1": 0,
+    "trackedP2": 6,
+    "balanceVerdict": "NOT_EVALUATED_STEP2"
+  },
+  "status": {
+    "step2": "PASS",
+    "step3": "READY_TO_START",
+    "step3Executed": false,
+    "physicalIPhoneVerified": false,
+    "productionChanged": false
+  },
+  "verdict": "PASS_FINAL_LIVE_READBACK_STEP2_SEALED"
+}
