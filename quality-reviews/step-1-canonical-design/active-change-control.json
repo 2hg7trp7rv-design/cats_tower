@@ -1,225 +1,110 @@
 {
   "schemaVersion": 1,
   "artifactId": "step-1-canonical-design-active-change-control",
-  "revision": 5,
+  "revision": 6,
   "createdAt": "2026-08-26",
-  "updatedAt": "2026-08-26",
-  "status": "IN_PROGRESS",
-  "verdict": "IN_PROGRESS",
-  "advanceAllowed": false,
+  "updatedAt": "2026-08-27",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
-  "baseHeadBeforeRevision5": "57a912c96d07f3516685f567ddde86496fe004f2",
-  "trigger": "Complete the 00_統括・工程管理 core-authority correction after replacing the ChatGPT Project instructions: remove finite-100F/no-gacha authority from MASTER_SPEC.md and PROJECT_STATUS.json, activate CHATGPT_PROJECT_INSTRUCTIONS1.md in change control, and make 01_正本仕様・競合調査 the next authorized work.",
-  "previousCompletionEvidence": {
-    "path": "quality-reviews/step-1-canonical-design/acceptance-round-005.json",
-    "verdict": "PASS",
-    "roleNow": "immutable historical evidence for the superseded finite-100F no-gacha design",
-    "mayAuthorizeCurrentStep2": false
-  },
+  "status": "PASS",
+  "verdict": "PASS",
+  "advanceAllowed": true,
+  "step2Allowed": true,
+  "trigger": "Activate the exact Round 008 unbounded-tower, gacha, monetization, mastery, server-authority and twelve-screen Step 1 seal after ten critics, P0/P1 repair, final judge and direct-descendant mirror synchronization.",
   "projectInstructions": {
     "activePath": "CHATGPT_PROJECT_INSTRUCTIONS1.md",
     "status": "ACTIVE_COMPLETE_REPLACEMENT",
-    "oldPath": "CHATGPT_PROJECT_INSTRUCTIONS.md",
     "oldPathStatus": "DELETED_FROM_LIVE_KIMI",
-    "oldAndNewMayBeActiveTogether": false,
-    "evidence": "quality-reviews/chatgpt-project-governance/project-instructions1-evidence.json"
+    "oldAndNewMayBeActiveTogether": false
   },
-  "activeAcceptances": [
-    "quality-reviews/step-1-hero-merchant-large-idle-integration/acceptance.json",
-    "quality-reviews/step-1-hero-merchant-large-idle-integration/monetization-acceptance-round-002.json",
-    "quality-reviews/step-1-hero-merchant-large-idle-integration/progression-acceptance-round-003.json",
-    "quality-reviews/step-1-hero-merchant-large-idle-integration/reward-cadence-acceptance-round-004.json",
-    "quality-reviews/step-1-hero-merchant-large-idle-integration/user-decision-lock-round-004.json",
-    "quality-reviews/step-1-hero-merchant-large-idle-integration/user-decision-lock-round-005.json"
-  ],
-  "allUserOwnedProductDecisionsResolved": true,
-  "currentProductBoundary": {
-    "tower": "no player-visible maximum; 100F is the first major milestone and 101F+ continues",
-    "protagonists": "cats and catfolk",
+  "activeSeal": {
+    "path": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
+    "blob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
+    "commit": "0b17f9b5b8decdab8ce329287a4dc073790c4bf7",
+    "tree": "9eac6b6103d65cf8bcb13859d00e43cd3389fa8a",
+    "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+    "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce",
+    "finalJudgeCommit": "cd57005ef12c5ca4c923f436c2bcce0a5cc8aadf",
+    "unresolvedP0": 0,
+    "unresolvedP1": 0
+  },
+  "activationEvidence": {
+    "latestAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-013.json",
+    "completion": "quality-reviews/step-1-reseal-round-008/activation-completion-evidence-round-008.json",
+    "liveReadback": "quality-reviews/step-1-reseal-round-008/live-readback-round-008.json"
+  },
+  "historicalEvidence": {
+    "finite100FNoGachaPassesRemainImmutable": true,
+    "mayAuthorizeCurrentProduct": false,
+    "mayAuthorizeStep2": false
+  },
+  "productBoundary": {
+    "tower": "no player-visible maximum; 100F is the first major milestone and 101F+ is normal progression",
+    "playableSpecies": ["cat", "catfolk"],
     "activeNamedParty": 4,
-    "merchantBoundary": "shops, income, delivery, recruitment, and reinvestment support combat; merchant-chairman identity is removed",
-    "reset": "one original Cat's Tower strong-new-game reset from Floor 1; Dawn must be merged, renamed, or removed",
-    "levelAndEvolution": "coin levels have no cap; ruby evolution eligibility occurs every 100 levels and does not gate further leveling",
-    "rarity": [
-      "N",
-      "R",
-      "RR",
-      "SR",
-      "SSR",
-      "UR"
-    ],
-    "catalogTarget": {
-      "characters": 24,
-      "weapons": 36,
-      "weaponPerActiveCharacter": 1
-    },
-    "gacha": "separate character and weapon banners; abundant tickets for routine mass draws; 100 hard pity and 200 featured guarantee targets with compatible carryover",
-    "duplicateMastery": "first copy is functionally complete; full mastery requires at least twenty additional effective copies or equivalent resources and is optional long-term progression",
-    "monetization": "login bonuses, payments, premium ruby, and rewarded opt-in advertisements are required; forced and banner ads are excluded initially",
-    "f2pTarget": "no-ad F2P can fund mandatory evolution and reach one featured UR guarantee in 30-45 days",
+    "temporaryReinforcementSeparate": true,
+    "merchantRole": "shop, income, delivery, recruitment and reinvestment support combat; merchant-chairman identity is excluded",
+    "tapDirectDamage": 0,
+    "reset": {"count": 1, "id": "reset.tower_return", "restartFloor": 1, "repeatBestNewRuby": 0},
+    "coinLevelCap": null,
+    "evolutionEligibilityEveryLevels": 100,
+    "rarities": ["N", "R", "RR", "SR", "SSR", "UR"],
+    "catalogTargets": {"characters": 24, "weapons": 36},
+    "gacha": {"characterWeaponSeparated": true, "hardPityTarget": 100, "featuredGuaranteeTarget": 200, "compatibleCarryover": true},
+    "duplicateMastery": {"firstCopyFunctional": true, "minimumAdditionalEffectiveCopiesForFullMastery": 20, "normalPveRequiresFullMastery": false, "overflowRequired": true},
+    "wallet": ["paid", "free-reset", "free-ad", "free-other"],
+    "ads": "rewarded opt-in only in the initial product",
     "screens": 12,
-    "serverAuthority": "wallet, draws, pity, acquisition, duplicates, evolution, reset rewards, login claims, ad receipts, payments, and entitlements are server-owned",
-    "initialDeferred": [
-      "PvP",
-      "competitive ranking rewards",
-      "guild competition",
-      "battle pass",
-      "dense overlapping limited events"
-    ]
+    "serverAuthority": "all permanent economy and entitlements",
+    "numeric": "versioned arbitrary precision with deterministic serialization and rounding"
   },
-  "supersededClauses": [
-    {
-      "claim": "1F-100F is the final product",
-      "replacement": "unbounded player-visible tower"
-    },
-    {
-      "claim": "101F does not exist",
-      "replacement": "101F and beyond are normal progression"
-    },
-    {
-      "claim": "100F is the product ending",
-      "replacement": "100F is the first major saga milestone"
-    },
-    {
-      "claim": "all cats are deterministic and gacha is forbidden",
-      "replacement": "story-critical N/R roles have deterministic paths; RR-UR use gacha routes"
-    },
-    {
-      "claim": "premium currency, login, payments, and ads are forbidden",
-      "replacement": "ruby, login bonuses, payments, and rewarded ads are required"
-    },
-    {
-      "claim": "two currencies only",
-      "replacement": "coin, paid/free ruby sub-ledgers, character/weapon/pickup tickets, and exchange/mastery resources"
-    },
-    {
-      "claim": "Dawn remains an independent reset",
-      "replacement": "one original reset; Dawn is merged, renamed, or removed"
-    },
-    {
-      "claim": "exactly nine screens",
-      "replacement": "twelve screens S01-S12"
-    },
-    {
-      "claim": "3,000 scenarios are sufficient",
-      "replacement": "minimum 15,000 build/persona scenarios plus separate Monte Carlo and state-transition tests"
-    },
-    {
-      "claim": "local-only save is sufficient",
-      "replacement": "server-authoritative permanent economy and entitlements"
+  "completedCheckpoints": {
+    "route010": "PASS",
+    "route011": "PASS",
+    "route012": "PASS",
+    "route013": "PASS",
+    "route014": {
+      "status": "PASS",
+      "criticCount": 10,
+      "initialP1": 5,
+      "resolvedP1": 5,
+      "unresolvedP0": 0,
+      "unresolvedP1": 0,
+      "trackedP2": 6
     }
+  },
+  "authorizedExecutionSequence": [
+    {"order": 1, "name": "canonical-integration-and-reseal", "status": "PASS"},
+    {"order": 2, "name": "executable-contract-and-simulation", "status": "READY_TO_START"},
+    {"order": 3, "name": "large-scale-validation", "status": "BLOCKED_UNTIL_STEP2_PASS"},
+    {"order": 4, "name": "twelve-screen-final-mockups", "status": "BLOCKED_UNTIL_STEP3_PASS"},
+    {"order": 5, "name": "first-production-slice-and-backend-implementation", "status": "BLOCKED_UNTIL_PRIOR_GATES"},
+    {"order": 6, "name": "physical-iphone-validation", "status": "BLOCKED_UNTIL_ELIGIBLE_BUILD"}
   ],
-  "zeroZeroCoreAuthoritySync": {
-    "chat": "00_統括・工程管理",
-    "status": "PASS",
-    "files": [
-      "MASTER_SPEC.md",
-      "PROJECT_STATUS.json",
-      "quality-reviews/step-1-canonical-design/active-change-control.json"
+  "step2Boundary": {
+    "requiredSource": "canonical/STEP2_DEPENDENCY_CLOSURE.json",
+    "requiredNewArtifacts": [
+      "simulation/candidate-v2.json",
+      "simulation/candidate-v2.schema.json",
+      "simulation/validate-candidate-v2.mjs",
+      "simulation/run-plan-v2.json",
+      "simulation/result-v2.schema.json",
+      "simulation/validate-result-v2.mjs",
+      "simulation/engine-v2/**",
+      "simulation/fixtures/v2/**",
+      "simulation/migrations/v1-to-v2/**",
+      "simulation/executable-seal-v2.json",
+      "simulation/executable-seal-v2.schema.json",
+      "simulation/validate-executable-seal-v2.mjs"
     ],
-    "acceptance": [
-      "MASTER_SPEC no longer asserts a finite 100F endpoint, 101F prohibition, or no-gacha product",
-      "PROJECT_STATUS no longer authorizes Step 2 from the historical PASS and records the 12-screen, unbounded, monetized product",
-      "active change control marks CHATGPT_PROJECT_INSTRUCTIONS1.md active rather than stale",
-      "all three files agree that Step 1 remains IN_PROGRESS and 01 is next",
-      "strict JSON parsing and target-file contradiction checks pass",
-      "no runtime, asset, candidate, schema, backend, payment, ad-network, or production change occurs"
-    ],
-    "evidencePath": "quality-reviews/step-1-hero-merchant-large-idle-integration/core-authority-sync-evidence-round-006.json",
-    "meaning": "PASS applies only to the three-file 00 core-authority synchronization. It is not the final Step 1 seal."
+    "oldV1MayExecuteForPromotion": false,
+    "oldV1MayExtendInPlace": false,
+    "observedHoldoutMayBeReused": false,
+    "allowed": ["V2 executable contract, validators, simulator, fixtures, migrations, result schema, dedicated Step 2 workflow and quality evidence"],
+    "forbidden": ["runtime", "assets", "backend", "payment provider", "ad network", "PR operation", "Production alias", "Step 3 simulation before Step 2 PASS"]
   },
-  "authoritativeCoreFiles": [
-    {
-      "path": "CHATGPT_PROJECT_INSTRUCTIONS1.md",
-      "status": "ACTIVE"
-    },
-    {
-      "path": "MASTER_SPEC.md",
-      "status": "CORE_SYNC_PASS_STEP1_RESEAL_PENDING"
-    },
-    {
-      "path": "PROJECT_STATUS.json",
-      "status": "CORE_SYNC_PASS_STEP1_RESEAL_PENDING"
-    },
-    {
-      "path": "quality-reviews/step-1-canonical-design/active-change-control.json",
-      "status": "ACTIVE"
-    }
-  ],
-  "pending01Revalidation": [
-    "FLOORS_1_10_DESIGN.md",
-    "QUALITY_GATE.md",
-    "PROJECT_HANDOVER.md",
-    "README.md",
-    "AGENTS.md",
-    "AI_PROJECT_POLICY.json",
-    "CHATGPT_PROJECT_BOOTSTRAP.md",
-    "simulation/INPUT_CONTRACT.md",
-    "simulation/candidate-v1.json",
-    "simulation/candidate.schema.json",
-    "simulation/validate-candidate.mjs",
-    ".github/workflows/verify-main.yml",
-    ".github/workflows/verify-step-1-artifacts.yml",
-    "repository-wide contradictions and stable ID registry"
-  ],
-  "blockedSteps": [
-    {
-      "step": 2,
-      "name": "executable-contract-and-simulation",
-      "reason": "The repository-wide canonical redline, dependency closure, and new Step 1 seal are not complete."
-    },
-    {
-      "step": 3,
-      "name": "large-scale-validation",
-      "reason": "Step 2 executable semantics and validated candidate do not exist."
-    },
-    {
-      "step": 4,
-      "name": "twelve-screen-final-mockups",
-      "reason": "Lower canonical screen states and policy/error states remain pending 01 integration."
-    },
-    {
-      "step": 5,
-      "name": "first-production-slice-and-backend-implementation",
-      "reason": "Implementation may not consume an unsealed economy, reset, or server contract."
-    },
-    {
-      "step": 6,
-      "name": "physical-iphone-validation",
-      "reason": "No eligible redesigned implementation exists."
-    }
-  ],
-  "step1ClosureRequirements": [
-    "Complete a repository-wide contradiction inventory and classify every finite-100F, no-gacha, Dawn-only, two-currency, nine-screen, local-only, and 3,000-scenario claim.",
-    "Redline all affected canonical documents and status mirrors without rewriting historical evidence.",
-    "Freeze stable IDs and migration aliases for reset, ruby, tickets, rarity, banners, characters, weapons, mastery, products, and entitlements.",
-    "Define the complete backend trust boundary and Step 2 dependency contract.",
-    "Define exact screen responsibilities and all purchase, draw, login, ad, reset, failure, retry, refund, and restore states.",
-    "Complete independent product, originality, economy/probability, unbounded progression, backend/fraud, platform-policy, and mobile-density critiques.",
-    "Resolve all P0/P1 findings and create a new exact commit/tree-bound Step 1 PASS seal."
-  ],
-  "nextAuthorizedChat": "01_正本仕様・競合調査",
-  "nextAuthorizedAction": "Create the consolidated repository-wide canonical redline, competitive and policy research, dependency closure, independent critiques, and new Step 1 seal. Do not start Step 2.",
-  "writeBoundary": {
-    "documentationAndReviewArtifactsOnly": true,
-    "runtimeChanged": false,
-    "assetChanged": false,
-    "candidateChanged": false,
-    "schemaChanged": false,
-    "backendChanged": false,
-    "paymentProviderConfigured": false,
-    "adNetworkConfigured": false,
-    "vercelConfigurationChanged": false,
-    "productionAliasChanged": false
-  },
-  "verificationState": {
-    "coreAuthoritySync": "PASS",
-    "repositoryWideCanonicalRedline": "NOT_STARTED_IN_00",
-    "newStep1Seal": "NOT_CREATED",
-    "step2Allowed": false,
-    "runtimeImplemented": false,
-    "backendImplemented": false,
-    "physicalIPhoneVerified": false
-  }
+  "nextAuthorizedChat": "02_無制限塔・経済・リセットシミュレーション",
+  "nextAuthorizedAction": "Create a new Step 2 Acceptance before any V2 implementation, bind all source digests, implement the V2 executable contract, separate calibration and holdout, run Step 2 validation, critics, final judge and executable seal. Do not start Step 3 until Step 2 PASS.",
+  "physicalIPhoneVerified": false,
+  "productionAliasChanged": false
 }
