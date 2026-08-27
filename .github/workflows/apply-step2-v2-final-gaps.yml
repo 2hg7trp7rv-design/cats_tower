@@ -1,0 +1,97 @@
+name: Apply validated Step 2 V2 final semantic repairs
+
+on:
+  push:
+    branches: [kimi]
+    paths:
+      - '.github/workflows/apply-step2-v2-final-gaps.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apply-step2-v2-final-gaps-kimi
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Reuse the exact no-write-validated patch body
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'EXTRACT'
+          from pathlib import Path
+          import textwrap
+
+          workflow = Path('.github/workflows/diagnose-step2-v2-final-gaps.yml').read_text(encoding='utf-8')
+          start_marker = "          python - <<'PY'\n"
+          end_marker = "\n          PY\n      - name: Regenerate qualification evidence for the updated execution contract"
+          start = workflow.find(start_marker)
+          end = workflow.find(end_marker, start)
+          if start < 0 or end < 0:
+              raise SystemExit('cannot locate validated patch body')
+          body = workflow[start + len(start_marker):end]
+          script = textwrap.dedent(body)
+          exec(compile(script, 'validated-step2-final-gap-repair.py', 'exec'), {'__name__': '__main__'})
+          EXTRACT
+      - name: Regenerate qualification evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          node simulation/engine-v2/run-plan.mjs --mode qualification --output quality-reviews/step-2-executable-contract-v2/qualification-result.json
+      - name: Re-run the complete verifier before commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          node simulation/verify-step2-v2.mjs
+          git diff --check
+      - name: Commit only the validated Step 2 repair boundary to existing kimi
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/diagnose-step2-v2-final-gaps.yml
+          rm -f .github/workflows/apply-step2-v2-final-gaps.yml
+          git config user.name 'cats-tower-step2-bot'
+          git config user.email 'cats-tower-step2-bot@users.noreply.github.com'
+          git add \
+            simulation/engine-v2/economy.mjs \
+            simulation/engine-v2/state-machines.mjs \
+            simulation/engine-v2/high-volume.mjs \
+            simulation/execution-contract-v2.json \
+            simulation/validate-execution-contract-v2.mjs \
+            simulation/high-volume-result-v2.schema.json \
+            simulation/validate-high-volume-result-v2.mjs \
+            simulation/fixtures/v2/boundary.json \
+            simulation/fixtures/v2/state-transitions.json \
+            simulation/fixtures/v2/validate-fixtures.mjs \
+            simulation/fixtures/v2/validate-execution-fixtures.mjs \
+            simulation/fixtures/v2/manifest.json \
+            quality-reviews/step-2-executable-contract-v2/qualification-result.json \
+            .github/workflows/diagnose-step2-v2-final-gaps.yml \
+            .github/workflows/apply-step2-v2-final-gaps.yml
+          staged="$(git diff --cached --name-only)"
+          printf '%s\n' "$staged"
+          test -n "$staged" || { echo 'no final semantic repairs staged' >&2; exit 1; }
+          while IFS= read -r path; do
+            case "$path" in
+              simulation/engine-v2/economy.mjs|simulation/engine-v2/state-machines.mjs|simulation/engine-v2/high-volume.mjs|simulation/execution-contract-v2.json|simulation/validate-execution-contract-v2.mjs|simulation/high-volume-result-v2.schema.json|simulation/validate-high-volume-result-v2.mjs|simulation/fixtures/v2/boundary.json|simulation/fixtures/v2/state-transitions.json|simulation/fixtures/v2/validate-fixtures.mjs|simulation/fixtures/v2/validate-execution-fixtures.mjs|simulation/fixtures/v2/manifest.json|quality-reviews/step-2-executable-contract-v2/qualification-result.json|.github/workflows/diagnose-step2-v2-final-gaps.yml|.github/workflows/apply-step2-v2-final-gaps.yml)
+                ;;
+              *)
+                echo "staged path escaped final repair boundary: $path" >&2
+                exit 1
+                ;;
+            esac
+          done <<< "$staged"
+          git commit -m 'fix: close final Step 2 semantic audit gaps'
+          git push origin HEAD:kimi
