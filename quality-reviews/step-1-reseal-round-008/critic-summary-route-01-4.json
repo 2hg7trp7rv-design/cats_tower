@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-route-01-4-critic-summary",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "reviewedSemanticContent": {
+    "commit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+    "tree": "99084efa0e6055977b01cf507d7d7e2a391c74ce"
+  },
+  "criticEvidenceHead": {
+    "commit": "9991e6f4ce3389c5f8dfa9c09dcc80c969b7f5f4",
+    "tree": "b0b15112b3628444aa7e4d1971324bef3fe35a91"
+  },
+  "critics": [
+    {"id": 1, "path": "quality-reviews/step-1-reseal-round-008/critics/critic-01-product-originality.json", "blob": "7ffe1296c10f2150f053416bc9ac8555d2883d43", "finalVerdict": "PASS_WITH_TRACKED_P2", "P0": 0, "P1": 0, "P2": 1},
+    {"id": 2, "path": "quality-reviews/step-1-reseal-round-008/critics/critic-02-merchant-combat.json", "blob": "44d58a2757993ab03d3257c5f26865541131dfa5", "finalVerdict": "PASS", "P0": 0, "P1": 0, "P2": 0},
+    {"id": 3, "path": "quality-reviews/step-1-reseal-round-008/critics/critic-03-unbounded-big-number-reset.json", "blob": "953594b24af9933abed3760a9d13fbdd5abe4eab", "finalVerdict": "PASS_AFTER_RERUN", "P0": 0, "P1": 0, "P2": 0},
+    {"id": 4, "path": "quality-reviews/step-1-reseal-round-008/critics/critic-04-economy-probability-monetization.json", "blob": "2df8d5541faab6e034a699850eb96ffd5c8b2ce1", "finalVerdict": "PASS_WITH_TRACKED_P2", "P0": 0, "P1": 0, "P2": 1},
+    {"id": 5, "path": "quality-reviews/step-1-reseal-round-008/critics/critic-05-duplicate-mastery.json", "blob": "62c05f6fc46dfb2437c53213e635b782143f5f6c", "finalVerdict": "PASS_WITH_TRACKED_P2", "P0": 0, "P1": 0, "P2": 1},
+    {"id": 6, "path": "quality-reviews/step-1-reseal-round-008/critics/critic-06-server-authority-fraud.json", "blob": "60241c09c37dc813456a9b218783aae1274804ed", "finalVerdict": "PASS_AFTER_RERUN", "P0": 0, "P1": 0, "P2": 0},
+    {"id": 7, "path": "quality-reviews/step-1-reseal-round-008/critics/critic-07-platform-japan.json", "blob": "0c6d1c5a47762723205bd9958a54ad8dfa9a3fc8", "finalVerdict": "PASS_WITH_TRACKED_RELEASE_P2", "P0": 0, "P1": 0, "P2": 1},
+    {"id": 8, "path": "quality-reviews/step-1-reseal-round-008/critics/critic-08-privacy-minors.json", "blob": "91a3996da6d67d0e2108cc270e2290c9d8917427", "finalVerdict": "PASS_WITH_TRACKED_RELEASE_P2", "P0": 0, "P1": 0, "P2": 1},
+    {"id": 9, "path": "quality-reviews/step-1-reseal-round-008/critics/critic-09-screens-mobile-density.json", "blob": "c08c3007a5e064d10de7b8d9034e17305b580bde", "finalVerdict": "PASS_WITH_TRACKED_P2", "P0": 0, "P1": 0, "P2": 1},
+    {"id": 10, "path": "quality-reviews/step-1-reseal-round-008/critics/critic-10-repository-canonical-consistency.json", "blob": "873a3c0bae698aa7778ad5bede8894ea6e688519", "finalVerdict": "PASS_AFTER_RERUN", "P0": 0, "P1": 0, "P2": 0}
+  ],
+  "initialBlockingFindings": [
+    {"id": "C03-P1-001", "topic": "generated tower ID normalization", "status": "RESOLVED"},
+    {"id": "C06-P1-001", "topic": "immutable ad-offer and login-campaign version binding", "status": "RESOLVED"},
+    {"id": "C06-P1-002", "topic": "spent-paid-grant refund/revocation deficit semantics", "status": "RESOLVED"},
+    {"id": "C10-P1-001", "topic": "registered Floor 5 boss ID", "status": "RESOLVED"},
+    {"id": "C10-P1-002", "topic": "final repository path/claim/history/forbidden-boundary postcheck", "status": "RESOLVED"}
+  ],
+  "trackedP2": [
+    {
+      "id": "C01-P2-001",
+      "topic": "reset display-name similarity/trademark review and final naming for characters 005/006",
+      "owner": "Step 4 and Step 5 before public release",
+      "blocks": "public-facing mockup/content/release approval",
+      "doesNotBlock": "Step 1 semantic seal"
+    },
+    {
+      "id": "C04-P2-001",
+      "topic": "exact ruby consumption order and catalog values",
+      "owner": "Step 2",
+      "blocks": "Step 2 executable seal if absent or unconserved",
+      "doesNotBlock": "Step 1 product meaning"
+    },
+    {
+      "id": "C05-P2-001",
+      "topic": "mastery breakpoint coefficients, fragment equivalence and overflow exchange ratios",
+      "owner": "Step 2 and Step 3",
+      "blocks": "executable seal/Step 3 PASS if guardrails fail",
+      "doesNotBlock": "Step 1 semantic shape"
+    },
+    {
+      "id": "C07-P2-001",
+      "topic": "submission-time Apple/Google policy refresh and Japanese specialist review",
+      "owner": "release owner before submission and after material provider/catalog changes",
+      "blocks": "release PASS",
+      "doesNotBlock": "Step 1 or Step 2 start"
+    },
+    {
+      "id": "C08-P2-001",
+      "topic": "target age, exact age assurance and spend caps",
+      "owner": "product/legal/provider implementation before submission",
+      "blocks": "provider configuration and release approval when audience/regions are fixed",
+      "doesNotBlock": "Step 1 semantic seal"
+    },
+    {
+      "id": "C09-P2-001",
+      "topic": "actual mobile layouts, tap targets, safe areas, text scaling, motion and physical-device feel",
+      "owner": "Step 4 and Step 6",
+      "blocks": "UI/device quality PASS",
+      "doesNotBlock": "Step 1 semantic seal"
+    }
+  ],
+  "summary": {
+    "criticCount": 10,
+    "initialP0": 0,
+    "initialP1": 5,
+    "resolvedP1": 5,
+    "finalUnresolvedP0": 0,
+    "finalUnresolvedP1": 0,
+    "trackedP2Count": 6,
+    "allCriticsSealEligible": true,
+    "historicalResultsModified": false
+  },
+  "verdict": "PASS_FOR_FINAL_JUDGE"
+}
