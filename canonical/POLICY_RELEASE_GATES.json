@@ -1,0 +1,189 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-policy-release-gates-round-008-preseal",
+  "asOf": "2026-08-27",
+  "researchCutoff": "2026-08-26T23:59:59+09:00",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "authority": "PRESEAL_DRAFT",
+  "step1SealRequired": true,
+  "mayAuthorizeStep2": false,
+  "mayAuthorizeRelease": false,
+  "legalAdvice": false,
+  "sourceRegister": "quality-reviews/step-1-reseal-round-008/source-register-route-01-2.json",
+  "gateStates": ["NOT_STARTED", "DESIGN_FIXED", "IMPLEMENTED", "EVIDENCE_READY", "EXPERT_REVIEWED", "SUBMISSION_REFRESHED", "PASS", "BLOCKED"],
+  "gates": [
+    {
+      "id": "APPLE-IAP-001",
+      "platform": "APPLE",
+      "trigger": "digital goods, ruby, tickets, subscriptions or feature unlocks",
+      "requirement": "Use applicable Apple IAP; purchased currency does not expire; restorable purchases have restore.",
+      "evidence": ["StoreKit product catalog", "in-app disclosure", "paid-ruby ledger test", "restore test"],
+      "releaseBlocker": true,
+      "expertReviewRequired": false,
+      "sourceIds": ["SRC-APPLE-001"],
+      "state": "DESIGN_FIXED"
+    },
+    {
+      "id": "APPLE-RANDOM-001",
+      "platform": "APPLE",
+      "trigger": "purchased randomized virtual item mechanism",
+      "requirement": "Disclose odds before purchase or draw; show rate-table version, pity, featured guarantee, carryover, exchange and ending rules.",
+      "evidence": ["S10 screenshots", "server rate-table digest", "odds and pity conformance tests"],
+      "releaseBlocker": true,
+      "expertReviewRequired": false,
+      "sourceIds": ["SRC-APPLE-001"],
+      "state": "DESIGN_FIXED"
+    },
+    {
+      "id": "APPLE-ACCOUNT-001",
+      "platform": "APPLE",
+      "trigger": "account creation or linking",
+      "requirement": "Provide discoverable in-app full-account deletion initiation, transparent confirmation, billing explanation and disclosed legal retention.",
+      "evidence": ["S01/account screenshots", "deletion E2E", "retention matrix", "privacy policy"],
+      "releaseBlocker": true,
+      "expertReviewRequired": true,
+      "sourceIds": ["SRC-APPLE-002"],
+      "state": "DESIGN_FIXED"
+    },
+    {
+      "id": "APPLE-PRIVACY-001",
+      "platform": "APPLE",
+      "trigger": "data collection, SDK, analytics, advertising or tracking",
+      "requirement": "App Privacy label and privacy policy match actual app and SDK flows; ATT precedes tracking; refusal does not gate core play.",
+      "evidence": ["SDK inventory", "network capture", "privacy manifest", "App Store Connect declaration", "ATT tests"],
+      "releaseBlocker": true,
+      "expertReviewRequired": true,
+      "sourceIds": ["SRC-APPLE-003", "SRC-APPLE-004"],
+      "state": "DESIGN_FIXED"
+    },
+    {
+      "id": "GOOGLE-BILLING-001",
+      "platform": "GOOGLE_PLAY",
+      "trigger": "digital goods, currency, tickets, subscription or feature unlocks",
+      "requirement": "Use applicable Play Billing or documented eligible program; backend verifies purchase; PENDING grants nothing; PURCHASED grants once and is acknowledged.",
+      "evidence": ["Play catalog", "purchase-state E2E", "verification logs", "duplicate-token test", "acknowledgement test"],
+      "releaseBlocker": true,
+      "expertReviewRequired": false,
+      "sourceIds": ["SRC-GOOGLE-001", "SRC-GOOGLE-002"],
+      "state": "DESIGN_FIXED"
+    },
+    {
+      "id": "GOOGLE-RANDOM-001",
+      "platform": "GOOGLE_PLAY",
+      "trigger": "purchase-linked randomized virtual items",
+      "requirement": "Odds are disclosed before and in close proximity to purchase; indirect paid currency and paid tickets are included.",
+      "evidence": ["S10 screenshots", "rate-table digest", "localization review"],
+      "releaseBlocker": true,
+      "expertReviewRequired": false,
+      "sourceIds": ["SRC-GOOGLE-001"],
+      "state": "DESIGN_FIXED"
+    },
+    {
+      "id": "GOOGLE-REFUND-001",
+      "platform": "GOOGLE_PLAY",
+      "trigger": "one-time products, subscriptions or entitlements",
+      "requirement": "Process RTDN and API events idempotently and out of order; refund, revocation and restore reconcile server ledgers and entitlements.",
+      "evidence": ["RTDN fixtures", "refund/revocation/restore E2E", "ledger conservation test"],
+      "releaseBlocker": true,
+      "expertReviewRequired": false,
+      "sourceIds": ["SRC-GOOGLE-002"],
+      "state": "DESIGN_FIXED"
+    },
+    {
+      "id": "GOOGLE-ADS-001",
+      "platform": "GOOGLE_PLAY",
+      "trigger": "advertising SDK or placement",
+      "requirement": "Initial product uses rewarded opt-in only; no unexpected or disruptive ads, accidental-click placement, or battle/purchase/recovery interruption.",
+      "evidence": ["placement inventory", "screen recording", "consent tests", "ad-receipt idempotency"],
+      "releaseBlocker": true,
+      "expertReviewRequired": false,
+      "sourceIds": ["SRC-GOOGLE-005"],
+      "state": "DESIGN_FIXED"
+    },
+    {
+      "id": "GOOGLE-DATA-001",
+      "platform": "GOOGLE_PLAY",
+      "trigger": "user data, account, SDK or backend",
+      "requirement": "User Data policy, Data Safety and privacy policy match actual flows; account creation includes in-app deletion and public web resource.",
+      "evidence": ["data map", "SDK inventory", "Data Safety export", "deletion E2E", "web resource"],
+      "releaseBlocker": true,
+      "expertReviewRequired": true,
+      "sourceIds": ["SRC-GOOGLE-003", "SRC-GOOGLE-004"],
+      "state": "DESIGN_FIXED"
+    },
+    {
+      "id": "JP-CARD-MATCH-001",
+      "platform": "JAPAN",
+      "trigger": "paid randomized acquisition and collection rewards",
+      "requirement": "Do not grant a separate economic benefit for completing a specific set of two or more distinct paid-random items; prohibit comp gacha.",
+      "evidence": ["reward-rule audit", "banner-catalog audit", "legal-review memo"],
+      "releaseBlocker": true,
+      "expertReviewRequired": true,
+      "sourceIds": ["SRC-JP-001"],
+      "state": "DESIGN_FIXED"
+    },
+    {
+      "id": "JP-MISREP-001",
+      "platform": "JAPAN",
+      "trigger": "odds, price, discount, product content, pity, guarantee or limited-time claim",
+      "requirement": "Displayed terms match server and catalog reality; no fake discount, hidden zero rate, misleading mass-draw count or ambiguous value.",
+      "evidence": ["catalog/display diff test", "odds conformance", "campaign approval record"],
+      "releaseBlocker": true,
+      "expertReviewRequired": true,
+      "sourceIds": ["SRC-JP-001"],
+      "state": "DESIGN_FIXED"
+    },
+    {
+      "id": "JP-PREPAID-001",
+      "platform": "JAPAN",
+      "trigger": "paid ruby or other stored value",
+      "requirement": "Determine prepaid-payment-instrument applicability and obligations for issuer display, unused balance, filing or registration, safeguarding and termination refund.",
+      "evidence": ["business/legal classification", "paid/free ledger", "unused-balance report", "termination plan"],
+      "releaseBlocker": true,
+      "expertReviewRequired": true,
+      "sourceIds": ["SRC-JP-002"],
+      "state": "DESIGN_FIXED"
+    },
+    {
+      "id": "JP-MINOR-001",
+      "platform": "JAPAN",
+      "trigger": "minors may access purchases or randomized items",
+      "requirement": "Age and guardian protections, clear pricing, purchase history, repeated-spend warnings, parental-control guidance and support/refund process are defined and tested.",
+      "evidence": ["age-flow decision", "guardian copy", "spend-warning tests", "support runbook"],
+      "releaseBlocker": true,
+      "expertReviewRequired": true,
+      "sourceIds": ["SRC-JP-005", "SRC-JP-006"],
+      "state": "DESIGN_FIXED"
+    },
+    {
+      "id": "JP-PRIVACY-001",
+      "platform": "JAPAN",
+      "trigger": "personal data, identifiers, analytics, ads, support or cross-border providers",
+      "requirement": "Purpose, minimization, security, processor supervision, third-party and cross-border transfer, rights response and incident response are mapped.",
+      "evidence": ["data inventory", "vendor/subprocessor register", "consent/notice", "incident plan", "legal review"],
+      "releaseBlocker": true,
+      "expertReviewRequired": true,
+      "sourceIds": ["SRC-JP-003", "SRC-JP-004"],
+      "state": "DESIGN_FIXED"
+    },
+    {
+      "id": "GLOBAL-REFRESH-001",
+      "platform": "ALL",
+      "trigger": "submission or material SDK, catalog or provider change",
+      "requirement": "Refresh Apple and Google policies and Japanese legal review immediately before release; record versions and reviewer.",
+      "evidence": ["submission-time source snapshot", "expert sign-off", "release checklist"],
+      "releaseBlocker": true,
+      "expertReviewRequired": true,
+      "sourceIds": ["SRC-APPLE-001", "SRC-GOOGLE-001", "SRC-JP-001", "SRC-JP-002", "SRC-JP-003"],
+      "state": "NOT_STARTED"
+    }
+  ],
+  "globalInvariants": [
+    "This PRESEAL_DRAFT cannot authorize Step 2 until the Round 008 Step 1 seal validates it.",
+    "No gate claims guaranteed store approval or a final legal conclusion.",
+    "User review evidence never establishes a platform or legal requirement.",
+    "Runtime and provider implementation evidence is deferred to later authorized steps.",
+    "Submission-time policy refresh and Japanese expert review remain mandatory release blockers."
+  ]
+}
