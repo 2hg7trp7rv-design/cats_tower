@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-v2-preseal-gap-review",
+  "reviewedAt": "2026-08-27T22:35:00+09:00",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "reviewedContentCommit": "2c2619766918fafccb85e2fecc4c5c46ea91ee5c",
+  "reviewedContentTree": "b2528ac4b9876a475a3c00844e9ee12ab1f92d32",
+  "role": "INDEPENDENT_ADVERSARIAL_CRITIC",
+  "perspective": "step3-execution-readiness-and-model-integrity",
+  "verdict": "FAIL_REPAIR_REQUIRED",
+  "findings": [
+    {
+      "id": "S2-P0-EXECUTION-READY-001",
+      "severity": "P0",
+      "status": "OPEN",
+      "paths": [
+        "simulation/engine-v2/run-plan.mjs",
+        "simulation/result-v2.schema.json",
+        "simulation/validate-result-v2.mjs",
+        "simulation/run-plan-v2.json"
+      ],
+      "finding": "The committed runner permits qualification mode only. There is no committed executable path or closed result contract for the 800-seed calibration partition, 200-seed unseen holdout partition, 15000-scenario gameplay matrix, or the six high-volume Step 3 suites.",
+      "impact": "Step 3 would have to design and implement the validator and result contract before it could validate. Step 2 therefore is not ready for Step 3 large-scale validation and cannot satisfy Acceptance G02/G04/G05.",
+      "requiredRepair": "Commit Step-3-owned but Step-2-sealed execution entrypoints, partition-aware scenario identity, closed gameplay/high-volume result schemas and validators, and bounded contract-smoke fixtures without executing the Step 3 sample volumes."
+    },
+    {
+      "id": "S2-P1-MODEL-SOURCE-001",
+      "severity": "P1",
+      "status": "OPEN",
+      "paths": [
+        "simulation/engine-v2/run-scenario.mjs",
+        "simulation/candidate-v2.json",
+        "simulation/candidate-v2.schema.json",
+        "simulation/validate-candidate-v2.mjs"
+      ],
+      "finding": "First-reset baselines, build reset adjustments and horizon baseline minutes are hard-coded inside the engine rather than sealed candidate fields.",
+      "impact": "Candidate tuning can change while the executable model silently continues to use old constants, making source binding incomplete and simulation results circular or stale.",
+      "requiredRepair": "Move all balance-affecting progression baselines and jitter bounds into strict candidate fields and make the engine read only those fields. Add negative fixtures that mutate each binding and prove output changes or validation failure."
+    },
+    {
+      "id": "S2-P1-SCENARIO-ID-001",
+      "severity": "P1",
+      "status": "OPEN",
+      "paths": [
+        "simulation/engine-v2/run-scenario.mjs"
+      ],
+      "finding": "scenarioId always embeds the qualification namespace, so the function cannot safely identify calibration or holdout scenarios.",
+      "impact": "Extending the current runner could create identity collisions or mislabeled evidence across partitions.",
+      "requiredRepair": "Require an explicit namespace and partition in the scenario input and include both in the canonical scenario identity and digest."
+    },
+    {
+      "id": "S2-P1-TAIL-CONTRACT-001",
+      "severity": "P1",
+      "status": "OPEN",
+      "paths": [
+        "canonical/STEP2_DEPENDENCY_CLOSURE.json",
+        "simulation/candidate-v2.json",
+        "simulation/result-v2.schema.json"
+      ],
+      "finding": "The sealed dependency closure and candidate declare p50/p90/p99 tail metrics, but the only committed result schema is qualification-specific and cannot represent Step 3 tail summaries or holdout evidence.",
+      "impact": "Required result semantics are declared but not executable or schema-closed.",
+      "requiredRepair": "Add strict result variants for gameplay partitions and high-volume suites with exact percentile definitions, sample-count bindings, partition separation and no partial-run promotion."
+    },
+    {
+      "id": "S2-P1-CI-EXACT-001",
+      "severity": "P1",
+      "status": "OPEN",
+      "paths": [
+        ".github/workflows/verify-step-2-v2.yml"
+      ],
+      "finding": "The critic-fix content commit was created by a GitHub Actions token, so no dedicated push verification run exists for that exact commit.",
+      "impact": "The repair was validated before commit, but the final live commit lacks an independently triggered exact-SHA workflow record.",
+      "requiredRepair": "After the execution-readiness repairs, trigger the dedicated workflow from a non-recursive commit and bind its exact head SHA, tree, run and job in completion evidence."
+    },
+    {
+      "id": "S2-P2-MIGRATION-TIME-001",
+      "severity": "P2",
+      "status": "TRACKED_NONBLOCKING_FOR_CONTRACT",
+      "paths": [
+        "simulation/migrations/v1-to-v2/migrate.mjs"
+      ],
+      "finding": "migratedAt is a deterministic fixture timestamp rather than an injected runtime audit timestamp.",
+      "impact": "This is acceptable only for the deterministic migration contract; production migration must inject a server audit timestamp and audit ID without changing the canonical transformed payload semantics.",
+      "requiredRepair": "Document and fixture-test the separation between deterministic migration payload and runtime audit envelope before backend implementation."
+    }
+  ],
+  "unresolved": {
+    "P0": 1,
+    "P1": 4,
+    "P2": 1
+  },
+  "step2PassAllowed": false,
+  "step3Allowed": false,
+  "writeBoundary": {
+    "runtimeChanged": false,
+    "assetChanged": false,
+    "backendChanged": false,
+    "productionChanged": false
+  }
+}
