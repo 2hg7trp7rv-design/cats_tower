@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-route-01-4-acceptance",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "status": "ACTIVE_BEFORE_FINAL_CRITICS",
+  "scope": "Final Step 1 mirror and canonical review, ten separated critics, accepted finding repair, regression, final judge, exact seal, activation/completion evidence and live read-back.",
+  "reviewBase": {
+    "contentCommit": "5da274ddc63876565d3d210a7e2b5a87afca6730",
+    "contentTree": "b479c92bab43581f3ec293fecbb16ce9592a9dfa",
+    "message": "docs: freeze Round 008 final preseal content"
+  },
+  "previewEvidence": {
+    "deploymentId": "dpl_HanC12dDQdYSEpEva92GxfS2BC4s",
+    "url": "https://catstower-nw5arrjfc-shinyaaas-projects.vercel.app",
+    "state": "READY",
+    "target": null,
+    "githubCommit": "5da274ddc63876565d3d210a7e2b5a87afca6730",
+    "githubBranch": "kimi",
+    "commitMatch": true,
+    "branchMatch": true,
+    "readyMeaning": "documentation Preview build evidence only; not quality PASS",
+    "productionAliasMayChange": false
+  },
+  "authoritativeInputs": [
+    "CHATGPT_PROJECT_INSTRUCTIONS1.md",
+    "quality-reviews/step-1-canonical-design/active-change-control.json",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-012.json",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/user-decision-lock-round-005.json",
+    "MASTER_SPEC.md",
+    "PROJECT_STATUS.json",
+    "QUALITY_GATE.md",
+    "PROJECT_HANDOVER.md",
+    "AGENTS.md",
+    "AI_PROJECT_POLICY.json",
+    "FLOORS_1_10_DESIGN.md",
+    "canonical/STABLE_ID_REGISTRY.json",
+    "canonical/SCREEN_STATE_REGISTRY.json",
+    "canonical/STATE_TRANSITION_CONTRACT.json",
+    "canonical/POLICY_RELEASE_GATES.json",
+    "canonical/STEP2_DEPENDENCY_CLOSURE.json",
+    "quality-reviews/step-1-reseal-round-008/canonical-coverage-matrix.json",
+    "quality-reviews/step-1-reseal-round-008/source-register-route-01-2.json",
+    "quality-reviews/step-1-reseal-round-008/competitive-research.md",
+    "quality-reviews/step-1-reseal-round-008/platform-policy-audit.md",
+    "simulation/INPUT_CONTRACT.md",
+    "simulation/CURRENT_STATUS.json",
+    ".github/workflows/CURRENT_STATUS.md"
+  ],
+  "criticPaths": [
+    "quality-reviews/step-1-reseal-round-008/critics/critic-01-product-originality.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-02-merchant-combat.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-03-unbounded-big-number-reset.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-04-economy-probability-monetization.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-05-duplicate-mastery.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-06-server-authority-fraud.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-07-platform-japan.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-08-privacy-minors.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-09-screens-mobile-density.json",
+    "quality-reviews/step-1-reseal-round-008/critics/critic-10-repository-canonical-consistency.json"
+  ],
+  "finalArtifacts": {
+    "deploymentEvidence": "quality-reviews/step-1-reseal-round-008/deployment-evidence-route-01-4.json",
+    "criticSummary": "quality-reviews/step-1-reseal-round-008/critic-summary-route-01-4.json",
+    "finalRepositoryPostcheck": "quality-reviews/step-1-reseal-round-008/final-repository-postcheck.json",
+    "finalJudge": "quality-reviews/step-1-reseal-round-008/final-judge.json",
+    "seal": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
+    "activationCompletionEvidence": "quality-reviews/step-1-reseal-round-008/activation-completion-evidence-round-008.json",
+    "liveReadback": "quality-reviews/step-1-reseal-round-008/live-readback-round-008.json"
+  },
+  "severity": {
+    "P0": "Unauthorized destructive/public/provider/Production change, loss of historical evidence, executable legacy promotion, or product contract defect that can create unrecoverable economic or legal harm.",
+    "P1": "Contradictory or missing current authority, unresolved stable-ID/state/dependency gap, invalid evidence ancestry/digest binding, or any defect that prevents a truthful Step 1 seal or Step 2 implementation without guessing.",
+    "P2": "Nonblocking later-step implementation or release item whose owner, blocking condition and verification point are explicit.",
+    "P3": "Editorial or optional clarity improvement with no semantic or gate impact."
+  },
+  "requirements": [
+    {"id": "R014-01", "requirement": "All writes use existing kimi explicitly; no branch, PR, merge, rebase, cherry-pick or force push.", "failure": "Any prohibited repository operation occurs."},
+    {"id": "R014-02", "requirement": "The ten critics are separate artifacts and review the same exact semantic content commit/tree or an explicitly recorded repaired successor.", "failure": "A critic reviews an unspecified or mixed content state."},
+    {"id": "R014-03", "requirement": "All accepted P0/P1 findings are repaired before final judge; repair changes create a new frozen content commit/tree and all affected critics are rerun against it.", "failure": "The judge ignores or silently defers a P0/P1."},
+    {"id": "R014-04", "requirement": "Stable IDs, cross-file references and state-machine dependencies are exact; no persistent ID is invented only in a lower document.", "failure": "Any canonical write/reference cannot be resolved or violates instance normalization."},
+    {"id": "R014-05", "requirement": "Current-authority finite-100F/no-gacha/Dawn/two-currency/nine-screen/local-only/3,000-scenario assertions are zero; all tracked paths and new Route 01-4 paths are classified.", "failure": "Any current assertion, unclassified path or unclassified match remains."},
+    {"id": "R014-06", "requirement": "Historical Acceptance/PASS/audit/deployment evidence remains byte-unchanged and is not used to authorize the current product.", "failure": "Historical evidence is rewritten or promoted."},
+    {"id": "R014-07", "requirement": "The matching kimi Preview is READY, target is Preview/null, commit and branch match, and Production aliases/domains are not changed.", "failure": "Deployment mismatch or Production alias operation occurs."},
+    {"id": "R014-08", "requirement": "Final judge reports unresolved P0=0 and P1=0, exact reviewed content/evidence commit/tree, changed paths, forbidden paths, Preview binding and physical iPhone NOT_VERIFIED.", "failure": "Any required field is absent or unsupported."},
+    {"id": "R014-09", "requirement": "The seal binds exact semantic content paths and blob/digest evidence, critic summary, final postcheck, final judge and Preview; Vercel READY alone is insufficient.", "failure": "Seal inputs are ambiguous, stale or self-asserted without read-back."},
+    {"id": "R014-10", "requirement": "A direct-descendant activation/completion commit updates active mirrors to Step 1 PASS and Step 2 READY_TO_START without creating V2 artifacts; a later live read-back confirms HEAD/tree/status/seal.", "failure": "Status is advanced before a valid seal, V2 work starts, or live read-back does not match."},
+    {"id": "R014-11", "requirement": "Runtime, assets, V1 candidate/schema/validator/simulator, workflow YAML, backend, payment provider and ad network remain unchanged.", "failure": "Any forbidden implementation or provider path changes."},
+    {"id": "R014-12", "requirement": "Physical iPhone remains NOT_VERIFIED and no runtime, economic simulation, payment, ad or device quality PASS is inferred from Step 1 documentation.", "failure": "Later-step quality is falsely claimed."}
+  ],
+  "repairBoundary": {
+    "allowed": [
+      "Step 1 semantic canonical documents",
+      "active status and handover mirrors",
+      "Route 01-4 acceptance, critic, judge, postcheck, deployment, seal and completion evidence"
+    ],
+    "forbidden": [
+      "runtime/**",
+      "assets/**",
+      "simulation/candidate-v1.json",
+      "simulation/candidate.schema.json",
+      "simulation/validate-candidate.mjs",
+      "simulation/executable-seal.schema.json",
+      "simulation/validate-executable-seal.mjs",
+      ".github/workflows/verify-main.yml",
+      ".github/workflows/verify-step-1-artifacts.yml",
+      "backend",
+      "payment provider",
+      "ad network",
+      "PR operation",
+      "Production alias"
+    ]
+  },
+  "historicalImmutability": [
+    "quality-reviews/step-1-legacy-baseline/**",
+    "quality-reviews/step-1-legacy-baseline-round-007/**",
+    "quality-reviews/step-1-canonical-design/acceptance*.json",
+    "quality-reviews/step-1-canonical-design/audits/**",
+    "quality-reviews/step-1-hero-merchant-large-idle-integration/** existing pre-Round-008 artifacts",
+    "quality-reviews/step-1-reseal-round-008/checkpoint-*-evidence.json"
+  ],
+  "commitSequence": [
+    "acceptance",
+    "ten critics against frozen content",
+    "accepted finding repair and new frozen content when needed",
+    "affected critic rerun and critic summary",
+    "final repository postcheck and final judge evidence",
+    "seal",
+    "direct-descendant activation/completion mirrors and evidence",
+    "live read-back evidence"
+  ],
+  "passCondition": "Every requirement passes, unresolved P0/P1 are zero, exact evidence ancestry is valid, forbidden changes are zero, and live read-back confirms the activated seal. Otherwise Step 1 remains IN_PROGRESS and Step 2 remains BLOCKED.",
+  "physicalIPhoneVerified": false
+}
