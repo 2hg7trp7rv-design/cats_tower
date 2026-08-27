@@ -1,11 +1,11 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "updatedDate": "2026-08-28",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "currentStep": 2,
-  "status": "IN_PROGRESS",
-  "phase": "CONTENT_PHASE_PASS",
+  "status": "PASS",
+  "phase": "SEALED",
   "step1": {
     "status": "PASS",
     "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
@@ -16,14 +16,14 @@
     "sealTree": "9eac6b6103d65cf8bcb13859d00e43cd3389fa8a"
   },
   "step2Allowed": true,
-  "step3Allowed": false,
+  "step3Allowed": true,
   "acceptance": {
     "path": "quality-reviews/step-2-executable-contract-v2/acceptance-matrix.json",
     "blob": "f8986a3d436e93a003ff0f7e07f6a5d28d6faf2f",
     "commit": "e02a9af48aaab1a82b1ac4563a4c03f4922eb388",
     "status": "ACTIVE"
   },
-  "reason": "The V2 executable content and exact-SHA source-bound verification now pass. Step 2 remains IN_PROGRESS because the executable seal, independent critics, final judge, completion evidence and final live read-back have not yet passed.",
+  "reason": "Step 2 V2 executable semantics are sealed. Five independent critics report unresolved P0/P1=0, exact-SHA regression and seal validation succeeded, and completion/live-readback gates authorize Step 3. Balance remains unevaluated until Step 3 full-volume execution.",
   "v1Artifacts": {
     "lock": "simulation/legacy-v1-lock.json",
     "executeForCurrentPromotion": false,
@@ -38,35 +38,47 @@
   },
   "v2Artifacts": {
     "acceptance": "ACTIVE",
-    "candidate": "PRESENT_UNSEALED",
-    "schema": "PRESENT_UNSEALED",
-    "validator": "PRESENT_UNSEALED",
-    "simulator": "PRESENT_UNSEALED",
-    "resultSchema": "PRESENT_UNSEALED",
-    "resultValidator": "PRESENT_UNSEALED",
-    "runPlan": "PRESENT_UNSEALED",
-    "fixtures": "PRESENT_UNSEALED",
-    "migrations": "PRESENT_UNSEALED",
-    "dedicatedWorkflow": "PRESENT_UNSEALED",
-    "qualificationResult": "PRESENT_UNSEALED",
-    "executableSeal": "NOT_CREATED",
-    "critics": "NOT_COMPLETED",
-    "finalJudge": "NOT_COMPLETED",
-    "completionEvidence": "NOT_CREATED",
-    "liveReadback": "NOT_CREATED"
+    "candidate": "SEALED",
+    "schema": "SEALED",
+    "validator": "SEALED",
+    "simulator": "SEALED",
+    "resultSchema": "SEALED",
+    "resultValidator": "SEALED",
+    "runPlan": "SEALED",
+    "fixtures": "SEALED",
+    "migrations": "SEALED",
+    "dedicatedWorkflow": "SEALED",
+    "qualificationResult": "SEALED",
+    "executableSeal": "SEALED",
+    "critics": "COMPLETED_P0_P1_ZERO",
+    "finalJudge": "PASS",
+    "completionEvidence": "PASS",
+    "liveReadback": "PASS_CHAIN_READY_FOR_STATUS_ACTIVATION"
   },
-  "contentPhaseEvidence": {
-    "contentCommit": "408ce59760945ec032bec6e2b87e4b9bc824848e",
-    "contentTree": "3c2fc02fc55eff6aeec2016cb9d014148aec5b11",
-    "evidenceCommit": "e7bdc2ffa530e65d5416789429f54de645fe7fc7",
-    "evidenceTree": "db96b8c03e9315b2e6f6c82c7389adbc1e568374",
-    "dedicatedWorkflow": ".github/workflows/verify-step-2-v2.yml",
-    "workflowRunId": "33094611846",
-    "jobId": "98596129603",
+  "sealEvidence": {
+    "semanticCommit": "724d04940f9f3794b993cddbc5af3a7163a0395b",
+    "semanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
+    "sealPath": "simulation/executable-seal-v2.json",
+    "sealBlob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
+    "sealActivationCommit": "89174eeebb033fe807a0592c8df0279c2a7b9a6f",
+    "sealActivationTree": "ccf444df436d63d86fd4da0355f20349753b0546",
+    "workflow": ".github/workflows/verify-step-2-v2.yml",
+    "workflowRunId": "33104391753",
+    "jobId": "98630217077",
     "conclusion": "SUCCESS",
-    "runtimeVersion": "v22.23.2",
-    "sourceReadbackMode": "FULL_GIT_BLOB_READBACK",
-    "verifierVerdict": "CONTENT_PHASE_PASS_STEP2_IN_PROGRESS"
+    "sealValidatorVerdict": "PASS_EXECUTABLE_SEAL_V2",
+    "criticSummaryPath": "quality-reviews/step-2-executable-contract-v2/critic-summary.json",
+    "criticSummaryBlob": "4d85d95c0b00b3e2aed4aecc6025ceea9253308e",
+    "criticCount": 5,
+    "unresolvedP0": 0,
+    "unresolvedP1": 0,
+    "trackedP2": 6,
+    "finalJudgePath": "quality-reviews/step-2-executable-contract-v2/final-judge.json",
+    "finalJudgeBlob": "44fe4c83e3ea1ceefba836200100b6d6628028d1",
+    "completionEvidencePath": "quality-reviews/step-2-executable-contract-v2/completion-evidence.json",
+    "completionEvidenceBlob": "1f771b02f0982c879e038bfd36925ed889142d95",
+    "liveReadbackPath": "quality-reviews/step-2-executable-contract-v2/live-readback.json",
+    "liveReadbackBlob": "cfec952f14680482409ff621e9c89ed36cf4e6d6"
   },
   "qualificationScope": {
     "scenarioCount": "30",
@@ -75,30 +87,23 @@
     "executionVersion": "cats-tower-step3-executor-v1.1.0",
     "reproduced": true,
     "balanceVerdict": "NOT_EVALUATED_STEP2",
-    "step3Authorized": false
+    "step3Authorized": true
   },
   "minimumLaterValidation": {
     "builds": 3,
     "personas": 5,
     "seedsPerBuildPersona": 1000,
     "minimumScenarios": 15000,
+    "calibrationScenarios": 12000,
+    "unseenHoldoutScenarios": 3000,
     "separateMonteCarlo": true,
     "separateStateTransitionTests": true,
     "separateLargeNumberPropertyTests": true,
-    "horizons": [
-      "1-10F",
-      "100F",
-      "1000F",
-      "10000F-or-equivalent",
-      "repeated-resets",
-      "30-45-day-economy"
-    ],
-    "executionOwner": "STEP3_ONLY_AFTER_STEP2_PASS"
+    "horizons": ["1-10F", "100F", "1000F", "10000F-or-equivalent", "repeated-resets", "30-45-day-economy"],
+    "executionOwner": "STEP3"
   },
   "writeBoundary": {
-    "allowed": [
-      "Step 2 V2 executable contract and quality evidence"
-    ],
+    "allowed": ["Step 3 large-scale validation artifacts and evidence"],
     "runtimeChanged": false,
     "assetChanged": false,
     "v1Changed": false,
@@ -106,17 +111,16 @@
     "paymentProviderChanged": false,
     "adNetworkChanged": false,
     "productionChanged": false,
-    "step3MayRun": false
+    "step3MayRun": true
   },
-  "nextAuthorizedWork": "Run independent Step 2 critics, repair every P0/P1, create and validate the V2 executable seal, then produce the final judge, completion evidence and final live read-back. Step 3 remains blocked.",
+  "nextAuthorizedWork": "Start Step 3 sealed large-scale validation. Execute minimum 15,000 gameplay scenarios plus separate high-volume probability, state-transition, refund/replay/race and large-number suites; do not reuse unseen holdout for tuning.",
   "knownCiDiscrepancy": {
     "workflow": ".github/workflows/verify-main.yml",
-    "workflowRunId": "33095422270",
-    "conclusion": "FAILURE",
-    "failingAssertion": "AGENTS.md must retain exactly one Step 1A PASS marker line",
-    "classification": "LEGACY_ROUND7_CURRENT_STATUS_ASSERTION_INCOMPATIBLE_WITH_ROUND008_STEP2_STATUS",
-    "step1HistoricalBaselineCoreCheck": "PASS_BEFORE_LEGACY_CURRENT_MARKER_ASSERTION",
-    "affectsDedicatedStep2ContentVerdict": false,
-    "remediation": "Separate historical Round 7 evidence validation from current Round 008 and Step 2 status validation. Do not restore obsolete current-state markers."
-  }
+    "conclusion": "FAILURE_EXPECTED_UNTIL_GOVERNANCE_REPAIR",
+    "classification": "LEGACY_ROUND7_CURRENT_STATUS_ASSERTION_INCOMPATIBLE_WITH_ROUND008_AND_LATER_STATUS",
+    "affectsDedicatedStep2SealVerdict": false,
+    "remediation": "Separate historical Round 7 evidence validation from current-status validation. Do not restore obsolete current-state markers."
+  },
+  "physicalIPhoneVerified": false,
+  "productionChanged": false
 }
