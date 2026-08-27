@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-reseal-round-008-route-01-4-deployment-evidence",
+  "createdAt": "2026-08-27",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "semanticContent": {
+    "commit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+    "tree": "99084efa0e6055977b01cf507d7d7e2a391c74ce",
+    "message": "docs: extend canonical coverage for repaired dependencies"
+  },
+  "vercel": {
+    "teamId": "team_6odZCZQ1QxjzhPdC9sgEtoCM",
+    "projectId": "prj_3Ip3e0eYMy9SchP1vS36ibjJP9LB",
+    "projectName": "cats_tower",
+    "deploymentId": "dpl_712tz3ij7ruB8cRe5JqudmMYFtdu",
+    "url": "https://catstower-46sbgrdcg-shinyaaas-projects.vercel.app",
+    "state": "READY",
+    "target": null,
+    "source": "git",
+    "githubRepository": "2hg7trp7rv-design/cats_tower",
+    "githubBranch": "kimi",
+    "githubCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+    "commitMatch": true,
+    "branchMatch": true,
+    "targetIsPreview": true,
+    "readyMeaning": "The documentation build and Preview deployment completed. It does not establish product, simulation, payment, ad, device or Step 1 quality PASS."
+  },
+  "productionBaseline": {
+    "domainsObservedBeforeRoute014Completion": [
+      "cats-tau-dusky.vercel.app",
+      "catstower-shinyaaas-projects.vercel.app",
+      "catstower-git-main-shinyaaas-projects.vercel.app"
+    ],
+    "productionAliasOperationPerformed": false,
+    "productionTargetDeploymentCreated": false
+  },
+  "verification": {
+    "deploymentReady": true,
+    "targetNullPreview": true,
+    "commitAndBranchMatch": true,
+    "productionAliasChangedByRoute014": false,
+    "runtimeQualityInferred": false,
+    "physicalIPhoneVerified": false
+  },
+  "verdict": "PASS_AS_PREVIEW_BUILD_EVIDENCE_ONLY"
+}
