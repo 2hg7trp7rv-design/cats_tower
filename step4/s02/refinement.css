@@ -1,1 +1,368 @@
-PLACEHOLDER
+/* S02 visual refinement round 003 — applied after styles.css. */
+
+.player-bar {
+  grid-template-columns: 120px minmax(0, 1fr) 48px;
+  gap: 3px;
+  min-height: calc(60px + var(--safe-top));
+  padding: calc(5px + var(--safe-top)) 4px 5px;
+}
+
+.profile-button {
+  grid-template-columns: 39px minmax(0, 1fr);
+  gap: 4px;
+  padding-inline: 2px;
+}
+
+.portrait-frame {
+  width: 39px;
+  height: 42px;
+}
+
+.portrait-frame img {
+  width: 39px;
+  height: 40px;
+}
+
+.profile-copy strong {
+  font-size: 12px;
+}
+
+.profile-copy > span:not(.profile-progress) {
+  font-size: 8px;
+}
+
+.resource-strip {
+  gap: 2px;
+}
+
+.resource-card {
+  min-width: 44px;
+  gap: 2px;
+  padding: 3px 2px;
+}
+
+.resource-card small {
+  display: none;
+}
+
+.resource-card strong {
+  margin-top: 0;
+  color: #fff0c8;
+  font-size: clamp(10px, 2.8vw, 13px);
+  text-align: center;
+}
+
+.resource-icon {
+  width: 16px;
+  height: 16px;
+  flex-basis: 16px;
+  font-size: 10px;
+}
+
+.menu-button {
+  padding-inline: 8px;
+}
+
+.context-bar {
+  min-height: 54px;
+  padding-block: 4px;
+}
+
+.context-copy h1 {
+  font-size: clamp(16px, 4.6vw, 20px);
+}
+
+.battle-stage {
+  min-height: clamp(292px, 36svh, 300px);
+  background:
+    linear-gradient(180deg, rgba(55, 94, 55, .25), rgba(28, 12, 8, .06)),
+    url("/assets/saga/bg_corridor.webp") center 42% / cover no-repeat,
+    #394932;
+}
+
+.battle-stage::before {
+  background:
+    linear-gradient(180deg, rgba(255, 224, 157, .13), transparent 35%),
+    radial-gradient(circle at 48% 48%, transparent 0 53%, rgba(25, 10, 5, .1) 75%, rgba(14, 5, 3, .31) 100%);
+  backdrop-filter: brightness(1.24) saturate(1.18);
+}
+
+.event-banner {
+  grid-template-columns: 52px 1fr;
+  width: min(195px, 53%);
+  height: 67px;
+}
+
+.event-banner img {
+  width: 50px;
+  height: 58px;
+  transform: scale(1.03) translateY(3px);
+}
+
+.event-banner div {
+  padding-right: 5px;
+}
+
+.event-banner strong {
+  font-size: 15px;
+}
+
+.event-banner span {
+  font-size: 10px;
+}
+
+.event-banner small {
+  font-size: 8px;
+}
+
+.shortcut {
+  width: clamp(46px, 12vw, 52px);
+  min-height: 46px;
+}
+
+.shortcut > span {
+  font-size: 17px;
+}
+
+.shortcut b {
+  font-size: 7px;
+}
+
+.battle-unit {
+  width: 70px;
+}
+
+.battle-unit img {
+  width: 67px;
+  height: 67px;
+}
+
+.unit-warrior { left: 5%; bottom: 32%; }
+.unit-sage { left: 25%; bottom: 33%; }
+.unit-mage { left: 7%; bottom: 7%; }
+.unit-ranger { left: 28%; bottom: 7%; }
+
+.unit-hp {
+  width: 64px;
+  font-size: 7px;
+}
+
+.enemy {
+  filter: saturate(1.18) contrast(1.1) brightness(.9);
+}
+
+.enemy-small {
+  right: 36%;
+  top: 40%;
+  width: 62px;
+}
+
+.enemy-small img {
+  width: 58px;
+  height: 58px;
+}
+
+.enemy-b {
+  right: 30%;
+  top: 65%;
+}
+
+.enemy-large {
+  right: 16%;
+  top: 52%;
+  width: 82px;
+}
+
+.enemy-large img {
+  width: 82px;
+  height: 82px;
+  transform: scale(1.08);
+}
+
+.enemy-hp {
+  width: 55px;
+}
+
+.enemy-large .enemy-hp {
+  width: 76px;
+}
+
+.damage-number {
+  top: -20px;
+  left: 8px;
+  font-size: 17px;
+}
+
+.damage-critical {
+  top: -18px;
+  left: 2px;
+  font-size: 22px;
+}
+
+.critical-label {
+  top: -33px;
+  left: -3px;
+  font-size: 10px;
+}
+
+.round-control {
+  min-width: 50px;
+  min-height: 50px;
+}
+
+.skill-row {
+  padding-block: 5px;
+}
+
+.skill-button {
+  min-height: 54px;
+}
+
+.skill-icon {
+  width: 30px;
+  height: 30px;
+  font-size: 21px;
+}
+
+.party-roster {
+  padding-block: 4px;
+}
+
+.roster-card {
+  min-height: 74px;
+}
+
+.roster-card img {
+  width: 47px;
+  height: 45px;
+}
+
+.action-button {
+  min-height: 49px;
+}
+
+.support-deck {
+  padding: 5px;
+}
+
+.support-deck > header {
+  margin-bottom: 3px;
+}
+
+.support-deck h2 {
+  font-size: 14px;
+}
+
+.help-button {
+  width: 44px;
+  height: 44px;
+}
+
+.support-grid {
+  grid-template-columns: repeat(3, minmax(48px, .72fr)) minmax(72px, 1fr) minmax(88px, 1.18fr);
+  gap: 3px;
+}
+
+.support-card,
+.support-summary,
+.support-button {
+  min-height: 72px;
+}
+
+.support-card,
+.support-summary {
+  padding: 4px;
+}
+
+.support-card > span {
+  font-size: 15px;
+}
+
+.support-card strong,
+.support-card p,
+.support-card small {
+  font-size: 7px;
+}
+
+.support-summary {
+  grid-column: auto;
+}
+
+.support-summary strong {
+  font-size: 8px;
+}
+
+.support-summary p {
+  display: block;
+  margin: 2px 0 0;
+  font-size: 7px;
+}
+
+.support-button {
+  grid-column: auto;
+  padding: 4px;
+}
+
+.support-button > span {
+  font-size: 13px;
+}
+
+.support-button strong {
+  font-size: 8px;
+}
+
+.support-button time {
+  margin-top: 1px;
+  font-size: 12px;
+}
+
+.bottom-nav {
+  min-height: calc(68px + var(--safe-bottom));
+}
+
+.nav-button span {
+  font-size: 20px;
+}
+
+.nav-button strong {
+  font-size: 11px;
+}
+
+@media (max-width: 359px) {
+  .player-bar {
+    grid-template-columns: 112px minmax(0, 1fr) 46px;
+  }
+
+  .profile-button {
+    grid-template-columns: 36px minmax(0, 1fr);
+  }
+
+  .portrait-frame {
+    width: 36px;
+    height: 40px;
+  }
+
+  .profile-copy strong {
+    font-size: 11px;
+  }
+
+  .resource-card strong {
+    font-size: 9px;
+  }
+
+  .battle-stage {
+    min-height: 292px;
+  }
+
+  .event-banner {
+    width: 168px;
+  }
+
+  .enemy-small { right: 34%; }
+  .enemy-b { right: 28%; }
+  .enemy-large { right: 15%; }
+
+  .support-grid {
+    grid-template-columns: repeat(3, minmax(48px, .7fr)) minmax(70px, 1fr) minmax(86px, 1.15fr);
+  }
+}
