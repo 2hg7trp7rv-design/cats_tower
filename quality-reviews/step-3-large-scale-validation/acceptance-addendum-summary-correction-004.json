@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-execution-summary-correction-addendum-004",
+  "createdAt": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "status": "ACTIVE_BEFORE_CORRECTED_EXECUTION_READBACK",
+  "parentAcceptance": {
+    "path": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
+    "blob": "d1392c431282d0faae9e9ad7f1c22161a3c5caad"
+  },
+  "executionGate": {
+    "path": "quality-reviews/step-3-large-scale-validation/execution-gate.json",
+    "blob": "e499cdb421d17a5e1ee79ca4ffff204fed80e60e",
+    "commit": "5ba6f150edd817fd1aee1d4b3112d13ecfeb3e51",
+    "tree": "51b22d10b8a863a2dbb9665caabc7ef98aa0c411"
+  },
+  "supersededReadback": {
+    "path": "quality-reviews/step-3-large-scale-validation/execution-live-readback.json",
+    "blob": "79f2dd2ebad32a90d22a98cdf2b82e18926a2270",
+    "commit": "7c569a41944166e644d9865bfdf70c65c3211631",
+    "tree": "b9bad5c444e79d36f99b6a6d0b867d6be7d4ebb4",
+    "disposition": "IMMUTABLE_SUPERSEDED_FOR_SUMMARY_CONSUMPTION"
+  },
+  "trigger": "Exact raw-audit reconciliation found three copied counter errors and one percentile transcription error in derived summary fields. The committed result and audit blobs, validators, suite verdicts, P0/P1 counts and execution PASS remain valid. Past evidence is not rewritten; a corrected v2 live read-back must become the sole summary authority before independent critics begin.",
+  "sourceOfTruth": {
+    "holdoutAudit": {
+      "path": "quality-reviews/step-3-large-scale-validation/holdout-audit.json",
+      "blob": "0dd82dad74cd056a9da643c564ef2725808db209"
+    },
+    "refundReplayRaceAudit": {
+      "path": "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-refund-replay-race.json",
+      "blob": "d1d59709adf75647ea16176d44b6b53cb641d458"
+    },
+    "stateMachineAudit": {
+      "path": "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-state-machine-model.json",
+      "blob": "35c7e8fc26b04ebb8d222c38001f921e71e60689"
+    }
+  },
+  "corrections": [
+    {
+      "id": "SUMMARY-CORRECTION-01",
+      "paths": [
+        "execution-gate.json/highVolume/refundReplayRace/deficitStateCount",
+        "execution-live-readback.json/highVolumeDecision/refundReplayRace/deficitStateCount"
+      ],
+      "incorrect": "34954",
+      "correct": "89481",
+      "source": "audit-high-volume-refund-replay-race.json/counters/deficitStateCount"
+    },
+    {
+      "id": "SUMMARY-CORRECTION-02",
+      "paths": [
+        "execution-gate.json/highVolume/stateMachineModel/validAccepted",
+        "execution-live-readback.json/highVolumeDecision/stateMachineModel/validAccepted"
+      ],
+      "incorrect": "58224",
+      "correct": "49896",
+      "source": "audit-high-volume-state-machine-model.json/counters/validAccepted"
+    },
+    {
+      "id": "SUMMARY-CORRECTION-03",
+      "paths": [
+        "execution-gate.json/highVolume/stateMachineModel/invalidRejected",
+        "execution-live-readback.json/highVolumeDecision/stateMachineModel/invalidRejected"
+      ],
+      "incorrect": "41776",
+      "correct": "50104",
+      "source": "audit-high-volume-state-machine-model.json/counters/invalidRejected"
+    },
+    {
+      "id": "SUMMARY-CORRECTION-04",
+      "paths": [
+        "execution-live-readback.json/gameplayDecision/holdoutFirstResetMinutes/p90"
+      ],
+      "incorrect": "28",
+      "correct": "27",
+      "source": "holdout-audit.json/compactSummary/firstResetMinutes/p90",
+      "note": "Some individual cells have p90=28, but the global 3,000-scenario compact summary p90 is 27."
+    }
+  ],
+  "impactAssessment": {
+    "severity": "P1_EVIDENCE_SUMMARY_INTEGRITY",
+    "rawResultBytesChanged": false,
+    "auditBytesChanged": false,
+    "executionManifestBytesChanged": false,
+    "executionGateBindingsChanged": false,
+    "acceptanceThresholdChanged": false,
+    "suitePassChanged": false,
+    "unresolvedP0Changed": false,
+    "unresolvedP1Changed": false,
+    "step3ExecutionVerdictChanged": false,
+    "independentCriticsMayStartBeforeCorrection": false
+  },
+  "requiredRepair": {
+    "newPath": "quality-reviews/step-3-large-scale-validation/execution-live-readback-v2.json",
+    "requirements": [
+      "Bind the immutable execution gate, v1 read-back and this correction addendum.",
+      "Copy summary values only from the exact committed audits and results.",
+      "Distinguish calibration and holdout percentile sources explicitly.",
+      "Record execution PASS pending five independent critics, with Step 4 still blocked.",
+      "Do not modify the execution gate, v1 read-back or raw evidence."
+    ]
+  },
+  "verdict": "PASS_SUMMARY_CORRECTION_REQUIRED_BEFORE_CRITICS"
+}
