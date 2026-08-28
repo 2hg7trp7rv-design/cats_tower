@@ -88,7 +88,7 @@ jobs:
           node "$TOOL" prepare | tee "$RUNNER_TEMP/correction-result.json"
           jq -e '.verdict == "PASS_STEP3_POST_TERMINAL_MIRROR_CORRECTION" and .mirrorCount == 13' "$RUNNER_TEMP/correction-result.json" >/dev/null
           git diff --check
-          git diff --name-only | sort > "$RUNNER_TEMP/changed-paths.txt"
+          { git diff --name-only; git ls-files --others --exclude-standard; } | sort -u > "$RUNNER_TEMP/changed-paths.txt"
           cat > "$RUNNER_TEMP/expected-paths.txt" <<'EOF'
           .github/workflows/CURRENT_STATUS.md
           AGENTS.md
