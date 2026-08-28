@@ -96,7 +96,10 @@ jobs:
         run: |
           set -euo pipefail
           node simulation/verify-step2-v2.mjs | tee "$RUNNER_TEMP/step2-regression.json"
-          jq -e '.verdict == "PASS"' "$RUNNER_TEMP/step2-regression.json" >/dev/null
+          jq -e '
+            ([.checks[].status] | all(. == "PASS")) and
+            (.verdict == "PASS" or (.verdict | startswith("QUALITY_PHASE_PASS_STEP2_")))
+          ' "$RUNNER_TEMP/step2-regression.json" >/dev/null
           node simulation/validate-executable-seal-v2.mjs simulation/executable-seal-v2.json | tee "$RUNNER_TEMP/step2-seal.json"
           jq -e '.verdict == "PASS_EXECUTABLE_SEAL_V2"' "$RUNNER_TEMP/step2-seal.json" >/dev/null
 
