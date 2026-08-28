@@ -5,37 +5,36 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 
-// Verifies immutable Step 1-3 authority and the current Step 4 mockup lifecycle.
 const ROOT = process.cwd();
 const REPOSITORY = '2hg7trp7rv-design/cats_tower';
 const BRANCH = 'kimi';
+const STEP3_ENTRY = '3eefbf6fa7dfcec8b5b093612e8946b43d838bc2';
+const STEP4_ENTRY = '245d50b6e80e2783f6aeaab5e50fae217661a3b6';
 const STEP3 = 'quality-reviews/step-3-large-scale-validation';
 const STEP4 = 'quality-reviews/step-4-twelve-screen-final-mockups';
-const ENTRY = '3eefbf6fa7dfcec8b5b093612e8946b43d838bc2';
-const STEP4_ENTRY = '245d50b6e80e2783f6aeaab5e50fae217661a3b6';
-const STEP3_ADDENDUM = 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-015.json';
-const STEP4_ADDENDUM = 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-017.json';
-const STEP3_LIVE = `${STEP3}/live-readback.json`;
-const STEP3_FINAL = `${STEP3}/final-judge.json`;
-const STEP3_CORRECTION = `${STEP3}/terminal-mirror-correction.json`;
 const STEP4_ACCEPTANCE = `${STEP4}/acceptance-matrix.json`;
+const STEP4_DRAFT = `${STEP4}/render-manifest.json`;
+const STEP4_ACTIVATION = `${STEP4}/draft-activation-evidence.json`;
+const STEP4_LIVE = `${STEP4}/draft-live-readback.json`;
 const STEP4_FINAL = `${STEP4}/final-judge.json`;
-const STEP4_LIVE = `${STEP4}/live-readback.json`;
-const STEP3_BLOCK_BEGIN = '<!-- CATS_TOWER_STEP3_STATUS_BEGIN -->';
-const STEP3_BLOCK_END = '<!-- CATS_TOWER_STEP3_STATUS_END -->';
-const STEP4_BLOCK_BEGIN = '<!-- CATS_TOWER_STEP4_STATUS_BEGIN -->';
-const STEP4_BLOCK_END = '<!-- CATS_TOWER_STEP4_STATUS_END -->';
+const BLOCKS = [
+  ['<!-- CATS_TOWER_STEP4_STATUS_BEGIN -->', '<!-- CATS_TOWER_STEP4_STATUS_END -->'],
+  ['<!-- CATS_TOWER_STEP3_STATUS_BEGIN -->', '<!-- CATS_TOWER_STEP3_STATUS_END -->'],
+];
 
-const readText = (relativePath) => readFileSync(path.join(ROOT, relativePath), 'utf8');
+const abs = (relativePath) => path.join(ROOT, relativePath);
+const readText = (relativePath) => readFileSync(abs(relativePath), 'utf8');
 const readJson = (relativePath) => JSON.parse(readText(relativePath));
 const git = (...args) => execFileSync('git', args, { cwd: ROOT, encoding: 'utf8' }).trim();
 const blob = (relativePath) => git('rev-parse', `HEAD:${relativePath}`);
+const exists = (relativePath) => existsSync(abs(relativePath));
 
 assert.equal(process.env.GITHUB_REPOSITORY ?? REPOSITORY, REPOSITORY);
 assert.equal(process.env.GITHUB_REF_NAME ?? BRANCH, BRANCH);
 assert.equal(git('rev-parse', '--is-shallow-repository'), 'false');
 assert.equal(git('replace', '-l'), '');
-execFileSync('git', ['merge-base', '--is-ancestor', ENTRY, 'HEAD'], { cwd: ROOT });
+execFileSync('git', ['merge-base', '--is-ancestor', STEP3_ENTRY, 'HEAD'], { cwd: ROOT });
+execFileSync('git', ['merge-base', '--is-ancestor', STEP4_ENTRY, 'HEAD'], { cwd: ROOT });
 
 const immutable = {
   'quality-reviews/step-1-reseal-round-008/seal-round-008.json': '0a959de0383b57ad6cd1f33c124b398aa51c1e00',
@@ -49,22 +48,28 @@ const immutable = {
   [`${STEP3}/completion-evidence.json`]: 'bc808fc3129f81000f1c5e755ffb2fc3a05bcf0b',
   [`${STEP3}/live-readback.json`]: 'd0b73af25a8f0d449cfc083b007b84b8ff3fbc9b',
   [`${STEP3}/terminal-mirror-correction.json`]: '14a9208b49c0b683e215cbefe587fedf67c2cac0',
-  [STEP4_ACCEPTANCE]: '7d907578c367ef426e11f97393637f23e14e25c2',
 };
-for (const [relativePath, expected] of Object.entries(immutable)) {
-  assert(existsSync(path.join(ROOT, relativePath)), `${relativePath}: missing immutable authority`);
-  assert.equal(blob(relativePath), expected, `${relativePath}: immutable authority blob mismatch`);
+for (const [relativePath, expectedBlob] of Object.entries(immutable)) {
+  assert(exists(relativePath), `${relativePath}: missing immutable authority`);
+  assert.equal(blob(relativePath), expectedBlob, `${relativePath}: immutable authority blob mismatch`);
 }
 
-const step3Final = readJson(STEP3_FINAL);
-const step3Live = readJson(STEP3_LIVE);
-const step3Correction = readJson(STEP3_CORRECTION);
-assert.equal(step3Final.step3Pass, true);
+const step3Live = readJson(`${STEP3}/live-readback.json`);
+const step3Correction = readJson(`${STEP3}/terminal-mirror-correction.json`);
 assert.equal(step3Live.verdict, 'PASS_FINAL_LIVE_READBACK_STEP3_LARGE_SCALE_VALIDATION');
 assert.equal(step3Live.governanceDecision.step3, 'PASS');
+assert.equal(step3Live.governanceDecision.step4, 'READY_TO_START');
+assert.equal(step3Live.criticSummary.criticCount, 5);
+assert.equal(step3Live.governanceDecision.unresolvedP0, 0);
+assert.equal(step3Live.governanceDecision.unresolvedP1, 0);
+assert.equal(step3Live.scopeReadback.productionAliasChanged, false);
+assert.equal(step3Live.scopeReadback.physicalIPhoneVerified, false);
+assert.equal(step3Live.scopeReadback.holdoutUsedForTuning, false);
 assert.equal(step3Correction.verdict, 'PASS_STEP3_POST_TERMINAL_MIRROR_CORRECTION');
-assert.equal(step3Correction.governanceDecision.unresolvedP0, 0);
-assert.equal(step3Correction.governanceDecision.unresolvedP1, 0);
+assert.equal(step3Correction.scope.productSemanticsChanged, false);
+assert.equal(step3Correction.scope.rawExecutionEvidenceChanged, false);
+assert.equal(step3Correction.scope.productionAliasChanged, false);
+assert.equal(step3Correction.scope.physicalIPhoneVerified, false);
 
 const project = readJson('PROJECT_STATUS.json');
 const simulation = readJson('simulation/CURRENT_STATUS.json');
@@ -74,110 +79,149 @@ assert.equal(project.canonicalRepository, REPOSITORY);
 assert.equal(project.canonicalBranch, BRANCH);
 assert.equal(simulation.repository, REPOSITORY);
 assert.equal(simulation.branch, BRANCH);
+assert.equal(policy.repository.fullName, REPOSITORY);
+assert.equal(policy.repository.allowedBranch, BRANCH);
+assert.equal(active.repository, REPOSITORY);
+assert.equal(active.branch, BRANCH);
 assert.equal(project.physicalIPhoneVerified, false);
 assert.equal(simulation.physicalIPhoneVerified, false);
-assert.notEqual(project.productionChangedByCurrentWork, true);
-assert.notEqual(project.productionAliasChanged, true);
+assert.equal(policy.currentPhase.physicalIPhone, 'NOT_VERIFIED');
+assert.equal(project.productionChangedByCurrentWork, false);
+assert.equal(project.productionAliasChanged, false);
 assert.equal(simulation.productionChanged, false);
+assert.equal(active.productionAliasChanged, false);
 
-const step4Active = existsSync(path.join(ROOT, STEP4_ADDENDUM));
-if (!step4Active) {
-  const step3Addendum = readJson(STEP3_ADDENDUM);
-  assert.equal(active.status, 'PASS');
-  assert.equal(active.verdict, 'PASS');
-  assert.equal(Boolean(active.step4Allowed), true);
-  assert.equal(step3Addendum.status, 'PASS');
-  assert.equal(Boolean(step3Addendum.step4Allowed), true);
-  assert.equal(policy.currentPhase.step, 3);
-  assert.equal(policy.currentPhase.status, 'PASS');
-  assert.equal(Boolean(policy.currentPhase.step4Allowed), true);
-  assert.equal(project.currentStep, 3);
-  assert.equal(project.currentStepStatus, 'PASS');
-  assert.equal(project.status, 'PASS');
-  assert.equal(Boolean(project.step4Allowed), true);
-  assert.equal(simulation.currentStep, 3);
-  assert.equal(simulation.status, 'PASS');
-  assert.equal(Boolean(simulation.step4Allowed), true);
-  for (const relativePath of ['QUALITY_GATE.md', '.github/workflows/CURRENT_STATUS.md', 'AGENTS.md', 'PROJECT_HANDOVER.md']) {
-    const content = readText(relativePath);
-    assert(content.includes(STEP3_BLOCK_BEGIN), `${relativePath}: missing canonical Step 3 status block`);
-    assert(content.includes(STEP3_BLOCK_END), `${relativePath}: incomplete canonical Step 3 status block`);
-    const block = content.slice(content.indexOf(STEP3_BLOCK_BEGIN), content.indexOf(STEP3_BLOCK_END) + STEP3_BLOCK_END.length);
-    assert(block.includes('- Step 3: **PASS**'), `${relativePath}: Step 3 status mismatch`);
-    assert(block.includes('- Step 4: **READY_TO_START**'), `${relativePath}: Step 4 status mismatch`);
-  }
-  console.log(JSON.stringify({ verdict: 'PASS_CURRENT_STEP3_TERMINAL_STEP4_READY', head: git('rev-parse', 'HEAD'), tree: git('rev-parse', 'HEAD^{tree}'), step4AcceptanceFrozen: true }));
-  process.exit(0);
+const step4Accepted = exists(STEP4_ACCEPTANCE);
+const step4Drafted = exists(STEP4_DRAFT);
+const step4Activated = exists(STEP4_ACTIVATION);
+const step4Live = exists(STEP4_LIVE) ? readJson(STEP4_LIVE) : null;
+const step4Final = exists(STEP4_FINAL) ? readJson(STEP4_FINAL) : null;
+
+let lifecycle;
+let expectedCurrentStep;
+let expectedStatus;
+let expectedStep5Allowed;
+let expectedStep4Label;
+let expectedStep5Label;
+
+if (!step4Accepted) {
+  lifecycle = 'STEP3_TERMINAL_STEP4_READY';
+  expectedCurrentStep = 3;
+  expectedStatus = 'PASS';
+  expectedStep5Allowed = false;
+  expectedStep4Label = 'READY_TO_START';
+  expectedStep5Label = 'BLOCKED_UNTIL_STEP4_PASS';
+} else if (!step4Activated) {
+  lifecycle = step4Drafted ? 'STEP4_DRAFT_PRE_ACTIVATION' : 'STEP4_ACCEPTANCE_PRE_DRAFT';
+  expectedCurrentStep = 3;
+  expectedStatus = 'PASS';
+  expectedStep5Allowed = false;
+  expectedStep4Label = 'READY_TO_START';
+  expectedStep5Label = 'BLOCKED_UNTIL_STEP4_PASS';
+  assert.equal(blob(STEP4_ACCEPTANCE), '7d907578c367ef426e11f97393637f23e14e25c2');
+} else if (!step4Live) {
+  lifecycle = 'STEP4_IN_PROGRESS_PENDING_LIVE_READBACK';
+  expectedCurrentStep = 4;
+  expectedStatus = 'IN_PROGRESS';
+  expectedStep5Allowed = false;
+  expectedStep4Label = 'IN_PROGRESS';
+  expectedStep5Label = 'BLOCKED_UNTIL_STEP4_PASS';
+} else if (!step4Final) {
+  lifecycle = 'STEP4_IN_PROGRESS_DRAFT_LIVE';
+  expectedCurrentStep = 4;
+  expectedStatus = 'IN_PROGRESS';
+  expectedStep5Allowed = false;
+  expectedStep4Label = 'IN_PROGRESS';
+  expectedStep5Label = 'BLOCKED_UNTIL_STEP4_PASS';
+  assert.equal(step4Live.governanceDecision.step4, 'IN_PROGRESS');
+  assert.equal(step4Live.governanceDecision.step5, 'BLOCKED_UNTIL_STEP4_PASS');
+  assert.equal(step4Live.scope.productionAliasChanged, false);
+  assert.equal(step4Live.scope.physicalIPhoneVerified, false);
+} else {
+  lifecycle = step4Final.step4Pass ? 'STEP4_TERMINAL_PASS' : 'STEP4_TERMINAL_FAIL';
+  expectedCurrentStep = 4;
+  expectedStatus = step4Final.step4Pass ? 'PASS' : 'FAIL';
+  expectedStep5Allowed = Boolean(step4Final.step4Pass);
+  expectedStep4Label = expectedStatus;
+  expectedStep5Label = expectedStep5Allowed ? 'READY_TO_START' : 'BLOCKED_BY_STEP4_FAILURE';
 }
 
-execFileSync('git', ['merge-base', '--is-ancestor', STEP4_ENTRY, 'HEAD'], { cwd: ROOT });
-const step4Addendum = readJson(STEP4_ADDENDUM);
-const step4Terminal = existsSync(path.join(ROOT, STEP4_LIVE));
-const step4Final = existsSync(path.join(ROOT, STEP4_FINAL)) ? readJson(STEP4_FINAL) : null;
-let expectedStatus = 'IN_PROGRESS';
-let expectedStep5 = false;
-let expectedStep5Label = 'BLOCKED_UNTIL_STEP4_PASS';
-if (step4Terminal) {
-  const live = readJson(STEP4_LIVE);
-  assert(step4Final, 'Step 4 terminal read-back requires final judge');
-  expectedStatus = live.governanceDecision?.step4 ?? (step4Final.step4Pass ? 'PASS' : 'FAIL');
-  expectedStep5 = live.governanceDecision?.step5 === 'READY_TO_START';
-  expectedStep5Label = expectedStep5 ? 'READY_TO_START' : 'BLOCKED_BY_STEP4_FAILURE';
-}
-
-assert.equal(active.status, expectedStatus);
-assert.equal(active.verdict, expectedStatus === 'IN_PROGRESS' ? 'IN_PROGRESS_STEP4' : expectedStatus);
-assert.equal(Boolean(active.step4Allowed), true);
-assert.equal(Boolean(active.step5Allowed), expectedStep5);
-assert.equal(step4Addendum.status, expectedStatus);
-assert.equal(Boolean(step4Addendum.step4Allowed), true);
-assert.equal(Boolean(step4Addendum.step5Allowed), expectedStep5);
-assert.equal(policy.currentPhase.step, 4);
-assert.equal(policy.currentPhase.status, expectedStatus);
-assert.equal(Boolean(policy.currentPhase.step4Allowed), true);
-assert.equal(Boolean(policy.currentPhase.step5Allowed), expectedStep5);
-assert.equal(project.currentStep, 4);
+assert.equal(project.currentStep, expectedCurrentStep);
+assert.equal(simulation.currentStep, expectedCurrentStep);
+assert.equal(policy.currentPhase.step, expectedCurrentStep);
 assert.equal(project.currentStepStatus, expectedStatus);
 assert.equal(project.status, expectedStatus);
-assert.equal(Boolean(project.step4Allowed), true);
-assert.equal(Boolean(project.step5Allowed), expectedStep5);
-assert.equal(simulation.currentStep, 4);
 assert.equal(simulation.status, expectedStatus);
-assert.equal(Boolean(simulation.step4Allowed), true);
-assert.equal(Boolean(simulation.step5Allowed), expectedStep5);
-assert.equal(project.step3.status, 'PASS');
-assert.equal(project.step3.liveReadback, 'PASS');
-assert.equal(simulation.step3.status, 'PASS');
-assert.equal(simulation.step3.liveReadback, 'PASS');
+assert.equal(policy.currentPhase.status, expectedStatus);
+assert.equal(active.status, expectedStatus);
+assert.equal(active.verdict, expectedStatus);
+assert.equal(Boolean(project.step5Allowed), expectedStep5Allowed);
+assert.equal(Boolean(simulation.step5Allowed), expectedStep5Allowed);
+assert.equal(Boolean(policy.currentPhase.step5Allowed), expectedStep5Allowed);
+assert.equal(Boolean(active.step5Allowed), expectedStep5Allowed);
+
+function currentBlock(relativePath) {
+  const content = readText(relativePath);
+  for (const [begin, end] of BLOCKS) {
+    const start = content.indexOf(begin);
+    const finish = content.indexOf(end);
+    if (start >= 0 && finish > start) return content.slice(start, finish + end.length);
+  }
+  throw new Error(`${relativePath}: missing current status block`);
+}
 
 for (const relativePath of ['QUALITY_GATE.md', '.github/workflows/CURRENT_STATUS.md', 'AGENTS.md', 'PROJECT_HANDOVER.md']) {
-  const content = readText(relativePath);
-  assert(content.includes(STEP4_BLOCK_BEGIN), `${relativePath}: missing canonical Step 4 status block`);
-  assert(content.includes(STEP4_BLOCK_END), `${relativePath}: incomplete canonical Step 4 status block`);
-  const block = content.slice(content.indexOf(STEP4_BLOCK_BEGIN), content.indexOf(STEP4_BLOCK_END) + STEP4_BLOCK_END.length);
-  assert(block.includes(`- Step 4: **${expectedStatus}**`), `${relativePath}: Step 4 status mismatch`);
-  assert(block.includes(`- Step 5: **${expectedStep5Label}**`), `${relativePath}: Step 5 status mismatch`);
+  const block = currentBlock(relativePath);
+  assert(block.includes('- Step 1: **PASS**'), `${relativePath}: Step 1 mismatch`);
+  assert(block.includes('- Step 2: **PASS / SEALED**'), `${relativePath}: Step 2 mismatch`);
+  assert(block.includes('- Step 3: **PASS**'), `${relativePath}: Step 3 mismatch`);
+  assert(block.includes(`- Step 4: **${expectedStep4Label}**`), `${relativePath}: Step 4 mismatch`);
+  if (expectedCurrentStep === 4) assert(block.includes(`- Step 5: **${expectedStep5Label}**`), `${relativePath}: Step 5 mismatch`);
   assert(block.includes('- Physical iPhone: **NOT_VERIFIED**'));
   assert(block.includes('- Production alias changed: **false**'));
 }
 
-for (const relativePath of [
-  `${STEP4}/mockups/index.html`,
-  `${STEP4}/mockups/styles.css`,
-  `${STEP4}/mockups/app.js`,
-  `${STEP4}/reference-audit.md`,
-  `${STEP4}/design-system.json`,
-  `${STEP4}/screen-state-coverage.json`,
-  `${STEP4}/source-manifest.json`,
-  `${STEP4}/start-evidence.json`,
-]) assert(existsSync(path.join(ROOT, relativePath)), `${relativePath}: missing Step 4 source`);
-
 const changedOutput = git('diff', '--name-only', `${STEP4_ENTRY}..HEAD`);
 const changed = changedOutput ? changedOutput.split('\n').filter(Boolean) : [];
-const forbidden = changed.filter((relativePath) => /^(runtime\/|public\/|assets\/|backend\/)/.test(relativePath)
-  || /^(vercel\.json|\.vercel\/)/.test(relativePath)
-  || /^simulation\/(candidate-v2\.json|candidate-v2\.schema\.json|run-plan-v2\.json|execution-contract-v2\.json|executable-seal-v2\.json|engine-v2\/|fixtures\/v2\/|migrations\/v1-to-v2\/)/.test(relativePath)
-  || /^quality-reviews\/step-3-large-scale-validation\/(gameplay-|high-volume\/|analysis\.json|critic-summary\.json|critics\/|final-judge\.json|completion-evidence\.json|live-readback\.json|execution-gate\.json|execution-live-readback-v2\.json)/.test(relativePath));
-assert.deepEqual(forbidden, []);
+const allowedExact = new Set([
+  'tests/governance/verify-current-step2-state.mjs',
+  'PROJECT_STATUS.json',
+  'simulation/CURRENT_STATUS.json',
+  'AI_PROJECT_POLICY.json',
+  'QUALITY_GATE.md',
+  '.github/workflows/CURRENT_STATUS.md',
+  'AGENTS.md',
+  'PROJECT_HANDOVER.md',
+  'README.md',
+  'CHATGPT_PROJECT_BOOTSTRAP.md',
+  'CUSTOM_GPT_CONFIGURATION.md',
+  'simulation/INPUT_CONTRACT.md',
+  'quality-reviews/step-1-canonical-design/active-change-control.json',
+  'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-017.json',
+]);
+const allowed = (relativePath) =>
+  relativePath.startsWith(`${STEP4}/`) ||
+  relativePath.startsWith('tests/step4/') ||
+  (relativePath.startsWith('.github/workflows/') && /step-4|step4/u.test(relativePath)) ||
+  allowedExact.has(relativePath);
+const forbidden = changed.filter((relativePath) => !allowed(relativePath));
+assert.deepEqual(forbidden, [], `forbidden current-lifecycle path(s): ${forbidden.join(', ')}`);
+assert.deepEqual(changed.filter((relativePath) => /^(runtime\/|assets\/|public\/|backend\/|vercel\.json|\.vercel\/)/u.test(relativePath)), []);
+assert.deepEqual(changed.filter((relativePath) => /^simulation\/(candidate-v2\.json|candidate-v2\.schema\.json|run-plan-v2\.json|execution-contract-v2\.json|executable-seal-v2\.json|engine-v2\/|fixtures\/v2\/|migrations\/v1-to-v2\/)/u.test(relativePath)), []);
 
-console.log(JSON.stringify({ verdict: step4Terminal ? 'PASS_CURRENT_STEP4_TERMINAL_STATE' : 'PASS_CURRENT_STEP4_IN_PROGRESS', head: git('rev-parse', 'HEAD'), tree: git('rev-parse', 'HEAD^{tree}'), status: expectedStatus, step5Allowed: expectedStep5, changedPathCount: changed.length }));
+git('diff', '--check', `${STEP4_ENTRY}..HEAD`);
+
+console.log(JSON.stringify({
+  verdict: 'PASS_CURRENT_CATS_TOWER_LIFECYCLE_GOVERNANCE',
+  head: git('rev-parse', 'HEAD'),
+  tree: git('rev-parse', 'HEAD^{tree}'),
+  lifecycle,
+  currentStep: expectedCurrentStep,
+  status: expectedStatus,
+  step4: expectedStep4Label,
+  step5: expectedStep5Label,
+  changedPathCount: changed.length,
+  forbiddenPathCount: forbidden.length,
+  physicalIPhone: 'NOT_VERIFIED',
+  productionChanged: false,
+}));
