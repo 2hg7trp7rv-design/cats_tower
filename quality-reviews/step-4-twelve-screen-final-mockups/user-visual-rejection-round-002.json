@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-user-visual-rejection-round-002",
+  "createdAt": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "entry": {
+    "head": "bf89bbe693390b4e4219ba73bdd4f69e743f520d",
+    "tree": "0ac83ba0f66c2eeb9d2c4b98d9e04c1d63199514"
+  },
+  "trigger": "The user rejected the first post-rejection anchor concept because it still differed materially from the project-source completed-screen image baseline.",
+  "status": "IN_PROGRESS",
+  "verdict": "REJECT_ANCHOR_CONCEPT_ROUND_001",
+  "step4Pass": false,
+  "step5Allowed": false,
+  "candidate": {
+    "type": "chat-rendered four-panel anchor concept",
+    "screens": ["S01", "S02", "S08", "S10"],
+    "approval": false,
+    "disposition": "REJECTED_DO_NOT_ITERATE_AS_BASE"
+  },
+  "visualMismatchFindings": [
+    {
+      "id": "S4-R2-001",
+      "severity": "P1",
+      "finding": "The candidate changed the art style from warm pixel-art chibi cats to dark painterly high-fantasy catfolk."
+    },
+    {
+      "id": "S4-R2-002",
+      "severity": "P1",
+      "finding": "The candidate omitted the persistent source-baseline information architecture: player/resource header, contextual screen header, and five-tab bottom navigation."
+    },
+    {
+      "id": "S4-R2-003",
+      "severity": "P1",
+      "finding": "The candidate replaced the bright tower-town, shop-management and playful recruitment presentation with generic gothic RPG scenes."
+    },
+    {
+      "id": "S4-R2-004",
+      "severity": "P1",
+      "finding": "The candidate was presented as a 2x2 collage rather than individual portrait mobile screens at the target composition and density."
+    },
+    {
+      "id": "S4-R2-005",
+      "severity": "P1",
+      "finding": "The battle, boss and gacha screens did not preserve the source-baseline pixel-art silhouette language, brown-and-gold framing, compact modular HUD, or playful capsule-machine identity."
+    },
+    {
+      "id": "S4-R2-006",
+      "severity": "P1",
+      "finding": "Generated Japanese labels and values were not controlled enough for a production mockup and cannot be accepted as final UI evidence."
+    }
+  ],
+  "bindingVisualBaseline": {
+    "role": "USER_DEFINED_COMPLETED_SCREEN_IMAGE_BASELINE",
+    "requiredCharacteristics": [
+      "portrait single-screen mobile composition",
+      "warm dark-brown, wood and brass framing",
+      "pixel-art chibi cats, enemies, town, shops and tower scenes",
+      "persistent top player/resource header",
+      "contextual screen title and status header",
+      "persistent five-tab bottom navigation",
+      "screen-specific scene composition instead of generic RPG panels",
+      "bright cozy fantasy tone with readable production and progression systems",
+      "commercial mobile-game density without losing hierarchy"
+    ],
+    "semanticReconciliationRule": "Preserve the visual language, hierarchy and screen organization shown by the source images while replacing any obsolete product wording or finite-tower semantics with the sealed current Cat's Tower canon."
+  },
+  "requiredNextSequence": [
+    "Do not use the rejected dark painterly concept as a base.",
+    "Create one individual portrait anchor screen at a time, starting with the primary tower-lobby or battle screen.",
+    "Match the source-baseline chrome, pixel-art scale, warm palette, content density and navigation structure before adding new visual inventions.",
+    "Use controlled final Japanese copy rather than image-generated placeholder text.",
+    "Perform side-by-side adversarial comparison against the source images.",
+    "Show the actual individual rendered screen to the user before proceeding to the next anchor."
+  ],
+  "scopeReadback": {
+    "runtimeChanged": false,
+    "productAssetsChanged": false,
+    "backendChanged": false,
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "otherBranchWritten": false,
+    "pullRequestOperation": false
+  }
+}
