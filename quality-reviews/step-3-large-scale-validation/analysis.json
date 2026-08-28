@@ -1,0 +1,780 @@
+{
+  "schemaVersion": 2,
+  "artifactId": "cats-tower-step3-integrated-analysis-v2",
+  "recordedAt": "2026-08-28T04:54:22.768Z",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "reviewTarget": {
+    "commit": "ba6843b4dd8efe55b4d0c8c3f9bc1345b97d005e",
+    "tree": "30b9db2ead85ebedeebe1c52fb917751cde5a646"
+  },
+  "orchestrationHead": {
+    "commit": "4b9c286194e8bc82bf86721df147a772d051754f",
+    "tree": "341c83b01991f1819b8344227f905d5a13c47138"
+  },
+  "authority": {
+    "acceptance": {
+      "path": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
+      "blob": "d1392c431282d0faae9e9ad7f1c22161a3c5caad"
+    },
+    "executionGate": {
+      "path": "quality-reviews/step-3-large-scale-validation/execution-gate.json",
+      "blob": "e499cdb421d17a5e1ee79ca4ffff204fed80e60e",
+      "verdict": "PASS_STEP3_EXECUTION_GATE_CRITICS_AUTHORIZED"
+    },
+    "executionReadback": {
+      "path": "quality-reviews/step-3-large-scale-validation/execution-live-readback-v2.json",
+      "blob": "073252683f207cf9f42d2f8b2634b10ae36ff8b5",
+      "verdict": "PASS_CORRECTED_EXECUTION_READBACK_CRITICS_AUTHORIZED"
+    }
+  },
+  "volumes": {
+    "gameplayCalibration": "12000",
+    "gameplayHoldout": "3000",
+    "gameplayTotal": "15000",
+    "highVolumeTotal": "1700000"
+  },
+  "findings": [
+    {
+      "id": "S3-GATE-01",
+      "severity": "P0",
+      "requirement": "The exact Step 1 and Step 2 seals, completion chains, governance repair and live kimi ancestry remain valid before every execution phase.",
+      "status": "PASS",
+      "summary": "Step 1, Step 2, governance repair, calibration gate and final execution gate remain bound to their exact live blobs.",
+      "evidence": {
+        "immutableBlobs": {
+          "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json": "d1392c431282d0faae9e9ad7f1c22161a3c5caad",
+          "quality-reviews/step-3-large-scale-validation/execution-gate.json": "e499cdb421d17a5e1ee79ca4ffff204fed80e60e",
+          "quality-reviews/step-3-large-scale-validation/execution-live-readback-v2.json": "073252683f207cf9f42d2f8b2634b10ae36ff8b5",
+          "quality-reviews/step-3-large-scale-validation/calibration-gate.json": "5ecb6c177a0c52f164c4ad22723f54305bf8c97d",
+          "quality-reviews/step-1-reseal-round-008/seal-round-008.json": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
+          "simulation/executable-seal-v2.json": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
+          "quality-reviews/step-2-governance-repair-round-001/live-readback.json": "692434fafd19d1e5470fe58808fd72af7286ec35",
+          "simulation/run-plan-v2.json": "a04632e41d78dd15b36e95cd6998e8a8648b9a6c",
+          "simulation/execution-contract-v2.json": "82685b646358129d7e66a810b267777d6bf5af92"
+        },
+        "executionGateVerdict": "PASS_STEP3_EXECUTION_GATE_CRITICS_AUTHORIZED",
+        "executionReadbackVerdict": "PASS_CORRECTED_EXECUTION_READBACK_CRITICS_AUTHORIZED"
+      }
+    },
+    {
+      "id": "S3-DATA-01",
+      "severity": "P0",
+      "requirement": "Calibration contains exactly 12,000 complete scenarios and holdout exactly 3,000 complete scenarios across all 3 builds and 5 personas, with schema validation, deterministic reproduction and canonical digests.",
+      "status": "PASS",
+      "summary": "The complete 12,000 calibration and 3,000 unseen-holdout matrices are present with all 15 build/persona cells in each partition.",
+      "evidence": {
+        "calibrationScenarios": "12000",
+        "holdoutScenarios": "3000",
+        "calibrationCells": 15,
+        "holdoutCells": 15,
+        "calibrationReplayMismatches": "0",
+        "holdoutReplayMismatches": "0"
+      }
+    },
+    {
+      "id": "S3-HOLDOUT-01",
+      "severity": "P0",
+      "requirement": "Calibration and holdout namespaces, scenario IDs, input digests and scenario digests are disjoint. Holdout is not executed or inspected before a committed calibration gate and is never used for tuning.",
+      "status": "PASS",
+      "summary": "Calibration and holdout are disjoint, and the committed calibration gate predates unseen-holdout execution.",
+      "evidence": {
+        "separation": {
+          "calibrationScenarios": "12000",
+          "holdoutScenarios": "3000",
+          "calibrationInputOverlap": "0",
+          "calibrationScenarioOverlap": "0",
+          "duplicateHoldoutInputDigests": "0",
+          "duplicateHoldoutScenarioDigests": "0",
+          "tuningVisible": false,
+          "tuningReuseForbidden": true
+        },
+        "calibrationGate": "PASS_CALIBRATION_GATE_HOLDOUT_AUTHORIZED",
+        "holdoutPolicy": {
+          "authorized": true,
+          "executed": false,
+          "tuningReuseForbidden": true
+        }
+      }
+    },
+    {
+      "id": "S3-RESET-01",
+      "severity": "P0",
+      "requirement": "For every build/persona cell, first-reset p50 is within 20 to 35 minutes; no scenario is below 20 or above 35 minutes; repeated-reset sequences are non-increasing and never below the configured minimum.",
+      "status": "PASS",
+      "summary": "All first-reset distributions and repeated-reset sequences satisfy the sealed bounds.",
+      "evidence": {
+        "calibrationFirstReset": {
+          "count": "12000",
+          "minimum": "20",
+          "maximum": "29",
+          "p50": "24",
+          "p90": "27",
+          "p99": "29"
+        },
+        "holdoutFirstReset": {
+          "count": "3000",
+          "minimum": "20",
+          "maximum": "29",
+          "p50": "24",
+          "p90": "27",
+          "p99": "29"
+        },
+        "calibrationRepeatedResetViolations": "0",
+        "holdoutRepeatedResetViolations": "0"
+      }
+    },
+    {
+      "id": "S3-EVOLUTION-01",
+      "severity": "P0",
+      "requirement": "Every gameplay scenario covers the first evolution from first-effective-reset free ruby without ads or payment; evolution remains non-blocking and catch-up ordered.",
+      "status": "PASS",
+      "summary": "Every gameplay scenario covers the first evolution without ads or payment; continuation and catch-up remain non-blocking and ordered.",
+      "evidence": {
+        "calibration": {
+          "uncoveredScenarios": "0",
+          "firstEffectiveResetMinimumReward": "15",
+          "firstStageCost": "10",
+          "orderedCatchUp": true,
+          "nonBlockingContinuation": true,
+          "adOrPaymentRequired": false
+        },
+        "holdout": {
+          "uncoveredScenarios": "0",
+          "orderedCatchUp": true,
+          "nonBlockingContinuation": true,
+          "adOrPaymentRequired": false
+        }
+      }
+    },
+    {
+      "id": "S3-F2P-01",
+      "severity": "P0",
+      "requirement": "No-ad F2P reaches one featured guarantee within 30 to 45 days, retains at least 40 combined daily draws, and does not depend on rewarded ads for core progression or first evolution.",
+      "status": "PASS",
+      "summary": "No-ad F2P reaches the featured guarantee on day 40 with 44 combined daily draws and no core ad/payment dependency.",
+      "evidence": {
+        "calibration": {
+          "guaranteeDay": "40",
+          "combinedDailyDraws": "44",
+          "progressionContinues": true,
+          "evolutionCoverage": true
+        },
+        "holdout": {
+          "guaranteeDay": "40",
+          "combinedDailyDraws": "44",
+          "progressionContinues": true,
+          "evolutionCoverage": true
+        }
+      }
+    },
+    {
+      "id": "S3-MONETIZATION-01",
+      "severity": "P0",
+      "requirement": "Monthly-pass acceleration is at most 2.0x, controlled payer at most 3.0x, and high-spend stress at most 5.0x; no persona creates an unbounded paid multiplier or a paid-only core gate.",
+      "status": "PASS",
+      "summary": "All persona acceleration multipliers remain within the sealed 1.0x, 1.25x, 2.0x, 3.0x and 5.0x ceilings.",
+      "evidence": {
+        "calibration": {
+          "personas": [
+            {
+              "personaId": "no-ad-f2p",
+              "progressMultiplier": "1.00",
+              "declaredMaximum": "1.00",
+              "acceptanceMaximum": "1.00",
+              "progressWithinDeclaredMaximum": true,
+              "declaredWithinAcceptanceMaximum": true
+            },
+            {
+              "personaId": "rewarded-ad-f2p",
+              "progressMultiplier": "1.18",
+              "declaredMaximum": "1.25",
+              "acceptanceMaximum": "1.25",
+              "progressWithinDeclaredMaximum": true,
+              "declaredWithinAcceptanceMaximum": true
+            },
+            {
+              "personaId": "monthly-pass",
+              "progressMultiplier": "1.70",
+              "declaredMaximum": "2.00",
+              "acceptanceMaximum": "2.00",
+              "progressWithinDeclaredMaximum": true,
+              "declaredWithinAcceptanceMaximum": true
+            },
+            {
+              "personaId": "controlled-payer",
+              "progressMultiplier": "2.70",
+              "declaredMaximum": "3.00",
+              "acceptanceMaximum": "3.00",
+              "progressWithinDeclaredMaximum": true,
+              "declaredWithinAcceptanceMaximum": true
+            },
+            {
+              "personaId": "high-spend-stress",
+              "progressMultiplier": "4.50",
+              "declaredMaximum": "5.00",
+              "acceptanceMaximum": "5.00",
+              "progressWithinDeclaredMaximum": true,
+              "declaredWithinAcceptanceMaximum": true
+            }
+          ]
+        },
+        "holdout": {
+          "personas": [
+            {
+              "id": "no-ad-f2p",
+              "progressMultiplier": "1.00",
+              "declaredMaximum": "1.00",
+              "acceptanceMaximum": "1.00"
+            },
+            {
+              "id": "rewarded-ad-f2p",
+              "progressMultiplier": "1.18",
+              "declaredMaximum": "1.25",
+              "acceptanceMaximum": "1.25"
+            },
+            {
+              "id": "monthly-pass",
+              "progressMultiplier": "1.70",
+              "declaredMaximum": "2.00",
+              "acceptanceMaximum": "2.00"
+            },
+            {
+              "id": "controlled-payer",
+              "progressMultiplier": "2.70",
+              "declaredMaximum": "3.00",
+              "acceptanceMaximum": "3.00"
+            },
+            {
+              "id": "high-spend-stress",
+              "progressMultiplier": "4.50",
+              "declaredMaximum": "5.00",
+              "acceptanceMaximum": "5.00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "S3-BUILD-01",
+      "severity": "P1",
+      "requirement": "All three builds remain viable at every horizon. Cell p50 reach-time spread between fastest and slowest build for the same persona/horizon must not exceed 1.20x, and no build is universally best across combat, reclear and economy dimensions.",
+      "status": "PASS",
+      "summary": "All three builds remain within the authorized scale-aware spread rule, and no build is universally best across power, economy and reclear.",
+      "evidence": {
+        "calibrationViolations": "0",
+        "holdoutViolations": "0",
+        "universalBestBuildIds": [],
+        "bestByDimension": {
+          "power": [
+            "build.combat"
+          ],
+          "economy": [
+            "build.commerce"
+          ],
+          "reclear": [
+            "build.commerce"
+          ]
+        },
+        "quantizationAddendumBlob": "9d0c89489363340c4954b6912fb105ca6789b462"
+      },
+      "phaseNote": "The pre-holdout calibration addendum permits an absolute one-minute spread when integer rounding makes a ratio-only rule misleading; all other cells retain the 1.20x ceiling."
+    },
+    {
+      "id": "S3-RARITY-01",
+      "severity": "P0",
+      "requirement": "N/R deterministic routes cover every required character and weapon role, first copies are functional, RR through UR are not core gates, and UR does not cover every role or exceed the sealed bounded power model. Any required rarity dimension not measured by the executable evidence must be reported as a blocking gap rather than inferred as PASS.",
+      "status": "PASS",
+      "summary": "Deterministic N/R routes cover every required role, all first copies are functional, no rarity is a core gate, and UR does not cover every role.",
+      "evidence": {
+        "characters": {
+          "deterministicCoversAllRequired": true,
+          "allFirstCopiesFunctional": true,
+          "allCoreProgressionGateFalse": true,
+          "urCoversEveryRequiredRole": false,
+          "deterministicRoles": [
+            "area-damage",
+            "cleanse-support",
+            "commerce-support",
+            "damage-mitigation",
+            "frontline-control",
+            "healing-support",
+            "ranged-anti-air",
+            "runner-backline-disruption"
+          ],
+          "urRoles": [
+            "area-damage",
+            "cleanse-support",
+            "commerce-support",
+            "damage-mitigation"
+          ]
+        },
+        "weapons": {
+          "deterministicCoversAllRequired": true,
+          "allFirstCopiesFunctional": true,
+          "allCoreProgressionGateFalse": true,
+          "urCoversEveryRequiredRole": false,
+          "deterministicRoles": [
+            "area-damage",
+            "cleanse",
+            "commerce-support",
+            "guard",
+            "healing-focus",
+            "melee-control",
+            "mobility",
+            "ranged-anti-air"
+          ],
+          "urRoles": [
+            "healing-focus",
+            "mobility",
+            "ranged-anti-air"
+          ]
+        },
+        "strengthBoundary": {
+          "URGenerallyStrong": true,
+          "URUnconditionalBestAllRoles": false
+        }
+      }
+    },
+    {
+      "id": "S3-MASTERY-01",
+      "severity": "P0",
+      "requirement": "Character and weapon first copies are role-complete; practical breakpoints occur by 7 additional effective copies; full mastery requires at least 20; marginal gains diminish; post-cap duplicates create nonzero overflow and are never discarded.",
+      "status": "PASS",
+      "summary": "Character and weapon mastery satisfy first-copy utility, <=7-copy practical breakpoints, >=20-copy full mastery, diminishing gains and nonzero post-cap overflow.",
+      "evidence": {
+        "holdoutReplay": {
+          "masteryReplayMismatchCount": "0"
+        },
+        "characterMastery": {
+          "firstCopy": {
+            "functional": true,
+            "roleComplete": true
+          },
+          "practicalBreakpoints": {
+            "nodes": [
+              {
+                "additionalEffectiveCopies": "1",
+                "cumulativePowerBasisPoints": "300",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "3",
+                "cumulativePowerBasisPoints": "550",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "7",
+                "cumulativePowerBasisPoints": "750",
+                "functionalUnlock": false
+              }
+            ],
+            "latestAdditionalCopies": "7"
+          },
+          "fullMastery": {
+            "minimumAdditionalEffectiveCopies": "20",
+            "normalPvePrerequisite": false
+          },
+          "marginalCurve": {
+            "nodes": [
+              {
+                "additionalEffectiveCopies": "1",
+                "cumulativePowerBasisPoints": "300",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "3",
+                "cumulativePowerBasisPoints": "550",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "7",
+                "cumulativePowerBasisPoints": "750",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "12",
+                "cumulativePowerBasisPoints": "900",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "20",
+                "cumulativePowerBasisPoints": "1000",
+                "functionalUnlock": false
+              }
+            ],
+            "strictlyDiminishingMarginalGain": true
+          },
+          "overflow": {
+            "currency": "overflow.character.mastery",
+            "conversionPerDuplicate": "100",
+            "neverDiscard": true
+          },
+          "catchUp": {
+            "selectors": true,
+            "universalFragments": true,
+            "exchange": true,
+            "rerun": true
+          }
+        },
+        "weaponMastery": {
+          "firstCopy": {
+            "functional": true,
+            "roleComplete": true
+          },
+          "practicalBreakpoints": {
+            "nodes": [
+              {
+                "additionalEffectiveCopies": "1",
+                "cumulativePowerBasisPoints": "300",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "3",
+                "cumulativePowerBasisPoints": "550",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "7",
+                "cumulativePowerBasisPoints": "750",
+                "functionalUnlock": false
+              }
+            ],
+            "latestAdditionalCopies": "7"
+          },
+          "fullMastery": {
+            "minimumAdditionalEffectiveCopies": "20",
+            "normalPvePrerequisite": false
+          },
+          "marginalCurve": {
+            "nodes": [
+              {
+                "additionalEffectiveCopies": "1",
+                "cumulativePowerBasisPoints": "300",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "3",
+                "cumulativePowerBasisPoints": "550",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "7",
+                "cumulativePowerBasisPoints": "750",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "12",
+                "cumulativePowerBasisPoints": "900",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "20",
+                "cumulativePowerBasisPoints": "1000",
+                "functionalUnlock": false
+              }
+            ],
+            "strictlyDiminishingMarginalGain": true
+          },
+          "overflow": {
+            "currency": "overflow.weapon.mastery",
+            "conversionPerDuplicate": "100",
+            "neverDiscard": true
+          },
+          "catchUp": {
+            "selectors": true,
+            "universalFragments": true,
+            "exchange": true,
+            "rerun": true
+          }
+        },
+        "duplicateOverflow": {
+          "characterItemsAtFullMastery": "24",
+          "weaponItemsAtFullMastery": "36",
+          "characterItemsWithOverflow": "24",
+          "weaponItemsWithOverflow": "36",
+          "characterMaximumCopies": "24896",
+          "weaponMaximumCopies": "16775",
+          "characterOverflowMaximum": "2487500",
+          "weaponOverflowMaximum": "1675400"
+        }
+      }
+    },
+    {
+      "id": "S3-GACHA-01",
+      "severity": "P0",
+      "requirement": "Character and weapon gacha remain separate. Natural and guaranteed results satisfy p50/p90/p99 reporting, first UR never exceeds 100 draws, featured never exceeds 200 draws, featured item mapping is exact, non-featured UR cannot resolve to the featured item, and all boundary violations are zero.",
+      "status": "PASS",
+      "summary": "Character and weapon gacha are independently sampled; first UR never exceeds 100, featured never exceeds 200, and item mapping/boundary violations are zero.",
+      "evidence": {
+        "percentiles": {
+          "primary": {
+            "count": "200000",
+            "minimum": "1",
+            "maximum": "100",
+            "p50": "100",
+            "p90": "100",
+            "p99": "100"
+          },
+          "secondary": {
+            "count": "200000",
+            "minimum": "1",
+            "maximum": "200",
+            "p50": "100",
+            "p90": "200",
+            "p99": "200"
+          },
+          "tertiary": {
+            "count": "200000",
+            "minimum": "1",
+            "maximum": "100",
+            "p50": "100",
+            "p90": "100",
+            "p99": "100"
+          },
+          "quaternary": {
+            "count": "200000",
+            "minimum": "1",
+            "maximum": "200",
+            "p50": "100",
+            "p90": "200",
+            "p99": "200"
+          }
+        },
+        "counters": {
+          "characterSamples": "200000",
+          "characterPoolItemCount": "24",
+          "characterTotalDraws": "25515431",
+          "characterUniqueItemsSeen": "24",
+          "characterFeaturedOutputs": "200000",
+          "characterFeaturedItemMismatches": "0",
+          "characterNonFeaturedUrFeaturedViolations": "0",
+          "characterHardPityTriggered": "185745",
+          "characterFeaturedGuaranteeTriggered": "62406",
+          "characterFeaturedRollHits": "137594",
+          "characterMaximumDrawsToFeatured": "200",
+          "characterRarityNDraws": "12653288",
+          "characterRarityRDraws": "7593282",
+          "characterRarityRRDraws": "3034615",
+          "characterRaritySRDraws": "1265987",
+          "characterRaritySSRDraws": "630722",
+          "characterRarityURDraws": "337537",
+          "weaponSamples": "200000",
+          "weaponPoolItemCount": "36",
+          "weaponTotalDraws": "25488865",
+          "weaponUniqueItemsSeen": "36",
+          "weaponFeaturedOutputs": "200000",
+          "weaponFeaturedItemMismatches": "0",
+          "weaponNonFeaturedUrFeaturedViolations": "0",
+          "weaponHardPityTriggered": "185599",
+          "weaponFeaturedGuaranteeTriggered": "62426",
+          "weaponFeaturedRollHits": "137574",
+          "weaponMaximumDrawsToFeatured": "200",
+          "weaponRarityNDraws": "12643047",
+          "weaponRarityRDraws": "7580549",
+          "weaponRarityRRDraws": "3031872",
+          "weaponRaritySRDraws": "1262596",
+          "weaponRaritySSRDraws": "633514",
+          "weaponRarityURDraws": "337287",
+          "maximumDrawsToFeatured": "200",
+          "boundaryViolations": "0"
+        }
+      }
+    },
+    {
+      "id": "S3-PITY-01",
+      "severity": "P0",
+      "requirement": "One million pity-conformance samples pass 99/100 and 199/200 boundaries with zero early trigger, missed trigger or counter-reset violation.",
+      "status": "PASS",
+      "summary": "One million pity samples pass 99/100 and 199/200 boundary conformance with zero violations.",
+      "evidence": {
+        "result": {
+          "sourcePath": "/home/runner/work/_temp/cats-step3-high-volume-pity-conformance/high-volume-pity-conformance.json",
+          "fileBytes": "2366",
+          "fileSha256": "b17e0aada5015d10babda729b49ab1cea25896a618f2b5ce326cb54772e8f2b4",
+          "deterministicPayloadSha256": "228202cbaa891d9e94d729732782c19ea481d57868e3babe09e134cde33c3a7c",
+          "suiteDigest": "fe78b6321c8ba09d24d318110706bc019519d7aa754b4f59d170d0787c24b26e",
+          "sampleCount": "1000000",
+          "executedAt": "2026-08-28T02:03:29.089Z"
+        },
+        "counters": {
+          "hardBoundaryCases": "9937",
+          "hardBoundaryPass": "9937",
+          "featuredBoundaryCases": "5012",
+          "featuredBoundaryPass": "5012",
+          "earlyHardFalse": "990063",
+          "earlyFeaturedFalse": "994988",
+          "boundaryViolations": "0"
+        }
+      }
+    },
+    {
+      "id": "S3-LEDGER-01",
+      "severity": "P0",
+      "requirement": "Refund, replay and race tests show zero duplicate permanent grants, zero free-ledger debit from paid-ruby refund deficit, exactly-once receipt behavior and deterministic retry convergence.",
+      "status": "PASS",
+      "summary": "Refund, replay and race testing preserves exactly-once grants, retry convergence and free-ledger isolation.",
+      "evidence": {
+        "result": {
+          "sourcePath": "/home/runner/work/_temp/cats-step3-high-volume-refund-replay-race/high-volume-refund-replay-race.json",
+          "fileBytes": "2450",
+          "fileSha256": "d381dca95059210046d5ea298d3affee29eb915cc871854cd7dfcbef65b3dc1a",
+          "deterministicPayloadSha256": "2f134631de7a3f393f4e23e534f7465ebabb51b35d7361f28046266a01ff43a5",
+          "suiteDigest": "a67ff4f178c898242851e463d813de7c7110235ceb3f5d900d90f6d5298d9f36",
+          "sampleCount": "100000",
+          "executedAt": "2026-08-28T02:03:27.423Z"
+        },
+        "counters": {
+          "validRefunds": "89954",
+          "invalidSpentRejected": "10046",
+          "idempotentReplayMatches": "89954",
+          "exactlyOnceReceiptMatches": "89954",
+          "outOfOrderRestoreMatches": "89954",
+          "acceptedVersionRetryMatches": "89954",
+          "freeLedgerDebitViolations": "0",
+          "deficitStateCount": "89481"
+        }
+      }
+    },
+    {
+      "id": "S3-STATE-01",
+      "severity": "P0",
+      "requirement": "State-machine model testing reports zero unexpected accepts and zero unexpected rejects across draw, payment, rewarded ad, login, reset, evolution, mastery and account operations represented by the sealed contract.",
+      "status": "PASS",
+      "summary": "The sealed state-machine model reports zero unexpected accepts and zero unexpected rejects across nine machines.",
+      "evidence": {
+        "result": {
+          "sourcePath": "/home/runner/work/_temp/cats-step3-high-volume-state-machine-model/high-volume-state-machine-model.json",
+          "fileBytes": "2264",
+          "fileSha256": "6a740f312ad3d90019a9a6b97f87db8d720fbdbd304dada2b220f6dee17321d7",
+          "deterministicPayloadSha256": "a544c4ad27b70b886360c7b3c94c5c86d926217ecf9d7785be23f3bd852b38f8",
+          "suiteDigest": "2e9cd8db66dcffc533fc79d5ee755189b5be6816794e4ef6dfdc760bf9f15d00",
+          "sampleCount": "100000",
+          "executedAt": "2026-08-28T02:03:28.660Z"
+        },
+        "counters": {
+          "validAccepted": "49896",
+          "invalidRejected": "50104",
+          "unexpectedAccept": "0",
+          "unexpectedReject": "0",
+          "machineCount": "9"
+        }
+      }
+    },
+    {
+      "id": "S3-BIGNUM-01",
+      "severity": "P0",
+      "requirement": "Large-number property testing reports zero unsafe-number persistence, noncanonical generated IDs, modifier repetition overflow, background cadence mismatch, NaN, Infinity or silent saturation.",
+      "status": "PASS",
+      "summary": "One hundred thousand 30-149 digit floor cases preserve canonical IDs, symbolic arithmetic and cadence/repetition invariants.",
+      "evidence": {
+        "result": {
+          "sourcePath": "/home/runner/work/_temp/cats-step3-high-volume-large-number-properties/high-volume-large-number-properties.json",
+          "fileBytes": "2504",
+          "fileSha256": "2a0e2dcea21cdb7a534c3fd1dc0e4c45d38d2911085b108c29549b8bc6d31ea6",
+          "deterministicPayloadSha256": "959a1c2e7296b4097e88078f42a75ec171a7a10801ccaa100fc2c3f8e46fbf2a",
+          "suiteDigest": "2ac706e2870c3b9e3762ca7ea3e959f4cd02a22313671a13d28c7c5b8f44196e",
+          "sampleCount": "100000",
+          "executedAt": "2026-08-28T02:03:33.898Z"
+        },
+        "counters": {
+          "symbolicRepresentations": "100000",
+          "expandedRepresentations": "0",
+          "canonicalIdPass": "100000",
+          "canonicalIdFail": "0",
+          "adjacentModifierRepeatViolations": "0",
+          "windowModifierRepeatViolations": "0",
+          "backgroundDistrictMismatches": "0",
+          "backgroundCycleMismatches": "0",
+          "maximumDigits": "149"
+        },
+        "percentiles": {
+          "primary": {
+            "count": "100000",
+            "minimum": "30",
+            "maximum": "149",
+            "p50": "89",
+            "p90": "137",
+            "p99": "148"
+          },
+          "secondary": {
+            "count": "100000",
+            "minimum": "29",
+            "maximum": "148",
+            "p50": "88",
+            "p90": "136",
+            "p99": "147"
+          }
+        }
+      }
+    },
+    {
+      "id": "S3-EVIDENCE-01",
+      "severity": "P0",
+      "requirement": "Raw results, validators, manifests, workflow run/job IDs, artifact digests, committed result blobs, critics, final judge, completion evidence and final live read-back are bound to exact commits and trees.",
+      "status": "PASS",
+      "summary": "All pre-review raw results, audits, manifests, workflow run/job IDs and committed blobs are exact-bound; critic, final-judge, completion and terminal read-back files are created by the subsequent phases.",
+      "evidence": {
+        "executionContentCommit": "ba6843b4dd8efe55b4d0c8c3f9bc1345b97d005e",
+        "executionContentTree": "30b9db2ead85ebedeebe1c52fb917751cde5a646",
+        "bindingCount": 23,
+        "sourceExecution": {
+          "runId": "33134710212",
+          "head": "22a9a3e56caadba8f2cc3c03359ff1646908b72d",
+          "tree": "e55eb2b934c3049b66e2c41ae4632004a134f960",
+          "aggregateJobId": "98732488607",
+          "aggregateArtifactId": "9671638681",
+          "aggregateArtifactDigest": "sha256:b0fff485be3fd0d101fa4562b09cbcd8c3c9e9a55af4033897f7bc4b310e0096",
+          "conclusion": "success"
+        },
+        "aggregateRepair": {
+          "runId": "33135178244",
+          "head": "9d897426ff68ce95cb7bc5d322c9caa6de9b335f",
+          "tree": "78a331fe4881bd196b05a775753752a3d7af96f7",
+          "jobId": "98733432808",
+          "artifactId": "9671745843",
+          "artifactDigest": "sha256:fd7d3314d8d36818c930a777cbb8150e3c80e9eb224b464098b06340eb108aed",
+          "conclusion": "success"
+        },
+        "executionSeal": {
+          "workflow": ".github/workflows/seal-step-3-final-execution-v2.yml",
+          "runId": "33135520122",
+          "head": "9278edb744658a2e8c21f302ec8f2381ee30f3c6",
+          "jobId": "98734463045",
+          "conclusion": "success",
+          "exactTwentyThreeFilesCommitted": true,
+          "executionGateCommitted": true,
+          "twoCommitChainPushedToExistingKimi": true
+        }
+      },
+      "phaseNote": "PASS here means the pre-review evidence boundary is complete. Full S3-EVIDENCE-01 closure is asserted only by terminal verification after completion evidence and live read-back exist."
+    },
+    {
+      "id": "S3-SCOPE-01",
+      "severity": "P0",
+      "requirement": "No runtime, asset, backend, payment-provider, ad-network, Production alias, other branch, PR or physical-iPhone PASS change occurs during Step 3.",
+      "status": "PASS",
+      "summary": "Step 3 changes remain limited to validation/evidence/governance; runtime, assets, backend, providers, Production, other branches, PR operations and physical-iPhone claims remain untouched.",
+      "evidence": {
+        "forbiddenPaths": [],
+        "scopeReadback": {
+          "runtimeChanged": false,
+          "assetsChanged": false,
+          "step1SemanticContentChanged": false,
+          "step2ExecutableContentChanged": false,
+          "backendChanged": false,
+          "paymentProviderChanged": false,
+          "adNetworkChanged": false,
+          "productionAliasChanged": false,
+          "physicalIPhoneVerified": false,
+          "otherBranchWritten": false,
+          "pullRequestOperationPerformed": false
+        },
+        "changedPathCount": 55
+      }
+    }
+  ],
+  "unresolvedP0": 0,
+  "unresolvedP1": 0,
+  "preReviewVerdict": "PASS_ANALYSIS_ELIGIBLE_FOR_CRITICS"
+}

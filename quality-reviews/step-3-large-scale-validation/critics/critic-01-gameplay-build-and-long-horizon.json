@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 2,
+  "artifactId": "cats-tower-step3-critic-01-gameplay-build-and-long-horizon",
+  "recordedAt": "2026-08-28T04:54:22.779Z",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "role": "gameplay-build-and-long-horizon",
+  "independenceBoundary": "This critic reads the exact sealed execution evidence and its assigned acceptance subset; it does not consume another critic verdict.",
+  "reviewTarget": {
+    "commit": "ba6843b4dd8efe55b4d0c8c3f9bc1345b97d005e",
+    "tree": "30b9db2ead85ebedeebe1c52fb917751cde5a646"
+  },
+  "analysis": {
+    "path": "quality-reviews/step-3-large-scale-validation/analysis.json",
+    "sha256": "344c176b306de9ed8ba8b1eb49045ea52d99a563ae90b77f059ca88ab53c586d",
+    "verdict": "PASS_ANALYSIS_ELIGIBLE_FOR_CRITICS"
+  },
+  "reviewedCriteria": [
+    {
+      "id": "S3-DATA-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "The complete 12,000 calibration and 3,000 unseen-holdout matrices are present with all 15 build/persona cells in each partition.",
+      "evidence": {
+        "calibrationScenarios": "12000",
+        "holdoutScenarios": "3000",
+        "calibrationCells": 15,
+        "holdoutCells": 15,
+        "calibrationReplayMismatches": "0",
+        "holdoutReplayMismatches": "0"
+      }
+    },
+    {
+      "id": "S3-HOLDOUT-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "Calibration and holdout are disjoint, and the committed calibration gate predates unseen-holdout execution.",
+      "evidence": {
+        "separation": {
+          "calibrationScenarios": "12000",
+          "holdoutScenarios": "3000",
+          "calibrationInputOverlap": "0",
+          "calibrationScenarioOverlap": "0",
+          "duplicateHoldoutInputDigests": "0",
+          "duplicateHoldoutScenarioDigests": "0",
+          "tuningVisible": false,
+          "tuningReuseForbidden": true
+        },
+        "calibrationGate": "PASS_CALIBRATION_GATE_HOLDOUT_AUTHORIZED",
+        "holdoutPolicy": {
+          "authorized": true,
+          "executed": false,
+          "tuningReuseForbidden": true
+        }
+      }
+    },
+    {
+      "id": "S3-RESET-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "All first-reset distributions and repeated-reset sequences satisfy the sealed bounds.",
+      "evidence": {
+        "calibrationFirstReset": {
+          "count": "12000",
+          "minimum": "20",
+          "maximum": "29",
+          "p50": "24",
+          "p90": "27",
+          "p99": "29"
+        },
+        "holdoutFirstReset": {
+          "count": "3000",
+          "minimum": "20",
+          "maximum": "29",
+          "p50": "24",
+          "p90": "27",
+          "p99": "29"
+        },
+        "calibrationRepeatedResetViolations": "0",
+        "holdoutRepeatedResetViolations": "0"
+      }
+    },
+    {
+      "id": "S3-EVOLUTION-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "Every gameplay scenario covers the first evolution without ads or payment; continuation and catch-up remain non-blocking and ordered.",
+      "evidence": {
+        "calibration": {
+          "uncoveredScenarios": "0",
+          "firstEffectiveResetMinimumReward": "15",
+          "firstStageCost": "10",
+          "orderedCatchUp": true,
+          "nonBlockingContinuation": true,
+          "adOrPaymentRequired": false
+        },
+        "holdout": {
+          "uncoveredScenarios": "0",
+          "orderedCatchUp": true,
+          "nonBlockingContinuation": true,
+          "adOrPaymentRequired": false
+        }
+      }
+    },
+    {
+      "id": "S3-BUILD-01",
+      "severity": "P1",
+      "status": "PASS",
+      "summary": "All three builds remain within the authorized scale-aware spread rule, and no build is universally best across power, economy and reclear.",
+      "evidence": {
+        "calibrationViolations": "0",
+        "holdoutViolations": "0",
+        "universalBestBuildIds": [],
+        "bestByDimension": {
+          "power": [
+            "build.combat"
+          ],
+          "economy": [
+            "build.commerce"
+          ],
+          "reclear": [
+            "build.commerce"
+          ]
+        },
+        "quantizationAddendumBlob": "9d0c89489363340c4954b6912fb105ca6789b462"
+      }
+    },
+    {
+      "id": "S3-RARITY-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "Deterministic N/R routes cover every required role, all first copies are functional, no rarity is a core gate, and UR does not cover every role.",
+      "evidence": {
+        "characters": {
+          "deterministicCoversAllRequired": true,
+          "allFirstCopiesFunctional": true,
+          "allCoreProgressionGateFalse": true,
+          "urCoversEveryRequiredRole": false,
+          "deterministicRoles": [
+            "area-damage",
+            "cleanse-support",
+            "commerce-support",
+            "damage-mitigation",
+            "frontline-control",
+            "healing-support",
+            "ranged-anti-air",
+            "runner-backline-disruption"
+          ],
+          "urRoles": [
+            "area-damage",
+            "cleanse-support",
+            "commerce-support",
+            "damage-mitigation"
+          ]
+        },
+        "weapons": {
+          "deterministicCoversAllRequired": true,
+          "allFirstCopiesFunctional": true,
+          "allCoreProgressionGateFalse": true,
+          "urCoversEveryRequiredRole": false,
+          "deterministicRoles": [
+            "area-damage",
+            "cleanse",
+            "commerce-support",
+            "guard",
+            "healing-focus",
+            "melee-control",
+            "mobility",
+            "ranged-anti-air"
+          ],
+          "urRoles": [
+            "healing-focus",
+            "mobility",
+            "ranged-anti-air"
+          ]
+        },
+        "strengthBoundary": {
+          "URGenerallyStrong": true,
+          "URUnconditionalBestAllRoles": false
+        }
+      }
+    }
+  ],
+  "unresolvedP0": 0,
+  "unresolvedP1": 0,
+  "verdict": "PASS"
+}

@@ -1,11 +1,11 @@
 {
-  "schemaVersion": 6,
+  "schemaVersion": 7,
   "updatedDate": "2026-08-28",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
-  "currentStep": 2,
-  "status": "PASS",
-  "phase": "SEALED",
+  "currentStep": 3,
+  "status": "IN_PROGRESS",
+  "phase": "CONTENT_PASS_PENDING_EVIDENCE",
   "step1": {
     "status": "PASS",
     "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
@@ -23,7 +23,7 @@
     "commit": "e02a9af48aaab1a82b1ac4563a4c03f4922eb388",
     "status": "ACTIVE"
   },
-  "reason": "Step 2 V2 executable semantics are sealed. Five independent critics report unresolved P0/P1=0, exact-SHA regression and seal validation succeeded, and completion/live-readback gates authorize Step 3. Balance remains unevaluated until Step 3 full-volume execution.",
+  "reason": "Step 3 measurements and five critics passed; completion evidence and terminal live read-back are pending.",
   "v1Artifacts": {
     "lock": "simulation/legacy-v1-lock.json",
     "executeForCurrentPromotion": false,
@@ -99,11 +99,20 @@
     "separateMonteCarlo": true,
     "separateStateTransitionTests": true,
     "separateLargeNumberPropertyTests": true,
-    "horizons": ["1-10F", "100F", "1000F", "10000F-or-equivalent", "repeated-resets", "30-45-day-economy"],
+    "horizons": [
+      "1-10F",
+      "100F",
+      "1000F",
+      "10000F-or-equivalent",
+      "repeated-resets",
+      "30-45-day-economy"
+    ],
     "executionOwner": "STEP3"
   },
   "writeBoundary": {
-    "allowed": ["Step 3 large-scale validation artifacts and evidence"],
+    "allowed": [
+      "Step 3 large-scale validation artifacts and evidence"
+    ],
     "runtimeChanged": false,
     "assetChanged": false,
     "v1Changed": false,
@@ -122,5 +131,20 @@
     "remediation": "Separate historical Round 7 evidence validation from current-status validation. Do not restore obsolete current-state markers."
   },
   "physicalIPhoneVerified": false,
-  "productionChanged": false
+  "productionChanged": false,
+  "step4Allowed": false,
+  "balanceVerdict": "PASS_PENDING_EVIDENCE",
+  "step3": {
+    "status": "IN_PROGRESS",
+    "acceptance": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
+    "gameplayCalibration": "COMPLETE",
+    "gameplayHoldout": "COMPLETE_UNSEEN",
+    "highVolume": "COMPLETE",
+    "critics": "COMPLETE",
+    "finalJudge": "PASS_STEP3_CONTENT_PENDING_COMPLETION_AND_LIVE_READBACK",
+    "completionEvidence": "PENDING",
+    "liveReadback": "PENDING",
+    "candidateMutation": false,
+    "holdoutTuningReuse": false
+  }
 }

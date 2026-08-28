@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-canonical-design-active-change-control-addendum-round-015",
+  "createdAt": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "previousAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-014.json",
+  "acceptance": {
+    "path": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
+    "blob": "d1392c431282d0faae9e9ad7f1c22161a3c5caad",
+    "entryCommit": "3eefbf6fa7dfcec8b5b093612e8946b43d838bc2",
+    "entryTree": "7499d7b07e5dff59ae5b675b475e23a7e03359b5"
+  },
+  "updatedAt": "2026-08-28",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS",
+  "step3Allowed": true,
+  "step4Allowed": false,
+  "executionGate": {
+    "path": "quality-reviews/step-3-large-scale-validation/execution-gate.json",
+    "blob": "e499cdb421d17a5e1ee79ca4ffff204fed80e60e",
+    "verdict": "PASS_STEP3_EXECUTION_GATE_CRITICS_AUTHORIZED"
+  },
+  "finalJudge": {
+    "path": "quality-reviews/step-3-large-scale-validation/final-judge.json",
+    "sha256": "7978852984bb158ecb9a8189031e72e846404fae9efc6b3d0b9255c771c1dfb0",
+    "verdict": "PASS_STEP3_CONTENT_PENDING_COMPLETION_AND_LIVE_READBACK",
+    "step3Pass": true
+  },
+  "holdoutPolicy": {
+    "unseenForTuning": true,
+    "candidateMutationDuringRound": false,
+    "tuningAfterObservation": false
+  },
+  "physicalIPhoneVerified": false,
+  "productionAliasChanged": false,
+  "nextAuthorizedAction": "Commit completion evidence and terminal live read-back; Step 4 remains blocked."
+}

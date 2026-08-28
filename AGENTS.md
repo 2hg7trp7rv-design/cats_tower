@@ -1,11 +1,23 @@
+<!-- CATS_TOWER_STEP3_STATUS_BEGIN -->
+## 現在の正式Gate
+
+- Step 1: **PASS**
+- Step 2: **PASS / SEALED**
+- Step 3: **IN_PROGRESS**
+- Step 4: **BLOCKED_UNTIL_TERMINAL_EVIDENCE**
+- Balance verdict: **PASS_PENDING_EVIDENCE**
+- Physical iPhone: **NOT_VERIFIED**
+- Production alias changed: **false**
+<!-- CATS_TOWER_STEP3_STATUS_END -->
+
 # Cat's Tower repository instructions
 
-更新日: **2026-08-28**  
-Repository: `2hg7trp7rv-design/cats_tower`  
-書込みbranch: **既存の`kimi`のみ**  
-Step 1 Round 008: **PASS**  
-Step 2: **PASS — SEALED**  
-Step 3: **READY_TO_START**  
+更新日: **2026-08-28**
+Repository: `2hg7trp7rv-design/cats_tower`
+書込みbranch: **既存の`kimi`のみ**
+Step 1 Round 008: **PASS**
+Step 2: **PASS — SEALED**
+Step 3: **IN_PROGRESS**
 Step 4〜6: **BLOCKED BY PRIOR GATES**
 
 ## Branch hard lock
@@ -88,7 +100,7 @@ Step 3ではholdoutを調整に再利用しない。Step 2の30件qualification�
 
 ## Current write boundary
 
-Allowed next: Step 3 large-scale validation artifacts and evidence only.  
+Allowed next: Step 3 large-scale validation artifacts and evidence only.
 Forbidden until later gates: runtime、assets、backend、payment provider、ad network、Production alias、physical-iPhone PASS claim。
 
 ## Completion rule

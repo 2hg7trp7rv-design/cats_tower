@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-finalization-repair-addendum-005",
+  "recordedAt": "2026-08-28T04:54:22.785Z",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "trigger": "The first resumable critic/finalization workflow asserted ACTIVE_BEFORE_FIRST_STEP3_WRITE while the pre-execution acceptance artifact is immutably ACTIVE_BEFORE_STEP3_EXECUTION, causing all critic and completion steps to be skipped.",
+  "repairBoundary": {
+    "orchestrationOnly": true,
+    "rawExecutionEvidenceChanged": false,
+    "acceptanceThresholdChanged": false,
+    "candidateChanged": false,
+    "holdoutReusedForTuning": false
+  },
+  "authority": {
+    "acceptance": {
+      "path": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
+      "blob": "d1392c431282d0faae9e9ad7f1c22161a3c5caad",
+      "status": "ACTIVE_BEFORE_STEP3_EXECUTION"
+    },
+    "executionGate": {
+      "path": "quality-reviews/step-3-large-scale-validation/execution-gate.json",
+      "blob": "e499cdb421d17a5e1ee79ca4ffff204fed80e60e",
+      "verdict": "PASS_STEP3_EXECUTION_GATE_CRITICS_AUTHORIZED"
+    },
+    "executionReadback": {
+      "path": "quality-reviews/step-3-large-scale-validation/execution-live-readback-v2.json",
+      "blob": "073252683f207cf9f42d2f8b2634b10ae36ff8b5",
+      "verdict": "PASS_CORRECTED_EXECUTION_READBACK_CRITICS_AUTHORIZED"
+    }
+  },
+  "priorFailedWorkflow": {
+    "path": ".github/workflows/verify-step-3-large-scale-validation-v2.yml",
+    "runId": "33137497733",
+    "failedStep": "Assert immutable authority and tool syntax",
+    "skippedCriticCount": 5
+  },
+  "requiredClosure": [
+    "integrated analysis",
+    "five independent critic records",
+    "critic summary",
+    "final judge",
+    "completion evidence",
+    "terminal live read-back",
+    "later exact-head CI verification"
+  ],
+  "verdict": "PASS_REPAIR_AUTHORIZED_FROM_EXISTING_SEALED_EXECUTION_EVIDENCE"
+}

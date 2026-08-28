@@ -1,5 +1,5 @@
 {
-  "statusDocumentSchemaVersion": 13,
+  "statusDocumentSchemaVersion": 14,
   "updatedDate": "2026-08-28",
   "project": "Cat's Tower",
   "canonicalRepository": "2hg7trp7rv-design/cats_tower",
@@ -14,12 +14,12 @@
     "status": "ACTIVE_COMPLETE_REPLACEMENT",
     "oldPathStatus": "DELETED_FROM_LIVE_KIMI"
   },
-  "currentChat": "02_無制限塔・経済・リセットシミュレーション",
-  "currentStep": 2,
-  "currentStepName": "executable-contract-and-simulation",
-  "currentStepStatus": "PASS",
-  "currentCheckpoint": "step2-sealed-status-activation",
-  "advanceAllowed": true,
+  "currentChat": "03_3ビルド・ガチャ・重複熟練・進化・課金検証",
+  "currentStep": 3,
+  "currentStepName": "large-scale-validation",
+  "currentStepStatus": "IN_PROGRESS",
+  "currentCheckpoint": "step3-content-judged-pending-terminal-evidence",
+  "advanceAllowed": false,
   "step2Allowed": true,
   "step3Allowed": true,
   "physicalIPhoneVerified": false,
@@ -44,7 +44,14 @@
     "singleResetId": "reset.tower_return",
     "coinLevelCap": null,
     "evolutionEligibilityEveryLevels": 100,
-    "rarities": ["N", "R", "RR", "SR", "SSR", "UR"],
+    "rarities": [
+      "N",
+      "R",
+      "RR",
+      "SR",
+      "SSR",
+      "UR"
+    ],
     "characterAndWeaponGachaSeparated": true,
     "hardPityTarget": 100,
     "featuredGuaranteeTarget": 200,
@@ -84,12 +91,36 @@
     "step3Authorized": true
   },
   "authorizedExecutionSequence": [
-    {"order": 1, "name": "canonical-integration-and-reseal", "status": "PASS"},
-    {"order": 2, "name": "executable-contract-and-simulation", "status": "PASS"},
-    {"order": 3, "name": "large-scale-validation", "status": "READY_TO_START"},
-    {"order": 4, "name": "twelve-screen-final-mockups", "status": "BLOCKED_UNTIL_STEP3_PASS"},
-    {"order": 5, "name": "first-production-slice-and-backend-implementation", "status": "BLOCKED_UNTIL_PRIOR_GATES"},
-    {"order": 6, "name": "physical-iphone-validation", "status": "BLOCKED_UNTIL_ELIGIBLE_BUILD"}
+    {
+      "order": 1,
+      "name": "canonical-integration-and-reseal",
+      "status": "PASS"
+    },
+    {
+      "order": 2,
+      "name": "executable-contract-and-simulation",
+      "status": "PASS"
+    },
+    {
+      "order": 3,
+      "name": "large-scale-validation",
+      "status": "IN_PROGRESS"
+    },
+    {
+      "order": 4,
+      "name": "twelve-screen-final-mockups",
+      "status": "BLOCKED_UNTIL_TERMINAL_EVIDENCE"
+    },
+    {
+      "order": 5,
+      "name": "first-production-slice-and-backend-implementation",
+      "status": "BLOCKED_UNTIL_PRIOR_GATES"
+    },
+    {
+      "order": 6,
+      "name": "physical-iphone-validation",
+      "status": "BLOCKED_UNTIL_ELIGIBLE_BUILD"
+    }
   ],
   "step2Entry": {
     "source": "canonical/STEP2_DEPENDENCY_CLOSURE.json",
@@ -105,10 +136,20 @@
     "step3MayStartBeforeStep2Seal": false
   },
   "nextAuthorizedChat": "03_3ビルド・ガチャ・重複熟練・進化・課金検証",
-  "nextAction": "Execute the sealed Step 3 large-scale validation: minimum 15,000 gameplay scenarios plus separate gacha-tail, pity, duplicate, refund/replay/race, state-transition and large-number suites. Do not treat Step 2 qualification as a balance PASS.",
+  "nextAction": "Commit completion evidence and terminal live read-back; Step 4 remains blocked.",
   "writeBoundary": {
-    "allowedNext": ["Step 3 large-scale validation artifacts and evidence"],
-    "forbiddenUntilLaterGates": ["runtime", "assets", "backend", "payment provider", "ad network", "Production alias", "physical-iPhone PASS claim"]
+    "allowedNext": [
+      "Step 3 large-scale validation artifacts and evidence"
+    ],
+    "forbiddenUntilLaterGates": [
+      "runtime",
+      "assets",
+      "backend",
+      "payment provider",
+      "ad network",
+      "Production alias",
+      "physical-iPhone PASS claim"
+    ]
   },
   "knownCiDiscrepancy": {
     "workflow": ".github/workflows/verify-main.yml",
@@ -120,5 +161,25 @@
     "affectsStep2SealVerdict": false,
     "productionImpact": false,
     "remediation": "Separate historical Round 7 evidence validation from current-status validation; do not restore obsolete markers."
+  },
+  "status": "IN_PROGRESS",
+  "phase": "CONTENT_PASS_PENDING_EVIDENCE",
+  "step4Allowed": false,
+  "balanceVerdict": "PASS_PENDING_EVIDENCE",
+  "productionAliasChanged": false,
+  "reason": "Step 3 measurements and five critics passed; completion evidence and terminal live read-back are pending.",
+  "step3": {
+    "status": "IN_PROGRESS",
+    "acceptance": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
+    "executionGate": "quality-reviews/step-3-large-scale-validation/execution-gate.json",
+    "analysis": "quality-reviews/step-3-large-scale-validation/analysis.json",
+    "criticSummary": "quality-reviews/step-3-large-scale-validation/critic-summary.json",
+    "finalJudge": "quality-reviews/step-3-large-scale-validation/final-judge.json",
+    "completionEvidence": "PENDING",
+    "liveReadback": "PENDING",
+    "gameplayScenarios": "15000",
+    "highVolumeSamples": "1700000",
+    "candidateMutation": false,
+    "holdoutTuningReuse": false
   }
 }

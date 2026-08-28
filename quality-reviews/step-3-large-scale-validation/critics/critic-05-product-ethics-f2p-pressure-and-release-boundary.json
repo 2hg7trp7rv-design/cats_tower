@@ -1,0 +1,370 @@
+{
+  "schemaVersion": 2,
+  "artifactId": "cats-tower-step3-critic-05-product-ethics-f2p-pressure-and-release-boundary",
+  "recordedAt": "2026-08-28T04:54:22.780Z",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "role": "product-ethics-f2p-pressure-and-release-boundary",
+  "independenceBoundary": "This critic reads the exact sealed execution evidence and its assigned acceptance subset; it does not consume another critic verdict.",
+  "reviewTarget": {
+    "commit": "ba6843b4dd8efe55b4d0c8c3f9bc1345b97d005e",
+    "tree": "30b9db2ead85ebedeebe1c52fb917751cde5a646"
+  },
+  "analysis": {
+    "path": "quality-reviews/step-3-large-scale-validation/analysis.json",
+    "sha256": "344c176b306de9ed8ba8b1eb49045ea52d99a563ae90b77f059ca88ab53c586d",
+    "verdict": "PASS_ANALYSIS_ELIGIBLE_FOR_CRITICS"
+  },
+  "reviewedCriteria": [
+    {
+      "id": "S3-F2P-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "No-ad F2P reaches the featured guarantee on day 40 with 44 combined daily draws and no core ad/payment dependency.",
+      "evidence": {
+        "calibration": {
+          "guaranteeDay": "40",
+          "combinedDailyDraws": "44",
+          "progressionContinues": true,
+          "evolutionCoverage": true
+        },
+        "holdout": {
+          "guaranteeDay": "40",
+          "combinedDailyDraws": "44",
+          "progressionContinues": true,
+          "evolutionCoverage": true
+        }
+      }
+    },
+    {
+      "id": "S3-MONETIZATION-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "All persona acceleration multipliers remain within the sealed 1.0x, 1.25x, 2.0x, 3.0x and 5.0x ceilings.",
+      "evidence": {
+        "calibration": {
+          "personas": [
+            {
+              "personaId": "no-ad-f2p",
+              "progressMultiplier": "1.00",
+              "declaredMaximum": "1.00",
+              "acceptanceMaximum": "1.00",
+              "progressWithinDeclaredMaximum": true,
+              "declaredWithinAcceptanceMaximum": true
+            },
+            {
+              "personaId": "rewarded-ad-f2p",
+              "progressMultiplier": "1.18",
+              "declaredMaximum": "1.25",
+              "acceptanceMaximum": "1.25",
+              "progressWithinDeclaredMaximum": true,
+              "declaredWithinAcceptanceMaximum": true
+            },
+            {
+              "personaId": "monthly-pass",
+              "progressMultiplier": "1.70",
+              "declaredMaximum": "2.00",
+              "acceptanceMaximum": "2.00",
+              "progressWithinDeclaredMaximum": true,
+              "declaredWithinAcceptanceMaximum": true
+            },
+            {
+              "personaId": "controlled-payer",
+              "progressMultiplier": "2.70",
+              "declaredMaximum": "3.00",
+              "acceptanceMaximum": "3.00",
+              "progressWithinDeclaredMaximum": true,
+              "declaredWithinAcceptanceMaximum": true
+            },
+            {
+              "personaId": "high-spend-stress",
+              "progressMultiplier": "4.50",
+              "declaredMaximum": "5.00",
+              "acceptanceMaximum": "5.00",
+              "progressWithinDeclaredMaximum": true,
+              "declaredWithinAcceptanceMaximum": true
+            }
+          ]
+        },
+        "holdout": {
+          "personas": [
+            {
+              "id": "no-ad-f2p",
+              "progressMultiplier": "1.00",
+              "declaredMaximum": "1.00",
+              "acceptanceMaximum": "1.00"
+            },
+            {
+              "id": "rewarded-ad-f2p",
+              "progressMultiplier": "1.18",
+              "declaredMaximum": "1.25",
+              "acceptanceMaximum": "1.25"
+            },
+            {
+              "id": "monthly-pass",
+              "progressMultiplier": "1.70",
+              "declaredMaximum": "2.00",
+              "acceptanceMaximum": "2.00"
+            },
+            {
+              "id": "controlled-payer",
+              "progressMultiplier": "2.70",
+              "declaredMaximum": "3.00",
+              "acceptanceMaximum": "3.00"
+            },
+            {
+              "id": "high-spend-stress",
+              "progressMultiplier": "4.50",
+              "declaredMaximum": "5.00",
+              "acceptanceMaximum": "5.00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "S3-RARITY-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "Deterministic N/R routes cover every required role, all first copies are functional, no rarity is a core gate, and UR does not cover every role.",
+      "evidence": {
+        "characters": {
+          "deterministicCoversAllRequired": true,
+          "allFirstCopiesFunctional": true,
+          "allCoreProgressionGateFalse": true,
+          "urCoversEveryRequiredRole": false,
+          "deterministicRoles": [
+            "area-damage",
+            "cleanse-support",
+            "commerce-support",
+            "damage-mitigation",
+            "frontline-control",
+            "healing-support",
+            "ranged-anti-air",
+            "runner-backline-disruption"
+          ],
+          "urRoles": [
+            "area-damage",
+            "cleanse-support",
+            "commerce-support",
+            "damage-mitigation"
+          ]
+        },
+        "weapons": {
+          "deterministicCoversAllRequired": true,
+          "allFirstCopiesFunctional": true,
+          "allCoreProgressionGateFalse": true,
+          "urCoversEveryRequiredRole": false,
+          "deterministicRoles": [
+            "area-damage",
+            "cleanse",
+            "commerce-support",
+            "guard",
+            "healing-focus",
+            "melee-control",
+            "mobility",
+            "ranged-anti-air"
+          ],
+          "urRoles": [
+            "healing-focus",
+            "mobility",
+            "ranged-anti-air"
+          ]
+        },
+        "strengthBoundary": {
+          "URGenerallyStrong": true,
+          "URUnconditionalBestAllRoles": false
+        }
+      }
+    },
+    {
+      "id": "S3-MASTERY-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "Character and weapon mastery satisfy first-copy utility, <=7-copy practical breakpoints, >=20-copy full mastery, diminishing gains and nonzero post-cap overflow.",
+      "evidence": {
+        "holdoutReplay": {
+          "masteryReplayMismatchCount": "0"
+        },
+        "characterMastery": {
+          "firstCopy": {
+            "functional": true,
+            "roleComplete": true
+          },
+          "practicalBreakpoints": {
+            "nodes": [
+              {
+                "additionalEffectiveCopies": "1",
+                "cumulativePowerBasisPoints": "300",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "3",
+                "cumulativePowerBasisPoints": "550",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "7",
+                "cumulativePowerBasisPoints": "750",
+                "functionalUnlock": false
+              }
+            ],
+            "latestAdditionalCopies": "7"
+          },
+          "fullMastery": {
+            "minimumAdditionalEffectiveCopies": "20",
+            "normalPvePrerequisite": false
+          },
+          "marginalCurve": {
+            "nodes": [
+              {
+                "additionalEffectiveCopies": "1",
+                "cumulativePowerBasisPoints": "300",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "3",
+                "cumulativePowerBasisPoints": "550",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "7",
+                "cumulativePowerBasisPoints": "750",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "12",
+                "cumulativePowerBasisPoints": "900",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "20",
+                "cumulativePowerBasisPoints": "1000",
+                "functionalUnlock": false
+              }
+            ],
+            "strictlyDiminishingMarginalGain": true
+          },
+          "overflow": {
+            "currency": "overflow.character.mastery",
+            "conversionPerDuplicate": "100",
+            "neverDiscard": true
+          },
+          "catchUp": {
+            "selectors": true,
+            "universalFragments": true,
+            "exchange": true,
+            "rerun": true
+          }
+        },
+        "weaponMastery": {
+          "firstCopy": {
+            "functional": true,
+            "roleComplete": true
+          },
+          "practicalBreakpoints": {
+            "nodes": [
+              {
+                "additionalEffectiveCopies": "1",
+                "cumulativePowerBasisPoints": "300",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "3",
+                "cumulativePowerBasisPoints": "550",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "7",
+                "cumulativePowerBasisPoints": "750",
+                "functionalUnlock": false
+              }
+            ],
+            "latestAdditionalCopies": "7"
+          },
+          "fullMastery": {
+            "minimumAdditionalEffectiveCopies": "20",
+            "normalPvePrerequisite": false
+          },
+          "marginalCurve": {
+            "nodes": [
+              {
+                "additionalEffectiveCopies": "1",
+                "cumulativePowerBasisPoints": "300",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "3",
+                "cumulativePowerBasisPoints": "550",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "7",
+                "cumulativePowerBasisPoints": "750",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "12",
+                "cumulativePowerBasisPoints": "900",
+                "functionalUnlock": false
+              },
+              {
+                "additionalEffectiveCopies": "20",
+                "cumulativePowerBasisPoints": "1000",
+                "functionalUnlock": false
+              }
+            ],
+            "strictlyDiminishingMarginalGain": true
+          },
+          "overflow": {
+            "currency": "overflow.weapon.mastery",
+            "conversionPerDuplicate": "100",
+            "neverDiscard": true
+          },
+          "catchUp": {
+            "selectors": true,
+            "universalFragments": true,
+            "exchange": true,
+            "rerun": true
+          }
+        },
+        "duplicateOverflow": {
+          "characterItemsAtFullMastery": "24",
+          "weaponItemsAtFullMastery": "36",
+          "characterItemsWithOverflow": "24",
+          "weaponItemsWithOverflow": "36",
+          "characterMaximumCopies": "24896",
+          "weaponMaximumCopies": "16775",
+          "characterOverflowMaximum": "2487500",
+          "weaponOverflowMaximum": "1675400"
+        }
+      }
+    },
+    {
+      "id": "S3-SCOPE-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "Step 3 changes remain limited to validation/evidence/governance; runtime, assets, backend, providers, Production, other branches, PR operations and physical-iPhone claims remain untouched.",
+      "evidence": {
+        "forbiddenPaths": [],
+        "scopeReadback": {
+          "runtimeChanged": false,
+          "assetsChanged": false,
+          "step1SemanticContentChanged": false,
+          "step2ExecutableContentChanged": false,
+          "backendChanged": false,
+          "paymentProviderChanged": false,
+          "adNetworkChanged": false,
+          "productionAliasChanged": false,
+          "physicalIPhoneVerified": false,
+          "otherBranchWritten": false,
+          "pullRequestOperationPerformed": false
+        },
+        "changedPathCount": 55
+      }
+    }
+  ],
+  "unresolvedP0": 0,
+  "unresolvedP1": 0,
+  "verdict": "PASS"
+}

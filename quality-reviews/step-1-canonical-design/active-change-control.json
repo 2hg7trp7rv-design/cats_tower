@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "artifactId": "step-1-canonical-design-active-change-control",
-  "revision": 7,
+  "revision": 8,
   "createdAt": "2026-08-26",
   "updatedAt": "2026-08-28",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
-  "status": "PASS",
-  "verdict": "PASS",
-  "advanceAllowed": true,
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS",
+  "advanceAllowed": false,
   "step2Allowed": true,
   "step3Allowed": true,
   "trigger": "Advance repository governance from the activated Round 008 Step 1 seal through the exact sealed Step 2 executable contract and authorize Step 3 large-scale validation. Repair stale mirrors and separate legacy Round 7 historical assertions from current status assertions without restoring obsolete markers.",
@@ -50,7 +50,7 @@
     "status": "PASS_SEALED"
   },
   "activationEvidence": {
-    "latestAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-014.json",
+    "latestAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-015.json",
     "step1Completion": "quality-reviews/step-1-reseal-round-008/activation-completion-evidence-round-008.json",
     "step1LiveReadback": "quality-reviews/step-1-reseal-round-008/live-readback-round-008.json",
     "step2Completion": "quality-reviews/step-2-executable-contract-v2/completion-evidence.json",
@@ -58,7 +58,10 @@
     "step2FinalReadback": "quality-reviews/step-2-executable-contract-v2/final-live-readback.json",
     "governanceRepairAcceptance": "quality-reviews/step-2-governance-repair-round-001/acceptance-matrix.json",
     "governanceRepairCompletion": "quality-reviews/step-2-governance-repair-round-001/completion-evidence.json",
-    "governanceRepairLiveReadback": "quality-reviews/step-2-governance-repair-round-001/live-readback.json"
+    "governanceRepairLiveReadback": "quality-reviews/step-2-governance-repair-round-001/live-readback.json",
+    "step3FinalJudge": "quality-reviews/step-3-large-scale-validation/final-judge.json",
+    "step3CompletionEvidence": "PENDING",
+    "step3LiveReadback": "PENDING"
   },
   "historicalEvidence": {
     "finite100FNoGachaPassesRemainImmutable": true,
@@ -69,19 +72,52 @@
   },
   "productBoundary": {
     "tower": "no player-visible maximum; 100F is the first major milestone and 101F+ is normal progression",
-    "playableSpecies": ["cat", "catfolk"],
+    "playableSpecies": [
+      "cat",
+      "catfolk"
+    ],
     "activeNamedParty": 4,
     "temporaryReinforcementSeparate": true,
     "merchantRole": "shop, income, delivery, recruitment and reinvestment support combat; merchant-chairman identity is excluded",
     "tapDirectDamage": 0,
-    "reset": {"count": 1, "id": "reset.tower_return", "restartFloor": 1, "repeatBestNewRuby": 0},
+    "reset": {
+      "count": 1,
+      "id": "reset.tower_return",
+      "restartFloor": 1,
+      "repeatBestNewRuby": 0
+    },
     "coinLevelCap": null,
     "evolutionEligibilityEveryLevels": 100,
-    "rarities": ["N", "R", "RR", "SR", "SSR", "UR"],
-    "catalogTargets": {"characters": 24, "weapons": 36},
-    "gacha": {"characterWeaponSeparated": true, "hardPityTarget": 100, "featuredGuaranteeTarget": 200, "compatibleCarryover": true},
-    "duplicateMastery": {"firstCopyFunctional": true, "minimumAdditionalEffectiveCopiesForFullMastery": 20, "normalPveRequiresFullMastery": false, "overflowRequired": true},
-    "wallet": ["paid", "free-reset", "free-ad", "free-other"],
+    "rarities": [
+      "N",
+      "R",
+      "RR",
+      "SR",
+      "SSR",
+      "UR"
+    ],
+    "catalogTargets": {
+      "characters": 24,
+      "weapons": 36
+    },
+    "gacha": {
+      "characterWeaponSeparated": true,
+      "hardPityTarget": 100,
+      "featuredGuaranteeTarget": 200,
+      "compatibleCarryover": true
+    },
+    "duplicateMastery": {
+      "firstCopyFunctional": true,
+      "minimumAdditionalEffectiveCopiesForFullMastery": 20,
+      "normalPveRequiresFullMastery": false,
+      "overflowRequired": true
+    },
+    "wallet": [
+      "paid",
+      "free-reset",
+      "free-ad",
+      "free-other"
+    ],
     "ads": "rewarded opt-in only in the initial product",
     "screens": 12,
     "serverAuthority": "all permanent economy and entitlements",
@@ -106,12 +142,36 @@
     }
   },
   "authorizedExecutionSequence": [
-    {"order": 1, "name": "canonical-integration-and-reseal", "status": "PASS"},
-    {"order": 2, "name": "executable-contract-and-simulation", "status": "PASS"},
-    {"order": 3, "name": "large-scale-validation", "status": "READY_TO_START"},
-    {"order": 4, "name": "twelve-screen-final-mockups", "status": "BLOCKED_UNTIL_STEP3_PASS"},
-    {"order": 5, "name": "first-production-slice-and-backend-implementation", "status": "BLOCKED_UNTIL_PRIOR_GATES"},
-    {"order": 6, "name": "physical-iphone-validation", "status": "BLOCKED_UNTIL_ELIGIBLE_BUILD"}
+    {
+      "order": 1,
+      "name": "canonical-integration-and-reseal",
+      "status": "PASS"
+    },
+    {
+      "order": 2,
+      "name": "executable-contract-and-simulation",
+      "status": "PASS"
+    },
+    {
+      "order": 3,
+      "name": "large-scale-validation",
+      "status": "IN_PROGRESS"
+    },
+    {
+      "order": 4,
+      "name": "twelve-screen-final-mockups",
+      "status": "BLOCKED_UNTIL_TERMINAL_EVIDENCE"
+    },
+    {
+      "order": 5,
+      "name": "first-production-slice-and-backend-implementation",
+      "status": "BLOCKED_UNTIL_PRIOR_GATES"
+    },
+    {
+      "order": 6,
+      "name": "physical-iphone-validation",
+      "status": "BLOCKED_UNTIL_ELIGIBLE_BUILD"
+    }
   ],
   "step3Boundary": {
     "requiredRunPlan": "simulation/run-plan-v2.json",
@@ -128,8 +188,19 @@
     ],
     "holdoutMayBeReusedForTuning": false,
     "step2QualificationMayBeClaimedAsBalancePass": false,
-    "allowed": ["Step 3 large-scale validation artifacts and evidence"],
-    "forbidden": ["runtime", "assets", "backend", "payment provider", "ad network", "PR operation", "Production alias", "physical-iPhone PASS claim"]
+    "allowed": [
+      "Step 3 large-scale validation artifacts and evidence"
+    ],
+    "forbidden": [
+      "runtime",
+      "assets",
+      "backend",
+      "payment provider",
+      "ad network",
+      "PR operation",
+      "Production alias",
+      "physical-iPhone PASS claim"
+    ]
   },
   "governanceRepair": {
     "acceptancePath": "quality-reviews/step-2-governance-repair-round-001/acceptance-matrix.json",
@@ -141,7 +212,8 @@
     "liveReadbackPath": "quality-reviews/step-2-governance-repair-round-001/live-readback.json"
   },
   "nextAuthorizedChat": "03_3ビルド・ガチャ・重複熟練・進化・課金検証",
-  "nextAuthorizedAction": "After governance repair completion and terminal live read-back, execute the sealed Step 3 plan. Do not treat Step 2 qualification as balance PASS.",
+  "nextAuthorizedAction": "Commit completion evidence and terminal live read-back; Step 4 remains blocked.",
   "physicalIPhoneVerified": false,
-  "productionAliasChanged": false
+  "productionAliasChanged": false,
+  "step4Allowed": false
 }

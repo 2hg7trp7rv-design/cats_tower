@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "updatedDate": "2026-08-28",
   "repository": {
     "fullName": "2hg7trp7rv-design/cats_tower",
@@ -23,17 +23,15 @@
     "chat history and competitor references"
   ],
   "currentPhase": {
-    "step": 2,
-    "name": "executable-contract-and-simulation",
-    "status": "PASS",
-    "phase": "SEALED",
+    "step": 3,
+    "name": "large-scale-validation",
+    "status": "IN_PROGRESS",
+    "phase": "CONTENT_PASS_PENDING_EVIDENCE",
     "step1Status": "PASS",
+    "step2Status": "PASS_SEALED",
     "step3Allowed": true,
-    "nextStep": 3,
-    "nextStepName": "large-scale-validation",
-    "nextStepStatus": "READY_TO_START",
-    "balanceVerdict": "NOT_EVALUATED_STEP2",
-    "step3Executed": false,
+    "step4Allowed": false,
+    "balanceVerdict": "PASS_PENDING_EVIDENCE",
     "physicalIPhone": "NOT_VERIFIED"
   },
   "activeStep1Seal": {
@@ -96,7 +94,13 @@
   },
   "permanentEconomyAuthority": "server",
   "completionContract": {
-    "insufficientAlone": ["files exist", "build succeeds", "tests pass", "deployment READY", "sandbox provider responds"],
+    "insufficientAlone": [
+      "files exist",
+      "build succeeds",
+      "tests pass",
+      "deployment READY",
+      "sandbox provider responds"
+    ],
     "required": [
       "requirements coverage",
       "schema and semantic validation",
@@ -110,18 +114,59 @@
     ]
   },
   "writeBoundary": {
-    "currentAllowed": ["Step 3 large-scale validation artifacts and evidence"],
-    "currentForbidden": ["runtime", "assets", "backend", "payment provider", "ad network", "PR operation", "Production alias", "physical-iPhone PASS claim"],
-    "step3MayRun": true,
-    "productionChanged": false
+    "currentAllowed": [
+      "Step 3 completion, terminal evidence and explicit failure/change-control records"
+    ],
+    "currentForbidden": [
+      "runtime",
+      "assets",
+      "backend",
+      "payment provider",
+      "ad network",
+      "PR operation",
+      "Production alias",
+      "Step 2 executable mutation",
+      "physical-iPhone PASS claim"
+    ]
   },
   "userBoundary": {
-    "chatgptOwns": ["research", "specification", "implementation when authorized", "tests", "defect discovery", "repair", "regression", "handover"],
-    "userNeededFor": ["material product-direction tie", "unavailable credentials/contracts", "destructive or public operation approval", "physical iPhone evidence"],
+    "chatgptOwns": [
+      "research",
+      "specification",
+      "implementation when authorized",
+      "tests",
+      "defect discovery",
+      "repair",
+      "regression",
+      "handover"
+    ],
+    "userNeededFor": [
+      "material product-direction tie",
+      "unavailable credentials/contracts",
+      "destructive or public operation approval",
+      "physical iPhone evidence"
+    ],
     "forbiddenDelegation": "Do not ask the user to write code or diagnose ordinary defects."
   },
   "reporting": {
-    "required": ["repository", "branch", "content/evidence commit and tree", "workflow run/job", "phase/verdict", "P0/P1", "changed paths", "Production change", "physical iPhone state"],
-    "forbiddenWithoutPass": ["完成", "OK", "問題なし", "Preview Ready", "Production Ready", "実機確認済み"]
+    "required": [
+      "repository",
+      "branch",
+      "content/evidence commit and tree",
+      "workflow run/job",
+      "phase/verdict",
+      "P0/P1",
+      "changed paths",
+      "Production change",
+      "physical iPhone state"
+    ],
+    "forbiddenWithoutPass": [
+      "完成",
+      "OK",
+      "問題なし",
+      "Preview Ready",
+      "Production Ready",
+      "実機確認済み"
+    ]
   }
 }

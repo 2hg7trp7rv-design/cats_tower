@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 2,
+  "artifactId": "cats-tower-step3-critic-03-ledger-refund-replay-race-and-state-machines",
+  "recordedAt": "2026-08-28T04:54:22.780Z",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "role": "ledger-refund-replay-race-and-state-machines",
+  "independenceBoundary": "This critic reads the exact sealed execution evidence and its assigned acceptance subset; it does not consume another critic verdict.",
+  "reviewTarget": {
+    "commit": "ba6843b4dd8efe55b4d0c8c3f9bc1345b97d005e",
+    "tree": "30b9db2ead85ebedeebe1c52fb917751cde5a646"
+  },
+  "analysis": {
+    "path": "quality-reviews/step-3-large-scale-validation/analysis.json",
+    "sha256": "344c176b306de9ed8ba8b1eb49045ea52d99a563ae90b77f059ca88ab53c586d",
+    "verdict": "PASS_ANALYSIS_ELIGIBLE_FOR_CRITICS"
+  },
+  "reviewedCriteria": [
+    {
+      "id": "S3-LEDGER-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "Refund, replay and race testing preserves exactly-once grants, retry convergence and free-ledger isolation.",
+      "evidence": {
+        "result": {
+          "sourcePath": "/home/runner/work/_temp/cats-step3-high-volume-refund-replay-race/high-volume-refund-replay-race.json",
+          "fileBytes": "2450",
+          "fileSha256": "d381dca95059210046d5ea298d3affee29eb915cc871854cd7dfcbef65b3dc1a",
+          "deterministicPayloadSha256": "2f134631de7a3f393f4e23e534f7465ebabb51b35d7361f28046266a01ff43a5",
+          "suiteDigest": "a67ff4f178c898242851e463d813de7c7110235ceb3f5d900d90f6d5298d9f36",
+          "sampleCount": "100000",
+          "executedAt": "2026-08-28T02:03:27.423Z"
+        },
+        "counters": {
+          "validRefunds": "89954",
+          "invalidSpentRejected": "10046",
+          "idempotentReplayMatches": "89954",
+          "exactlyOnceReceiptMatches": "89954",
+          "outOfOrderRestoreMatches": "89954",
+          "acceptedVersionRetryMatches": "89954",
+          "freeLedgerDebitViolations": "0",
+          "deficitStateCount": "89481"
+        }
+      }
+    },
+    {
+      "id": "S3-STATE-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "The sealed state-machine model reports zero unexpected accepts and zero unexpected rejects across nine machines.",
+      "evidence": {
+        "result": {
+          "sourcePath": "/home/runner/work/_temp/cats-step3-high-volume-state-machine-model/high-volume-state-machine-model.json",
+          "fileBytes": "2264",
+          "fileSha256": "6a740f312ad3d90019a9a6b97f87db8d720fbdbd304dada2b220f6dee17321d7",
+          "deterministicPayloadSha256": "a544c4ad27b70b886360c7b3c94c5c86d926217ecf9d7785be23f3bd852b38f8",
+          "suiteDigest": "2e9cd8db66dcffc533fc79d5ee755189b5be6816794e4ef6dfdc760bf9f15d00",
+          "sampleCount": "100000",
+          "executedAt": "2026-08-28T02:03:28.660Z"
+        },
+        "counters": {
+          "validAccepted": "49896",
+          "invalidRejected": "50104",
+          "unexpectedAccept": "0",
+          "unexpectedReject": "0",
+          "machineCount": "9"
+        }
+      }
+    },
+    {
+      "id": "S3-GACHA-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "Character and weapon gacha are independently sampled; first UR never exceeds 100, featured never exceeds 200, and item mapping/boundary violations are zero.",
+      "evidence": {
+        "percentiles": {
+          "primary": {
+            "count": "200000",
+            "minimum": "1",
+            "maximum": "100",
+            "p50": "100",
+            "p90": "100",
+            "p99": "100"
+          },
+          "secondary": {
+            "count": "200000",
+            "minimum": "1",
+            "maximum": "200",
+            "p50": "100",
+            "p90": "200",
+            "p99": "200"
+          },
+          "tertiary": {
+            "count": "200000",
+            "minimum": "1",
+            "maximum": "100",
+            "p50": "100",
+            "p90": "100",
+            "p99": "100"
+          },
+          "quaternary": {
+            "count": "200000",
+            "minimum": "1",
+            "maximum": "200",
+            "p50": "100",
+            "p90": "200",
+            "p99": "200"
+          }
+        },
+        "counters": {
+          "characterSamples": "200000",
+          "characterPoolItemCount": "24",
+          "characterTotalDraws": "25515431",
+          "characterUniqueItemsSeen": "24",
+          "characterFeaturedOutputs": "200000",
+          "characterFeaturedItemMismatches": "0",
+          "characterNonFeaturedUrFeaturedViolations": "0",
+          "characterHardPityTriggered": "185745",
+          "characterFeaturedGuaranteeTriggered": "62406",
+          "characterFeaturedRollHits": "137594",
+          "characterMaximumDrawsToFeatured": "200",
+          "characterRarityNDraws": "12653288",
+          "characterRarityRDraws": "7593282",
+          "characterRarityRRDraws": "3034615",
+          "characterRaritySRDraws": "1265987",
+          "characterRaritySSRDraws": "630722",
+          "characterRarityURDraws": "337537",
+          "weaponSamples": "200000",
+          "weaponPoolItemCount": "36",
+          "weaponTotalDraws": "25488865",
+          "weaponUniqueItemsSeen": "36",
+          "weaponFeaturedOutputs": "200000",
+          "weaponFeaturedItemMismatches": "0",
+          "weaponNonFeaturedUrFeaturedViolations": "0",
+          "weaponHardPityTriggered": "185599",
+          "weaponFeaturedGuaranteeTriggered": "62426",
+          "weaponFeaturedRollHits": "137574",
+          "weaponMaximumDrawsToFeatured": "200",
+          "weaponRarityNDraws": "12643047",
+          "weaponRarityRDraws": "7580549",
+          "weaponRarityRRDraws": "3031872",
+          "weaponRaritySRDraws": "1262596",
+          "weaponRaritySSRDraws": "633514",
+          "weaponRarityURDraws": "337287",
+          "maximumDrawsToFeatured": "200",
+          "boundaryViolations": "0"
+        }
+      }
+    },
+    {
+      "id": "S3-PITY-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "One million pity samples pass 99/100 and 199/200 boundary conformance with zero violations.",
+      "evidence": {
+        "result": {
+          "sourcePath": "/home/runner/work/_temp/cats-step3-high-volume-pity-conformance/high-volume-pity-conformance.json",
+          "fileBytes": "2366",
+          "fileSha256": "b17e0aada5015d10babda729b49ab1cea25896a618f2b5ce326cb54772e8f2b4",
+          "deterministicPayloadSha256": "228202cbaa891d9e94d729732782c19ea481d57868e3babe09e134cde33c3a7c",
+          "suiteDigest": "fe78b6321c8ba09d24d318110706bc019519d7aa754b4f59d170d0787c24b26e",
+          "sampleCount": "1000000",
+          "executedAt": "2026-08-28T02:03:29.089Z"
+        },
+        "counters": {
+          "hardBoundaryCases": "9937",
+          "hardBoundaryPass": "9937",
+          "featuredBoundaryCases": "5012",
+          "featuredBoundaryPass": "5012",
+          "earlyHardFalse": "990063",
+          "earlyFeaturedFalse": "994988",
+          "boundaryViolations": "0"
+        }
+      }
+    }
+  ],
+  "unresolvedP0": 0,
+  "unresolvedP1": 0,
+  "verdict": "PASS"
+}

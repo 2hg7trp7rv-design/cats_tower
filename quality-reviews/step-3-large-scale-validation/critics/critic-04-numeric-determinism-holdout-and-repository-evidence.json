@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 2,
+  "artifactId": "cats-tower-step3-critic-04-numeric-determinism-holdout-and-repository-evidence",
+  "recordedAt": "2026-08-28T04:54:22.780Z",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "role": "numeric-determinism-holdout-and-repository-evidence",
+  "independenceBoundary": "This critic reads the exact sealed execution evidence and its assigned acceptance subset; it does not consume another critic verdict.",
+  "reviewTarget": {
+    "commit": "ba6843b4dd8efe55b4d0c8c3f9bc1345b97d005e",
+    "tree": "30b9db2ead85ebedeebe1c52fb917751cde5a646"
+  },
+  "analysis": {
+    "path": "quality-reviews/step-3-large-scale-validation/analysis.json",
+    "sha256": "344c176b306de9ed8ba8b1eb49045ea52d99a563ae90b77f059ca88ab53c586d",
+    "verdict": "PASS_ANALYSIS_ELIGIBLE_FOR_CRITICS"
+  },
+  "reviewedCriteria": [
+    {
+      "id": "S3-GATE-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "Step 1, Step 2, governance repair, calibration gate and final execution gate remain bound to their exact live blobs.",
+      "evidence": {
+        "immutableBlobs": {
+          "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json": "d1392c431282d0faae9e9ad7f1c22161a3c5caad",
+          "quality-reviews/step-3-large-scale-validation/execution-gate.json": "e499cdb421d17a5e1ee79ca4ffff204fed80e60e",
+          "quality-reviews/step-3-large-scale-validation/execution-live-readback-v2.json": "073252683f207cf9f42d2f8b2634b10ae36ff8b5",
+          "quality-reviews/step-3-large-scale-validation/calibration-gate.json": "5ecb6c177a0c52f164c4ad22723f54305bf8c97d",
+          "quality-reviews/step-1-reseal-round-008/seal-round-008.json": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
+          "simulation/executable-seal-v2.json": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
+          "quality-reviews/step-2-governance-repair-round-001/live-readback.json": "692434fafd19d1e5470fe58808fd72af7286ec35",
+          "simulation/run-plan-v2.json": "a04632e41d78dd15b36e95cd6998e8a8648b9a6c",
+          "simulation/execution-contract-v2.json": "82685b646358129d7e66a810b267777d6bf5af92"
+        },
+        "executionGateVerdict": "PASS_STEP3_EXECUTION_GATE_CRITICS_AUTHORIZED",
+        "executionReadbackVerdict": "PASS_CORRECTED_EXECUTION_READBACK_CRITICS_AUTHORIZED"
+      }
+    },
+    {
+      "id": "S3-DATA-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "The complete 12,000 calibration and 3,000 unseen-holdout matrices are present with all 15 build/persona cells in each partition.",
+      "evidence": {
+        "calibrationScenarios": "12000",
+        "holdoutScenarios": "3000",
+        "calibrationCells": 15,
+        "holdoutCells": 15,
+        "calibrationReplayMismatches": "0",
+        "holdoutReplayMismatches": "0"
+      }
+    },
+    {
+      "id": "S3-HOLDOUT-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "Calibration and holdout are disjoint, and the committed calibration gate predates unseen-holdout execution.",
+      "evidence": {
+        "separation": {
+          "calibrationScenarios": "12000",
+          "holdoutScenarios": "3000",
+          "calibrationInputOverlap": "0",
+          "calibrationScenarioOverlap": "0",
+          "duplicateHoldoutInputDigests": "0",
+          "duplicateHoldoutScenarioDigests": "0",
+          "tuningVisible": false,
+          "tuningReuseForbidden": true
+        },
+        "calibrationGate": "PASS_CALIBRATION_GATE_HOLDOUT_AUTHORIZED",
+        "holdoutPolicy": {
+          "authorized": true,
+          "executed": false,
+          "tuningReuseForbidden": true
+        }
+      }
+    },
+    {
+      "id": "S3-BIGNUM-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "One hundred thousand 30-149 digit floor cases preserve canonical IDs, symbolic arithmetic and cadence/repetition invariants.",
+      "evidence": {
+        "result": {
+          "sourcePath": "/home/runner/work/_temp/cats-step3-high-volume-large-number-properties/high-volume-large-number-properties.json",
+          "fileBytes": "2504",
+          "fileSha256": "2a0e2dcea21cdb7a534c3fd1dc0e4c45d38d2911085b108c29549b8bc6d31ea6",
+          "deterministicPayloadSha256": "959a1c2e7296b4097e88078f42a75ec171a7a10801ccaa100fc2c3f8e46fbf2a",
+          "suiteDigest": "2ac706e2870c3b9e3762ca7ea3e959f4cd02a22313671a13d28c7c5b8f44196e",
+          "sampleCount": "100000",
+          "executedAt": "2026-08-28T02:03:33.898Z"
+        },
+        "counters": {
+          "symbolicRepresentations": "100000",
+          "expandedRepresentations": "0",
+          "canonicalIdPass": "100000",
+          "canonicalIdFail": "0",
+          "adjacentModifierRepeatViolations": "0",
+          "windowModifierRepeatViolations": "0",
+          "backgroundDistrictMismatches": "0",
+          "backgroundCycleMismatches": "0",
+          "maximumDigits": "149"
+        },
+        "percentiles": {
+          "primary": {
+            "count": "100000",
+            "minimum": "30",
+            "maximum": "149",
+            "p50": "89",
+            "p90": "137",
+            "p99": "148"
+          },
+          "secondary": {
+            "count": "100000",
+            "minimum": "29",
+            "maximum": "148",
+            "p50": "88",
+            "p90": "136",
+            "p99": "147"
+          }
+        }
+      }
+    },
+    {
+      "id": "S3-EVIDENCE-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "All pre-review raw results, audits, manifests, workflow run/job IDs and committed blobs are exact-bound; critic, final-judge, completion and terminal read-back files are created by the subsequent phases.",
+      "evidence": {
+        "executionContentCommit": "ba6843b4dd8efe55b4d0c8c3f9bc1345b97d005e",
+        "executionContentTree": "30b9db2ead85ebedeebe1c52fb917751cde5a646",
+        "bindingCount": 23,
+        "sourceExecution": {
+          "runId": "33134710212",
+          "head": "22a9a3e56caadba8f2cc3c03359ff1646908b72d",
+          "tree": "e55eb2b934c3049b66e2c41ae4632004a134f960",
+          "aggregateJobId": "98732488607",
+          "aggregateArtifactId": "9671638681",
+          "aggregateArtifactDigest": "sha256:b0fff485be3fd0d101fa4562b09cbcd8c3c9e9a55af4033897f7bc4b310e0096",
+          "conclusion": "success"
+        },
+        "aggregateRepair": {
+          "runId": "33135178244",
+          "head": "9d897426ff68ce95cb7bc5d322c9caa6de9b335f",
+          "tree": "78a331fe4881bd196b05a775753752a3d7af96f7",
+          "jobId": "98733432808",
+          "artifactId": "9671745843",
+          "artifactDigest": "sha256:fd7d3314d8d36818c930a777cbb8150e3c80e9eb224b464098b06340eb108aed",
+          "conclusion": "success"
+        },
+        "executionSeal": {
+          "workflow": ".github/workflows/seal-step-3-final-execution-v2.yml",
+          "runId": "33135520122",
+          "head": "9278edb744658a2e8c21f302ec8f2381ee30f3c6",
+          "jobId": "98734463045",
+          "conclusion": "success",
+          "exactTwentyThreeFilesCommitted": true,
+          "executionGateCommitted": true,
+          "twoCommitChainPushedToExistingKimi": true
+        }
+      }
+    },
+    {
+      "id": "S3-SCOPE-01",
+      "severity": "P0",
+      "status": "PASS",
+      "summary": "Step 3 changes remain limited to validation/evidence/governance; runtime, assets, backend, providers, Production, other branches, PR operations and physical-iPhone claims remain untouched.",
+      "evidence": {
+        "forbiddenPaths": [],
+        "scopeReadback": {
+          "runtimeChanged": false,
+          "assetsChanged": false,
+          "step1SemanticContentChanged": false,
+          "step2ExecutableContentChanged": false,
+          "backendChanged": false,
+          "paymentProviderChanged": false,
+          "adNetworkChanged": false,
+          "productionAliasChanged": false,
+          "physicalIPhoneVerified": false,
+          "otherBranchWritten": false,
+          "pullRequestOperationPerformed": false
+        },
+        "changedPathCount": 55
+      }
+    }
+  ],
+  "unresolvedP0": 0,
+  "unresolvedP1": 0,
+  "verdict": "PASS"
+}

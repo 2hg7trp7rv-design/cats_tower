@@ -1,3 +1,15 @@
+<!-- CATS_TOWER_STEP3_STATUS_BEGIN -->
+## 現在の正式Gate
+
+- Step 1: **PASS**
+- Step 2: **PASS / SEALED**
+- Step 3: **IN_PROGRESS**
+- Step 4: **BLOCKED_UNTIL_TERMINAL_EVIDENCE**
+- Balance verdict: **PASS_PENDING_EVIDENCE**
+- Physical iPhone: **NOT_VERIFIED**
+- Production alias changed: **false**
+<!-- CATS_TOWER_STEP3_STATUS_END -->
+
 # Cat's Tower workflow status
 
 Updated: **2026-08-28**

@@ -1,11 +1,23 @@
+<!-- CATS_TOWER_STEP3_STATUS_BEGIN -->
+## 現在の正式Gate
+
+- Step 1: **PASS**
+- Step 2: **PASS / SEALED**
+- Step 3: **IN_PROGRESS**
+- Step 4: **BLOCKED_UNTIL_TERMINAL_EVIDENCE**
+- Balance verdict: **PASS_PENDING_EVIDENCE**
+- Physical iPhone: **NOT_VERIFIED**
+- Production alias changed: **false**
+<!-- CATS_TOWER_STEP3_STATUS_END -->
+
 # Cat's Tower 引き継ぎ書
 
-更新日: **2026-08-28**  
-Repository: `2hg7trp7rv-design/cats_tower`  
-Branch: existing `kimi` only  
-Current: **Step 2 — PASS / SEALED**  
-Step 3: **READY_TO_START**  
-Physical iPhone: **NOT_VERIFIED**  
+更新日: **2026-08-28**
+Repository: `2hg7trp7rv-design/cats_tower`
+Branch: existing `kimi` only
+Current: **Step 3 — IN_PROGRESS**
+Step 3: **IN_PROGRESS**
+Physical iPhone: **NOT_VERIFIED**
 Vercel / Production: **変更なし**
 
 ## 結論
