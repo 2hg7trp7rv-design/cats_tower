@@ -1,0 +1,277 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-final-execution-gate-v1",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "authority": {
+    "acceptanceBlob": "d1392c431282d0faae9e9ad7f1c22161a3c5caad",
+    "calibrationAddendumBlob": "9d0c89489363340c4954b6912fb105ca6789b462",
+    "transportAddendumBlob": "a8c853c1fe61e2ff5f5fced6d3776bcc97821d21",
+    "aggregateRepairAddendumBlob": "712268d487ec2b1a812e9f722cad1fa787d69153",
+    "calibrationGateBlob": "5ecb6c177a0c52f164c4ad22723f54305bf8c97d",
+    "calibrationReadbackBlob": "284ace113d40f6e0fa1a832e660a677b8eb65c5a",
+    "step1SealBlob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
+    "step2SealBlob": "ee3507969c03b08fe27350263cf0bc093a1c18e1"
+  },
+  "sourceExecution": {
+    "runId": "33134710212",
+    "head": "22a9a3e56caadba8f2cc3c03359ff1646908b72d",
+    "tree": "e55eb2b934c3049b66e2c41ae4632004a134f960",
+    "aggregateJobId": "98732488607",
+    "aggregateArtifactId": "9671638681",
+    "aggregateArtifactDigest": "sha256:b0fff485be3fd0d101fa4562b09cbcd8c3c9e9a55af4033897f7bc4b310e0096",
+    "conclusion": "success"
+  },
+  "aggregateRepair": {
+    "runId": "33135178244",
+    "head": "9d897426ff68ce95cb7bc5d322c9caa6de9b335f",
+    "tree": "78a331fe4881bd196b05a775753752a3d7af96f7",
+    "jobId": "98733432808",
+    "artifactId": "9671745843",
+    "artifactDigest": "sha256:fd7d3314d8d36818c930a777cbb8150e3c80e9eb224b464098b06340eb108aed",
+    "conclusion": "success"
+  },
+  "content": {
+    "commit": "ba6843b4dd8efe55b4d0c8c3f9bc1345b97d005e",
+    "tree": "30b9db2ead85ebedeebe1c52fb917751cde5a646",
+    "bindings": [
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/gameplay-holdout-result.json",
+        "blob": "7e823eeadaeea6ed7f54790e9b9f5acefa948172",
+        "sha256": "3bcae607267a7e20863f0279fa4a3f76810ec0a315074567e6199e8f589b8bc5",
+        "bytes": "509843"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/holdout-audit.json",
+        "blob": "0dd82dad74cd056a9da643c564ef2725808db209",
+        "sha256": "3326c8ce5497579929e8c625cf35a1eb000aa5ff56ed0864dff18b95f6e679ef",
+        "bytes": "39635"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/holdout-execution-manifest.json",
+        "blob": "10cc81fc9415103a787ca62ce6ba1593d5ebc31b",
+        "sha256": "e21da008ec1a4eb426ba27b8d6eefc02b2b4247913083b898d662b08f656e63d",
+        "bytes": "1319"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/final-execution-manifest.json",
+        "blob": "d30a9a473573aef908ac26bda501021a4c514aca",
+        "sha256": "0ff866fe97cc0ea74a9f4dc027db30f37c4a6c56db56293501d22b0e3e24d8ba",
+        "bytes": "4362"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/aggregate-manifest-repair-record.json",
+        "blob": "d7edab73180bbf575ab994e12655086e5ba1c9ce",
+        "sha256": "01533fb799b136bb9f3dce1c63b1732edfc7934e7b5e49d30cf354b2d864ebc5",
+        "bytes": "1439"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/high-volume/high-volume-gacha-tails.json",
+        "blob": "97f9e38d3dbf1949b924879b25b9d5dcd93f0a86",
+        "sha256": "89863f2896481c4d54cc9451ac754458044e5569ec44c7c5627f016ad6615b1a",
+        "bytes": "4010"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-gacha-tails.json",
+        "blob": "40b25d2bbd03b9d8392a326208ad5135232053ae",
+        "sha256": "c7bd3e06bbf98e1cf9a0bbcd23d4b47ca08b3200f9a51a6b689eae1f1c054c7d",
+        "bytes": "5532"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/high-volume/manifest-high-volume-gacha-tails.json",
+        "blob": "208b05a63f13d6fc7147ca9b6de54637f65f11c2",
+        "sha256": "ef03909719bf60ce7d7feb0bc32b8ce519089f029caf54e1affc852107e3e168",
+        "bytes": "1251"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/high-volume/high-volume-pity-conformance.json",
+        "blob": "aaabed2f46ba3940c33afa123aa030a98a5d73f0",
+        "sha256": "b17e0aada5015d10babda729b49ab1cea25896a618f2b5ce326cb54772e8f2b4",
+        "bytes": "2366"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-pity-conformance.json",
+        "blob": "fff3a155946c98813ae6b31fb23834201eb69881",
+        "sha256": "c1eacdae8d753ec8c0d014fe0bc8649e8d7afb03992d737d9ad5d32b4861a8ba",
+        "bytes": "2673"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/high-volume/manifest-high-volume-pity-conformance.json",
+        "blob": "c9efbbeff7b6c258ec74701f6b4364a834b90cfd",
+        "sha256": "7ec45ade888974b5d9c0a0ec01a1bfbc1f06afed3c08c0cb73991e29bf41b82d",
+        "bytes": "1272"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/high-volume/high-volume-duplicate-skew-overflow.json",
+        "blob": "1839b7a60bad4fa3d0125d2d7ef4fb165c53f6b7",
+        "sha256": "6433a60ce041ea0ee8b6a2bf5df9bd3640d8c7d241c8faa1d0792f95e7e53298",
+        "bytes": "4119"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-duplicate-skew-overflow.json",
+        "blob": "80501579065475642acd611f08ca10bb5e7a7bd3",
+        "sha256": "e3a650083d46a0deb7f5b94031506ee67e65aa57c1bcc1f022290a6a5b97513f",
+        "bytes": "4798"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/high-volume/manifest-high-volume-duplicate-skew-overflow.json",
+        "blob": "fa64f7d9254260487536d9c4f39b45339320aa43",
+        "sha256": "ecb610a06f1b5872e81ae8c7d7565e478502af2edcc294e66ebbb7a3302ab3bb",
+        "bytes": "1299"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/high-volume/high-volume-refund-replay-race.json",
+        "blob": "e78a882225c45a81df201eea840fdb3c8698cf92",
+        "sha256": "d381dca95059210046d5ea298d3affee29eb915cc871854cd7dfcbef65b3dc1a",
+        "bytes": "2450"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-refund-replay-race.json",
+        "blob": "d1d59709adf75647ea16176d44b6b53cb641d458",
+        "sha256": "84981234ff5b23162e2c36c7be4306837dec626d7e45d6a1dcfa5dc0f230f7f4",
+        "bytes": "2790"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/high-volume/manifest-high-volume-refund-replay-race.json",
+        "blob": "17fe57aef04c9cbc38d3c183dfad6e2f6b6d6c09",
+        "sha256": "bc413d7b16d87b60abf9dcd9d992dae7162e348cf5fc1bcdf24746b32cfcc1d2",
+        "bytes": "1279"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/high-volume/high-volume-state-machine-model.json",
+        "blob": "6b7beda06c6fe85693ea4120cdad8aedb8be45a1",
+        "sha256": "6a740f312ad3d90019a9a6b97f87db8d720fbdbd304dada2b220f6dee17321d7",
+        "bytes": "2264"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-state-machine-model.json",
+        "blob": "35c7e8fc26b04ebb8d222c38001f921e71e60689",
+        "sha256": "6e3fc5c1cd683ebeca149a9f5436d071f6b3bc5f5dbda3eea6d504bb0ef05369",
+        "bytes": "2290"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/high-volume/manifest-high-volume-state-machine-model.json",
+        "blob": "c6cc66280224042590769d3f57000605ccea488a",
+        "sha256": "90d5ff10cf9cfe4e96975c22231cadb9c6db06dc48ddbc2fce96fbfa77353039",
+        "bytes": "1283"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/high-volume/high-volume-large-number-properties.json",
+        "blob": "b35c7e1ff5e44a393c3acb332f14cfcdd3e71736",
+        "sha256": "2a0e2dcea21cdb7a534c3fd1dc0e4c45d38d2911085b108c29549b8bc6d31ea6",
+        "bytes": "2504"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-large-number-properties.json",
+        "blob": "73c7d4019d6ddddbf9a9bbd5d00d10d0bd86089d",
+        "sha256": "b3ea5e36a3459cfd07577427bf76dc832b3ee6e1b2d28461e43ab0c4b5ca5f0d",
+        "bytes": "3019"
+      },
+      {
+        "path": "quality-reviews/step-3-large-scale-validation/high-volume/manifest-high-volume-large-number-properties.json",
+        "blob": "21288886cfdda4c777d0aa56cf6779ed45c5595b",
+        "sha256": "91761824da1a9c20d6dae4317d9086d05096791ffcbbf64d300fdcf21aef98fa",
+        "bytes": "1299"
+      }
+    ]
+  },
+  "gameplay": {
+    "calibrationScenarios": "12000",
+    "unseenHoldoutScenarios": "3000",
+    "totalScenarios": "15000",
+    "firstResetMinutes": {
+      "minimum": "20",
+      "maximum": "29",
+      "p50": "24",
+      "p90": "27",
+      "p99": "29"
+    },
+    "repeatedResetSequenceViolations": "0",
+    "noAdF2PFeaturedGuaranteeDay": "40",
+    "noAdF2PCombinedDailyDraws": "44",
+    "calibrationInputOverlap": "0",
+    "calibrationScenarioOverlap": "0",
+    "holdoutReplayMismatchCount": "0",
+    "buildSpreadViolations": "0"
+  },
+  "highVolume": {
+    "totalSamples": "1700000",
+    "gachaTails": {
+      "samples": "200000",
+      "characterFirstUr": {
+        "p50": "100",
+        "p90": "100",
+        "p99": "100",
+        "maximum": "100"
+      },
+      "characterFeatured": {
+        "p50": "100",
+        "p90": "200",
+        "p99": "200",
+        "maximum": "200"
+      },
+      "weaponFirstUr": {
+        "p50": "100",
+        "p90": "100",
+        "p99": "100",
+        "maximum": "100"
+      },
+      "weaponFeatured": {
+        "p50": "100",
+        "p90": "200",
+        "p99": "200",
+        "maximum": "200"
+      },
+      "boundaryViolations": "0"
+    },
+    "pityConformance": {
+      "samples": "1000000",
+      "boundaryViolations": "0"
+    },
+    "duplicateSkewOverflow": {
+      "samples": "200000",
+      "characterItemsAtFullMastery": "24",
+      "characterItemsWithOverflow": "24",
+      "weaponItemsAtFullMastery": "36",
+      "weaponItemsWithOverflow": "36",
+      "mismatchViolations": "0"
+    },
+    "refundReplayRace": {
+      "samples": "100000",
+      "freeLedgerDebitViolations": "0",
+      "idempotentReplayMatches": "89954",
+      "exactlyOnceReceiptMatches": "89954"
+    },
+    "stateMachineModel": {
+      "samples": "100000",
+      "unexpectedAccept": "0",
+      "unexpectedReject": "0"
+    },
+    "largeNumberProperties": {
+      "samples": "100000",
+      "canonicalIdFail": "0",
+      "adjacentRepeatViolations": "0",
+      "windowRepeatViolations": "0",
+      "backgroundMismatches": "0",
+      "maximumDigits": "149"
+    }
+  },
+  "quality": {
+    "unresolvedP0": 0,
+    "unresolvedP1": 0
+  },
+  "independentCriticsRequired": 5,
+  "finalJudgeRequired": true,
+  "step3Status": "EXECUTION_PASS_PENDING_INDEPENDENT_CRITICS",
+  "step4Allowed": false,
+  "productionChanged": false,
+  "physicalIPhoneVerified": false,
+  "sealInvocation": {
+    "workflow": "Seal Step 3 final execution evidence V2",
+    "runId": "33135520122",
+    "runAttempt": "1",
+    "job": "seal-execution",
+    "conclusionAtCreation": "IN_PROGRESS"
+  },
+  "verdict": "PASS_STEP3_EXECUTION_GATE_CRITICS_AUTHORIZED"
+}
