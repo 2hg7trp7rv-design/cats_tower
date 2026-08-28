@@ -542,7 +542,7 @@ function updateMarkdown(relativePath, status, step4Status, balanceVerdict) {
     ['Current: **Step 3 — IN_PROGRESS / LARGE_SCALE_VALIDATION**', `Current: **Step 3 — ${status}**`],
   ];
   for (const [before, after] of replacements) content = content.split(before).join(after);
-  writeText(relativePath, `${statusBlock(status, step4Status, balanceVerdict)}\n\n${content.trimStart()}`);
+  writeText(relativePath, `${statusBlock(status, step4Status, balanceVerdict)}\n\n${content.trimStart()}`.replace(/[ \t]+$/gm, ''));
 }
 
 function updateStatus({ terminal, step3Pass }) {
