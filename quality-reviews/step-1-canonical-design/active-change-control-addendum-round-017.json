@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-active-change-control-addendum-round-017",
+  "createdAt": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "parentAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-016.json",
+  "entry": {
+    "head": "e16a642d2945b3cb8d41d564b56e3a3f22262bc0",
+    "tree": "ca1bcc8ea813fb5809bbf86f5a2b3bf7f3d214f2"
+  },
+  "trigger": "The user explicitly rejected the current Step 4 visual draft as materially below the project-source visual prototypes and prohibited approving design quality from SVG generation, XML validity, file count or validator success.",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS_STEP4_VISUAL_REDESIGN",
+  "advanceAllowed": false,
+  "step4Allowed": true,
+  "step5Allowed": false,
+  "supersedesForCurrentStep4": [
+    "Any implication that the 36 XML-valid SVG files are visually approved.",
+    "Any implication that deterministic generation proves production design quality.",
+    "Any treatment of the project-source images as merely nonbinding inspiration rather than the user's visual-prototype baseline.",
+    "Any Step 4 PASS or Step 5 authorization before rendered visual acceptance, critics and terminal evidence."
+  ],
+  "preserves": {
+    "step1": "PASS",
+    "step2": "PASS_SEALED",
+    "step3": "PASS",
+    "step3BalanceVerdict": "PASS_STEP3_LARGE_SCALE_VALIDATION",
+    "step2ExecutableMutation": false,
+    "step3EvidenceMutation": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false
+  },
+  "bindingEvidence": {
+    "userVisualRejection": "quality-reviews/step-4-twelve-screen-final-mockups/user-visual-rejection-round-001.json",
+    "projectStatus": "PROJECT_STATUS.json",
+    "policy": "AI_PROJECT_POLICY.json",
+    "workflowStatus": ".github/workflows/CURRENT_STATUS.md"
+  },
+  "visualBaseline": {
+    "role": "USER_DEFINED_VISUAL_PROTOTYPE_BASELINE",
+    "mustMatchOrExceedIn": [
+      "illustrated cats and enemies",
+      "environment and tower presence",
+      "scene-led composition",
+      "warm dark-brown and brass framing",
+      "reward and growth clarity",
+      "premium commercial mobile-game finish"
+    ],
+    "originalityBoundary": "Use the project-source prototypes as the Cat's Tower visual target while retaining original assets, composition decisions, names, values and UI implementation."
+  },
+  "requiredSequence": [
+    "Reject the current generic dark-purple card-dashboard direction.",
+    "Redesign S01, S02, S08 and S10 as production-fidelity anchor screens.",
+    "Adversarially compare rendered results against the project-source prototype baseline.",
+    "Show actual rendered screenshots to the user.",
+    "Expand to S01-S12 only after the anchor direction is visually credible.",
+    "Complete three viewports, critical states, large text, reduced motion, five independent critics, repairs, final judge, completion evidence and terminal live read-back."
+  ],
+  "automaticFailConditions": [
+    "generic dashboard or card-wall appearance",
+    "placeholder-looking character, enemy or environment art",
+    "screen identity carried mainly by headings rather than composition",
+    "XML or code validity used as a visual-quality proxy",
+    "rendered result not shown to the user",
+    "user visual-direction approval absent",
+    "unresolved P0 or P1 greater than zero"
+  ],
+  "currentWriteBoundary": {
+    "allowed": [
+      "Step 4 production-fidelity visual redesign",
+      "Step 4 rendered screenshot evidence",
+      "Step 4 accessibility and visual critics",
+      "Step 4 status synchronization"
+    ],
+    "forbidden": [
+      "Step 5 implementation",
+      "runtime",
+      "final product assets before Step 4 approval",
+      "backend",
+      "payment provider",
+      "ad network",
+      "PR operation",
+      "Production alias",
+      "physical-iPhone PASS claim",
+      "Step 2 or Step 3 executable mutation"
+    ]
+  }
+}
