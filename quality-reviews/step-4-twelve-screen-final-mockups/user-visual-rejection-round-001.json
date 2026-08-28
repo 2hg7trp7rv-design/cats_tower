@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-user-visual-rejection-round-001",
+  "createdAt": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "entry": {
+    "head": "b491da464f10bb54517fc7623eafefbd2448f3b4",
+    "tree": "40edb690c02dff24fc518d6c3334a1ba6514be83"
+  },
+  "trigger": "The user explicitly rejected the current Step 4 visual direction and prohibited treating SVG generation or file existence as evidence of production-quality design.",
+  "status": "IN_PROGRESS",
+  "verdict": "REJECT_CURRENT_STEP4_VISUAL_DRAFT",
+  "step4Pass": false,
+  "step5Allowed": false,
+  "userApproval": {
+    "currentSvgDraftApproved": false,
+    "currentContactSheetApproved": false,
+    "visualDirectionApproved": false,
+    "reason": "The current design differs materially from the project-source visual prototypes and is not acceptable as a production-facing game UI."
+  },
+  "rejectedArtifacts": {
+    "svgTree": {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups",
+      "tree": "980ed3686346f48ddf5e53c8e24a0f697a3219cd",
+      "disposition": "REJECTED_AS_VISUAL_DIRECTION_NOT_DELETED_HISTORY_ONLY"
+    },
+    "gallery": {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockup-gallery.html",
+      "blob": "9f93c10fd10cc901c329ccb040682c79e89ccd59",
+      "disposition": "REJECTED_AS_FINAL_OR_PRODUCTION_QUALITY_EVIDENCE"
+    },
+    "designSystem": {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/design-system.json",
+      "blob": "1f47d533e21870448c93902528dad501aa484c23",
+      "disposition": "SUPERSEDED_FOR_VISUAL_DIRECTION_PENDING_REDESIGN"
+    }
+  },
+  "visualFailureFindings": [
+    {
+      "id": "S4-VIS-001",
+      "severity": "P1",
+      "finding": "The screens use a generic dark-purple card-dashboard language instead of a distinctive illustrated mobile game presentation."
+    },
+    {
+      "id": "S4-VIS-002",
+      "severity": "P1",
+      "finding": "Character, enemy, tower, town, shop and reward art are too weak or abstract to carry the Cat's Tower value proposition."
+    },
+    {
+      "id": "S4-VIS-003",
+      "severity": "P1",
+      "finding": "The twelve screens are excessively homogeneous; screen-specific composition and emotional hierarchy are insufficient."
+    },
+    {
+      "id": "S4-VIS-004",
+      "severity": "P1",
+      "finding": "The title, battle and boss screens do not reach the production-density, illustration quality or spectacle established by the project-source prototypes."
+    },
+    {
+      "id": "S4-VIS-005",
+      "severity": "P1",
+      "finding": "The current critical-state presentation is dominated by generic modal sheets and does not preserve enough scene identity or operation context."
+    },
+    {
+      "id": "S4-VIS-006",
+      "severity": "P1",
+      "finding": "No actual browser-rendered screenshot set, large-text proof, reduced-motion proof or user visual approval exists."
+    },
+    {
+      "id": "S4-VIS-007",
+      "severity": "P1",
+      "finding": "XML-valid SVG and deterministic generation were incorrectly treated as progress toward visual acceptance; they prove transport validity, not design quality."
+    }
+  ],
+  "projectSourceImages": {
+    "role": "USER_DEFINED_VISUAL_PROTOTYPE_BASELINE",
+    "notMerelyReferenceOnly": true,
+    "mustInform": [
+      "production art density",
+      "warm dark-brown and brass framing",
+      "illustrated cats and enemies",
+      "scene-led composition",
+      "tower, town and battle spectacle",
+      "reward and growth readability",
+      "premium mobile-game finish"
+    ],
+    "mustNotAuthorize": [
+      "copying third-party names",
+      "tracing third-party characters or icons",
+      "one-to-one copying of another product's exact layout",
+      "copying exact prices, probabilities or live-service values"
+    ]
+  },
+  "replacementAcceptance": {
+    "principle": "A design may pass only when the rendered result itself is credible as a production-facing Cat's Tower screen, not because source files exist or validators pass.",
+    "anchorScreensBeforeFullSet": [
+      "S01 title-resume-account",
+      "S02 battle-follow",
+      "S08 boss",
+      "S10 recruit-gacha"
+    ],
+    "requiredForAnchorApproval": [
+      "original high-fidelity illustration-led composition",
+      "Cat's Tower-specific art direction visibly derived from the project-source prototypes",
+      "distinct screen identity rather than one reusable dashboard template",
+      "actual rendered screenshots shown to the user in this chat",
+      "internal comparison against the project-source prototype baseline",
+      "self-rejection and redesign when the result does not look production-ready",
+      "no expansion to all twelve screens until the anchor direction is credible"
+    ],
+    "requiredForStep4Pass": [
+      "all S01-S12 final mockups",
+      "three target viewports",
+      "normal, pending, failure and recovery states",
+      "browser-rendered screenshot evidence",
+      "large-text and reduced-motion evidence",
+      "five independent critic scopes",
+      "unresolved P0 equals 0",
+      "unresolved P1 equals 0",
+      "user visual-direction acceptance",
+      "final judge",
+      "completion evidence",
+      "terminal live read-back"
+    ],
+    "automaticFailConditions": [
+      "generic dashboard appearance",
+      "placeholder-looking character or environment art",
+      "SVG or code validity used as a visual-quality proxy",
+      "the design team would not confidently publish the screen in a commercial mobile game",
+      "the project-source prototype baseline is materially exceeded in simplicity or materially undercut in finish",
+      "user has not been shown the rendered result"
+    ]
+  },
+  "nextAction": "Discard the current visual direction as a candidate for final approval, redesign the four anchor screens at production-grade fidelity, conduct an adversarial visual review, then show the actual rendered screens to the user before expanding to S01-S12.",
+  "scopeReadback": {
+    "runtimeChanged": false,
+    "productAssetsChanged": false,
+    "backendChanged": false,
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "otherBranchWritten": false,
+    "pullRequestOperation": false
+  }
+}
