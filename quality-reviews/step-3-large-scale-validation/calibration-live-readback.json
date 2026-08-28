@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-calibration-live-readback-v1",
+  "recordedAt": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "observedLiveBeforeThisReadback": {
+    "head": "8d3ead1f12e5452dad7df8ec91d49cc29e0badcf",
+    "tree": "3a270ba6296eda1614e82cab4098b35b7c5c6f8b",
+    "parent": "b17549e70c4f00c0f9a4fdf900ae49ecfa3c0b80"
+  },
+  "calibrationGate": {
+    "path": "quality-reviews/step-3-large-scale-validation/calibration-gate.json",
+    "blob": "5ecb6c177a0c52f164c4ad22723f54305bf8c97d",
+    "commit": "8d3ead1f12e5452dad7df8ec91d49cc29e0badcf",
+    "tree": "3a270ba6296eda1614e82cab4098b35b7c5c6f8b",
+    "verdict": "PASS_CALIBRATION_GATE_HOLDOUT_AUTHORIZED"
+  },
+  "calibrationContent": {
+    "commit": "b17549e70c4f00c0f9a4fdf900ae49ecfa3c0b80",
+    "tree": "537d61ecbcdb90d95d23218f9f12c9a68f0ad043",
+    "resultBlob": "79a531def0e6e88c202eac12d414e19b79902159",
+    "auditBlob": "36c29a78ee38bb3082a39b719fccd2da503b9016",
+    "executionManifestBlob": "d19d1680dcf6751ec5d190ef2203f701f35c084c",
+    "transportManifestBlob": "2c297f5955e5af0f5e36d09c1666ac59a5eefc4a"
+  },
+  "workflowVerification": {
+    "workflow": ".github/workflows/seal-step-3-calibration.yml",
+    "runId": "33134263412",
+    "headSha": "b31c541a99e8be0e5c1a8a3f3387f4d5e7e57a06",
+    "status": "completed",
+    "conclusion": "success",
+    "jobId": "98730606211",
+    "jobName": "seal-calibration-gate",
+    "jobConclusion": "success"
+  },
+  "calibrationDecision": {
+    "scenarioCount": "12000",
+    "cellCount": "15",
+    "deterministicPayloadSha256": "df7cbceb0569f40eefee43dbd81d0b2c4698a44104f88a312ce693471f746e22",
+    "replayMismatchCount": "0",
+    "duplicateInputDigestCount": "0",
+    "duplicateScenarioDigestCount": "0",
+    "firstResetMinutes": {
+      "minimum": "20",
+      "maximum": "29",
+      "p50": "24",
+      "p90": "27",
+      "p99": "29"
+    },
+    "noAdF2PFeaturedGuaranteeDay": "40",
+    "noAdF2PCombinedDailyDraws": "44",
+    "repeatedResetSequenceViolations": "0",
+    "buildSpreadViolations": "0",
+    "unresolvedP0": 0,
+    "unresolvedP1": 0
+  },
+  "holdout": {
+    "authorized": true,
+    "executed": false,
+    "namespace": "cats-tower-v2-holdout-unseen",
+    "scenarioCount": "3000",
+    "tuningVisible": false,
+    "reuseForTuningForbidden": true
+  },
+  "highVolumeAuthorized": true,
+  "productionChanged": false,
+  "physicalIPhoneVerified": false,
+  "otherBranchWritten": false,
+  "pullRequestOperationPerformed": false,
+  "verdict": "PASS_FINAL_CALIBRATION_READBACK_HOLDOUT_AUTHORIZED"
+}
