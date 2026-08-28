@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-large-scale-validation-acceptance-v1",
+  "createdAt": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "status": "ACTIVE_BEFORE_STEP3_EXECUTION",
+  "verdict": "PENDING",
+  "entry": {
+    "head": "3eefbf6fa7dfcec8b5b093612e8946b43d838bc2",
+    "tree": "7499d7b07e5dff59ae5b675b475e23a7e03359b5",
+    "step1": "PASS",
+    "step2": "PASS_SEALED",
+    "step3": "READY_TO_START",
+    "step3Executed": false,
+    "balanceVerdict": "NOT_EVALUATED_STEP2",
+    "physicalIPhoneVerified": false,
+    "productionChanged": false
+  },
+  "authority": {
+    "projectInstructions": {
+      "path": "CHATGPT_PROJECT_INSTRUCTIONS1.md",
+      "blob": "2b42e9907bf19724dd5eb3342872aaa931424be9"
+    },
+    "step1Seal": {
+      "path": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
+      "blob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
+      "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+      "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce"
+    },
+    "step2Seal": {
+      "path": "simulation/executable-seal-v2.json",
+      "blob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
+      "semanticCommit": "724d04940f9f3794b993cddbc5af3a7163a0395b",
+      "semanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6"
+    },
+    "step2FinalReadback": {
+      "path": "quality-reviews/step-2-executable-contract-v2/final-live-readback.json",
+      "blob": "4d26695cc6359ad933249ac6fdf2eddca9be9c6f",
+      "verdict": "PASS_FINAL_LIVE_READBACK_STEP2_SEALED"
+    },
+    "governanceRepairReadback": {
+      "path": "quality-reviews/step-2-governance-repair-round-001/live-readback.json",
+      "blob": "692434fafd19d1e5470fe58808fd72af7286ec35",
+      "verdict": "PASS_FINAL_LIVE_READBACK_STEP2_GOVERNANCE_REPAIRED"
+    },
+    "runPlan": {
+      "path": "simulation/run-plan-v2.json",
+      "blob": "a04632e41d78dd15b36e95cd6998e8a8648b9a6c",
+      "executionVersion": "cats-tower-step3-executor-v1.1.0"
+    },
+    "executionContract": {
+      "path": "simulation/execution-contract-v2.json",
+      "blob": "82685b646358129d7e66a810b267777d6bf5af92"
+    }
+  },
+  "executionPhases": [
+    {
+      "order": 1,
+      "id": "calibration",
+      "scenarioCount": "12000",
+      "seedsPerBuildPersona": "800",
+      "tuningVisible": true,
+      "requiredBeforeHoldout": true
+    },
+    {
+      "order": 2,
+      "id": "calibration-gate",
+      "requirement": "Freeze a calibration decision and exact result digest before any unseen holdout execution. If calibration fails, holdout must remain unexecuted."
+    },
+    {
+      "order": 3,
+      "id": "unseen-holdout",
+      "scenarioCount": "3000",
+      "seedsPerBuildPersona": "200",
+      "tuningVisible": false,
+      "promotionEligible": true,
+      "reuseForTuningForbidden": true
+    },
+    {
+      "order": 4,
+      "id": "high-volume",
+      "suites": {
+        "gacha-tails": "200000",
+        "pity-conformance": "1000000",
+        "duplicate-skew-overflow": "200000",
+        "refund-replay-race": "100000",
+        "state-machine-model": "100000",
+        "large-number-properties": "100000"
+      }
+    },
+    {
+      "order": 5,
+      "id": "independent-review-and-final-judge",
+      "criticCountMinimum": 5,
+      "unresolvedP0Maximum": 0,
+      "unresolvedP1Maximum": 0
+    }
+  ],
+  "requiredGameplayMatrix": {
+    "builds": [
+      "build.combat",
+      "build.reinforcement",
+      "build.commerce"
+    ],
+    "personas": [
+      "no-ad-f2p",
+      "rewarded-ad-f2p",
+      "monthly-pass",
+      "controlled-payer",
+      "high-spend-stress"
+    ],
+    "horizons": [
+      "1-10F",
+      "100F",
+      "1000F",
+      "10000F-or-equivalent",
+      "repeated-resets",
+      "30-45-day-economy"
+    ],
+    "minimumTotalScenarios": "15000"
+  },
+  "acceptanceCriteria": [
+    {
+      "id": "S3-GATE-01",
+      "severity": "P0",
+      "requirement": "The exact Step 1 and Step 2 seals, completion chains, governance repair and live kimi ancestry remain valid before every execution phase."
+    },
+    {
+      "id": "S3-DATA-01",
+      "severity": "P0",
+      "requirement": "Calibration contains exactly 12,000 complete scenarios and holdout exactly 3,000 complete scenarios across all 3 builds and 5 personas, with schema validation, deterministic reproduction and canonical digests."
+    },
+    {
+      "id": "S3-HOLDOUT-01",
+      "severity": "P0",
+      "requirement": "Calibration and holdout namespaces, scenario IDs, input digests and scenario digests are disjoint. Holdout is not executed or inspected before a committed calibration gate and is never used for tuning."
+    },
+    {
+      "id": "S3-RESET-01",
+      "severity": "P0",
+      "requirement": "For every build/persona cell, first-reset p50 is within 20 to 35 minutes; no scenario is below 20 or above 35 minutes; repeated-reset sequences are non-increasing and never below the configured minimum."
+    },
+    {
+      "id": "S3-EVOLUTION-01",
+      "severity": "P0",
+      "requirement": "Every gameplay scenario covers the first evolution from first-effective-reset free ruby without ads or payment; evolution remains non-blocking and catch-up ordered."
+    },
+    {
+      "id": "S3-F2P-01",
+      "severity": "P0",
+      "requirement": "No-ad F2P reaches one featured guarantee within 30 to 45 days, retains at least 40 combined daily draws, and does not depend on rewarded ads for core progression or first evolution."
+    },
+    {
+      "id": "S3-MONETIZATION-01",
+      "severity": "P0",
+      "requirement": "Monthly-pass acceleration is at most 2.0x, controlled payer at most 3.0x, and high-spend stress at most 5.0x; no persona creates an unbounded paid multiplier or a paid-only core gate."
+    },
+    {
+      "id": "S3-BUILD-01",
+      "severity": "P1",
+      "requirement": "All three builds remain viable at every horizon. Cell p50 reach-time spread between fastest and slowest build for the same persona/horizon must not exceed 1.20x, and no build is universally best across combat, reclear and economy dimensions."
+    },
+    {
+      "id": "S3-RARITY-01",
+      "severity": "P0",
+      "requirement": "N/R deterministic routes cover every required character and weapon role, first copies are functional, RR through UR are not core gates, and UR does not cover every role or exceed the sealed bounded power model. Any required rarity dimension not measured by the executable evidence must be reported as a blocking gap rather than inferred as PASS."
+    },
+    {
+      "id": "S3-MASTERY-01",
+      "severity": "P0",
+      "requirement": "Character and weapon first copies are role-complete; practical breakpoints occur by 7 additional effective copies; full mastery requires at least 20; marginal gains diminish; post-cap duplicates create nonzero overflow and are never discarded."
+    },
+    {
+      "id": "S3-GACHA-01",
+      "severity": "P0",
+      "requirement": "Character and weapon gacha remain separate. Natural and guaranteed results satisfy p50/p90/p99 reporting, first UR never exceeds 100 draws, featured never exceeds 200 draws, featured item mapping is exact, non-featured UR cannot resolve to the featured item, and all boundary violations are zero."
+    },
+    {
+      "id": "S3-PITY-01",
+      "severity": "P0",
+      "requirement": "One million pity-conformance samples pass 99/100 and 199/200 boundaries with zero early trigger, missed trigger or counter-reset violation."
+    },
+    {
+      "id": "S3-LEDGER-01",
+      "severity": "P0",
+      "requirement": "Refund, replay and race tests show zero duplicate permanent grants, zero free-ledger debit from paid-ruby refund deficit, exactly-once receipt behavior and deterministic retry convergence."
+    },
+    {
+      "id": "S3-STATE-01",
+      "severity": "P0",
+      "requirement": "State-machine model testing reports zero unexpected accepts and zero unexpected rejects across draw, payment, rewarded ad, login, reset, evolution, mastery and account operations represented by the sealed contract."
+    },
+    {
+      "id": "S3-BIGNUM-01",
+      "severity": "P0",
+      "requirement": "Large-number property testing reports zero unsafe-number persistence, noncanonical generated IDs, modifier repetition overflow, background cadence mismatch, NaN, Infinity or silent saturation."
+    },
+    {
+      "id": "S3-EVIDENCE-01",
+      "severity": "P0",
+      "requirement": "Raw results, validators, manifests, workflow run/job IDs, artifact digests, committed result blobs, critics, final judge, completion evidence and final live read-back are bound to exact commits and trees."
+    },
+    {
+      "id": "S3-SCOPE-01",
+      "severity": "P0",
+      "requirement": "No runtime, asset, backend, payment-provider, ad-network, Production alias, other branch, PR or physical-iPhone PASS change occurs during Step 3."
+    }
+  ],
+  "independentCriticPerspectives": [
+    "gameplay-build-and-long-horizon",
+    "economy-gacha-mastery-and-monetization",
+    "ledger-refund-replay-race-and-state-machines",
+    "numeric-determinism-holdout-and-repository-evidence",
+    "product-ethics-f2p-pressure-and-release-boundary"
+  ],
+  "writeBoundary": {
+    "allowed": [
+      "quality-reviews/step-3-large-scale-validation/**",
+      ".github/workflows/verify-step-3-*.yml",
+      "Step 3-only analysis and verification scripts that do not alter the sealed Step 2 engine semantics",
+      "status, handover and completion mirrors after evidence exists"
+    ],
+    "forbidden": [
+      "runtime",
+      "assets",
+      "simulation/candidate-v2.json",
+      "simulation/run-plan-v2.json",
+      "simulation/execution-contract-v2.json",
+      "simulation/executable-seal-v2.json",
+      "sealed Step 2 engine, schema, fixture or migration semantics",
+      "backend",
+      "payment provider",
+      "ad network",
+      "Production alias",
+      "other branch writes",
+      "pull request operations",
+      "physical-iPhone PASS claim"
+    ]
+  },
+  "failurePolicy": {
+    "calibrationFailure": "Do not execute holdout. Record exact failing criteria and open a new explicit unseal/change-control before changing any sealed candidate or engine input.",
+    "holdoutFailure": "Do not tune against holdout. Record FAIL and require a new candidate/version with a new unseen holdout namespace.",
+    "measurementGap": "A required dimension absent from executable evidence is P1 or P0 according to impact and cannot be silently passed by static assertion alone.",
+    "partialResult": "Never promote partial output or an interrupted suite."
+  },
+  "completionRule": "Step 3 PASS requires all P0 and P1 criteria satisfied, all required volumes complete, calibration and unseen holdout separation proven, five independent critics completed, unresolved P0/P1 equal zero, exact completion evidence and a terminal live read-back. Workflow success or files alone are insufficient."
+}
