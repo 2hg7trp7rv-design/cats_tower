@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 2,
+  "artifactId": "cats-tower-step3-final-execution-live-readback-v2",
+  "recordedAt": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "observedLiveBeforeThisReadback": {
+    "head": "073a5a67c29ca1bd787197edf7723a640003d5b7",
+    "tree": "0e52ea3509183adb1aea945db90054bea5099798",
+    "parent": "7c569a41944166e644d9865bfdf70c65c3211631"
+  },
+  "authority": {
+    "executionGate": {
+      "path": "quality-reviews/step-3-large-scale-validation/execution-gate.json",
+      "blob": "e499cdb421d17a5e1ee79ca4ffff204fed80e60e",
+      "commit": "5ba6f150edd817fd1aee1d4b3112d13ecfeb3e51",
+      "tree": "51b22d10b8a863a2dbb9665caabc7ef98aa0c411",
+      "verdict": "PASS_STEP3_EXECUTION_GATE_CRITICS_AUTHORIZED"
+    },
+    "summaryCorrection": {
+      "path": "quality-reviews/step-3-large-scale-validation/acceptance-addendum-summary-correction-004.json",
+      "blob": "1409b217b004a69c5887d2d1fe44f205b47c3797",
+      "commit": "073a5a67c29ca1bd787197edf7723a640003d5b7",
+      "tree": "0e52ea3509183adb1aea945db90054bea5099798",
+      "verdict": "PASS_SUMMARY_CORRECTION_REQUIRED_BEFORE_CRITICS"
+    },
+    "supersededReadback": {
+      "path": "quality-reviews/step-3-large-scale-validation/execution-live-readback.json",
+      "blob": "79f2dd2ebad32a90d22a98cdf2b82e18926a2270",
+      "commit": "7c569a41944166e644d9865bfdf70c65c3211631",
+      "tree": "b9bad5c444e79d36f99b6a6d0b867d6be7d4ebb4",
+      "disposition": "IMMUTABLE_SUPERSEDED_FOR_SUMMARY_CONSUMPTION"
+    },
+    "step1SealBlob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
+    "step2SealBlob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
+    "calibrationGateBlob": "5ecb6c177a0c52f164c4ad22723f54305bf8c97d",
+    "calibrationReadbackBlob": "284ace113d40f6e0fa1a832e660a677b8eb65c5a"
+  },
+  "executionContent": {
+    "commit": "ba6843b4dd8efe55b4d0c8c3f9bc1345b97d005e",
+    "tree": "30b9db2ead85ebedeebe1c52fb917751cde5a646",
+    "bindingCount": 23,
+    "gameplayHoldoutResultBlob": "7e823eeadaeea6ed7f54790e9b9f5acefa948172",
+    "holdoutAuditBlob": "0dd82dad74cd056a9da643c564ef2725808db209",
+    "gachaAuditBlob": "40b25d2bbd03b9d8392a326208ad5135232053ae",
+    "pityAuditBlob": "fff3a155946c98813ae6b31fb23834201eb69881",
+    "duplicateAuditBlob": "80501579065475642acd611f08ca10bb5e7a7bd3",
+    "refundAuditBlob": "d1d59709adf75647ea16176d44b6b53cb641d458",
+    "stateMachineAuditBlob": "35c7e8fc26b04ebb8d222c38001f921e71e60689",
+    "largeNumberAuditBlob": "73c7d4019d6ddddbf9a9bbd5d00d10d0bd86089d",
+    "finalExecutionManifestBlob": "d30a9a473573aef908ac26bda501021a4c514aca",
+    "aggregateRepairRecordBlob": "d7edab73180bbf575ab994e12655086e5ba1c9ce"
+  },
+  "workflowVerification": {
+    "execution": {
+      "workflow": ".github/workflows/execute-step-3-final-validation.yml",
+      "runId": "33134710212",
+      "head": "22a9a3e56caadba8f2cc3c03359ff1646908b72d",
+      "tree": "e55eb2b934c3049b66e2c41ae4632004a134f960",
+      "conclusion": "success",
+      "aggregateArtifactId": "9671638681",
+      "aggregateArtifactDigest": "sha256:b0fff485be3fd0d101fa4562b09cbcd8c3c9e9a55af4033897f7bc4b310e0096"
+    },
+    "aggregateRepair": {
+      "workflow": ".github/workflows/repair-step-3-final-aggregate.yml",
+      "runId": "33135178244",
+      "head": "9d897426ff68ce95cb7bc5d322c9caa6de9b335f",
+      "tree": "78a331fe4881bd196b05a775753752a3d7af96f7",
+      "jobId": "98733432808",
+      "conclusion": "success",
+      "artifactId": "9671745843",
+      "artifactDigest": "sha256:fd7d3314d8d36818c930a777cbb8150e3c80e9eb224b464098b06340eb108aed"
+    },
+    "executionSeal": {
+      "workflow": ".github/workflows/seal-step-3-final-execution-v2.yml",
+      "runId": "33135520122",
+      "head": "9278edb744658a2e8c21f302ec8f2381ee30f3c6",
+      "jobId": "98734463045",
+      "conclusion": "success",
+      "exactTwentyThreeFilesCommitted": true,
+      "executionGateCommitted": true,
+      "twoCommitChainPushedToExistingKimi": true
+    }
+  },
+  "gameplayDecision": {
+    "calibrationScenarios": "12000",
+    "unseenHoldoutScenarios": "3000",
+    "totalScenarios": "15000",
+    "buildCount": "3",
+    "personaCount": "5",
+    "horizonCount": "6",
+    "calibrationInputOverlap": "0",
+    "calibrationScenarioOverlap": "0",
+    "calibrationReplayMismatchCount": "0",
+    "holdoutReplayMismatchCount": "0",
+    "buildSpreadViolations": "0",
+    "repeatedResetSequenceViolations": "0",
+    "firstEvolutionUncoveredScenarios": "0",
+    "masteryReplayMismatchCount": "0",
+    "economy45dMismatchCount": "0",
+    "noAdF2PFeaturedGuaranteeDay": "40",
+    "noAdF2PCombinedDailyDraws": "44",
+    "calibrationFirstResetMinutes": {
+      "source": "calibration-audit.json",
+      "minimum": "20",
+      "maximum": "29",
+      "p50": "24",
+      "p90": "27",
+      "p99": "29"
+    },
+    "holdoutFirstResetMinutes": {
+      "source": "holdout-audit.json/compactSummary/firstResetMinutes",
+      "minimum": "20",
+      "maximum": "29",
+      "p50": "24",
+      "p90": "27",
+      "p99": "29"
+    },
+    "holdoutTuningVisible": false,
+    "holdoutReuseForTuningForbidden": true
+  },
+  "highVolumeDecision": {
+    "suiteCount": "6",
+    "totalSamples": "1700000",
+    "gachaTails": {
+      "source": "high-volume/audit-high-volume-gacha-tails.json",
+      "samples": "200000",
+      "characterFirstUr": {"minimum": "1", "p50": "100", "p90": "100", "p99": "100", "maximum": "100"},
+      "characterFeatured": {"minimum": "1", "p50": "100", "p90": "200", "p99": "200", "maximum": "200"},
+      "weaponFirstUr": {"minimum": "1", "p50": "100", "p90": "100", "p99": "100", "maximum": "100"},
+      "weaponFeatured": {"minimum": "1", "p50": "100", "p90": "200", "p99": "200", "maximum": "200"},
+      "boundaryViolations": "0",
+      "characterUniqueItemsSeen": "24",
+      "weaponUniqueItemsSeen": "36"
+    },
+    "pityConformance": {
+      "source": "high-volume/audit-high-volume-pity-conformance.json",
+      "samples": "1000000",
+      "hardBoundaryCases": "9937",
+      "hardBoundaryPass": "9937",
+      "featuredBoundaryCases": "5012",
+      "featuredBoundaryPass": "5012",
+      "earlyHardFalse": "990063",
+      "earlyFeaturedFalse": "994988",
+      "boundaryViolations": "0"
+    },
+    "duplicateSkewOverflow": {
+      "source": "high-volume/audit-high-volume-duplicate-skew-overflow.json",
+      "samples": "200000",
+      "characterItemsAtFullMastery": "24",
+      "characterItemsWithOverflow": "24",
+      "characterMaximumCopies": "24896",
+      "weaponItemsAtFullMastery": "36",
+      "weaponItemsWithOverflow": "36",
+      "weaponMaximumCopies": "16775",
+      "featuredItemMismatches": "0"
+    },
+    "refundReplayRace": {
+      "source": "high-volume/audit-high-volume-refund-replay-race.json",
+      "samples": "100000",
+      "validRefunds": "89954",
+      "invalidSpentRejected": "10046",
+      "idempotentReplayMatches": "89954",
+      "exactlyOnceReceiptMatches": "89954",
+      "outOfOrderRestoreMatches": "89954",
+      "acceptedVersionRetryMatches": "89954",
+      "freeLedgerDebitViolations": "0",
+      "deficitStateCount": "89481"
+    },
+    "stateMachineModel": {
+      "source": "high-volume/audit-high-volume-state-machine-model.json",
+      "samples": "100000",
+      "validAccepted": "49896",
+      "invalidRejected": "50104",
+      "unexpectedAccept": "0",
+      "unexpectedReject": "0",
+      "machineCount": "9"
+    },
+    "largeNumberProperties": {
+      "source": "high-volume/audit-high-volume-large-number-properties.json",
+      "samples": "100000",
+      "symbolicRepresentations": "100000",
+      "expandedRepresentations": "0",
+      "canonicalIdPass": "100000",
+      "canonicalIdFail": "0",
+      "adjacentModifierRepeatViolations": "0",
+      "windowModifierRepeatViolations": "0",
+      "backgroundDistrictMismatches": "0",
+      "backgroundCycleMismatches": "0",
+      "minimumDigits": "30",
+      "p50Digits": "89",
+      "p90Digits": "137",
+      "p99Digits": "148",
+      "maximumDigits": "149"
+    }
+  },
+  "correctionClosure": {
+    "correctedFieldCount": 4,
+    "rawEvidenceChanged": false,
+    "executionGateChanged": false,
+    "v1ReadbackChanged": false,
+    "acceptanceThresholdChanged": false,
+    "executionPassChanged": false,
+    "summaryAuthority": "THIS_V2_READBACK"
+  },
+  "qualityState": {
+    "executionUnresolvedP0": 0,
+    "executionUnresolvedP1": 0,
+    "summaryCorrectionUnresolvedP0": 0,
+    "summaryCorrectionUnresolvedP1": 0,
+    "independentCriticCountRequired": 5,
+    "independentCriticsCompleted": 0,
+    "finalJudgeCompleted": false,
+    "completionEvidenceCompleted": false,
+    "step3Status": "EXECUTION_PASS_PENDING_INDEPENDENT_CRITICS",
+    "step4Allowed": false
+  },
+  "scopeReadback": {
+    "runtimeChanged": false,
+    "assetsChanged": false,
+    "step1SemanticContentChanged": false,
+    "step2ExecutableContentChanged": false,
+    "backendChanged": false,
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "otherBranchWritten": false,
+    "pullRequestOperationPerformed": false
+  },
+  "nextAuthorizedAction": "Run five independent Step 3 critics against this corrected v2 read-back, the exact execution gate and committed raw evidence. Step 4 remains blocked until critic repair, final judge, completion evidence and terminal live read-back pass.",
+  "verdict": "PASS_CORRECTED_EXECUTION_READBACK_CRITICS_AUTHORIZED"
+}
