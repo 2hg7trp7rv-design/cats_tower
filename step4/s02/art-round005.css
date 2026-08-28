@@ -1,0 +1,13 @@
+/* S02 visual art refinement round 005 — outdoor tower-gate scene trial. */
+.s02-shell .battle-stage {
+  background:
+    linear-gradient(180deg, rgba(77, 121, 92, .03), rgba(43, 24, 12, .12)),
+    url("/assets/saga/castle_gate.webp") center 58% / cover no-repeat,
+    #758d62;
+}
+.s02-shell .battle-stage::before {
+  background:
+    linear-gradient(180deg, rgba(232, 244, 218, .05), transparent 38%),
+    radial-gradient(circle at 51% 49%, transparent 0 58%, rgba(29, 15, 7, .09) 82%, rgba(18, 8, 4, .24) 100%);
+  backdrop-filter: saturate(1.16) brightness(1.13);
+}
