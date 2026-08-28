@@ -1,0 +1,110 @@
+name: Verify Step 4 S02 anchor
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - kimi
+    paths:
+      - "step4/s02/**"
+      - "tests/step4/s02-*.mjs"
+      - "quality-reviews/step-4-twelve-screen-final-mockups/s02-*"
+      - "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-019.json"
+      - ".github/workflows/verify-step-4-s02-anchor.yml"
+      - "PROJECT_STATUS.json"
+      - "AI_PROJECT_POLICY.json"
+      - "QUALITY_GATE.md"
+      - ".github/workflows/CURRENT_STATUS.md"
+      - "PROJECT_HANDOVER.md"
+      - "AGENTS.md"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: step4-s02-anchor-kimi
+  cancel-in-progress: true
+
+jobs:
+  verify-s02-anchor:
+    name: Static contract and Chromium evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout exact kimi commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Assert repository and branch boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${GITHUB_REPOSITORY}" = "2hg7trp7rv-design/cats_tower"
+          test "${GITHUB_REF_NAME}" = "kimi"
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          echo "head=$(git rev-parse HEAD)"
+          echo "tree=$(git rev-parse HEAD^{tree})"
+
+      - name: Run fail-closed static contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          node tests/step4/s02-static-contract-v2.mjs | tee s02-static-report.json
+
+      - name: Install pinned Playwright and Chromium
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/s02-playwright
+          cd /tmp/s02-playwright
+          npm init -y >/dev/null 2>&1
+          npm install --save-exact playwright@1.62.1
+          npx playwright install --with-deps chromium
+
+      - name: Start isolated static preview
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/s02-http.log 2>&1 &
+          echo $! > /tmp/s02-http.pid
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4173/step4/s02/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/s02-http.log
+          exit 1
+
+      - name: Run Chromium viewport interaction and motion QA
+        shell: bash
+        env:
+          PLAYWRIGHT_PACKAGE: /tmp/s02-playwright/node_modules/playwright
+          S02_BASE_URL: http://127.0.0.1:4173/step4/s02/
+          S02_EVIDENCE_DIR: quality-reviews/step-4-twelve-screen-final-mockups/s02-browser-evidence
+        run: |
+          set -euo pipefail
+          node tests/step4/s02-browser-qa.mjs
+
+      - name: Verify evidence payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f quality-reviews/step-4-twelve-screen-final-mockups/s02-browser-evidence/report.json
+          test "$(find quality-reviews/step-4-twelve-screen-final-mockups/s02-browser-evidence -maxdepth 1 -name '*.png' | wc -l | tr -d ' ')" = "5"
+          grep -q 'PASS_S02_BROWSER_QA' quality-reviews/step-4-twelve-screen-final-mockups/s02-browser-evidence/report.json
+          git diff --check d8c6b110604596265124ad277da430d38a6cd09e..HEAD
+
+      - name: Upload exact-head S02 browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: step4-s02-browser-evidence-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 30
+          path: |
+            s02-static-report.json
+            quality-reviews/step-4-twelve-screen-final-mockups/s02-browser-evidence/**
+            /tmp/s02-http.log
