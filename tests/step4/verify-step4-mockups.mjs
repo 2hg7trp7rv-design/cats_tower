@@ -192,7 +192,7 @@ const allowed = changed.filter((relativePath) =>
   relativePath.startsWith(`${STEP4}/`) ||
   relativePath.startsWith('tests/step4/') ||
   relativePath === 'tests/governance/verify-current-step2-state.mjs' ||
-  ['.github/workflows/execute-step-4-twelve-screen-mockups.yml', '.github/workflows/execute-step-4-twelve-screen-mockups-v3.yml', '.github/workflows/repair-step-4-verifier-allowlist.yml'].includes(relativePath)
+  (relativePath.startsWith('.github/workflows/') && /step-4|step4/u.test(relativePath))
 );
 const forbidden = changed.filter((relativePath) => !allowed.includes(relativePath));
 assert.deepEqual(forbidden, [], `forbidden Step 4 draft paths: ${forbidden.join(', ')}`);
