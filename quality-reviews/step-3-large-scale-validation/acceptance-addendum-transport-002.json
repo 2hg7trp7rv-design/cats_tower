@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-calibration-acceptance-addendum-transport-002",
+  "createdAt": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "status": "ACTIVE_BEFORE_TRANSPORT_REPAIR",
+  "previousAddendum": {
+    "path": "quality-reviews/step-3-large-scale-validation/acceptance-addendum-calibration-001.json",
+    "blob": "9d0c89489363340c4954b6912fb105ca6789b462"
+  },
+  "trigger": "The repaired calibration workflow produced valid result, replay audit and nonempty execution manifest, but SHA256SUMS stored runner-absolute paths. Checks passed inside the original runner and fail after artifact extraction because those absolute paths no longer exist. This is an evidence portability defect only; the bound files and GitHub artifact ZIP digest are valid. Holdout remains unexecuted.",
+  "sourceCalibration": {
+    "workflowRunId": "33133249662",
+    "jobId": "98727326189",
+    "head": "3363c36d91d47b177b1dcf4af053c00b23954d7a",
+    "tree": "a60ce0417851573a4c3895b30872fd3d0860a328",
+    "conclusion": "SUCCESS",
+    "artifact": {
+      "id": "9671238966",
+      "name": "cats-tower-step3-calibration-3363c36d91d47b177b1dcf4af053c00b23954d7a-attempt-1",
+      "digest": "sha256:b8dadc084d2aadb9406c06fdaffaf449aad96ea20861f3c47da4fa0ccfc5fb83",
+      "sizeBytes": "897914",
+      "expired": false
+    },
+    "files": {
+      "gameplay-calibration-result.json": {
+        "bytes": "1913915",
+        "sha256": "f77eb5fdb805ea484a02b165105c585d07e77d3097fcbf42637f7a96618d90bb",
+        "deterministicPayloadSha256": "df7cbceb0569f40eefee43dbd81d0b2c4698a44104f88a312ce693471f746e22"
+      },
+      "calibration-audit.json": {
+        "bytes": "43002",
+        "sha256": "4b0f0004625ea923199f32b28606a4599da08f3ef3116c1e3a6460f0730da7c7",
+        "verdict": "PASS_CALIBRATION_GATE_CANDIDATE",
+        "unresolvedP0": 0,
+        "unresolvedP1": 0
+      },
+      "execution-manifest.json": {
+        "bytes": "1590",
+        "sha256": "f270136f0021c772d94e415a8c6e72f119b17964067ac59ff87d246f39d33d8c",
+        "verdict": "PASS_CALIBRATION_EXECUTION_ARTIFACT_READY"
+      }
+    },
+    "holdoutExecuted": false,
+    "dataDisposition": "VALID_IMMUTABLE_SOURCE_FOR_TRANSPORT_REPACK"
+  },
+  "defect": {
+    "id": "CAL-EVIDENCE-PORTABILITY-001",
+    "severity": "P0",
+    "scope": "SHA256SUMS path portability",
+    "dataCorruption": false,
+    "auditCorruption": false,
+    "manifestCorruption": false,
+    "cause": "sha256sum was invoked with absolute file paths before writing SHA256SUMS.",
+    "failure": "An extracted consumer cannot execute sha256sum -c because /home/runner/work/_temp/... paths do not exist."
+  },
+  "authorizedRepair": {
+    "type": "BYTE_PRESERVING_ARTIFACT_REPACK",
+    "required": [
+      "Download the exact source artifact from run 33133249662 and verify its GitHub metadata binding.",
+      "Verify the three source file byte lengths and SHA-256 values above before any rewrite.",
+      "Do not modify gameplay-calibration-result.json, calibration-audit.json or execution-manifest.json.",
+      "Replace only SHA256SUMS with relative member paths.",
+      "Add transport-repair-manifest.json binding source artifact identity, unchanged file hashes and repair workflow invocation.",
+      "Verify the corrected SHA256SUMS after extraction and upload a new immutable artifact.",
+      "Correct the reusable calibration workflow for future manual execution without rerunning or changing the accepted calibration data."
+    ],
+    "forbidden": [
+      "calibration data regeneration",
+      "calibration result modification",
+      "audit modification",
+      "execution-manifest modification",
+      "holdout execution",
+      "candidate or sealed engine modification",
+      "runtime or asset modification",
+      "backend, provider, ad-network or Production modification",
+      "other branch or pull request operation"
+    ]
+  },
+  "completionRule": "Transport repair passes only when the derived artifact ZIP digest is independently observed, its relative SHA256SUMS verifies after extraction, all three source files remain byte-identical, the wrapper manifest is nonempty and bound, and holdout remains unexecuted.",
+  "verdict": "PASS_BYTE_PRESERVING_TRANSPORT_REPAIR_AUTHORIZED"
+}
