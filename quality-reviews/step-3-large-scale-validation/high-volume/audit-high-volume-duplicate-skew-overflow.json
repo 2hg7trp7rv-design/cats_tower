@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-high-volume-duplicate-skew-overflow-audit-v1",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "suiteId": "duplicate-skew-overflow",
+  "result": {
+    "sourcePath": "/home/runner/work/_temp/cats-step3-high-volume-duplicate-skew-overflow/high-volume-duplicate-skew-overflow.json",
+    "fileBytes": "4119",
+    "fileSha256": "6433a60ce041ea0ee8b6a2bf5df9bd3640d8c7d241c8faa1d0792f95e7e53298",
+    "deterministicPayloadSha256": "f899552a72068cc3bdfa8010336b664a4e40ab13ee8cc744249d8b5364be4830",
+    "suiteDigest": "8a821f5d3211516232af6daa6bb97d7574e5b87bcf002719fcf0e5df205ec25e",
+    "sampleCount": "200000",
+    "executedAt": "2026-08-28T02:03:26.383Z"
+  },
+  "percentiles": {
+    "primary": {
+      "count": "200000",
+      "minimum": "0",
+      "maximum": "20",
+      "p50": "20",
+      "p90": "20",
+      "p99": "20"
+    },
+    "secondary": {
+      "count": "200000",
+      "minimum": "0",
+      "maximum": "2487500",
+      "p50": "731400",
+      "p90": "1976100",
+      "p99": "2426100"
+    },
+    "tertiary": {
+      "count": "200000",
+      "minimum": "0",
+      "maximum": "20",
+      "p50": "20",
+      "p90": "20",
+      "p99": "20"
+    },
+    "quaternary": {
+      "count": "200000",
+      "minimum": "0",
+      "maximum": "1675400",
+      "p50": "490100",
+      "p90": "1314700",
+      "p99": "1614700"
+    }
+  },
+  "counters": {
+    "characterSamples": "200000",
+    "characterCatalogSize": "24",
+    "characterPoolItemCount": "24",
+    "characterUniqueItemsSeen": "24",
+    "characterItemsAtFullMastery": "24",
+    "characterItemsWithOverflow": "24",
+    "characterMaximumCopies": "24896",
+    "characterFeaturedCopies": "1583",
+    "characterFeaturedItemMismatches": "0",
+    "characterNonFeaturedUrFeaturedViolations": "0",
+    "characterHardPityTriggered": "1413",
+    "characterFeaturedGuaranteeTriggered": "474",
+    "characterFeaturedRollHits": "1109",
+    "characterRarityNDraws": "99125",
+    "characterRarityRDraws": "59550",
+    "characterRarityRRDraws": "23738",
+    "characterRaritySRDraws": "10041",
+    "characterRaritySSRDraws": "4885",
+    "characterRarityURDraws": "2661",
+    "weaponSamples": "200000",
+    "weaponCatalogSize": "36",
+    "weaponPoolItemCount": "36",
+    "weaponUniqueItemsSeen": "36",
+    "weaponItemsAtFullMastery": "36",
+    "weaponItemsWithOverflow": "36",
+    "weaponMaximumCopies": "16775",
+    "weaponFeaturedCopies": "1560",
+    "weaponFeaturedItemMismatches": "0",
+    "weaponNonFeaturedUrFeaturedViolations": "0",
+    "weaponHardPityTriggered": "1435",
+    "weaponFeaturedGuaranteeTriggered": "478",
+    "weaponFeaturedRollHits": "1082",
+    "weaponRarityNDraws": "99007",
+    "weaponRarityRDraws": "60056",
+    "weaponRarityRRDraws": "23521",
+    "weaponRaritySRDraws": "9831",
+    "weaponRaritySSRDraws": "4934",
+    "weaponRarityURDraws": "2651"
+  },
+  "criteria": [
+    {
+      "id": "HV-COMMON-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "sampleCount": "200000",
+        "complete": true,
+        "violationCount": "0",
+        "contractValidation": "PASS"
+      }
+    },
+    {
+      "id": "HV-DIGEST-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "deterministicPayloadSha256": "f899552a72068cc3bdfa8010336b664a4e40ab13ee8cc744249d8b5364be4830",
+        "canonicalJsonSha256": "f899552a72068cc3bdfa8010336b664a4e40ab13ee8cc744249d8b5364be4830",
+        "suiteDigest": "8a821f5d3211516232af6daa6bb97d7574e5b87bcf002719fcf0e5df205ec25e"
+      }
+    },
+    {
+      "id": "HV-DUPLICATE-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "characterSamples": "200000",
+        "weaponSamples": "200000",
+        "characterFeaturedItemMismatches": "0",
+        "weaponFeaturedItemMismatches": "0",
+        "characterNonFeaturedUrFeaturedViolations": "0",
+        "weaponNonFeaturedUrFeaturedViolations": "0"
+      }
+    },
+    {
+      "id": "HV-DUPLICATE-02",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "characterItemsAtFullMastery": "24",
+        "weaponItemsAtFullMastery": "36",
+        "characterItemsWithOverflow": "24",
+        "weaponItemsWithOverflow": "36",
+        "characterMaximumCopies": "24896",
+        "weaponMaximumCopies": "16775",
+        "characterOverflowMaximum": "2487500",
+        "weaponOverflowMaximum": "1675400"
+      }
+    },
+    {
+      "id": "HV-DUPLICATE-03",
+      "severity": "P1",
+      "status": "PASS",
+      "detail": {
+        "characterUniqueItemsSeen": "24",
+        "characterCatalogSize": "24",
+        "weaponUniqueItemsSeen": "36",
+        "weaponCatalogSize": "36"
+      }
+    }
+  ],
+  "findings": [],
+  "unresolvedP0": 0,
+  "unresolvedP1": 0,
+  "verdict": "PASS_HIGH_VOLUME_SUITE_AUDIT"
+}

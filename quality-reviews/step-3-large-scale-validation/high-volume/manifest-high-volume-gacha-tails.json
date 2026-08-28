@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-high-volume-gacha-tails-execution-manifest",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "suiteId": "gacha-tails",
+  "head": "22a9a3e56caadba8f2cc3c03359ff1646908b72d",
+  "tree": "e55eb2b934c3049b66e2c41ae4632004a134f960",
+  "workflow": "Execute Step 3 holdout and high-volume validation",
+  "runId": "33134710212",
+  "runAttempt": "1",
+  "job": "high-volume",
+  "authority": {
+    "calibrationReadbackBlob": "284ace113d40f6e0fa1a832e660a677b8eb65c5a",
+    "highVolumeAuditScriptBlob": "bd421bf758ff0d42150b96d8f5085b71dfbc4403",
+    "step2SealBlob": "ee3507969c03b08fe27350263cf0bc093a1c18e1"
+  },
+  "result": {
+    "path": "high-volume-gacha-tails.json",
+    "sampleCount": "200000",
+    "sha256": "89863f2896481c4d54cc9451ac754458044e5569ec44c7c5627f016ad6615b1a",
+    "bytes": "4010",
+    "deterministicPayloadSha256": "8b2f2880a651f63d3175868c31af28ae32cd9a15f81c571642f8130188c214b2"
+  },
+  "audit": {
+    "path": "audit-high-volume-gacha-tails.json",
+    "sha256": "c7bd3e06bbf98e1cf9a0bbcd23d4b47ca08b3200f9a51a6b689eae1f1c054c7d",
+    "bytes": "5532",
+    "verdict": "PASS_HIGH_VOLUME_SUITE_AUDIT"
+  },
+  "verdict": "PASS_HIGH_VOLUME_SUITE_ARTIFACT_READY"
+}

@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-high-volume-large-number-properties-audit-v1",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "suiteId": "large-number-properties",
+  "result": {
+    "sourcePath": "/home/runner/work/_temp/cats-step3-high-volume-large-number-properties/high-volume-large-number-properties.json",
+    "fileBytes": "2504",
+    "fileSha256": "2a0e2dcea21cdb7a534c3fd1dc0e4c45d38d2911085b108c29549b8bc6d31ea6",
+    "deterministicPayloadSha256": "959a1c2e7296b4097e88078f42a75ec171a7a10801ccaa100fc2c3f8e46fbf2a",
+    "suiteDigest": "2ac706e2870c3b9e3762ca7ea3e959f4cd02a22313671a13d28c7c5b8f44196e",
+    "sampleCount": "100000",
+    "executedAt": "2026-08-28T02:03:33.898Z"
+  },
+  "percentiles": {
+    "primary": {
+      "count": "100000",
+      "minimum": "30",
+      "maximum": "149",
+      "p50": "89",
+      "p90": "137",
+      "p99": "148"
+    },
+    "secondary": {
+      "count": "100000",
+      "minimum": "29",
+      "maximum": "148",
+      "p50": "88",
+      "p90": "136",
+      "p99": "147"
+    }
+  },
+  "counters": {
+    "symbolicRepresentations": "100000",
+    "expandedRepresentations": "0",
+    "canonicalIdPass": "100000",
+    "canonicalIdFail": "0",
+    "adjacentModifierRepeatViolations": "0",
+    "windowModifierRepeatViolations": "0",
+    "backgroundDistrictMismatches": "0",
+    "backgroundCycleMismatches": "0",
+    "maximumDigits": "149"
+  },
+  "criteria": [
+    {
+      "id": "HV-COMMON-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "sampleCount": "100000",
+        "complete": true,
+        "violationCount": "0",
+        "contractValidation": "PASS"
+      }
+    },
+    {
+      "id": "HV-DIGEST-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "deterministicPayloadSha256": "959a1c2e7296b4097e88078f42a75ec171a7a10801ccaa100fc2c3f8e46fbf2a",
+        "canonicalJsonSha256": "959a1c2e7296b4097e88078f42a75ec171a7a10801ccaa100fc2c3f8e46fbf2a",
+        "suiteDigest": "2ac706e2870c3b9e3762ca7ea3e959f4cd02a22313671a13d28c7c5b8f44196e"
+      }
+    },
+    {
+      "id": "HV-BIGNUM-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "samples": "100000",
+        "canonicalIdPass": "100000",
+        "canonicalIdFail": "0",
+        "adjacentModifierRepeatViolations": "0",
+        "windowModifierRepeatViolations": "0",
+        "backgroundDistrictMismatches": "0",
+        "backgroundCycleMismatches": "0"
+      }
+    },
+    {
+      "id": "HV-BIGNUM-02",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "symbolicRepresentations": "100000",
+        "expandedRepresentations": "0",
+        "maximumDigits": "149",
+        "floorDigits": {
+          "count": "100000",
+          "minimum": "30",
+          "maximum": "149",
+          "p50": "89",
+          "p90": "137",
+          "p99": "148"
+        }
+      }
+    }
+  ],
+  "findings": [],
+  "unresolvedP0": 0,
+  "unresolvedP1": 0,
+  "verdict": "PASS_HIGH_VOLUME_SUITE_AUDIT"
+}

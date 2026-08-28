@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-high-volume-pity-conformance-execution-manifest",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "suiteId": "pity-conformance",
+  "head": "22a9a3e56caadba8f2cc3c03359ff1646908b72d",
+  "tree": "e55eb2b934c3049b66e2c41ae4632004a134f960",
+  "workflow": "Execute Step 3 holdout and high-volume validation",
+  "runId": "33134710212",
+  "runAttempt": "1",
+  "job": "high-volume",
+  "authority": {
+    "calibrationReadbackBlob": "284ace113d40f6e0fa1a832e660a677b8eb65c5a",
+    "highVolumeAuditScriptBlob": "bd421bf758ff0d42150b96d8f5085b71dfbc4403",
+    "step2SealBlob": "ee3507969c03b08fe27350263cf0bc093a1c18e1"
+  },
+  "result": {
+    "path": "high-volume-pity-conformance.json",
+    "sampleCount": "1000000",
+    "sha256": "b17e0aada5015d10babda729b49ab1cea25896a618f2b5ce326cb54772e8f2b4",
+    "bytes": "2366",
+    "deterministicPayloadSha256": "228202cbaa891d9e94d729732782c19ea481d57868e3babe09e134cde33c3a7c"
+  },
+  "audit": {
+    "path": "audit-high-volume-pity-conformance.json",
+    "sha256": "c1eacdae8d753ec8c0d014fe0bc8649e8d7afb03992d737d9ad5d32b4861a8ba",
+    "bytes": "2673",
+    "verdict": "PASS_HIGH_VOLUME_SUITE_AUDIT"
+  },
+  "verdict": "PASS_HIGH_VOLUME_SUITE_ARTIFACT_READY"
+}

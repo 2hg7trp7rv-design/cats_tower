@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-high-volume-refund-replay-race-audit-v1",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "suiteId": "refund-replay-race",
+  "result": {
+    "sourcePath": "/home/runner/work/_temp/cats-step3-high-volume-refund-replay-race/high-volume-refund-replay-race.json",
+    "fileBytes": "2450",
+    "fileSha256": "d381dca95059210046d5ea298d3affee29eb915cc871854cd7dfcbef65b3dc1a",
+    "deterministicPayloadSha256": "2f134631de7a3f393f4e23e534f7465ebabb51b35d7361f28046266a01ff43a5",
+    "suiteDigest": "a67ff4f178c898242851e463d813de7c7110235ceb3f5d900d90f6d5298d9f36",
+    "sampleCount": "100000",
+    "executedAt": "2026-08-28T02:03:27.423Z"
+  },
+  "percentiles": {
+    "primary": {
+      "count": "100000",
+      "minimum": "0",
+      "maximum": "1000",
+      "p50": "204",
+      "p90": "639",
+      "p99": "886"
+    },
+    "secondary": {
+      "count": "100000",
+      "minimum": "0",
+      "maximum": "1492",
+      "p50": "270",
+      "p90": "717",
+      "p99": "1143"
+    }
+  },
+  "counters": {
+    "validRefunds": "89954",
+    "invalidSpentRejected": "10046",
+    "idempotentReplayMatches": "89954",
+    "exactlyOnceReceiptMatches": "89954",
+    "outOfOrderRestoreMatches": "89954",
+    "acceptedVersionRetryMatches": "89954",
+    "freeLedgerDebitViolations": "0",
+    "deficitStateCount": "89481"
+  },
+  "criteria": [
+    {
+      "id": "HV-COMMON-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "sampleCount": "100000",
+        "complete": true,
+        "violationCount": "0",
+        "contractValidation": "PASS"
+      }
+    },
+    {
+      "id": "HV-DIGEST-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "deterministicPayloadSha256": "2f134631de7a3f393f4e23e534f7465ebabb51b35d7361f28046266a01ff43a5",
+        "canonicalJsonSha256": "2f134631de7a3f393f4e23e534f7465ebabb51b35d7361f28046266a01ff43a5",
+        "suiteDigest": "a67ff4f178c898242851e463d813de7c7110235ceb3f5d900d90f6d5298d9f36"
+      }
+    },
+    {
+      "id": "HV-LEDGER-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "samples": "100000",
+        "validRefunds": "89954",
+        "invalidSpentRejected": "10046",
+        "idempotentReplayMatches": "89954",
+        "exactlyOnceReceiptMatches": "89954",
+        "outOfOrderRestoreMatches": "89954",
+        "acceptedVersionRetryMatches": "89954",
+        "freeLedgerDebitViolations": "0",
+        "deficitStateCount": "89481"
+      }
+    },
+    {
+      "id": "HV-LEDGER-02",
+      "severity": "P1",
+      "status": "PASS",
+      "detail": {
+        "deficitStateCount": "89481"
+      }
+    }
+  ],
+  "findings": [],
+  "unresolvedP0": 0,
+  "unresolvedP1": 0,
+  "verdict": "PASS_HIGH_VOLUME_SUITE_AUDIT"
+}

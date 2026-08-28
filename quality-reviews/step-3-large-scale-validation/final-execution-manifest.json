@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 2,
+  "artifactId": "cats-tower-step3-final-execution-aggregate-manifest",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "head": "22a9a3e56caadba8f2cc3c03359ff1646908b72d",
+  "tree": "e55eb2b934c3049b66e2c41ae4632004a134f960",
+  "workflow": "Execute Step 3 holdout and high-volume validation",
+  "workflowPath": ".github/workflows/execute-step-3-final-validation.yml",
+  "runId": "33134710212",
+  "runAttempt": "1",
+  "jobs": {
+    "preflight": {
+      "jobId": "98731986815",
+      "conclusion": "success"
+    },
+    "holdout": {
+      "jobId": "98732063205",
+      "conclusion": "success"
+    },
+    "gachaTails": {
+      "jobId": "98732063292",
+      "conclusion": "success"
+    },
+    "pityConformance": {
+      "jobId": "98732063309",
+      "conclusion": "success"
+    },
+    "duplicateSkewOverflow": {
+      "jobId": "98732063319",
+      "conclusion": "success"
+    },
+    "refundReplayRace": {
+      "jobId": "98732063421",
+      "conclusion": "success"
+    },
+    "stateMachineModel": {
+      "jobId": "98732063321",
+      "conclusion": "success"
+    },
+    "largeNumberProperties": {
+      "jobId": "98732063311",
+      "conclusion": "success"
+    },
+    "aggregate": {
+      "jobId": "98732488607",
+      "conclusion": "success"
+    }
+  },
+  "sourceAggregateArtifact": {
+    "artifactId": "9671638681",
+    "artifactDigest": "sha256:b0fff485be3fd0d101fa4562b09cbcd8c3c9e9a55af4033897f7bc4b310e0096",
+    "sizeBytes": "260309",
+    "originalDefectiveManifestSha256": "882dfa4e9d0139f9b08fb783a00bc8057b0651c9396bce2e1fe957ad78eeaf88",
+    "sourceAggregateChecksumSha256": "3780e08f8de77ab9e23754f17d148d2ebd35b13710ccb15846d126bfe080d5ee"
+  },
+  "authority": {
+    "acceptanceBlob": "d1392c431282d0faae9e9ad7f1c22161a3c5caad",
+    "calibrationGateBlob": "5ecb6c177a0c52f164c4ad22723f54305bf8c97d",
+    "calibrationReadbackBlob": "284ace113d40f6e0fa1a832e660a677b8eb65c5a",
+    "aggregateRepairAddendumBlob": "712268d487ec2b1a812e9f722cad1fa787d69153",
+    "holdoutAuditScriptBlob": "7f6e5069c08b088c75134ed9d9650de24565545f",
+    "highVolumeAuditScriptBlob": "bd421bf758ff0d42150b96d8f5085b71dfbc4403",
+    "step2SealBlob": "ee3507969c03b08fe27350263cf0bc093a1c18e1"
+  },
+  "gameplay": {
+    "calibrationScenarios": "12000",
+    "unseenHoldoutScenarios": "3000",
+    "totalScenarios": "15000",
+    "holdoutDeterministicPayloadSha256": "7d043887ccf793ac6a52ef6582e3081416ee54056564f608e59b3688cffa05a3",
+    "holdoutResultSha256": "3bcae607267a7e20863f0279fa4a3f76810ec0a315074567e6199e8f589b8bc5",
+    "holdoutAuditSha256": "3326c8ce5497579929e8c625cf35a1eb000aa5ff56ed0864dff18b95f6e679ef",
+    "calibrationInputOverlap": "0",
+    "calibrationScenarioOverlap": "0",
+    "tuningVisible": false,
+    "tuningReuseForbidden": true,
+    "holdoutAuditVerdict": "PASS_UNSEEN_HOLDOUT_GATE_CANDIDATE"
+  },
+  "highVolume": {
+    "suiteCount": "6",
+    "totalSamples": "1700000",
+    "suites": [
+      {
+        "id": "gacha-tails",
+        "samples": "200000",
+        "auditVerdict": "PASS_HIGH_VOLUME_SUITE_AUDIT"
+      },
+      {
+        "id": "pity-conformance",
+        "samples": "1000000",
+        "auditVerdict": "PASS_HIGH_VOLUME_SUITE_AUDIT"
+      },
+      {
+        "id": "duplicate-skew-overflow",
+        "samples": "200000",
+        "auditVerdict": "PASS_HIGH_VOLUME_SUITE_AUDIT"
+      },
+      {
+        "id": "refund-replay-race",
+        "samples": "100000",
+        "auditVerdict": "PASS_HIGH_VOLUME_SUITE_AUDIT"
+      },
+      {
+        "id": "state-machine-model",
+        "samples": "100000",
+        "auditVerdict": "PASS_HIGH_VOLUME_SUITE_AUDIT"
+      },
+      {
+        "id": "large-number-properties",
+        "samples": "100000",
+        "auditVerdict": "PASS_HIGH_VOLUME_SUITE_AUDIT"
+      }
+    ]
+  },
+  "quality": {
+    "unresolvedP0": 0,
+    "unresolvedP1": 0
+  },
+  "repairInvocation": {
+    "head": "9d897426ff68ce95cb7bc5d322c9caa6de9b335f",
+    "tree": "78a331fe4881bd196b05a775753752a3d7af96f7",
+    "workflow": "Repair Step 3 final aggregate manifest",
+    "runId": "33135178244",
+    "runAttempt": "1",
+    "job": "repair-aggregate",
+    "sourceResultBytesModified": false,
+    "sourceAuditBytesModified": false,
+    "individualManifestBytesModified": false
+  },
+  "partialResultPromotion": false,
+  "verdict": "PASS_STEP3_FINAL_EXECUTION_ARTIFACT_READY_FOR_INDEPENDENT_CRITICS"
+}

@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-high-volume-pity-conformance-audit-v1",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "suiteId": "pity-conformance",
+  "result": {
+    "sourcePath": "/home/runner/work/_temp/cats-step3-high-volume-pity-conformance/high-volume-pity-conformance.json",
+    "fileBytes": "2366",
+    "fileSha256": "b17e0aada5015d10babda729b49ab1cea25896a618f2b5ce326cb54772e8f2b4",
+    "deterministicPayloadSha256": "228202cbaa891d9e94d729732782c19ea481d57868e3babe09e134cde33c3a7c",
+    "suiteDigest": "fe78b6321c8ba09d24d318110706bc019519d7aa754b4f59d170d0787c24b26e",
+    "sampleCount": "1000000",
+    "executedAt": "2026-08-28T02:03:29.089Z"
+  },
+  "percentiles": {
+    "primary": {
+      "count": "1000000",
+      "minimum": "1",
+      "maximum": "100",
+      "p50": "51",
+      "p90": "91",
+      "p99": "99"
+    },
+    "secondary": {
+      "count": "1000000",
+      "minimum": "1",
+      "maximum": "200",
+      "p50": "101",
+      "p90": "181",
+      "p99": "199"
+    }
+  },
+  "counters": {
+    "hardBoundaryCases": "9937",
+    "hardBoundaryPass": "9937",
+    "featuredBoundaryCases": "5012",
+    "featuredBoundaryPass": "5012",
+    "earlyHardFalse": "990063",
+    "earlyFeaturedFalse": "994988",
+    "boundaryViolations": "0"
+  },
+  "criteria": [
+    {
+      "id": "HV-COMMON-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "sampleCount": "1000000",
+        "complete": true,
+        "violationCount": "0",
+        "contractValidation": "PASS"
+      }
+    },
+    {
+      "id": "HV-DIGEST-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "deterministicPayloadSha256": "228202cbaa891d9e94d729732782c19ea481d57868e3babe09e134cde33c3a7c",
+        "canonicalJsonSha256": "228202cbaa891d9e94d729732782c19ea481d57868e3babe09e134cde33c3a7c",
+        "suiteDigest": "fe78b6321c8ba09d24d318110706bc019519d7aa754b4f59d170d0787c24b26e"
+      }
+    },
+    {
+      "id": "HV-PITY-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "hardBoundaryCases": "9937",
+        "hardBoundaryPass": "9937",
+        "featuredBoundaryCases": "5012",
+        "featuredBoundaryPass": "5012",
+        "earlyHardFalse": "990063",
+        "earlyFeaturedFalse": "994988",
+        "boundaryViolations": "0"
+      }
+    },
+    {
+      "id": "HV-PITY-02",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "samples": "1000000",
+        "hardCoverage": "1000000",
+        "featuredCoverage": "1000000"
+      }
+    }
+  ],
+  "findings": [],
+  "unresolvedP0": 0,
+  "unresolvedP1": 0,
+  "verdict": "PASS_HIGH_VOLUME_SUITE_AUDIT"
+}

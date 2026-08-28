@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-high-volume-large-number-properties-execution-manifest",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "suiteId": "large-number-properties",
+  "head": "22a9a3e56caadba8f2cc3c03359ff1646908b72d",
+  "tree": "e55eb2b934c3049b66e2c41ae4632004a134f960",
+  "workflow": "Execute Step 3 holdout and high-volume validation",
+  "runId": "33134710212",
+  "runAttempt": "1",
+  "job": "high-volume",
+  "authority": {
+    "calibrationReadbackBlob": "284ace113d40f6e0fa1a832e660a677b8eb65c5a",
+    "highVolumeAuditScriptBlob": "bd421bf758ff0d42150b96d8f5085b71dfbc4403",
+    "step2SealBlob": "ee3507969c03b08fe27350263cf0bc093a1c18e1"
+  },
+  "result": {
+    "path": "high-volume-large-number-properties.json",
+    "sampleCount": "100000",
+    "sha256": "2a0e2dcea21cdb7a534c3fd1dc0e4c45d38d2911085b108c29549b8bc6d31ea6",
+    "bytes": "2504",
+    "deterministicPayloadSha256": "959a1c2e7296b4097e88078f42a75ec171a7a10801ccaa100fc2c3f8e46fbf2a"
+  },
+  "audit": {
+    "path": "audit-high-volume-large-number-properties.json",
+    "sha256": "b3ea5e36a3459cfd07577427bf76dc832b3ee6e1b2d28461e43ab0c4b5ca5f0d",
+    "bytes": "3019",
+    "verdict": "PASS_HIGH_VOLUME_SUITE_AUDIT"
+  },
+  "verdict": "PASS_HIGH_VOLUME_SUITE_ARTIFACT_READY"
+}

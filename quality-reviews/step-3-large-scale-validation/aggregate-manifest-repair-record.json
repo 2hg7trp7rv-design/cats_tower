@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-final-aggregate-manifest-repair-record",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "source": {
+    "runId": "33134710212",
+    "head": "22a9a3e56caadba8f2cc3c03359ff1646908b72d",
+    "tree": "e55eb2b934c3049b66e2c41ae4632004a134f960",
+    "artifactId": "9671638681",
+    "artifactDigest": "sha256:b0fff485be3fd0d101fa4562b09cbcd8c3c9e9a55af4033897f7bc4b310e0096",
+    "originalDefectiveManifestSha256": "882dfa4e9d0139f9b08fb783a00bc8057b0651c9396bce2e1fe957ad78eeaf88"
+  },
+  "repair": {
+    "head": "9d897426ff68ce95cb7bc5d322c9caa6de9b335f",
+    "tree": "78a331fe4881bd196b05a775753752a3d7af96f7",
+    "workflow": "Repair Step 3 final aggregate manifest",
+    "runId": "33135178244",
+    "runAttempt": "1",
+    "job": "repair-aggregate",
+    "addendumBlob": "712268d487ec2b1a812e9f722cad1fa787d69153",
+    "correctedManifestSha256": "0ff866fe97cc0ea74a9f4dc027db30f37c4a6c56db56293501d22b0e3e24d8ba",
+    "correctedManifestBytes": "4362"
+  },
+  "preservedSourceMemberCount": "28",
+  "modifiedSourceMembers": [
+    "final-execution-manifest.json",
+    "SHA256SUMS-aggregate"
+  ],
+  "addedMembers": [
+    "aggregate-manifest-repair-record.json"
+  ],
+  "executionDataRerun": false,
+  "resultBytesModified": false,
+  "auditBytesModified": false,
+  "individualManifestBytesModified": false,
+  "verdict": "PASS_BYTE_PRESERVING_AGGREGATE_MANIFEST_REPAIR"
+}

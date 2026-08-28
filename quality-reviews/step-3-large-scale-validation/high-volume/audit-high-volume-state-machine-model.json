@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-high-volume-state-machine-model-audit-v1",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "suiteId": "state-machine-model",
+  "result": {
+    "sourcePath": "/home/runner/work/_temp/cats-step3-high-volume-state-machine-model/high-volume-state-machine-model.json",
+    "fileBytes": "2264",
+    "fileSha256": "6a740f312ad3d90019a9a6b97f87db8d720fbdbd304dada2b220f6dee17321d7",
+    "deterministicPayloadSha256": "a544c4ad27b70b886360c7b3c94c5c86d926217ecf9d7785be23f3bd852b38f8",
+    "suiteDigest": "2e9cd8db66dcffc533fc79d5ee755189b5be6816794e4ef6dfdc760bf9f15d00",
+    "sampleCount": "100000",
+    "executedAt": "2026-08-28T02:03:28.660Z"
+  },
+  "percentiles": {
+    "primary": {
+      "count": "100000",
+      "minimum": "2",
+      "maximum": "2",
+      "p50": "2",
+      "p90": "2",
+      "p99": "2"
+    },
+    "secondary": {
+      "count": "100000",
+      "minimum": "0",
+      "maximum": "1",
+      "p50": "0",
+      "p90": "1",
+      "p99": "1"
+    }
+  },
+  "counters": {
+    "validAccepted": "49896",
+    "invalidRejected": "50104",
+    "unexpectedAccept": "0",
+    "unexpectedReject": "0",
+    "machineCount": "9"
+  },
+  "criteria": [
+    {
+      "id": "HV-COMMON-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "sampleCount": "100000",
+        "complete": true,
+        "violationCount": "0",
+        "contractValidation": "PASS"
+      }
+    },
+    {
+      "id": "HV-DIGEST-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "deterministicPayloadSha256": "a544c4ad27b70b886360c7b3c94c5c86d926217ecf9d7785be23f3bd852b38f8",
+        "canonicalJsonSha256": "a544c4ad27b70b886360c7b3c94c5c86d926217ecf9d7785be23f3bd852b38f8",
+        "suiteDigest": "2e9cd8db66dcffc533fc79d5ee755189b5be6816794e4ef6dfdc760bf9f15d00"
+      }
+    },
+    {
+      "id": "HV-STATE-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "samples": "100000",
+        "validAccepted": "49896",
+        "invalidRejected": "50104",
+        "unexpectedAccept": "0",
+        "unexpectedReject": "0",
+        "machineCount": "9"
+      }
+    }
+  ],
+  "findings": [],
+  "unresolvedP0": 0,
+  "unresolvedP1": 0,
+  "verdict": "PASS_HIGH_VOLUME_SUITE_AUDIT"
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-high-volume-refund-replay-race-execution-manifest",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "suiteId": "refund-replay-race",
+  "head": "22a9a3e56caadba8f2cc3c03359ff1646908b72d",
+  "tree": "e55eb2b934c3049b66e2c41ae4632004a134f960",
+  "workflow": "Execute Step 3 holdout and high-volume validation",
+  "runId": "33134710212",
+  "runAttempt": "1",
+  "job": "high-volume",
+  "authority": {
+    "calibrationReadbackBlob": "284ace113d40f6e0fa1a832e660a677b8eb65c5a",
+    "highVolumeAuditScriptBlob": "bd421bf758ff0d42150b96d8f5085b71dfbc4403",
+    "step2SealBlob": "ee3507969c03b08fe27350263cf0bc093a1c18e1"
+  },
+  "result": {
+    "path": "high-volume-refund-replay-race.json",
+    "sampleCount": "100000",
+    "sha256": "d381dca95059210046d5ea298d3affee29eb915cc871854cd7dfcbef65b3dc1a",
+    "bytes": "2450",
+    "deterministicPayloadSha256": "2f134631de7a3f393f4e23e534f7465ebabb51b35d7361f28046266a01ff43a5"
+  },
+  "audit": {
+    "path": "audit-high-volume-refund-replay-race.json",
+    "sha256": "84981234ff5b23162e2c36c7be4306837dec626d7e45d6a1dcfa5dc0f230f7f4",
+    "bytes": "2790",
+    "verdict": "PASS_HIGH_VOLUME_SUITE_AUDIT"
+  },
+  "verdict": "PASS_HIGH_VOLUME_SUITE_ARTIFACT_READY"
+}

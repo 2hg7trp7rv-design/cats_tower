@@ -1,0 +1,110 @@
+{
+  "schemaVersion": "2.1.0",
+  "resultId": "cats-tower-step3-high-volume-gacha-tails-001",
+  "deterministicPayload": {
+    "mode": "STEP3_HIGH_VOLUME_SUITE",
+    "suiteId": "gacha-tails",
+    "metricContract": "gacha-tails-metrics-v3",
+    "candidateId": "cats-tower-v2-candidate-001",
+    "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+    "executionVersion": "cats-tower-step3-executor-v1.1.0",
+    "roundingVersion": "ct-rational-half-even-v1",
+    "seedNamespace": "cats-tower-v2-high-volume|gacha-tails",
+    "expectedSamples": "200000",
+    "sampleCount": "200000",
+    "complete": true,
+    "metrics": {
+      "primary": {
+        "count": "200000",
+        "minimum": "1",
+        "maximum": "100",
+        "p50": "100",
+        "p90": "100",
+        "p99": "100"
+      },
+      "secondary": {
+        "count": "200000",
+        "minimum": "1",
+        "maximum": "200",
+        "p50": "100",
+        "p90": "200",
+        "p99": "200"
+      },
+      "tertiary": {
+        "count": "200000",
+        "minimum": "1",
+        "maximum": "100",
+        "p50": "100",
+        "p90": "100",
+        "p99": "100"
+      },
+      "quaternary": {
+        "count": "200000",
+        "minimum": "1",
+        "maximum": "200",
+        "p50": "100",
+        "p90": "200",
+        "p99": "200"
+      },
+      "counters": {
+        "characterSamples": "200000",
+        "characterPoolItemCount": "24",
+        "characterTotalDraws": "25515431",
+        "characterUniqueItemsSeen": "24",
+        "characterFeaturedOutputs": "200000",
+        "characterFeaturedItemMismatches": "0",
+        "characterNonFeaturedUrFeaturedViolations": "0",
+        "characterHardPityTriggered": "185745",
+        "characterFeaturedGuaranteeTriggered": "62406",
+        "characterFeaturedRollHits": "137594",
+        "characterMaximumDrawsToFeatured": "200",
+        "characterRarityNDraws": "12653288",
+        "characterRarityRDraws": "7593282",
+        "characterRarityRRDraws": "3034615",
+        "characterRaritySRDraws": "1265987",
+        "characterRaritySSRDraws": "630722",
+        "characterRarityURDraws": "337537",
+        "weaponSamples": "200000",
+        "weaponPoolItemCount": "36",
+        "weaponTotalDraws": "25488865",
+        "weaponUniqueItemsSeen": "36",
+        "weaponFeaturedOutputs": "200000",
+        "weaponFeaturedItemMismatches": "0",
+        "weaponNonFeaturedUrFeaturedViolations": "0",
+        "weaponHardPityTriggered": "185599",
+        "weaponFeaturedGuaranteeTriggered": "62426",
+        "weaponFeaturedRollHits": "137574",
+        "weaponMaximumDrawsToFeatured": "200",
+        "weaponRarityNDraws": "12643047",
+        "weaponRarityRDraws": "7580549",
+        "weaponRarityRRDraws": "3031872",
+        "weaponRaritySRDraws": "1262596",
+        "weaponRaritySSRDraws": "633514",
+        "weaponRarityURDraws": "337287",
+        "maximumDrawsToFeatured": "200",
+        "boundaryViolations": "0"
+      },
+      "suiteDigest": "92ce03e6c89c31ea1552794831449e541d52155a03e41269554c7b67f08b3413"
+    },
+    "violations": []
+  },
+  "hashes": {
+    "candidateSha256": "4a908482466236bda39d9d6fbce927cef4b7707c70140a332b656d79ffae877d",
+    "runPlanSha256": "bf2102593bba178fcfcec96a0f49e3d07a61ac1b36378899622c3866469985a9",
+    "executionContractSha256": "aef4aebee845c25568a489091d812e607647af813102b89765821c6cc281bf1c",
+    "deterministicPayloadSha256": "8b2f2880a651f63d3175868c31af28ae32cd9a15f81c571642f8130188c214b2"
+  },
+  "evidence": {
+    "runtimeVersion": "v22.23.2",
+    "executedAt": "2026-08-28T02:04:31.868Z",
+    "reproductionCommand": "CT_STEP3_AUTHORIZED=1 node simulation/engine-v2/high-volume.mjs --mode full --owner STEP3 --suite gacha-tails --output <path>",
+    "canonicalJsonSha256": "8b2f2880a651f63d3175868c31af28ae32cd9a15f81c571642f8130188c214b2"
+  },
+  "verdict": {
+    "contractValidation": "PASS",
+    "balanceQualification": "PENDING_STEP3_FINAL_JUDGE",
+    "suiteComplete": true,
+    "step3PromotionAllowed": false,
+    "partialResultPromotion": false
+  }
+}

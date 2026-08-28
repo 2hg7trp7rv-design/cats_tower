@@ -1,0 +1,112 @@
+{
+  "schemaVersion": "2.1.0",
+  "resultId": "cats-tower-step3-high-volume-duplicate-skew-overflow-001",
+  "deterministicPayload": {
+    "mode": "STEP3_HIGH_VOLUME_SUITE",
+    "suiteId": "duplicate-skew-overflow",
+    "metricContract": "duplicate-skew-overflow-metrics-v3",
+    "candidateId": "cats-tower-v2-candidate-001",
+    "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+    "executionVersion": "cats-tower-step3-executor-v1.1.0",
+    "roundingVersion": "ct-rational-half-even-v1",
+    "seedNamespace": "cats-tower-v2-high-volume|duplicate-skew-overflow",
+    "expectedSamples": "200000",
+    "sampleCount": "200000",
+    "complete": true,
+    "metrics": {
+      "primary": {
+        "count": "200000",
+        "minimum": "0",
+        "maximum": "20",
+        "p50": "20",
+        "p90": "20",
+        "p99": "20"
+      },
+      "secondary": {
+        "count": "200000",
+        "minimum": "0",
+        "maximum": "2487500",
+        "p50": "731400",
+        "p90": "1976100",
+        "p99": "2426100"
+      },
+      "tertiary": {
+        "count": "200000",
+        "minimum": "0",
+        "maximum": "20",
+        "p50": "20",
+        "p90": "20",
+        "p99": "20"
+      },
+      "quaternary": {
+        "count": "200000",
+        "minimum": "0",
+        "maximum": "1675400",
+        "p50": "490100",
+        "p90": "1314700",
+        "p99": "1614700"
+      },
+      "counters": {
+        "characterSamples": "200000",
+        "characterCatalogSize": "24",
+        "characterPoolItemCount": "24",
+        "characterUniqueItemsSeen": "24",
+        "characterItemsAtFullMastery": "24",
+        "characterItemsWithOverflow": "24",
+        "characterMaximumCopies": "24896",
+        "characterFeaturedCopies": "1583",
+        "characterFeaturedItemMismatches": "0",
+        "characterNonFeaturedUrFeaturedViolations": "0",
+        "characterHardPityTriggered": "1413",
+        "characterFeaturedGuaranteeTriggered": "474",
+        "characterFeaturedRollHits": "1109",
+        "characterRarityNDraws": "99125",
+        "characterRarityRDraws": "59550",
+        "characterRarityRRDraws": "23738",
+        "characterRaritySRDraws": "10041",
+        "characterRaritySSRDraws": "4885",
+        "characterRarityURDraws": "2661",
+        "weaponSamples": "200000",
+        "weaponCatalogSize": "36",
+        "weaponPoolItemCount": "36",
+        "weaponUniqueItemsSeen": "36",
+        "weaponItemsAtFullMastery": "36",
+        "weaponItemsWithOverflow": "36",
+        "weaponMaximumCopies": "16775",
+        "weaponFeaturedCopies": "1560",
+        "weaponFeaturedItemMismatches": "0",
+        "weaponNonFeaturedUrFeaturedViolations": "0",
+        "weaponHardPityTriggered": "1435",
+        "weaponFeaturedGuaranteeTriggered": "478",
+        "weaponFeaturedRollHits": "1082",
+        "weaponRarityNDraws": "99007",
+        "weaponRarityRDraws": "60056",
+        "weaponRarityRRDraws": "23521",
+        "weaponRaritySRDraws": "9831",
+        "weaponRaritySSRDraws": "4934",
+        "weaponRarityURDraws": "2651"
+      },
+      "suiteDigest": "8a821f5d3211516232af6daa6bb97d7574e5b87bcf002719fcf0e5df205ec25e"
+    },
+    "violations": []
+  },
+  "hashes": {
+    "candidateSha256": "4a908482466236bda39d9d6fbce927cef4b7707c70140a332b656d79ffae877d",
+    "runPlanSha256": "bf2102593bba178fcfcec96a0f49e3d07a61ac1b36378899622c3866469985a9",
+    "executionContractSha256": "aef4aebee845c25568a489091d812e607647af813102b89765821c6cc281bf1c",
+    "deterministicPayloadSha256": "f899552a72068cc3bdfa8010336b664a4e40ab13ee8cc744249d8b5364be4830"
+  },
+  "evidence": {
+    "runtimeVersion": "v22.23.2",
+    "executedAt": "2026-08-28T02:03:26.383Z",
+    "reproductionCommand": "CT_STEP3_AUTHORIZED=1 node simulation/engine-v2/high-volume.mjs --mode full --owner STEP3 --suite duplicate-skew-overflow --output <path>",
+    "canonicalJsonSha256": "f899552a72068cc3bdfa8010336b664a4e40ab13ee8cc744249d8b5364be4830"
+  },
+  "verdict": {
+    "contractValidation": "PASS",
+    "balanceQualification": "PENDING_STEP3_FINAL_JUDGE",
+    "suiteComplete": true,
+    "step3PromotionAllowed": false,
+    "partialResultPromotion": false
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "2.1.0",
+  "resultId": "cats-tower-step3-high-volume-large-number-properties-001",
+  "deterministicPayload": {
+    "mode": "STEP3_HIGH_VOLUME_SUITE",
+    "suiteId": "large-number-properties",
+    "metricContract": "large-number-properties-metrics-v1",
+    "candidateId": "cats-tower-v2-candidate-001",
+    "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+    "executionVersion": "cats-tower-step3-executor-v1.1.0",
+    "roundingVersion": "ct-rational-half-even-v1",
+    "seedNamespace": "cats-tower-v2-high-volume|large-number-properties",
+    "expectedSamples": "100000",
+    "sampleCount": "100000",
+    "complete": true,
+    "metrics": {
+      "primary": {
+        "count": "100000",
+        "minimum": "30",
+        "maximum": "149",
+        "p50": "89",
+        "p90": "137",
+        "p99": "148"
+      },
+      "secondary": {
+        "count": "100000",
+        "minimum": "29",
+        "maximum": "148",
+        "p50": "88",
+        "p90": "136",
+        "p99": "147"
+      },
+      "counters": {
+        "symbolicRepresentations": "100000",
+        "expandedRepresentations": "0",
+        "canonicalIdPass": "100000",
+        "canonicalIdFail": "0",
+        "adjacentModifierRepeatViolations": "0",
+        "windowModifierRepeatViolations": "0",
+        "backgroundDistrictMismatches": "0",
+        "backgroundCycleMismatches": "0",
+        "maximumDigits": "149"
+      },
+      "suiteDigest": "2ac706e2870c3b9e3762ca7ea3e959f4cd02a22313671a13d28c7c5b8f44196e"
+    },
+    "violations": []
+  },
+  "hashes": {
+    "candidateSha256": "4a908482466236bda39d9d6fbce927cef4b7707c70140a332b656d79ffae877d",
+    "runPlanSha256": "bf2102593bba178fcfcec96a0f49e3d07a61ac1b36378899622c3866469985a9",
+    "executionContractSha256": "aef4aebee845c25568a489091d812e607647af813102b89765821c6cc281bf1c",
+    "deterministicPayloadSha256": "959a1c2e7296b4097e88078f42a75ec171a7a10801ccaa100fc2c3f8e46fbf2a"
+  },
+  "evidence": {
+    "runtimeVersion": "v22.23.2",
+    "executedAt": "2026-08-28T02:03:33.898Z",
+    "reproductionCommand": "CT_STEP3_AUTHORIZED=1 node simulation/engine-v2/high-volume.mjs --mode full --owner STEP3 --suite large-number-properties --output <path>",
+    "canonicalJsonSha256": "959a1c2e7296b4097e88078f42a75ec171a7a10801ccaa100fc2c3f8e46fbf2a"
+  },
+  "verdict": {
+    "contractValidation": "PASS",
+    "balanceQualification": "PENDING_STEP3_FINAL_JUDGE",
+    "suiteComplete": true,
+    "step3PromotionAllowed": false,
+    "partialResultPromotion": false
+  }
+}

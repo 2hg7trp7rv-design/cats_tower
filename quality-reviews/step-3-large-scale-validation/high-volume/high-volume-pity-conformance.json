@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "2.1.0",
+  "resultId": "cats-tower-step3-high-volume-pity-conformance-001",
+  "deterministicPayload": {
+    "mode": "STEP3_HIGH_VOLUME_SUITE",
+    "suiteId": "pity-conformance",
+    "metricContract": "pity-conformance-metrics-v1",
+    "candidateId": "cats-tower-v2-candidate-001",
+    "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+    "executionVersion": "cats-tower-step3-executor-v1.1.0",
+    "roundingVersion": "ct-rational-half-even-v1",
+    "seedNamespace": "cats-tower-v2-high-volume|pity-conformance",
+    "expectedSamples": "1000000",
+    "sampleCount": "1000000",
+    "complete": true,
+    "metrics": {
+      "primary": {
+        "count": "1000000",
+        "minimum": "1",
+        "maximum": "100",
+        "p50": "51",
+        "p90": "91",
+        "p99": "99"
+      },
+      "secondary": {
+        "count": "1000000",
+        "minimum": "1",
+        "maximum": "200",
+        "p50": "101",
+        "p90": "181",
+        "p99": "199"
+      },
+      "counters": {
+        "hardBoundaryCases": "9937",
+        "hardBoundaryPass": "9937",
+        "featuredBoundaryCases": "5012",
+        "featuredBoundaryPass": "5012",
+        "earlyHardFalse": "990063",
+        "earlyFeaturedFalse": "994988",
+        "boundaryViolations": "0"
+      },
+      "suiteDigest": "fe78b6321c8ba09d24d318110706bc019519d7aa754b4f59d170d0787c24b26e"
+    },
+    "violations": []
+  },
+  "hashes": {
+    "candidateSha256": "4a908482466236bda39d9d6fbce927cef4b7707c70140a332b656d79ffae877d",
+    "runPlanSha256": "bf2102593bba178fcfcec96a0f49e3d07a61ac1b36378899622c3866469985a9",
+    "executionContractSha256": "aef4aebee845c25568a489091d812e607647af813102b89765821c6cc281bf1c",
+    "deterministicPayloadSha256": "228202cbaa891d9e94d729732782c19ea481d57868e3babe09e134cde33c3a7c"
+  },
+  "evidence": {
+    "runtimeVersion": "v22.23.2",
+    "executedAt": "2026-08-28T02:03:29.089Z",
+    "reproductionCommand": "CT_STEP3_AUTHORIZED=1 node simulation/engine-v2/high-volume.mjs --mode full --owner STEP3 --suite pity-conformance --output <path>",
+    "canonicalJsonSha256": "228202cbaa891d9e94d729732782c19ea481d57868e3babe09e134cde33c3a7c"
+  },
+  "verdict": {
+    "contractValidation": "PASS",
+    "balanceQualification": "PENDING_STEP3_FINAL_JUDGE",
+    "suiteComplete": true,
+    "step3PromotionAllowed": false,
+    "partialResultPromotion": false
+  }
+}
