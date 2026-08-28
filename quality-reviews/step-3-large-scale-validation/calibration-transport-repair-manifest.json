@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-calibration-transport-repair-manifest",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "repairInvocation": {
+    "head": "0f15be9e8e93c114a98182f3149442e7f0204c2c",
+    "tree": "13a10da4440f9c0da188caeb11018502727207bd",
+    "workflow": "Repair Step 3 calibration artifact transport",
+    "runId": "33134128875",
+    "runAttempt": "1",
+    "job": "repair-transport",
+    "transportAddendumBlob": "a8c853c1fe61e2ff5f5fced6d3776bcc97821d21"
+  },
+  "source": {
+    "runId": "33133249662",
+    "jobId": "98727326189",
+    "head": "3363c36d91d47b177b1dcf4af053c00b23954d7a",
+    "tree": "a60ce0417851573a4c3895b30872fd3d0860a328",
+    "artifactId": "9671238966",
+    "artifactDigest": "sha256:b8dadc084d2aadb9406c06fdaffaf449aad96ea20861f3c47da4fa0ccfc5fb83"
+  },
+  "preservedFiles": {
+    "gameplay-calibration-result.json": {
+      "bytes": "1913915",
+      "sha256": "f77eb5fdb805ea484a02b165105c585d07e77d3097fcbf42637f7a96618d90bb"
+    },
+    "calibration-audit.json": {
+      "bytes": "43002",
+      "sha256": "4b0f0004625ea923199f32b28606a4599da08f3ef3116c1e3a6460f0730da7c7"
+    },
+    "execution-manifest.json": {
+      "bytes": "1590",
+      "sha256": "f270136f0021c772d94e415a8c6e72f119b17964067ac59ff87d246f39d33d8c"
+    }
+  },
+  "checksumPaths": "RELATIVE_ARTIFACT_MEMBERS",
+  "sourceFilesModified": false,
+  "holdoutExecuted": false,
+  "verdict": "PASS_CALIBRATION_TRANSPORT_REPAIRED"
+}

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 2,
+  "artifactId": "cats-tower-step3-calibration-execution-manifest",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "head": "3363c36d91d47b177b1dcf4af053c00b23954d7a",
+  "tree": "a60ce0417851573a4c3895b30872fd3d0860a328",
+  "workflow": "Execute Step 3 calibration",
+  "runId": "33133249662",
+  "runAttempt": "1",
+  "job": "calibration",
+  "runtimeVersion": "v22.23.2",
+  "inputs": {
+    "acceptanceBlob": "d1392c431282d0faae9e9ad7f1c22161a3c5caad",
+    "addendumBlob": "9d0c89489363340c4954b6912fb105ca6789b462",
+    "auditScriptBlob": "d0545a851666bc2dbc25f03c82cc02a7ca615cda",
+    "step1SealBlob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
+    "step2SealBlob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
+    "runPlanBlob": "a04632e41d78dd15b36e95cd6998e8a8648b9a6c",
+    "executionContractBlob": "82685b646358129d7e66a810b267777d6bf5af92"
+  },
+  "result": {
+    "path": "gameplay-calibration-result.json",
+    "scenarioCount": "12000",
+    "sha256": "f77eb5fdb805ea484a02b165105c585d07e77d3097fcbf42637f7a96618d90bb",
+    "bytes": "1913915",
+    "deterministicPayloadSha256": "df7cbceb0569f40eefee43dbd81d0b2c4698a44104f88a312ce693471f746e22",
+    "canonicalJsonSha256": "df7cbceb0569f40eefee43dbd81d0b2c4698a44104f88a312ce693471f746e22"
+  },
+  "audit": {
+    "path": "calibration-audit.json",
+    "sha256": "4b0f0004625ea923199f32b28606a4599da08f3ef3116c1e3a6460f0730da7c7",
+    "bytes": "43002",
+    "verdict": "PASS_CALIBRATION_GATE_CANDIDATE"
+  },
+  "holdoutExecuted": false,
+  "verdict": "PASS_CALIBRATION_EXECUTION_ARTIFACT_READY"
+}

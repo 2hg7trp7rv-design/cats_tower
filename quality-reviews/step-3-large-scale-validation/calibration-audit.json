@@ -1,0 +1,1448 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-calibration-audit-v1",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "auditHead": "3363c36d91d47b177b1dcf4af053c00b23954d7a",
+  "auditTree": "a60ce0417851573a4c3895b30872fd3d0860a328",
+  "sourceBlobs": {
+    "candidate": {
+      "path": "simulation/candidate-v2.json",
+      "blob": "1e633de1c6ecb1f98cee262b88575387816cf310"
+    },
+    "plan": {
+      "path": "simulation/run-plan-v2.json",
+      "blob": "a04632e41d78dd15b36e95cd6998e8a8648b9a6c"
+    },
+    "execution": {
+      "path": "simulation/execution-contract-v2.json",
+      "blob": "82685b646358129d7e66a810b267777d6bf5af92"
+    },
+    "acceptance": {
+      "path": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
+      "blob": "d1392c431282d0faae9e9ad7f1c22161a3c5caad"
+    },
+    "addendum": {
+      "path": "quality-reviews/step-3-large-scale-validation/acceptance-addendum-calibration-001.json",
+      "blob": "9d0c89489363340c4954b6912fb105ca6789b462"
+    },
+    "governanceReadback": {
+      "path": "quality-reviews/step-2-governance-repair-round-001/live-readback.json",
+      "blob": "692434fafd19d1e5470fe58808fd72af7286ec35"
+    }
+  },
+  "result": {
+    "sourcePath": "/home/runner/work/_temp/cats-step3-calibration/gameplay-calibration-result.json",
+    "fileBytes": "1913915",
+    "fileSha256": "f77eb5fdb805ea484a02b165105c585d07e77d3097fcbf42637f7a96618d90bb",
+    "deterministicPayloadSha256": "df7cbceb0569f40eefee43dbd81d0b2c4698a44104f88a312ce693471f746e22",
+    "canonicalJsonSha256": "df7cbceb0569f40eefee43dbd81d0b2c4698a44104f88a312ce693471f746e22",
+    "scenarioCount": "12000",
+    "cellCount": "15",
+    "executedAt": "2026-08-28T01:39:39.393Z"
+  },
+  "replay": {
+    "scenarioCount": "12000",
+    "replayMismatchCount": "0",
+    "duplicateInputDigests": "0",
+    "duplicateScenarioDigests": "0",
+    "uniqueInputDigests": "12000",
+    "uniqueScenarioDigests": "12000"
+  },
+  "compactSummary": {
+    "buildCount": "3",
+    "personaCount": "5",
+    "cellCount": "15",
+    "firstResetMinutes": {
+      "count": "12000",
+      "minimum": "20",
+      "maximum": "29",
+      "p50": "24",
+      "p90": "27",
+      "p99": "29"
+    },
+    "featuredGuaranteeDay": {
+      "count": "12000",
+      "minimum": "8",
+      "maximum": "40",
+      "p50": "20",
+      "p90": "40",
+      "p99": "40"
+    }
+  },
+  "cells": [
+    {
+      "cellId": "calibration|build.combat|no-ad-f2p",
+      "buildId": "build.combat",
+      "personaId": "no-ad-f2p",
+      "seedCount": "800",
+      "firstResetMinutes": {
+        "count": "800",
+        "minimum": "26",
+        "maximum": "28",
+        "p50": "27",
+        "p90": "28",
+        "p99": "28"
+      },
+      "featuredGuaranteeDay": {
+        "count": "800",
+        "minimum": "40",
+        "maximum": "40",
+        "p50": "40",
+        "p90": "40",
+        "p99": "40"
+      },
+      "firstEvolutionUncovered": "0",
+      "repeatedResetSequenceViolations": "0",
+      "horizonP50": {
+        "1-10F": "9",
+        "100F": "115",
+        "1000F": "2398",
+        "10000F-or-equivalent": "42030",
+        "repeated-resets": "2403",
+        "30-45-day-economy": "2395"
+      }
+    },
+    {
+      "cellId": "calibration|build.combat|rewarded-ad-f2p",
+      "buildId": "build.combat",
+      "personaId": "rewarded-ad-f2p",
+      "seedCount": "800",
+      "firstResetMinutes": {
+        "count": "800",
+        "minimum": "25",
+        "maximum": "27",
+        "p50": "26",
+        "p90": "27",
+        "p99": "27"
+      },
+      "featuredGuaranteeDay": {
+        "count": "800",
+        "minimum": "29",
+        "maximum": "29",
+        "p50": "29",
+        "p90": "29",
+        "p99": "29"
+      },
+      "firstEvolutionUncovered": "0",
+      "repeatedResetSequenceViolations": "0",
+      "horizonP50": {
+        "1-10F": "7",
+        "100F": "98",
+        "1000F": "2031",
+        "10000F-or-equivalent": "35579",
+        "repeated-resets": "2035",
+        "30-45-day-economy": "2035"
+      }
+    },
+    {
+      "cellId": "calibration|build.combat|monthly-pass",
+      "buildId": "build.combat",
+      "personaId": "monthly-pass",
+      "seedCount": "800",
+      "firstResetMinutes": {
+        "count": "800",
+        "minimum": "23",
+        "maximum": "25",
+        "p50": "24",
+        "p90": "25",
+        "p99": "25"
+      },
+      "featuredGuaranteeDay": {
+        "count": "800",
+        "minimum": "20",
+        "maximum": "20",
+        "p50": "20",
+        "p90": "20",
+        "p99": "20"
+      },
+      "firstEvolutionUncovered": "0",
+      "repeatedResetSequenceViolations": "0",
+      "horizonP50": {
+        "1-10F": "5",
+        "100F": "68",
+        "1000F": "1411",
+        "10000F-or-equivalent": "24701",
+        "repeated-resets": "1416",
+        "30-45-day-economy": "1414"
+      }
+    },
+    {
+      "cellId": "calibration|build.combat|controlled-payer",
+      "buildId": "build.combat",
+      "personaId": "controlled-payer",
+      "seedCount": "800",
+      "firstResetMinutes": {
+        "count": "800",
+        "minimum": "22",
+        "maximum": "24",
+        "p50": "23",
+        "p90": "24",
+        "p99": "24"
+      },
+      "featuredGuaranteeDay": {
+        "count": "800",
+        "minimum": "13",
+        "maximum": "13",
+        "p50": "13",
+        "p90": "13",
+        "p99": "13"
+      },
+      "firstEvolutionUncovered": "0",
+      "repeatedResetSequenceViolations": "0",
+      "horizonP50": {
+        "1-10F": "3",
+        "100F": "43",
+        "1000F": "887",
+        "10000F-or-equivalent": "15579",
+        "repeated-resets": "890",
+        "30-45-day-economy": "890"
+      }
+    },
+    {
+      "cellId": "calibration|build.combat|high-spend-stress",
+      "buildId": "build.combat",
+      "personaId": "high-spend-stress",
+      "seedCount": "800",
+      "firstResetMinutes": {
+        "count": "800",
+        "minimum": "21",
+        "maximum": "23",
+        "p50": "22",
+        "p90": "23",
+        "p99": "23"
+      },
+      "featuredGuaranteeDay": {
+        "count": "800",
+        "minimum": "8",
+        "maximum": "8",
+        "p50": "8",
+        "p90": "8",
+        "p99": "8"
+      },
+      "firstEvolutionUncovered": "0",
+      "repeatedResetSequenceViolations": "0",
+      "horizonP50": {
+        "1-10F": "2",
+        "100F": "26",
+        "1000F": "534",
+        "10000F-or-equivalent": "9353",
+        "repeated-resets": "533",
+        "30-45-day-economy": "533"
+      }
+    },
+    {
+      "cellId": "calibration|build.reinforcement|no-ad-f2p",
+      "buildId": "build.reinforcement",
+      "personaId": "no-ad-f2p",
+      "seedCount": "800",
+      "firstResetMinutes": {
+        "count": "800",
+        "minimum": "25",
+        "maximum": "27",
+        "p50": "26",
+        "p90": "27",
+        "p99": "27"
+      },
+      "featuredGuaranteeDay": {
+        "count": "800",
+        "minimum": "40",
+        "maximum": "40",
+        "p50": "40",
+        "p90": "40",
+        "p99": "40"
+      },
+      "firstEvolutionUncovered": "0",
+      "repeatedResetSequenceViolations": "0",
+      "horizonP50": {
+        "1-10F": "9",
+        "100F": "120",
+        "1000F": "2498",
+        "10000F-or-equivalent": "43724",
+        "repeated-resets": "2497",
+        "30-45-day-economy": "2498"
+      }
+    },
+    {
+      "cellId": "calibration|build.reinforcement|rewarded-ad-f2p",
+      "buildId": "build.reinforcement",
+      "personaId": "rewarded-ad-f2p",
+      "seedCount": "800",
+      "firstResetMinutes": {
+        "count": "800",
+        "minimum": "24",
+        "maximum": "26",
+        "p50": "25",
+        "p90": "26",
+        "p99": "26"
+      },
+      "featuredGuaranteeDay": {
+        "count": "800",
+        "minimum": "29",
+        "maximum": "29",
+        "p50": "29",
+        "p90": "29",
+        "p99": "29"
+      },
+      "firstEvolutionUncovered": "0",
+      "repeatedResetSequenceViolations": "0",
+      "horizonP50": {
+        "1-10F": "8",
+        "100F": "102",
+        "1000F": "2117",
+        "10000F-or-equivalent": "37121",
+        "repeated-resets": "2120",
+        "30-45-day-economy": "2119"
+      }
+    },
+    {
+      "cellId": "calibration|build.reinforcement|monthly-pass",
+      "buildId": "build.reinforcement",
+      "personaId": "monthly-pass",
+      "seedCount": "800",
+      "firstResetMinutes": {
+        "count": "800",
+        "minimum": "22",
+        "maximum": "24",
+        "p50": "23",
+        "p90": "24",
+        "p99": "24"
+      },
+      "featuredGuaranteeDay": {
+        "count": "800",
+        "minimum": "20",
+        "maximum": "20",
+        "p50": "20",
+        "p90": "20",
+        "p99": "20"
+      },
+      "firstEvolutionUncovered": "0",
+      "repeatedResetSequenceViolations": "0",
+      "horizonP50": {
+        "1-10F": "5",
+        "100F": "71",
+        "1000F": "1471",
+        "10000F-or-equivalent": "25769",
+        "repeated-resets": "1473",
+        "30-45-day-economy": "1472"
+      }
+    },
+    {
+      "cellId": "calibration|build.reinforcement|controlled-payer",
+      "buildId": "build.reinforcement",
+      "personaId": "controlled-payer",
+      "seedCount": "800",
+      "firstResetMinutes": {
+        "count": "800",
+        "minimum": "21",
+        "maximum": "23",
+        "p50": "22",
+        "p90": "23",
+        "p99": "23"
+      },
+      "featuredGuaranteeDay": {
+        "count": "800",
+        "minimum": "13",
+        "maximum": "13",
+        "p50": "13",
+        "p90": "13",
+        "p99": "13"
+      },
+      "firstEvolutionUncovered": "0",
+      "repeatedResetSequenceViolations": "0",
+      "horizonP50": {
+        "1-10F": "4",
+        "100F": "45",
+        "1000F": "924",
+        "10000F-or-equivalent": "16175",
+        "repeated-resets": "927",
+        "30-45-day-economy": "926"
+      }
+    },
+    {
+      "cellId": "calibration|build.reinforcement|high-spend-stress",
+      "buildId": "build.reinforcement",
+      "personaId": "high-spend-stress",
+      "seedCount": "800",
+      "firstResetMinutes": {
+        "count": "800",
+        "minimum": "20",
+        "maximum": "22",
+        "p50": "21",
+        "p90": "22",
+        "p99": "22"
+      },
+      "featuredGuaranteeDay": {
+        "count": "800",
+        "minimum": "8",
+        "maximum": "8",
+        "p50": "8",
+        "p90": "8",
+        "p99": "8"
+      },
+      "firstEvolutionUncovered": "0",
+      "repeatedResetSequenceViolations": "0",
+      "horizonP50": {
+        "1-10F": "2",
+        "100F": "27",
+        "1000F": "556",
+        "10000F-or-equivalent": "9720",
+        "repeated-resets": "557",
+        "30-45-day-economy": "558"
+      }
+    },
+    {
+      "cellId": "calibration|build.commerce|no-ad-f2p",
+      "buildId": "build.commerce",
+      "personaId": "no-ad-f2p",
+      "seedCount": "800",
+      "firstResetMinutes": {
+        "count": "800",
+        "minimum": "27",
+        "maximum": "29",
+        "p50": "28",
+        "p90": "29",
+        "p99": "29"
+      },
+      "featuredGuaranteeDay": {
+        "count": "800",
+        "minimum": "40",
+        "maximum": "40",
+        "p50": "40",
+        "p90": "40",
+        "p99": "40"
+      },
+      "firstEvolutionUncovered": "0",
+      "repeatedResetSequenceViolations": "0",
+      "horizonP50": {
+        "1-10F": "9",
+        "100F": "125",
+        "1000F": "2600",
+        "10000F-or-equivalent": "45539",
+        "repeated-resets": "2604",
+        "30-45-day-economy": "2608"
+      }
+    },
+    {
+      "cellId": "calibration|build.commerce|rewarded-ad-f2p",
+      "buildId": "build.commerce",
+      "personaId": "rewarded-ad-f2p",
+      "seedCount": "800",
+      "firstResetMinutes": {
+        "count": "800",
+        "minimum": "26",
+        "maximum": "28",
+        "p50": "27",
+        "p90": "28",
+        "p99": "28"
+      },
+      "featuredGuaranteeDay": {
+        "count": "800",
+        "minimum": "29",
+        "maximum": "29",
+        "p50": "29",
+        "p90": "29",
+        "p99": "29"
+      },
+      "firstEvolutionUncovered": "0",
+      "repeatedResetSequenceViolations": "0",
+      "horizonP50": {
+        "1-10F": "8",
+        "100F": "106",
+        "1000F": "2212",
+        "10000F-or-equivalent": "38646",
+        "repeated-resets": "2204",
+        "30-45-day-economy": "2207"
+      }
+    },
+    {
+      "cellId": "calibration|build.commerce|monthly-pass",
+      "buildId": "build.commerce",
+      "personaId": "monthly-pass",
+      "seedCount": "800",
+      "firstResetMinutes": {
+        "count": "800",
+        "minimum": "24",
+        "maximum": "26",
+        "p50": "25",
+        "p90": "26",
+        "p99": "26"
+      },
+      "featuredGuaranteeDay": {
+        "count": "800",
+        "minimum": "20",
+        "maximum": "20",
+        "p50": "20",
+        "p90": "20",
+        "p99": "20"
+      },
+      "firstEvolutionUncovered": "0",
+      "repeatedResetSequenceViolations": "0",
+      "horizonP50": {
+        "1-10F": "6",
+        "100F": "74",
+        "1000F": "1532",
+        "10000F-or-equivalent": "26890",
+        "repeated-resets": "1540",
+        "30-45-day-economy": "1535"
+      }
+    },
+    {
+      "cellId": "calibration|build.commerce|controlled-payer",
+      "buildId": "build.commerce",
+      "personaId": "controlled-payer",
+      "seedCount": "800",
+      "firstResetMinutes": {
+        "count": "800",
+        "minimum": "23",
+        "maximum": "25",
+        "p50": "24",
+        "p90": "25",
+        "p99": "25"
+      },
+      "featuredGuaranteeDay": {
+        "count": "800",
+        "minimum": "13",
+        "maximum": "13",
+        "p50": "13",
+        "p90": "13",
+        "p99": "13"
+      },
+      "firstEvolutionUncovered": "0",
+      "repeatedResetSequenceViolations": "0",
+      "horizonP50": {
+        "1-10F": "4",
+        "100F": "47",
+        "1000F": "965",
+        "10000F-or-equivalent": "16894",
+        "repeated-resets": "966",
+        "30-45-day-economy": "968"
+      }
+    },
+    {
+      "cellId": "calibration|build.commerce|high-spend-stress",
+      "buildId": "build.commerce",
+      "personaId": "high-spend-stress",
+      "seedCount": "800",
+      "firstResetMinutes": {
+        "count": "800",
+        "minimum": "22",
+        "maximum": "24",
+        "p50": "23",
+        "p90": "24",
+        "p99": "24"
+      },
+      "featuredGuaranteeDay": {
+        "count": "800",
+        "minimum": "8",
+        "maximum": "8",
+        "p50": "8",
+        "p90": "8",
+        "p99": "8"
+      },
+      "firstEvolutionUncovered": "0",
+      "repeatedResetSequenceViolations": "0",
+      "horizonP50": {
+        "1-10F": "2",
+        "100F": "28",
+        "1000F": "580",
+        "10000F-or-equivalent": "10154",
+        "repeated-resets": "581",
+        "30-45-day-economy": "581"
+      }
+    }
+  ],
+  "criteria": [
+    {
+      "id": "CAL-DATA-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "scenarioCount": "12000",
+        "cellCount": "15",
+        "complete": true
+      }
+    },
+    {
+      "id": "CAL-DETERMINISM-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "replayMismatchCount": "0",
+        "duplicateInputDigests": "0",
+        "duplicateScenarioDigests": "0",
+        "uniqueInputDigests": "12000",
+        "uniqueScenarioDigests": "12000"
+      }
+    },
+    {
+      "id": "CAL-RESET-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "count": "12000",
+        "minimum": "20",
+        "maximum": "29",
+        "p50": "24",
+        "p90": "27",
+        "p99": "29"
+      }
+    },
+    {
+      "id": "CAL-RESET-02",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "repeatedResetSequenceViolations": "0",
+        "runMinutesByIndex": [
+          {
+            "run": "1",
+            "count": "12000",
+            "minimum": "22",
+            "maximum": "27",
+            "p50": "24",
+            "p90": "27",
+            "p99": "27"
+          },
+          {
+            "run": "2",
+            "count": "12000",
+            "minimum": "19",
+            "maximum": "25",
+            "p50": "21",
+            "p90": "24",
+            "p99": "25"
+          },
+          {
+            "run": "3",
+            "count": "12000",
+            "minimum": "16",
+            "maximum": "23",
+            "p50": "19",
+            "p90": "22",
+            "p99": "23"
+          },
+          {
+            "run": "4",
+            "count": "12000",
+            "minimum": "14",
+            "maximum": "21",
+            "p50": "17",
+            "p90": "20",
+            "p99": "21"
+          },
+          {
+            "run": "5",
+            "count": "12000",
+            "minimum": "12",
+            "maximum": "20",
+            "p50": "15",
+            "p90": "19",
+            "p99": "20"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CAL-EVOLUTION-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "uncoveredScenarios": "0",
+        "firstEffectiveResetMinimumReward": "15",
+        "firstStageCost": "10",
+        "orderedCatchUp": true,
+        "nonBlockingContinuation": true,
+        "adOrPaymentRequired": false
+      }
+    },
+    {
+      "id": "CAL-F2P-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "guaranteeDay": "40",
+        "combinedDailyDraws": "44",
+        "progressionContinues": true,
+        "evolutionCoverage": true
+      }
+    },
+    {
+      "id": "CAL-MONETIZATION-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "personas": [
+          {
+            "personaId": "no-ad-f2p",
+            "progressMultiplier": "1.00",
+            "declaredMaximum": "1.00",
+            "acceptanceMaximum": "1.00",
+            "progressWithinDeclaredMaximum": true,
+            "declaredWithinAcceptanceMaximum": true
+          },
+          {
+            "personaId": "rewarded-ad-f2p",
+            "progressMultiplier": "1.18",
+            "declaredMaximum": "1.25",
+            "acceptanceMaximum": "1.25",
+            "progressWithinDeclaredMaximum": true,
+            "declaredWithinAcceptanceMaximum": true
+          },
+          {
+            "personaId": "monthly-pass",
+            "progressMultiplier": "1.70",
+            "declaredMaximum": "2.00",
+            "acceptanceMaximum": "2.00",
+            "progressWithinDeclaredMaximum": true,
+            "declaredWithinAcceptanceMaximum": true
+          },
+          {
+            "personaId": "controlled-payer",
+            "progressMultiplier": "2.70",
+            "declaredMaximum": "3.00",
+            "acceptanceMaximum": "3.00",
+            "progressWithinDeclaredMaximum": true,
+            "declaredWithinAcceptanceMaximum": true
+          },
+          {
+            "personaId": "high-spend-stress",
+            "progressMultiplier": "4.50",
+            "declaredMaximum": "5.00",
+            "acceptanceMaximum": "5.00",
+            "progressWithinDeclaredMaximum": true,
+            "declaredWithinAcceptanceMaximum": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "CAL-BUILD-01-R1",
+      "severity": "P1",
+      "status": "PASS",
+      "detail": {
+        "violations": "0",
+        "universalBestBuildIds": [],
+        "bestByDimension": {
+          "power": [
+            "build.combat"
+          ],
+          "economy": [
+            "build.commerce"
+          ],
+          "reclear": [
+            "build.commerce"
+          ]
+        },
+        "dimensions": [
+          {
+            "buildId": "build.combat",
+            "powerMultiplier": "1.00",
+            "economyMultiplier": "1.00",
+            "reclearMultiplier": "1.10"
+          },
+          {
+            "buildId": "build.reinforcement",
+            "powerMultiplier": "0.96",
+            "economyMultiplier": "1.02",
+            "reclearMultiplier": "1.16"
+          },
+          {
+            "buildId": "build.commerce",
+            "powerMultiplier": "0.92",
+            "economyMultiplier": "1.10",
+            "reclearMultiplier": "1.20"
+          }
+        ],
+        "comparisons": [
+          {
+            "personaId": "no-ad-f2p",
+            "horizonId": "1-10F",
+            "p50ByBuild": {
+              "build.combat": "9",
+              "build.reinforcement": "9",
+              "build.commerce": "9"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "9",
+            "slowestBuild": "build.combat",
+            "slowestMinutes": "9",
+            "ratioBasisPointsCeil": "10000",
+            "absoluteSpreadMinutes": "0",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "no-ad-f2p",
+            "horizonId": "100F",
+            "p50ByBuild": {
+              "build.combat": "115",
+              "build.reinforcement": "120",
+              "build.commerce": "125"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "115",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "125",
+            "ratioBasisPointsCeil": "10870",
+            "absoluteSpreadMinutes": "10",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "no-ad-f2p",
+            "horizonId": "1000F",
+            "p50ByBuild": {
+              "build.combat": "2398",
+              "build.reinforcement": "2498",
+              "build.commerce": "2600"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "2398",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "2600",
+            "ratioBasisPointsCeil": "10843",
+            "absoluteSpreadMinutes": "202",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "no-ad-f2p",
+            "horizonId": "10000F-or-equivalent",
+            "p50ByBuild": {
+              "build.combat": "42030",
+              "build.reinforcement": "43724",
+              "build.commerce": "45539"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "42030",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "45539",
+            "ratioBasisPointsCeil": "10835",
+            "absoluteSpreadMinutes": "3509",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "no-ad-f2p",
+            "horizonId": "repeated-resets",
+            "p50ByBuild": {
+              "build.combat": "2403",
+              "build.reinforcement": "2497",
+              "build.commerce": "2604"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "2403",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "2604",
+            "ratioBasisPointsCeil": "10837",
+            "absoluteSpreadMinutes": "201",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "no-ad-f2p",
+            "horizonId": "30-45-day-economy",
+            "p50ByBuild": {
+              "build.combat": "2395",
+              "build.reinforcement": "2498",
+              "build.commerce": "2608"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "2395",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "2608",
+            "ratioBasisPointsCeil": "10890",
+            "absoluteSpreadMinutes": "213",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "rewarded-ad-f2p",
+            "horizonId": "1-10F",
+            "p50ByBuild": {
+              "build.combat": "7",
+              "build.reinforcement": "8",
+              "build.commerce": "8"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "7",
+            "slowestBuild": "build.reinforcement",
+            "slowestMinutes": "8",
+            "ratioBasisPointsCeil": "11429",
+            "absoluteSpreadMinutes": "1",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "rewarded-ad-f2p",
+            "horizonId": "100F",
+            "p50ByBuild": {
+              "build.combat": "98",
+              "build.reinforcement": "102",
+              "build.commerce": "106"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "98",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "106",
+            "ratioBasisPointsCeil": "10817",
+            "absoluteSpreadMinutes": "8",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "rewarded-ad-f2p",
+            "horizonId": "1000F",
+            "p50ByBuild": {
+              "build.combat": "2031",
+              "build.reinforcement": "2117",
+              "build.commerce": "2212"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "2031",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "2212",
+            "ratioBasisPointsCeil": "10892",
+            "absoluteSpreadMinutes": "181",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "rewarded-ad-f2p",
+            "horizonId": "10000F-or-equivalent",
+            "p50ByBuild": {
+              "build.combat": "35579",
+              "build.reinforcement": "37121",
+              "build.commerce": "38646"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "35579",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "38646",
+            "ratioBasisPointsCeil": "10863",
+            "absoluteSpreadMinutes": "3067",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "rewarded-ad-f2p",
+            "horizonId": "repeated-resets",
+            "p50ByBuild": {
+              "build.combat": "2035",
+              "build.reinforcement": "2120",
+              "build.commerce": "2204"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "2035",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "2204",
+            "ratioBasisPointsCeil": "10831",
+            "absoluteSpreadMinutes": "169",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "rewarded-ad-f2p",
+            "horizonId": "30-45-day-economy",
+            "p50ByBuild": {
+              "build.combat": "2035",
+              "build.reinforcement": "2119",
+              "build.commerce": "2207"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "2035",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "2207",
+            "ratioBasisPointsCeil": "10846",
+            "absoluteSpreadMinutes": "172",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "monthly-pass",
+            "horizonId": "1-10F",
+            "p50ByBuild": {
+              "build.combat": "5",
+              "build.reinforcement": "5",
+              "build.commerce": "6"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "5",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "6",
+            "ratioBasisPointsCeil": "12000",
+            "absoluteSpreadMinutes": "1",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "monthly-pass",
+            "horizonId": "100F",
+            "p50ByBuild": {
+              "build.combat": "68",
+              "build.reinforcement": "71",
+              "build.commerce": "74"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "68",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "74",
+            "ratioBasisPointsCeil": "10883",
+            "absoluteSpreadMinutes": "6",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "monthly-pass",
+            "horizonId": "1000F",
+            "p50ByBuild": {
+              "build.combat": "1411",
+              "build.reinforcement": "1471",
+              "build.commerce": "1532"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "1411",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "1532",
+            "ratioBasisPointsCeil": "10858",
+            "absoluteSpreadMinutes": "121",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "monthly-pass",
+            "horizonId": "10000F-or-equivalent",
+            "p50ByBuild": {
+              "build.combat": "24701",
+              "build.reinforcement": "25769",
+              "build.commerce": "26890"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "24701",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "26890",
+            "ratioBasisPointsCeil": "10887",
+            "absoluteSpreadMinutes": "2189",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "monthly-pass",
+            "horizonId": "repeated-resets",
+            "p50ByBuild": {
+              "build.combat": "1416",
+              "build.reinforcement": "1473",
+              "build.commerce": "1540"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "1416",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "1540",
+            "ratioBasisPointsCeil": "10876",
+            "absoluteSpreadMinutes": "124",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "monthly-pass",
+            "horizonId": "30-45-day-economy",
+            "p50ByBuild": {
+              "build.combat": "1414",
+              "build.reinforcement": "1472",
+              "build.commerce": "1535"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "1414",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "1535",
+            "ratioBasisPointsCeil": "10856",
+            "absoluteSpreadMinutes": "121",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "controlled-payer",
+            "horizonId": "1-10F",
+            "p50ByBuild": {
+              "build.combat": "3",
+              "build.reinforcement": "4",
+              "build.commerce": "4"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "3",
+            "slowestBuild": "build.reinforcement",
+            "slowestMinutes": "4",
+            "ratioBasisPointsCeil": "13334",
+            "absoluteSpreadMinutes": "1",
+            "appliedRule": "ABSOLUTE_SPREAD_AT_MOST_ONE_MINUTE",
+            "pass": true
+          },
+          {
+            "personaId": "controlled-payer",
+            "horizonId": "100F",
+            "p50ByBuild": {
+              "build.combat": "43",
+              "build.reinforcement": "45",
+              "build.commerce": "47"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "43",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "47",
+            "ratioBasisPointsCeil": "10931",
+            "absoluteSpreadMinutes": "4",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "controlled-payer",
+            "horizonId": "1000F",
+            "p50ByBuild": {
+              "build.combat": "887",
+              "build.reinforcement": "924",
+              "build.commerce": "965"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "887",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "965",
+            "ratioBasisPointsCeil": "10880",
+            "absoluteSpreadMinutes": "78",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "controlled-payer",
+            "horizonId": "10000F-or-equivalent",
+            "p50ByBuild": {
+              "build.combat": "15579",
+              "build.reinforcement": "16175",
+              "build.commerce": "16894"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "15579",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "16894",
+            "ratioBasisPointsCeil": "10845",
+            "absoluteSpreadMinutes": "1315",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "controlled-payer",
+            "horizonId": "repeated-resets",
+            "p50ByBuild": {
+              "build.combat": "890",
+              "build.reinforcement": "927",
+              "build.commerce": "966"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "890",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "966",
+            "ratioBasisPointsCeil": "10854",
+            "absoluteSpreadMinutes": "76",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "controlled-payer",
+            "horizonId": "30-45-day-economy",
+            "p50ByBuild": {
+              "build.combat": "890",
+              "build.reinforcement": "926",
+              "build.commerce": "968"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "890",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "968",
+            "ratioBasisPointsCeil": "10877",
+            "absoluteSpreadMinutes": "78",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "high-spend-stress",
+            "horizonId": "1-10F",
+            "p50ByBuild": {
+              "build.combat": "2",
+              "build.reinforcement": "2",
+              "build.commerce": "2"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "2",
+            "slowestBuild": "build.combat",
+            "slowestMinutes": "2",
+            "ratioBasisPointsCeil": "10000",
+            "absoluteSpreadMinutes": "0",
+            "appliedRule": "ABSOLUTE_SPREAD_AT_MOST_ONE_MINUTE",
+            "pass": true
+          },
+          {
+            "personaId": "high-spend-stress",
+            "horizonId": "100F",
+            "p50ByBuild": {
+              "build.combat": "26",
+              "build.reinforcement": "27",
+              "build.commerce": "28"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "26",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "28",
+            "ratioBasisPointsCeil": "10770",
+            "absoluteSpreadMinutes": "2",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "high-spend-stress",
+            "horizonId": "1000F",
+            "p50ByBuild": {
+              "build.combat": "534",
+              "build.reinforcement": "556",
+              "build.commerce": "580"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "534",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "580",
+            "ratioBasisPointsCeil": "10862",
+            "absoluteSpreadMinutes": "46",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "high-spend-stress",
+            "horizonId": "10000F-or-equivalent",
+            "p50ByBuild": {
+              "build.combat": "9353",
+              "build.reinforcement": "9720",
+              "build.commerce": "10154"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "9353",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "10154",
+            "ratioBasisPointsCeil": "10857",
+            "absoluteSpreadMinutes": "801",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "high-spend-stress",
+            "horizonId": "repeated-resets",
+            "p50ByBuild": {
+              "build.combat": "533",
+              "build.reinforcement": "557",
+              "build.commerce": "581"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "533",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "581",
+            "ratioBasisPointsCeil": "10901",
+            "absoluteSpreadMinutes": "48",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          },
+          {
+            "personaId": "high-spend-stress",
+            "horizonId": "30-45-day-economy",
+            "p50ByBuild": {
+              "build.combat": "533",
+              "build.reinforcement": "558",
+              "build.commerce": "581"
+            },
+            "fastestBuild": "build.combat",
+            "fastestMinutes": "533",
+            "slowestBuild": "build.commerce",
+            "slowestMinutes": "581",
+            "ratioBasisPointsCeil": "10901",
+            "absoluteSpreadMinutes": "48",
+            "appliedRule": "RATIO_AT_MOST_1_20",
+            "pass": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "CAL-RARITY-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "characters": {
+          "catalogCount": "24",
+          "deterministicNRCount": "8",
+          "deterministicRoles": [
+            "area-damage",
+            "cleanse-support",
+            "commerce-support",
+            "damage-mitigation",
+            "frontline-control",
+            "healing-support",
+            "ranged-anti-air",
+            "runner-backline-disruption"
+          ],
+          "requiredRoles": [
+            "area-damage",
+            "cleanse-support",
+            "commerce-support",
+            "damage-mitigation",
+            "frontline-control",
+            "healing-support",
+            "ranged-anti-air",
+            "runner-backline-disruption"
+          ],
+          "deterministicCoversAllRequired": true,
+          "allFirstCopiesFunctional": true,
+          "allCoreProgressionGateFalse": true,
+          "urRoles": [
+            "area-damage",
+            "cleanse-support",
+            "commerce-support",
+            "damage-mitigation"
+          ],
+          "urCoversEveryRequiredRole": false
+        },
+        "weapons": {
+          "catalogCount": "36",
+          "deterministicNRCount": "12",
+          "deterministicRoles": [
+            "area-damage",
+            "cleanse",
+            "commerce-support",
+            "guard",
+            "healing-focus",
+            "melee-control",
+            "mobility",
+            "ranged-anti-air"
+          ],
+          "requiredRoles": [
+            "area-damage",
+            "cleanse",
+            "commerce-support",
+            "guard",
+            "healing-focus",
+            "melee-control",
+            "mobility",
+            "ranged-anti-air"
+          ],
+          "deterministicCoversAllRequired": true,
+          "allFirstCopiesFunctional": true,
+          "allCoreProgressionGateFalse": true,
+          "urRoles": [
+            "healing-focus",
+            "mobility",
+            "ranged-anti-air"
+          ],
+          "urCoversEveryRequiredRole": false
+        },
+        "strengthBoundary": {
+          "URGenerallyStrong": true,
+          "URUnconditionalBestAllRoles": false
+        },
+        "lowRarityUtility": {
+          "deterministicRoutes": true,
+          "longTermMeasurable": true
+        }
+      }
+    },
+    {
+      "id": "CAL-MASTERY-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "replayMismatchCount": "0",
+        "character": {
+          "firstCopyFunctional": true,
+          "firstCopyRoleComplete": true,
+          "practicalLatestAdditionalCopies": "7",
+          "practicalBySeven": true,
+          "fullMasteryCopies": "20",
+          "fullMasteryAtLeastTwenty": true,
+          "normalPvePrerequisite": false,
+          "strictlyDiminishingDeclared": true,
+          "strictlyDiminishingMeasured": true,
+          "overflowNeverDiscard": true,
+          "overflowConversionPerDuplicate": "100",
+          "overflowAtCapPlusFive": {
+            "masteredCopies": "20",
+            "overflowCopies": "5",
+            "overflowCredit": "500"
+          },
+          "overflowPass": true
+        },
+        "weapon": {
+          "firstCopyFunctional": true,
+          "firstCopyRoleComplete": true,
+          "practicalLatestAdditionalCopies": "7",
+          "practicalBySeven": true,
+          "fullMasteryCopies": "20",
+          "fullMasteryAtLeastTwenty": true,
+          "normalPvePrerequisite": false,
+          "strictlyDiminishingDeclared": true,
+          "strictlyDiminishingMeasured": true,
+          "overflowNeverDiscard": true,
+          "overflowConversionPerDuplicate": "100",
+          "overflowAtCapPlusFive": {
+            "masteredCopies": "20",
+            "overflowCopies": "5",
+            "overflowCredit": "500"
+          },
+          "overflowPass": true
+        }
+      }
+    },
+    {
+      "id": "CAL-ECONOMY-45D-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "mismatchCount": "0",
+        "persona45dDraws": [
+          {
+            "personaId": "no-ad-f2p",
+            "characterDraws45d": "990",
+            "weaponDraws45d": "990"
+          },
+          {
+            "personaId": "rewarded-ad-f2p",
+            "characterDraws45d": "1440",
+            "weaponDraws45d": "1440"
+          },
+          {
+            "personaId": "monthly-pass",
+            "characterDraws45d": "1800",
+            "weaponDraws45d": "1800"
+          },
+          {
+            "personaId": "controlled-payer",
+            "characterDraws45d": "2475",
+            "weaponDraws45d": "2475"
+          },
+          {
+            "personaId": "high-spend-stress",
+            "characterDraws45d": "3600",
+            "weaponDraws45d": "3600"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CAL-HOLDOUT-01",
+      "severity": "P0",
+      "status": "PASS",
+      "detail": {
+        "holdoutExecuted": false
+      }
+    }
+  ],
+  "findings": [],
+  "unresolvedP0": 0,
+  "unresolvedP1": 0,
+  "holdoutExecuted": false,
+  "verdict": "PASS_CALIBRATION_GATE_CANDIDATE"
+}
