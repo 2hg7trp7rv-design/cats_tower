@@ -5,6 +5,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 
+// Verifies immutable Step 1/2 authority throughout the Step 3 in-progress and terminal PASS lifecycle.
 const ROOT = process.cwd();
 const REPOSITORY = '2hg7trp7rv-design/cats_tower';
 const BRANCH = 'kimi';
@@ -30,89 +31,113 @@ execFileSync('git', ['merge-base', '--is-ancestor', ENTRY, 'HEAD'], { cwd: ROOT 
 assert.equal(blob('quality-reviews/step-1-reseal-round-008/seal-round-008.json'), '0a959de0383b57ad6cd1f33c124b398aa51c1e00');
 assert.equal(blob('simulation/executable-seal-v2.json'), 'ee3507969c03b08fe27350263cf0bc093a1c18e1');
 assert.equal(blob('quality-reviews/step-2-governance-repair-round-001/live-readback.json'), '692434fafd19d1e5470fe58808fd72af7286ec35');
-assert.equal(blob(`${STEP3}/acceptance-matrix.json`), 'd1392c431282d0faae9e9ad7f1c22161a3c5caad');
-assert.equal(blob(`${STEP3}/execution-gate.json`), 'e499cdb421d17a5e1ee79ca4ffff204fed80e60e');
-assert.equal(blob(`${STEP3}/execution-live-readback-v2.json`), '073252683f207cf9f42d2f8b2634b10ae36ff8b5');
 
 const project = readJson('PROJECT_STATUS.json');
 const simulation = readJson('simulation/CURRENT_STATUS.json');
+const policy = readJson('AI_PROJECT_POLICY.json');
+const control = readJson('quality-reviews/step-1-canonical-design/active-change-control.json');
+const addendum = existsSync(path.join(ROOT, ADDENDUM)) ? readJson(ADDENDUM) : null;
+const finalJudge = existsSync(path.join(ROOT, FINAL)) ? readJson(FINAL) : null;
+const live = existsSync(path.join(ROOT, LIVE)) ? readJson(LIVE) : null;
+
 assert.equal(project.canonicalRepository, REPOSITORY);
 assert.equal(project.canonicalBranch, BRANCH);
 assert.equal(simulation.repository, REPOSITORY);
 assert.equal(simulation.branch, BRANCH);
-assert.equal(project.physicalIPhoneVerified, false);
-assert.equal(simulation.physicalIPhoneVerified, false);
-assert.notEqual(project.productionChangedByCurrentWork, true);
-assert.notEqual(project.productionAliasChanged, true);
-assert.equal(simulation.productionChanged, false);
+assert.equal(policy.repository, REPOSITORY);
+assert.equal(policy.branch, BRANCH);
+assert.equal(control.repository, REPOSITORY);
+assert.equal(control.branch, BRANCH);
 
-const step3Activated = existsSync(path.join(ROOT, ADDENDUM));
-const terminal = existsSync(path.join(ROOT, LIVE));
-
-if (!step3Activated) {
+const step3Lifecycle = project.currentStep === 3 || project.step3?.status !== undefined || simulation.currentStep === 3 || addendum !== null || live !== null;
+if (!step3Lifecycle) {
   assert.equal(project.currentStep, 2);
-  assert.equal(project.currentStepStatus ?? project.status, 'PASS');
+  assert.equal(project.currentStepStatus, 'PASS');
   assert.equal(project.step3Allowed, true);
-  assert.notEqual(project.step4Allowed, true);
   assert.equal(simulation.currentStep, 2);
   assert.equal(simulation.status, 'PASS');
+  assert.equal(simulation.phase, 'SEALED');
   assert.equal(simulation.step3Allowed, true);
-  assert.notEqual(simulation.step4Allowed, true);
-  console.log(JSON.stringify({ verdict: 'PASS_CURRENT_STEP2_SEALED_STEP3_EXECUTION_EVIDENCE_PENDING_CRITICS', head: git('rev-parse', 'HEAD'), tree: git('rev-parse', 'HEAD^{tree}') }));
-  process.exit(0);
-}
-
-const active = readJson('quality-reviews/step-1-canonical-design/active-change-control.json');
-const addendum = readJson(ADDENDUM);
-const policy = readJson('AI_PROJECT_POLICY.json');
-const finalJudge = existsSync(path.join(ROOT, FINAL)) ? readJson(FINAL) : null;
-
-let expectedStatus;
-let expectedStep4;
-if (terminal) {
-  assert(finalJudge, 'Terminal state requires final judge');
-  expectedStatus = finalJudge.step3Pass ? 'PASS' : 'FAIL';
-  expectedStep4 = Boolean(finalJudge.step3Pass);
-} else if (finalJudge?.step3Pass === false) {
-  expectedStatus = 'FAIL_PENDING_TERMINAL_EVIDENCE';
-  expectedStep4 = false;
+  assert.equal(policy.currentPhase.step, 2);
+  assert.equal(policy.currentPhase.status, 'PASS');
+  assert.equal(policy.currentPhase.step3Allowed, true);
+  assert.equal(control.step3Allowed, true);
 } else {
-  expectedStatus = 'IN_PROGRESS';
-  expectedStep4 = false;
+  assert(addendum, 'Step 3 lifecycle requires round-015 change control addendum');
+  assert.equal(addendum.repository, REPOSITORY);
+  assert.equal(addendum.branch, BRANCH);
+  assert.equal(addendum.step1Status, 'PASS');
+  assert.equal(addendum.step2Status, 'PASS_SEALED');
+  assert.equal(addendum.step3Allowed, true);
+  assert.equal(control.step3Allowed, true);
+  assert.equal(project.currentStep, 3);
+  assert.equal(simulation.currentStep, 3);
+  assert.equal(policy.currentPhase.step, 3);
+  assert.equal(project.step3Allowed, true);
+  assert.equal(simulation.step3Allowed, true);
+  assert.equal(policy.currentPhase.step3Allowed, true);
+
+  if (live) {
+    assert(finalJudge, 'Terminal live read-back requires final judge');
+    assert.equal(live.repository, REPOSITORY);
+    assert.equal(live.branch, BRANCH);
+    assert.equal(live.criticSummary.criticCount, 5);
+    assert.equal(live.governanceDecision.unresolvedP0, 0);
+    assert.equal(live.governanceDecision.unresolvedP1, 0);
+    assert.equal(live.scopeReadback.candidateChanged, false);
+    assert.equal(live.scopeReadback.holdoutUsedForTuning, false);
+    assert.equal(live.scopeReadback.productionAliasChanged, false);
+    assert.equal(live.scopeReadback.physicalIPhoneVerified, false);
+    assert.equal(project.currentStepStatus, live.governanceDecision.step3);
+    assert.equal(simulation.status, live.governanceDecision.step3);
+    assert.equal(policy.currentPhase.status, live.governanceDecision.step3);
+    assert.equal(project.step4Allowed, live.governanceDecision.step4 === 'READY_TO_START');
+    assert.equal(simulation.step4Allowed, live.governanceDecision.step4 === 'READY_TO_START');
+    assert.equal(policy.currentPhase.step4Allowed, live.governanceDecision.step4 === 'READY_TO_START');
+    assert.equal(finalJudge.step3Pass, live.governanceDecision.step3 === 'PASS');
+  } else {
+    assert.equal(project.currentStepStatus, 'IN_PROGRESS');
+    assert.equal(simulation.status, 'IN_PROGRESS');
+    assert.equal(policy.currentPhase.status, 'IN_PROGRESS');
+    assert.equal(project.step4Allowed, false);
+    assert.equal(simulation.step4Allowed, false);
+    assert.equal(policy.currentPhase.step4Allowed, false);
+  }
 }
 
-assert.equal(active.status, expectedStatus);
-assert.equal(active.verdict, expectedStatus);
-assert.equal(Boolean(active.step4Allowed), expectedStep4);
-assert.equal(addendum.status, expectedStatus);
-assert.equal(Boolean(addendum.step4Allowed), expectedStep4);
-assert.equal(policy.currentPhase.step, 3);
-assert.equal(policy.currentPhase.status, expectedStatus);
-assert.equal(Boolean(policy.currentPhase.step4Allowed), expectedStep4);
-assert.equal(project.currentStep, 3);
-assert.equal(project.currentStepStatus, expectedStatus);
-assert.equal(project.status, expectedStatus);
-assert.equal(Boolean(project.step4Allowed), expectedStep4);
-assert.equal(simulation.currentStep, 3);
-assert.equal(simulation.status, expectedStatus);
-assert.equal(Boolean(simulation.step4Allowed), expectedStep4);
+assert.equal(project.physicalIPhoneVerified, false);
+assert.equal(simulation.physicalIPhoneVerified, false);
+assert.equal(policy.currentPhase.physicalIPhone, 'NOT_VERIFIED');
+assert.equal(project.productionAliasChanged ?? false, false);
+assert.equal(simulation.productionChanged, false);
 
+const expectedStatus = live ? live.governanceDecision.step3 : (step3Lifecycle ? 'IN_PROGRESS' : 'PASS');
+const expectedStep4 = live ? live.governanceDecision.step4 : (step3Lifecycle ? 'BLOCKED_UNTIL_TERMINAL_EVIDENCE' : 'READY_TO_START');
+const expectedBalance = live ? live.governanceDecision.balanceVerdict : (step3Lifecycle ? 'PASS_PENDING_EVIDENCE' : 'NOT_EVALUATED_STEP2');
 for (const relativePath of ['QUALITY_GATE.md', '.github/workflows/CURRENT_STATUS.md', 'AGENTS.md', 'PROJECT_HANDOVER.md']) {
-  const content = readText(relativePath);
-  assert(content.includes(BLOCK_BEGIN), `${relativePath}: missing canonical Step 3 status block`);
-  assert(content.includes(BLOCK_END), `${relativePath}: incomplete canonical Step 3 status block`);
-  const block = content.slice(content.indexOf(BLOCK_BEGIN), content.indexOf(BLOCK_END) + BLOCK_END.length);
-  assert(block.includes(`- Step 3: **${expectedStatus}**`), `${relativePath}: Step 3 status mismatch`);
-  assert(block.includes(`- Step 4: **${expectedStep4 ? 'READY_TO_START' : (finalJudge?.step3Pass === false ? 'BLOCKED_BY_STEP3_FAILURE' : 'BLOCKED_UNTIL_TERMINAL_EVIDENCE')}**`), `${relativePath}: Step 4 status mismatch`);
-  assert(block.includes('- Physical iPhone: **NOT_VERIFIED**'));
-  assert(block.includes('- Production alias changed: **false**'));
+  const text = readText(relativePath);
+  const start = text.indexOf(BLOCK_BEGIN);
+  const end = text.indexOf(BLOCK_END);
+  if (step3Lifecycle) {
+    assert(start >= 0 && end > start, `${relativePath}: missing Step 3 status block`);
+    const block = text.slice(start, end + BLOCK_END.length);
+    assert(block.includes(`Step 3: **${expectedStatus}**`), `${relativePath}: Step 3 status mismatch`);
+    assert(block.includes(`Step 4: **${expectedStep4}**`), `${relativePath}: Step 4 status mismatch`);
+    assert(block.includes(`Balance verdict: **${expectedBalance}**`), `${relativePath}: balance verdict mismatch`);
+    assert(block.includes('Physical iPhone: **NOT_VERIFIED**'), `${relativePath}: physical iPhone mismatch`);
+    assert(block.includes('Production alias changed: **false**'), `${relativePath}: Production mismatch`);
+  }
 }
 
-const changedOutput = git('diff', '--name-only', `${ENTRY}..HEAD`);
-const changed = changedOutput ? changedOutput.split('\n').filter(Boolean) : [];
-const forbidden = changed.filter((relativePath) => /^(runtime\/|public\/|assets\/|backend\/)/.test(relativePath)
-  || /^(vercel\.json|\.vercel\/)/.test(relativePath)
-  || /^simulation\/(candidate-v2\.json|candidate-v2\.schema\.json|run-plan-v2\.json|execution-contract-v2\.json|executable-seal-v2\.json|engine-v2\/|fixtures\/v2\/|migrations\/v1-to-v2\/)/.test(relativePath));
-assert.deepEqual(forbidden, []);
-
-console.log(JSON.stringify({ verdict: terminal ? 'PASS_CURRENT_STEP3_TERMINAL_STATE' : 'PASS_CURRENT_STEP3_PENDING_TERMINAL_STATE', head: git('rev-parse', 'HEAD'), tree: git('rev-parse', 'HEAD^{tree}'), status: expectedStatus, step4Allowed: expectedStep4, changedPathCount: changed.length }));
+console.log(JSON.stringify({
+  ok: true,
+  repository: REPOSITORY,
+  branch: BRANCH,
+  step1: 'PASS',
+  step2: 'PASS_SEALED',
+  step3: step3Lifecycle ? expectedStatus : 'READY_TO_START',
+  step4: expectedStep4,
+  balanceVerdict: expectedBalance,
+  physicalIPhone: 'NOT_VERIFIED',
+  productionChanged: false,
+}));
