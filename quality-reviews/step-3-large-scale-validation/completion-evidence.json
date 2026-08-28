@@ -1,0 +1,358 @@
+{
+  "schemaVersion": 2,
+  "artifactId": "cats-tower-step3-large-scale-validation-completion-v2",
+  "recordedAt": "2026-08-28T05:06:03.450Z",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "entry": {
+    "commit": "3eefbf6fa7dfcec8b5b093612e8946b43d838bc2",
+    "tree": "7499d7b07e5dff59ae5b675b475e23a7e03359b5"
+  },
+  "acceptance": {
+    "path": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
+    "blob": "d1392c431282d0faae9e9ad7f1c22161a3c5caad"
+  },
+  "workflow": {
+    "path": ".github/workflows/verify-step-3-large-scale-validation-v2.yml",
+    "sourceCommit": "fc727d89217576b4929288800a613e3521f88c55",
+    "runId": "33143714589",
+    "runAttempt": "1",
+    "jobId": "98760057075",
+    "statusAtRecord": "IN_PROGRESS_EXPECTED_SUCCESS"
+  },
+  "content": {
+    "commit": "fc727d89217576b4929288800a613e3521f88c55",
+    "tree": "31a7fca0dde7ef5b052a16f3c20b6f16ed7c3aac",
+    "changedPaths": [
+      ".github/workflows/CURRENT_STATUS.md",
+      ".github/workflows/diagnose-step-3-finalization.yml",
+      ".github/workflows/execute-step-3-final-validation.yml",
+      ".github/workflows/finalize-step-3-large-scale-validation.yml",
+      ".github/workflows/repair-step-3-calibration-artifact.yml",
+      ".github/workflows/repair-step-3-final-aggregate.yml",
+      ".github/workflows/repair-step-3-finalization-bootstrap.yml",
+      ".github/workflows/seal-step-3-calibration.yml",
+      ".github/workflows/seal-step-3-final-execution-v2.yml",
+      ".github/workflows/seal-step-3-final-execution.yml",
+      ".github/workflows/verify-step-3-calibration.yml",
+      ".github/workflows/verify-step-3-large-scale-validation-v2.yml",
+      ".github/workflows/verify-step-3-large-scale-validation.yml",
+      "AGENTS.md",
+      "AI_PROJECT_POLICY.json",
+      "PROJECT_HANDOVER.md",
+      "PROJECT_STATUS.json",
+      "QUALITY_GATE.md",
+      "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-015.json",
+      "quality-reviews/step-1-canonical-design/active-change-control.json",
+      "quality-reviews/step-3-large-scale-validation/acceptance-addendum-aggregate-003.json",
+      "quality-reviews/step-3-large-scale-validation/acceptance-addendum-calibration-001.json",
+      "quality-reviews/step-3-large-scale-validation/acceptance-addendum-finalization-repair-005.json",
+      "quality-reviews/step-3-large-scale-validation/acceptance-addendum-summary-correction-004.json",
+      "quality-reviews/step-3-large-scale-validation/acceptance-addendum-transport-002.json",
+      "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
+      "quality-reviews/step-3-large-scale-validation/aggregate-manifest-repair-record.json",
+      "quality-reviews/step-3-large-scale-validation/analysis.json",
+      "quality-reviews/step-3-large-scale-validation/audit-calibration.mjs",
+      "quality-reviews/step-3-large-scale-validation/audit-high-volume.mjs",
+      "quality-reviews/step-3-large-scale-validation/audit-holdout.mjs",
+      "quality-reviews/step-3-large-scale-validation/calibration-audit.json",
+      "quality-reviews/step-3-large-scale-validation/calibration-execution-manifest.json",
+      "quality-reviews/step-3-large-scale-validation/calibration-gate.json",
+      "quality-reviews/step-3-large-scale-validation/calibration-live-readback.json",
+      "quality-reviews/step-3-large-scale-validation/calibration-transport-repair-manifest.json",
+      "quality-reviews/step-3-large-scale-validation/critic-summary.json",
+      "quality-reviews/step-3-large-scale-validation/critics/critic-01-gameplay-build-and-long-horizon.json",
+      "quality-reviews/step-3-large-scale-validation/critics/critic-02-economy-gacha-mastery-and-monetization.json",
+      "quality-reviews/step-3-large-scale-validation/critics/critic-03-ledger-refund-replay-race-and-state-machines.json",
+      "quality-reviews/step-3-large-scale-validation/critics/critic-04-numeric-determinism-holdout-and-repository-evidence.json",
+      "quality-reviews/step-3-large-scale-validation/critics/critic-05-product-ethics-f2p-pressure-and-release-boundary.json",
+      "quality-reviews/step-3-large-scale-validation/execution-gate.json",
+      "quality-reviews/step-3-large-scale-validation/execution-live-readback-v2.json",
+      "quality-reviews/step-3-large-scale-validation/execution-live-readback.json",
+      "quality-reviews/step-3-large-scale-validation/final-execution-manifest.json",
+      "quality-reviews/step-3-large-scale-validation/final-judge.json",
+      "quality-reviews/step-3-large-scale-validation/gameplay-calibration-result.json",
+      "quality-reviews/step-3-large-scale-validation/gameplay-holdout-result.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-duplicate-skew-overflow.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-gacha-tails.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-large-number-properties.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-pity-conformance.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-refund-replay-race.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-state-machine-model.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/high-volume-duplicate-skew-overflow.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/high-volume-gacha-tails.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/high-volume-large-number-properties.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/high-volume-pity-conformance.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/high-volume-refund-replay-race.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/high-volume-state-machine-model.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/manifest-high-volume-duplicate-skew-overflow.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/manifest-high-volume-gacha-tails.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/manifest-high-volume-large-number-properties.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/manifest-high-volume-pity-conformance.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/manifest-high-volume-refund-replay-race.json",
+      "quality-reviews/step-3-large-scale-validation/high-volume/manifest-high-volume-state-machine-model.json",
+      "quality-reviews/step-3-large-scale-validation/holdout-audit.json",
+      "quality-reviews/step-3-large-scale-validation/holdout-execution-manifest.json",
+      "quality-reviews/step-3-large-scale-validation/tools/finalize-step3.mjs",
+      "simulation/CURRENT_STATUS.json",
+      "tests/governance/verify-current-step2-state.mjs",
+      "tests/step3/analyze-step3-results.mjs",
+      "tests/step3/step3-governance.mjs"
+    ],
+    "forbiddenPaths": []
+  },
+  "evidence": {
+    "quality-reviews/step-3-large-scale-validation/gameplay-holdout-result.json": {
+      "blob": "7e823eeadaeea6ed7f54790e9b9f5acefa948172",
+      "sha256": "3bcae607267a7e20863f0279fa4a3f76810ec0a315074567e6199e8f589b8bc5",
+      "bytes": "509843"
+    },
+    "quality-reviews/step-3-large-scale-validation/holdout-audit.json": {
+      "blob": "0dd82dad74cd056a9da643c564ef2725808db209",
+      "sha256": "3326c8ce5497579929e8c625cf35a1eb000aa5ff56ed0864dff18b95f6e679ef",
+      "bytes": "39635"
+    },
+    "quality-reviews/step-3-large-scale-validation/holdout-execution-manifest.json": {
+      "blob": "10cc81fc9415103a787ca62ce6ba1593d5ebc31b",
+      "sha256": "e21da008ec1a4eb426ba27b8d6eefc02b2b4247913083b898d662b08f656e63d",
+      "bytes": "1319"
+    },
+    "quality-reviews/step-3-large-scale-validation/final-execution-manifest.json": {
+      "blob": "d30a9a473573aef908ac26bda501021a4c514aca",
+      "sha256": "0ff866fe97cc0ea74a9f4dc027db30f37c4a6c56db56293501d22b0e3e24d8ba",
+      "bytes": "4362"
+    },
+    "quality-reviews/step-3-large-scale-validation/aggregate-manifest-repair-record.json": {
+      "blob": "d7edab73180bbf575ab994e12655086e5ba1c9ce",
+      "sha256": "01533fb799b136bb9f3dce1c63b1732edfc7934e7b5e49d30cf354b2d864ebc5",
+      "bytes": "1439"
+    },
+    "quality-reviews/step-3-large-scale-validation/high-volume/high-volume-gacha-tails.json": {
+      "blob": "97f9e38d3dbf1949b924879b25b9d5dcd93f0a86",
+      "sha256": "89863f2896481c4d54cc9451ac754458044e5569ec44c7c5627f016ad6615b1a",
+      "bytes": "4010"
+    },
+    "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-gacha-tails.json": {
+      "blob": "40b25d2bbd03b9d8392a326208ad5135232053ae",
+      "sha256": "c7bd3e06bbf98e1cf9a0bbcd23d4b47ca08b3200f9a51a6b689eae1f1c054c7d",
+      "bytes": "5532"
+    },
+    "quality-reviews/step-3-large-scale-validation/high-volume/manifest-high-volume-gacha-tails.json": {
+      "blob": "208b05a63f13d6fc7147ca9b6de54637f65f11c2",
+      "sha256": "ef03909719bf60ce7d7feb0bc32b8ce519089f029caf54e1affc852107e3e168",
+      "bytes": "1251"
+    },
+    "quality-reviews/step-3-large-scale-validation/high-volume/high-volume-pity-conformance.json": {
+      "blob": "aaabed2f46ba3940c33afa123aa030a98a5d73f0",
+      "sha256": "b17e0aada5015d10babda729b49ab1cea25896a618f2b5ce326cb54772e8f2b4",
+      "bytes": "2366"
+    },
+    "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-pity-conformance.json": {
+      "blob": "fff3a155946c98813ae6b31fb23834201eb69881",
+      "sha256": "c1eacdae8d753ec8c0d014fe0bc8649e8d7afb03992d737d9ad5d32b4861a8ba",
+      "bytes": "2673"
+    },
+    "quality-reviews/step-3-large-scale-validation/high-volume/manifest-high-volume-pity-conformance.json": {
+      "blob": "c9efbbeff7b6c258ec74701f6b4364a834b90cfd",
+      "sha256": "7ec45ade888974b5d9c0a0ec01a1bfbc1f06afed3c08c0cb73991e29bf41b82d",
+      "bytes": "1272"
+    },
+    "quality-reviews/step-3-large-scale-validation/high-volume/high-volume-duplicate-skew-overflow.json": {
+      "blob": "1839b7a60bad4fa3d0125d2d7ef4fb165c53f6b7",
+      "sha256": "6433a60ce041ea0ee8b6a2bf5df9bd3640d8c7d241c8faa1d0792f95e7e53298",
+      "bytes": "4119"
+    },
+    "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-duplicate-skew-overflow.json": {
+      "blob": "80501579065475642acd611f08ca10bb5e7a7bd3",
+      "sha256": "e3a650083d46a0deb7f5b94031506ee67e65aa57c1bcc1f022290a6a5b97513f",
+      "bytes": "4798"
+    },
+    "quality-reviews/step-3-large-scale-validation/high-volume/manifest-high-volume-duplicate-skew-overflow.json": {
+      "blob": "fa64f7d9254260487536d9c4f39b45339320aa43",
+      "sha256": "ecb610a06f1b5872e81ae8c7d7565e478502af2edcc294e66ebbb7a3302ab3bb",
+      "bytes": "1299"
+    },
+    "quality-reviews/step-3-large-scale-validation/high-volume/high-volume-refund-replay-race.json": {
+      "blob": "e78a882225c45a81df201eea840fdb3c8698cf92",
+      "sha256": "d381dca95059210046d5ea298d3affee29eb915cc871854cd7dfcbef65b3dc1a",
+      "bytes": "2450"
+    },
+    "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-refund-replay-race.json": {
+      "blob": "d1d59709adf75647ea16176d44b6b53cb641d458",
+      "sha256": "84981234ff5b23162e2c36c7be4306837dec626d7e45d6a1dcfa5dc0f230f7f4",
+      "bytes": "2790"
+    },
+    "quality-reviews/step-3-large-scale-validation/high-volume/manifest-high-volume-refund-replay-race.json": {
+      "blob": "17fe57aef04c9cbc38d3c183dfad6e2f6b6d6c09",
+      "sha256": "bc413d7b16d87b60abf9dcd9d992dae7162e348cf5fc1bcdf24746b32cfcc1d2",
+      "bytes": "1279"
+    },
+    "quality-reviews/step-3-large-scale-validation/high-volume/high-volume-state-machine-model.json": {
+      "blob": "6b7beda06c6fe85693ea4120cdad8aedb8be45a1",
+      "sha256": "6a740f312ad3d90019a9a6b97f87db8d720fbdbd304dada2b220f6dee17321d7",
+      "bytes": "2264"
+    },
+    "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-state-machine-model.json": {
+      "blob": "35c7e8fc26b04ebb8d222c38001f921e71e60689",
+      "sha256": "6e3fc5c1cd683ebeca149a9f5436d071f6b3bc5f5dbda3eea6d504bb0ef05369",
+      "bytes": "2290"
+    },
+    "quality-reviews/step-3-large-scale-validation/high-volume/manifest-high-volume-state-machine-model.json": {
+      "blob": "c6cc66280224042590769d3f57000605ccea488a",
+      "sha256": "90d5ff10cf9cfe4e96975c22231cadb9c6db06dc48ddbc2fce96fbfa77353039",
+      "bytes": "1283"
+    },
+    "quality-reviews/step-3-large-scale-validation/high-volume/high-volume-large-number-properties.json": {
+      "blob": "b35c7e1ff5e44a393c3acb332f14cfcdd3e71736",
+      "sha256": "2a0e2dcea21cdb7a534c3fd1dc0e4c45d38d2911085b108c29549b8bc6d31ea6",
+      "bytes": "2504"
+    },
+    "quality-reviews/step-3-large-scale-validation/high-volume/audit-high-volume-large-number-properties.json": {
+      "blob": "73c7d4019d6ddddbf9a9bbd5d00d10d0bd86089d",
+      "sha256": "b3ea5e36a3459cfd07577427bf76dc832b3ee6e1b2d28461e43ab0c4b5ca5f0d",
+      "bytes": "3019"
+    },
+    "quality-reviews/step-3-large-scale-validation/high-volume/manifest-high-volume-large-number-properties.json": {
+      "blob": "21288886cfdda4c777d0aa56cf6779ed45c5595b",
+      "sha256": "91761824da1a9c20d6dae4317d9086d05096791ffcbbf64d300fdcf21aef98fa",
+      "bytes": "1299"
+    },
+    "quality-reviews/step-3-large-scale-validation/gameplay-calibration-result.json": {
+      "blob": "79a531def0e6e88c202eac12d414e19b79902159",
+      "sha256": "f77eb5fdb805ea484a02b165105c585d07e77d3097fcbf42637f7a96618d90bb",
+      "bytes": "1913915"
+    },
+    "quality-reviews/step-3-large-scale-validation/calibration-audit.json": {
+      "blob": "36c29a78ee38bb3082a39b719fccd2da503b9016",
+      "sha256": "4b0f0004625ea923199f32b28606a4599da08f3ef3116c1e3a6460f0730da7c7",
+      "bytes": "43002"
+    },
+    "quality-reviews/step-3-large-scale-validation/calibration-execution-manifest.json": {
+      "blob": "d19d1680dcf6751ec5d190ef2203f701f35c084c",
+      "sha256": "f270136f0021c772d94e415a8c6e72f119b17964067ac59ff87d246f39d33d8c",
+      "bytes": "1590"
+    },
+    "quality-reviews/step-3-large-scale-validation/calibration-transport-repair-manifest.json": {
+      "blob": "2c297f5955e5af0f5e36d09c1666ac59a5eefc4a",
+      "sha256": "6e5710d0b7f8d77612807e70b935a768c00d989a138d77536bdf1d97cb5617c0",
+      "bytes": "1477"
+    },
+    "quality-reviews/step-3-large-scale-validation/calibration-gate.json": {
+      "blob": "5ecb6c177a0c52f164c4ad22723f54305bf8c97d",
+      "sha256": "3cf9b1ba8495f3edb1abc4acac2ef045d0519da7131c9211b2f98e8d68894113",
+      "bytes": "3723"
+    },
+    "quality-reviews/step-3-large-scale-validation/execution-gate.json": {
+      "blob": "e499cdb421d17a5e1ee79ca4ffff204fed80e60e",
+      "sha256": "f417aa98dd906ee017f90239fdd83b5b59c56198ea11e0a7087233508a9d3345",
+      "bytes": "11168"
+    },
+    "quality-reviews/step-3-large-scale-validation/execution-live-readback-v2.json": {
+      "blob": "073252683f207cf9f42d2f8b2634b10ae36ff8b5",
+      "sha256": "21117f3348286173c4bd8a13bcc1671fdad1487e5a5f8443375eb1144a7f4fd2",
+      "bytes": "9420"
+    },
+    "quality-reviews/step-3-large-scale-validation/analysis.json": {
+      "blob": "217dd93fa1b63988b4f358a0e9077221e2f0364f",
+      "sha256": "344c176b306de9ed8ba8b1eb49045ea52d99a563ae90b77f059ca88ab53c586d",
+      "bytes": "31781"
+    },
+    "quality-reviews/step-3-large-scale-validation/critic-summary.json": {
+      "blob": "197f2a0949a8f6eb398f9614f79ab79562471fb2",
+      "sha256": "1abf44ad76cb7fb911aa68b3e735bf44e3a56b3e4ff9099a91746a7de5eda1c7",
+      "bytes": "2454"
+    },
+    "quality-reviews/step-3-large-scale-validation/final-judge.json": {
+      "blob": "a089266f56076a0b2a59b2670188d95ae8eff3d2",
+      "sha256": "7978852984bb158ecb9a8189031e72e846404fae9efc6b3d0b9255c771c1dfb0",
+      "bytes": "1745"
+    },
+    "quality-reviews/step-3-large-scale-validation/acceptance-addendum-finalization-repair-005.json": {
+      "blob": "514f15c71e0f65b673a9113a4b141d3a7d2f43ef",
+      "sha256": "b4f4db7a513a665f2d7db73c588cb389c985cc658653bc2f79070273254e9df3",
+      "bytes": "1937"
+    },
+    "quality-reviews/step-3-large-scale-validation/critics/critic-01-gameplay-build-and-long-horizon.json": {
+      "blob": "2d4f691ad68739b0862c882636491531a5d8b529",
+      "sha256": "90c24685038588cb55081062f97e3ac198aa2f9a4ab37c9f6f10877a6070e910",
+      "bytes": "6013"
+    },
+    "quality-reviews/step-3-large-scale-validation/critics/critic-02-economy-gacha-mastery-and-monetization.json": {
+      "blob": "baa9eafdc74bdf7358c513b7de0ce26e90b26ff1",
+      "sha256": "209c27edf596d6ef8baaf921c1833f699b3ed36527f62e16c5443b499d5d0f02",
+      "bytes": "13716"
+    },
+    "quality-reviews/step-3-large-scale-validation/critics/critic-03-ledger-refund-replay-race-and-state-machines.json": {
+      "blob": "9a092dfd97c23cd1381783455394c16f5a629348",
+      "sha256": "a5ab25b532cbfeee2ed154c9a78fa72208cacc4cad73f2605b70f0cf56d31914",
+      "bytes": "7074"
+    },
+    "quality-reviews/step-3-large-scale-validation/critics/critic-04-numeric-determinism-holdout-and-repository-evidence.json": {
+      "blob": "bec125b5e68e2877c502789c6b1793dd9feb22c6",
+      "sha256": "869a5eb966a2d4f804b0ccf8b35769d94fd797eefbcb43b91ea71a1609d5fe0f",
+      "bytes": "8089"
+    },
+    "quality-reviews/step-3-large-scale-validation/critics/critic-05-product-ethics-f2p-pressure-and-release-boundary.json": {
+      "blob": "af34e38554d4ef6a577ddbfa78f13be0ff305d0a",
+      "sha256": "adcbc4471bd5dc8de11cc82296217b64bb3993284716d27b14c32eeffa1ee5b7",
+      "bytes": "12366"
+    }
+  },
+  "immutable": {
+    "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json": {
+      "blob": "d1392c431282d0faae9e9ad7f1c22161a3c5caad"
+    },
+    "quality-reviews/step-3-large-scale-validation/execution-gate.json": {
+      "blob": "e499cdb421d17a5e1ee79ca4ffff204fed80e60e"
+    },
+    "quality-reviews/step-3-large-scale-validation/execution-live-readback-v2.json": {
+      "blob": "073252683f207cf9f42d2f8b2634b10ae36ff8b5"
+    },
+    "quality-reviews/step-3-large-scale-validation/calibration-gate.json": {
+      "blob": "5ecb6c177a0c52f164c4ad22723f54305bf8c97d"
+    },
+    "quality-reviews/step-1-reseal-round-008/seal-round-008.json": {
+      "blob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00"
+    },
+    "simulation/executable-seal-v2.json": {
+      "blob": "ee3507969c03b08fe27350263cf0bc093a1c18e1"
+    },
+    "quality-reviews/step-2-governance-repair-round-001/live-readback.json": {
+      "blob": "692434fafd19d1e5470fe58808fd72af7286ec35"
+    },
+    "simulation/run-plan-v2.json": {
+      "blob": "a04632e41d78dd15b36e95cd6998e8a8648b9a6c"
+    },
+    "simulation/execution-contract-v2.json": {
+      "blob": "82685b646358129d7e66a810b267777d6bf5af92"
+    }
+  },
+  "finalJudge": {
+    "path": "quality-reviews/step-3-large-scale-validation/final-judge.json",
+    "blob": "a089266f56076a0b2a59b2670188d95ae8eff3d2",
+    "verdict": "PASS_STEP3_CONTENT_PENDING_COMPLETION_AND_LIVE_READBACK",
+    "step3Pass": true
+  },
+  "criticSummary": {
+    "path": "quality-reviews/step-3-large-scale-validation/critic-summary.json",
+    "blob": "197f2a0949a8f6eb398f9614f79ab79562471fb2",
+    "criticCount": 5,
+    "unresolvedP0": 0,
+    "unresolvedP1": 0,
+    "verdict": "PASS"
+  },
+  "scope": {
+    "candidateChanged": false,
+    "holdoutUsedForTuning": false,
+    "runtimeChanged": false,
+    "assetsChanged": false,
+    "backendChanged": false,
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "productionChanged": false,
+    "physicalIPhoneVerified": false,
+    "otherBranchWritten": false,
+    "pullRequestOperation": false
+  },
+  "verdict": "PASS_COMPLETION_EVIDENCE_READY_FOR_TERMINAL_READBACK"
+}
