@@ -1,0 +1,133 @@
+/* S02 visual art refinement round 004.
+ * This layer is loaded after the frozen round-003 layout and only affects the
+ * isolated Step 4 prototype. It uses original assets already sealed in kimi.
+ */
+
+/* Move the scene from the rejected purple corridor to the brighter illustrated
+   tower environment used by the project prototype set. */
+.s02-shell .battle-stage {
+  min-height: clamp(306px, 39svh, 336px);
+  background:
+    linear-gradient(180deg, rgba(52, 91, 63, .06), rgba(31, 15, 8, .16)),
+    url("/assets/prototype/bg/floor_living.png") center 58% / cover no-repeat,
+    #6f8353;
+}
+.s02-shell .battle-stage::before {
+  background:
+    linear-gradient(180deg, rgba(255, 235, 173, .1), transparent 34%),
+    radial-gradient(circle at 52% 50%, transparent 0 55%, rgba(28, 13, 7, .12) 79%, rgba(17, 7, 4, .30) 100%);
+  backdrop-filter: saturate(1.12) brightness(1.08);
+}
+
+/* Existing project-prototype cast: one coherent face direction, outline and
+   foot-anchor family. CSS content replacement keeps semantic img/alt text. */
+.s02-shell .profile-button .portrait-frame img,
+.s02-shell .unit-warrior img,
+.s02-shell .roster-card:nth-child(1) img { content: url("/assets/prototype/cats/mugi.png"); }
+.s02-shell .unit-sage img,
+.s02-shell .roster-card:nth-child(2) img { content: url("/assets/prototype/cats/luna.png"); }
+.s02-shell .unit-mage img,
+.s02-shell .roster-card:nth-child(5) img { content: url("/assets/prototype/cats/kohaku.png"); }
+.s02-shell .unit-ranger img,
+.s02-shell .roster-card:nth-child(3) img { content: url("/assets/prototype/cats/slinger.png"); }
+.s02-shell .roster-card:nth-child(4) img { content: url("/assets/prototype/cats/toto.png"); }
+.s02-shell .event-banner img { content: url("/assets/prototype/cats/toto.png"); }
+
+.s02-shell .ally img {
+  width: 82px;
+  height: 82px;
+  transform: scale(1.18) translateY(3px);
+  transform-origin: center bottom;
+  filter: drop-shadow(0 5px 2px rgba(18, 7, 3, .58));
+}
+.s02-shell .unit-warrior { left: 3%; bottom: 29%; }
+.s02-shell .unit-sage { left: 24%; bottom: 30%; }
+.s02-shell .unit-mage { left: 5%; bottom: 4%; }
+.s02-shell .unit-ranger { left: 27%; bottom: 4%; }
+
+/* Project-prototype enemies replace the repeated placeholder silhouette. */
+.s02-shell .enemy-small:not(.enemy-b) img { content: url("/assets/prototype/enemies/ash_mouse.png"); }
+.s02-shell .enemy-b img { content: url("/assets/prototype/enemies/sack_mole.png"); }
+.s02-shell .enemy-large img { content: url("/assets/prototype/enemies/blackwing_guard.png"); }
+.s02-shell .enemy { filter: none; }
+.s02-shell .enemy-small { right: 34%; top: 40%; width: 72px; }
+.s02-shell .enemy-small img { width: 78px; height: 72px; transform: scale(1.22); transform-origin: center bottom; }
+.s02-shell .enemy-b { right: 28%; top: 63%; }
+.s02-shell .enemy-large { right: 7%; top: 48%; width: 104px; }
+.s02-shell .enemy-large img { width: 112px; height: 116px; transform: scale(1.12); transform-origin: center bottom; }
+.s02-shell .enemy-large .enemy-hp { width: 92px; }
+
+/* More deliberate source-screen hierarchy and depth. */
+.s02-shell .wood-frame,
+.s02-shell .ornate-panel {
+  border-color: #e7aa43;
+  box-shadow:
+    inset 0 0 0 1px #170805,
+    inset 0 0 0 3px rgba(121, 60, 25, .88),
+    inset 0 1px 0 rgba(255, 226, 148, .24),
+    0 3px 0 #100502,
+    0 7px 18px rgba(0, 0, 0, .34);
+}
+.s02-shell .player-bar,
+.s02-shell .context-bar,
+.s02-shell .skill-row,
+.s02-shell .party-roster,
+.s02-shell .support-deck,
+.s02-shell .bottom-nav {
+  background-image:
+    linear-gradient(180deg, rgba(72, 38, 24, .97), rgba(29, 13, 9, .99)),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 6px);
+}
+
+/* Shop artwork turns the merchant support row into an actual world system,
+   rather than three text-only cards. */
+.s02-shell .support-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: #2a160f;
+  background-position: center;
+  background-size: cover;
+}
+.s02-shell .support-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(25, 11, 7, .18), rgba(24, 10, 6, .88));
+}
+.s02-shell .support-card:nth-child(1) { background-image: url("/assets/prototype/shops/fish_diner.png"); }
+.s02-shell .support-card:nth-child(2) { background-image: url("/assets/prototype/shops/clinic.png"); }
+.s02-shell .support-card:nth-child(3) { background-image: url("/assets/prototype/shops/claw_forge.png"); }
+.s02-shell .support-card > span { display: none; }
+.s02-shell .support-card strong,
+.s02-shell .support-card p,
+.s02-shell .support-card small { text-shadow: 0 2px 1px #120604, 1px 0 1px #120604; }
+
+/* Keep primary game information readable over the richer scene. */
+.s02-shell .unit-hp,
+.s02-shell .damage-number,
+.s02-shell .critical-label { filter: drop-shadow(0 2px 1px rgba(0,0,0,.8)); }
+.s02-shell .event-banner {
+  background:
+    linear-gradient(135deg, rgba(83, 36, 18, .96), rgba(39, 17, 11, .97)),
+    #35170d;
+}
+.s02-shell .event-banner img {
+  transform: scale(1.45) translate(1px, 9px);
+  transform-origin: center bottom;
+}
+
+@media (max-width: 359px) {
+  .s02-shell .battle-stage { min-height: 300px; }
+  .s02-shell .ally img { width: 76px; height: 76px; }
+  .s02-shell .enemy-small { right: 32%; }
+  .s02-shell .enemy-b { right: 26%; }
+  .s02-shell .enemy-large { right: 5%; }
+  .s02-shell .enemy-large img { width: 103px; height: 108px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s02-shell .ally img,
+  .s02-shell .enemy img { animation: none !important; }
+}
