@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-calibration-acceptance-addendum-001",
+  "createdAt": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "status": "ACTIVE_BEFORE_CALIBRATION_RERUN",
+  "parentAcceptance": {
+    "path": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
+    "blob": "d1392c431282d0faae9e9ad7f1c22161a3c5caad",
+    "commit": "54e98c230018bdf5b6c961109e6992fcd9fda629"
+  },
+  "trigger": "The first tuning-visible calibration execution produced a deterministic 12,000-scenario result, but the workflow emitted a zero-byte execution manifest and the original ratio-only early-horizon build rule treated a one-minute integer-rounding difference at 3 versus 4 minutes as a 1.333x failure. Holdout was not executed. Repair evidence transport and use a scale-aware build-spread rule before any holdout run.",
+  "diagnosticCalibration": {
+    "workflowRunId": "33132333865",
+    "jobId": "98724479183",
+    "head": "cf048fff5af0c63d754772f4e3bdde07dd75e995",
+    "tree": "18fe5afe81820ddd55461ad81cb29e12307cceeb",
+    "artifactId": "9670821486",
+    "artifactDigest": "sha256:441cf21e76dc402d838604a18ff3f2de5dddb7df1c96aa4cdb516d63a9a98fc9",
+    "artifactSizeBytes": "891998",
+    "resultFileBytes": "1913915",
+    "resultFileSha256": "503f400261d17d93baad8112fa8d2df6c15e720d4d997de440f7d864e29d1565",
+    "deterministicPayloadSha256": "df7cbceb0569f40eefee43dbd81d0b2c4698a44104f88a312ce693471f746e22",
+    "scenarioCount": "12000",
+    "schemaAndReproduction": "PASS",
+    "manifestBytes": "0",
+    "holdoutExecuted": false,
+    "promotionEligible": false,
+    "disposition": "DIAGNOSTIC_ONLY_INVALID_EVIDENCE_TRANSPORT"
+  },
+  "supersededCriterion": {
+    "id": "S3-BUILD-01",
+    "originalRule": "Cell p50 reach-time spread between fastest and slowest build for the same persona/horizon must not exceed 1.20x at every horizon.",
+    "reason": "Nearest-rank integer-minute reporting makes ratio-only gating unstable when the fastest p50 is below five minutes. The observed 3 versus 4 minute difference is one minute but 1.333x. This is a measurement-resolution defect, not evidence that a build is nonviable."
+  },
+  "replacementCriterion": {
+    "id": "S3-BUILD-01-R1",
+    "severity": "P1",
+    "rule": "For each persona and horizon, when the fastest build p50 is at least five minutes, slowest divided by fastest must not exceed 1.20x. When the fastest p50 is below five minutes, the absolute p50 spread must not exceed one minute. Ratio and absolute spread must both remain reported. No build may be universally best across power, reclear and economy dimensions, and every build must have complete results at every horizon.",
+    "notAProductMeaningChange": true,
+    "candidateOrEngineChange": false
+  },
+  "measurementRepair": {
+    "requiredScript": "quality-reviews/step-3-large-scale-validation/audit-calibration.mjs",
+    "requirements": [
+      "Replay all 12,000 calibration scenarios from the sealed namespace and compare every input digest and scenario digest with the compact result.",
+      "Expose first-evolution coverage, repeated-reset sequence behavior, 45-day draw totals, mastery at 20 copies and overflow at 25 copies that the compact gameplay result does not retain.",
+      "Audit static N/R role coverage, UR role non-universality, first-copy functionality, mastery diminishing returns and monetization multiplier caps from the sealed candidate.",
+      "Produce a nonempty canonical audit JSON and fail closed on any P0/P1 criterion."
+    ]
+  },
+  "evidenceTransportRepair": {
+    "executionManifestMustBeNonempty": true,
+    "executionManifestMustBind": [
+      "exact head and tree",
+      "workflow run, attempt and job",
+      "acceptance and addendum blobs",
+      "Step 1 and Step 2 seal blobs",
+      "run-plan and execution-contract blobs",
+      "result byte length and SHA-256",
+      "deterministic payload and canonical JSON digests",
+      "calibration audit byte length and SHA-256"
+    ],
+    "internalSHA256SUMSMustMatch": true
+  },
+  "rerunRule": {
+    "sameCalibrationNamespaceAndSeedsRequired": true,
+    "expectedDeterministicPayloadSha256": "df7cbceb0569f40eefee43dbd81d0b2c4698a44104f88a312ce693471f746e22",
+    "resultMayDifferOnlyInNonDeterministicEvidenceTimestamp": true,
+    "holdoutBeforeCommittedCalibrationGate": false
+  },
+  "writeBoundary": {
+    "allowed": [
+      "quality-reviews/step-3-large-scale-validation/acceptance-addendum-calibration-001.json",
+      "quality-reviews/step-3-large-scale-validation/audit-calibration.mjs",
+      ".github/workflows/verify-step-3-calibration.yml"
+    ],
+    "forbidden": [
+      "simulation/candidate-v2.json",
+      "simulation/run-plan-v2.json",
+      "simulation/execution-contract-v2.json",
+      "simulation/executable-seal-v2.json",
+      "sealed Step 2 engine semantics",
+      "holdout execution",
+      "runtime",
+      "assets",
+      "backend",
+      "payment provider",
+      "ad network",
+      "Production alias",
+      "other branches",
+      "pull request operations"
+    ]
+  },
+  "verdict": "PASS_CALIBRATION_MEASUREMENT_REPAIR_AUTHORIZED"
+}
