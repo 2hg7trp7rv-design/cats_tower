@@ -1,0 +1,22 @@
+/* S02 visual art refinement round 007 — dedicated forest battle background. */
+.s02-shell .battle-stage {
+  background:
+    linear-gradient(180deg, rgba(72, 123, 92, .015), rgba(34, 21, 10, .075)),
+    url("./assets/s02-forest-background-v1.webp") center 52% / cover no-repeat,
+    #79a271;
+}
+.s02-shell .battle-stage::before {
+  background:
+    linear-gradient(180deg, rgba(246, 252, 232, .025), transparent 42%),
+    radial-gradient(circle at 50% 50%, transparent 0 63%, rgba(26, 18, 8, .05) 85%, rgba(14, 7, 3, .17) 100%);
+  backdrop-filter: saturate(1.08) brightness(1.06);
+}
+
+/* Keep the scene readable without turning the daytime forest into a dark vignette. */
+.s02-shell .battle-unit img {
+  filter: drop-shadow(0 4px 2px rgba(19, 9, 4, .52));
+}
+.s02-shell .unit-hp,
+.s02-shell .enemy-hp {
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,.86));
+}
