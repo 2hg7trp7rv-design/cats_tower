@@ -4,8 +4,8 @@
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "currentStep": 3,
-  "status": "IN_PROGRESS",
-  "phase": "CONTENT_PASS_PENDING_EVIDENCE",
+  "status": "PASS",
+  "phase": "LARGE_SCALE_VALIDATION_COMPLETE",
   "step1": {
     "status": "PASS",
     "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
@@ -23,7 +23,7 @@
     "commit": "e02a9af48aaab1a82b1ac4563a4c03f4922eb388",
     "status": "ACTIVE"
   },
-  "reason": "Step 3 measurements and five critics passed; completion evidence and terminal live read-back are pending.",
+  "reason": "Step 3 volumes, critics, final judge, completion evidence and terminal live read-back passed.",
   "v1Artifacts": {
     "lock": "simulation/legacy-v1-lock.json",
     "executeForCurrentPromotion": false,
@@ -132,17 +132,17 @@
   },
   "physicalIPhoneVerified": false,
   "productionChanged": false,
-  "step4Allowed": false,
-  "balanceVerdict": "PASS_PENDING_EVIDENCE",
+  "step4Allowed": true,
+  "balanceVerdict": "PASS_STEP3_LARGE_SCALE_VALIDATION",
   "step3": {
-    "status": "IN_PROGRESS",
+    "status": "PASS",
     "acceptance": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
     "gameplayCalibration": "COMPLETE",
     "gameplayHoldout": "COMPLETE_UNSEEN",
     "highVolume": "COMPLETE",
     "critics": "COMPLETE",
     "finalJudge": "PASS_STEP3_CONTENT_PENDING_COMPLETION_AND_LIVE_READBACK",
-    "completionEvidence": "PENDING",
+    "completionEvidence": "PASS",
     "liveReadback": "PENDING",
     "candidateMutation": false,
     "holdoutTuningReuse": false

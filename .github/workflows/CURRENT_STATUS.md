@@ -3,9 +3,9 @@
 
 - Step 1: **PASS**
 - Step 2: **PASS / SEALED**
-- Step 3: **IN_PROGRESS**
-- Step 4: **BLOCKED_UNTIL_TERMINAL_EVIDENCE**
-- Balance verdict: **PASS_PENDING_EVIDENCE**
+- Step 3: **PASS**
+- Step 4: **READY_TO_START**
+- Balance verdict: **PASS_STEP3_LARGE_SCALE_VALIDATION**
 - Physical iPhone: **NOT_VERIFIED**
 - Production alias changed: **false**
 <!-- CATS_TOWER_STEP3_STATUS_END -->

@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 2,
+  "artifactId": "cats-tower-step3-large-scale-validation-live-readback-v2",
+  "recordedAt": "2026-08-28T05:07:44.728Z",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "observedLiveBeforeThisEvidence": {
+    "head": "f07ee2e496d9ed5961369fabca85bedb39503c71",
+    "tree": "c8659bc8c4f83b562239ec9b79480ab42656134b"
+  },
+  "acceptance": {
+    "path": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
+    "blob": "d1392c431282d0faae9e9ad7f1c22161a3c5caad"
+  },
+  "executionGate": {
+    "path": "quality-reviews/step-3-large-scale-validation/execution-gate.json",
+    "blob": "e499cdb421d17a5e1ee79ca4ffff204fed80e60e",
+    "verdict": "PASS_STEP3_EXECUTION_GATE_CRITICS_AUTHORIZED"
+  },
+  "completionEvidence": {
+    "path": "quality-reviews/step-3-large-scale-validation/completion-evidence.json",
+    "blob": "bc808fc3129f81000f1c5e755ffb2fc3a05bcf0b",
+    "commit": "f07ee2e496d9ed5961369fabca85bedb39503c71",
+    "tree": "c8659bc8c4f83b562239ec9b79480ab42656134b",
+    "verdict": "PASS_COMPLETION_EVIDENCE_READY_FOR_TERMINAL_READBACK"
+  },
+  "executionWorkflow": {
+    "runId": "33143714589",
+    "status": "COMPLETED",
+    "conclusion": "SUCCESS",
+    "sourceCommit": "fc727d89217576b4929288800a613e3521f88c55",
+    "jobId": "98760057075"
+  },
+  "finalJudge": {
+    "path": "quality-reviews/step-3-large-scale-validation/final-judge.json",
+    "blob": "a089266f56076a0b2a59b2670188d95ae8eff3d2",
+    "verdict": "PASS_STEP3_CONTENT_PENDING_COMPLETION_AND_LIVE_READBACK",
+    "step3Pass": true
+  },
+  "criticSummary": {
+    "path": "quality-reviews/step-3-large-scale-validation/critic-summary.json",
+    "blob": "197f2a0949a8f6eb398f9614f79ab79562471fb2",
+    "criticCount": 5,
+    "unresolvedP0": 0,
+    "unresolvedP1": 0
+  },
+  "liveMirrorBlobs": {
+    "quality-reviews/step-1-canonical-design/active-change-control.json": "ed4717cd38c1c40aa638bc83f7592184d3aea1fd",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-015.json": "717504d556f1b6682ca889c9821cbf6b93028789",
+    "AI_PROJECT_POLICY.json": "6bcae22e9f92b8e61158e28c7a1cc1518ecd98ca",
+    "QUALITY_GATE.md": "8836279860ad5f51e36d4c0621b61ecdcbe3f61c",
+    ".github/workflows/CURRENT_STATUS.md": "3262d7f52dc91bba89abbd48413bb48f2565e389",
+    "PROJECT_STATUS.json": "39dfbc614febf1552d073522221470dc27b0e23f",
+    "simulation/CURRENT_STATUS.json": "d67080df92f941701096084c2355ef46b7c4c56e",
+    "AGENTS.md": "81b0686cf477915a803eec87c4712d1d495276ae",
+    "PROJECT_HANDOVER.md": "ec104b57a3f6d8754f241175c666bed541869720"
+  },
+  "governanceDecision": {
+    "step1": "PASS",
+    "step2": "PASS_SEALED",
+    "step3": "PASS",
+    "step4": "READY_TO_START",
+    "balanceVerdict": "PASS_STEP3_LARGE_SCALE_VALIDATION",
+    "unresolvedP0": 0,
+    "unresolvedP1": 0
+  },
+  "scopeReadback": {
+    "candidateChanged": false,
+    "holdoutUsedForTuning": false,
+    "runtimeChanged": false,
+    "assetsChanged": false,
+    "backendChanged": false,
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "otherBranchWritten": false,
+    "pullRequestOperationPerformed": false
+  },
+  "nextAuthorizedAction": "Start Step 4 twelve-screen final mockups.",
+  "verdict": "PASS_FINAL_LIVE_READBACK_STEP3_LARGE_SCALE_VALIDATION"
+}

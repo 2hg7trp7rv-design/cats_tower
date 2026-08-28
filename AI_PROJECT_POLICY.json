@@ -25,13 +25,13 @@
   "currentPhase": {
     "step": 3,
     "name": "large-scale-validation",
-    "status": "IN_PROGRESS",
-    "phase": "CONTENT_PASS_PENDING_EVIDENCE",
+    "status": "PASS",
+    "phase": "LARGE_SCALE_VALIDATION_COMPLETE",
     "step1Status": "PASS",
     "step2Status": "PASS_SEALED",
     "step3Allowed": true,
-    "step4Allowed": false,
-    "balanceVerdict": "PASS_PENDING_EVIDENCE",
+    "step4Allowed": true,
+    "balanceVerdict": "PASS_STEP3_LARGE_SCALE_VALIDATION",
     "physicalIPhone": "NOT_VERIFIED"
   },
   "activeStep1Seal": {
@@ -115,7 +115,7 @@
   },
   "writeBoundary": {
     "currentAllowed": [
-      "Step 3 completion, terminal evidence and explicit failure/change-control records"
+      "Step 4 twelve-screen final mockups"
     ],
     "currentForbidden": [
       "runtime",
