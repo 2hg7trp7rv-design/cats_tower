@@ -1,0 +1,340 @@
+name: Verify Step 3 large-scale validation
+
+on:
+  push:
+    branches: [kimi]
+    paths:
+      - '.github/workflows/verify-step-3-large-scale-validation.yml'
+      - 'tests/step3/**'
+      - 'quality-reviews/step-3-large-scale-validation/acceptance-matrix.json'
+      - 'quality-reviews/step-3-large-scale-validation/live-readback-request.json'
+      - 'quality-reviews/step-3-large-scale-validation/terminal-verification-trigger.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: cats-step3-large-scale-validation
+  cancel-in-progress: false
+
+jobs:
+  execute-review-evidence:
+    name: execute-review-evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      STEP3_DIR: quality-reviews/step-3-large-scale-validation
+      REPAIR_BASE: 3eefbf6fa7dfcec8b5b093612e8946b43d838bc2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Assert repository, branch and immutable entry
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = '2hg7trp7rv-design/cats_tower'
+          test "$GITHUB_REF_NAME" = 'kimi'
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse --is-shallow-repository)" = 'false'
+          test -z "$(git replace -l)"
+          git merge-base --is-ancestor "$REPAIR_BASE" HEAD
+          jq -e --arg head "$REPAIR_BASE" '
+            .repository == "2hg7trp7rv-design/cats_tower" and
+            .branch == "kimi" and
+            .status == "ACTIVE_BEFORE_FIRST_STEP3_WRITE" and
+            .entry.head == $head and
+            .entry.step1 == "PASS" and
+            .entry.step2 == "PASS_SEALED" and
+            .sealedExecution.fullExecutionOwner == "STEP3" and
+            .sealedExecution.candidateMutationDuringThisRound == false and
+            .sealedExecution.holdoutMayBeUsedForTuning == false
+          ' "$STEP3_DIR/acceptance-matrix.json" >/dev/null
+          test "$(git rev-parse HEAD:quality-reviews/step-1-reseal-round-008/seal-round-008.json)" = '0a959de0383b57ad6cd1f33c124b398aa51c1e00'
+          test "$(git rev-parse HEAD:simulation/executable-seal-v2.json)" = 'ee3507969c03b08fe27350263cf0bc093a1c18e1'
+          test "$(git rev-parse HEAD:quality-reviews/step-2-governance-repair-round-001/live-readback.json)" = '692434fafd19d1e5470fe58808fd72af7286ec35'
+          node --check tests/step3/analyze-step3-results.mjs
+          node --check tests/step3/step3-governance.mjs
+
+      - name: Detect execution phase
+        id: phase
+        run: |
+          set -euo pipefail
+          if [ ! -f "$STEP3_DIR/completion-evidence.json" ]; then
+            MODE=execute
+          elif [ -f "$STEP3_DIR/live-readback-request.json" ] && [ ! -f "$STEP3_DIR/live-readback.json" ]; then
+            MODE=finalize
+          elif [ -f "$STEP3_DIR/live-readback.json" ]; then
+            MODE=verify
+          else
+            echo 'Completion exists but no authorized terminal phase marker exists.' >&2
+            exit 1
+          fi
+          echo "mode=$MODE" >> "$GITHUB_OUTPUT"
+          echo "Detected Step 3 workflow mode: $MODE"
+
+      - name: Configure exact kimi writer
+        if: steps.phase.outputs.mode != 'verify'
+        run: |
+          set -euo pipefail
+          git checkout -B kimi "$GITHUB_SHA"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          test "$(git branch --show-current)" = 'kimi'
+
+      - name: Activate Step 3 IN_PROGRESS state
+        if: steps.phase.outputs.mode == 'execute'
+        run: |
+          set -euo pipefail
+          node tests/step3/step3-governance.mjs activate | tee "$RUNNER_TEMP/step3-activation.json"
+          git diff --check
+          git add \
+            quality-reviews/step-1-canonical-design/active-change-control.json \
+            quality-reviews/step-1-canonical-design/active-change-control-addendum-round-015.json \
+            AI_PROJECT_POLICY.json PROJECT_STATUS.json simulation/CURRENT_STATUS.json \
+            QUALITY_GATE.md .github/workflows/CURRENT_STATUS.md AGENTS.md PROJECT_HANDOVER.md
+          git commit -m 'step3: activate sealed large-scale validation'
+          git push origin HEAD:kimi
+          git status --short
+          test -z "$(git status --porcelain --untracked-files=all)"
+
+      - name: Revalidate sealed Step 2 executable before full execution
+        if: steps.phase.outputs.mode == 'execute'
+        run: |
+          set -euo pipefail
+          node simulation/verify-step2-v2.mjs | tee "$RUNNER_TEMP/step2-regression.json"
+          jq -e '.verdict == "PASS"' "$RUNNER_TEMP/step2-regression.json" >/dev/null
+          node simulation/validate-executable-seal-v2.mjs simulation/executable-seal-v2.json | tee "$RUNNER_TEMP/executable-seal.json"
+          jq -e '.verdict == "PASS_EXECUTABLE_SEAL_V2"' "$RUNNER_TEMP/executable-seal.json" >/dev/null
+
+      - name: Execute 12000 calibration scenarios
+        if: steps.phase.outputs.mode == 'execute'
+        env:
+          CT_STEP3_AUTHORIZED: '1'
+        run: |
+          set -euo pipefail
+          mkdir -p "$STEP3_DIR/high-volume" "$RUNNER_TEMP/step3-times"
+          /usr/bin/time -f '%e %M' -o "$RUNNER_TEMP/step3-times/gameplay-calibration.txt" \
+            node simulation/engine-v2/run-plan.mjs \
+              --mode gameplay --owner STEP3 --partition calibration \
+              --output "$STEP3_DIR/gameplay-calibration-result.json"
+          node simulation/validate-gameplay-result-v2.mjs \
+            "$STEP3_DIR/gameplay-calibration-result.json" --reproduce \
+            | tee "$RUNNER_TEMP/gameplay-calibration-validate.json"
+          jq -e '.scenarioCount == "12000" and .partition == "calibration"' \
+            "$STEP3_DIR/gameplay-calibration-result.json" >/dev/null
+
+      - name: Execute 3000 unseen holdout scenarios
+        if: steps.phase.outputs.mode == 'execute'
+        env:
+          CT_STEP3_AUTHORIZED: '1'
+        run: |
+          set -euo pipefail
+          /usr/bin/time -f '%e %M' -o "$RUNNER_TEMP/step3-times/gameplay-holdout.txt" \
+            node simulation/engine-v2/run-plan.mjs \
+              --mode gameplay --owner STEP3 --partition holdout \
+              --output "$STEP3_DIR/gameplay-holdout-result.json"
+          node simulation/validate-gameplay-result-v2.mjs \
+            "$STEP3_DIR/gameplay-holdout-result.json" --reproduce \
+            | tee "$RUNNER_TEMP/gameplay-holdout-validate.json"
+          jq -e '.scenarioCount == "3000" and .partition == "holdout"' \
+            "$STEP3_DIR/gameplay-holdout-result.json" >/dev/null
+
+      - name: Execute all six full high-volume suites
+        if: steps.phase.outputs.mode == 'execute'
+        env:
+          CT_STEP3_AUTHORIZED: '1'
+        run: |
+          set -euo pipefail
+          for suite in \
+            gacha-tails \
+            pity-conformance \
+            duplicate-skew-overflow \
+            refund-replay-race \
+            state-machine-model \
+            large-number-properties
+          do
+            /usr/bin/time -f '%e %M' -o "$RUNNER_TEMP/step3-times/$suite.txt" \
+              node simulation/engine-v2/high-volume.mjs \
+                --mode full --owner STEP3 --suite "$suite" \
+                --output "$STEP3_DIR/high-volume/$suite.json"
+            node simulation/validate-high-volume-result-v2.mjs \
+              "$STEP3_DIR/high-volume/$suite.json" --reproduce \
+              | tee "$RUNNER_TEMP/$suite-validate.json"
+          done
+          jq -e '.sampleCount == "200000"' "$STEP3_DIR/high-volume/gacha-tails.json" >/dev/null
+          jq -e '.sampleCount == "1000000"' "$STEP3_DIR/high-volume/pity-conformance.json" >/dev/null
+          jq -e '.sampleCount == "200000"' "$STEP3_DIR/high-volume/duplicate-skew-overflow.json" >/dev/null
+          jq -e '.sampleCount == "100000"' "$STEP3_DIR/high-volume/refund-replay-race.json" >/dev/null
+          jq -e '.sampleCount == "100000"' "$STEP3_DIR/high-volume/state-machine-model.json" >/dev/null
+          jq -e '.sampleCount == "100000"' "$STEP3_DIR/high-volume/large-number-properties.json" >/dev/null
+
+      - name: Freeze execution manifest before analysis
+        if: steps.phase.outputs.mode == 'execute'
+        run: |
+          set -euo pipefail
+          EXECUTION_SOURCE=$(git rev-parse HEAD)
+          EXECUTION_TREE=$(git rev-parse HEAD^{tree})
+          node - "$STEP3_DIR" "$EXECUTION_SOURCE" "$EXECUTION_TREE" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$RUNNER_TEMP/step3-times" <<'NODE'
+          const {createHash}=require('node:crypto');
+          const {readFileSync,writeFileSync,readdirSync}=require('node:fs');
+          const path=require('node:path');
+          const [dir,commit,tree,runId,runAttempt,timeDir]=process.argv.slice(2);
+          const files=[
+            'gameplay-calibration-result.json','gameplay-holdout-result.json',
+            ...['gacha-tails','pity-conformance','duplicate-skew-overflow','refund-replay-race','state-machine-model','large-number-properties'].map(x=>`high-volume/${x}.json`)
+          ];
+          const sha=p=>createHash('sha256').update(readFileSync(path.join(dir,p))).digest('hex');
+          const timings=Object.fromEntries(readdirSync(timeDir).sort().map(f=>{
+            const [seconds,maxRssKiB]=readFileSync(path.join(timeDir,f),'utf8').trim().split(/\s+/);
+            return [f.replace(/\.txt$/,''),{seconds,maxRssKiB}];
+          }));
+          const manifest={schemaVersion:1,artifactId:'cats-tower-step3-execution-manifest',recordedAt:new Date().toISOString(),repository:'2hg7trp7rv-design/cats_tower',branch:'kimi',executionSource:{commit,tree},workflow:{runId,runAttempt},candidateMutation:false,holdoutUsedForTuning:false,outputs:Object.fromEntries(files.map(p=>[p,{sha256:sha(p),bytes:readFileSync(path.join(dir,p)).byteLength}])),timings};
+          writeFileSync(path.join(dir,'execution-manifest.json'),JSON.stringify(manifest,null,2)+'\n');
+          NODE
+
+      - name: Analyze measurements and run five independent critic scopes
+        if: steps.phase.outputs.mode == 'execute'
+        run: |
+          set -euo pipefail
+          node tests/step3/analyze-step3-results.mjs \
+            --input-dir "$STEP3_DIR" --output "$STEP3_DIR/analysis.json" \
+            | tee "$RUNNER_TEMP/step3-analysis-summary.json"
+          node tests/step3/step3-governance.mjs review \
+            | tee "$RUNNER_TEMP/step3-review-summary.json"
+          test -f "$STEP3_DIR/critic-summary.json"
+          test -f "$STEP3_DIR/final-judge.json"
+          jq -e '.criticCount == 5' "$STEP3_DIR/critic-summary.json" >/dev/null
+          jq -e '.verdict == "PASS_STEP3_CONTENT_PENDING_COMPLETION_AND_LIVE_READBACK" or .verdict == "FAIL_STEP3_SEALED_CANDIDATE"' "$STEP3_DIR/final-judge.json" >/dev/null
+          git diff --check
+
+      - name: Commit immutable Step 3 results and judge
+        if: steps.phase.outputs.mode == 'execute'
+        run: |
+          set -euo pipefail
+          git add \
+            "$STEP3_DIR/gameplay-calibration-result.json" \
+            "$STEP3_DIR/gameplay-holdout-result.json" \
+            "$STEP3_DIR/high-volume" \
+            "$STEP3_DIR/execution-manifest.json" \
+            "$STEP3_DIR/analysis.json" \
+            "$STEP3_DIR/critics" \
+            "$STEP3_DIR/critic-summary.json" \
+            "$STEP3_DIR/final-judge.json" \
+            quality-reviews/step-1-canonical-design/active-change-control.json \
+            quality-reviews/step-1-canonical-design/active-change-control-addendum-round-015.json \
+            AI_PROJECT_POLICY.json PROJECT_STATUS.json simulation/CURRENT_STATUS.json \
+            QUALITY_GATE.md .github/workflows/CURRENT_STATUS.md AGENTS.md PROJECT_HANDOVER.md
+          git commit -m 'step3: record full matrix and independent judgment'
+          git push origin HEAD:kimi
+          test -z "$(git status --porcelain --untracked-files=all)"
+
+      - name: Resolve current workflow job ID
+        if: steps.phase.outputs.mode == 'execute'
+        id: job
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          JOB_ID=$(curl -fsSL \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs?per_page=100" \
+            | jq -r '.jobs[] | select(.name == "execute-review-evidence") | .id' | head -n1)
+          test "$JOB_ID" != ''
+          test "$JOB_ID" != 'null'
+          echo "job_id=$JOB_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Create exact completion evidence
+        if: steps.phase.outputs.mode == 'execute'
+        env:
+          STEP3_JOB_ID: ${{ steps.job.outputs.job_id }}
+        run: |
+          set -euo pipefail
+          node tests/step3/step3-governance.mjs completion \
+            | tee "$RUNNER_TEMP/step3-completion-summary.json"
+          git diff --check
+          git add "$STEP3_DIR/completion-evidence.json"
+          git commit -m 'step3: bind large-scale validation completion evidence'
+          git push origin HEAD:kimi
+          test -z "$(git status --porcelain --untracked-files=all)"
+
+      - name: Validate request and prior execution run
+        if: steps.phase.outputs.mode == 'finalize'
+        id: prior
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          jq -e '.artifactId == "cats-tower-step3-live-readback-request" and .requested == true' \
+            "$STEP3_DIR/live-readback-request.json" >/dev/null
+          PRIOR_RUN_ID=$(jq -r '.workflow.runId' "$STEP3_DIR/completion-evidence.json")
+          test "$PRIOR_RUN_ID" != ''
+          test "$PRIOR_RUN_ID" != 'null'
+          PRIOR=$(curl -fsSL \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$PRIOR_RUN_ID")
+          test "$(jq -r '.status' <<<"$PRIOR")" = 'completed'
+          test "$(jq -r '.conclusion' <<<"$PRIOR")" = 'success'
+          test "$(jq -r '.head_branch' <<<"$PRIOR")" = 'kimi'
+          echo "run_id=$PRIOR_RUN_ID" >> "$GITHUB_OUTPUT"
+          echo "conclusion=success" >> "$GITHUB_OUTPUT"
+
+      - name: Create terminal live read-back
+        if: steps.phase.outputs.mode == 'finalize'
+        env:
+          PRIOR_RUN_ID: ${{ steps.prior.outputs.run_id }}
+          PRIOR_RUN_CONCLUSION: ${{ steps.prior.outputs.conclusion }}
+        run: |
+          set -euo pipefail
+          node tests/step3/step3-governance.mjs live-readback \
+            | tee "$RUNNER_TEMP/step3-live-readback-summary.json"
+          node tests/step3/step3-governance.mjs verify-terminal
+          git diff --check
+          git add \
+            "$STEP3_DIR/live-readback.json" \
+            quality-reviews/step-1-canonical-design/active-change-control.json \
+            quality-reviews/step-1-canonical-design/active-change-control-addendum-round-015.json \
+            AI_PROJECT_POLICY.json PROJECT_STATUS.json simulation/CURRENT_STATUS.json \
+            QUALITY_GATE.md .github/workflows/CURRENT_STATUS.md AGENTS.md PROJECT_HANDOVER.md
+          git commit -m 'step3: add terminal large-scale validation read-back'
+          git push origin HEAD:kimi
+          test -z "$(git status --porcelain --untracked-files=all)"
+
+      - name: Verify terminal Step 3 evidence at later exact head
+        if: steps.phase.outputs.mode == 'verify'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          jq -e '.artifactId == "cats-tower-step3-terminal-verification-trigger" and .requested == true' \
+            "$STEP3_DIR/terminal-verification-trigger.json" >/dev/null
+          node simulation/verify-step2-v2.mjs | tee "$RUNNER_TEMP/terminal-step2-regression.json"
+          jq -e '.verdict == "PASS"' "$RUNNER_TEMP/terminal-step2-regression.json" >/dev/null
+          node tests/step3/step3-governance.mjs verify-terminal \
+            | tee "$RUNNER_TEMP/terminal-step3-verification.json"
+          node simulation/validate-gameplay-result-v2.mjs "$STEP3_DIR/gameplay-calibration-result.json" --reproduce >/dev/null
+          node simulation/validate-gameplay-result-v2.mjs "$STEP3_DIR/gameplay-holdout-result.json" --reproduce >/dev/null
+          for suite in gacha-tails pity-conformance duplicate-skew-overflow refund-replay-race state-machine-model large-number-properties; do
+            node simulation/validate-high-volume-result-v2.mjs "$STEP3_DIR/high-volume/$suite.json" --reproduce >/dev/null
+          done
+          PRIOR_RUN_ID=$(jq -r '.executionWorkflow.runId' "$STEP3_DIR/live-readback.json")
+          PRIOR=$(curl -fsSL \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$PRIOR_RUN_ID")
+          test "$(jq -r '.status' <<<"$PRIOR")" = 'completed'
+          test "$(jq -r '.conclusion' <<<"$PRIOR")" = 'success'
+          git diff --check "$REPAIR_BASE..HEAD"
+          test -z "$(git status --porcelain --untracked-files=all)"
