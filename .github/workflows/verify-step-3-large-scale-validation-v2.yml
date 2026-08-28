@@ -9,6 +9,8 @@ on:
       - '.github/workflows/CURRENT_STATUS.md'
       - '.github/workflows/repair-step-3-finalization-bootstrap.yml'
       - 'quality-reviews/step-3-large-scale-validation/tools/finalize-step3.mjs'
+      - 'quality-reviews/step-3-large-scale-validation/tools/correct-terminal-mirrors.mjs'
+      - 'quality-reviews/step-3-large-scale-validation/terminal-mirror-correction.json'
       - 'tests/governance/verify-current-step2-state.mjs'
       - 'quality-reviews/step-3-large-scale-validation/completion-evidence.json'
       - 'quality-reviews/step-3-large-scale-validation/live-readback.json'
@@ -30,6 +32,8 @@ jobs:
     env:
       STEP3_DIR: quality-reviews/step-3-large-scale-validation
       TOOL: quality-reviews/step-3-large-scale-validation/tools/finalize-step3.mjs
+      CORRECTION_TOOL: quality-reviews/step-3-large-scale-validation/tools/correct-terminal-mirrors.mjs
+      CORRECTION: quality-reviews/step-3-large-scale-validation/terminal-mirror-correction.json
       ENTRY: 3eefbf6fa7dfcec8b5b093612e8946b43d838bc2
     steps:
       - uses: actions/checkout@v4
@@ -51,6 +55,7 @@ jobs:
           test -z "$(git replace -l)"
           git merge-base --is-ancestor "$ENTRY" HEAD
           node --check "$TOOL"
+          node --check "$CORRECTION_TOOL"
           node --check tests/governance/verify-current-step2-state.mjs
           node tests/governance/verify-current-step2-state.mjs
           node "$TOOL" verify-source
@@ -164,15 +169,20 @@ jobs:
           set -euo pipefail
           node "$TOOL" verify-completion
           test ! -f "$STEP3_DIR/live-readback.json"
-          echo 'Completion evidence is valid. The successful workflow_run finalizer will create terminal live read-back.'
+          echo 'Completion evidence is valid. The successful workflow-run finalizer will create terminal live read-back.'
 
-      - name: Verify terminal evidence at exact later HEAD
+      - name: Verify terminal and post-terminal correction at exact later HEAD
         if: steps.phase.outputs.mode == 'verify-terminal'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          node "$TOOL" verify-terminal
+          if [ -f "$CORRECTION" ]; then
+            node "$TOOL" verify-completion
+            node "$CORRECTION_TOOL" verify
+          else
+            node "$TOOL" verify-terminal
+          fi
           node tests/governance/verify-current-step2-state.mjs
           PRIOR_RUN_ID=$(jq -r '.executionWorkflow.runId' "$STEP3_DIR/live-readback.json")
           PRIOR=$(curl -fsSL \
