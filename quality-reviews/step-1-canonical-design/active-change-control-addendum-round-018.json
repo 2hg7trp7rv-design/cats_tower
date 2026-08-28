@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-active-change-control-addendum-round-018",
+  "createdAt": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "parentAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-017.json",
+  "entry": {
+    "head": "9f786d58f8df24864655450fc5783c96eaed1ccb"
+  },
+  "trigger": "The user clarified that the project-source completed-screen images are the binding visual baseline and rejected the first redesigned anchor concept because it diverged in art style, information architecture, palette, navigation and screen composition.",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS_STEP4_SOURCE_BASELINE_REALIGNMENT",
+  "advanceAllowed": false,
+  "step4Allowed": true,
+  "step5Allowed": false,
+  "bindingEvidence": {
+    "firstVisualRejection": "quality-reviews/step-4-twelve-screen-final-mockups/user-visual-rejection-round-001.json",
+    "anchorConceptRejection": "quality-reviews/step-4-twelve-screen-final-mockups/user-visual-rejection-round-002.json"
+  },
+  "supersedesForCurrentStep4": [
+    "Any dark painterly or semi-realistic high-fantasy art direction that replaces the source-baseline pixel-art chibi presentation.",
+    "Any 2x2 contact-sheet concept used as a substitute for individual portrait mobile-screen evaluation.",
+    "Any redesign that removes the persistent player/resource header, contextual screen header or five-tab bottom navigation shown in the source baseline.",
+    "Any claim that a visually polished but structurally different RPG screen satisfies the Cat's Tower completed-screen target."
+  ],
+  "bindingVisualDirection": {
+    "baselineRole": "USER_DEFINED_COMPLETED_SCREEN_IMAGE_BASELINE",
+    "mustPreserve": [
+      "warm dark-brown, wood and brass UI frame",
+      "pixel-art chibi cats and enemies",
+      "bright cozy fantasy town and tower environments",
+      "dense but clearly tiered production-game HUD",
+      "persistent top player and currency bar",
+      "screen-specific contextual title/status strip",
+      "persistent five-tab bottom navigation",
+      "scene-led battle, tower, guild, formation, gacha, forge, town and event compositions"
+    ],
+    "mustImproveWithoutChangingIdentity": [
+      "safe-area handling",
+      "small-text legibility",
+      "large-text fallback",
+      "contrast",
+      "touch target separation",
+      "reduced-motion behavior",
+      "current sealed infinite-tower and non-chairman product semantics"
+    ]
+  },
+  "requiredSequence": [
+    "Freeze the source-image visual grammar as the comparison baseline.",
+    "Select one portrait anchor screen and reproduce its hierarchy and density with original Cat's Tower assets and current canonical semantics.",
+    "Use controlled UI text and separate illustration generation from final text rendering.",
+    "Conduct an internal side-by-side rejection test before presentation.",
+    "Present the individual rendered screen to the user.",
+    "Proceed to the next anchor only after the direction is credible; do not mass-produce twelve screens from an unapproved base."
+  ],
+  "automaticFailConditions": [
+    "non-pixel painterly or realistic catfolk art becomes the dominant style",
+    "generic dark fantasy RPG appearance",
+    "missing persistent source-baseline navigation chrome",
+    "collage-only presentation",
+    "uncontrolled generated Japanese text",
+    "source-baseline hierarchy or warmth is materially lost",
+    "user visual-direction approval is absent",
+    "unresolved P0 or P1 is greater than zero"
+  ],
+  "currentWriteBoundary": {
+    "allowed": [
+      "Step 4 source-baseline visual realignment",
+      "individual portrait anchor mockups",
+      "rendered screenshot evidence",
+      "visual and accessibility review",
+      "Step 4 status synchronization"
+    ],
+    "forbidden": [
+      "Step 5 implementation",
+      "runtime",
+      "final product assets before Step 4 approval",
+      "backend",
+      "payment provider",
+      "ad network",
+      "PR operation",
+      "Production alias",
+      "physical-iPhone PASS claim",
+      "Step 2 or Step 3 executable mutation"
+    ]
+  }
+}
