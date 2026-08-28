@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   apply-repair:
-    name: apply-step3-nonworkflow-repair
+    name: patch-step3-markdown-normalization
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -28,41 +28,43 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Verify immutable bootstrap source
+      - name: Patch finalizer and remove transport chunks
         run: |
           set -euo pipefail
           test "$GITHUB_REPOSITORY" = '2hg7trp7rv-design/cats_tower'
           test "$GITHUB_REF_NAME" = 'kimi'
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          git merge-base --is-ancestor '70862ef56bc586755e5a4571a826686bb95486bb' HEAD
           test "$(git rev-parse --is-shallow-repository)" = 'false'
           test -z "$(git replace -l)"
-          cat .github/step3-repair/segment* > "$RUNNER_TEMP/step3-repair.b64"
-          test "$(sha256sum "$RUNNER_TEMP/step3-repair.b64" | awk '{print $1}')" = '379c6e0a84904abb4b365dfff1ebaa938e2de5f0019dec0853473c7e5dbf5344'
-          base64 -d "$RUNNER_TEMP/step3-repair.b64" > "$RUNNER_TEMP/step3-repair.tar.gz"
-          test "$(sha256sum "$RUNNER_TEMP/step3-repair.tar.gz" | awk '{print $1}')" = 'c8528ef19e1d1f664b0860d8a99ca3bbe7f269a5edcf7ae326be5153266e6e4b'
-
-      - name: Apply and push non-workflow repair files
-        run: |
-          set -euo pipefail
           git checkout -B kimi "$GITHUB_SHA"
-          tar -xzf "$RUNNER_TEMP/step3-repair.tar.gz" -C .
-          git checkout -- \
-            .github/workflows/verify-step-3-large-scale-validation-v2.yml \
-            .github/workflows/finalize-step-3-large-scale-validation.yml
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('quality-reviews/step-3-large-scale-validation/tools/finalize-step3.mjs')
+          text = path.read_text()
+          old = "  writeText(relativePath, `${statusBlock(status, step4Status, balanceVerdict)}\\n\\n${content.trimStart()}`);"
+          new = "  writeText(relativePath, `${statusBlock(status, step4Status, balanceVerdict)}\\n\\n${content.trimStart()}`.replace(/[ \\t]+$/gm, ''));"
+          if text.count(old) != 1:
+              raise SystemExit(f'expected exactly one markdown writer, found {text.count(old)}')
+          path.write_text(text.replace(old, new))
+          PY
           node --check quality-reviews/step-3-large-scale-validation/tools/finalize-step3.mjs
-          node --check tests/governance/verify-current-step2-state.mjs
+          git rm -r .github/step3-repair
           git diff --check
-          git add \
-            quality-reviews/step-3-large-scale-validation/tools/finalize-step3.mjs \
-            tests/governance/verify-current-step2-state.mjs
+          git add quality-reviews/step-3-large-scale-validation/tools/finalize-step3.mjs
           git diff --cached --name-only | sort > "$RUNNER_TEMP/staged-paths.txt"
-          printf '%s\n' \
-            'quality-reviews/step-3-large-scale-validation/tools/finalize-step3.mjs' \
-            'tests/governance/verify-current-step2-state.mjs' | sort > "$RUNNER_TEMP/expected-paths.txt"
+          cat > "$RUNNER_TEMP/expected-paths.txt" <<'EOF'
+          .github/step3-repair/segment00
+          .github/step3-repair/segment01
+          .github/step3-repair/segment02
+          .github/step3-repair/segment03
+          .github/step3-repair/segment04
+          .github/step3-repair/segment05
+          quality-reviews/step-3-large-scale-validation/tools/finalize-step3.mjs
+          EOF
+          sort -o "$RUNNER_TEMP/expected-paths.txt" "$RUNNER_TEMP/expected-paths.txt"
           diff -u "$RUNNER_TEMP/expected-paths.txt" "$RUNNER_TEMP/staged-paths.txt"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'step3: add strict critic and evidence finalizer'
+          git commit -m 'step3: normalize generated markdown evidence'
           git push origin HEAD:kimi
           test -z "$(git status --porcelain --untracked-files=all)"
