@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "step-1-canonical-design-active-change-control-addendum-round-016",
+  "createdAt": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "previousAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-015.json",
+  "trigger": "Post-terminal read-back found stale Step 2/Step 3 lifecycle wording inside current authority mirrors even though the canonical status blocks and terminal verdict were PASS. Correct mirrors without changing product semantics, sealed inputs, raw execution evidence or the immutable v2 terminal read-back.",
+  "sourceTerminalReadback": {
+    "path": "quality-reviews/step-3-large-scale-validation/live-readback.json",
+    "blob": "d0b73af25a8f0d449cfc083b007b84b8ff3fbc9b",
+    "verdict": "PASS_FINAL_LIVE_READBACK_STEP3_LARGE_SCALE_VALIDATION"
+  },
+  "sourceCompletionEvidence": {
+    "path": "quality-reviews/step-3-large-scale-validation/completion-evidence.json",
+    "blob": "bc808fc3129f81000f1c5e755ffb2fc3a05bcf0b"
+  },
+  "correctedMirrorEvidence": "quality-reviews/step-3-large-scale-validation/terminal-mirror-correction.json",
+  "step1Status": "PASS",
+  "step2Status": "PASS_SEALED",
+  "step3Status": "PASS",
+  "step4Status": "READY_TO_START",
+  "balanceVerdict": "PASS_STEP3_LARGE_SCALE_VALIDATION",
+  "unresolvedP0": 0,
+  "unresolvedP1": 0,
+  "physicalIPhoneVerified": false,
+  "productionAliasChanged": false,
+  "nextAuthorizedAction": "Start Step 4 twelve-screen final mockups.",
+  "verdict": "PASS_POST_TERMINAL_MIRROR_CORRECTION_AUTHORIZED"
+}

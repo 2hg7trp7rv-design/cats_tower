@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "updatedDate": "2026-08-28",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
@@ -111,7 +111,7 @@
   },
   "writeBoundary": {
     "allowed": [
-      "Step 3 large-scale validation artifacts and evidence"
+      "Step 4 twelve-screen final mockups"
     ],
     "runtimeChanged": false,
     "assetChanged": false,
@@ -120,16 +120,10 @@
     "paymentProviderChanged": false,
     "adNetworkChanged": false,
     "productionChanged": false,
-    "step3MayRun": true
+    "step3MayRun": false,
+    "step4MayStart": true
   },
-  "nextAuthorizedWork": "Start Step 3 sealed large-scale validation. Execute minimum 15,000 gameplay scenarios plus separate high-volume probability, state-transition, refund/replay/race and large-number suites; do not reuse unseen holdout for tuning.",
-  "knownCiDiscrepancy": {
-    "workflow": ".github/workflows/verify-main.yml",
-    "conclusion": "FAILURE_EXPECTED_UNTIL_GOVERNANCE_REPAIR",
-    "classification": "LEGACY_ROUND7_CURRENT_STATUS_ASSERTION_INCOMPATIBLE_WITH_ROUND008_AND_LATER_STATUS",
-    "affectsDedicatedStep2SealVerdict": false,
-    "remediation": "Separate historical Round 7 evidence validation from current-status validation. Do not restore obsolete current-state markers."
-  },
+  "nextAuthorizedWork": "Start Step 4 twelve-screen final mockups. Do not mutate the sealed Step 2/3 executable evidence.",
   "physicalIPhoneVerified": false,
   "productionChanged": false,
   "step4Allowed": true,
@@ -141,10 +135,19 @@
     "gameplayHoldout": "COMPLETE_UNSEEN",
     "highVolume": "COMPLETE",
     "critics": "COMPLETE",
-    "finalJudge": "PASS_STEP3_CONTENT_PENDING_COMPLETION_AND_LIVE_READBACK",
+    "finalJudge": "PASS",
     "completionEvidence": "PASS",
-    "liveReadback": "PENDING",
+    "liveReadback": "PASS",
     "candidateMutation": false,
-    "holdoutTuningReuse": false
+    "holdoutTuningReuse": false,
+    "finalJudgeVerdict": "PASS_STEP3_CONTENT_PENDING_COMPLETION_AND_LIVE_READBACK",
+    "liveReadbackVerdict": "PASS_FINAL_LIVE_READBACK_STEP3_LARGE_SCALE_VALIDATION",
+    "terminalMirrorCorrection": "quality-reviews/step-3-large-scale-validation/terminal-mirror-correction.json"
+  },
+  "resolvedCiHistory": {
+    "workflow": ".github/workflows/verify-main.yml",
+    "status": "RESOLVED",
+    "verifiedRunId": "33144127913",
+    "conclusion": "SUCCESS"
   }
 }

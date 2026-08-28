@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "artifactId": "step-1-canonical-design-active-change-control",
-  "revision": 8,
+  "revision": 9,
   "createdAt": "2026-08-26",
   "updatedAt": "2026-08-28",
   "repository": "2hg7trp7rv-design/cats_tower",
@@ -50,7 +50,7 @@
     "status": "PASS_SEALED"
   },
   "activationEvidence": {
-    "latestAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-015.json",
+    "latestAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-016.json",
     "step1Completion": "quality-reviews/step-1-reseal-round-008/activation-completion-evidence-round-008.json",
     "step1LiveReadback": "quality-reviews/step-1-reseal-round-008/live-readback-round-008.json",
     "step2Completion": "quality-reviews/step-2-executable-contract-v2/completion-evidence.json",
@@ -61,7 +61,8 @@
     "governanceRepairLiveReadback": "quality-reviews/step-2-governance-repair-round-001/live-readback.json",
     "step3FinalJudge": "quality-reviews/step-3-large-scale-validation/final-judge.json",
     "step3CompletionEvidence": "quality-reviews/step-3-large-scale-validation/completion-evidence.json",
-    "step3LiveReadback": "PENDING"
+    "step3LiveReadback": "quality-reviews/step-3-large-scale-validation/live-readback.json",
+    "step3TerminalMirrorCorrection": "quality-reviews/step-3-large-scale-validation/terminal-mirror-correction.json"
   },
   "historicalEvidence": {
     "finite100FNoGachaPassesRemainImmutable": true,
@@ -139,6 +140,15 @@
       "trackedP2": 6,
       "qualificationScenarios": 30,
       "balanceVerdict": "NOT_EVALUATED_STEP2"
+    },
+    "step3LargeScaleValidation": {
+      "status": "PASS",
+      "gameplayScenarios": 15000,
+      "highVolumeSamples": 1700000,
+      "criticCount": 5,
+      "unresolvedP0": 0,
+      "unresolvedP1": 0,
+      "balanceVerdict": "PASS_STEP3_LARGE_SCALE_VALIDATION"
     }
   },
   "authorizedExecutionSequence": [
@@ -215,5 +225,21 @@
   "nextAuthorizedAction": "Start Step 4 twelve-screen final mockups.",
   "physicalIPhoneVerified": false,
   "productionAliasChanged": false,
-  "step4Allowed": true
+  "step4Allowed": true,
+  "currentWriteBoundary": {
+    "allowed": [
+      "Step 4 twelve-screen final mockups"
+    ],
+    "forbidden": [
+      "runtime",
+      "assets",
+      "backend",
+      "payment provider",
+      "ad network",
+      "PR operation",
+      "Production alias",
+      "Step 2 executable mutation",
+      "physical-iPhone PASS claim"
+    ]
+  }
 }

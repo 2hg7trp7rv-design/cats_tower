@@ -1,5 +1,5 @@
 {
-  "statusDocumentSchemaVersion": 14,
+  "statusDocumentSchemaVersion": 15,
   "updatedDate": "2026-08-28",
   "project": "Cat's Tower",
   "canonicalRepository": "2hg7trp7rv-design/cats_tower",
@@ -18,7 +18,7 @@
   "currentStep": 3,
   "currentStepName": "large-scale-validation",
   "currentStepStatus": "PASS",
-  "currentCheckpoint": "step3-terminal-live-readback",
+  "currentCheckpoint": "step3-post-terminal-mirror-correction",
   "advanceAllowed": true,
   "step2Allowed": true,
   "step3Allowed": true,
@@ -139,7 +139,7 @@
   "nextAction": "Start Step 4 twelve-screen final mockups.",
   "writeBoundary": {
     "allowedNext": [
-      "Step 3 large-scale validation artifacts and evidence"
+      "Step 4 twelve-screen final mockups"
     ],
     "forbiddenUntilLaterGates": [
       "runtime",
@@ -150,17 +150,6 @@
       "Production alias",
       "physical-iPhone PASS claim"
     ]
-  },
-  "knownCiDiscrepancy": {
-    "workflow": ".github/workflows/verify-main.yml",
-    "conclusion": "FAILURE_EXPECTED_UNTIL_GOVERNANCE_REPAIR",
-    "failingAssertion": "legacy Round 7 current-state Step 1A PASS marker assertion",
-    "classification": "LEGACY_ROUND7_CURRENT_STATUS_ASSERTION_INCOMPATIBLE_WITH_ROUND008_AND_LATER_STATUS",
-    "dedicatedStep2WorkflowConclusion": "SUCCESS",
-    "dedicatedStep2WorkflowRunId": "33104391753",
-    "affectsStep2SealVerdict": false,
-    "productionImpact": false,
-    "remediation": "Separate historical Round 7 evidence validation from current-status validation; do not restore obsolete markers."
   },
   "status": "PASS",
   "phase": "LARGE_SCALE_VALIDATION_COMPLETE",
@@ -174,12 +163,22 @@
     "executionGate": "quality-reviews/step-3-large-scale-validation/execution-gate.json",
     "analysis": "quality-reviews/step-3-large-scale-validation/analysis.json",
     "criticSummary": "quality-reviews/step-3-large-scale-validation/critic-summary.json",
-    "finalJudge": "quality-reviews/step-3-large-scale-validation/final-judge.json",
+    "finalJudge": "PASS",
     "completionEvidence": "PASS",
-    "liveReadback": "PENDING",
+    "liveReadback": "PASS",
     "gameplayScenarios": "15000",
     "highVolumeSamples": "1700000",
     "candidateMutation": false,
-    "holdoutTuningReuse": false
+    "holdoutTuningReuse": false,
+    "finalJudgeVerdict": "PASS_STEP3_CONTENT_PENDING_COMPLETION_AND_LIVE_READBACK",
+    "liveReadbackVerdict": "PASS_FINAL_LIVE_READBACK_STEP3_LARGE_SCALE_VALIDATION",
+    "terminalMirrorCorrection": "quality-reviews/step-3-large-scale-validation/terminal-mirror-correction.json"
+  },
+  "resolvedCiHistory": {
+    "workflow": ".github/workflows/verify-main.yml",
+    "status": "RESOLVED",
+    "resolution": "Historical Round 7 and current governance are separate jobs.",
+    "verifiedRunId": "33144127913",
+    "conclusion": "SUCCESS"
   }
 }

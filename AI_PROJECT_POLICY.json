@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 6,
+  "schemaVersion": 7,
   "updatedDate": "2026-08-28",
   "repository": {
     "fullName": "2hg7trp7rv-design/cats_tower",
@@ -17,6 +17,7 @@
     "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
     "MASTER_SPEC.md and sealed canonical contracts",
     "simulation/executable-seal-v2.json and its completion/read-back chain",
+    "quality-reviews/step-3-large-scale-validation/terminal-mirror-correction.json",
     "PROJECT_STATUS.json, simulation/CURRENT_STATUS.json, QUALITY_GATE.md and AGENTS.md",
     "task Acceptance, critics, judge, handover, workflow and completion evidence",
     "historical Acceptance/PASS/audits and legacy runtime",
@@ -168,5 +169,19 @@
       "Production Ready",
       "実機確認済み"
     ]
+  },
+  "activeStep3Validation": {
+    "status": "PASS",
+    "acceptance": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
+    "executionGate": "quality-reviews/step-3-large-scale-validation/execution-gate.json",
+    "criticSummary": "quality-reviews/step-3-large-scale-validation/critic-summary.json",
+    "finalJudge": "quality-reviews/step-3-large-scale-validation/final-judge.json",
+    "completionEvidence": "quality-reviews/step-3-large-scale-validation/completion-evidence.json",
+    "terminalReadback": "quality-reviews/step-3-large-scale-validation/live-readback.json",
+    "terminalMirrorCorrection": "quality-reviews/step-3-large-scale-validation/terminal-mirror-correction.json",
+    "gameplayScenarios": 15000,
+    "highVolumeSamples": 1700000,
+    "unresolvedP0": 0,
+    "unresolvedP1": 0
   }
 }
