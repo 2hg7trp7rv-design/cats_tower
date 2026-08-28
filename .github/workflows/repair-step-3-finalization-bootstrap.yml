@@ -1,0 +1,90 @@
+name: Repair Step 3 finalization bootstrap
+
+on:
+  push:
+    branches: [kimi]
+    paths:
+      - '.github/workflows/repair-step-3-finalization-bootstrap.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cats-step3-finalization-bootstrap
+  cancel-in-progress: false
+
+jobs:
+  apply-repair:
+    name: apply-step3-finalization-repair
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify immutable bootstrap source
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = '2hg7trp7rv-design/cats_tower'
+          test "$GITHUB_REF_NAME" = 'kimi'
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD^)" = '70862ef56bc586755e5a4571a826686bb95486bb'
+          test "$(git rev-parse --is-shallow-repository)" = 'false'
+          test -z "$(git replace -l)"
+          cat .github/step3-repair/segment* > "$RUNNER_TEMP/step3-repair.b64"
+          test "$(sha256sum "$RUNNER_TEMP/step3-repair.b64" | awk '{print $1}')" = '379c6e0a84904abb4b365dfff1ebaa938e2de5f0019dec0853473c7e5dbf5344'
+          base64 -d "$RUNNER_TEMP/step3-repair.b64" > "$RUNNER_TEMP/step3-repair.tar.gz"
+          test "$(sha256sum "$RUNNER_TEMP/step3-repair.tar.gz" | awk '{print $1}')" = 'c8528ef19e1d1f664b0860d8a99ca3bbe7f269a5edcf7ae326be5153266e6e4b'
+          tar -tzf "$RUNNER_TEMP/step3-repair.tar.gz" | sort > "$RUNNER_TEMP/archive-paths.txt"
+          cat > "$RUNNER_TEMP/expected-archive-paths.txt" <<'EOF'
+          .github/workflows/finalize-step-3-large-scale-validation.yml
+          .github/workflows/verify-step-3-large-scale-validation-v2.yml
+          quality-reviews/step-3-large-scale-validation/tools/finalize-step3.mjs
+          tests/governance/verify-current-step2-state.mjs
+          EOF
+          sort -o "$RUNNER_TEMP/expected-archive-paths.txt" "$RUNNER_TEMP/expected-archive-paths.txt"
+          diff -u "$RUNNER_TEMP/expected-archive-paths.txt" "$RUNNER_TEMP/archive-paths.txt"
+
+      - name: Apply, validate and push exact repair
+        run: |
+          set -euo pipefail
+          git checkout -B kimi "$GITHUB_SHA"
+          tar -xzf "$RUNNER_TEMP/step3-repair.tar.gz" -C .
+          node --check quality-reviews/step-3-large-scale-validation/tools/finalize-step3.mjs
+          node --check tests/governance/verify-current-step2-state.mjs
+          ruby -e "require 'yaml'; YAML.load_file('.github/workflows/verify-step-3-large-scale-validation-v2.yml'); YAML.load_file('.github/workflows/finalize-step-3-large-scale-validation.yml')"
+          git diff --check
+          git rm -r .github/step3-repair
+          git rm .github/workflows/repair-step-3-finalization-bootstrap.yml
+          git add \
+            .github/workflows/verify-step-3-large-scale-validation-v2.yml \
+            .github/workflows/finalize-step-3-large-scale-validation.yml \
+            quality-reviews/step-3-large-scale-validation/tools/finalize-step3.mjs \
+            tests/governance/verify-current-step2-state.mjs
+          git diff --cached --name-only | sort > "$RUNNER_TEMP/staged-paths.txt"
+          cat > "$RUNNER_TEMP/expected-staged-paths.txt" <<'EOF'
+          .github/step3-repair/segment00
+          .github/step3-repair/segment01
+          .github/step3-repair/segment02
+          .github/step3-repair/segment03
+          .github/step3-repair/segment04
+          .github/step3-repair/segment05
+          .github/workflows/finalize-step-3-large-scale-validation.yml
+          .github/workflows/repair-step-3-finalization-bootstrap.yml
+          .github/workflows/verify-step-3-large-scale-validation-v2.yml
+          quality-reviews/step-3-large-scale-validation/tools/finalize-step3.mjs
+          tests/governance/verify-current-step2-state.mjs
+          EOF
+          sort -o "$RUNNER_TEMP/expected-staged-paths.txt" "$RUNNER_TEMP/expected-staged-paths.txt"
+          diff -u "$RUNNER_TEMP/expected-staged-paths.txt" "$RUNNER_TEMP/staged-paths.txt"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'step3: repair critic and terminal finalization orchestration'
+          git push origin HEAD:kimi
+          test -z "$(git status --porcelain --untracked-files=all)"
