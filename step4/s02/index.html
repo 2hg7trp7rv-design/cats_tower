@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+  <meta name="theme-color" content="#21130f">
+  <meta name="description" content="Cat's Tower Step 4 S02 production-fidelity interaction prototype">
+  <title>Cat's Tower — S02 戦闘アンカー</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="s02-shell" data-testid="s02-shell">
+    <header class="player-bar wood-frame" aria-label="プレイヤーと所持資源">
+      <button class="profile-button tap-target" type="button" data-action="profile" aria-label="冒険者プロフィールを開く">
+        <span class="portrait-frame" aria-hidden="true">
+          <img src="/assets/saga/cat_calico_0.png" alt="">
+        </span>
+        <span class="profile-copy">
+          <strong>冒険者ミケ</strong>
+          <span>冒険者Lv.42</span>
+          <span class="profile-progress"><i style="width:85%"></i><b>85%</b></span>
+        </span>
+      </button>
+
+      <div class="resource-strip" role="group" aria-label="所持資源">
+        <button class="resource-card tap-target" type="button" data-action="coin" aria-label="コイン 1245万">
+          <span class="resource-icon coin" aria-hidden="true">●</span>
+          <span><small>コイン</small><strong>12.45M</strong></span>
+        </button>
+        <button class="resource-card tap-target" type="button" data-action="ruby" aria-label="ルビー 1280">
+          <span class="resource-icon ruby" aria-hidden="true">◆</span>
+          <span><small>ルビー</small><strong>1,280</strong></span>
+        </button>
+        <button class="resource-card tap-target reputation" type="button" data-action="reputation" aria-label="評判 18230">
+          <span class="resource-icon rep" aria-hidden="true">✦</span>
+          <span><small>評判</small><strong>18,230</strong></span>
+        </button>
+      </div>
+
+      <button class="menu-button tap-target" type="button" data-action="menu" aria-label="メニューを開く">
+        <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <section class="context-bar wood-frame" aria-labelledby="screen-title">
+      <span class="context-emblem" aria-hidden="true">戦</span>
+      <div class="context-copy">
+        <h1 id="screen-title">25F・静寂の森</h1>
+        <p><span class="status-dot"></span><span id="battle-status">自動戦闘中…</span></p>
+      </div>
+      <button class="next-target tap-target" type="button" data-action="target" aria-label="次の目標 26階を確認する">
+        <span>次の目標</span><strong>26F</strong><span aria-hidden="true">⌕</span>
+      </button>
+    </section>
+
+    <main class="battle-scroll" data-testid="battle-scroll">
+      <section class="battle-stage ornate-panel" aria-label="戦闘フィールド">
+        <div class="event-banner" role="button" tabindex="0" data-action="event" aria-label="グルメ祭り 開催中 残り3時間21分45秒">
+          <img src="/assets/saga/cat_calico_1.png" alt="">
+          <div><strong>グルメ祭り</strong><span>開催中！</span><small>◷ 03:21:45</small></div>
+        </div>
+
+        <div class="shortcut-rail" aria-label="ショートカット">
+          <button class="shortcut tap-target has-alert" type="button" data-action="mission"><span aria-hidden="true">▤</span><b>ミッション</b></button>
+          <button class="shortcut tap-target has-alert" type="button" data-action="present"><span aria-hidden="true">🎁</span><b>プレゼント</b></button>
+          <button class="shortcut tap-target" type="button" data-action="daily"><span aria-hidden="true">▧</span><b>デイリー</b></button>
+          <button class="shortcut tap-target" type="button" data-action="friend"><span aria-hidden="true">♟</span><b>フレンド</b></button>
+          <button class="shortcut tap-target" type="button" data-action="guild"><span aria-hidden="true">⚑</span><b>ギルド支援</b></button>
+        </div>
+
+        <div class="party-field" aria-label="味方4体">
+          <article class="battle-unit ally unit-warrior">
+            <div class="unit-hp"><span>1,580 / 1,580</span><i style="width:100%"></i></div>
+            <img src="/assets/saga/cat_calico_0.png" alt="剣士ミケ">
+            <span class="role-badge">剣</span>
+          </article>
+          <article class="battle-unit ally unit-sage">
+            <div class="unit-hp"><span>1,320 / 1,320</span><i style="width:100%"></i></div>
+            <img src="/assets/saga/cat_gray_0.png" alt="賢者ルナ">
+            <span class="role-badge">術</span>
+          </article>
+          <article class="battle-unit ally unit-mage">
+            <div class="unit-hp"><span>1,210 / 1,210</span><i style="width:100%"></i></div>
+            <img src="/assets/saga/cat_black_0.png" alt="魔導士ニコ">
+            <span class="role-badge">魔</span>
+          </article>
+          <article class="battle-unit ally unit-ranger">
+            <div class="unit-hp"><span>1,430 / 1,430</span><i style="width:100%"></i></div>
+            <img src="/assets/saga/cat_calico_2.png" alt="狩人ロビン">
+            <span class="role-badge">弓</span>
+          </article>
+        </div>
+
+        <div class="enemy-field" aria-label="敵3体">
+          <article class="battle-unit enemy enemy-small" data-enemy="small-a">
+            <div class="damage-number damage-a" aria-hidden="true">284</div>
+            <img src="/assets/illustrations/enemy-shadow.webp" alt="影のスライム">
+            <div class="enemy-hp"><i style="width:62%"></i></div>
+          </article>
+          <article class="battle-unit enemy enemy-small enemy-b" data-enemy="small-b">
+            <div class="damage-number damage-b" aria-hidden="true">312</div>
+            <img src="/assets/illustrations/enemy-shadow.webp" alt="影のスライム">
+            <div class="enemy-hp"><i style="width:48%"></i></div>
+          </article>
+          <article class="battle-unit enemy enemy-large" data-enemy="large">
+            <div class="critical-label" aria-hidden="true">CRITICAL!</div>
+            <div class="damage-number damage-critical" aria-hidden="true">2,458</div>
+            <img src="/assets/illustrations/enemy-shadow.webp" alt="影王スライム">
+            <div class="enemy-hp"><i id="boss-hp" style="width:34%"></i></div>
+          </article>
+        </div>
+
+        <button id="auto-toggle" class="round-control auto-control tap-target is-active" type="button" aria-pressed="true" aria-label="オート戦闘 オン">
+          <span>オート</span><strong>ON</strong>
+        </button>
+        <button id="speed-toggle" class="round-control speed-control tap-target" type="button" aria-label="戦闘速度 1.5倍">
+          <strong>×1.5</strong><span>速度</span>
+        </button>
+
+        <div class="battle-flash" aria-hidden="true"></div>
+      </section>
+
+      <section class="skill-row wood-frame" aria-label="戦闘スキル">
+        <button class="skill-button tap-target" type="button" data-skill="双刃撃" data-cooldown="6" aria-label="双刃撃 使用可能">
+          <span class="skill-icon skill-swords" aria-hidden="true">⚔</span><b>双刃撃</b><i class="cooldown-mask"><em></em></i>
+        </button>
+        <button class="skill-button tap-target" type="button" data-skill="氷牙" data-cooldown="8" aria-label="氷牙 使用可能">
+          <span class="skill-icon skill-ice" aria-hidden="true">❄</span><b>氷牙</b><i class="cooldown-mask"><em></em></i>
+        </button>
+        <button class="skill-button tap-target" type="button" data-skill="五月雨矢" data-cooldown="7" aria-label="五月雨矢 使用可能">
+          <span class="skill-icon skill-arrows" aria-hidden="true">➹</span><b>五月雨矢</b><i class="cooldown-mask"><em></em></i>
+        </button>
+        <button class="skill-button ultimate tap-target" type="button" data-skill="猫王の奥義" data-cooldown="15" aria-label="猫王の奥義 使用可能">
+          <span class="ultimate-ribbon">奥義</span><span class="skill-icon" aria-hidden="true">🐾</span><b>猫王の奥義</b><i class="cooldown-mask"><em></em></i>
+        </button>
+        <button class="skill-button tap-target" type="button" data-skill="癒しの光" data-cooldown="10" aria-label="癒しの光 使用可能">
+          <span class="skill-icon skill-heal" aria-hidden="true">✚</span><b>癒しの光</b><i class="cooldown-mask"><em></em></i>
+        </button>
+        <button class="skill-button tap-target" type="button" data-skill="満腹支援" data-cooldown="12" aria-label="満腹支援 使用可能">
+          <span class="skill-icon skill-food" aria-hidden="true">♨</span><b>満腹支援</b><i class="cooldown-mask"><em></em></i>
+        </button>
+      </section>
+
+      <section class="party-roster wood-frame" aria-label="出撃中の仲間">
+        <button class="roster-card active tap-target" type="button" data-action="member-mike" aria-label="剣士ミケ レベル42 星5 出撃中">
+          <span class="roster-role">剣</span><img src="/assets/saga/cat_calico_0.png" alt=""><strong>Lv.42</strong><small>★★★★★</small>
+        </button>
+        <button class="roster-card tap-target" type="button" data-action="member-luna" aria-label="賢者ルナ レベル41 星4 出撃中">
+          <span class="roster-role purple">術</span><img src="/assets/saga/cat_gray_0.png" alt=""><strong>Lv.41</strong><small>★★★★☆</small>
+        </button>
+        <button class="roster-card tap-target" type="button" data-action="member-robin" aria-label="狩人ロビン レベル40 星4 出撃中">
+          <span class="roster-role green">弓</span><img src="/assets/saga/cat_calico_2.png" alt=""><strong>Lv.40</strong><small>★★★★☆</small>
+        </button>
+        <button class="roster-card tap-target" type="button" data-action="member-pom" aria-label="料理人ポム レベル38 星4 支援中">
+          <span class="roster-role gold">支</span><img src="/assets/saga/cat_calico_1.png" alt=""><strong>Lv.38</strong><small>★★★★☆</small>
+        </button>
+        <button class="roster-card tap-target" type="button" data-action="member-nico" aria-label="魔導士ニコ レベル36 星4 出撃中">
+          <span class="roster-role purple">魔</span><img src="/assets/saga/cat_black_0.png" alt=""><strong>Lv.36</strong><small>★★★★☆</small>
+        </button>
+        <button class="roster-card locked tap-target" type="button" disabled aria-label="30階で解放">
+          <span class="lock-mark" aria-hidden="true">▣</span><strong>30Fで解放</strong>
+        </button>
+      </section>
+
+      <section class="action-row" aria-label="主要操作">
+        <button class="action-button blue tap-target" type="button" data-action="formation"><span aria-hidden="true">⚔</span><strong>編成</strong></button>
+        <button class="action-button amber tap-target is-current" type="button" data-action="sortie"><span aria-hidden="true">⚑</span><strong>出撃中</strong><small>4/4</small></button>
+        <button class="action-button violet tap-target has-alert" type="button" data-action="enhance"><span aria-hidden="true">✥</span><strong>強化</strong></button>
+        <button class="action-button green tap-target" type="button" data-action="shop"><span aria-hidden="true">▦</span><strong>商店</strong></button>
+        <button class="action-button brown tap-target has-alert" type="button" data-action="battle-mission"><span aria-hidden="true">🐾</span><strong>任務</strong></button>
+      </section>
+
+      <section class="support-deck ornate-panel" aria-labelledby="support-title">
+        <header>
+          <h2 id="support-title">商会支援デッキ</h2>
+          <button class="help-button tap-target" type="button" data-action="support-help" aria-label="商会支援の説明">?</button>
+        </header>
+        <div class="support-grid">
+          <article class="support-card"><span aria-hidden="true">🥖</span><strong>パン屋の支援</strong><p>攻撃力 <b>+8%</b></p><small>Lv.6</small><i><em style="width:75%"></em></i></article>
+          <article class="support-card"><span aria-hidden="true">⚗</span><strong>薬屋の支援</strong><p>HP回復 <b>+12%</b></p><small>Lv.7</small><i><em style="width:72%"></em></i></article>
+          <article class="support-card"><span aria-hidden="true">⚒</span><strong>鍛冶屋の支援</strong><p>会心率 <b>+7%</b></p><small>Lv.5</small><i><em style="width:58%"></em></i></article>
+          <article class="support-summary"><strong>支援効果合計</strong><p>攻撃力 +15%</p><p>HP回復 +12%</p><p>会心率 +7%</p></article>
+          <button id="support-button" class="support-button tap-target" type="button" aria-pressed="false">
+            <span>商会支援</span><strong id="support-state">発動可能</strong><time id="support-timer" datetime="PT58S">00:58</time>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav wood-frame" aria-label="主要画面">
+      <button class="nav-button tap-target is-active" type="button" data-tab="tower" aria-current="page"><span aria-hidden="true">♜</span><strong>塔</strong></button>
+      <button class="nav-button tap-target" type="button" data-tab="commerce"><span aria-hidden="true">▦</span><strong>商会</strong></button>
+      <button class="nav-button tap-target" type="button" data-tab="party"><span aria-hidden="true">♟</span><strong>仲間</strong></button>
+      <button class="nav-button tap-target" type="button" data-tab="town"><span aria-hidden="true">⌂</span><strong>町</strong></button>
+      <button class="nav-button tap-target has-alert" type="button" data-tab="events"><span aria-hidden="true">⚑</span><strong>催事</strong></button>
+    </nav>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+    <div id="sr-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  </div>
+  <script src="./app.js" defer></script>
+</body>
+</html>
