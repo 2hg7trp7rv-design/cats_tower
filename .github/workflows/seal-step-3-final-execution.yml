@@ -1,0 +1,297 @@
+name: Seal Step 3 final execution evidence
+
+on:
+  push:
+    branches: [kimi]
+    paths:
+      - '.github/workflows/seal-step-3-final-execution.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: cats-step3-final-execution-seal
+  cancel-in-progress: false
+
+jobs:
+  seal-execution:
+    name: seal-step3-final-execution
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify execution seal authority and repaired artifact metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          ENTRY=3eefbf6fa7dfcec8b5b093612e8946b43d838bc2
+          SOURCE_RUN=33135178244
+          SOURCE_ARTIFACT=9671745843
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse --is-shallow-repository)" = "false"
+          test -z "$(git replace -l)"
+          git merge-base --is-ancestor "$ENTRY" HEAD
+          test "$(git rev-parse HEAD:quality-reviews/step-3-large-scale-validation/acceptance-matrix.json)" = "d1392c431282d0faae9e9ad7f1c22161a3c5caad"
+          test "$(git rev-parse HEAD:quality-reviews/step-3-large-scale-validation/acceptance-addendum-calibration-001.json)" = "9d0c89489363340c4954b6912fb105ca6789b462"
+          test "$(git rev-parse HEAD:quality-reviews/step-3-large-scale-validation/acceptance-addendum-transport-002.json)" = "a8c853c1fe61e2ff5f5fced6d3776bcc97821d21"
+          test "$(git rev-parse HEAD:quality-reviews/step-3-large-scale-validation/acceptance-addendum-aggregate-003.json)" = "712268d487ec2b1a812e9f722cad1fa787d69153"
+          test "$(git rev-parse HEAD:quality-reviews/step-3-large-scale-validation/calibration-gate.json)" = "5ecb6c177a0c52f164c4ad22723f54305bf8c97d"
+          test "$(git rev-parse HEAD:quality-reviews/step-3-large-scale-validation/calibration-live-readback.json)" = "284ace113d40f6e0fa1a832e660a677b8eb65c5a"
+          test "$(git rev-parse HEAD:quality-reviews/step-1-reseal-round-008/seal-round-008.json)" = "0a959de0383b57ad6cd1f33c124b398aa51c1e00"
+          test "$(git rev-parse HEAD:simulation/executable-seal-v2.json)" = "ee3507969c03b08fe27350263cf0bc093a1c18e1"
+          jq -e '.verdict == "PASS_BYTE_PRESERVING_AGGREGATE_MANIFEST_REPAIR_AUTHORIZED"' quality-reviews/step-3-large-scale-validation/acceptance-addendum-aggregate-003.json >/dev/null
+          test ! -e quality-reviews/step-3-large-scale-validation/gameplay-holdout-result.json
+          test ! -d quality-reviews/step-3-large-scale-validation/high-volume
+          git diff --check "$ENTRY"..HEAD
+          curl -fsSL \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$SOURCE_RUN/artifacts?per_page=100" \
+            > "$RUNNER_TEMP/source-artifacts.json"
+          jq -e --argjson id "$SOURCE_ARTIFACT" '
+            .total_count == 1 and
+            (.artifacts | length) == 1 and
+            .artifacts[0].id == $id and
+            .artifacts[0].name == "cats-tower-step3-final-execution-repaired-9d897426ff68ce95cb7bc5d322c9caa6de9b335f-attempt-1" and
+            .artifacts[0].size_in_bytes == 262049 and
+            .artifacts[0].digest == "sha256:fd7d3314d8d36818c930a777cbb8150e3c80e9eb224b464098b06340eb108aed" and
+            .artifacts[0].expired == false and
+            .artifacts[0].workflow_run.id == 33135178244 and
+            .artifacts[0].workflow_run.head_branch == "kimi" and
+            .artifacts[0].workflow_run.head_sha == "9d897426ff68ce95cb7bc5d322c9caa6de9b335f"
+          ' "$RUNNER_TEMP/source-artifacts.json" >/dev/null
+
+      - name: Download exact repaired execution package
+        uses: actions/download-artifact@v4
+        with:
+          name: cats-tower-step3-final-execution-repaired-9d897426ff68ce95cb7bc5d322c9caa6de9b335f-attempt-1
+          path: ${{ runner.temp }}/cats-step3-final-execution-seal
+          github-token: ${{ github.token }}
+          run-id: 33135178244
+
+      - name: Verify package integrity and all semantic gates
+        run: |
+          set -euo pipefail
+          DIR="$RUNNER_TEMP/cats-step3-final-execution-seal"
+          cd "$DIR"
+          test "$(find . -maxdepth 1 -type f | wc -l | tr -d ' ')" = "31"
+          test "$(sha256sum SHA256SUMS-aggregate | cut -d' ' -f1)" = "9539accda1faa800ce29add976016b5b55f904210d39aab9a1d8b361a801543b"
+          sha256sum -c SHA256SUMS-aggregate
+          jq -e '.schemaVersion == 2 and .head == "22a9a3e56caadba8f2cc3c03359ff1646908b72d" and .tree == "e55eb2b934c3049b66e2c41ae4632004a134f960" and .gameplay.totalScenarios == "15000" and .highVolume.totalSamples == "1700000" and .quality.unresolvedP0 == 0 and .quality.unresolvedP1 == 0 and .verdict == "PASS_STEP3_FINAL_EXECUTION_ARTIFACT_READY_FOR_INDEPENDENT_CRITICS"' final-execution-manifest.json >/dev/null
+          jq -e '.verdict == "PASS_BYTE_PRESERVING_AGGREGATE_MANIFEST_REPAIR" and .executionDataRerun == false and .resultBytesModified == false and .auditBytesModified == false and .individualManifestBytesModified == false' aggregate-manifest-repair-record.json >/dev/null
+          jq -e '.deterministicPayload.partition == "holdout" and .deterministicPayload.scenarioCount == "3000" and .deterministicPayload.tuningVisible == false and .verdict.contractValidation == "PASS" and .verdict.partitionComplete == true' gameplay-holdout-result.json >/dev/null
+          jq -e '.verdict == "PASS_UNSEEN_HOLDOUT_GATE_CANDIDATE" and .unresolvedP0 == 0 and .unresolvedP1 == 0 and .separation.calibrationInputOverlap == "0" and .separation.calibrationScenarioOverlap == "0" and .separation.tuningVisible == false and .separation.tuningReuseForbidden == true' holdout-audit.json >/dev/null
+          for suite in gacha-tails pity-conformance duplicate-skew-overflow refund-replay-race state-machine-model large-number-properties; do
+            jq -e --arg suite "$suite" '.deterministicPayload.suiteId == $suite and .deterministicPayload.complete == true and .verdict.contractValidation == "PASS" and .verdict.suiteComplete == true' "high-volume-$suite.json" >/dev/null
+            jq -e --arg suite "$suite" '.suiteId == $suite and .verdict == "PASS_HIGH_VOLUME_SUITE_AUDIT" and .unresolvedP0 == 0 and .unresolvedP1 == 0' "audit-high-volume-$suite.json" >/dev/null
+            jq -e '.head == "22a9a3e56caadba8f2cc3c03359ff1646908b72d" and .tree == "e55eb2b934c3049b66e2c41ae4632004a134f960" and .verdict == "PASS_HIGH_VOLUME_SUITE_ARTIFACT_READY"' "manifest-high-volume-$suite.json" >/dev/null
+          done
+          TOTAL_HIGH_VOLUME=$(jq -s 'map(.deterministicPayload.sampleCount | tonumber) | add' high-volume-*.json)
+          test "$TOTAL_HIGH_VOLUME" = "1700000"
+
+      - name: Commit immutable execution result bytes
+        id: content
+        run: |
+          set -euo pipefail
+          SRC="$RUNNER_TEMP/cats-step3-final-execution-seal"
+          OUT=quality-reviews/step-3-large-scale-validation
+          HV="$OUT/high-volume"
+          mkdir -p "$HV"
+          cp "$SRC/gameplay-holdout-result.json" "$OUT/gameplay-holdout-result.json"
+          cp "$SRC/holdout-audit.json" "$OUT/holdout-audit.json"
+          cp "$SRC/holdout-execution-manifest.json" "$OUT/holdout-execution-manifest.json"
+          cp "$SRC/final-execution-manifest.json" "$OUT/final-execution-manifest.json"
+          cp "$SRC/aggregate-manifest-repair-record.json" "$OUT/aggregate-manifest-repair-record.json"
+          for suite in gacha-tails pity-conformance duplicate-skew-overflow refund-replay-race state-machine-model large-number-properties; do
+            cp "$SRC/high-volume-$suite.json" "$HV/high-volume-$suite.json"
+            cp "$SRC/audit-high-volume-$suite.json" "$HV/audit-high-volume-$suite.json"
+            cp "$SRC/manifest-high-volume-$suite.json" "$HV/manifest-high-volume-$suite.json"
+          done
+          git diff --check
+          mapfile -t CHANGED < <(git status --short | sed -E 's/^.. //')
+          test "${#CHANGED[@]}" -eq 23
+          printf '%s\n' "${CHANGED[@]}" | sort > "$RUNNER_TEMP/changed-content.txt"
+          {
+            printf '%s\n' \
+              "$OUT/aggregate-manifest-repair-record.json" \
+              "$OUT/final-execution-manifest.json" \
+              "$OUT/gameplay-holdout-result.json" \
+              "$OUT/holdout-audit.json" \
+              "$OUT/holdout-execution-manifest.json"
+            for suite in gacha-tails pity-conformance duplicate-skew-overflow refund-replay-race state-machine-model large-number-properties; do
+              printf '%s\n' \
+                "$HV/audit-high-volume-$suite.json" \
+                "$HV/high-volume-$suite.json" \
+                "$HV/manifest-high-volume-$suite.json"
+            done
+          } | sort > "$RUNNER_TEMP/expected-content.txt"
+          diff -u "$RUNNER_TEMP/expected-content.txt" "$RUNNER_TEMP/changed-content.txt"
+          git config user.name "cats-tower-step3-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -- "$OUT/gameplay-holdout-result.json" "$OUT/holdout-audit.json" "$OUT/holdout-execution-manifest.json" "$OUT/final-execution-manifest.json" "$OUT/aggregate-manifest-repair-record.json" "$HV"
+          git commit -m "step3: commit final execution evidence"
+          CONTENT_COMMIT=$(git rev-parse HEAD)
+          CONTENT_TREE=$(git rev-parse HEAD^{tree})
+          echo "commit=$CONTENT_COMMIT" >> "$GITHUB_OUTPUT"
+          echo "tree=$CONTENT_TREE" >> "$GITHUB_OUTPUT"
+
+      - name: Create exact execution gate
+        id: gate
+        run: |
+          set -euo pipefail
+          OUT=quality-reviews/step-3-large-scale-validation
+          HV="$OUT/high-volume"
+          CONTENT_COMMIT="${{ steps.content.outputs.commit }}"
+          CONTENT_TREE="${{ steps.content.outputs.tree }}"
+          : > "$RUNNER_TEMP/bindings.jsonl"
+          for path in \
+            "$OUT/gameplay-holdout-result.json" \
+            "$OUT/holdout-audit.json" \
+            "$OUT/holdout-execution-manifest.json" \
+            "$OUT/final-execution-manifest.json" \
+            "$OUT/aggregate-manifest-repair-record.json" \
+            "$HV/high-volume-gacha-tails.json" \
+            "$HV/audit-high-volume-gacha-tails.json" \
+            "$HV/manifest-high-volume-gacha-tails.json" \
+            "$HV/high-volume-pity-conformance.json" \
+            "$HV/audit-high-volume-pity-conformance.json" \
+            "$HV/manifest-high-volume-pity-conformance.json" \
+            "$HV/high-volume-duplicate-skew-overflow.json" \
+            "$HV/audit-high-volume-duplicate-skew-overflow.json" \
+            "$HV/manifest-high-volume-duplicate-skew-overflow.json" \
+            "$HV/high-volume-refund-replay-race.json" \
+            "$HV/audit-high-volume-refund-replay-race.json" \
+            "$HV/manifest-high-volume-refund-replay-race.json" \
+            "$HV/high-volume-state-machine-model.json" \
+            "$HV/audit-high-volume-state-machine-model.json" \
+            "$HV/manifest-high-volume-state-machine-model.json" \
+            "$HV/high-volume-large-number-properties.json" \
+            "$HV/audit-high-volume-large-number-properties.json" \
+            "$HV/manifest-high-volume-large-number-properties.json"
+          do
+            jq -n \
+              --arg path "$path" \
+              --arg blob "$(git rev-parse "HEAD:$path")" \
+              --arg sha256 "$(sha256sum "$path" | cut -d' ' -f1)" \
+              --arg bytes "$(wc -c < "$path" | tr -d ' ')" \
+              '{path: $path, blob: $blob, sha256: $sha256, bytes: $bytes}' >> "$RUNNER_TEMP/bindings.jsonl"
+          done
+          jq -s '.' "$RUNNER_TEMP/bindings.jsonl" > "$RUNNER_TEMP/bindings.json"
+          test "$(jq 'length' "$RUNNER_TEMP/bindings.json")" = "23"
+          jq -n \
+            --arg repository "$GITHUB_REPOSITORY" \
+            --arg branch "kimi" \
+            --arg contentCommit "$CONTENT_COMMIT" \
+            --arg contentTree "$CONTENT_TREE" \
+            --arg sealWorkflow "$GITHUB_WORKFLOW" \
+            --arg sealRunId "$GITHUB_RUN_ID" \
+            --arg sealRunAttempt "$GITHUB_RUN_ATTEMPT" \
+            --arg sealJob "$GITHUB_JOB" \
+            --slurpfile bindings "$RUNNER_TEMP/bindings.json" \
+            '{
+              schemaVersion: 1,
+              artifactId: "cats-tower-step3-final-execution-gate-v1",
+              repository: $repository,
+              branch: $branch,
+              authority: {
+                acceptanceBlob: "d1392c431282d0faae9e9ad7f1c22161a3c5caad",
+                calibrationAddendumBlob: "9d0c89489363340c4954b6912fb105ca6789b462",
+                transportAddendumBlob: "a8c853c1fe61e2ff5f5fced6d3776bcc97821d21",
+                aggregateRepairAddendumBlob: "712268d487ec2b1a812e9f722cad1fa787d69153",
+                calibrationGateBlob: "5ecb6c177a0c52f164c4ad22723f54305bf8c97d",
+                calibrationReadbackBlob: "284ace113d40f6e0fa1a832e660a677b8eb65c5a",
+                step1SealBlob: "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
+                step2SealBlob: "ee3507969c03b08fe27350263cf0bc093a1c18e1"
+              },
+              sourceExecution: {
+                runId: "33134710212",
+                head: "22a9a3e56caadba8f2cc3c03359ff1646908b72d",
+                tree: "e55eb2b934c3049b66e2c41ae4632004a134f960",
+                aggregateJobId: "98732488607",
+                aggregateArtifactId: "9671638681",
+                aggregateArtifactDigest: "sha256:b0fff485be3fd0d101fa4562b09cbcd8c3c9e9a55af4033897f7bc4b310e0096",
+                conclusion: "success"
+              },
+              aggregateRepair: {
+                runId: "33135178244",
+                head: "9d897426ff68ce95cb7bc5d322c9caa6de9b335f",
+                tree: "78a331fe4881bd196b05a775753752a3d7af96f7",
+                jobId: "98733432808",
+                artifactId: "9671745843",
+                artifactDigest: "sha256:fd7d3314d8d36818c930a777cbb8150e3c80e9eb224b464098b06340eb108aed",
+                conclusion: "success"
+              },
+              content: {
+                commit: $contentCommit,
+                tree: $contentTree,
+                bindings: $bindings[0]
+              },
+              gameplay: {
+                calibrationScenarios: "12000",
+                unseenHoldoutScenarios: "3000",
+                totalScenarios: "15000",
+                firstResetMinutes: {minimum: "20", maximum: "29", p50: "24", p90: "27", p99: "29"},
+                repeatedResetSequenceViolations: "0",
+                noAdF2PFeaturedGuaranteeDay: "40",
+                noAdF2PCombinedDailyDraws: "44",
+                calibrationInputOverlap: "0",
+                calibrationScenarioOverlap: "0",
+                holdoutReplayMismatchCount: "0",
+                buildSpreadViolations: "0"
+              },
+              highVolume: {
+                totalSamples: "1700000",
+                gachaTails: {samples: "200000", characterFirstUrP50: "100", characterFirstUrP90: "100", characterFirstUrP99: "100", characterFeaturedP50: "100", characterFeaturedP90: "200", characterFeaturedP99: "200", weaponFirstUrP50: "100", weaponFirstUrP90: "100", weaponFirstUrP99: "100", weaponFeaturedP50: "100", weaponFeaturedP90: "200", weaponFeaturedP99: "200", boundaryViolations: "0"},
+                pityConformance: {samples: "1000000", boundaryViolations: "0"},
+                duplicateSkewOverflow: {samples: "200000", characterItemsAtFullMastery: "24", characterItemsWithOverflow: "24", weaponItemsAtFullMastery: "36", weaponItemsWithOverflow: "36", mismatchViolations: "0"},
+                refundReplayRace: {samples: "100000", freeLedgerDebitViolations: "0", idempotentReplayMatches: "89954", exactlyOnceReceiptMatches: "89954"},
+                stateMachineModel: {samples: "100000", unexpectedAccept: "0", unexpectedReject: "0"},
+                largeNumberProperties: {samples: "100000", canonicalIdFail: "0", adjacentRepeatViolations: "0", windowRepeatViolations: "0", backgroundMismatches: "0", maximumDigits: "149"}
+              },
+              quality: {unresolvedP0: 0, unresolvedP1: 0},
+              independentCriticsRequired: 5,
+              finalJudgeRequired: true,
+              step3Status: "EXECUTION_PASS_PENDING_INDEPENDENT_CRITICS",
+              step4Allowed: false,
+              productionChanged: false,
+              physicalIPhoneVerified: false,
+              sealInvocation: {workflow: $sealWorkflow, runId: $sealRunId, runAttempt: $sealRunAttempt, job: $sealJob, conclusionAtCreation: "IN_PROGRESS"},
+              verdict: "PASS_STEP3_EXECUTION_GATE_CRITICS_AUTHORIZED"
+            }' > "$OUT/execution-gate.json"
+          jq -e '.verdict == "PASS_STEP3_EXECUTION_GATE_CRITICS_AUTHORIZED" and .content.bindings | length == 23' "$OUT/execution-gate.json" >/dev/null
+          git add -- "$OUT/execution-gate.json"
+          git commit -m "step3: seal final execution gate"
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "tree=$(git rev-parse HEAD^{tree})" >> "$GITHUB_OUTPUT"
+          echo "blob=$(git rev-parse HEAD:$OUT/execution-gate.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Verify and push only to existing kimi
+        run: |
+          set -euo pipefail
+          INVOCATION_SHA="$GITHUB_SHA"
+          REMOTE_SHA=$(git ls-remote origin refs/heads/kimi | cut -f1)
+          test "$REMOTE_SHA" = "$INVOCATION_SHA"
+          test "$(git rev-list --count "$INVOCATION_SHA"..HEAD)" = "2"
+          git merge-base --is-ancestor "$INVOCATION_SHA" HEAD
+          test -z "$(git status --porcelain --untracked-files=all)"
+          git diff --check "$INVOCATION_SHA"..HEAD
+          mapfile -t CHANGED < <(git diff --name-only "$INVOCATION_SHA"..HEAD)
+          for path in "${CHANGED[@]}"; do
+            case "$path" in
+              quality-reviews/step-3-large-scale-validation/gameplay-holdout-result.json|quality-reviews/step-3-large-scale-validation/holdout-audit.json|quality-reviews/step-3-large-scale-validation/holdout-execution-manifest.json|quality-reviews/step-3-large-scale-validation/final-execution-manifest.json|quality-reviews/step-3-large-scale-validation/aggregate-manifest-repair-record.json|quality-reviews/step-3-large-scale-validation/execution-gate.json|quality-reviews/step-3-large-scale-validation/high-volume/*) ;;
+              *) echo "Forbidden execution seal path: $path" >&2; exit 1 ;;
+            esac
+          done
+          git push origin HEAD:kimi
