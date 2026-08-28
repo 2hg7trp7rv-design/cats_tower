@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-s02-implementation-acceptance-round-001",
+  "createdAt": "2026-08-29",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "entry": {
+    "head": "d8c6b110604596265124ad277da430d38a6cd09e",
+    "tree": "8ea71fa774c2c3fc02847bf9e3aaa496441eeb5a"
+  },
+  "trigger": "The user approved the latest S02 battle-screen visual direction and explicitly authorized proceeding through a controlled implementation route while checking the actual code and rendered design.",
+  "status": "ACTIVE_BEFORE_FIRST_S02_IMPLEMENTATION_WRITE",
+  "step4Pass": false,
+  "step5Allowed": false,
+  "scope": {
+    "screen": "S02 auto-battle and follow",
+    "route": "/step4/s02",
+    "implementationType": "isolated Step 4 production-fidelity interaction prototype",
+    "mainRuntimeMutationAllowed": false,
+    "productionAliasChangeAllowed": false,
+    "backendOrPermanentEconomyAllowed": false
+  },
+  "visualAuthority": {
+    "primary": "The user-approved portrait S02 image generated in the current chat on 2026-08-29.",
+    "bindingBaseline": "Project-source completed-screen images: warm wood and brass chrome, pixel-art chibi cats and enemies, persistent resource header, contextual title strip, dense scene-led battle composition, merchant-support layer and five-tab bottom navigation.",
+    "semanticAuthority": "Current sealed Cat's Tower canon on live kimi; obsolete finite-tower and merchant-chairman semantics must not return."
+  },
+  "requiredImplementation": [
+    "componentized semantic HTML rather than a flattened full-screen image",
+    "CSS and JavaScript isolated under step4/s02",
+    "existing original repository assets or newly controlled original assets only",
+    "persistent top player and resource header",
+    "contextual current-floor and next-target strip",
+    "scene-led four-cat-versus-enemy battle field",
+    "right shortcut rail",
+    "auto and speed controls",
+    "skill row with cooldown feedback",
+    "four-member active party representation",
+    "formation, battle, enhancement, shop and mission actions",
+    "merchant-support deck and timed support feedback",
+    "five-tab bottom navigation",
+    "controlled Japanese UI text outside generated raster art",
+    "normal, active, cooldown, disabled and notification states"
+  ],
+  "viewportAcceptance": {
+    "required": [
+      "320x667",
+      "375x667",
+      "390x844"
+    ],
+    "rules": [
+      "no horizontal overflow",
+      "no clipped primary action",
+      "bottom navigation remains reachable",
+      "safe-area insets are applied",
+      "primary interactive targets are at least 44 CSS pixels before browser zoom",
+      "small viewport may scroll the battle-detail region but must not hide the common header or bottom navigation"
+    ]
+  },
+  "interactionAcceptance": [
+    "auto toggle visibly changes state and accessible label",
+    "speed control cycles through supported values",
+    "skill activation shows immediate feedback and deterministic cooldown",
+    "merchant-support activation shows active countdown and prevents duplicate activation",
+    "right-rail and bottom-navigation controls provide visible feedback",
+    "reduced-motion mode removes looping movement and burst animation while preserving state information",
+    "no permanent wallet, gacha, entitlement or backend state is minted by the prototype"
+  ],
+  "qualityGates": {
+    "staticCode": [
+      "valid landmark structure",
+      "no inline event-handler attributes",
+      "no external runtime dependency",
+      "no forbidden production or backend path changes",
+      "all visible controls have accessible names"
+    ],
+    "browser": [
+      "Chromium render at all three required viewports",
+      "console error count equals zero",
+      "uncaught page error count equals zero",
+      "layout overflow assertions pass",
+      "interaction smoke flow passes",
+      "prefers-reduced-motion render is captured"
+    ],
+    "visual": [
+      "side-by-side adversarial comparison with the approved S02 image and source-screen baseline",
+      "cats, battle and next action are identifiable within five seconds",
+      "screen is not a generic dashboard or flattened screenshot",
+      "visual result is shown to the user before expansion to another screen"
+    ]
+  },
+  "automaticFailConditions": [
+    "using the approved image as a single flattened interactive background",
+    "generic dark dashboard presentation",
+    "missing source-baseline header, contextual strip or five-tab navigation",
+    "uncontrolled image-generated Japanese text",
+    "main runtime or Production alias changed",
+    "browser screenshots or actual rendered review absent",
+    "user visual approval assumed rather than observed",
+    "unresolved P0 or P1 greater than zero"
+  ],
+  "evidencePlan": [
+    "dedicated GitHub Actions static and browser workflow",
+    "three normal viewport screenshots",
+    "one reduced-motion screenshot",
+    "machine-readable layout and interaction report",
+    "Vercel preview deployment bound to exact kimi commit",
+    "adversarial visual critic and repair log",
+    "user-visible rendered result in chat"
+  ],
+  "completionBoundary": {
+    "thisAcceptanceMayAuthorize": "S02 isolated implementation prototype and its validation evidence",
+    "thisAcceptanceMayNotAuthorize": "Step 4 PASS, expansion to all twelve screens, Step 5, Production, backend, payment, ads or physical-iPhone PASS"
+  }
+}
