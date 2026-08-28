@@ -1,0 +1,324 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-twelve-screen-final-mockups-acceptance-v1",
+  "createdAt": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "status": "ACTIVE_BEFORE_FIRST_STEP4_WRITE",
+  "entry": {
+    "head": "245d50b6e80e2783f6aeaab5e50fae217661a3b6",
+    "tree": "646e47f7e16eafab96344413d0ef4b5a42dfcc61"
+  },
+  "priorGate": {
+    "step1": "PASS",
+    "step2": "PASS_SEALED",
+    "step3": "PASS",
+    "step4": "READY_TO_START",
+    "step1Seal": {
+      "path": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
+      "blob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00"
+    },
+    "step2Seal": {
+      "path": "simulation/executable-seal-v2.json",
+      "blob": "ee3507969c03b08fe27350263cf0bc093a1c18e1"
+    },
+    "step3FinalJudge": {
+      "path": "quality-reviews/step-3-large-scale-validation/final-judge.json",
+      "blob": "a089266f56076a0b2a59b2670188d95ae8eff3d2",
+      "step3Pass": true
+    },
+    "step3CriticSummary": {
+      "path": "quality-reviews/step-3-large-scale-validation/critic-summary.json",
+      "blob": "197f2a0949a8f6eb398f9614f79ab79562471fb2",
+      "criticCount": 5,
+      "unresolvedP0": 0,
+      "unresolvedP1": 0
+    },
+    "step3CompletionEvidence": {
+      "path": "quality-reviews/step-3-large-scale-validation/completion-evidence.json",
+      "blob": "bc808fc3129f81000f1c5e755ffb2fc3a05bcf0b"
+    },
+    "step3TerminalReadback": {
+      "path": "quality-reviews/step-3-large-scale-validation/live-readback.json",
+      "blob": "d0b73af25a8f0d449cfc083b007b84b8ff3fbc9b",
+      "verdict": "PASS_FINAL_LIVE_READBACK_STEP3_LARGE_SCALE_VALIDATION"
+    },
+    "step3MirrorCorrection": {
+      "path": "quality-reviews/step-3-large-scale-validation/terminal-mirror-correction.json",
+      "blob": "14a9208b49c0b683e215cbefe587fedf67c2cac0",
+      "verdict": "PASS_STEP3_POST_TERMINAL_MIRROR_CORRECTION"
+    }
+  },
+  "task": {
+    "step": 4,
+    "name": "twelve-screen-final-mockups",
+    "chat": "04_UIUX・12画面完成見本",
+    "goal": "Freeze an original, implementation-ready mobile visual and interaction specification for canonical screens S01-S12, including normal, pending, recovery and critical failure states, without implementing production runtime, backend, payment, ads or Production publication.",
+    "completionMayNotBeClaimedFrom": [
+      "twelve files merely existing",
+      "a gallery rendering once",
+      "one viewport passing",
+      "normal states only",
+      "designer self-approval",
+      "placeholder art presented as production art",
+      "Vercel READY",
+      "source-code assumptions without rendered screenshots"
+    ]
+  },
+  "authority": [
+    "CHATGPT_PROJECT_INSTRUCTIONS1.md",
+    "quality-reviews/step-1-canonical-design/active-change-control.json",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-016.json",
+    "quality-reviews/step-3-large-scale-validation/terminal-mirror-correction.json",
+    "MASTER_SPEC.md",
+    "canonical/SCREEN_STATE_REGISTRY.json",
+    "canonical/STATE_TRANSITION_CONTRACT.json",
+    "canonical/STABLE_ID_REGISTRY.json",
+    "FLOORS_1_10_DESIGN.md",
+    "simulation/candidate-v2.json",
+    "simulation/run-plan-v2.json"
+  ],
+  "referenceInputs": {
+    "status": "REFERENCE_ONLY_NOT_ADOPTED_AS_FINAL_ASSETS",
+    "userProvidedImages": [
+      "29761A72-218E-483B-8857-BEDFD1F21DE5.jpeg",
+      "BD2D2AF8-7004-48A9-AC7E-26733CAB3D4A.jpeg",
+      "6527453F-3B12-4F23-89C9-6B7805841CFD.jpeg",
+      "8AEAD8BB-9B8A-4004-9D27-BBC0A276B67D.jpeg",
+      "197CB535-D88E-426D-92CE-3780DBA64943.jpeg",
+      "E60F8EC1-5717-42DC-B7D1-957D91B9C607.jpeg",
+      "D581B0B8-E687-4C61-BF9D-DC116F3E7064.jpeg",
+      "442A2FB3-6311-4A62-B431-047F3296B61D.jpeg",
+      "1CEFDACB-CB43-4B1E-9EBE-D44557BB49FA.jpeg",
+      "79D0C043-48CA-4D97-B408-FE0FE50FF58C.jpeg",
+      "IMG_3119.jpeg",
+      "IMG_3120.jpeg",
+      "IMG_3121.jpeg",
+      "IMG_3122.jpeg",
+      "IMG_3123.jpeg",
+      "IMG_3124.jpeg",
+      "IMG_3125.jpeg",
+      "IMG_3126.jpeg",
+      "IMG_3127.jpeg",
+      "IMG_3128.jpeg"
+    ],
+    "copyingForbidden": [
+      "competitor layout tracing",
+      "competitor names or exact UI placement",
+      "competitor art, icons, probabilities or prices",
+      "treating reference mockups as already approved production assets"
+    ]
+  },
+  "canonicalScreens": [
+    {
+      "id": "S01",
+      "name": "title-resume-account",
+      "primaryOutcome": "Start, resume or recover the correct account and save state without hiding link, migration or deletion consequences.",
+      "criticalStates": ["OFFLINE", "LINK_CONFLICT", "FATAL_RECOVERY", "DELETE_CONFIRM", "DELETION_PENDING"]
+    },
+    {
+      "id": "S02",
+      "name": "battle-follow",
+      "primaryOutcome": "Understand current floor, four-cat battle causality, next useful action, support arrival and settlement state within five seconds.",
+      "criticalStates": ["TUTORIAL", "DEFEAT", "DESYNC", "BACKGROUND_RECONCILE", "VICTORY_PENDING"]
+    },
+    {
+      "id": "S03",
+      "name": "unbounded-tower",
+      "primaryOutcome": "Understand current floor, best floor, district, 100F cycle and next milestone without implying a final maximum floor.",
+      "criticalStates": ["BROWSE_KNOWN", "UNSEEN_LOCKED", "STALE_CACHE", "OFFLINE"]
+    },
+    {
+      "id": "S04",
+      "name": "floor-clear-choice",
+      "primaryOutcome": "Show the clear reward and one-time support, rescue or shop choice with an explicit choose-later path.",
+      "criticalStates": ["SETTLEMENT_PENDING", "CHOICE_PENDING", "CHOICE_COMMITTED", "CLAIM_RECOVERY"]
+    },
+    {
+      "id": "S05",
+      "name": "shop-delivery",
+      "primaryOutcome": "Compare persistent shop and delivery configurations by visible combat impact without mandatory manual collection or replenishment.",
+      "criticalStates": ["EDITING", "SAVE_PENDING", "SYNC_CONFLICT", "RESTORED", "OFFLINE"]
+    },
+    {
+      "id": "S06",
+      "name": "character",
+      "primaryOutcome": "Separate base rarity, uncapped coin level, evolution stage, character mastery and party slot while making first-copy functionality explicit.",
+      "criticalStates": ["INSUFFICIENT_COIN", "INSUFFICIENT_RUBY", "EVOLUTION_QUOTE", "EVOLUTION_PENDING", "CONFLICT_RELOAD", "REVOKED"]
+    },
+    {
+      "id": "S07",
+      "name": "weapon-build",
+      "primaryOutcome": "Equip one weapon per permanent character, compare build impact and mastery, and explain overflow without random-substat clutter.",
+      "criticalStates": ["EQUIP_PENDING", "EQUIP_CONFLICT", "MASTERY_PENDING", "OVERFLOW", "REVOKED"]
+    },
+    {
+      "id": "S08",
+      "name": "boss",
+      "primaryOutcome": "Expose phase, telegraph, break window, failure diagnosis, retry and one-time reward with clear battle causality.",
+      "criticalStates": ["INTRO", "BREAK", "DEFEAT", "RETRY", "VICTORY_PENDING", "RECONNECT", "REPLAY_SAFE"]
+    },
+    {
+      "id": "S09",
+      "name": "tower-return",
+      "primaryOutcome": "Show every loss, retained asset, ruby grant and reclear forecast before the single irreversible tower-return confirmation.",
+      "criticalStates": ["INELIGIBLE", "QUOTE_LOADING", "QUOTE_READY", "COMMIT_PENDING", "QUOTE_EXPIRED", "PENDING_RECONCILIATION", "ALREADY_APPLIED"]
+    },
+    {
+      "id": "S10",
+      "name": "recruit-gacha",
+      "primaryOutcome": "Keep character and weapon banners separated and disclose odds, pity, featured guarantee, carryover, exchange, duplicate conversion and history before drawing.",
+      "criticalStates": ["CATALOG_STALE", "ODDS_VIEW", "DRAW_CONFIRM", "DRAW_PENDING", "RESULT", "RESULT_RECOVERY", "BANNER_ENDED", "INSUFFICIENT_RESOURCE", "OFFLINE"]
+    },
+    {
+      "id": "S11",
+      "name": "store-ruby-ads",
+      "primaryOutcome": "Distinguish paid and free ruby, exact product contents, purchase state, refund deficit, rewarded-ad opt-in and entitlement restoration without deceptive urgency.",
+      "criticalStates": ["CATALOG_STALE", "PURCHASE_CONFIRM", "PURCHASE_PENDING", "PURCHASE_RECONCILIATION", "VERIFICATION_FAILED", "REFUNDED", "REVOKED", "RESTORE_PENDING", "AD_OPT_IN", "AD_PENDING", "AD_CAP_REACHED", "OFFLINE"]
+    },
+    {
+      "id": "S12",
+      "name": "login-inbox",
+      "primaryOutcome": "Present newcomer, monthly and returner campaigns, server-time eligibility, inbox, claim history and missed-day behavior without false streak pressure.",
+      "criticalStates": ["CLAIM_PENDING", "GRANTED", "ALREADY_CLAIMED", "NOT_ELIGIBLE", "EXPIRED", "SERVER_TIME_ERROR", "DUPLICATE_REQUEST", "RECOVERED", "OFFLINE"]
+    }
+  ],
+  "visualDirection": {
+    "workingName": "Moonlit Brass Storybook",
+    "principles": [
+      "Cats, battle, tower and growth are visually primary.",
+      "Use original moonlit indigo, warm brass, parchment and jewel accents rather than copying the reference layouts.",
+      "Use tower arches, paw sigils, stained-glass geometry and delivery-route motifs as Cat's Tower-specific identity.",
+      "Reserve red for destructive or failed states and green for confirmed positive settlement, not generic decoration.",
+      "One dominant action per screen; secondary actions remain visually subordinate.",
+      "Monetization, gacha and login details do not remain permanently visible on the battle screen.",
+      "Normal, pending and recovery states share the same information hierarchy rather than replacing outcomes with generic spinners."
+    ],
+    "prohibitedPatterns": [
+      "always-on store or gacha promotion on S02",
+      "multiple equally dominant primary buttons",
+      "unlabeled icon-only irreversible actions",
+      "tiny gold text on brown panels",
+      "decorative frames consuming the safe area",
+      "reward claims that conceal server time, cap or immutable offer version",
+      "reset, draw or purchase timeout presented as definite failure"
+    ]
+  },
+  "mobileAcceptance": {
+    "primaryViewports": [
+      {"width": 320, "height": 667},
+      {"width": 375, "height": 667},
+      {"width": 390, "height": 844}
+    ],
+    "safeArea": {
+      "topContentExclusionPx": 44,
+      "bottomContentExclusionPx": 24,
+      "dynamicIslandOrNotchMayNotCoverEssentialState": true,
+      "homeIndicatorMayNotCoverPrimaryAction": true
+    },
+    "touch": {
+      "minimumEssentialTargetPx": 44,
+      "minimumGapPx": 8,
+      "destructiveActionRequiresSeparatedConfirmation": true
+    },
+    "typography": {
+      "minimumEssentialTextPx": 13,
+      "minimumNonessentialMicroTextPx": 11,
+      "largeTextTestScale": 1.25,
+      "numericAbbreviationMustPreserveExactValueAccess": true
+    },
+    "contrast": {
+      "essentialTextMinimumRatio": 4.5,
+      "largeTextAndEssentialIconMinimumRatio": 3.0,
+      "meaningMayNotDependOnColorAlone": true
+    },
+    "motion": {
+      "reducedMotionVariantRequired": true,
+      "criticalOutcomeMayNotDependOnAnimation": true,
+      "threeMinuteBossAndHundredDrawResultMustNotProduceUnboundedMotion": true
+    },
+    "fiveSecondComprehension": [
+      "screen purpose",
+      "current floor or current operation",
+      "primary subject",
+      "next useful action",
+      "reward or economic consequence",
+      "failure or pending reason when applicable"
+    ]
+  },
+  "deliverables": {
+    "source": [
+      "quality-reviews/step-4-twelve-screen-final-mockups/mockups/index.html",
+      "quality-reviews/step-4-twelve-screen-final-mockups/mockups/styles.css",
+      "quality-reviews/step-4-twelve-screen-final-mockups/mockups/app.js"
+    ],
+    "documents": [
+      "quality-reviews/step-4-twelve-screen-final-mockups/reference-audit.md",
+      "quality-reviews/step-4-twelve-screen-final-mockups/design-system.json",
+      "quality-reviews/step-4-twelve-screen-final-mockups/screen-state-coverage.json",
+      "quality-reviews/step-4-twelve-screen-final-mockups/render-manifest.json",
+      "quality-reviews/step-4-twelve-screen-final-mockups/visual-audit.json"
+    ],
+    "renderedEvidence": {
+      "primaryScreens": 36,
+      "formula": "12 canonical screens x 3 primary viewports",
+      "criticalStateScreensMinimum": 12,
+      "criticalStateViewport": "390x844",
+      "format": "PNG",
+      "exactSourceCommitBindingRequired": true
+    },
+    "independentReview": {
+      "criticCountMinimum": 5,
+      "roles": [
+        "mobile information hierarchy and five-second comprehension",
+        "combat and progression causality",
+        "economy, gacha, reset and purchase disclosure",
+        "accessibility, safe-area, large-text and reduced-motion",
+        "repository evidence, originality and implementation handoff"
+      ],
+      "unresolvedP0Required": 0,
+      "unresolvedP1Required": 0
+    },
+    "terminalEvidence": [
+      "final-judge.json",
+      "completion-evidence.json",
+      "live-readback.json"
+    ]
+  },
+  "failureConditions": [
+    "Any canonical screen S01-S12 is missing or merged into another screen.",
+    "Any primary screenshot is missing at 320x667, 375x667 or 390x844.",
+    "Essential content is clipped, overlapped by safe areas or requires horizontal scrolling.",
+    "A required economic operation lacks pending and recovery presentation.",
+    "Character and weapon gacha are visually or logically merged into one ordinary pool.",
+    "S09 omits any loss, retained asset, ruby grant or reclear forecast.",
+    "S11 obscures paid/free provenance, product contents, refund deficit or opt-in ad terms.",
+    "S02 makes store, gacha or login the visual protagonist.",
+    "Reference images are traced or presented as owned final assets.",
+    "Any unresolved P0 or P1 remains after independent review.",
+    "Runtime, backend, provider settings, Production alias or physical-iPhone PASS are changed or claimed during Step 4."
+  ],
+  "scopeBoundary": {
+    "allowed": [
+      "quality-reviews/step-4-twelve-screen-final-mockups/**",
+      "Step 4 current-state governance mirrors",
+      "dedicated Step 4 verification workflow and tests"
+    ],
+    "forbidden": [
+      "runtime/**",
+      "public/**",
+      "assets/**",
+      "backend/**",
+      "payment provider activation",
+      "ad network activation",
+      "Production alias change",
+      "Step 2 executable mutation",
+      "Step 3 raw execution evidence mutation",
+      "physical-iPhone PASS claim",
+      "branch creation or PR operation"
+    ],
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false
+  },
+  "completionRule": "Step 4 may become PASS only after source, all renders, state coverage, rendered self-audit, five independent critics, fixes, regression, exact commit/tree/workflow binding, synchronized current-state mirrors and terminal live read-back all pass with unresolved P0/P1 equal to zero."
+}
