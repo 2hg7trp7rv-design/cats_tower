@@ -1,0 +1,13 @@
+/* S02 visual art refinement round 006 — bright tower-town background trial. */
+.s02-shell .battle-stage {
+  background:
+    linear-gradient(180deg, rgba(106, 162, 179, .02), rgba(49, 59, 27, .08)),
+    url("/assets/saga/bg_title.webp") center 54% / cover no-repeat,
+    #759f78;
+}
+.s02-shell .battle-stage::before {
+  background:
+    linear-gradient(180deg, rgba(235, 248, 235, .04), transparent 39%),
+    radial-gradient(circle at 51% 49%, transparent 0 60%, rgba(29, 22, 8, .07) 83%, rgba(18, 9, 4, .21) 100%);
+  backdrop-filter: saturate(1.18) brightness(1.20);
+}
