@@ -6,6 +6,8 @@ on:
     paths:
       - '.github/workflows/verify-step-3-calibration.yml'
       - 'quality-reviews/step-3-large-scale-validation/acceptance-matrix.json'
+      - 'quality-reviews/step-3-large-scale-validation/acceptance-addendum-calibration-001.json'
+      - 'quality-reviews/step-3-large-scale-validation/audit-calibration.mjs'
   workflow_dispatch:
 
 permissions:
@@ -39,6 +41,8 @@ jobs:
           test -z "$(git replace -l)"
           git merge-base --is-ancestor "$ENTRY" HEAD
           test "$(git rev-parse HEAD:quality-reviews/step-3-large-scale-validation/acceptance-matrix.json)" = "d1392c431282d0faae9e9ad7f1c22161a3c5caad"
+          test "$(git rev-parse HEAD:quality-reviews/step-3-large-scale-validation/acceptance-addendum-calibration-001.json)" = "9d0c89489363340c4954b6912fb105ca6789b462"
+          test "$(git rev-parse HEAD:quality-reviews/step-3-large-scale-validation/audit-calibration.mjs)" = "d0545a851666bc2dbc25f03c82cc02a7ca615cda"
           test "$(git rev-parse HEAD:quality-reviews/step-1-reseal-round-008/seal-round-008.json)" = "0a959de0383b57ad6cd1f33c124b398aa51c1e00"
           test "$(git rev-parse HEAD:simulation/executable-seal-v2.json)" = "ee3507969c03b08fe27350263cf0bc093a1c18e1"
           test "$(git rev-parse HEAD:simulation/run-plan-v2.json)" = "a04632e41d78dd15b36e95cd6998e8a8648b9a6c"
@@ -46,14 +50,16 @@ jobs:
           test "$(git rev-parse HEAD:quality-reviews/step-2-governance-repair-round-001/live-readback.json)" = "692434fafd19d1e5470fe58808fd72af7286ec35"
           jq -e '.governanceDecision.step3 == "READY_TO_START" and .governanceDecision.step3Executed == false and .governanceDecision.unresolvedP0 == 0 and .governanceDecision.unresolvedP1 == 0' quality-reviews/step-2-governance-repair-round-001/live-readback.json >/dev/null
           jq -e '.status == "ACTIVE_BEFORE_STEP3_EXECUTION" and .entry.head == "3eefbf6fa7dfcec8b5b093612e8946b43d838bc2"' quality-reviews/step-3-large-scale-validation/acceptance-matrix.json >/dev/null
+          jq -e '.status == "ACTIVE_BEFORE_CALIBRATION_RERUN" and .diagnosticCalibration.holdoutExecuted == false and .rerunRule.holdoutBeforeCommittedCalibrationGate == false' quality-reviews/step-3-large-scale-validation/acceptance-addendum-calibration-001.json >/dev/null
           mapfile -t CHANGED < <(git diff --name-only "$ENTRY"..HEAD)
           for path in "${CHANGED[@]}"; do
             case "$path" in
-              quality-reviews/step-3-large-scale-validation/acceptance-matrix.json|.github/workflows/verify-step-3-calibration.yml) ;;
+              quality-reviews/step-3-large-scale-validation/acceptance-matrix.json|quality-reviews/step-3-large-scale-validation/acceptance-addendum-calibration-001.json|quality-reviews/step-3-large-scale-validation/audit-calibration.mjs|.github/workflows/verify-step-3-calibration.yml) ;;
               *) echo "Forbidden pre-calibration path: $path" >&2; exit 1 ;;
             esac
           done
           git diff --check "$ENTRY"..HEAD
+          node --check quality-reviews/step-3-large-scale-validation/audit-calibration.mjs
 
       - name: Re-run sealed Step 2 regression before execution
         run: node simulation/verify-step2-v2.mjs
@@ -84,23 +90,38 @@ jobs:
             .deterministicPayload.expectedScenarioCount == "12000" and
             .deterministicPayload.complete == true and
             (.deterministicPayload.cells | length) == 15 and
+            .hashes.deterministicPayloadSha256 == "df7cbceb0569f40eefee43dbd81d0b2c4698a44104f88a312ce693471f746e22" and
+            .evidence.canonicalJsonSha256 == "df7cbceb0569f40eefee43dbd81d0b2c4698a44104f88a312ce693471f746e22" and
             .verdict.contractValidation == "PASS" and
             .verdict.partitionComplete == true and
             .verdict.partialResultPromotion == false
           ' "$RESULT" >/dev/null
           test ! -e quality-reviews/step-3-large-scale-validation/gameplay-holdout-result.json
 
+      - name: Replay and audit all calibration criteria
+        run: |
+          set -euo pipefail
+          DIR="$RUNNER_TEMP/cats-step3-calibration"
+          node quality-reviews/step-3-large-scale-validation/audit-calibration.mjs \
+            --result "$DIR/gameplay-calibration-result.json" \
+            --output "$DIR/calibration-audit.json"
+          test -s "$DIR/calibration-audit.json"
+          jq -e '.verdict == "PASS_CALIBRATION_GATE_CANDIDATE" and .replay.scenarioCount == "12000" and .unresolvedP0 == 0 and .unresolvedP1 == 0 and .holdoutExecuted == false' "$DIR/calibration-audit.json" >/dev/null
+
       - name: Create immutable execution manifest
         run: |
           set -euo pipefail
           DIR="$RUNNER_TEMP/cats-step3-calibration"
           RESULT="$DIR/gameplay-calibration-result.json"
+          AUDIT="$DIR/calibration-audit.json"
           HEAD_SHA=$(git rev-parse HEAD)
           HEAD_TREE=$(git rev-parse HEAD^{tree})
           RESULT_SHA256=$(sha256sum "$RESULT" | cut -d' ' -f1)
           RESULT_BYTES=$(wc -c < "$RESULT" | tr -d ' ')
           RESULT_DIGEST=$(jq -r '.hashes.deterministicPayloadSha256' "$RESULT")
           CANONICAL_DIGEST=$(jq -r '.evidence.canonicalJsonSha256' "$RESULT")
+          AUDIT_SHA256=$(sha256sum "$AUDIT" | cut -d' ' -f1)
+          AUDIT_BYTES=$(wc -c < "$AUDIT" | tr -d ' ')
           jq -n \
             --arg repository "$GITHUB_REPOSITORY" \
             --arg branch "kimi" \
@@ -112,6 +133,8 @@ jobs:
             --arg job "$GITHUB_JOB" \
             --arg runtime "$(node --version)" \
             --arg acceptanceBlob "d1392c431282d0faae9e9ad7f1c22161a3c5caad" \
+            --arg addendumBlob "9d0c89489363340c4954b6912fb105ca6789b462" \
+            --arg auditScriptBlob "d0545a851666bc2dbc25f03c82cc02a7ca615cda" \
             --arg step1SealBlob "0a959de0383b57ad6cd1f33c124b398aa51c1e00" \
             --arg step2SealBlob "ee3507969c03b08fe27350263cf0bc093a1c18e1" \
             --arg runPlanBlob "a04632e41d78dd15b36e95cd6998e8a8648b9a6c" \
@@ -120,8 +143,10 @@ jobs:
             --arg resultBytes "$RESULT_BYTES" \
             --arg deterministicPayloadSha256 "$RESULT_DIGEST" \
             --arg canonicalJsonSha256 "$CANONICAL_DIGEST" \
+            --arg auditSha256 "$AUDIT_SHA256" \
+            --arg auditBytes "$AUDIT_BYTES" \
             '{
-              schemaVersion: 1,
+              schemaVersion: 2,
               artifactId: "cats-tower-step3-calibration-execution-manifest",
               repository: $repository,
               branch: $branch,
@@ -134,6 +159,8 @@ jobs:
               runtimeVersion: $runtime,
               inputs: {
                 acceptanceBlob: $acceptanceBlob,
+                addendumBlob: $addendumBlob,
+                auditScriptBlob: $auditScriptBlob,
                 step1SealBlob: $step1SealBlob,
                 step2SealBlob: $step2SealBlob,
                 runPlanBlob: $runPlanBlob,
@@ -147,12 +174,21 @@ jobs:
                 deterministicPayloadSha256: $deterministicPayloadSha256,
                 canonicalJsonSha256: $canonicalJsonSha256
               },
+              audit: {
+                path: "calibration-audit.json",
+                sha256: $auditSha256,
+                bytes: $auditBytes,
+                verdict: "PASS_CALIBRATION_GATE_CANDIDATE"
+              },
               holdoutExecuted: false,
               verdict: "PASS_CALIBRATION_EXECUTION_ARTIFACT_READY"
-            }'
-          > "$DIR/execution-manifest.json"
+            }' > "$DIR/execution-manifest.json"
+          test -s "$DIR/execution-manifest.json"
+          jq -e '.schemaVersion == 2 and .result.scenarioCount == "12000" and .audit.verdict == "PASS_CALIBRATION_GATE_CANDIDATE" and .holdoutExecuted == false' "$DIR/execution-manifest.json" >/dev/null
           sha256sum "$DIR/execution-manifest.json" > "$DIR/SHA256SUMS"
           sha256sum "$RESULT" >> "$DIR/SHA256SUMS"
+          sha256sum "$AUDIT" >> "$DIR/SHA256SUMS"
+          (cd "$DIR" && sha256sum -c SHA256SUMS)
 
       - name: Upload Step 3 calibration evidence
         uses: actions/upload-artifact@v4
