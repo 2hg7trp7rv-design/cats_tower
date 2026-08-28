@@ -14,6 +14,7 @@ const ENTRY = '3eefbf6fa7dfcec8b5b093612e8946b43d838bc2';
 const ADDENDUM = 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-015.json';
 const LIVE = `${STEP3}/live-readback.json`;
 const FINAL = `${STEP3}/final-judge.json`;
+const MIRROR_CORRECTION = `${STEP3}/terminal-mirror-correction.json`;
 const BLOCK_BEGIN = '<!-- CATS_TOWER_STEP3_STATUS_BEGIN -->';
 const BLOCK_END = '<!-- CATS_TOWER_STEP3_STATUS_END -->';
 
@@ -116,4 +117,24 @@ const forbidden = changed.filter((relativePath) => /^(runtime\/|public\/|assets\
   || /^simulation\/(candidate-v2\.json|candidate-v2\.schema\.json|run-plan-v2\.json|execution-contract-v2\.json|executable-seal-v2\.json|engine-v2\/|fixtures\/v2\/|migrations\/v1-to-v2\/)/.test(relativePath));
 assert.deepEqual(forbidden, []);
 
-console.log(JSON.stringify({ verdict: terminal ? 'PASS_CURRENT_STEP3_TERMINAL_STATE' : 'PASS_CURRENT_STEP3_PENDING_TERMINAL_STATE', head: git('rev-parse', 'HEAD'), tree: git('rev-parse', 'HEAD^{tree}'), status: expectedStatus, step4Allowed: expectedStep4, changedPathCount: changed.length }));
+if (existsSync(path.join(ROOT, MIRROR_CORRECTION))) {
+  const correction = readJson(MIRROR_CORRECTION);
+  assert.equal(correction.repository, REPOSITORY);
+  assert.equal(correction.branch, BRANCH);
+  assert.equal(correction.verdict, 'PASS_STEP3_POST_TERMINAL_MIRROR_CORRECTION');
+  assert.equal(correction.governanceDecision.step3, 'PASS');
+  assert.equal(correction.governanceDecision.step4, 'READY_TO_START');
+  assert.equal(correction.governanceDecision.unresolvedP0, 0);
+  assert.equal(correction.governanceDecision.unresolvedP1, 0);
+  for (const [relativePath, expectedBlob] of Object.entries(correction.mirrorBlobs)) {
+    assert.equal(blob(relativePath), expectedBlob, `${relativePath}: post-terminal mirror correction blob mismatch`);
+  }
+  assert.equal(project.step3.liveReadback, 'PASS');
+  assert.equal(project.step3.terminalMirrorCorrection, MIRROR_CORRECTION);
+  assert.equal(simulation.step3.liveReadback, 'PASS');
+  assert.equal(simulation.step3.terminalMirrorCorrection, MIRROR_CORRECTION);
+  assert.equal(active.activationEvidence.step3LiveReadback, LIVE);
+  assert.equal(active.activationEvidence.step3TerminalMirrorCorrection, MIRROR_CORRECTION);
+}
+
+console.log(JSON.stringify({ verdict: terminal ? 'PASS_CURRENT_STEP3_TERMINAL_STATE' : 'PASS_CURRENT_STEP3_PENDING_TERMINAL_STATE', head: git('rev-parse', 'HEAD'), tree: git('rev-parse', 'HEAD^{tree}'), status: expectedStatus, step4Allowed: expectedStep4, changedPathCount: changed.length, mirrorCorrection: existsSync(path.join(ROOT, MIRROR_CORRECTION)) }));
