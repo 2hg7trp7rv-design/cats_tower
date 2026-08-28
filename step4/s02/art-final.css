@@ -1,0 +1,307 @@
+/* Cat's Tower S02 production-art refinement.
+ * Loaded dynamically after all historical draft layers. The approved screen is
+ * still a Step 4 prototype: no product runtime, backend or Production mutation.
+ */
+
+:root {
+  --s02-gold: #f5c85d;
+  --s02-gold-hi: #ffe9a0;
+  --s02-wood: #6e3c21;
+  --s02-wood-dark: #24110b;
+  --s02-ink: #fff1cf;
+}
+
+.s02-shell {
+  background:
+    radial-gradient(circle at 50% -8%, rgba(130,72,34,.34), transparent 43%),
+    #120806 !important;
+}
+
+/* Use a reusable 9-slice-style original frame instead of flat CSS rectangles. */
+.s02-shell .wood-frame,
+.s02-shell .ornate-panel {
+  border: 7px solid transparent !important;
+  border-image-source: url("./assets/s02-frame.svg") !important;
+  border-image-slice: 16 !important;
+  border-image-width: 7px !important;
+  border-image-repeat: stretch !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,235,170,.16),
+    0 3px 0 #0d0402,
+    0 7px 18px rgba(0,0,0,.38) !important;
+}
+
+.s02-shell .player-bar,
+.s02-shell .context-bar,
+.s02-shell .skill-row,
+.s02-shell .party-roster,
+.s02-shell .support-deck,
+.s02-shell .bottom-nav {
+  background:
+    linear-gradient(180deg, rgba(83,46,28,.98), rgba(32,15,10,.99)),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.028) 0 1px, transparent 1px 7px) !important;
+}
+
+.s02-shell .player-bar {
+  min-height: calc(62px + var(--safe-top)) !important;
+}
+
+.s02-shell .resource-card,
+.s02-shell .next-target,
+.s02-shell .shortcut,
+.s02-shell .skill-button,
+.s02-shell .roster-card,
+.s02-shell .action-button,
+.s02-shell .support-card,
+.s02-shell .support-summary,
+.s02-shell .support-button,
+.s02-shell .nav-button {
+  box-shadow:
+    inset 0 1px 0 rgba(255,239,188,.2),
+    inset 0 0 0 1px rgba(43,17,8,.75),
+    0 2px 0 #110603 !important;
+}
+
+/* Bright, cozy tower-town/forest stage: same visual family as the source
+   completed-screen baseline, while retaining controlled current-canon UI. */
+.s02-shell .battle-stage {
+  min-height: clamp(320px, 40svh, 350px) !important;
+  background:
+    linear-gradient(180deg, rgba(93,145,176,.03), rgba(42,73,36,.05) 46%, rgba(38,18,9,.22) 100%),
+    url("/assets/prototype/bg/title.png") center 55% / cover no-repeat,
+    #6c8958 !important;
+  image-rendering: pixelated;
+}
+
+.s02-shell .battle-stage::before {
+  z-index: 1 !important;
+  background:
+    linear-gradient(180deg, rgba(255,245,194,.13), transparent 34%),
+    radial-gradient(ellipse at 52% 58%, transparent 0 49%, rgba(26,12,6,.08) 72%, rgba(14,5,3,.25) 100%) !important;
+  backdrop-filter: saturate(1.12) brightness(1.08) !important;
+}
+
+/* A narrow foreground path gives the characters a shared ground plane. */
+.s02-shell .battle-stage::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: -8%;
+  right: -8%;
+  bottom: -12px;
+  height: 37%;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 52% 38%, rgba(194,164,103,.62) 0 13%, transparent 14%),
+    radial-gradient(ellipse at 36% 58%, rgba(150,125,76,.45) 0 10%, transparent 11%),
+    linear-gradient(180deg, rgba(91,111,55,.02), rgba(58,43,24,.35));
+  clip-path: polygon(5% 27%, 18% 18%, 31% 25%, 43% 14%, 58% 22%, 72% 12%, 88% 24%, 100% 17%, 100% 100%, 0 100%);
+}
+
+.s02-shell .event-banner,
+.s02-shell .shortcut-rail,
+.s02-shell .party-field,
+.s02-shell .enemy-field,
+.s02-shell .round-control,
+.s02-shell .battle-flash {
+  z-index: 5 !important;
+}
+
+.s02-shell .event-banner {
+  width: min(188px, 50%) !important;
+  height: 64px !important;
+  background:
+    linear-gradient(135deg, rgba(110,45,19,.98), rgba(44,18,10,.98)),
+    #40180b !important;
+  border-color: var(--s02-gold) !important;
+}
+.s02-shell .event-banner strong { color: #ffe06f !important; }
+
+/* Coherent original project cast. */
+.s02-shell .profile-button .portrait-frame img,
+.s02-shell .unit-warrior img,
+.s02-shell .roster-card:nth-child(1) img { content: url("/assets/prototype/cats/mugi.png") !important; }
+.s02-shell .unit-sage img,
+.s02-shell .roster-card:nth-child(2) img { content: url("/assets/prototype/cats/luna.png") !important; }
+.s02-shell .unit-mage img,
+.s02-shell .roster-card:nth-child(5) img { content: url("/assets/prototype/cats/kohaku.png") !important; }
+.s02-shell .unit-ranger img,
+.s02-shell .roster-card:nth-child(3) img { content: url("/assets/prototype/cats/slinger.png") !important; }
+.s02-shell .roster-card:nth-child(4) img,
+.s02-shell .event-banner img { content: url("/assets/prototype/cats/toto.png") !important; }
+
+.s02-shell .battle-unit.ally {
+  width: 78px !important;
+}
+.s02-shell .battle-unit.ally::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 12px;
+  right: 12px;
+  bottom: 2px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(20,9,4,.42);
+  filter: blur(2px);
+}
+.s02-shell .ally img {
+  width: 84px !important;
+  height: 84px !important;
+  object-fit: contain !important;
+  transform: scale(1.17) translateY(3px) !important;
+  transform-origin: center bottom !important;
+  filter: drop-shadow(0 5px 2px rgba(20,7,3,.55)) !important;
+  image-rendering: pixelated !important;
+}
+.s02-shell .unit-warrior { left: 3% !important; bottom: 30% !important; }
+.s02-shell .unit-sage { left: 24% !important; bottom: 31% !important; }
+.s02-shell .unit-mage { left: 5% !important; bottom: 4% !important; }
+.s02-shell .unit-ranger { left: 28% !important; bottom: 4% !important; }
+.s02-shell .role-badge { display: none !important; }
+.s02-shell .unit-hp { width: 70px !important; font-size: 8px !important; }
+
+/* Original crisp-edged shadow slimes, cropped from the controlled SVG sheet. */
+.s02-shell .enemy img {
+  opacity: 0 !important;
+  width: 1px !important;
+  height: 1px !important;
+}
+.s02-shell .enemy::before {
+  content: "";
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 86px;
+  height: 86px;
+  background-image: url("./assets/s02-sprites.svg");
+  background-repeat: no-repeat;
+  background-size: 300% 300%;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 6px 2px rgba(20,7,3,.58));
+}
+.s02-shell .enemy-small:not(.enemy-b)::before { background-position: 0 100%; }
+.s02-shell .enemy-b::before { background-position: 50% 100%; }
+.s02-shell .enemy-large::before {
+  width: 118px;
+  height: 118px;
+  background-position: 100% 100%;
+}
+.s02-shell .enemy-small { right: 34% !important; top: 39% !important; width: 86px !important; }
+.s02-shell .enemy-b { right: 29% !important; top: 62% !important; }
+.s02-shell .enemy-large { right: 5% !important; top: 48% !important; width: 118px !important; }
+.s02-shell .enemy-hp { width: 72px !important; margin-top: -5px !important; }
+.s02-shell .enemy-large .enemy-hp { width: 105px !important; }
+.s02-shell .damage-number { font-size: 18px !important; }
+.s02-shell .damage-critical { left: 5px !important; font-size: 24px !important; }
+.s02-shell .critical-label { left: 7px !important; font-size: 11px !important; }
+
+/* Controlled icon set: no emoji or Unicode glyph is visually exposed. */
+.s02-shell .skill-icon {
+  width: 36px !important;
+  height: 36px !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  background-color: transparent !important;
+  background-image: url("./assets/s02-sprites.svg") !important;
+  background-repeat: no-repeat !important;
+  background-size: 300% 300% !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.s02-shell .skill-button:nth-child(1) .skill-icon { background-position: 0 0 !important; }
+.s02-shell .skill-button:nth-child(2) .skill-icon { background-position: 50% 0 !important; }
+.s02-shell .skill-button:nth-child(3) .skill-icon { background-position: 100% 0 !important; }
+.s02-shell .skill-button:nth-child(4) .skill-icon { background-position: 0 50% !important; }
+.s02-shell .skill-button:nth-child(5) .skill-icon { background-position: 50% 50% !important; }
+.s02-shell .skill-button:nth-child(6) .skill-icon { background-position: 100% 50% !important; }
+.s02-shell .skill-button {
+  min-height: 58px !important;
+  background: linear-gradient(145deg, #352319, #130c09) !important;
+  border-color: #c9933c !important;
+}
+.s02-shell .skill-button.ultimate {
+  background: radial-gradient(circle at 50% 38%, #7a4118, #1a0c07 72%) !important;
+  border-color: #ffe171 !important;
+}
+
+/* Merchant support is a visible world system, not a text-only dashboard. */
+.s02-shell .support-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-position: center !important;
+  background-size: cover !important;
+}
+.s02-shell .support-card:nth-child(1) { background-image: url("/assets/prototype/shops/fish_diner.png") !important; }
+.s02-shell .support-card:nth-child(2) { background-image: url("/assets/prototype/shops/clinic.png") !important; }
+.s02-shell .support-card:nth-child(3) { background-image: url("/assets/prototype/shops/claw_forge.png") !important; }
+.s02-shell .support-card::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(25,10,5,.13), rgba(22,8,5,.9));
+}
+.s02-shell .support-card > span { display: none !important; }
+.s02-shell .support-card strong,
+.s02-shell .support-card p,
+.s02-shell .support-card small {
+  text-shadow: 0 2px 1px #120503, 1px 0 1px #120503 !important;
+}
+
+/* Strong hierarchy and readable, tactile bottom navigation. */
+.s02-shell .bottom-nav {
+  min-height: calc(70px + var(--safe-bottom)) !important;
+}
+.s02-shell .nav-button.is-active {
+  background: linear-gradient(180deg, #73502d, #351b11) !important;
+  outline: 2px solid #ffe38a;
+  outline-offset: -4px;
+}
+.s02-shell .nav-button strong { color: #fff0c8 !important; }
+
+/* Large-text fallback: preserve all primary actions and allow the detail region
+   to scroll instead of shrinking text below legibility. QA toggles this attr. */
+html[data-s02-text-scale="large"] .s02-shell {
+  font-size: 125%;
+}
+html[data-s02-text-scale="large"] .profile-copy strong,
+html[data-s02-text-scale="large"] .context-copy h1,
+html[data-s02-text-scale="large"] .action-button strong,
+html[data-s02-text-scale="large"] .nav-button strong {
+  font-size: max(14px, 1em) !important;
+}
+html[data-s02-text-scale="large"] .battle-scroll {
+  overflow-y: auto !important;
+}
+html[data-s02-text-scale="large"] .support-card p,
+html[data-s02-text-scale="large"] .support-card small,
+html[data-s02-text-scale="large"] .support-summary p {
+  font-size: 10px !important;
+}
+
+@media (max-width: 359px) {
+  .s02-shell .battle-stage { min-height: 308px !important; }
+  .s02-shell .ally img { width: 78px !important; height: 78px !important; }
+  .s02-shell .enemy::before { width: 78px; height: 78px; }
+  .s02-shell .enemy-large::before { width: 105px; height: 105px; }
+  .s02-shell .enemy-small { right: 32% !important; }
+  .s02-shell .enemy-b { right: 26% !important; }
+  .s02-shell .enemy-large { right: 3% !important; width: 105px !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s02-shell *,
+  .s02-shell *::before,
+  .s02-shell *::after {
+    scroll-behavior: auto !important;
+  }
+  .s02-shell .ally img,
+  .s02-shell .enemy::before,
+  .s02-shell .damage-number,
+  .s02-shell .battle-flash {
+    animation: none !important;
+    transition: none !important;
+  }
+}
