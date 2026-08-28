@@ -18,9 +18,10 @@ jobs:
     name: finalize-terminal-readback
     if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'kimi'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       STEP3_DIR: quality-reviews/step-3-large-scale-validation
+      TOOL: quality-reviews/step-3-large-scale-validation/tools/finalize-step3.mjs
     steps:
       - uses: actions/checkout@v4
         with:
@@ -31,7 +32,7 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Decide whether read-back is required
+      - name: Decide whether terminal read-back is required
         id: need
         run: |
           set -euo pipefail
@@ -42,7 +43,7 @@ jobs:
           fi
           echo "required=$REQUIRED" >> "$GITHUB_OUTPUT"
 
-      - name: Bind successful execution run and create live read-back
+      - name: Verify completion and bind successful workflow run
         if: steps.need.outputs.required == 'true'
         env:
           PRIOR_RUN_ID: ${{ github.event.workflow_run.id }}
@@ -51,34 +52,29 @@ jobs:
           set -euo pipefail
           test "$GITHUB_REPOSITORY" = '2hg7trp7rv-design/cats_tower'
           test "$(git branch --show-current)" = 'kimi'
+          node --check "$TOOL"
+          node "$TOOL" verify-completion
           test "$(jq -r '.workflow.runId' "$STEP3_DIR/completion-evidence.json")" = "$PRIOR_RUN_ID"
-          node tests/step3/step3-governance.mjs live-readback
-          node - "$STEP3_DIR/live-readback.json" <<'NODE'
-          const {readFileSync,writeFileSync}=require('node:fs');
-          const {execFileSync}=require('node:child_process');
-          const file=process.argv[2];
-          const value=JSON.parse(readFileSync(file,'utf8'));
-          for (const p of Object.keys(value.liveMirrorBlobs)) {
-            value.liveMirrorBlobs[p]=execFileSync('git',['hash-object',p],{encoding:'utf8'}).trim();
-          }
-          value.executionWorkflow.status='COMPLETED';
-          value.executionWorkflow.conclusion='SUCCESS';
-          writeFileSync(file,JSON.stringify(value,null,2)+'\n');
-          NODE
-          node tests/step3/step3-governance.mjs verify-terminal
-          git diff --check
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          node "$TOOL" live-readback
+          git diff --check
           git add \
             "$STEP3_DIR/live-readback.json" \
             quality-reviews/step-1-canonical-design/active-change-control.json \
             quality-reviews/step-1-canonical-design/active-change-control-addendum-round-015.json \
             AI_PROJECT_POLICY.json PROJECT_STATUS.json simulation/CURRENT_STATUS.json \
             QUALITY_GATE.md .github/workflows/CURRENT_STATUS.md AGENTS.md PROJECT_HANDOVER.md
-          git commit -m 'step3: finalize terminal large-scale validation readback'
+          git commit -m 'step3: finalize terminal critic and validation readback'
           git push origin HEAD:kimi
           test -z "$(git status --porcelain --untracked-files=all)"
 
       - name: No-op after terminal read-back exists
         if: steps.need.outputs.required != 'true'
-        run: echo 'Terminal Step 3 read-back already exists or completion evidence is not yet present.'
+        run: |
+          set -euo pipefail
+          if [ -f "$STEP3_DIR/live-readback.json" ]; then
+            node "$TOOL" verify-terminal
+          else
+            echo 'Completion evidence is not present; no terminal read-back can be created.'
+          fi
