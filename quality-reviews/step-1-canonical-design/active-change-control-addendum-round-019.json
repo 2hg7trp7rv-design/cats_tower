@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-active-change-control-addendum-round-019",
+  "createdAt": "2026-08-29",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "parentAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-018.json",
+  "entry": {
+    "head": "79c16294ece107458a5c5a01f7e52356e0cad115"
+  },
+  "trigger": "The user accepted the latest S02 battle-screen visual direction and instructed ChatGPT to proceed efficiently through a complete implementation route while continuously checking the actual code and rendered design.",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS_STEP4_S02_IMPLEMENTATION_ANCHOR",
+  "advanceAllowed": false,
+  "step4Allowed": true,
+  "step5Allowed": false,
+  "bindingAcceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-implementation-acceptance-round-001.json",
+  "scopeChange": {
+    "previousBoundary": "Step 4 visual mockups and rendered evidence only",
+    "newlyAllowed": "An isolated, non-production, componentized S02 interaction prototype under /step4/s02 plus dedicated tests, browser evidence and Vercel preview verification.",
+    "stillForbidden": "Mutation of the current product runtime entrypoint, Step 5 implementation, backend, payment, ads, Production alias and physical-iPhone PASS claims."
+  },
+  "bindingVisualDirection": {
+    "approvedAnchor": "Latest user-approved S02 portrait battle image in the current chat",
+    "completedScreenBaseline": "Project-source portrait game screens",
+    "mustPreserve": [
+      "warm wood, leather and brass presentation",
+      "pixel-art chibi cats and enemies",
+      "persistent top player and resource header",
+      "contextual floor and target strip",
+      "dense scene-led battle field",
+      "merchant-support integration",
+      "persistent five-tab bottom navigation"
+    ],
+    "mustNotDo": [
+      "flatten the whole approved screen into one background image",
+      "return to generic purple dashboard UI",
+      "use uncontrolled generated Japanese text as final interface text",
+      "restore finite-tower or merchant-chairman semantics"
+    ]
+  },
+  "requiredSequence": [
+    "Implement the isolated S02 route with semantic HTML, CSS and JavaScript.",
+    "Run static contract checks before browser execution.",
+    "Render 320x667, 375x667 and 390x844 in Chromium and capture evidence.",
+    "Exercise auto, speed, skills, support and navigation interactions.",
+    "Run reduced-motion evidence.",
+    "Adversarially compare the rendered result against the approved anchor and source-screen baseline.",
+    "Repair defects and repeat until no unresolved P0/P1 remains for the S02 prototype.",
+    "Present the actual rendered screen to the user before authorizing another screen."
+  ],
+  "currentWriteBoundary": {
+    "allowed": [
+      "quality-reviews/step-4-twelve-screen-final-mockups/**",
+      "step4/s02/**",
+      "tests/step4/s02-*.mjs",
+      ".github/workflows/verify-step-4-s02-anchor.yml",
+      "Step 4 status mirrors and evidence"
+    ],
+    "forbidden": [
+      "index.html",
+      "app.js",
+      "styles.css",
+      "game-core.js",
+      "game-data.js",
+      "sw.js",
+      "manifest.webmanifest",
+      "assets presented as final product assets",
+      "backend",
+      "payment provider",
+      "ad network",
+      "PR operation",
+      "Production alias",
+      "physical-iPhone PASS claim",
+      "Step 2 or Step 3 executable mutation"
+    ]
+  },
+  "completionBoundary": {
+    "s02PrototypePassDoesNotEqualStep4Pass": true,
+    "userVisualApprovalRequired": true,
+    "fiveStep4CriticsStillRequiredForStep4Pass": true,
+    "step5RemainsBlocked": true
+  },
+  "scopeReadback": {
+    "runtimeChanged": false,
+    "productAssetsChanged": false,
+    "backendChanged": false,
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "otherBranchWritten": false,
+    "pullRequestOperation": false
+  }
+}
