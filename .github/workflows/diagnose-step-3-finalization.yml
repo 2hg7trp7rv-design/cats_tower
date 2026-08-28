@@ -1,0 +1,49 @@
+name: Diagnose Step 3 finalization assertions
+
+on:
+  push:
+    branches: [kimi]
+    paths:
+      - '.github/workflows/diagnose-step-3-finalization.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      STEP3_DIR: quality-reviews/step-3-large-scale-validation
+      ENTRY: 3eefbf6fa7dfcec8b5b093612e8946b43d838bc2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Diagnose each finalization assertion
+        run: |
+          set -euo pipefail
+          COUNT=$(find "$STEP3_DIR/critics" -maxdepth 1 -type f -name 'critic-*.json' | wc -l | tr -d ' ')
+          echo "critic_count=$COUNT"
+          test "$COUNT" = '5'
+          jq -c '{criticCount, unresolvedP0, unresolvedP1, verdict}' "$STEP3_DIR/critic-summary.json"
+          jq -e '.criticCount == 5 and .unresolvedP0 == 0 and .unresolvedP1 == 0 and .verdict == "PASS"' "$STEP3_DIR/critic-summary.json" >/dev/null
+          echo 'critic_summary=PASS'
+          jq -c '{step3Pass, unresolvedP0, unresolvedP1, verdict}' "$STEP3_DIR/final-judge.json"
+          jq -e '.step3Pass == true and .unresolvedP0 == 0 and .unresolvedP1 == 0 and .verdict == "PASS_STEP3_CONTENT_PENDING_COMPLETION_AND_LIVE_READBACK"' "$STEP3_DIR/final-judge.json" >/dev/null
+          echo 'final_judge=PASS'
+          for file in "$STEP3_DIR"/critics/critic-*.json; do
+            echo -n "critic=$(basename "$file") "
+            jq -c '{unresolvedP0, unresolvedP1, verdict}' "$file"
+            jq -e '.unresolvedP0 == 0 and .unresolvedP1 == 0 and (.verdict | startswith("PASS"))' "$file" >/dev/null
+          done
+          echo 'all_critics=PASS'
+          echo 'diff_check_begin'
+          git diff --check "$ENTRY..HEAD" || { code=$?; echo "diff_check_exit=$code"; exit "$code"; }
+          echo 'diff_check=PASS'
+          STATUS=$(git status --porcelain --untracked-files=all)
+          printf 'status=%q\n' "$STATUS"
+          test -z "$STATUS"
+          echo 'working_tree=PASS'
