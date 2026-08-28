@@ -1,11 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 3,
   "artifactId": "cats-tower-step4-entry-readback-v1",
-  "recordedAt": "2026-08-28T08:09:07.746Z",
+  "recordedAt": "2026-08-28T08:14:05.431Z",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
-  "observedHead": "df190b26b0b663156c59563ecdff331218e2bcc3",
-  "observedTree": "933ec3d75399960494167abf930759d0dc6bc412",
+  "observedHead": "0c56440ebb7181fe0abb929dc1044aa5abe43cc2",
+  "observedTree": "baf3918e84c2192233a4bc95671c677a0cbe0090",
   "step3Entry": "245d50b6e80e2783f6aeaab5e50fae217661a3b6",
   "acceptance": {
     "path": "quality-reviews/step-4-twelve-screen-final-mockups/acceptance-matrix.json",
@@ -27,7 +27,10 @@
     "gallery": "quality-reviews/step-4-twelve-screen-final-mockups/mockup-gallery.html",
     "screenSpecs": "quality-reviews/step-4-twelve-screen-final-mockups/screen-specs.json",
     "designSystem": "quality-reviews/step-4-twelve-screen-final-mockups/design-system.json",
-    "referenceAudit": "quality-reviews/step-4-twelve-screen-final-mockups/reference-audit.json"
+    "referenceAudit": "quality-reviews/step-4-twelve-screen-final-mockups/reference-audit.json",
+    "generator": "quality-reviews/step-4-twelve-screen-final-mockups/tools/build-step4-draft-v3.mjs",
+    "generatorBlob": "b1a1e1942f3fb5669e5dfca96bcaf6058afb78de",
+    "xmlValidation": "PASS"
   },
   "scope": {
     "runtimeChanged": false,
@@ -40,6 +43,7 @@
     "otherBranchWritten": false,
     "pullRequestOperationPerformed": false
   },
-  "phase": "STEP4_DRAFT_GENERATED_PENDING_CRITICS_AND_FINAL_JUDGE",
-  "verdict": "PASS_STEP4_ENTRY_AND_DRAFT_GENERATION_READBACK"
+  "phase": "STEP4_XML_VALID_DRAFT_GENERATED_PENDING_CRITICS_AND_FINAL_JUDGE",
+  "verdict": "PASS_STEP4_ENTRY_AND_DRAFT_GENERATION_READBACK",
+  "xmlVerdict": "PASS_STEP4_ENTRY_AND_XML_VALID_DRAFT_GENERATION_READBACK_V3"
 }
