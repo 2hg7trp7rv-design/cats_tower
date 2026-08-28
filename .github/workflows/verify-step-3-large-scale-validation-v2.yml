@@ -109,7 +109,7 @@ jobs:
           set -euo pipefail
           test "$(find "$STEP3_DIR/critics" -maxdepth 1 -type f -name 'critic-*.json' | wc -l | tr -d ' ')" = '5'
           jq -e '.criticCount == 5 and .unresolvedP0 == 0 and .unresolvedP1 == 0 and .verdict == "PASS"' "$STEP3_DIR/critic-summary.json" >/dev/null
-          jq -e '.step3Pass == true and .unresolvedP0 == 0 and .unresolvedP1 == 0 and .verdict == "PASS_STEP3_CONTENT_PENDING_COMPLETION_AND_LIVE_READBACK"' "$STEP3_DIR/final-judge.json" >/dev/null
+          jq -e '.step3Pass == true and .criticSummary.unresolvedP0 == 0 and .criticSummary.unresolvedP1 == 0 and .verdict == "PASS_STEP3_CONTENT_PENDING_COMPLETION_AND_LIVE_READBACK"' "$STEP3_DIR/final-judge.json" >/dev/null
           for file in "$STEP3_DIR"/critics/critic-*.json; do
             jq -e '.unresolvedP0 == 0 and .unresolvedP1 == 0 and (.verdict | startswith("PASS"))' "$file" >/dev/null
           done
