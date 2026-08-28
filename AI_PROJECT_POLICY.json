@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "updatedDate": "2026-08-28",
   "repository": {
     "fullName": "2hg7trp7rv-design/cats_tower",
@@ -18,20 +18,25 @@
     "MASTER_SPEC.md and sealed canonical contracts",
     "simulation/executable-seal-v2.json and its completion/read-back chain",
     "quality-reviews/step-3-large-scale-validation/terminal-mirror-correction.json",
+    "quality-reviews/step-4-twelve-screen-final-mockups/user-visual-rejection-round-001.json",
     "PROJECT_STATUS.json, simulation/CURRENT_STATUS.json, QUALITY_GATE.md and AGENTS.md",
     "task Acceptance, critics, judge, handover, workflow and completion evidence",
     "historical Acceptance/PASS/audits and legacy runtime",
     "chat history and competitor references"
   ],
   "currentPhase": {
-    "step": 3,
-    "name": "large-scale-validation",
-    "status": "PASS",
-    "phase": "LARGE_SCALE_VALIDATION_COMPLETE",
+    "step": 4,
+    "name": "twelve-screen-final-mockups",
+    "status": "IN_PROGRESS",
+    "phase": "STEP4_VISUAL_REDESIGN",
     "step1Status": "PASS",
     "step2Status": "PASS_SEALED",
+    "step3Status": "PASS",
     "step3Allowed": true,
     "step4Allowed": true,
+    "step5Allowed": false,
+    "currentVisualDraft": "REJECTED_BY_USER_NOT_PRODUCTION_QUALITY",
+    "userVisualDirectionApproval": false,
     "balanceVerdict": "PASS_STEP3_LARGE_SCALE_VALIDATION",
     "physicalIPhone": "NOT_VERIFIED"
   },
@@ -66,110 +71,6 @@
     "balanceVerdict": "NOT_EVALUATED_STEP2",
     "status": "PASS_SEALED"
   },
-  "governanceRepair": {
-    "acceptance": "quality-reviews/step-2-governance-repair-round-001/acceptance-matrix.json",
-    "latestAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-014.json",
-    "completion": "quality-reviews/step-2-governance-repair-round-001/completion-evidence.json",
-    "liveReadback": "quality-reviews/step-2-governance-repair-round-001/live-readback.json",
-    "legacyRound7Mode": "IMMUTABLE_HISTORICAL_WORKTREE_ONLY",
-    "currentStatusMode": "ROUND008_AND_STEP2_LIVE_MIRRORS",
-    "obsoleteMarkerRestorationAllowed": false
-  },
-  "step3Rule": {
-    "requiredRunPlan": "simulation/run-plan-v2.json",
-    "minimumGameplayScenarios": 15000,
-    "calibrationScenarios": 12000,
-    "unseenHoldoutScenarios": 3000,
-    "separateHighVolumeSuitesRequired": true,
-    "holdoutMayBeUsedForTuning": false,
-    "step2QualificationMayBeClaimedAsBalancePass": false,
-    "requiredArtifacts": [
-      "quality-reviews/step-3-large-scale-validation/gameplay-calibration-result.json",
-      "quality-reviews/step-3-large-scale-validation/gameplay-holdout-result.json",
-      "quality-reviews/step-3-large-scale-validation/high-volume/**",
-      "quality-reviews/step-3-large-scale-validation/critic-summary.json",
-      "quality-reviews/step-3-large-scale-validation/final-judge.json",
-      "quality-reviews/step-3-large-scale-validation/completion-evidence.json",
-      "quality-reviews/step-3-large-scale-validation/live-readback.json"
-    ]
-  },
-  "permanentEconomyAuthority": "server",
-  "completionContract": {
-    "insufficientAlone": [
-      "files exist",
-      "build succeeds",
-      "tests pass",
-      "deployment READY",
-      "sandbox provider responds"
-    ],
-    "required": [
-      "requirements coverage",
-      "schema and semantic validation",
-      "deterministic source/seed/version/rounding/result binding",
-      "positive/boundary/negative/migration/cross-runtime fixtures",
-      "calibration and unseen holdout separation",
-      "independent critics and final judge",
-      "unresolved P0/P1 zero",
-      "exact commit/tree/workflow/evidence binding",
-      "forbidden path and Production changes zero"
-    ]
-  },
-  "writeBoundary": {
-    "currentAllowed": [
-      "Step 4 twelve-screen final mockups"
-    ],
-    "currentForbidden": [
-      "runtime",
-      "assets",
-      "backend",
-      "payment provider",
-      "ad network",
-      "PR operation",
-      "Production alias",
-      "Step 2 executable mutation",
-      "physical-iPhone PASS claim"
-    ]
-  },
-  "userBoundary": {
-    "chatgptOwns": [
-      "research",
-      "specification",
-      "implementation when authorized",
-      "tests",
-      "defect discovery",
-      "repair",
-      "regression",
-      "handover"
-    ],
-    "userNeededFor": [
-      "material product-direction tie",
-      "unavailable credentials/contracts",
-      "destructive or public operation approval",
-      "physical iPhone evidence"
-    ],
-    "forbiddenDelegation": "Do not ask the user to write code or diagnose ordinary defects."
-  },
-  "reporting": {
-    "required": [
-      "repository",
-      "branch",
-      "content/evidence commit and tree",
-      "workflow run/job",
-      "phase/verdict",
-      "P0/P1",
-      "changed paths",
-      "Production change",
-      "physical iPhone state"
-    ],
-    "forbiddenWithoutPass": [
-      "完成",
-      "OK",
-      "問題なし",
-      "Preview Ready",
-      "Production Ready",
-      "実機確認済み"
-    ]
-  },
   "activeStep3Validation": {
     "status": "PASS",
     "acceptance": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
@@ -183,5 +84,130 @@
     "highVolumeSamples": 1700000,
     "unresolvedP0": 0,
     "unresolvedP1": 0
+  },
+  "activeStep4Redesign": {
+    "status": "IN_PROGRESS",
+    "acceptance": "quality-reviews/step-4-twelve-screen-final-mockups/acceptance-matrix.json",
+    "userVisualRejection": "quality-reviews/step-4-twelve-screen-final-mockups/user-visual-rejection-round-001.json",
+    "rejectedSvgTree": "980ed3686346f48ddf5e53c8e24a0f697a3219cd",
+    "rejectedGalleryBlob": "9f93c10fd10cc901c329ccb040682c79e89ccd59",
+    "transportValidityMayCountAsVisualQuality": false,
+    "projectSourceImagesRole": "USER_DEFINED_VISUAL_PROTOTYPE_BASELINE",
+    "anchorScreensBeforeExpansion": [
+      "S01",
+      "S02",
+      "S08",
+      "S10"
+    ],
+    "anchorScreensMustBeShownToUser": true,
+    "browserRenderedEvidenceRequired": true,
+    "largeTextEvidenceRequired": true,
+    "reducedMotionEvidenceRequired": true,
+    "independentCriticsRequired": 5,
+    "unresolvedP0Required": 0,
+    "unresolvedP1Required": 0,
+    "userVisualDirectionApprovalRequired": true,
+    "finalJudgeRequired": true,
+    "completionEvidenceRequired": true,
+    "terminalLiveReadbackRequired": true,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "governanceRepair": {
+    "acceptance": "quality-reviews/step-2-governance-repair-round-001/acceptance-matrix.json",
+    "completion": "quality-reviews/step-2-governance-repair-round-001/completion-evidence.json",
+    "liveReadback": "quality-reviews/step-2-governance-repair-round-001/live-readback.json",
+    "legacyRound7Mode": "IMMUTABLE_HISTORICAL_WORKTREE_ONLY",
+    "currentStatusMode": "STEP4_VISUAL_REDESIGN",
+    "obsoleteMarkerRestorationAllowed": false
+  },
+  "permanentEconomyAuthority": "server",
+  "completionContract": {
+    "insufficientAlone": [
+      "files exist",
+      "SVG exists",
+      "XML parses",
+      "deterministic generator succeeds",
+      "build succeeds",
+      "tests pass",
+      "deployment READY",
+      "sandbox provider responds"
+    ],
+    "required": [
+      "requirements coverage",
+      "rendered-result self-inspection",
+      "production-quality visual comparison against the project-source prototype baseline",
+      "screen-specific composition and Cat's Tower identity",
+      "browser-rendered screenshots",
+      "large-text and reduced-motion verification",
+      "independent critics and final judge",
+      "unresolved P0/P1 zero",
+      "user visual-direction acceptance",
+      "exact commit/tree/workflow/evidence binding",
+      "forbidden path and Production changes zero"
+    ]
+  },
+  "writeBoundary": {
+    "currentAllowed": [
+      "Step 4 production-fidelity visual redesign",
+      "Step 4 rendered screenshots and visual audit",
+      "Step 4 accessibility evidence",
+      "Step 4 critics, repairs and status mirrors"
+    ],
+    "currentForbidden": [
+      "runtime",
+      "final product assets before Step 4 approval",
+      "backend",
+      "payment provider",
+      "ad network",
+      "PR operation",
+      "Production alias",
+      "Step 2 or Step 3 executable mutation",
+      "Step 5 implementation",
+      "physical-iPhone PASS claim"
+    ]
+  },
+  "userBoundary": {
+    "chatgptOwns": [
+      "research",
+      "specification",
+      "visual production",
+      "self-rejection of weak designs",
+      "tests",
+      "defect discovery",
+      "repair",
+      "regression",
+      "handover"
+    ],
+    "userNeededFor": [
+      "material product-direction tie",
+      "final visual preference between production-credible alternatives",
+      "unavailable credentials/contracts",
+      "destructive or public operation approval",
+      "physical iPhone evidence"
+    ],
+    "forbiddenDelegation": "Do not ask the user to write code, diagnose ordinary defects, or accept a design merely because files exist."
+  },
+  "reporting": {
+    "required": [
+      "repository",
+      "branch",
+      "content/evidence commit and tree",
+      "workflow run/job when available",
+      "phase/verdict",
+      "P0/P1",
+      "changed paths",
+      "Production change",
+      "physical iPhone state"
+    ],
+    "forbiddenWithoutPass": [
+      "完成",
+      "OK",
+      "問題なし",
+      "本番品質",
+      "Preview Ready",
+      "Production Ready",
+      "実機確認済み"
+    ]
   }
 }
