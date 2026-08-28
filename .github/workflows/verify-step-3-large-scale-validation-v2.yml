@@ -1,4 +1,3 @@
-# repair-trigger: markdown-normalization-2026-08-28
 name: Verify Step 3 large-scale validation v2
 
 on:
@@ -7,8 +6,11 @@ on:
     paths:
       - '.github/workflows/verify-step-3-large-scale-validation-v2.yml'
       - '.github/workflows/finalize-step-3-large-scale-validation.yml'
+      - '.github/workflows/CURRENT_STATUS.md'
+      - '.github/workflows/repair-step-3-finalization-bootstrap.yml'
       - 'quality-reviews/step-3-large-scale-validation/tools/finalize-step3.mjs'
       - 'tests/governance/verify-current-step2-state.mjs'
+      - 'quality-reviews/step-3-large-scale-validation/completion-evidence.json'
       - 'quality-reviews/step-3-large-scale-validation/live-readback.json'
   workflow_dispatch:
 
@@ -24,7 +26,7 @@ jobs:
   finalize-step3:
     name: finalize-step3
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 30
     env:
       STEP3_DIR: quality-reviews/step-3-large-scale-validation
       TOOL: quality-reviews/step-3-large-scale-validation/tools/finalize-step3.mjs
@@ -81,8 +83,11 @@ jobs:
             MODE=verify-terminal
           elif [ -f "$STEP3_DIR/completion-evidence.json" ]; then
             MODE=await-finalizer
+          elif [ -f "$STEP3_DIR/final-judge.json" ]; then
+            MODE=resume-evidence
           else
-            MODE=prepare
+            echo 'Step 3 critic/final-judge content is absent. Reopen explicit repair instead of silently fabricating it.' >&2
+            exit 1
           fi
           echo "mode=$MODE" >> "$GITHUB_OUTPUT"
           echo "Detected mode: $MODE"
@@ -95,8 +100,21 @@ jobs:
           node simulation/validate-executable-seal-v2.mjs simulation/executable-seal-v2.json | tee "$RUNNER_TEMP/step2-seal.json"
           jq -e '.verdict == "PASS_EXECUTABLE_SEAL_V2"' "$RUNNER_TEMP/step2-seal.json" >/dev/null
 
+      - name: Validate committed five-critic review and final judge
+        if: steps.phase.outputs.mode == 'resume-evidence'
+        run: |
+          set -euo pipefail
+          test "$(find "$STEP3_DIR/critics" -maxdepth 1 -type f -name 'critic-*.json' | wc -l | tr -d ' ')" = '5'
+          jq -e '.criticCount == 5 and .unresolvedP0 == 0 and .unresolvedP1 == 0 and .verdict == "PASS"' "$STEP3_DIR/critic-summary.json" >/dev/null
+          jq -e '.step3Pass == true and .unresolvedP0 == 0 and .unresolvedP1 == 0 and .verdict == "PASS_STEP3_CONTENT_PENDING_COMPLETION_AND_LIVE_READBACK"' "$STEP3_DIR/final-judge.json" >/dev/null
+          for file in "$STEP3_DIR"/critics/critic-*.json; do
+            jq -e '.unresolvedP0 == 0 and .unresolvedP1 == 0 and (.verdict | startswith("PASS"))' "$file" >/dev/null
+          done
+          git diff --check "$ENTRY..HEAD"
+          test -z "$(git status --porcelain --untracked-files=all)"
+
       - name: Configure exact kimi writer
-        if: steps.phase.outputs.mode == 'prepare'
+        if: steps.phase.outputs.mode == 'resume-evidence'
         run: |
           set -euo pipefail
           test "$(git rev-parse origin/kimi)" = "$GITHUB_SHA"
@@ -105,37 +123,8 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           test "$(git branch --show-current)" = 'kimi'
 
-      - name: Run integrated analysis and five independent critic scopes
-        if: steps.phase.outputs.mode == 'prepare'
-        run: |
-          set -euo pipefail
-          node "$TOOL" analyze | tee "$RUNNER_TEMP/step3-analysis-verdict.json"
-          jq -e '.criticCount == 5 and (.unresolvedP0 | type == "number") and (.unresolvedP1 | type == "number")' "$RUNNER_TEMP/step3-analysis-verdict.json" >/dev/null
-          jq -e '.criticCount == 5 and (.unresolvedP0 | type == "number") and (.unresolvedP1 | type == "number") and (.verdict == "PASS" or .verdict == "FAIL")' "$STEP3_DIR/critic-summary.json" >/dev/null
-          jq -e '.verdict == "PASS_STEP3_CONTENT_PENDING_COMPLETION_AND_LIVE_READBACK" or .verdict == "FAIL_STEP3_SEALED_CANDIDATE_PENDING_TERMINAL_EVIDENCE"' "$STEP3_DIR/final-judge.json" >/dev/null
-          git diff --check
-
-      - name: Commit independent review and status mirrors
-        if: steps.phase.outputs.mode == 'prepare'
-        run: |
-          set -euo pipefail
-          git add \
-            "$STEP3_DIR/analysis.json" \
-            "$STEP3_DIR/critics" \
-            "$STEP3_DIR/critic-summary.json" \
-            "$STEP3_DIR/final-judge.json" \
-            "$STEP3_DIR/acceptance-addendum-finalization-repair-005.json" \
-            quality-reviews/step-1-canonical-design/active-change-control.json \
-            quality-reviews/step-1-canonical-design/active-change-control-addendum-round-015.json \
-            AI_PROJECT_POLICY.json PROJECT_STATUS.json simulation/CURRENT_STATUS.json \
-            QUALITY_GATE.md .github/workflows/CURRENT_STATUS.md AGENTS.md PROJECT_HANDOVER.md
-          test -n "$(git diff --cached --name-only)"
-          git commit -m 'step3: complete independent critic review and final judgment'
-          git push origin HEAD:kimi
-          test -z "$(git status --porcelain --untracked-files=all)"
-
       - name: Resolve workflow job ID
-        if: steps.phase.outputs.mode == 'prepare'
+        if: steps.phase.outputs.mode == 'resume-evidence'
         id: job
         env:
           GH_TOKEN: ${{ github.token }}
@@ -152,7 +141,7 @@ jobs:
           echo "job_id=$JOB_ID" >> "$GITHUB_OUTPUT"
 
       - name: Create and commit completion evidence
-        if: steps.phase.outputs.mode == 'prepare'
+        if: steps.phase.outputs.mode == 'resume-evidence'
         env:
           STEP3_JOB_ID: ${{ steps.job.outputs.job_id }}
         run: |
@@ -160,6 +149,7 @@ jobs:
           node "$TOOL" completion
           git diff --check
           git add "$STEP3_DIR/completion-evidence.json"
+          test "$(git diff --cached --name-only)" = "$STEP3_DIR/completion-evidence.json"
           git commit -m 'step3: bind critic review completion evidence'
           git push origin HEAD:kimi
           node "$TOOL" verify-completion
