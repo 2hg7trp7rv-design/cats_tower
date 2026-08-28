@@ -1,0 +1,289 @@
+name: Repair Step 3 final aggregate manifest
+
+on:
+  push:
+    branches: [kimi]
+    paths:
+      - '.github/workflows/repair-step-3-final-aggregate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: cats-step3-final-aggregate-repair-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  repair-aggregate:
+    name: repair-final-aggregate-manifest
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify aggregate repair authority and source metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          ENTRY=3eefbf6fa7dfcec8b5b093612e8946b43d838bc2
+          SOURCE_RUN=33134710212
+          SOURCE_ARTIFACT=9671638681
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse --is-shallow-repository)" = "false"
+          test -z "$(git replace -l)"
+          git merge-base --is-ancestor "$ENTRY" HEAD
+          test "$(git rev-parse HEAD:quality-reviews/step-3-large-scale-validation/acceptance-matrix.json)" = "d1392c431282d0faae9e9ad7f1c22161a3c5caad"
+          test "$(git rev-parse HEAD:quality-reviews/step-3-large-scale-validation/acceptance-addendum-aggregate-003.json)" = "712268d487ec2b1a812e9f722cad1fa787d69153"
+          test "$(git rev-parse HEAD:quality-reviews/step-3-large-scale-validation/calibration-gate.json)" = "5ecb6c177a0c52f164c4ad22723f54305bf8c97d"
+          test "$(git rev-parse HEAD:quality-reviews/step-3-large-scale-validation/calibration-live-readback.json)" = "284ace113d40f6e0fa1a832e660a677b8eb65c5a"
+          test "$(git rev-parse HEAD:quality-reviews/step-1-reseal-round-008/seal-round-008.json)" = "0a959de0383b57ad6cd1f33c124b398aa51c1e00"
+          test "$(git rev-parse HEAD:simulation/executable-seal-v2.json)" = "ee3507969c03b08fe27350263cf0bc093a1c18e1"
+          jq -e '.verdict == "PASS_BYTE_PRESERVING_AGGREGATE_MANIFEST_REPAIR_AUTHORIZED" and .defect.resultDataCorruption == false and .sourceAggregateArtifact.aggregateChecksumVerifiedAfterExtraction == true' quality-reviews/step-3-large-scale-validation/acceptance-addendum-aggregate-003.json >/dev/null
+          test ! -e quality-reviews/step-3-large-scale-validation/gameplay-holdout-result.json
+          test ! -d quality-reviews/step-3-large-scale-validation/high-volume
+          git diff --check "$ENTRY"..HEAD
+          curl -fsSL \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$SOURCE_RUN/artifacts?per_page=100" \
+            > "$RUNNER_TEMP/source-artifacts.json"
+          jq -e --argjson id "$SOURCE_ARTIFACT" '
+            any(.artifacts[];
+              .id == $id and
+              .name == "cats-tower-step3-final-execution-22a9a3e56caadba8f2cc3c03359ff1646908b72d-attempt-1" and
+              .size_in_bytes == 260309 and
+              .digest == "sha256:b0fff485be3fd0d101fa4562b09cbcd8c3c9e9a55af4033897f7bc4b310e0096" and
+              .expired == false and
+              .workflow_run.id == 33134710212 and
+              .workflow_run.head_branch == "kimi" and
+              .workflow_run.head_sha == "22a9a3e56caadba8f2cc3c03359ff1646908b72d"
+            )
+          ' "$RUNNER_TEMP/source-artifacts.json" >/dev/null
+
+      - name: Download exact source aggregate artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: cats-tower-step3-final-execution-22a9a3e56caadba8f2cc3c03359ff1646908b72d-attempt-1
+          path: ${{ runner.temp }}/cats-step3-final-aggregate-repaired
+          github-token: ${{ github.token }}
+          run-id: 33134710212
+
+      - name: Verify all source bytes and isolate the manifest defect
+        run: |
+          set -euo pipefail
+          DIR="$RUNNER_TEMP/cats-step3-final-aggregate-repaired"
+          cd "$DIR"
+          test "$(find . -maxdepth 1 -type f | wc -l | tr -d ' ')" = "30"
+          test "$(sha256sum SHA256SUMS-aggregate | cut -d' ' -f1)" = "3780e08f8de77ab9e23754f17d148d2ebd35b13710ccb15846d126bfe080d5ee"
+          sha256sum -c SHA256SUMS-aggregate
+          test "$(sha256sum gameplay-holdout-result.json | cut -d' ' -f1)" = "3bcae607267a7e20863f0279fa4a3f76810ec0a315074567e6199e8f589b8bc5"
+          test "$(sha256sum holdout-audit.json | cut -d' ' -f1)" = "3326c8ce5497579929e8c625cf35a1eb000aa5ff56ed0864dff18b95f6e679ef"
+          test "$(sha256sum final-execution-manifest.json | cut -d' ' -f1)" = "882dfa4e9d0139f9b08fb783a00bc8057b0651c9396bce2e1fe957ad78eeaf88"
+          jq -e '.head == "" and .tree == "" and .runId == "33134710212" and .gameplay.totalScenarios == "15000" and .highVolume.totalSamples == "1700000" and .verdict == "PASS_STEP3_FINAL_EXECUTION_ARTIFACT_READY_FOR_EXTERNAL_AUDIT"' final-execution-manifest.json >/dev/null
+          jq -e '.verdict == "PASS_UNSEEN_HOLDOUT_GATE_CANDIDATE" and .unresolvedP0 == 0 and .unresolvedP1 == 0 and .separation.calibrationInputOverlap == "0" and .separation.calibrationScenarioOverlap == "0" and .separation.tuningVisible == false' holdout-audit.json >/dev/null
+          for suite in gacha-tails pity-conformance duplicate-skew-overflow refund-replay-race state-machine-model large-number-properties; do
+            jq -e --arg suite "$suite" '.deterministicPayload.suiteId == $suite and .deterministicPayload.complete == true and .verdict.contractValidation == "PASS" and .verdict.suiteComplete == true' "high-volume-$suite.json" >/dev/null
+            jq -e --arg suite "$suite" '.suiteId == $suite and .verdict == "PASS_HIGH_VOLUME_SUITE_AUDIT" and .unresolvedP0 == 0 and .unresolvedP1 == 0' "audit-high-volume-$suite.json" >/dev/null
+            jq -e '.head == "22a9a3e56caadba8f2cc3c03359ff1646908b72d" and .tree == "e55eb2b934c3049b66e2c41ae4632004a134f960" and .verdict == "PASS_HIGH_VOLUME_SUITE_ARTIFACT_READY"' "manifest-high-volume-$suite.json" >/dev/null
+          done
+          jq -e '.head == "22a9a3e56caadba8f2cc3c03359ff1646908b72d" and .tree == "e55eb2b934c3049b66e2c41ae4632004a134f960" and .result.scenarioCount == "3000" and .tuningVisible == false and .tuningReuseForbidden == true and .verdict == "PASS_UNSEEN_HOLDOUT_ARTIFACT_READY"' holdout-execution-manifest.json >/dev/null
+          TOTAL_HIGH_VOLUME=$(jq -s 'map(.deterministicPayload.sampleCount | tonumber) | add' high-volume-*.json)
+          test "$TOTAL_HIGH_VOLUME" = "1700000"
+          cp SHA256SUMS-aggregate "$RUNNER_TEMP/original-SHA256SUMS-aggregate"
+
+      - name: Replace only the defective aggregate manifest and checksum
+        run: |
+          set -euo pipefail
+          DIR="$RUNNER_TEMP/cats-step3-final-aggregate-repaired"
+          cd "$DIR"
+          rm -f SHA256SUMS-aggregate
+          jq -n \
+            --arg repository "$GITHUB_REPOSITORY" \
+            --arg branch "kimi" \
+            --arg head "22a9a3e56caadba8f2cc3c03359ff1646908b72d" \
+            --arg tree "e55eb2b934c3049b66e2c41ae4632004a134f960" \
+            --arg workflow "Execute Step 3 holdout and high-volume validation" \
+            --arg workflowPath ".github/workflows/execute-step-3-final-validation.yml" \
+            --arg runId "33134710212" \
+            --arg runAttempt "1" \
+            --arg aggregateJobId "98732488607" \
+            --arg sourceArtifactId "9671638681" \
+            --arg sourceArtifactDigest "sha256:b0fff485be3fd0d101fa4562b09cbcd8c3c9e9a55af4033897f7bc4b310e0096" \
+            --arg originalDefectiveManifestSha256 "882dfa4e9d0139f9b08fb783a00bc8057b0651c9396bce2e1fe957ad78eeaf88" \
+            --arg repairHead "$(git -C "$GITHUB_WORKSPACE" rev-parse HEAD)" \
+            --arg repairTree "$(git -C "$GITHUB_WORKSPACE" rev-parse HEAD^{tree})" \
+            --arg repairWorkflow "$GITHUB_WORKFLOW" \
+            --arg repairRunId "$GITHUB_RUN_ID" \
+            --arg repairRunAttempt "$GITHUB_RUN_ATTEMPT" \
+            --arg repairJob "$GITHUB_JOB" \
+            --arg addendumBlob "712268d487ec2b1a812e9f722cad1fa787d69153" \
+            --arg holdoutDigest "$(jq -r '.hashes.deterministicPayloadSha256' gameplay-holdout-result.json)" \
+            --arg holdoutResultSha256 "$(sha256sum gameplay-holdout-result.json | cut -d' ' -f1)" \
+            --arg holdoutAuditSha256 "$(sha256sum holdout-audit.json | cut -d' ' -f1)" \
+            '{
+              schemaVersion: 2,
+              artifactId: "cats-tower-step3-final-execution-aggregate-manifest",
+              repository: $repository,
+              branch: $branch,
+              head: $head,
+              tree: $tree,
+              workflow: $workflow,
+              workflowPath: $workflowPath,
+              runId: $runId,
+              runAttempt: $runAttempt,
+              jobs: {
+                preflight: {jobId: "98731986815", conclusion: "success"},
+                holdout: {jobId: "98732063205", conclusion: "success"},
+                gachaTails: {jobId: "98732063292", conclusion: "success"},
+                pityConformance: {jobId: "98732063309", conclusion: "success"},
+                duplicateSkewOverflow: {jobId: "98732063319", conclusion: "success"},
+                refundReplayRace: {jobId: "98732063421", conclusion: "success"},
+                stateMachineModel: {jobId: "98732063321", conclusion: "success"},
+                largeNumberProperties: {jobId: "98732063311", conclusion: "success"},
+                aggregate: {jobId: $aggregateJobId, conclusion: "success"}
+              },
+              sourceAggregateArtifact: {
+                artifactId: $sourceArtifactId,
+                artifactDigest: $sourceArtifactDigest,
+                sizeBytes: "260309",
+                originalDefectiveManifestSha256: $originalDefectiveManifestSha256,
+                sourceAggregateChecksumSha256: "3780e08f8de77ab9e23754f17d148d2ebd35b13710ccb15846d126bfe080d5ee"
+              },
+              authority: {
+                acceptanceBlob: "d1392c431282d0faae9e9ad7f1c22161a3c5caad",
+                calibrationGateBlob: "5ecb6c177a0c52f164c4ad22723f54305bf8c97d",
+                calibrationReadbackBlob: "284ace113d40f6e0fa1a832e660a677b8eb65c5a",
+                aggregateRepairAddendumBlob: $addendumBlob,
+                holdoutAuditScriptBlob: "7f6e5069c08b088c75134ed9d9650de24565545f",
+                highVolumeAuditScriptBlob: "bd421bf758ff0d42150b96d8f5085b71dfbc4403",
+                step2SealBlob: "ee3507969c03b08fe27350263cf0bc093a1c18e1"
+              },
+              gameplay: {
+                calibrationScenarios: "12000",
+                unseenHoldoutScenarios: "3000",
+                totalScenarios: "15000",
+                holdoutDeterministicPayloadSha256: $holdoutDigest,
+                holdoutResultSha256: $holdoutResultSha256,
+                holdoutAuditSha256: $holdoutAuditSha256,
+                calibrationInputOverlap: "0",
+                calibrationScenarioOverlap: "0",
+                tuningVisible: false,
+                tuningReuseForbidden: true,
+                holdoutAuditVerdict: "PASS_UNSEEN_HOLDOUT_GATE_CANDIDATE"
+              },
+              highVolume: {
+                suiteCount: "6",
+                totalSamples: "1700000",
+                suites: [
+                  {id: "gacha-tails", samples: "200000", auditVerdict: "PASS_HIGH_VOLUME_SUITE_AUDIT"},
+                  {id: "pity-conformance", samples: "1000000", auditVerdict: "PASS_HIGH_VOLUME_SUITE_AUDIT"},
+                  {id: "duplicate-skew-overflow", samples: "200000", auditVerdict: "PASS_HIGH_VOLUME_SUITE_AUDIT"},
+                  {id: "refund-replay-race", samples: "100000", auditVerdict: "PASS_HIGH_VOLUME_SUITE_AUDIT"},
+                  {id: "state-machine-model", samples: "100000", auditVerdict: "PASS_HIGH_VOLUME_SUITE_AUDIT"},
+                  {id: "large-number-properties", samples: "100000", auditVerdict: "PASS_HIGH_VOLUME_SUITE_AUDIT"}
+                ]
+              },
+              quality: {unresolvedP0: 0, unresolvedP1: 0},
+              repairInvocation: {
+                head: $repairHead,
+                tree: $repairTree,
+                workflow: $repairWorkflow,
+                runId: $repairRunId,
+                runAttempt: $repairRunAttempt,
+                job: $repairJob,
+                sourceResultBytesModified: false,
+                sourceAuditBytesModified: false,
+                individualManifestBytesModified: false
+              },
+              partialResultPromotion: false,
+              verdict: "PASS_STEP3_FINAL_EXECUTION_ARTIFACT_READY_FOR_INDEPENDENT_CRITICS"
+            }' > final-execution-manifest.json
+          test -s final-execution-manifest.json
+          CORRECTED_SHA=$(sha256sum final-execution-manifest.json | cut -d' ' -f1)
+          CORRECTED_BYTES=$(wc -c < final-execution-manifest.json | tr -d ' ')
+          jq -n \
+            --arg repository "$GITHUB_REPOSITORY" \
+            --arg branch "kimi" \
+            --arg repairHead "$(git -C "$GITHUB_WORKSPACE" rev-parse HEAD)" \
+            --arg repairTree "$(git -C "$GITHUB_WORKSPACE" rev-parse HEAD^{tree})" \
+            --arg workflow "$GITHUB_WORKFLOW" \
+            --arg runId "$GITHUB_RUN_ID" \
+            --arg runAttempt "$GITHUB_RUN_ATTEMPT" \
+            --arg job "$GITHUB_JOB" \
+            --arg addendumBlob "712268d487ec2b1a812e9f722cad1fa787d69153" \
+            --arg correctedManifestSha256 "$CORRECTED_SHA" \
+            --arg correctedManifestBytes "$CORRECTED_BYTES" \
+            '{
+              schemaVersion: 1,
+              artifactId: "cats-tower-step3-final-aggregate-manifest-repair-record",
+              repository: $repository,
+              branch: $branch,
+              source: {
+                runId: "33134710212",
+                head: "22a9a3e56caadba8f2cc3c03359ff1646908b72d",
+                tree: "e55eb2b934c3049b66e2c41ae4632004a134f960",
+                artifactId: "9671638681",
+                artifactDigest: "sha256:b0fff485be3fd0d101fa4562b09cbcd8c3c9e9a55af4033897f7bc4b310e0096",
+                originalDefectiveManifestSha256: "882dfa4e9d0139f9b08fb783a00bc8057b0651c9396bce2e1fe957ad78eeaf88"
+              },
+              repair: {
+                head: $repairHead,
+                tree: $repairTree,
+                workflow: $workflow,
+                runId: $runId,
+                runAttempt: $runAttempt,
+                job: $job,
+                addendumBlob: $addendumBlob,
+                correctedManifestSha256: $correctedManifestSha256,
+                correctedManifestBytes: $correctedManifestBytes
+              },
+              preservedSourceMemberCount: "28",
+              modifiedSourceMembers: ["final-execution-manifest.json", "SHA256SUMS-aggregate"],
+              addedMembers: ["aggregate-manifest-repair-record.json"],
+              executionDataRerun: false,
+              resultBytesModified: false,
+              auditBytesModified: false,
+              individualManifestBytesModified: false,
+              verdict: "PASS_BYTE_PRESERVING_AGGREGATE_MANIFEST_REPAIR"
+            }' > aggregate-manifest-repair-record.json
+          test -s aggregate-manifest-repair-record.json
+          find . -maxdepth 1 -type f ! -name 'SHA256SUMS-aggregate' -printf '%f\0' | sort -z | xargs -0 sha256sum > SHA256SUMS-aggregate
+          sha256sum -c SHA256SUMS-aggregate
+          ! grep -q '/home/runner/' SHA256SUMS-aggregate
+
+      - name: Prove byte preservation and corrected bindings
+        run: |
+          set -euo pipefail
+          DIR="$RUNNER_TEMP/cats-step3-final-aggregate-repaired"
+          cd "$DIR"
+          test "$(find . -maxdepth 1 -type f | wc -l | tr -d ' ')" = "31"
+          test "$(sha256sum gameplay-holdout-result.json | cut -d' ' -f1)" = "3bcae607267a7e20863f0279fa4a3f76810ec0a315074567e6199e8f589b8bc5"
+          test "$(sha256sum holdout-audit.json | cut -d' ' -f1)" = "3326c8ce5497579929e8c625cf35a1eb000aa5ff56ed0864dff18b95f6e679ef"
+          test "$(sha256sum high-volume-gacha-tails.json | cut -d' ' -f1)" = "89863f2896481c4d54cc9451ac754458044e5569ec44c7c5627f016ad6615b1a"
+          test "$(sha256sum high-volume-pity-conformance.json | cut -d' ' -f1)" = "b17e0aada5015d10babda729b49ab1cea25896a618f2b5ce326cb54772e8f2b4"
+          test "$(sha256sum high-volume-duplicate-skew-overflow.json | cut -d' ' -f1)" = "6433a60ce041ea0ee8b6a2bf5df9bd3640d8c7d241c8faa1d0792f95e7e53298"
+          test "$(sha256sum high-volume-refund-replay-race.json | cut -d' ' -f1)" = "d381dca95059210046d5ea298d3affee29eb915cc871854cd7dfcbef65b3dc1a"
+          test "$(sha256sum high-volume-state-machine-model.json | cut -d' ' -f1)" = "6a740f312ad3d90019a9a6b97f87db8d720fbdbd304dada2b220f6dee17321d7"
+          test "$(sha256sum high-volume-large-number-properties.json | cut -d' ' -f1)" = "2a0e2dcea21cdb7a534c3fd1dc0e4c45d38d2911085b108c29549b8bc6d31ea6"
+          jq -e '.schemaVersion == 2 and .head == "22a9a3e56caadba8f2cc3c03359ff1646908b72d" and .tree == "e55eb2b934c3049b66e2c41ae4632004a134f960" and .runId == "33134710212" and .gameplay.totalScenarios == "15000" and .highVolume.totalSamples == "1700000" and .quality.unresolvedP0 == 0 and .quality.unresolvedP1 == 0 and .verdict == "PASS_STEP3_FINAL_EXECUTION_ARTIFACT_READY_FOR_INDEPENDENT_CRITICS"' final-execution-manifest.json >/dev/null
+          jq -e '.verdict == "PASS_BYTE_PRESERVING_AGGREGATE_MANIFEST_REPAIR" and .executionDataRerun == false and .resultBytesModified == false and .auditBytesModified == false and .individualManifestBytesModified == false' aggregate-manifest-repair-record.json >/dev/null
+
+      - name: Upload repaired final execution package
+        uses: actions/upload-artifact@v4
+        with:
+          name: cats-tower-step3-final-execution-repaired-${{ github.sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/cats-step3-final-aggregate-repaired
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 6
