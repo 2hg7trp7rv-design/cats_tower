@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-aggregate-manifest-repair-addendum-003",
+  "createdAt": "2026-08-28",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "status": "ACTIVE_BEFORE_AGGREGATE_MANIFEST_REPAIR",
+  "parentAcceptance": {
+    "path": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
+    "blob": "d1392c431282d0faae9e9ad7f1c22161a3c5caad"
+  },
+  "previousAddenda": [
+    {
+      "path": "quality-reviews/step-3-large-scale-validation/acceptance-addendum-calibration-001.json",
+      "blob": "9d0c89489363340c4954b6912fb105ca6789b462"
+    },
+    {
+      "path": "quality-reviews/step-3-large-scale-validation/acceptance-addendum-transport-002.json",
+      "blob": "a8c853c1fe61e2ff5f5fced6d3776bcc97821d21"
+    }
+  ],
+  "trigger": "The exact Step 3 final execution completed successfully: 3,000 unseen holdout scenarios, six full high-volume suites totaling 1,700,000 samples, all validators and suite audits, and the aggregate checksum gate passed. Independent extraction confirmed every source checksum. However, final-execution-manifest.json recorded empty head and tree values because the aggregate step changed directory to the artifact directory before calling git rev-parse. This is an aggregate evidence metadata defect only; holdout and high-volume result bytes, audits and individual manifests are valid and immutable.",
+  "sourceExecution": {
+    "workflow": ".github/workflows/execute-step-3-final-validation.yml",
+    "runId": "33134710212",
+    "runAttempt": "1",
+    "head": "22a9a3e56caadba8f2cc3c03359ff1646908b72d",
+    "tree": "e55eb2b934c3049b66e2c41ae4632004a134f960",
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": {
+      "preflight": {"jobId": "98731986815", "conclusion": "success"},
+      "holdout": {"jobId": "98732063205", "conclusion": "success"},
+      "gachaTails": {"jobId": "98732063292", "conclusion": "success"},
+      "pityConformance": {"jobId": "98732063309", "conclusion": "success"},
+      "duplicateSkewOverflow": {"jobId": "98732063319", "conclusion": "success"},
+      "refundReplayRace": {"jobId": "98732063421", "conclusion": "success"},
+      "stateMachineModel": {"jobId": "98732063321", "conclusion": "success"},
+      "largeNumberProperties": {"jobId": "98732063311", "conclusion": "success"},
+      "aggregate": {"jobId": "98732488607", "conclusion": "success"}
+    }
+  },
+  "sourceAggregateArtifact": {
+    "id": "9671638681",
+    "name": "cats-tower-step3-final-execution-22a9a3e56caadba8f2cc3c03359ff1646908b72d-attempt-1",
+    "sizeBytes": "260309",
+    "digest": "sha256:b0fff485be3fd0d101fa4562b09cbcd8c3c9e9a55af4033897f7bc4b310e0096",
+    "expired": false,
+    "memberCount": "30",
+    "aggregateChecksumSha256": "3780e08f8de77ab9e23754f17d148d2ebd35b13710ccb15846d126bfe080d5ee",
+    "aggregateChecksumVerifiedAfterExtraction": true
+  },
+  "validExecutionResults": {
+    "gameplay": {
+      "calibrationScenarios": "12000",
+      "unseenHoldoutScenarios": "3000",
+      "totalScenarios": "15000",
+      "holdoutResultSha256": "3bcae607267a7e20863f0279fa4a3f76810ec0a315074567e6199e8f589b8bc5",
+      "holdoutDeterministicPayloadSha256": "7d043887ccf793ac6a52ef6582e3081416ee54056564f608e59b3688cffa05a3",
+      "holdoutAuditSha256": "3326c8ce5497579929e8c625cf35a1eb000aa5ff56ed0864dff18b95f6e679ef",
+      "holdoutAuditVerdict": "PASS_UNSEEN_HOLDOUT_GATE_CANDIDATE",
+      "calibrationInputOverlap": "0",
+      "calibrationScenarioOverlap": "0",
+      "unresolvedP0": 0,
+      "unresolvedP1": 0
+    },
+    "highVolume": {
+      "totalSamples": "1700000",
+      "suiteCount": "6",
+      "allSuiteAudits": "PASS_HIGH_VOLUME_SUITE_AUDIT",
+      "unresolvedP0": 0,
+      "unresolvedP1": 0
+    }
+  },
+  "defect": {
+    "id": "STEP3-AGGREGATE-MANIFEST-HEAD-TREE-EMPTY",
+    "severity": "P0",
+    "affectedPath": "final-execution-manifest.json",
+    "affectedFileBytes": "1971",
+    "affectedFileSha256": "882dfa4e9d0139f9b08fb783a00bc8057b0651c9396bce2e1fe957ad78eeaf88",
+    "observedHead": "",
+    "observedTree": "",
+    "expectedHead": "22a9a3e56caadba8f2cc3c03359ff1646908b72d",
+    "expectedTree": "e55eb2b934c3049b66e2c41ae4632004a134f960",
+    "cause": "The aggregate shell changed working directory from GITHUB_WORKSPACE to RUNNER_TEMP before invoking git rev-parse inside jq arguments.",
+    "resultDataCorruption": false,
+    "holdoutAuditCorruption": false,
+    "highVolumeAuditCorruption": false,
+    "individualManifestCorruption": false
+  },
+  "authorizedRepair": {
+    "type": "BYTE_PRESERVING_AGGREGATE_MANIFEST_REPAIR",
+    "required": [
+      "Download the exact aggregate artifact ID 9671638681 and verify its GitHub metadata, ZIP digest, member count and SHA256SUMS-aggregate after extraction.",
+      "Verify all holdout and high-volume result, audit and individual manifest files before modification.",
+      "Preserve every source file byte except final-execution-manifest.json and SHA256SUMS-aggregate.",
+      "Replace final-execution-manifest.json with a corrected version binding source head, tree, run, jobs, aggregate artifact identity, result/audit hashes, 15,000 gameplay scenarios and 1,700,000 high-volume samples.",
+      "Add aggregate-manifest-repair-record.json binding the original defective manifest hash and the byte-preserving repair invocation.",
+      "Regenerate SHA256SUMS-aggregate with relative member paths and verify it after extraction.",
+      "Correct the reusable workflow so future aggregate generation resolves git metadata through GITHUB_WORKSPACE without rerunning or replacing accepted execution evidence."
+    ],
+    "forbidden": [
+      "holdout regeneration",
+      "holdout tuning or reuse",
+      "high-volume suite regeneration",
+      "calibration, holdout or suite result modification",
+      "audit modification",
+      "individual execution manifest modification",
+      "candidate, run-plan, execution-contract or Step 2 seal modification",
+      "runtime, asset, backend, payment-provider, ad-network or Production modification",
+      "other branch or pull request operation"
+    ]
+  },
+  "completionRule": "The repair passes only when a derived aggregate artifact has an independently observed GitHub ZIP digest, all preserved source hashes remain exact, corrected head/tree values are exact, relative aggregate checksums pass after extraction, the repair record is nonempty, no execution data is rerun or modified, and unresolved P0/P1 for the repaired execution package remain zero.",
+  "verdict": "PASS_BYTE_PRESERVING_AGGREGATE_MANIFEST_REPAIR_AUTHORIZED"
+}
