@@ -1,5 +1,5 @@
 {
-  "statusDocumentSchemaVersion": 15,
+  "statusDocumentSchemaVersion": 16,
   "updatedDate": "2026-08-28",
   "project": "Cat's Tower",
   "canonicalRepository": "2hg7trp7rv-design/cats_tower",
@@ -14,16 +14,19 @@
     "status": "ACTIVE_COMPLETE_REPLACEMENT",
     "oldPathStatus": "DELETED_FROM_LIVE_KIMI"
   },
-  "currentChat": "03_3ビルド・ガチャ・重複熟練・進化・課金検証",
-  "currentStep": 3,
-  "currentStepName": "large-scale-validation",
-  "currentStepStatus": "PASS",
-  "currentCheckpoint": "step3-post-terminal-mirror-correction",
-  "advanceAllowed": true,
+  "currentChat": "04_UIUX・12画面完成見本",
+  "currentStep": 4,
+  "currentStepName": "twelve-screen-final-mockups",
+  "currentStepStatus": "IN_PROGRESS",
+  "currentCheckpoint": "step4-user-visual-rejection-round-001",
+  "advanceAllowed": false,
   "step2Allowed": true,
   "step3Allowed": true,
+  "step4Allowed": true,
+  "step5Allowed": false,
   "physicalIPhoneVerified": false,
   "productionChangedByCurrentWork": false,
+  "productionAliasChanged": false,
   "round008": {
     "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
     "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce",
@@ -109,12 +112,12 @@
     {
       "order": 4,
       "name": "twelve-screen-final-mockups",
-      "status": "READY_TO_START"
+      "status": "IN_PROGRESS_VISUAL_DRAFT_REJECTED"
     },
     {
       "order": 5,
       "name": "first-production-slice-and-backend-implementation",
-      "status": "BLOCKED_UNTIL_PRIOR_GATES"
+      "status": "BLOCKED_UNTIL_STEP4_PASS"
     },
     {
       "order": 6,
@@ -135,28 +138,29 @@
     "observedHoldoutReusable": false,
     "step3MayStartBeforeStep2Seal": false
   },
-  "nextAuthorizedChat": "04_12画面完成見本",
-  "nextAction": "Start Step 4 twelve-screen final mockups.",
+  "nextAuthorizedChat": "04_UIUX・12画面完成見本",
+  "nextAction": "Redesign S01, S02, S08 and S10 as production-fidelity anchor screens, adversarially review the rendered result, and show the actual screens to the user before expanding to all twelve.",
   "writeBoundary": {
     "allowedNext": [
-      "Step 4 twelve-screen final mockups"
+      "Step 4 production-fidelity visual redesign",
+      "Step 4 rendered screenshot evidence",
+      "Step 4 visual and accessibility critics"
     ],
     "forbiddenUntilLaterGates": [
       "runtime",
-      "assets",
+      "final product assets",
       "backend",
       "payment provider",
       "ad network",
       "Production alias",
-      "physical-iPhone PASS claim"
+      "physical-iPhone PASS claim",
+      "Step 5 implementation"
     ]
   },
-  "status": "PASS",
-  "phase": "LARGE_SCALE_VALIDATION_COMPLETE",
-  "step4Allowed": true,
+  "status": "IN_PROGRESS",
+  "phase": "STEP4_VISUAL_REDESIGN",
   "balanceVerdict": "PASS_STEP3_LARGE_SCALE_VALIDATION",
-  "productionAliasChanged": false,
-  "reason": "Step 3 volumes, critics, final judge, completion evidence and terminal live read-back passed.",
+  "reason": "The user explicitly rejected the current Step 4 SVG/contact-sheet visual direction as materially below the project-source visual prototypes and not credible as production-quality game design.",
   "step3": {
     "status": "PASS",
     "acceptance": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
@@ -174,10 +178,37 @@
     "liveReadbackVerdict": "PASS_FINAL_LIVE_READBACK_STEP3_LARGE_SCALE_VALIDATION",
     "terminalMirrorCorrection": "quality-reviews/step-3-large-scale-validation/terminal-mirror-correction.json"
   },
+  "step4": {
+    "status": "IN_PROGRESS",
+    "acceptance": "quality-reviews/step-4-twelve-screen-final-mockups/acceptance-matrix.json",
+    "userVisualRejection": "quality-reviews/step-4-twelve-screen-final-mockups/user-visual-rejection-round-001.json",
+    "currentSvgDraft": "REJECTED_AS_VISUAL_DIRECTION",
+    "currentSvgDraftTree": "980ed3686346f48ddf5e53c8e24a0f697a3219cd",
+    "existingScreenCount": 12,
+    "existingViewportCount": 3,
+    "existingSvgCount": 36,
+    "xmlValidity": "PASS_TRANSPORT_ONLY",
+    "browserRenderedEvidence": "NOT_COMPLETE",
+    "userVisualDirectionApproval": false,
+    "independentCriticsCompleted": 0,
+    "independentCriticsRequired": 5,
+    "finalJudge": "PENDING",
+    "completionEvidence": "PENDING",
+    "liveReadback": "PENDING",
+    "step4Pass": false,
+    "step5Allowed": false,
+    "visualBaselineRole": "USER_DEFINED_VISUAL_PROTOTYPE_BASELINE",
+    "anchorScreensRequiredBeforeExpansion": [
+      "S01",
+      "S02",
+      "S08",
+      "S10"
+    ]
+  },
   "resolvedCiHistory": {
     "workflow": ".github/workflows/verify-main.yml",
-    "status": "RESOLVED",
-    "resolution": "Historical Round 7 and current governance are separate jobs.",
+    "status": "RESOLVED_FOR_STEP3",
+    "resolution": "Historical Round 7 and current governance are separate jobs. Step 4 visual redesign requires a new dedicated quality chain.",
     "verifiedRunId": "33144127913",
     "conclusion": "SUCCESS"
   }
