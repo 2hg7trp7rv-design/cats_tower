@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 192" width="320" height="192" shape-rendering="crispEdges">
+  <defs>
+    <style>.o{stroke:#3a190d;stroke-width:4;stroke-linejoin:round}.g{fill:#f2c45d}.l{fill:#fff0b0}.b{fill:#8f552b}.r{fill:#d95343}.v{fill:#9a5bd7}.u{fill:#5ba8d9}.n{fill:#2b180f}.w{fill:#f5ead2}</style>
+  </defs>
+  <!-- row 1: shortcut rail -->
+  <g transform="translate(0 0)"><rect x="13" y="8" width="38" height="48" rx="3" class="w o"/><rect x="20" y="17" width="24" height="4" class="b"/><rect x="20" y="27" width="24" height="4" class="b"/><rect x="20" y="37" width="17" height="4" class="b"/><path d="M24 8h16v8H24z" class="g o"/></g>
+  <g transform="translate(64 0)"><path d="M10 25h44v31H10z" class="r o"/><path d="M7 19h50v12H7z" class="g o"/><path d="M28 17h8v39h-8z" class="l"/><path d="M31 20C17 15 13 6 21 6c6 0 10 7 10 14Zm2 0C47 15 51 6 43 6c-6 0-10 7-10 14Z" class="r o"/></g>
+  <g transform="translate(128 0)"><rect x="10" y="11" width="44" height="44" rx="4" class="w o"/><rect x="10" y="11" width="44" height="12" class="r o"/><rect x="18" y="4" width="7" height="14" class="g o"/><rect x="39" y="4" width="7" height="14" class="g o"/><rect x="18" y="30" width="8" height="8" class="u"/><rect x="30" y="30" width="8" height="8" class="g"/><rect x="42" y="30" width="8" height="8" class="v"/><rect x="18" y="42" width="8" height="8" class="g"/></g>
+  <g transform="translate(192 0)"><circle cx="24" cy="25" r="12" class="u o"/><circle cx="42" cy="25" r="12" class="g o"/><path d="M6 55c1-15 10-23 18-23s17 8 18 23Z" class="u o"/><path d="M25 55c1-15 9-23 17-23s16 8 17 23Z" class="g o"/></g>
+  <g transform="translate(256 0)"><path d="M10 12h44v38H10z" class="v o"/><path d="M10 12 4 4h18l10 8L42 4h18l-6 8Z" class="g o"/><circle cx="32" cy="31" r="10" class="l o"/><path d="m32 22 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z" class="r"/></g>
+  <!-- row 2: primary actions -->
+  <g transform="translate(0 64)"><path d="M12 49 45 16 52 23 19 56Z" class="w o"/><path d="M15 16 48 49 55 42 22 9Z" class="u o"/><path d="M7 49h20v7H7z" class="g o"/></g>
+  <g transform="translate(64 64)"><path d="M12 8h8v48h-8z" class="b o"/><path d="M20 10h38L45 25l13 15H20Z" class="r o"/><path d="M25 15h22l-8 10 8 10H25Z" class="l"/></g>
+  <g transform="translate(128 64)"><circle cx="32" cy="36" r="17" class="v o"/><circle cx="16" cy="18" r="8" class="v o"/><circle cx="29" cy="11" r="8" class="v o"/><circle cx="43" cy="13" r="8" class="v o"/><circle cx="53" cy="23" r="8" class="v o"/><path d="M21 42c7-12 16-12 23 0-7 10-16 10-23 0Z" class="l"/></g>
+  <g transform="translate(192 64)"><path d="M8 25 32 6l24 19v31H8Z" class="g o"/><path d="M4 27 32 3l28 24-6 7-22-18L10 34Z" class="r o"/><rect x="24" y="34" width="16" height="22" class="b o"/><rect x="12" y="34" width="9" height="10" class="u o"/></g>
+  <g transform="translate(256 64)"><rect x="11" y="9" width="42" height="48" rx="3" class="w o"/><path d="M19 20h26v5H19zM19 31h26v5H19zM19 42h17v5H19z" class="b"/><circle cx="49" cy="13" r="10" class="r o"/><path d="M49 7v8M49 19v2" stroke="#fff" stroke-width="4"/></g>
+  <!-- row 3: bottom navigation -->
+  <g transform="translate(0 128)"><path d="M18 55V25h28v30Z" class="b o"/><path d="M14 25h36L43 8H21Z" class="g o"/><rect x="27" y="36" width="10" height="19" class="n"/><path d="M26 8V2h12v6" class="r o"/></g>
+  <g transform="translate(64 128)"><path d="M7 29h50v27H7Z" class="b o"/><path d="M4 29 13 12h38l9 17Z" class="g o"/><path d="M11 13h42v10H11Z" class="r o"/><rect x="14" y="39" width="12" height="17" class="u o"/><rect x="36" y="38" width="14" height="10" class="l o"/></g>
+  <g transform="translate(128 128)"><circle cx="18" cy="25" r="11" class="r o"/><circle cx="32" cy="18" r="12" class="g o"/><circle cx="47" cy="26" r="11" class="u o"/><path d="M5 57c0-16 7-25 17-25s17 9 17 25Z" class="r o"/><path d="M22 57c0-18 8-29 19-29s19 11 19 29Z" class="u o"/><path d="M15 27h6M29 20h6M44 28h6" stroke="#261108" stroke-width="3"/></g>
+  <g transform="translate(192 128)"><path d="M6 30 32 6l26 24v27H6Z" class="w o"/><path d="M2 31 32 3l30 28-7 7-23-21L9 38Z" class="r o"/><rect x="24" y="37" width="16" height="20" class="b o"/><rect x="11" y="36" width="9" height="10" class="u o"/><rect x="44" y="36" width="9" height="10" class="u o"/></g>
+  <g transform="translate(256 128)"><path d="M12 10h8v47h-8z" class="b o"/><path d="M20 12h38L44 27l14 15H20Z" class="v o"/><path d="m30 20 4 7 8 1-6 6 2 8-8-4-7 4 1-8-6-6 8-1Z" class="g"/></g>
+</svg>
