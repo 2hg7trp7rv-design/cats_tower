@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-design-decision-log-v1",
+  "decisions": [
+    {
+      "id": "D01",
+      "decision": "Keep battle as the largest scene and remove permanent monetization from S02.",
+      "reason": "Cat, combat and tower are the first product value."
+    },
+    {
+      "id": "D02",
+      "decision": "Use five stable navigation destinations and route specialist screens contextually.",
+      "reason": "Twelve equal tabs would exceed one-thumb comprehension and mobile width."
+    },
+    {
+      "id": "D03",
+      "decision": "Show one critical recovery state on every mockup.",
+      "reason": "Permanent economy cannot be evaluated from happy-path screens alone."
+    },
+    {
+      "id": "D04",
+      "decision": "Separate base rarity, evolution and mastery visually.",
+      "reason": "They are distinct product axes and must not imply duplicate-gated evolution."
+    },
+    {
+      "id": "D05",
+      "decision": "Show paid/free ruby provenance on S11.",
+      "reason": "Refund deficit and source conservation are server-authoritative trust requirements."
+    },
+    {
+      "id": "D06",
+      "decision": "Use original vector cats and abstract tower scenery.",
+      "reason": "Avoid tracing or redistributing reference artwork while keeping a reviewable visual language."
+    },
+    {
+      "id": "D07",
+      "decision": "Treat 320x667 as a content-priority test, not a scaled-down 390px canvas.",
+      "reason": "Critical outcome, amount and CTA must survive the smallest target."
+    }
+  ],
+  "openUntilCriticReview": [
+    "final illustration density",
+    "Japanese copy length under OS large text",
+    "battle animation timing",
+    "haptic mapping",
+    "physical-device safe-area proof"
+  ],
+  "verdict": "PASS_STEP4_DRAFT_DECISIONS_RECORDED"
+}

@@ -1,0 +1,386 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-render-manifest-v1",
+  "generatedAt": "2026-08-28T08:09:07.745Z",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "generator": "quality-reviews/step-4-twelve-screen-final-mockups/tools/build-step4-draft.mjs",
+  "screenCount": 12,
+  "viewportCount": 3,
+  "renderCount": 36,
+  "renders": [
+    {
+      "screenId": "S01",
+      "canonicalName": "title-resume-account",
+      "viewport": "320x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S01-320x667.svg",
+      "bytes": 11763,
+      "sha256": "17b38eb01f36f277879827e04c4218a865e9c25ef2d0e0dd4e07b03dc5b14e0d",
+      "normalStateShown": true,
+      "criticalStateShown": "LINK_CONFLICT"
+    },
+    {
+      "screenId": "S01",
+      "canonicalName": "title-resume-account",
+      "viewport": "375x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S01-375x667.svg",
+      "bytes": 11831,
+      "sha256": "f8a13e0bd3b40c23afa81d0936e091e863a01b3b3e1fc42296774602d456a67e",
+      "normalStateShown": true,
+      "criticalStateShown": "LINK_CONFLICT"
+    },
+    {
+      "screenId": "S01",
+      "canonicalName": "title-resume-account",
+      "viewport": "390x844",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S01-390x844.svg",
+      "bytes": 11779,
+      "sha256": "5739707ead1f021d1933bf0853401849f3b9ff8f84380011353bc16c647f7f99",
+      "normalStateShown": true,
+      "criticalStateShown": "LINK_CONFLICT"
+    },
+    {
+      "screenId": "S02",
+      "canonicalName": "battle-follow",
+      "viewport": "320x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S02-320x667.svg",
+      "bytes": 14644,
+      "sha256": "2403d4812a064a7b359679f98bf94f6f57d4c5684f89d5387c3097b318c48d48",
+      "normalStateShown": true,
+      "criticalStateShown": "BACKGROUND_RECONCILE"
+    },
+    {
+      "screenId": "S02",
+      "canonicalName": "battle-follow",
+      "viewport": "375x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S02-375x667.svg",
+      "bytes": 14666,
+      "sha256": "c0c34cbd197b60577d42a98c5e439283a60698e66b2020c6a5798c913ab6ebf7",
+      "normalStateShown": true,
+      "criticalStateShown": "BACKGROUND_RECONCILE"
+    },
+    {
+      "screenId": "S02",
+      "canonicalName": "battle-follow",
+      "viewport": "390x844",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S02-390x844.svg",
+      "bytes": 16944,
+      "sha256": "6a5815e90edb379dd9775c74f21342c8fee2f5dc2e2dc6877c023ee1c4749fb8",
+      "normalStateShown": true,
+      "criticalStateShown": "BACKGROUND_RECONCILE"
+    },
+    {
+      "screenId": "S03",
+      "canonicalName": "unbounded-tower",
+      "viewport": "320x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S03-320x667.svg",
+      "bytes": 11227,
+      "sha256": "0d3021d999dcd936b921168d58c552676c28a970662b07446742998a02c1d5b1",
+      "normalStateShown": true,
+      "criticalStateShown": "STALE_CACHE"
+    },
+    {
+      "screenId": "S03",
+      "canonicalName": "unbounded-tower",
+      "viewport": "375x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S03-375x667.svg",
+      "bytes": 11288,
+      "sha256": "80219e8d244d378d93ad993bd02318071229c9de163c7bdd29e06c4674fdc7cc",
+      "normalStateShown": true,
+      "criticalStateShown": "STALE_CACHE"
+    },
+    {
+      "screenId": "S03",
+      "canonicalName": "unbounded-tower",
+      "viewport": "390x844",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S03-390x844.svg",
+      "bytes": 12821,
+      "sha256": "cf651c3fbc51db22400526a9a3364c6c5867fbaac36f076ae2a0a01990f219db",
+      "normalStateShown": true,
+      "criticalStateShown": "STALE_CACHE"
+    },
+    {
+      "screenId": "S04",
+      "canonicalName": "floor-clear-choice",
+      "viewport": "320x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S04-320x667.svg",
+      "bytes": 10857,
+      "sha256": "5c34d85e34e7791c63640d84d23056c4aadc150e61321992c5012b1a6338fad3",
+      "normalStateShown": true,
+      "criticalStateShown": "CLAIM_RECOVERY"
+    },
+    {
+      "screenId": "S04",
+      "canonicalName": "floor-clear-choice",
+      "viewport": "375x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S04-375x667.svg",
+      "bytes": 10879,
+      "sha256": "e80cdce41f288101e2a687e9518fe9853d1421ca7d055cc5949a8a994637a887",
+      "normalStateShown": true,
+      "criticalStateShown": "CLAIM_RECOVERY"
+    },
+    {
+      "screenId": "S04",
+      "canonicalName": "floor-clear-choice",
+      "viewport": "390x844",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S04-390x844.svg",
+      "bytes": 10863,
+      "sha256": "78f69426cade78f5baae99374dee58e8cb2f9d1a145bc806f8321c275672b83b",
+      "normalStateShown": true,
+      "criticalStateShown": "CLAIM_RECOVERY"
+    },
+    {
+      "screenId": "S05",
+      "canonicalName": "shop-delivery",
+      "viewport": "320x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S05-320x667.svg",
+      "bytes": 11762,
+      "sha256": "5e673fd02089aa26009c7e37be01b5ba1cbc0c48070d416dbf44d4c879643877",
+      "normalStateShown": true,
+      "criticalStateShown": "SYNC_CONFLICT"
+    },
+    {
+      "screenId": "S05",
+      "canonicalName": "shop-delivery",
+      "viewport": "375x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S05-375x667.svg",
+      "bytes": 11812,
+      "sha256": "6f1997ce536c4078afa4140b8b92aa56fde1597a5db4d6520c0facd2c77bb538",
+      "normalStateShown": true,
+      "criticalStateShown": "SYNC_CONFLICT"
+    },
+    {
+      "screenId": "S05",
+      "canonicalName": "shop-delivery",
+      "viewport": "390x844",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S05-390x844.svg",
+      "bytes": 11768,
+      "sha256": "bde5173bf7d8a3a5e819d77a3ba89ee3f570857da74bd650f9d14a8741903b06",
+      "normalStateShown": true,
+      "criticalStateShown": "SYNC_CONFLICT"
+    },
+    {
+      "screenId": "S06",
+      "canonicalName": "character",
+      "viewport": "320x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S06-320x667.svg",
+      "bytes": 10617,
+      "sha256": "79668520237c9ce4cc9ec02356c17b9c2e6f57e9afcb894519e5aa39c9b0b23f",
+      "normalStateShown": true,
+      "criticalStateShown": "EVOLUTION_PENDING"
+    },
+    {
+      "screenId": "S06",
+      "canonicalName": "character",
+      "viewport": "375x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S06-375x667.svg",
+      "bytes": 10644,
+      "sha256": "982fec713d0730b767b6045b2fc8918d3852d9899942cf0b231b4e5f3e400740",
+      "normalStateShown": true,
+      "criticalStateShown": "EVOLUTION_PENDING"
+    },
+    {
+      "screenId": "S06",
+      "canonicalName": "character",
+      "viewport": "390x844",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S06-390x844.svg",
+      "bytes": 11375,
+      "sha256": "80b489ec35f580792ff4bfe4290630bbc1cc16f91f016ff9b79a51bf55a5bdca",
+      "normalStateShown": true,
+      "criticalStateShown": "EVOLUTION_PENDING"
+    },
+    {
+      "screenId": "S07",
+      "canonicalName": "weapon-build",
+      "viewport": "320x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S07-320x667.svg",
+      "bytes": 10833,
+      "sha256": "0918e5a413f1a46137225daa4ab192005c0fc754d7c8ca861dbad3bf9902160a",
+      "normalStateShown": true,
+      "criticalStateShown": "EQUIP_CONFLICT"
+    },
+    {
+      "screenId": "S07",
+      "canonicalName": "weapon-build",
+      "viewport": "375x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S07-375x667.svg",
+      "bytes": 10856,
+      "sha256": "428e61983f612cfcb2023b398559c463a174e6bccabd55faf4037ae8483bfd0f",
+      "normalStateShown": true,
+      "criticalStateShown": "EQUIP_CONFLICT"
+    },
+    {
+      "screenId": "S07",
+      "canonicalName": "weapon-build",
+      "viewport": "390x844",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S07-390x844.svg",
+      "bytes": 11598,
+      "sha256": "07f23903129749523ca7da6278f4b24ecf6d101b58ff5e2ae1ef0beb12f712cc",
+      "normalStateShown": true,
+      "criticalStateShown": "EQUIP_CONFLICT"
+    },
+    {
+      "screenId": "S08",
+      "canonicalName": "boss",
+      "viewport": "320x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S08-320x667.svg",
+      "bytes": 13995,
+      "sha256": "e8b64e70cd35e26811287b0fa0347b506e33bf524e29d730dd2c42c5ac934e45",
+      "normalStateShown": true,
+      "criticalStateShown": "RECONNECT"
+    },
+    {
+      "screenId": "S08",
+      "canonicalName": "boss",
+      "viewport": "375x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S08-375x667.svg",
+      "bytes": 14014,
+      "sha256": "475f27569991b416873bd873dfde7cc27dd4080b3b5937ee5bb8f683141f104c",
+      "normalStateShown": true,
+      "criticalStateShown": "RECONNECT"
+    },
+    {
+      "screenId": "S08",
+      "canonicalName": "boss",
+      "viewport": "390x844",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S08-390x844.svg",
+      "bytes": 14762,
+      "sha256": "c6dbc3d81c6fef72dc9569e73aceb63ec4dadbc25af257f4e85f4d2798e0d639",
+      "normalStateShown": true,
+      "criticalStateShown": "RECONNECT"
+    },
+    {
+      "screenId": "S09",
+      "canonicalName": "tower-return",
+      "viewport": "320x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S09-320x667.svg",
+      "bytes": 11316,
+      "sha256": "1d46198882633f4c0337c764e529dd0d57ef25d20d204fc90861219dffc0b674",
+      "normalStateShown": true,
+      "criticalStateShown": "QUOTE_EXPIRED"
+    },
+    {
+      "screenId": "S09",
+      "canonicalName": "tower-return",
+      "viewport": "375x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S09-375x667.svg",
+      "bytes": 11371,
+      "sha256": "3a2ef411427e240791d97f1b6f6de34d3579176c9b88be26fe8764e50cddb1d2",
+      "normalStateShown": true,
+      "criticalStateShown": "QUOTE_EXPIRED"
+    },
+    {
+      "screenId": "S09",
+      "canonicalName": "tower-return",
+      "viewport": "390x844",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S09-390x844.svg",
+      "bytes": 11759,
+      "sha256": "a4a6def03e6f6097e52c3b7d78db45b9a448a62dae3557b5038ed1d42e519e5e",
+      "normalStateShown": true,
+      "criticalStateShown": "QUOTE_EXPIRED"
+    },
+    {
+      "screenId": "S10",
+      "canonicalName": "recruit-gacha",
+      "viewport": "320x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S10-320x667.svg",
+      "bytes": 11650,
+      "sha256": "aece0ab5581cc6436cabfcf3c6bdb947b7102b22d3165293f854e58b7d83d35a",
+      "normalStateShown": true,
+      "criticalStateShown": "RESULT_RECOVERY"
+    },
+    {
+      "screenId": "S10",
+      "canonicalName": "recruit-gacha",
+      "viewport": "375x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S10-375x667.svg",
+      "bytes": 11683,
+      "sha256": "fae824678e562e8f9415189e5a072b4dd6e4182dbc15e2dd8509ec3581549723",
+      "normalStateShown": true,
+      "criticalStateShown": "RESULT_RECOVERY"
+    },
+    {
+      "screenId": "S10",
+      "canonicalName": "recruit-gacha",
+      "viewport": "390x844",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S10-390x844.svg",
+      "bytes": 12018,
+      "sha256": "c98f72af7344db139f0bf28e3ecf1cfec8475b94b0bd1d206d3a20f6b39d2411",
+      "normalStateShown": true,
+      "criticalStateShown": "RESULT_RECOVERY"
+    },
+    {
+      "screenId": "S11",
+      "canonicalName": "store-ruby-ads",
+      "viewport": "320x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S11-320x667.svg",
+      "bytes": 11935,
+      "sha256": "d1a329c518489affb18e2b8f1fa182af509c882fd5bb0850b4e28877133939e5",
+      "normalStateShown": true,
+      "criticalStateShown": "PURCHASE_RECONCILIATION"
+    },
+    {
+      "screenId": "S11",
+      "canonicalName": "store-ruby-ads",
+      "viewport": "375x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S11-375x667.svg",
+      "bytes": 11971,
+      "sha256": "6e57eaeb238fcbb8c92cd83daf94a59e5f929613626b7ec19c4e81a148ed310c",
+      "normalStateShown": true,
+      "criticalStateShown": "PURCHASE_RECONCILIATION"
+    },
+    {
+      "screenId": "S11",
+      "canonicalName": "store-ruby-ads",
+      "viewport": "390x844",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S11-390x844.svg",
+      "bytes": 12695,
+      "sha256": "147e69496ee9adead11b79e075d0e9e943ee816377fd3ac40d0a452937b488e3",
+      "normalStateShown": true,
+      "criticalStateShown": "PURCHASE_RECONCILIATION"
+    },
+    {
+      "screenId": "S12",
+      "canonicalName": "login-inbox",
+      "viewport": "320x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S12-320x667.svg",
+      "bytes": 16943,
+      "sha256": "c71bf7779d71fc6c1510a5cc4f7a69186bac043458199c1961552986f27e11e8",
+      "normalStateShown": true,
+      "criticalStateShown": "DUPLICATE_REQUEST"
+    },
+    {
+      "screenId": "S12",
+      "canonicalName": "login-inbox",
+      "viewport": "375x667",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S12-375x667.svg",
+      "bytes": 16937,
+      "sha256": "5b84004c1334781bbc19c60731bdd241d65169ce578b22c0585a455094f36a93",
+      "normalStateShown": true,
+      "criticalStateShown": "DUPLICATE_REQUEST"
+    },
+    {
+      "screenId": "S12",
+      "canonicalName": "login-inbox",
+      "viewport": "390x844",
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S12-390x844.svg",
+      "bytes": 19959,
+      "sha256": "31184b08db994eb16f311f789870c01a317477441495a003bb24d148d320b809",
+      "normalStateShown": true,
+      "criticalStateShown": "DUPLICATE_REQUEST"
+    }
+  ],
+  "gallery": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/mockup-gallery.html",
+    "bytes": 13600,
+    "sha256": "26de4bf3ff1793642ebb53599be1deb930199a1373ea2daab1cd6b8d0376838a"
+  },
+  "limitations": {
+    "physicalIPhoneVerified": false,
+    "runtimeInteractionVerified": false,
+    "productionChanged": false,
+    "finalArtAssets": false,
+    "browserScreenshotEvidence": false
+  },
+  "verdict": "PASS_DETERMINISTIC_STEP4_DRAFT_RENDERS_GENERATED"
+}

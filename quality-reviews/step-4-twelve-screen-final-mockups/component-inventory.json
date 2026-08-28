@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-component-inventory-v1",
+  "components": [
+    {
+      "id": "app-header",
+      "purpose": "screen identity and contextual status",
+      "minimumHeight": 56
+    },
+    {
+      "id": "compact-hud",
+      "purpose": "floor, coin and ruby only",
+      "maximumCurrencyCount": 3
+    },
+    {
+      "id": "scene-stage",
+      "purpose": "character, battle or system focal visual",
+      "monetizationAllowed": false
+    },
+    {
+      "id": "state-card",
+      "purpose": "outcome, forecast, diagnosis and comparison",
+      "pendingVariantRequired": true
+    },
+    {
+      "id": "primary-action",
+      "purpose": "one decisive contextual action",
+      "minimumHeight": 48
+    },
+    {
+      "id": "secondary-action",
+      "purpose": "reversible or informational action",
+      "minimumHeight": 44
+    },
+    {
+      "id": "recovery-panel",
+      "purpose": "critical pending/conflict/reconciliation state",
+      "auditIdSupport": true
+    },
+    {
+      "id": "bottom-navigation",
+      "purpose": "battle, tower, team, shop and more",
+      "itemCount": 5,
+      "minimumHeight": 68
+    },
+    {
+      "id": "progress-meter",
+      "purpose": "HP, break, pity, mastery and evolution",
+      "colorOnly": false
+    },
+    {
+      "id": "ledger-row",
+      "purpose": "paid/free wallet provenance",
+      "sourceLabelRequired": true
+    },
+    {
+      "id": "confirmation-sheet",
+      "purpose": "loss/keep/gain and irreversible confirmation",
+      "timeoutInferenceForbidden": true
+    }
+  ],
+  "forbiddenPatterns": [
+    "battle-screen permanent store CTA",
+    "unlabeled icon-only economic action",
+    "tap damage CTA",
+    "motion-only danger telegraph",
+    "client-time claim eligibility"
+  ],
+  "verdict": "PASS_COMPONENT_INVENTORY_DRAFT"
+}

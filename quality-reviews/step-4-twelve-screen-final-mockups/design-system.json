@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-design-system-v1",
+  "direction": {
+    "name": "Lantern and Velvet",
+    "statement": "Moonlit tower adventure with tactile parchment cards and restrained jewel accents; cats, combat and progression remain the visual protagonists.",
+    "copyrightBoundary": "Original vector geometry and system UI only. Reference imagery is not embedded, traced or redistributed."
+  },
+  "tokens": {
+    "color": {
+      "ink": "#0B1020",
+      "ink2": "#121A2D",
+      "ink3": "#1B2740",
+      "parchment": "#F5EBD3",
+      "parchment2": "#DCCDAA",
+      "gold": "#E7B95C",
+      "gold2": "#F5D895",
+      "jade": "#58C7A6",
+      "sky": "#78B9FF",
+      "ruby": "#E56B77",
+      "violet": "#A989E8",
+      "amber": "#F29B52",
+      "muted": "#9CA9C3",
+      "line": "#344461",
+      "white": "#FFFFFF",
+      "shadow": "#050712"
+    },
+    "spacing": {
+      "unit": 4,
+      "scale": [
+        4,
+        8,
+        12,
+        16,
+        20,
+        24,
+        32,
+        40,
+        48,
+        64
+      ]
+    },
+    "radius": {
+      "chip": 12,
+      "control": 14,
+      "card": 16,
+      "hero": 20,
+      "device": 28
+    },
+    "elevation": {
+      "card": "0 8px 24px rgba(0,0,0,.24)",
+      "modal": "0 24px 70px rgba(0,0,0,.52)"
+    },
+    "typography": {
+      "family": "system-ui, -apple-system, BlinkMacSystemFont, Hiragino Sans, Noto Sans JP, sans-serif",
+      "display": {
+        "size": 24,
+        "weight": 900,
+        "lineHeight": 1.18
+      },
+      "heading": {
+        "size": 19,
+        "weight": 850,
+        "lineHeight": 1.25
+      },
+      "body": {
+        "size": 14,
+        "weight": 500,
+        "lineHeight": 1.55
+      },
+      "caption": {
+        "size": 10,
+        "weight": 650,
+        "lineHeight": 1.4
+      },
+      "minimumRuntimeBodyTarget": 14
+    }
+  },
+  "responsive": {
+    "viewports": [
+      {
+        "id": "compact",
+        "width": 320,
+        "height": 667,
+        "safeTop": 20,
+        "safeBottom": 16
+      },
+      {
+        "id": "standard",
+        "width": 375,
+        "height": 667,
+        "safeTop": 20,
+        "safeBottom": 16
+      },
+      {
+        "id": "expanded",
+        "width": 390,
+        "height": 844,
+        "safeTop": 47,
+        "safeBottom": 34
+      }
+    ],
+    "rules": [
+      "320x667 compresses secondary labels before shrinking primary controls",
+      "375x667 is the standard density reference",
+      "390x844 exposes secondary diagnosis and forecast cards",
+      "top and bottom safe areas are reserved; no primary action intersects them",
+      "bottom navigation remains five destinations with labels"
+    ]
+  },
+  "interaction": {
+    "minimumTouchTarget": 44,
+    "preferredPrimaryTarget": 48,
+    "onePrimaryActionPerState": true,
+    "destructiveConfirmationSeparated": true,
+    "economicTimeoutMeansFailure": false,
+    "pendingAndReconciliationVisible": true
+  },
+  "accessibility": {
+    "colorOnlyEncodingForbidden": true,
+    "largeTextStrategy": "wrap or reduce secondary copy; never clip amounts, outcome, or primary action",
+    "reducedMotion": "disable parallax, shake, looping pulse and particles; retain shape, label and progress evidence",
+    "contrastTarget": "WCAG AA for body and critical state labels where technically applicable",
+    "focusVisible": true
+  },
+  "motion": {
+    "normalDurationMs": [
+      120,
+      180,
+      240
+    ],
+    "reducedMotionDurationMs": 0,
+    "battleTelegraphRedundancy": [
+      "shape",
+      "label",
+      "countdown",
+      "contrast"
+    ],
+    "monetizationPulseAllowed": false
+  },
+  "visualHierarchy": [
+    "world and character",
+    "current objective and outcome",
+    "contextual primary action",
+    "secondary systems",
+    "monetization only in dedicated surfaces"
+  ],
+  "verdict": "PASS_STEP4_DESIGN_SYSTEM_DRAFT"
+}

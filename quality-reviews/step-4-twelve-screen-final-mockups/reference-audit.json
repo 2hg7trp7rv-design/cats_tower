@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-reference-audit-v1",
+  "recordedAt": "2026-08-28T08:09:07.723Z",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "referenceSet": {
+    "source": "user-provided conversation images",
+    "itemCount": 20,
+    "redistribution": false,
+    "byteCopiesCommitted": false,
+    "purpose": "principle-level visual audit only; no tracing or UI cloning"
+  },
+  "adoptedPrinciples": [
+    "portrait-first one-thumb hierarchy with a stable contextual action zone",
+    "character and battle scene receive the largest visual area before stores or banners",
+    "rarity and reward information use redundant color, label and icon encoding",
+    "foreground cards separate actionable state from atmospheric scene art",
+    "strong single primary action per state and restrained secondary actions",
+    "layered fantasy depth using night ink, parchment, warm metal and restrained jewel accents",
+    "bottom navigation remains stable while economic operations move into dedicated screens"
+  ],
+  "rejectedPrinciples": [
+    "copying any reference layout, wording, icon, character, frame or decorative motif one-to-one",
+    "permanent gacha, store or ad buttons occupying the battle focal area",
+    "more than three currencies in the compact battle HUD",
+    "tiny dense text, unlabeled rarity color, or color-only warnings",
+    "red notification dots used as generalized pressure rather than actionable state",
+    "tap-damage or mandatory rapid-tap affordances",
+    "motion-only telegraphs, uncontrolled particles, or pulsing monetization CTAs"
+  ],
+  "originalDirection": {
+    "name": "Lantern and Velvet",
+    "statement": "Moonlit tower adventure with tactile parchment cards and restrained jewel accents; cats, combat and progression remain the visual protagonists.",
+    "copyrightBoundary": "Original vector geometry and system UI only. Reference imagery is not embedded, traced or redistributed."
+  },
+  "verdict": "PASS_REFERENCE_PRINCIPLE_AUDIT_READY_FOR_ORIGINAL_MOCKUPS"
+}

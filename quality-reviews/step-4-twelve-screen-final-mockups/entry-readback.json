@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-entry-readback-v1",
+  "recordedAt": "2026-08-28T08:09:07.746Z",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "observedHead": "df190b26b0b663156c59563ecdff331218e2bcc3",
+  "observedTree": "933ec3d75399960494167abf930759d0dc6bc412",
+  "step3Entry": "245d50b6e80e2783f6aeaab5e50fae217661a3b6",
+  "acceptance": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/acceptance-matrix.json",
+    "blob": "7d907578c367ef426e11f97393637f23e14e25c2",
+    "status": "ACTIVE_BEFORE_FIRST_STEP4_WRITE"
+  },
+  "screenRegistry": {
+    "path": "canonical/SCREEN_STATE_REGISTRY.json",
+    "blob": "0cf6337da2ed3993136dbf4a9e4918efac501d2e",
+    "screenCount": 12
+  },
+  "step3TerminalReadback": {
+    "path": "quality-reviews/step-3-large-scale-validation/live-readback.json",
+    "blob": "d0b73af25a8f0d449cfc083b007b84b8ff3fbc9b",
+    "verdict": "PASS_FINAL_LIVE_READBACK_STEP3_LARGE_SCALE_VALIDATION"
+  },
+  "generatedArtifacts": {
+    "renderManifest": "quality-reviews/step-4-twelve-screen-final-mockups/render-manifest.json",
+    "gallery": "quality-reviews/step-4-twelve-screen-final-mockups/mockup-gallery.html",
+    "screenSpecs": "quality-reviews/step-4-twelve-screen-final-mockups/screen-specs.json",
+    "designSystem": "quality-reviews/step-4-twelve-screen-final-mockups/design-system.json",
+    "referenceAudit": "quality-reviews/step-4-twelve-screen-final-mockups/reference-audit.json"
+  },
+  "scope": {
+    "runtimeChanged": false,
+    "productAssetsChanged": false,
+    "backendChanged": false,
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "otherBranchWritten": false,
+    "pullRequestOperationPerformed": false
+  },
+  "phase": "STEP4_DRAFT_GENERATED_PENDING_CRITICS_AND_FINAL_JUDGE",
+  "verdict": "PASS_STEP4_ENTRY_AND_DRAFT_GENERATION_READBACK"
+}

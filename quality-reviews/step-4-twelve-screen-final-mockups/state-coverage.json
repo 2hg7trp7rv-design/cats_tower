@@ -1,0 +1,634 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-state-coverage-v1",
+  "screenCount": 12,
+  "screens": [
+    {
+      "id": "S01",
+      "canonicalStateCount": 12,
+      "mapping": [
+        {
+          "state": "READY",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "LOADING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "OFFLINE",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "MAINTENANCE",
+          "visualPattern": "blocked-or-terminal"
+        },
+        {
+          "state": "RETRYABLE_ERROR",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "FATAL_RECOVERY",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "LINK_PENDING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "LINK_CONFLICT",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "DELETE_CONFIRM",
+          "visualPattern": "contextual"
+        },
+        {
+          "state": "DELETION_PENDING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "DELETED",
+          "visualPattern": "blocked-or-terminal"
+        },
+        {
+          "state": "RECOVERED",
+          "visualPattern": "resolved-or-normal"
+        }
+      ],
+      "showcased": {
+        "normal": "READY",
+        "critical": "LINK_CONFLICT",
+        "recoveryAction": "競合した保存先を比較して選ぶ"
+      }
+    },
+    {
+      "id": "S02",
+      "canonicalStateCount": 10,
+      "mapping": [
+        {
+          "state": "TUTORIAL",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "READY",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "LOADING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "PAUSED",
+          "visualPattern": "contextual"
+        },
+        {
+          "state": "OFFLINE",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "BACKGROUND_RECONCILE",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "DESYNC",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "RETRYABLE_ERROR",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "DEFEAT",
+          "visualPattern": "blocked-or-terminal"
+        },
+        {
+          "state": "VICTORY_PENDING",
+          "visualPattern": "pending"
+        }
+      ],
+      "showcased": {
+        "normal": "TUTORIAL",
+        "critical": "BACKGROUND_RECONCILE",
+        "recoveryAction": "帰還中の報酬を照合しています"
+      }
+    },
+    {
+      "id": "S03",
+      "canonicalStateCount": 7,
+      "mapping": [
+        {
+          "state": "READY",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "LOADING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "OFFLINE",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "BROWSE_KNOWN",
+          "visualPattern": "contextual"
+        },
+        {
+          "state": "UNSEEN_LOCKED",
+          "visualPattern": "contextual"
+        },
+        {
+          "state": "STALE_CACHE",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "RETRYABLE_ERROR",
+          "visualPattern": "recovery-or-reconciliation"
+        }
+      ],
+      "showcased": {
+        "normal": "READY",
+        "critical": "STALE_CACHE",
+        "recoveryAction": "記録を更新して既知階を再表示"
+      }
+    },
+    {
+      "id": "S04",
+      "canonicalStateCount": 8,
+      "mapping": [
+        {
+          "state": "READY",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "SETTLEMENT_PENDING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "REWARD_CONFIRMED",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "CHOICE_PENDING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "CHOICE_COMMITTED",
+          "visualPattern": "contextual"
+        },
+        {
+          "state": "CLAIM_RECOVERY",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "OFFLINE",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "RETRYABLE_ERROR",
+          "visualPattern": "recovery-or-reconciliation"
+        }
+      ],
+      "showcased": {
+        "normal": "READY",
+        "critical": "CLAIM_RECOVERY",
+        "recoveryAction": "報酬結果を履歴から復元"
+      }
+    },
+    {
+      "id": "S05",
+      "canonicalStateCount": 8,
+      "mapping": [
+        {
+          "state": "READY",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "LOADING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "EDITING",
+          "visualPattern": "contextual"
+        },
+        {
+          "state": "SAVE_PENDING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "SYNC_CONFLICT",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "RESTORED",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "OFFLINE",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "RETRYABLE_ERROR",
+          "visualPattern": "recovery-or-reconciliation"
+        }
+      ],
+      "showcased": {
+        "normal": "READY",
+        "critical": "SYNC_CONFLICT",
+        "recoveryAction": "新旧配置を比較して再適用"
+      }
+    },
+    {
+      "id": "S06",
+      "canonicalStateCount": 10,
+      "mapping": [
+        {
+          "state": "READY",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "LOADING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "INSUFFICIENT_COIN",
+          "visualPattern": "blocked-or-terminal"
+        },
+        {
+          "state": "INSUFFICIENT_RUBY",
+          "visualPattern": "blocked-or-terminal"
+        },
+        {
+          "state": "EVOLUTION_QUOTE",
+          "visualPattern": "contextual"
+        },
+        {
+          "state": "EVOLUTION_PENDING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "MASTERY_PENDING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "CONFLICT_RELOAD",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "REVOKED",
+          "visualPattern": "blocked-or-terminal"
+        },
+        {
+          "state": "RETRYABLE_ERROR",
+          "visualPattern": "recovery-or-reconciliation"
+        }
+      ],
+      "showcased": {
+        "normal": "READY",
+        "critical": "EVOLUTION_PENDING",
+        "recoveryAction": "進化取引の結果を確認中"
+      }
+    },
+    {
+      "id": "S07",
+      "canonicalStateCount": 8,
+      "mapping": [
+        {
+          "state": "READY",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "LOADING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "EQUIP_PENDING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "EQUIP_CONFLICT",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "MASTERY_PENDING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "OVERFLOW",
+          "visualPattern": "contextual"
+        },
+        {
+          "state": "REVOKED",
+          "visualPattern": "blocked-or-terminal"
+        },
+        {
+          "state": "RETRYABLE_ERROR",
+          "visualPattern": "recovery-or-reconciliation"
+        }
+      ],
+      "showcased": {
+        "normal": "READY",
+        "critical": "EQUIP_CONFLICT",
+        "recoveryAction": "別端末の装備変更を反映"
+      }
+    },
+    {
+      "id": "S08",
+      "canonicalStateCount": 9,
+      "mapping": [
+        {
+          "state": "INTRO",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "READY",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "BREAK",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "DEFEAT",
+          "visualPattern": "blocked-or-terminal"
+        },
+        {
+          "state": "RETRY",
+          "visualPattern": "contextual"
+        },
+        {
+          "state": "VICTORY_PENDING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "REWARD_CONFIRMED",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "RECONNECT",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "REPLAY_SAFE",
+          "visualPattern": "contextual"
+        }
+      ],
+      "showcased": {
+        "normal": "INTRO",
+        "critical": "RECONNECT",
+        "recoveryAction": "決着前の戦闘記録へ再接続"
+      }
+    },
+    {
+      "id": "S09",
+      "canonicalStateCount": 11,
+      "mapping": [
+        {
+          "state": "READY",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "INELIGIBLE",
+          "visualPattern": "blocked-or-terminal"
+        },
+        {
+          "state": "QUOTE_LOADING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "QUOTE_READY",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "CONFIRMING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "COMMIT_PENDING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "QUOTE_EXPIRED",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "PENDING_RECONCILIATION",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "ALREADY_APPLIED",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "COMPLETED",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "RETRYABLE_ERROR",
+          "visualPattern": "recovery-or-reconciliation"
+        }
+      ],
+      "showcased": {
+        "normal": "READY",
+        "critical": "QUOTE_EXPIRED",
+        "recoveryAction": "最新条件で見積りを更新"
+      }
+    },
+    {
+      "id": "S10",
+      "canonicalStateCount": 12,
+      "mapping": [
+        {
+          "state": "READY",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "LOADING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "CATALOG_STALE",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "ODDS_VIEW",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "DRAW_CONFIRM",
+          "visualPattern": "contextual"
+        },
+        {
+          "state": "DRAW_PENDING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "RESULT",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "RESULT_RECOVERY",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "BANNER_ENDED",
+          "visualPattern": "blocked-or-terminal"
+        },
+        {
+          "state": "INSUFFICIENT_RESOURCE",
+          "visualPattern": "blocked-or-terminal"
+        },
+        {
+          "state": "OFFLINE",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "RETRYABLE_ERROR",
+          "visualPattern": "recovery-or-reconciliation"
+        }
+      ],
+      "showcased": {
+        "normal": "READY",
+        "critical": "RESULT_RECOVERY",
+        "recoveryAction": "抽選履歴から結果を復元"
+      }
+    },
+    {
+      "id": "S11",
+      "canonicalStateCount": 16,
+      "mapping": [
+        {
+          "state": "READY",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "LOADING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "CATALOG_STALE",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "PURCHASE_CONFIRM",
+          "visualPattern": "contextual"
+        },
+        {
+          "state": "PURCHASE_PENDING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "PURCHASE_RECONCILIATION",
+          "visualPattern": "contextual"
+        },
+        {
+          "state": "VERIFICATION_FAILED",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "REFUNDED",
+          "visualPattern": "contextual"
+        },
+        {
+          "state": "REVOKED",
+          "visualPattern": "blocked-or-terminal"
+        },
+        {
+          "state": "RESTORE_PENDING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "RESTORED",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "AD_OPT_IN",
+          "visualPattern": "contextual"
+        },
+        {
+          "state": "AD_PENDING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "AD_GRANTED",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "AD_CAP_REACHED",
+          "visualPattern": "blocked-or-terminal"
+        },
+        {
+          "state": "OFFLINE",
+          "visualPattern": "recovery-or-reconciliation"
+        }
+      ],
+      "showcased": {
+        "normal": "READY",
+        "critical": "PURCHASE_RECONCILIATION",
+        "recoveryAction": "決済結果をストアと照合中"
+      }
+    },
+    {
+      "id": "S12",
+      "canonicalStateCount": 11,
+      "mapping": [
+        {
+          "state": "READY",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "LOADING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "CLAIM_PENDING",
+          "visualPattern": "pending"
+        },
+        {
+          "state": "GRANTED",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "ALREADY_CLAIMED",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "NOT_ELIGIBLE",
+          "visualPattern": "blocked-or-terminal"
+        },
+        {
+          "state": "EXPIRED",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "SERVER_TIME_ERROR",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "DUPLICATE_REQUEST",
+          "visualPattern": "recovery-or-reconciliation"
+        },
+        {
+          "state": "RECOVERED",
+          "visualPattern": "resolved-or-normal"
+        },
+        {
+          "state": "OFFLINE",
+          "visualPattern": "recovery-or-reconciliation"
+        }
+      ],
+      "showcased": {
+        "normal": "READY",
+        "critical": "DUPLICATE_REQUEST",
+        "recoveryAction": "二重受取せず履歴を再確認"
+      }
+    }
+  ],
+  "universalPatterns": {
+    "pending": "lock repeat economic action, retain transaction context, show neutral progress and audit identifier",
+    "recovery": "read authoritative history or entity version, never create a replacement operation",
+    "blocked": "explain cause, preserved state and allowed next action without monetization pressure",
+    "resolved": "show exact outcome before allowing navigation away"
+  },
+  "verdict": "PASS_CANONICAL_STATE_VISUAL_MAPPING_DRAFT"
+}

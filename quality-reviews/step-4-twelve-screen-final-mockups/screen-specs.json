@@ -1,0 +1,897 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-screen-specs-v1",
+  "sourceRegistry": {
+    "path": "canonical/SCREEN_STATE_REGISTRY.json",
+    "blob": "0cf6337da2ed3993136dbf4a9e4918efac501d2e",
+    "screenCount": 12
+  },
+  "screens": [
+    {
+      "id": "S01",
+      "canonicalName": "title-resume-account",
+      "displayName": "旅の入口",
+      "subtitle": "つづきから・アカウント",
+      "primaryAction": "旅をつづける",
+      "primaryNavigation": "more",
+      "responsibilities": [
+        "new game",
+        "resume",
+        "guest/account link",
+        "migration recovery",
+        "account deletion"
+      ],
+      "authority": "local shell plus server account/profile",
+      "requiredState": [
+        "accountMode",
+        "saveSchema",
+        "serverSession",
+        "migrationStatus",
+        "linkStatus",
+        "deletionStatus",
+        "retentionNotice"
+      ],
+      "serverOwnedState": [
+        "account binding",
+        "guest merge",
+        "entitlement restore",
+        "deletion request",
+        "retention exception"
+      ],
+      "canonicalUiStates": [
+        "READY",
+        "LOADING",
+        "OFFLINE",
+        "MAINTENANCE",
+        "RETRYABLE_ERROR",
+        "FATAL_RECOVERY",
+        "LINK_PENDING",
+        "LINK_CONFLICT",
+        "DELETE_CONFIRM",
+        "DELETION_PENDING",
+        "DELETED",
+        "RECOVERED"
+      ],
+      "stateGroups": {
+        "resolved-or-normal": [
+          "READY",
+          "RECOVERED"
+        ],
+        "pending": [
+          "LOADING",
+          "LINK_PENDING",
+          "DELETION_PENDING"
+        ],
+        "recovery-or-reconciliation": [
+          "OFFLINE",
+          "RETRYABLE_ERROR",
+          "FATAL_RECOVERY",
+          "LINK_CONFLICT"
+        ],
+        "blocked-or-terminal": [
+          "MAINTENANCE",
+          "DELETED"
+        ],
+        "contextual": [
+          "DELETE_CONFIRM"
+        ]
+      },
+      "showcasedCriticalState": "LINK_CONFLICT",
+      "showcasedRecoveryAction": "競合した保存先を比較して選ぶ",
+      "viewportFiles": [
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S01-320x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S01-375x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S01-390x844.svg"
+      ]
+    },
+    {
+      "id": "S02",
+      "canonicalName": "battle-follow",
+      "displayName": "塔の戦い",
+      "subtitle": "自動戦闘・追従",
+      "primaryAction": "編成を整える",
+      "primaryNavigation": "battle",
+      "responsibilities": [
+        "auto battle",
+        "movement/contact",
+        "projectile arrival",
+        "telegraph",
+        "support arrival",
+        "offline catch-up"
+      ],
+      "authority": "local deterministic run cache plus server-verifiable settlement",
+      "requiredState": [
+        "floorId",
+        "party4",
+        "temporarySupport",
+        "enemyWave",
+        "autoState",
+        "offlineCatchup",
+        "settlementStatus"
+      ],
+      "serverOwnedState": [
+        "permanent reward settlement",
+        "highest-floor candidate"
+      ],
+      "canonicalUiStates": [
+        "TUTORIAL",
+        "READY",
+        "LOADING",
+        "PAUSED",
+        "OFFLINE",
+        "BACKGROUND_RECONCILE",
+        "DESYNC",
+        "RETRYABLE_ERROR",
+        "DEFEAT",
+        "VICTORY_PENDING"
+      ],
+      "stateGroups": {
+        "resolved-or-normal": [
+          "TUTORIAL",
+          "READY"
+        ],
+        "pending": [
+          "LOADING",
+          "VICTORY_PENDING"
+        ],
+        "recovery-or-reconciliation": [
+          "OFFLINE",
+          "BACKGROUND_RECONCILE",
+          "DESYNC",
+          "RETRYABLE_ERROR"
+        ],
+        "blocked-or-terminal": [
+          "DEFEAT"
+        ],
+        "contextual": [
+          "PAUSED"
+        ]
+      },
+      "showcasedCriticalState": "BACKGROUND_RECONCILE",
+      "showcasedRecoveryAction": "帰還中の報酬を照合しています",
+      "viewportFiles": [
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S02-320x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S02-375x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S02-390x844.svg"
+      ]
+    },
+    {
+      "id": "S03",
+      "canonicalName": "unbounded-tower",
+      "displayName": "無限の塔",
+      "subtitle": "現在階・次の節目",
+      "primaryAction": "現在階へ戻る",
+      "primaryNavigation": "tower",
+      "responsibilities": [
+        "current/best floor",
+        "10F district",
+        "100F cycle",
+        "next milestone",
+        "virtualized browse"
+      ],
+      "authority": "server highest floor and milestones plus generated local browse cache",
+      "requiredState": [
+        "currentFloor",
+        "bestFloor",
+        "districtId",
+        "cycleId",
+        "nextMilestone",
+        "knownFloorRange"
+      ],
+      "serverOwnedState": [
+        "best floor",
+        "milestone claims",
+        "cycle record"
+      ],
+      "canonicalUiStates": [
+        "READY",
+        "LOADING",
+        "OFFLINE",
+        "BROWSE_KNOWN",
+        "UNSEEN_LOCKED",
+        "STALE_CACHE",
+        "RETRYABLE_ERROR"
+      ],
+      "stateGroups": {
+        "resolved-or-normal": [
+          "READY"
+        ],
+        "pending": [
+          "LOADING"
+        ],
+        "recovery-or-reconciliation": [
+          "OFFLINE",
+          "STALE_CACHE",
+          "RETRYABLE_ERROR"
+        ],
+        "blocked-or-terminal": [],
+        "contextual": [
+          "BROWSE_KNOWN",
+          "UNSEEN_LOCKED"
+        ]
+      },
+      "showcasedCriticalState": "STALE_CACHE",
+      "showcasedRecoveryAction": "記録を更新して既知階を再表示",
+      "viewportFiles": [
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S03-320x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S03-375x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S03-390x844.svg"
+      ]
+    },
+    {
+      "id": "S04",
+      "canonicalName": "floor-clear-choice",
+      "displayName": "階層制圧",
+      "subtitle": "報酬・次の支援",
+      "primaryAction": "選択を確定",
+      "primaryNavigation": "battle",
+      "responsibilities": [
+        "clear reward",
+        "stairs",
+        "shop/support/rescue choice",
+        "choose later"
+      ],
+      "authority": "server settlement and one-time choice plus local presentation",
+      "requiredState": [
+        "settlementId",
+        "rewardPreview",
+        "choiceSet",
+        "nextFloor",
+        "claimStatus"
+      ],
+      "serverOwnedState": [
+        "settlement",
+        "one-time choice",
+        "reward claim"
+      ],
+      "canonicalUiStates": [
+        "READY",
+        "SETTLEMENT_PENDING",
+        "REWARD_CONFIRMED",
+        "CHOICE_PENDING",
+        "CHOICE_COMMITTED",
+        "CLAIM_RECOVERY",
+        "OFFLINE",
+        "RETRYABLE_ERROR"
+      ],
+      "stateGroups": {
+        "resolved-or-normal": [
+          "READY",
+          "REWARD_CONFIRMED"
+        ],
+        "pending": [
+          "SETTLEMENT_PENDING",
+          "CHOICE_PENDING"
+        ],
+        "recovery-or-reconciliation": [
+          "CLAIM_RECOVERY",
+          "OFFLINE",
+          "RETRYABLE_ERROR"
+        ],
+        "blocked-or-terminal": [],
+        "contextual": [
+          "CHOICE_COMMITTED"
+        ]
+      },
+      "showcasedCriticalState": "CLAIM_RECOVERY",
+      "showcasedRecoveryAction": "報酬結果を履歴から復元",
+      "viewportFiles": [
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S04-320x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S04-375x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S04-390x844.svg"
+      ]
+    },
+    {
+      "id": "S05",
+      "canonicalName": "shop-delivery",
+      "displayName": "商店と配送",
+      "subtitle": "戦闘支援を編成",
+      "primaryAction": "配置を保存",
+      "primaryNavigation": "shop",
+      "responsibilities": [
+        "placement",
+        "comparison",
+        "income",
+        "delivery",
+        "automation",
+        "reconfigure"
+      ],
+      "authority": "server profile configuration plus local forecast",
+      "requiredState": [
+        "shopLayout",
+        "deliveryQueue",
+        "automationRules",
+        "projectedCombatSupport",
+        "entityVersion"
+      ],
+      "serverOwnedState": [
+        "persistent layout",
+        "automation unlocks",
+        "permanent facility unlocks"
+      ],
+      "canonicalUiStates": [
+        "READY",
+        "LOADING",
+        "EDITING",
+        "SAVE_PENDING",
+        "SYNC_CONFLICT",
+        "RESTORED",
+        "OFFLINE",
+        "RETRYABLE_ERROR"
+      ],
+      "stateGroups": {
+        "resolved-or-normal": [
+          "READY",
+          "RESTORED"
+        ],
+        "pending": [
+          "LOADING",
+          "SAVE_PENDING"
+        ],
+        "recovery-or-reconciliation": [
+          "SYNC_CONFLICT",
+          "OFFLINE",
+          "RETRYABLE_ERROR"
+        ],
+        "blocked-or-terminal": [],
+        "contextual": [
+          "EDITING"
+        ]
+      },
+      "showcasedCriticalState": "SYNC_CONFLICT",
+      "showcasedRecoveryAction": "新旧配置を比較して再適用",
+      "viewportFiles": [
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S05-320x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S05-375x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S05-390x844.svg"
+      ]
+    },
+    {
+      "id": "S06",
+      "canonicalName": "character",
+      "displayName": "仲間",
+      "subtitle": "レベル・進化・熟練",
+      "primaryAction": "10レベル強化",
+      "primaryNavigation": "team",
+      "responsibilities": [
+        "rarity",
+        "coin level",
+        "evolution",
+        "character mastery",
+        "party"
+      ],
+      "authority": "server ownership/evolution/mastery and server-verifiable run level",
+      "requiredState": [
+        "characterId",
+        "rarityId",
+        "levelBigInt",
+        "evolutionEligibility",
+        "evolutionStage",
+        "masteryTrack",
+        "partySlot"
+      ],
+      "serverOwnedState": [
+        "ownership",
+        "evolution",
+        "mastery",
+        "ruby debit",
+        "party profile"
+      ],
+      "canonicalUiStates": [
+        "READY",
+        "LOADING",
+        "INSUFFICIENT_COIN",
+        "INSUFFICIENT_RUBY",
+        "EVOLUTION_QUOTE",
+        "EVOLUTION_PENDING",
+        "MASTERY_PENDING",
+        "CONFLICT_RELOAD",
+        "REVOKED",
+        "RETRYABLE_ERROR"
+      ],
+      "stateGroups": {
+        "resolved-or-normal": [
+          "READY"
+        ],
+        "pending": [
+          "LOADING",
+          "EVOLUTION_PENDING",
+          "MASTERY_PENDING"
+        ],
+        "recovery-or-reconciliation": [
+          "CONFLICT_RELOAD",
+          "RETRYABLE_ERROR"
+        ],
+        "blocked-or-terminal": [
+          "INSUFFICIENT_COIN",
+          "INSUFFICIENT_RUBY",
+          "REVOKED"
+        ],
+        "contextual": [
+          "EVOLUTION_QUOTE"
+        ]
+      },
+      "showcasedCriticalState": "EVOLUTION_PENDING",
+      "showcasedRecoveryAction": "進化取引の結果を確認中",
+      "viewportFiles": [
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S06-320x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S06-375x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S06-390x844.svg"
+      ]
+    },
+    {
+      "id": "S07",
+      "canonicalName": "weapon-build",
+      "displayName": "武器とビルド",
+      "subtitle": "装備・熟練・比較",
+      "primaryAction": "ムギに装備",
+      "primaryNavigation": "team",
+      "responsibilities": [
+        "rarity",
+        "equip",
+        "weapon mastery",
+        "build comparison",
+        "defeat diagnosis"
+      ],
+      "authority": "server ownership/mastery/equipment profile",
+      "requiredState": [
+        "weaponId",
+        "rarityId",
+        "owner",
+        "equippedBy",
+        "masteryTrack",
+        "buildImpact",
+        "entityVersion"
+      ],
+      "serverOwnedState": [
+        "ownership",
+        "equipment",
+        "mastery",
+        "overflow"
+      ],
+      "canonicalUiStates": [
+        "READY",
+        "LOADING",
+        "EQUIP_PENDING",
+        "EQUIP_CONFLICT",
+        "MASTERY_PENDING",
+        "OVERFLOW",
+        "REVOKED",
+        "RETRYABLE_ERROR"
+      ],
+      "stateGroups": {
+        "resolved-or-normal": [
+          "READY"
+        ],
+        "pending": [
+          "LOADING",
+          "EQUIP_PENDING",
+          "MASTERY_PENDING"
+        ],
+        "recovery-or-reconciliation": [
+          "EQUIP_CONFLICT",
+          "RETRYABLE_ERROR"
+        ],
+        "blocked-or-terminal": [
+          "REVOKED"
+        ],
+        "contextual": [
+          "OVERFLOW"
+        ]
+      },
+      "showcasedCriticalState": "EQUIP_CONFLICT",
+      "showcasedRecoveryAction": "別端末の装備変更を反映",
+      "viewportFiles": [
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S07-320x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S07-375x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S07-390x844.svg"
+      ]
+    },
+    {
+      "id": "S08",
+      "canonicalName": "boss",
+      "displayName": "地区ボス",
+      "subtitle": "予兆・ブレイク・再挑戦",
+      "primaryAction": "戦闘へ戻る",
+      "primaryNavigation": "battle",
+      "responsibilities": [
+        "intro",
+        "phase",
+        "telegraph",
+        "break",
+        "failure diagnosis",
+        "retry",
+        "reward"
+      ],
+      "authority": "deterministic local battle plus server clear settlement",
+      "requiredState": [
+        "bossId",
+        "phase",
+        "breakGauge",
+        "dangerAction",
+        "failureDiagnosis",
+        "retryCost",
+        "settlementStatus"
+      ],
+      "serverOwnedState": [
+        "boss milestone settlement",
+        "one-time reward"
+      ],
+      "canonicalUiStates": [
+        "INTRO",
+        "READY",
+        "BREAK",
+        "DEFEAT",
+        "RETRY",
+        "VICTORY_PENDING",
+        "REWARD_CONFIRMED",
+        "RECONNECT",
+        "REPLAY_SAFE"
+      ],
+      "stateGroups": {
+        "resolved-or-normal": [
+          "INTRO",
+          "READY",
+          "BREAK",
+          "REWARD_CONFIRMED"
+        ],
+        "pending": [
+          "VICTORY_PENDING"
+        ],
+        "recovery-or-reconciliation": [
+          "RECONNECT"
+        ],
+        "blocked-or-terminal": [
+          "DEFEAT"
+        ],
+        "contextual": [
+          "RETRY",
+          "REPLAY_SAFE"
+        ]
+      },
+      "showcasedCriticalState": "RECONNECT",
+      "showcasedRecoveryAction": "決着前の戦闘記録へ再接続",
+      "viewportFiles": [
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S08-320x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S08-375x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S08-390x844.svg"
+      ]
+    },
+    {
+      "id": "S09",
+      "canonicalName": "tower-return",
+      "displayName": "塔還り",
+      "subtitle": "失う・残る・得る",
+      "primaryAction": "内容を確認して塔還り",
+      "primaryNavigation": "tower",
+      "responsibilities": [
+        "lose/keep/gain",
+        "ruby",
+        "reclear forecast",
+        "quote",
+        "confirm"
+      ],
+      "authority": "server reset quote and commit",
+      "requiredState": [
+        "resetId",
+        "eligibility",
+        "losses",
+        "retained",
+        "rubyGrant",
+        "forecast",
+        "quoteVersion",
+        "idempotencyKey"
+      ],
+      "serverOwnedState": [
+        "best floor",
+        "reset reward",
+        "ruby ledger",
+        "reset count",
+        "post-reset profile"
+      ],
+      "canonicalUiStates": [
+        "READY",
+        "INELIGIBLE",
+        "QUOTE_LOADING",
+        "QUOTE_READY",
+        "CONFIRMING",
+        "COMMIT_PENDING",
+        "QUOTE_EXPIRED",
+        "PENDING_RECONCILIATION",
+        "ALREADY_APPLIED",
+        "COMPLETED",
+        "RETRYABLE_ERROR"
+      ],
+      "stateGroups": {
+        "resolved-or-normal": [
+          "READY",
+          "QUOTE_READY",
+          "ALREADY_APPLIED",
+          "COMPLETED"
+        ],
+        "pending": [
+          "QUOTE_LOADING",
+          "CONFIRMING",
+          "COMMIT_PENDING",
+          "PENDING_RECONCILIATION"
+        ],
+        "recovery-or-reconciliation": [
+          "QUOTE_EXPIRED",
+          "RETRYABLE_ERROR"
+        ],
+        "blocked-or-terminal": [
+          "INELIGIBLE"
+        ],
+        "contextual": []
+      },
+      "showcasedCriticalState": "QUOTE_EXPIRED",
+      "showcasedRecoveryAction": "最新条件で見積りを更新",
+      "viewportFiles": [
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S09-320x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S09-375x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S09-390x844.svg"
+      ]
+    },
+    {
+      "id": "S10",
+      "canonicalName": "recruit-gacha",
+      "displayName": "仲間を迎える",
+      "subtitle": "キャラ・武器募集",
+      "primaryAction": "10回迎える",
+      "primaryNavigation": "shop",
+      "responsibilities": [
+        "character banner",
+        "weapon banner",
+        "odds",
+        "pity",
+        "featured guarantee",
+        "exchange",
+        "history"
+      ],
+      "authority": "server RNG/result/pity/exchange/history",
+      "requiredState": [
+        "bannerId",
+        "bannerClass",
+        "rateTableVersion",
+        "pityCounter",
+        "featuredGuarantee",
+        "ticketBalance",
+        "rubyLedger",
+        "exchangeBalance",
+        "drawHistory"
+      ],
+      "serverOwnedState": [
+        "RNG result",
+        "pity",
+        "guarantee",
+        "ownership",
+        "duplicates",
+        "exchange",
+        "history"
+      ],
+      "canonicalUiStates": [
+        "READY",
+        "LOADING",
+        "CATALOG_STALE",
+        "ODDS_VIEW",
+        "DRAW_CONFIRM",
+        "DRAW_PENDING",
+        "RESULT",
+        "RESULT_RECOVERY",
+        "BANNER_ENDED",
+        "INSUFFICIENT_RESOURCE",
+        "OFFLINE",
+        "RETRYABLE_ERROR"
+      ],
+      "stateGroups": {
+        "resolved-or-normal": [
+          "READY",
+          "ODDS_VIEW",
+          "RESULT",
+          "RESULT_RECOVERY"
+        ],
+        "pending": [
+          "LOADING",
+          "DRAW_PENDING"
+        ],
+        "recovery-or-reconciliation": [
+          "CATALOG_STALE",
+          "OFFLINE",
+          "RETRYABLE_ERROR"
+        ],
+        "blocked-or-terminal": [
+          "BANNER_ENDED",
+          "INSUFFICIENT_RESOURCE"
+        ],
+        "contextual": [
+          "DRAW_CONFIRM"
+        ]
+      },
+      "showcasedCriticalState": "RESULT_RECOVERY",
+      "showcasedRecoveryAction": "抽選履歴から結果を復元",
+      "viewportFiles": [
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S10-320x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S10-375x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S10-390x844.svg"
+      ]
+    },
+    {
+      "id": "S11",
+      "canonicalName": "store-ruby-ads",
+      "displayName": "ルビーと特典",
+      "subtitle": "有償・無料・広告",
+      "primaryAction": "商品内容を確認",
+      "primaryNavigation": "shop",
+      "responsibilities": [
+        "paid/free wallet",
+        "products",
+        "payment",
+        "rewarded ads",
+        "entitlements"
+      ],
+      "authority": "server wallet/catalog/receipt/ad/entitlement",
+      "requiredState": [
+        "walletSubLedgers",
+        "catalogVersion",
+        "products",
+        "purchaseState",
+        "refundDeficitState",
+        "adOfferCatalogId",
+        "adOfferVersion",
+        "adAvailability",
+        "adDailyCap",
+        "entitlements",
+        "auditId"
+      ],
+      "serverOwnedState": [
+        "wallet",
+        "product catalog",
+        "ad-offer catalog",
+        "receipts",
+        "entitlements",
+        "ad receipts",
+        "refund/revocation/restore",
+        "paid-ruby refund deficit"
+      ],
+      "canonicalUiStates": [
+        "READY",
+        "LOADING",
+        "CATALOG_STALE",
+        "PURCHASE_CONFIRM",
+        "PURCHASE_PENDING",
+        "PURCHASE_RECONCILIATION",
+        "VERIFICATION_FAILED",
+        "REFUNDED",
+        "REVOKED",
+        "RESTORE_PENDING",
+        "RESTORED",
+        "AD_OPT_IN",
+        "AD_PENDING",
+        "AD_GRANTED",
+        "AD_CAP_REACHED",
+        "OFFLINE"
+      ],
+      "stateGroups": {
+        "resolved-or-normal": [
+          "READY",
+          "RESTORED",
+          "AD_GRANTED"
+        ],
+        "pending": [
+          "LOADING",
+          "PURCHASE_PENDING",
+          "RESTORE_PENDING",
+          "AD_PENDING"
+        ],
+        "recovery-or-reconciliation": [
+          "CATALOG_STALE",
+          "VERIFICATION_FAILED",
+          "OFFLINE"
+        ],
+        "blocked-or-terminal": [
+          "REVOKED",
+          "AD_CAP_REACHED"
+        ],
+        "contextual": [
+          "PURCHASE_CONFIRM",
+          "PURCHASE_RECONCILIATION",
+          "REFUNDED",
+          "AD_OPT_IN"
+        ]
+      },
+      "showcasedCriticalState": "PURCHASE_RECONCILIATION",
+      "showcasedRecoveryAction": "決済結果をストアと照合中",
+      "viewportFiles": [
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S11-320x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S11-375x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S11-390x844.svg"
+      ]
+    },
+    {
+      "id": "S12",
+      "canonicalName": "login-inbox",
+      "displayName": "ログインと便り",
+      "subtitle": "受取・受信箱・履歴",
+      "primaryAction": "本日の贈り物を受取る",
+      "primaryNavigation": "more",
+      "responsibilities": [
+        "newcomer",
+        "monthly",
+        "returner",
+        "inbox",
+        "claim history"
+      ],
+      "authority": "server time/eligibility/claim/inbox history",
+      "requiredState": [
+        "campaignCatalogId",
+        "campaignVersion",
+        "campaigns",
+        "serverTime",
+        "eligibility",
+        "claimable",
+        "inbox",
+        "claimHistory"
+      ],
+      "serverOwnedState": [
+        "login-campaign catalog",
+        "server time",
+        "eligibility",
+        "claim history",
+        "grants"
+      ],
+      "canonicalUiStates": [
+        "READY",
+        "LOADING",
+        "CLAIM_PENDING",
+        "GRANTED",
+        "ALREADY_CLAIMED",
+        "NOT_ELIGIBLE",
+        "EXPIRED",
+        "SERVER_TIME_ERROR",
+        "DUPLICATE_REQUEST",
+        "RECOVERED",
+        "OFFLINE"
+      ],
+      "stateGroups": {
+        "resolved-or-normal": [
+          "READY",
+          "GRANTED",
+          "ALREADY_CLAIMED",
+          "RECOVERED"
+        ],
+        "pending": [
+          "LOADING",
+          "CLAIM_PENDING"
+        ],
+        "recovery-or-reconciliation": [
+          "EXPIRED",
+          "SERVER_TIME_ERROR",
+          "DUPLICATE_REQUEST",
+          "OFFLINE"
+        ],
+        "blocked-or-terminal": [
+          "NOT_ELIGIBLE"
+        ],
+        "contextual": []
+      },
+      "showcasedCriticalState": "DUPLICATE_REQUEST",
+      "showcasedRecoveryAction": "二重受取せず履歴を再確認",
+      "viewportFiles": [
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S12-320x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S12-375x667.svg",
+        "quality-reviews/step-4-twelve-screen-final-mockups/mockups/S12-390x844.svg"
+      ]
+    }
+  ],
+  "globalInvariants": [
+    "Exactly S01-S12 are canonical.",
+    "All permanent-economy writes expose pending and reconciliation states.",
+    "No tap-damage state exists.",
+    "Purchase, draw, reset and claim never infer failure or success from client timeout.",
+    "Rewarded-ad and login claims display and submit the exact immutable offer or campaign version used for eligibility and grant.",
+    "A paid-ruby refund deficit is explicit and never hidden by silently consuming unrelated free ruby.",
+    "Account deletion and legally retained records are visible rather than implicit.",
+    "This registry cannot authorize Step 2 until the Round 008 seal validates it."
+  ],
+  "verdict": "PASS_ALL_TWELVE_SCREEN_SPECS_DRAFTED"
+}
