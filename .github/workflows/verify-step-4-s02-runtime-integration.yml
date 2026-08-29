@@ -9,6 +9,7 @@ on:
       - "index.html"
       - "sw.js"
       - "runtime/s02-runtime.css"
+      - "runtime/s02-runtime-fixes.css"
       - "runtime/s02-runtime.js"
       - "runtime/s02-battle-renderer.js"
       - "step4/s02/assets/s02-forest-approved.webp"
