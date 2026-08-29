@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-active-change-control-addendum-round-020",
+  "createdAt": "2026-08-29",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "parentAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-019.json",
+  "entry": {
+    "head": "7ba71f543e594c5e030807ed1a39f0eccc00cb33",
+    "tree": "ec00dffa152ceaf0e771d900382f24b41cbb3e2c"
+  },
+  "trigger": "The user explicitly requested through GitHub that the approved S02 design be reflected into the actual playable game screen in the correct form.",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS_STEP4_S02_LIMITED_RUNTIME_INTEGRATION",
+  "advanceAllowed": false,
+  "step4Allowed": true,
+  "step5Allowed": false,
+  "bindingAcceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-runtime-integration-acceptance-round-001.json",
+  "scopeOverride": {
+    "supersedes": "Round 019 isolated-only runtime restriction",
+    "limitedAuthorization": "Modify the existing root game entry and only the directly related runtime-shell files needed to render the approved S02 visual system while preserving the current playable engine.",
+    "reason": "Leaving S02 only under /step4/s02 does not satisfy the user's requirement that the design be reflected in the game screen.",
+    "doesNotOpenStep5": true
+  },
+  "requiredRuntimeTruth": [
+    "The root entry must display the S02 shell after the existing start flow.",
+    "window.__game remains the source of floor, currency, units, enemies, shops and action availability.",
+    "Controls must call actual existing actions or clearly expose an unavailable state.",
+    "The old playable engine, save data and progression loop must continue to operate.",
+    "The implementation may not be a screenshot overlay, iframe or fake state demo."
+  ],
+  "currentWriteBoundary": {
+    "allowed": [
+      "index.html",
+      "app.js",
+      "sw.js",
+      "runtime/s02-runtime.css",
+      "runtime/s02-runtime.js",
+      "tests/step4/verify-s02-runtime-integration.mjs",
+      "tests/step4/s02-runtime-browser-qa.mjs",
+      ".github/workflows/apply-step-4-s02-runtime-integration.yml",
+      ".github/workflows/verify-step-4-s02-runtime-integration.yml",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-runtime-integration-*",
+      "Step 4 governance and status mirrors"
+    ],
+    "forbidden": [
+      "game-core.js",
+      "game-data.js",
+      "simulation candidate or executable seal mutation",
+      "backend",
+      "payment provider",
+      "ad network",
+      "other branch write",
+      "PR operation",
+      "Production alias",
+      "physical-iPhone PASS claim"
+    ]
+  },
+  "completionBoundary": {
+    "runtimeIntegrationCheckpointMayPass": true,
+    "s02FinalVisualApprovalRequired": true,
+    "fiveStep4CriticsStillRequired": true,
+    "step4Pass": false,
+    "step5Allowed": false,
+    "productionChanged": false,
+    "physicalIPhoneVerified": false
+  },
+  "scopeReadbackBeforeImplementation": {
+    "rootRuntimeIntegrated": false,
+    "backendChanged": false,
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "otherBranchWritten": false,
+    "pullRequestOperation": false
+  }
+}
