@@ -1,0 +1,18 @@
+/* Runtime integration defect fixes discovered by exact-head browser QA. */
+#stage.s02-runtime-shell #sheets {
+  position: relative;
+  z-index: 80;
+}
+
+#stage.s02-runtime-shell .sheet {
+  z-index: 82 !important;
+}
+
+#stage.s02-runtime-shell .modal {
+  z-index: 110 !important;
+}
+
+#stage.s02-runtime-shell .sheet.open,
+#stage.s02-runtime-shell .modal:not([hidden]) {
+  pointer-events: auto;
+}
