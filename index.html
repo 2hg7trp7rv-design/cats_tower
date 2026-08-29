@@ -3,91 +3,182 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#1b2030">
-<title>Cat's Tower — 猫の商人サーガ</title>
-<meta name="description" content="猫の商人ムギが勇者ねこを雇って魔王城の塔を駆け上がる。制圧した階に武器屋・道具屋を建て、転生で強くなる。">
+<meta name="theme-color" content="#2d1710">
+<title>Cat's Tower — 無限塔遠征</title>
+<meta name="description" content="猫の仲間と商会の支援を組み合わせ、無限の塔を自動遠征するCat's Tower。">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="assets/icons/icon-192.png">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="runtime/s02-runtime.css">
 </head>
 <body>
 <div id="app">
-  <div id="stage">
+  <div id="stage" class="s02-runtime-shell" data-testid="s02-runtime-shell" data-runtime-ready="false">
 
-    <!-- 上部固定HUD (黒パネル+白枠) -->
-    <header id="hud-top">
-      <div class="hud-row">
-        <span id="hud-floor-wrap" class="px-panel">🐱 現在のフロア <b id="hud-floor">1F</b></span>
-        <span class="hud-spacer"></span>
-        <button id="btn-dawn" class="hud-btn dawn" disabled>🔄 転生</button>
-        <button id="btn-mute" class="hud-btn" aria-label="ミュート">🔊</button>
+    <header id="hud-top" class="runtime-player-bar runtime-wood" aria-label="プレイヤーと所持資源">
+      <button class="runtime-profile" type="button" data-runtime-action="party" aria-label="仲間と編成を開く">
+        <span class="runtime-profile-portrait" aria-hidden="true">
+          <img src="assets/prototype/cats/mugi.png" alt="">
+        </span>
+        <span class="runtime-profile-copy">
+          <strong>冒険隊ミケ</strong>
+          <small>隊Lv.<b id="runtime-team-level">1</b></small>
+          <span class="runtime-profile-progress" aria-hidden="true"><i id="runtime-profile-progress"></i></span>
+        </span>
+      </button>
+
+      <div class="runtime-resource-strip" role="group" aria-label="所持資源と最高到達階">
+        <span id="hud-coins-wrap" aria-label="コイン">
+          <span class="runtime-resource-symbol" aria-hidden="true">金</span>
+          <span class="runtime-resource-label">コイン</span>
+          <b id="hud-coins">0</b>
+        </span>
+        <span id="hud-sparkles-wrap" aria-label="ルビー">
+          <span class="runtime-resource-symbol ruby" aria-hidden="true">◆</span>
+          <span class="runtime-resource-label">ルビー</span>
+          <b id="hud-sparkles">0</b>
+        </span>
+        <span class="runtime-resource-card" aria-label="最高到達階">
+          <span class="runtime-resource-symbol flag" aria-hidden="true">旗</span>
+          <span class="runtime-resource-label">最高階</span>
+          <b id="runtime-max-floor">1F</b>
+        </span>
       </div>
-      <div class="hud-row sub">
-        <span id="hud-sparkles-wrap" class="px-panel" title="ルビー">💎<span id="hud-sparkles">0</span></span>
-        <span id="hud-coins-wrap" class="px-panel gold" title="コイン">💰<span id="hud-coins">0</span></span>
-        <span class="hud-spacer"></span>
-        <button id="btn-shop-pending" class="hud-btn accent" style="display:none">🏪 建店!</button>
-        <span id="hud-income" class="px-panel dim">収益 +0/秒</span>
-      </div>
+
+      <button id="btn-mute" class="runtime-menu-button" aria-label="音声を切り替える">🔊</button>
     </header>
 
-    <!-- 戦闘フィールド (Canvas) -->
-    <main id="battle-wrap">
-      <canvas id="battle"></canvas>
-      <div id="battle-progress-text" role="progressbar" aria-label="階層の進行状況"></div>
-      <div id="banner"></div>
-    </main>
-
-    <!-- ステータスバー + 招集ボタン -->
-    <div id="status-bar">
-      <div class="st-left">
-        <span id="hud-dps">攻撃力:0</span>
-        <span id="hud-weapon">E:—</span>
-        <small id="summon-sub">タップで招集 / 長押しで連打</small>
+    <section class="runtime-context-bar runtime-wood" aria-labelledby="runtime-screen-title">
+      <span class="runtime-context-emblem" aria-hidden="true">塔</span>
+      <div id="hud-floor-wrap" class="runtime-context-copy">
+        <h1 id="runtime-screen-title"><b id="hud-floor">1F</b>・塔内遠征</h1>
+        <p><span id="runtime-expedition-status">自動戦闘中</span>・商会支援と連動</p>
       </div>
-      <button id="btn-summon" aria-label="にゃんこ勇者招集">
-        <span class="sum-icon">🐱</span>
-        <span class="sum-label">にゃんこ勇者招集</span>
+      <button id="runtime-next-target" class="runtime-next-target" type="button" aria-label="次の目標階を確認する">
+        <span>次の目標</span><strong id="runtime-next-floor">2F</strong><small>自動進軍</small>
       </button>
+    </section>
+
+    <div id="runtime-scroll" class="runtime-scroll" data-testid="runtime-scroll">
+      <main id="battle-wrap" class="runtime-battle-stage" aria-label="実際のゲーム戦闘フィールド">
+        <canvas id="battle"></canvas>
+        <div id="battle-progress-text" role="progressbar" aria-label="階層の進行状況"></div>
+        <div id="banner"></div>
+
+        <button id="runtime-event-banner" class="runtime-event-banner" type="button" aria-label="現在の遠征状況を確認する">
+          <img src="assets/prototype/cats/toto.png" alt="">
+          <span><strong>無限塔遠征</strong><small id="runtime-event-state">現在 1F・最高 1F</small></span>
+        </button>
+
+        <div class="runtime-shortcut-rail" aria-label="実際に利用できるゲーム機能">
+          <button class="runtime-shortcut" type="button" data-runtime-action="agency" aria-label="仲間と人材派遣屋を開く">
+            <span class="runtime-ui-icon i-agency" aria-hidden="true"></span><b>仲間</b>
+          </button>
+          <button class="runtime-shortcut" type="button" data-runtime-action="forge" aria-label="武器屋を開く">
+            <span class="runtime-ui-icon i-forge" aria-hidden="true"></span><b>武器</b>
+          </button>
+          <button class="runtime-shortcut" type="button" data-runtime-action="item" aria-label="道具屋を開く">
+            <span class="runtime-ui-icon i-item" aria-hidden="true"></span><b>道具</b>
+          </button>
+          <button class="runtime-shortcut" type="button" data-runtime-action="shops" aria-label="建店と商会一覧を開く">
+            <span class="runtime-ui-icon i-shop" aria-hidden="true"></span><b>建店</b>
+          </button>
+          <button class="runtime-shortcut" type="button" data-runtime-action="return" aria-label="塔還りを確認する">
+            <span class="runtime-ui-icon i-return" aria-hidden="true"></span><b>塔還り</b>
+          </button>
+        </div>
+
+        <div class="runtime-auto-chip" aria-label="自動戦闘は常時有効"><span>AUTO</span><strong>ON</strong></div>
+        <div class="runtime-battle-counts" aria-label="現在の戦場人数">
+          <span>味方 <b id="runtime-party-count">0</b></span>
+          <span>敵 <b id="runtime-enemy-count">0</b></span>
+        </div>
+      </main>
+
+      <section id="status-bar" class="runtime-status-bar" aria-label="戦闘状況と招集">
+        <div class="st-left">
+          <span id="hud-dps">攻撃力:0</span>
+          <span id="hud-weapon">E:—</span>
+          <span id="hud-income">収益 +0/秒</span>
+          <small id="summon-sub">タップで招集 / 長押しで連打</small>
+        </div>
+        <button id="btn-summon" aria-label="にゃんこ勇者を実際の戦場へ招集する">
+          <span class="sum-icon" aria-hidden="true">🐾</span>
+          <span class="sum-label">にゃんこ招集</span>
+        </button>
+      </section>
+
+      <section class="runtime-action-row" aria-label="主要なゲーム操作">
+        <button class="runtime-action blue" type="button" data-runtime-action="agency">
+          <span class="runtime-ui-icon i-agency" aria-hidden="true"></span><b>仲間</b>
+        </button>
+        <button class="runtime-action violet" type="button" data-runtime-action="forge">
+          <span class="runtime-ui-icon i-forge" aria-hidden="true"></span><b>武器</b>
+        </button>
+        <button class="runtime-action green" type="button" data-runtime-action="item">
+          <span class="runtime-ui-icon i-item" aria-hidden="true"></span><b>道具</b>
+        </button>
+        <button id="btn-shop-pending" type="button" style="display:none">建店</button>
+        <button id="btn-dawn" type="button" disabled><span>塔還り</span><small id="runtime-return-state">条件未達</small></button>
+      </section>
+
+      <div id="runtime-support-anchor" class="runtime-support-heading">
+        <strong>商会支援・店舗タワー</strong>
+        <small>実際の収益・建店・装備に連動</small>
+      </div>
+      <section id="tower-list" aria-label="実際の店舗タワー"></section>
     </div>
 
-    <!-- 店舗タワー (常時表示・縦スクロール) -->
-    <section id="tower-list" aria-label="店舗タワー"></section>
+    <nav class="runtime-bottom-nav" aria-label="主要ゲーム画面">
+      <button class="runtime-nav-button is-active" type="button" data-runtime-action="tower" aria-current="page">
+        <span class="runtime-ui-icon i-tower" aria-hidden="true"></span><b>塔</b>
+      </button>
+      <button class="runtime-nav-button" type="button" data-runtime-action="commerce">
+        <span class="runtime-ui-icon i-commerce" aria-hidden="true"></span><b>商会</b>
+      </button>
+      <button class="runtime-nav-button" type="button" data-runtime-action="party">
+        <span class="runtime-ui-icon i-party" aria-hidden="true"></span><b>仲間</b>
+      </button>
+      <button class="runtime-nav-button" type="button" data-runtime-action="shops">
+        <span class="runtime-ui-icon i-town" aria-hidden="true"></span><b>町</b>
+      </button>
+      <button class="runtime-nav-button" type="button" data-runtime-action="events" aria-disabled="true">
+        <span class="runtime-ui-icon i-event" aria-hidden="true"></span><b>催事</b>
+      </button>
+    </nav>
 
-    <!-- ボトムシート挿入先 -->
+    <div id="runtime-toast" class="runtime-toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
     <div id="sheets"></div>
 
-    <!-- 転生モーダル (確認 + 伝説の道具屋) -->
     <div id="modal-prestige" class="modal" hidden>
       <div class="modal-card">
-        <h3>🔄 転生</h3>
-        <p class="modal-sub">王様の恩恵で世界をやり直す。階・コイン・雇用・武器・道具・建店はリセットされ、<b>💎ルビー</b>を得る。</p>
+        <h3>塔還り</h3>
+        <p class="modal-sub">遠征を1Fから再開し、到達実績に応じたルビーと永続強化を得る。</p>
         <p id="prestige-gain" class="prestige-gain"></p>
-        <h4>💎 伝説の道具屋 (永続パッシブ)</h4>
+        <h4>伝説の道具屋・永続パッシブ</h4>
         <div id="treasure-list"></div>
         <div class="btn-col">
-          <button id="btn-do-prestige" class="primary">転生する</button>
+          <button id="btn-do-prestige" class="primary">塔還りを実行</button>
           <button id="btn-close-prestige" class="ghost">閉じる</button>
         </div>
       </div>
     </div>
 
-    <!-- イントロ (開始時に1枚表示・スキップ可) -->
     <div id="modal-intro" class="modal" hidden>
       <div class="modal-card">
-        <h3>🐱 はじまり</h3>
+        <h3>遠征開始</h3>
         <p id="intro-text" class="intro-text"></p>
         <div class="btn-col">
-          <button id="btn-close-intro" class="primary">出発する</button>
+          <button id="btn-close-intro" class="primary">塔へ出発する</button>
         </div>
       </div>
     </div>
 
-    <!-- オフライン収益モーダル -->
     <div id="modal-offline" class="modal" hidden>
       <div class="modal-card">
-        <h3>🌙 おかえりなさい!</h3>
-        <p class="modal-sub">留守のあいだも店が稼いでいた。</p>
+        <h3>おかえりなさい</h3>
+        <p class="modal-sub">留守のあいだも店舗が稼働していた。</p>
         <p id="offline-gain" class="prestige-gain"></p>
         <div class="btn-col">
           <button id="btn-close-offline" class="primary">受け取る</button>
@@ -95,16 +186,15 @@
       </div>
     </div>
 
-    <!-- タイトル -->
     <div id="title-screen">
       <div id="title-inner">
         <h1>Cat's Tower</h1>
-        <p class="title-sub">にゃんこ商人物語</p>
-        <p class="title-desc">にゃんこ勇者を招集して塔を駆け上がれ。<br>制圧した階に店を建て、転生で強くなる。</p>
-        <button id="btn-start">はじめる</button>
-        <p class="title-note">縦画面推奨 / 音が出ます (ミュート可)</p>
+        <p class="title-sub">猫たちと登る無限塔</p>
+        <p class="title-desc">猫の仲間を招集し、商会支援とともに塔を進む。<br>遠征と店舗経営を一つの画面で指揮しよう。</p>
+        <button id="btn-start">遠征をはじめる</button>
+        <p class="title-note">縦画面推奨 / 音声は右上から切替</p>
       </div>
-      <img id="title-cat" src="assets/saga/cat_gray_3.png" alt="猫">
+      <img id="title-cat" src="assets/prototype/cats/mugi.png" alt="剣を持つ猫の冒険者">
     </div>
 
   </div>
@@ -112,5 +202,6 @@
 <script src="game-data.js"></script>
 <script src="game-core.js"></script>
 <script src="app.js"></script>
+<script src="runtime/s02-runtime.js"></script>
 </body>
 </html>
