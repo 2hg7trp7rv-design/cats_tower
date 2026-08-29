@@ -115,6 +115,7 @@ const allowed = [
   /^index\.html$/,
   /^sw\.js$/,
   /^runtime\/s02-(runtime|battle-renderer)\.(css|js)$/,
+  /^step4\/s02\/assets\/s02-forest-approved\.webp$/,
   /^tests\/step4\/(verify-s02-runtime-integration|s02-runtime-browser-qa)\.mjs$/,
   /^\.github\/workflows\/(verify|apply)-step-4-s02-runtime-integration\.yml$/,
   /^quality-reviews\/step-4-twelve-screen-final-mockups\/s02-runtime-integration-[^/]+\.json$/,
