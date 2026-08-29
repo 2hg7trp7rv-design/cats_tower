@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-s02-runtime-integration-acceptance-round-001",
+  "createdAt": "2026-08-29",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "entry": {
+    "head": "4e5cc9923c7db37e21001407f3bcd8a77fb48504",
+    "tree": "53d3ab025d68f52ddc383256276b41b3b349888d"
+  },
+  "trigger": "The user explicitly instructed GitHub work to reflect the approved S02 visual system into the actual playable game screen in the correct form, not merely leave it in the isolated Step 4 route.",
+  "status": "ACTIVE_BEFORE_FIRST_RUNTIME_INTEGRATION_WRITE",
+  "step4Pass": false,
+  "step5Allowed": false,
+  "productionAliasChangeAllowed": false,
+  "physicalIPhoneVerified": false,
+  "scope": {
+    "screen": "S02 auto-battle and follow",
+    "actualEntryPoint": "/",
+    "integrationType": "limited Step 4 runtime visual integration bridge",
+    "goal": "Make the live game entry render the approved S02 shell while preserving and visibly driving the existing playable game engine and save state.",
+    "notAuthorized": [
+      "broad Step 5 implementation",
+      "backend or permanent economy mutation",
+      "payment provider",
+      "advertising provider",
+      "Production alias change",
+      "physical-iPhone PASS claim"
+    ]
+  },
+  "bindingAuthorities": {
+    "visual": "The user-approved S02 portrait battle image plus the project-source completed-screen images.",
+    "semantic": "The current sealed Cat's Tower canon and the actual values exposed by window.__game.",
+    "governance": "This acceptance and active-change-control-addendum-round-020 supersede the isolated-only restriction in round-019 solely for the listed runtime integration paths."
+  },
+  "requiredImplementation": [
+    "The root index.html must load and display the S02 visual shell after the existing title/start flow.",
+    "The existing Game instance, save key, simulation loop, battle progression, summon action, shops, tower return and modal flows must remain functional.",
+    "The battle scene must show current game state; balances, floors, units, enemies and action availability must not be fabricated.",
+    "The approved background, warm wood/brass chrome, contextual floor strip, actual-action rail, merchant layer and five-tab navigation must be present on the root game entry.",
+    "Controls must invoke an existing real action, navigate to an existing real system, or be explicitly disabled/pending; fake success feedback is forbidden.",
+    "The implementation must not flatten the approved screen into one interactive screenshot or iframe the isolated prototype.",
+    "Japanese labels and numbers must remain controlled DOM text.",
+    "The isolated /step4/s02 route remains evidence and design reference; the root integration must be a separate runtime layer.",
+    "The service worker must version and cache the new runtime shell files without changing Production aliasing."
+  ],
+  "allowedPaths": [
+    "index.html",
+    "app.js",
+    "sw.js",
+    "runtime/s02-runtime.css",
+    "runtime/s02-runtime.js",
+    "tests/step4/verify-s02-runtime-integration.mjs",
+    "tests/step4/s02-runtime-browser-qa.mjs",
+    ".github/workflows/verify-step-4-s02-runtime-integration.yml",
+    ".github/workflows/apply-step-4-s02-runtime-integration.yml",
+    "quality-reviews/step-4-twelve-screen-final-mockups/s02-runtime-integration-*",
+    "quality-reviews/step-1-canonical-design/active-change-control.json",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-020.json",
+    "PROJECT_STATUS.json",
+    "AI_PROJECT_POLICY.json",
+    "simulation/CURRENT_STATUS.json",
+    "QUALITY_GATE.md",
+    ".github/workflows/CURRENT_STATUS.md",
+    "PROJECT_HANDOVER.md",
+    "AGENTS.md"
+  ],
+  "forbiddenPathsAndEffects": [
+    "game-core.js",
+    "game-data.js",
+    "simulation candidate or executable seal mutation",
+    "backend",
+    "payment provider",
+    "ad network",
+    "other branch write",
+    "PR operation",
+    "Production alias",
+    "physical-iPhone PASS claim"
+  ],
+  "browserAcceptance": {
+    "viewports": [
+      "320x667",
+      "375x667",
+      "390x844"
+    ],
+    "required": [
+      "root title/start flow reaches the integrated S02 game shell",
+      "window.__game exists and advances",
+      "root runtime floor display matches window.__game.floor",
+      "summon control changes actual game state",
+      "agency, shop and tower-return controls resolve to real existing systems or explicit unavailable states",
+      "no horizontal overflow",
+      "bottom navigation remains reachable",
+      "no console errors or uncaught page errors",
+      "reduced-motion mode removes nonessential looping motion",
+      "browser large-text simulation preserves primary actions"
+    ]
+  },
+  "automaticFailConditions": [
+    "root entry still shows only the legacy purple HUD after start",
+    "S02 exists only under /step4/s02 and is not loaded by the root game",
+    "approved screen is used as one flattened background",
+    "runtime shell displays invented balances or invented action completion",
+    "existing game loop or save flow is broken",
+    "new controls are clickable but do not invoke a real action or explicit unavailable response",
+    "CI checks only the isolated prototype and not the root entry",
+    "unresolved P0 is greater than zero",
+    "Step 4 PASS or Step 5 authorization is claimed from this integration alone"
+  ],
+  "completionBoundary": {
+    "integrationCheckpointMayPass": true,
+    "s02FinalVisualApprovalStillRequired": true,
+    "step4Pass": false,
+    "step5Allowed": false,
+    "productionChanged": false,
+    "physicalIPhoneVerified": false
+  }
+}
