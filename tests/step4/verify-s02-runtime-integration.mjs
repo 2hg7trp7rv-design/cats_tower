@@ -17,6 +17,7 @@ const requiredFiles = [
   'game-data.js',
   'sw.js',
   'runtime/s02-runtime.css',
+  'runtime/s02-runtime-fixes.css',
   'runtime/s02-runtime.js',
   'runtime/s02-battle-renderer.js',
   'step4/s02/assets/s02-forest-approved.webp',
@@ -28,6 +29,7 @@ for (const file of requiredFiles) assert(exists(file), `Missing required runtime
 
 const html = read('index.html');
 const css = read('runtime/s02-runtime.css');
+const fixes = read('runtime/s02-runtime-fixes.css');
 const runtime = read('runtime/s02-runtime.js');
 const renderer = read('runtime/s02-battle-renderer.js');
 const sw = read('sw.js');
@@ -35,6 +37,7 @@ const sw = read('sw.js');
 for (const token of [
   'data-testid="s02-runtime-shell"',
   'runtime/s02-runtime.css',
+  'runtime/s02-runtime-fixes.css',
   'runtime/s02-runtime.js',
   'id="battle"',
   'id="btn-summon"',
@@ -51,7 +54,7 @@ for (const token of [
 
 assert((html.match(/class="runtime-nav-button/g) || []).length === 5, 'Root game must expose five bottom navigation buttons.');
 assert(!/<iframe\b/i.test(html), 'Iframe integration is forbidden.');
-assert(!/a_full_screen_pixel_art_mobile_game_ui/i.test(html + css + runtime + renderer), 'Flattened generated game-screen image is forbidden.');
+assert(!/a_full_screen_pixel_art_mobile_game_ui/i.test(html + css + fixes + runtime + renderer), 'Flattened generated game-screen image is forbidden.');
 assert(!/\son[a-z]+\s*=/i.test(html), 'Inline event handlers are forbidden.');
 
 for (const token of [
@@ -82,9 +85,11 @@ assert(css.includes('env(safe-area-inset-top'), 'Safe-area top inset is missing.
 assert(css.includes('env(safe-area-inset-bottom'), 'Safe-area bottom inset is missing.');
 assert(css.includes('@media (prefers-reduced-motion: reduce)'), 'Reduced-motion CSS is missing.');
 assert(css.includes('body.runtime-large-text'), 'Large-text simulation styling is missing.');
+assert(fixes.includes('.sheet') && fixes.includes('z-index: 82'), 'Runtime sheet/nav stacking fix is missing.');
 
 for (const token of [
   "'runtime/s02-runtime.css'",
+  "'runtime/s02-runtime-fixes.css'",
   "'runtime/s02-runtime.js'",
   "'runtime/s02-battle-renderer.js'",
   "'step4/s02/assets/s02-forest-approved.webp'",
@@ -114,7 +119,7 @@ const entryHead = '4e5cc9923c7db37e21001407f3bcd8a77fb48504';
 const allowed = [
   /^index\.html$/,
   /^sw\.js$/,
-  /^runtime\/s02-(runtime|battle-renderer)\.(css|js)$/,
+  /^runtime\/s02-(runtime|runtime-fixes|battle-renderer)\.(css|js)$/,
   /^step4\/s02\/assets\/s02-forest-approved\.webp$/,
   /^tests\/step4\/(verify-s02-runtime-integration|s02-runtime-browser-qa)\.mjs$/,
   /^\.github\/workflows\/(verify|apply)-step-4-s02-runtime-integration\.yml$/,
