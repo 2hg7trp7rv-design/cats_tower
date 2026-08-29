@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-s02-main-runtime-integration-acceptance-round-001",
+  "createdAt": "2026-08-29",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "trigger": "The user explicitly required the approved S02 implementation to be reflected at the actual game entry point through GitHub, rather than existing only as an isolated Step 4 route.",
+  "status": "ACTIVE_BEFORE_FIRST_MAIN_ENTRY_WRITE",
+  "step4Pass": false,
+  "step5Allowed": false,
+  "scope": {
+    "screen": "S02 auto-battle and follow",
+    "actualGameEntry": "/",
+    "canonicalScreenSource": "/step4/s02/",
+    "integrationType": "same-origin componentized main-entry bridge on the existing kimi branch",
+    "productionAliasChangeAllowed": false,
+    "backendOrPermanentEconomyAllowed": false,
+    "physicalIPhonePassAllowed": false
+  },
+  "authorizedWrites": [
+    "index.html",
+    "legacy.html",
+    "step4/s02/index.html",
+    "step4/s02/root-entry.js",
+    "step4/s02/production.css",
+    "tests/step4/s02-main-entry-*.mjs",
+    ".github/workflows/verify-step-4-s02-anchor.yml",
+    "quality-reviews/step-4-twelve-screen-final-mockups/s02-*",
+    "quality-reviews/step-1-canonical-design/active-change-control*.json",
+    "Step 4 status mirrors"
+  ],
+  "protectedUnchangedFiles": [
+    "app.js",
+    "styles.css",
+    "game-core.js",
+    "game-data.js",
+    "sw.js",
+    "manifest.webmanifest",
+    "simulation/candidate-v2.json",
+    "simulation/executable-seal-v2.json"
+  ],
+  "requiredIntegration": [
+    "The root URL renders the same componentized S02 shell used by the isolated route.",
+    "The root URL must not use an iframe, object embed, flattened screenshot, or location redirect as the implementation.",
+    "The old Canvas runtime entry document is preserved at /legacy.html before root replacement.",
+    "The S02 source remains single-authority; root composition must not create a divergent second markup copy.",
+    "All active S02 visual layers are explicitly loaded by both the isolated route and the root entry.",
+    "Auto, speed, skill cooldown, merchant support and bottom navigation remain functional at the root URL.",
+    "Japanese labels remain controlled DOM text rather than rasterized generated text.",
+    "A visible load failure state links to the preserved legacy runtime."
+  ],
+  "browserAcceptance": {
+    "requiredUrls": [
+      "/",
+      "/step4/s02/",
+      "/legacy.html"
+    ],
+    "requiredViewports": [
+      "320x667",
+      "375x667",
+      "390x844"
+    ],
+    "rules": [
+      "root and isolated S02 expose data-testid=s02-shell and data-ready=true",
+      "root contains no iframe, object, embed, meta refresh or location redirect",
+      "root has no horizontal overflow",
+      "root bottom navigation is reachable",
+      "root interaction smoke flow passes",
+      "root console and page error counts are zero",
+      "legacy runtime document remains retrievable",
+      "reduced-motion and browser large-text simulations retain the primary controls"
+    ]
+  },
+  "automaticFailConditions": [
+    "Only repository files are added but the root game URL still displays the old screen.",
+    "The root merely redirects to the isolated route.",
+    "The approved screen is used as a single full-screen bitmap.",
+    "The old runtime is overwritten without a recoverable preserved entry.",
+    "Production alias, backend, payment, ads or permanent player economy are changed.",
+    "Step 4 PASS or physical-iPhone PASS is claimed from this checkpoint.",
+    "Actual root browser screenshots are absent.",
+    "User approval is assumed rather than observed."
+  ],
+  "completionBoundary": {
+    "thisAcceptanceMayAuthorize": "A verified S02 main-entry integration checkpoint on live kimi and its Preview deployment.",
+    "thisAcceptanceMayNotAuthorize": "Step 4 PASS, Step 5, Production, backend, payment, ads, or physical-iPhone PASS."
+  }
+}
