@@ -12,6 +12,29 @@
   let toastTimer = 0;
   let mirrorTimer = 0;
 
+  function mountActualStateRenderer() {
+    const legacyCanvas = byId('battle');
+    if (!legacyCanvas) return;
+    let runtimeCanvas = byId('runtime-battle-canvas');
+    if (!runtimeCanvas) {
+      runtimeCanvas = document.createElement('canvas');
+      runtimeCanvas.id = 'runtime-battle-canvas';
+      runtimeCanvas.className = 'runtime-battle-canvas';
+      runtimeCanvas.setAttribute('aria-hidden', 'true');
+      legacyCanvas.insertAdjacentElement('afterend', runtimeCanvas);
+    }
+    if (!document.querySelector('script[data-s02-battle-renderer]')) {
+      const script = document.createElement('script');
+      script.src = 'runtime/s02-battle-renderer.js';
+      script.async = true;
+      script.dataset.s02BattleRenderer = 'true';
+      script.addEventListener('error', () => {
+        shell.dataset.rendererReady = 'error';
+      });
+      document.head.appendChild(script);
+    }
+  }
+
   const query = new URLSearchParams(window.location.search);
   if (query.get('largeText') === '1') document.body.classList.add('runtime-large-text');
 
@@ -181,6 +204,7 @@
     if (mirrorGameState()) {
       window.clearInterval(mirrorTimer);
       mirrorTimer = window.setInterval(mirrorGameState, 250);
+      mountActualStateRenderer();
       window.__s02Runtime = Object.freeze({
         ready: true,
         version: 'runtime-integration-round-001',
