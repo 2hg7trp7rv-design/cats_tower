@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-active-change-control-addendum-round-022",
+  "createdAt": "2026-08-29",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "trigger": "The user explicitly ordered the approved S02 screen to be correctly reflected at the actual game entry point through GitHub.",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS_STEP4_S02_MAIN_ENTRY_INTEGRATION",
+  "advanceAllowed": false,
+  "step4Allowed": true,
+  "step5Allowed": false,
+  "bindingAcceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-runtime-integration-acceptance-round-001.json",
+  "scopeChange": {
+    "previousBoundary": "S02 existed only as an isolated Step 4 route.",
+    "newlyAllowed": "A same-origin, componentized S02 integration bridge at the root game entry on live kimi, with the old Canvas entry preserved at /legacy.html and dedicated root browser evidence.",
+    "stillForbidden": "Step 5 implementation, backend, payment provider, ad network, permanent economy mutation, Production alias change, PR operation and physical-iPhone PASS claim."
+  },
+  "architecturalDecision": {
+    "singleScreenAuthority": "/step4/s02/",
+    "rootComposition": "The root entry imports and mounts the S02 shell into the root DOM without iframe, object embed, flattened screenshot or redirect.",
+    "legacyPreservation": "/legacy.html retains the previous root document and continues using the unchanged legacy app.js, styles.css, game-core.js and game-data.js.",
+    "futureStep5": "After all Step 4 screens pass, the temporary same-origin bridge will be replaced by the final multi-screen runtime architecture."
+  },
+  "requiredSequence": [
+    "Preserve the current root document at legacy.html before replacing the root entry.",
+    "Create the root S02 composition module and consolidated active visual stylesheet.",
+    "Connect the actual root URL to the componentized S02 shell.",
+    "Extend static and browser QA to test root, isolated S02 and legacy entry.",
+    "Capture exact-head root screenshots for all required viewports plus large-text and reduced-motion states.",
+    "Verify an exact-commit Vercel Preview without changing Production.",
+    "Synchronize Step 4 status mirrors and record a terminal integration read-back.",
+    "Keep Step 4 IN_PROGRESS and Step 5 blocked until the user approves the actual root render and the remaining anchor screens pass."
+  ],
+  "currentWriteBoundary": {
+    "allowed": [
+      "index.html",
+      "legacy.html",
+      "step4/s02/**",
+      "tests/step4/s02-*.mjs",
+      ".github/workflows/verify-step-4-s02-anchor.yml",
+      "quality-reviews/step-4-twelve-screen-final-mockups/**",
+      "quality-reviews/step-1-canonical-design/active-change-control*.json",
+      "Step 4 status mirrors"
+    ],
+    "forbidden": [
+      "app.js",
+      "styles.css",
+      "game-core.js",
+      "game-data.js",
+      "sw.js",
+      "manifest.webmanifest",
+      "simulation/candidate-v2.json",
+      "simulation/executable-seal-v2.json",
+      "backend",
+      "payment provider",
+      "ad network",
+      "other branch",
+      "PR operation",
+      "Production alias",
+      "physical-iPhone PASS claim",
+      "Step 4 PASS claim before final judge"
+    ]
+  },
+  "scopeReadback": {
+    "step4Status": "IN_PROGRESS",
+    "step5Allowed": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "otherBranchWritten": false,
+    "pullRequestOperation": false
+  }
+}
