@@ -1,72 +1,80 @@
-/* Cat's Tower — 商人サーガ風ドット絵版 Service Worker
- * シェル+新規素材(saga/フォント)を precache。画像は network-first
- * (後から追加・差替えされた画像が反映されるようにする)。 */
-const CACHE = 'cats-tower-saga-v6';
+/* Cat's Tower — S02 runtime shell Service Worker.
+ * The playable shell is precached; image assets stay network-first so visual
+ * revisions appear immediately and fall back to cache when offline.
+ */
+const CACHE = 'cats-tower-s02-runtime-v7';
 const SHELL = [
   './',
   'index.html',
   'styles.css',
+  'runtime/s02-runtime.css',
+  'runtime/s02-runtime.js',
   'game-data.js',
   'game-core.js',
   'app.js',
   'manifest.webmanifest',
-  // ドット絵フォント
   'assets/fonts/DotGothic16-Regular.ttf',
-  // 商人サーガ風 自作素材
-  'assets/saga/bg_corridor.webp',
+  'step4/s02/assets/s02-forest-approved.webp',
+  'step4/s02/assets/s02-ui-icons.svg',
+  'step4/s02/assets/s02-frame.svg',
+  'step4/s02/assets/s02-sprites.svg',
+  'assets/prototype/cats/mugi.png',
+  'assets/prototype/cats/luna.png',
+  'assets/prototype/cats/slinger.png',
+  'assets/prototype/cats/toto.png',
+  'assets/prototype/cats/kohaku.png',
+  'assets/prototype/enemies/ash_mouse.png',
+  'assets/prototype/enemies/sack_mole.png',
+  'assets/prototype/enemies/blackwing_guard.png',
+  'assets/prototype/shops/fish_diner.png',
+  'assets/prototype/shops/clinic.png',
+  'assets/prototype/shops/claw_forge.png',
   'assets/saga/bg_title.webp',
   'assets/saga/castle_gate.webp',
   'assets/saga/shop_agency.webp',
   'assets/saga/shop_item.webp',
   'assets/saga/shop_legend.webp',
-  'assets/saga/shop_weapon.webp',
-  'assets/saga/cat_gray_0.png',
-  'assets/saga/cat_gray_1.png',
-  'assets/saga/cat_gray_2.png',
-  'assets/saga/cat_gray_3.png',
-  'assets/saga/cat_black_0.png',
-  'assets/saga/cat_black_1.png',
-  'assets/saga/cat_black_2.png',
-  'assets/saga/cat_black_3.png',
-  'assets/saga/cat_calico_0.png',
-  'assets/saga/cat_calico_1.png',
-  'assets/saga/cat_calico_2.png',
-  'assets/saga/cat_calico_3.png'
+  'assets/saga/shop_weapon.webp'
 ];
 
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE)
+      .then(cache => cache.addAll(SHELL))
+      .then(() => self.skipWaiting())
+  );
 });
 
-self.addEventListener('activate', e => {
-  e.waitUntil(
+self.addEventListener('activate', event => {
+  event.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key))))
       .then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('fetch', e => {
-  const url = new URL(e.request.url);
-  if (e.request.method !== 'GET' || url.origin !== location.origin) return;
-  if (url.pathname.startsWith('/assets/')) {
-    // 画像は network-first (追加・差替えを即反映)。失敗時はキャッシュ/404。
-    e.respondWith(
-      fetch(e.request)
-        .then(res => {
-          const copy = res.clone();
-          caches.open(CACHE).then(c => c.put(e.request, copy));
-          return res;
+self.addEventListener('fetch', event => {
+  const url = new URL(event.request.url);
+  if (event.request.method !== 'GET' || url.origin !== location.origin) return;
+
+  if (url.pathname.startsWith('/assets/') || url.pathname.startsWith('/step4/s02/assets/')) {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          const copy = response.clone();
+          caches.open(CACHE).then(cache => cache.put(event.request, copy));
+          return response;
         })
-        .catch(() => caches.match(e.request))
+        .catch(() => caches.match(event.request))
     );
     return;
   }
-  e.respondWith(
-    caches.match(e.request).then(hit => hit || fetch(e.request).then(res => {
-      const copy = res.clone();
-      caches.open(CACHE).then(c => c.put(e.request, copy));
-      return res;
+
+  event.respondWith(
+    caches.match(event.request).then(hit => hit || fetch(event.request).then(response => {
+      const copy = response.clone();
+      caches.open(CACHE).then(cache => cache.put(event.request, copy));
+      return response;
     }))
   );
 });
