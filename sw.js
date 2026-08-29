@@ -2,13 +2,14 @@
  * The playable shell is precached; image assets stay network-first so visual
  * revisions appear immediately and fall back to cache when offline.
  */
-const CACHE = 'cats-tower-s02-runtime-v7';
+const CACHE = 'cats-tower-s02-runtime-v8';
 const SHELL = [
   './',
   'index.html',
   'styles.css',
   'runtime/s02-runtime.css',
   'runtime/s02-runtime.js',
+  'runtime/s02-battle-renderer.js',
   'game-data.js',
   'game-core.js',
   'app.js',
