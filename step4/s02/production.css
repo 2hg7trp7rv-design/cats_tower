@@ -1,0 +1,253 @@
+/*
+ * Cat's Tower S02 active visual layer.
+ * Loaded after styles.css and refinement.css by both /step4/s02/ and the root
+ * integration entry. The isolated Step 4 source remains authoritative.
+ */
+@import url("./art-round004.css");
+
+:root {
+  --s02-frame-light: #ffe39a;
+  --s02-frame-mid: #d99a35;
+  --s02-frame-dark: #5d2a14;
+  --s02-panel-deep: #21100b;
+}
+
+.s02-shell .battle-stage {
+  min-height: clamp(308px, 39svh, 338px);
+  background-color: #79945b;
+  background-image:
+    linear-gradient(180deg, rgba(255, 239, 183, .06), rgba(38, 18, 8, .18)),
+    url("./assets/s02-forest-approved.webp"),
+    url("/assets/prototype/bg/floor_living.png");
+  background-position: center, center 54%, center 58%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.s02-shell .battle-stage::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 54% 0 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, transparent, rgba(38, 19, 9, .14)),
+    radial-gradient(ellipse at 50% 100%, rgba(255, 222, 139, .16), transparent 68%);
+}
+
+.s02-shell .battle-unit,
+.s02-shell .round-control,
+.s02-shell .shortcut-rail,
+.s02-shell .event-banner {
+  z-index: 6;
+}
+
+.s02-shell .wood-frame,
+.s02-shell .ornate-panel {
+  border-color: var(--s02-frame-mid);
+  box-shadow:
+    inset 0 0 0 1px #160704,
+    inset 0 0 0 3px rgba(112, 48, 20, .94),
+    inset 0 1px 0 rgba(255, 233, 169, .38),
+    0 3px 0 #110503,
+    0 8px 18px rgba(0, 0, 0, .36);
+}
+
+.s02-shell .player-bar,
+.s02-shell .context-bar,
+.s02-shell .skill-row,
+.s02-shell .party-roster,
+.s02-shell .support-deck,
+.s02-shell .bottom-nav {
+  background-color: var(--s02-panel-deep);
+  background-image:
+    linear-gradient(180deg, rgba(82, 43, 25, .98), rgba(27, 12, 8, .995)),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 6px);
+}
+
+.s02-shell .skill-button,
+.s02-shell .shortcut,
+.s02-shell .roster-card,
+.s02-shell .action-button,
+.s02-shell .support-card,
+.s02-shell .support-summary,
+.s02-shell .support-button,
+.s02-shell .nav-button {
+  border-color: #d9a044;
+  box-shadow:
+    inset 0 0 0 1px rgba(25, 9, 5, .92),
+    inset 0 0 0 2px rgba(111, 53, 23, .66),
+    0 2px 0 #100503;
+}
+
+.s02-shell .skill-button:focus-visible,
+.s02-shell .shortcut:focus-visible,
+.s02-shell .roster-card:focus-visible,
+.s02-shell .action-button:focus-visible,
+.s02-shell .support-button:focus-visible,
+.s02-shell .nav-button:focus-visible,
+.s02-shell .resource-card:focus-visible,
+.s02-shell .menu-button:focus-visible,
+.s02-shell .next-target:focus-visible {
+  outline: 3px solid #fff2b2;
+  outline-offset: 2px;
+}
+
+.s02-shell .ally img,
+.s02-shell .enemy img {
+  image-rendering: pixelated;
+  filter: drop-shadow(0 5px 2px rgba(20, 8, 4, .58));
+}
+
+.s02-shell .unit-warrior img,
+.s02-shell .roster-card:nth-child(1) img,
+.s02-shell .profile-button .portrait-frame img {
+  content: url("/assets/prototype/cats/mugi.png");
+}
+
+.s02-shell .unit-sage img,
+.s02-shell .roster-card:nth-child(2) img {
+  content: url("/assets/prototype/cats/luna.png");
+}
+
+.s02-shell .unit-mage img,
+.s02-shell .roster-card:nth-child(5) img {
+  content: url("/assets/prototype/cats/kohaku.png");
+}
+
+.s02-shell .unit-ranger img,
+.s02-shell .roster-card:nth-child(3) img {
+  content: url("/assets/prototype/cats/slinger.png");
+}
+
+.s02-shell .event-banner img,
+.s02-shell .roster-card:nth-child(4) img {
+  content: url("/assets/prototype/cats/toto.png");
+}
+
+.s02-shell .enemy-small:not(.enemy-b) img {
+  content: url("/assets/prototype/enemies/ash_mouse.png");
+}
+
+.s02-shell .enemy-b img {
+  content: url("/assets/prototype/enemies/sack_mole.png");
+}
+
+.s02-shell .enemy-large img {
+  content: url("/assets/prototype/enemies/blackwing_guard.png");
+}
+
+.s02-shell .enemy {
+  filter: none;
+}
+
+.s02-shell .support-card:nth-child(1) {
+  background-image: url("/assets/prototype/shops/fish_diner.png");
+}
+
+.s02-shell .support-card:nth-child(2) {
+  background-image: url("/assets/prototype/shops/clinic.png");
+}
+
+.s02-shell .support-card:nth-child(3) {
+  background-image: url("/assets/prototype/shops/claw_forge.png");
+}
+
+.s02-shell .support-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-position: center;
+  background-size: cover;
+}
+
+.s02-shell .support-card::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(22, 9, 5, .18), rgba(20, 8, 5, .9));
+}
+
+.s02-shell .support-card > span {
+  display: none;
+}
+
+.s02-shell .support-card strong,
+.s02-shell .support-card p,
+.s02-shell .support-card small {
+  text-shadow: 0 2px 1px #120604, 1px 0 1px #120604;
+}
+
+.main-entry-loading,
+.main-entry-failure {
+  display: grid;
+  place-content: center;
+  gap: 12px;
+  width: min(100vw, 430px);
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: 24px;
+  color: #f8e8c3;
+  text-align: center;
+  background: linear-gradient(180deg, #442417, #160b08);
+  border-inline: 2px solid #d99a35;
+}
+
+.main-entry-loading p,
+.main-entry-failure p {
+  margin: 0;
+}
+
+.main-entry-spinner {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto;
+  border: 6px solid rgba(255, 226, 154, .24);
+  border-top-color: #f1b94e;
+  border-radius: 50%;
+  animation: s02-entry-spin .8s linear infinite;
+}
+
+.main-entry-error {
+  overflow-wrap: anywhere;
+  color: #ffc8b8;
+  font-size: 12px;
+}
+
+.main-entry-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.main-entry-actions button,
+.main-entry-actions a {
+  min-width: 120px;
+  min-height: 44px;
+  padding: 10px 14px;
+  color: #fff0c8;
+  font: inherit;
+  text-decoration: none;
+  background: linear-gradient(#7b4825, #3a1b10);
+  border: 2px solid #e4ad4b;
+}
+
+@keyframes s02-entry-spin {
+  to { transform: rotate(1turn); }
+}
+
+@media (max-width: 359px) {
+  .s02-shell .battle-stage {
+    min-height: 300px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-entry-spinner,
+  .s02-shell .ally img,
+  .s02-shell .enemy img {
+    animation: none !important;
+  }
+}
