@@ -11,6 +11,8 @@ on:
       - "runtime/s02-runtime.css"
       - "runtime/s02-runtime.js"
       - "runtime/s02-battle-renderer.js"
+      - "step4/s02/assets/s02-forest-approved.webp"
+      - "step4/s02/assets/s02-ui-icons.svg"
       - "tests/step4/verify-s02-runtime-integration.mjs"
       - "tests/step4/s02-runtime-browser-qa.mjs"
       - "quality-reviews/step-4-twelve-screen-final-mockups/s02-runtime-integration-*"
