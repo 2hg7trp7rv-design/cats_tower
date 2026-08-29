@@ -1,0 +1,118 @@
+name: Verify Step 4 S02 runtime integration
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - kimi
+    paths:
+      - "index.html"
+      - "sw.js"
+      - "runtime/s02-runtime.css"
+      - "runtime/s02-runtime.js"
+      - "runtime/s02-battle-renderer.js"
+      - "tests/step4/verify-s02-runtime-integration.mjs"
+      - "tests/step4/s02-runtime-browser-qa.mjs"
+      - "quality-reviews/step-4-twelve-screen-final-mockups/s02-runtime-integration-*"
+      - "quality-reviews/step-1-canonical-design/active-change-control.json"
+      - "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-020.json"
+      - "PROJECT_STATUS.json"
+      - "AI_PROJECT_POLICY.json"
+      - "simulation/CURRENT_STATUS.json"
+      - "QUALITY_GATE.md"
+      - ".github/workflows/CURRENT_STATUS.md"
+      - "PROJECT_HANDOVER.md"
+      - "AGENTS.md"
+      - ".github/workflows/verify-step-4-s02-runtime-integration.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-step4-s02-runtime-kimi
+  cancel-in-progress: true
+
+jobs:
+  verify-runtime-integration:
+    name: Root game static and Chromium evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout exact kimi commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Assert repository and branch boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${GITHUB_REPOSITORY}" = "2hg7trp7rv-design/cats_tower"
+          test "${GITHUB_REF_NAME}" = "kimi"
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          git merge-base --is-ancestor 4e5cc9923c7db37e21001407f3bcd8a77fb48504 HEAD
+          echo "head=$(git rev-parse HEAD)"
+          echo "tree=$(git rev-parse HEAD^{tree})"
+
+      - name: Run fail-closed root integration contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          node tests/step4/verify-s02-runtime-integration.mjs | tee s02-runtime-static-report.json
+
+      - name: Install pinned Playwright and Chromium
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/s02-runtime-playwright
+          cd /tmp/s02-runtime-playwright
+          npm init -y >/dev/null 2>&1
+          npm install --save-exact playwright@1.62.1
+          npx playwright install --with-deps chromium
+
+      - name: Start exact-head root game preview
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/s02-runtime-http.log 2>&1 &
+          echo $! > /tmp/s02-runtime-http.pid
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4173/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/s02-runtime-http.log
+          exit 1
+
+      - name: Run root game Chromium integration QA
+        shell: bash
+        env:
+          PLAYWRIGHT_PACKAGE: /tmp/s02-runtime-playwright/node_modules/playwright
+          S02_RUNTIME_BASE_URL: http://127.0.0.1:4173/
+          S02_RUNTIME_EVIDENCE_DIR: quality-reviews/step-4-twelve-screen-final-mockups/s02-runtime-integration-browser-evidence
+        run: |
+          set -euo pipefail
+          node tests/step4/s02-runtime-browser-qa.mjs
+
+      - name: Verify evidence payload and patch hygiene
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f quality-reviews/step-4-twelve-screen-final-mockups/s02-runtime-integration-browser-evidence/report.json
+          test "$(find quality-reviews/step-4-twelve-screen-final-mockups/s02-runtime-integration-browser-evidence -maxdepth 1 -name '*.png' | wc -l | tr -d ' ')" = "6"
+          grep -q 'PASS_S02_RUNTIME_BROWSER_INTEGRATION' quality-reviews/step-4-twelve-screen-final-mockups/s02-runtime-integration-browser-evidence/report.json
+          git diff --check 4e5cc9923c7db37e21001407f3bcd8a77fb48504..HEAD
+
+      - name: Upload exact-head root game evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: step4-s02-runtime-integration-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 30
+          path: |
+            s02-runtime-static-report.json
+            quality-reviews/step-4-twelve-screen-final-mockups/s02-runtime-integration-browser-evidence/**
+            /tmp/s02-runtime-http.log
