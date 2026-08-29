@@ -16,3 +16,22 @@
 #stage.s02-runtime-shell .modal:not([hidden]) {
   pointer-events: auto;
 }
+
+#stage.s02-runtime-shell .runtime-nav-button.is-pending {
+  position: relative;
+  opacity: .68;
+}
+
+#stage.s02-runtime-shell .runtime-nav-button.is-pending::after {
+  content: "準備中";
+  position: absolute;
+  right: 3px;
+  top: 2px;
+  padding: 1px 3px;
+  color: #fff1c5;
+  font-size: 6px;
+  line-height: 1;
+  background: #8a3d2e;
+  border: 1px solid #e1a94d;
+  border-radius: 3px;
+}
