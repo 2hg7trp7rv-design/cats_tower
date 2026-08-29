@@ -38,6 +38,13 @@
   const query = new URLSearchParams(window.location.search);
   if (query.get('largeText') === '1') document.body.classList.add('runtime-large-text');
 
+  const pendingEventsButton = document.querySelector('.runtime-nav-button[data-runtime-action="events"]');
+  if (pendingEventsButton) {
+    pendingEventsButton.removeAttribute('aria-disabled');
+    pendingEventsButton.setAttribute('aria-label', '催事は制作中');
+    pendingEventsButton.classList.add('is-pending');
+  }
+
   function showToast(message, duration = 1700) {
     if (!toast) return;
     window.clearTimeout(toastTimer);
@@ -142,7 +149,7 @@
         performRuntimeAction(button.dataset.runtimeAction);
         return;
       }
-      if (button.classList.contains('runtime-nav-button')) setActiveNav(button);
+      if (button.classList.contains('runtime-nav-button') && !button.classList.contains('is-pending')) setActiveNav(button);
       performRuntimeAction(button.dataset.runtimeAction);
     });
   });
