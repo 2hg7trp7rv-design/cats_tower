@@ -1,4 +1,4 @@
-name: Execute Step 4 S02 main entry v2
+name: Apply Step 4 S02 viewport recovery
 
 on:
   workflow_dispatch:
@@ -12,14 +12,14 @@ permissions:
   contents: write
 
 concurrency:
-  group: execute-step4-s02-main-entry-v2-kimi
+  group: apply-step4-s02-viewport-recovery-kimi
   cancel-in-progress: false
 
 jobs:
-  execute:
-    name: Apply, browser-verify, evidence and status sync v2
+  apply:
+    name: Apply two-file viewport accessibility repair
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 10
 
     steps:
       - name: Checkout latest existing kimi
@@ -28,156 +28,92 @@ jobs:
           ref: kimi
           fetch-depth: 0
 
-      - name: Assert repository and branch boundary
+      - name: Assert repository, branch and recovery authority
         shell: bash
         run: |
           set -euo pipefail
           test "${GITHUB_REPOSITORY}" = "2hg7trp7rv-design/cats_tower"
           test "$(git branch --show-current)" = "kimi"
           git pull --ff-only origin kimi
-          echo "entry_head=$(git rev-parse HEAD)"
-          echo "entry_tree=$(git rev-parse HEAD^{tree})"
+          test -f quality-reviews/step-1-canonical-design/active-change-control-addendum-round-023.json
+          grep -q 'IN_PROGRESS_STEP4_S02_MAIN_ENTRY_GOVERNANCE_RECOVERY' \
+            quality-reviews/step-1-canonical-design/active-change-control-addendum-round-023.json
 
-      - name: Apply deterministic main-entry integration
+      - name: Apply exact viewport replacements
         shell: bash
         run: |
           set -euo pipefail
-          node tests/step4/apply-s02-main-entry.mjs | tee /tmp/s02-main-entry-apply-execute-report.json
-          test "$(git hash-object legacy.html)" = "c5871ded0f7fbb501dce08e2b0da767841ce789b"
-          grep -q '/step4/s02/root-entry.js' index.html
-          grep -q 'href="./production.css"' step4/s02/index.html
+          python3 - <<'PY'
+          from pathlib import Path
+
+          replacements = {
+              Path('index.html'): (
+                  'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover',
+                  'width=device-width, initial-scale=1.0, viewport-fit=cover',
+              ),
+              Path('step4/s02/index.html'): (
+                  'width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1',
+                  'width=device-width, initial-scale=1, viewport-fit=cover',
+              ),
+          }
+
+          for file, (old, new) in replacements.items():
+              text = file.read_text(encoding='utf-8')
+              if old not in text:
+                  if new in text:
+                      print(f'{file}: already repaired')
+                      continue
+                  raise SystemExit(f'{file}: expected viewport source string not found')
+              if text.count(old) != 1:
+                  raise SystemExit(f'{file}: expected exactly one viewport source string')
+              file.write_text(text.replace(old, new), encoding='utf-8')
+              print(f'{file}: repaired')
+          PY
+          grep -q 'viewport-fit=cover' index.html
+          grep -q 'viewport-fit=cover' step4/s02/index.html
+          ! grep -Eq 'user-scalable[[:space:]]*=[[:space:]]*no|maximum-scale[[:space:]]*=[[:space:]]*1([.,]|$)' index.html
+          ! grep -Eq 'user-scalable[[:space:]]*=[[:space:]]*no|maximum-scale[[:space:]]*=[[:space:]]*1([.,]|$)' step4/s02/index.html
           git diff --check
 
-      - name: Run fail-closed root integration contract
+      - name: Assert two-file mutation boundary
         shell: bash
         run: |
           set -euo pipefail
-          node tests/step4/s02-static-contract-v3.mjs | tee s02-static-v3-report.json
-          cp s02-static-v3-report.json /tmp/s02-static-v3-report.json
-
-      - name: Install pinned Playwright and Chromium
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p /tmp/s02-playwright
-          cd /tmp/s02-playwright
-          npm init -y >/dev/null 2>&1
-          npm install --save-exact playwright@1.62.1
-          npx playwright install --with-deps chromium
-
-      - name: Start working-tree static server
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/s02-execute-http.log 2>&1 &
-          echo $! > /tmp/s02-execute-http.pid
-          for attempt in $(seq 1 30); do
-            if curl --fail --silent http://127.0.0.1:4173/ >/dev/null \
-              && curl --fail --silent http://127.0.0.1:4173/step4/s02/ >/dev/null \
-              && curl --fail --silent http://127.0.0.1:4173/legacy.html >/dev/null; then
-              exit 0
-            fi
-            sleep 1
-          done
-          cat /tmp/s02-execute-http.log
-          exit 1
-
-      - name: Run isolated source browser QA
-        shell: bash
-        env:
-          PLAYWRIGHT_PACKAGE: /tmp/s02-playwright/node_modules/playwright
-          S02_BASE_URL: http://127.0.0.1:4173/step4/s02/
-          S02_EVIDENCE_DIR: quality-reviews/step-4-twelve-screen-final-mockups/s02-browser-evidence
-        run: |
-          set -euo pipefail
-          node tests/step4/s02-browser-qa.mjs
-
-      - name: Run actual root integration browser QA
-        shell: bash
-        env:
-          PLAYWRIGHT_PACKAGE: /tmp/s02-playwright/node_modules/playwright
-          S02_ORIGIN: http://127.0.0.1:4173
-          S02_MAIN_ENTRY_EVIDENCE_DIR: quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-evidence
-        run: |
-          set -euo pipefail
-          node tests/step4/s02-main-entry-browser.mjs
-
-      - name: Finalize evidence and synchronize status mirrors
-        shell: bash
-        run: |
-          set -euo pipefail
-          node tests/step4/finalize-s02-main-entry.mjs | tee /tmp/s02-main-entry-finalize-report.json
-          rm -f s02-static-v3-report.json
-          git diff --check
-          grep -q 'PASS_S02_MAIN_ENTRY_TECHNICAL_PENDING_USER_VISUAL_APPROVAL' \
-            quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-integration-evidence.json
-          grep -q 'S02_INTEGRATED_AT_ROOT' PROJECT_STATUS.json
-
-      - name: Assert generated change boundary
-        shell: bash
-        run: |
-          set -euo pipefail
-          changed="$(git status --short | awk '{print $2}')"
-          printf '%s\n' "$changed"
-          while IFS= read -r file; do
-            test -z "$file" && continue
+          mapfile -t changed < <(git diff --name-only)
+          printf '%s\n' "${changed[@]}"
+          test "${#changed[@]}" -le 2
+          for file in "${changed[@]}"; do
             case "$file" in
-              index.html|legacy.html|step4/s02/index.html) ;;
-              quality-reviews/step-4-twelve-screen-final-mockups/s02-browser-evidence/*) ;;
-              quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-evidence/*) ;;
-              quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-integration-evidence.json) ;;
-              PROJECT_STATUS.json|AI_PROJECT_POLICY.json|simulation/CURRENT_STATUS.json) ;;
-              quality-reviews/step-1-canonical-design/active-change-control.json) ;;
-              QUALITY_GATE.md|PROJECT_HANDOVER.md|AGENTS.md|.github/workflows/CURRENT_STATUS.md) ;;
-              *) echo "Out-of-bound generated change: $file" >&2; exit 1 ;;
+              index.html|step4/s02/index.html) ;;
+              *) echo "Out-of-bound recovery mutation: $file" >&2; exit 1 ;;
             esac
-          done <<< "$changed"
-          test "$(git hash-object app.js)" = "258f8cef77fb37a07d00aaab99ae1e678de764fd"
-          test "$(git hash-object styles.css)" = "ed222e53204411297eac3f9556bb7e91b9470597"
+          done
           test "$(git hash-object game-core.js)" = "34471eaa185b2355f17a8e8860261f63ee86bdaf"
           test "$(git hash-object game-data.js)" = "fa01689275f05f1e0879c40586499cc74c337cf9"
+          test "$(git hash-object sw.js)" = "2d21ce6930746722910e6182a7310da6f1245fb7"
           test "$(git hash-object simulation/executable-seal-v2.json)" = "ee3507969c03b08fe27350263cf0bc093a1c18e1"
 
-      - name: Commit verified root integration to existing kimi
+      - name: Commit repair to existing kimi
         shell: bash
         run: |
           set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add \
-            index.html \
-            legacy.html \
-            step4/s02/index.html \
-            quality-reviews/step-4-twelve-screen-final-mockups/s02-browser-evidence \
-            quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-evidence \
-            quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-integration-evidence.json \
-            PROJECT_STATUS.json \
-            AI_PROJECT_POLICY.json \
-            simulation/CURRENT_STATUS.json \
-            quality-reviews/step-1-canonical-design/active-change-control.json \
-            QUALITY_GATE.md \
-            PROJECT_HANDOVER.md \
-            AGENTS.md \
-            .github/workflows/CURRENT_STATUS.md
-          if git diff --cached --quiet; then
-            echo "Verified integration was already committed."
+          if git diff --quiet; then
+            echo "Viewport recovery is already applied."
             exit 0
           fi
-          git commit -m "step4: reflect S02 at actual game entry with evidence"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html step4/s02/index.html
+          git commit -m "fix: restore user zoom on S02 entries"
           git push origin HEAD:kimi
 
-      - name: Upload execution evidence
+      - name: Upload apply report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: step4-s02-main-entry-execution-v2-${{ github.sha }}
-          if-no-files-found: error
+          name: step4-s02-viewport-recovery-${{ github.sha }}
+          if-no-files-found: warn
           retention-days: 30
           path: |
-            /tmp/s02-main-entry-apply-execute-report.json
-            /tmp/s02-static-v3-report.json
-            /tmp/s02-main-entry-finalize-report.json
-            quality-reviews/step-4-twelve-screen-final-mockups/s02-browser-evidence/**
-            quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-evidence/**
-            quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-integration-evidence.json
-            /tmp/s02-execute-http.log
+            index.html
+            step4/s02/index.html
