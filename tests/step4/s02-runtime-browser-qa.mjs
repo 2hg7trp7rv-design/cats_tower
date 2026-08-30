@@ -195,6 +195,7 @@ async function runInteraction(browser) {
   const commerce = page.locator('.runtime-nav-button[data-runtime-action="commerce"]');
   await commerce.click();
   assert(await commerce.getAttribute('aria-current') === 'page', 'Interaction: commerce navigation did not become current.');
+  await page.waitForFunction(() => document.querySelector('#runtime-scroll')?.scrollTop > 0);
   const scrollTop = await page.locator('#runtime-scroll').evaluate(element => element.scrollTop);
   assert(scrollTop > 0, 'Interaction: commerce navigation did not move to the actual merchant section.');
 
