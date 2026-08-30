@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 8,
-  "updatedDate": "2026-08-28",
+  "schemaVersion": 9,
+  "updatedDate": "2026-08-31",
   "repository": {
     "fullName": "2hg7trp7rv-design/cats_tower",
     "allowedBranch": "kimi",
@@ -12,30 +12,30 @@
   "sourceOfTruthOrder": [
     "latest explicit user decision",
     "CHATGPT_PROJECT_INSTRUCTIONS1.md",
-    "active change-control and latest addendum",
-    "latest user-decision-lock",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-024.json",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-023.json",
     "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
     "MASTER_SPEC.md and sealed canonical contracts",
     "simulation/executable-seal-v2.json and its completion/read-back chain",
     "quality-reviews/step-3-large-scale-validation/terminal-mirror-correction.json",
-    "quality-reviews/step-4-twelve-screen-final-mockups/user-visual-rejection-round-001.json",
-    "PROJECT_STATUS.json, simulation/CURRENT_STATUS.json, QUALITY_GATE.md and AGENTS.md",
-    "task Acceptance, critics, judge, handover, workflow and completion evidence",
-    "historical Acceptance/PASS/audits and legacy runtime",
-    "chat history and competitor references"
+    "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-final-judge.json",
+    "PROJECT_STATUS.json, simulation/CURRENT_STATUS.json, QUALITY_GATE.md, CURRENT_STATUS.md, PROJECT_HANDOVER.md and AGENTS.md",
+    "historical Step 4 drafts and legacy runtime"
   ],
   "currentPhase": {
     "step": 4,
     "name": "twelve-screen-final-mockups",
     "status": "IN_PROGRESS",
-    "phase": "STEP4_VISUAL_REDESIGN",
+    "phase": "STEP4_S02_VISUAL_P1_OPEN",
     "step1Status": "PASS",
     "step2Status": "PASS_SEALED",
     "step3Status": "PASS",
-    "step3Allowed": true,
     "step4Allowed": true,
     "step5Allowed": false,
-    "currentVisualDraft": "REJECTED_BY_USER_NOT_PRODUCTION_QUALITY",
+    "s02TechnicalVerdict": "PASS_S02_RUNTIME_BROWSER_INTEGRATION",
+    "overallVerdict": "IN_PROGRESS_S02_RECOVERY_TECHNICAL_PASS_VISUAL_P1_OPEN",
+    "unresolvedP0": 0,
+    "unresolvedP1": 1,
     "userVisualDirectionApproval": false,
     "balanceVerdict": "PASS_STEP3_LARGE_SCALE_VALIDATION",
     "physicalIPhone": "NOT_VERIFIED"
@@ -45,125 +45,80 @@
     "blob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
     "commit": "0b17f9b5b8decdab8ce329287a4dc073790c4bf7",
     "tree": "9eac6b6103d65cf8bcb13859d00e43cd3389fa8a",
-    "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
-    "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce",
-    "unresolvedP0": 0,
-    "unresolvedP1": 0,
     "status": "PASS"
   },
   "activeStep2Seal": {
     "path": "simulation/executable-seal-v2.json",
     "blob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
-    "semanticCommit": "724d04940f9f3794b993cddbc5af3a7163a0395b",
-    "semanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
-    "activationCommit": "89174eeebb033fe807a0592c8df0279c2a7b9a6f",
-    "activationTree": "ccf444df436d63d86fd4da0355f20349753b0546",
     "workflow": ".github/workflows/verify-step-2-v2.yml",
     "workflowRunId": "33104391753",
     "jobId": "98630217077",
     "conclusion": "SUCCESS",
-    "validatorVerdict": "PASS_EXECUTABLE_SEAL_V2",
-    "criticCount": 5,
-    "unresolvedP0": 0,
-    "unresolvedP1": 0,
-    "trackedP2": 6,
-    "qualificationScenarios": 30,
-    "balanceVerdict": "NOT_EVALUATED_STEP2",
     "status": "PASS_SEALED"
   },
   "activeStep3Validation": {
     "status": "PASS",
-    "acceptance": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
-    "executionGate": "quality-reviews/step-3-large-scale-validation/execution-gate.json",
-    "criticSummary": "quality-reviews/step-3-large-scale-validation/critic-summary.json",
-    "finalJudge": "quality-reviews/step-3-large-scale-validation/final-judge.json",
-    "completionEvidence": "quality-reviews/step-3-large-scale-validation/completion-evidence.json",
-    "terminalReadback": "quality-reviews/step-3-large-scale-validation/live-readback.json",
-    "terminalMirrorCorrection": "quality-reviews/step-3-large-scale-validation/terminal-mirror-correction.json",
     "gameplayScenarios": 15000,
     "highVolumeSamples": 1700000,
     "unresolvedP0": 0,
-    "unresolvedP1": 0
+    "unresolvedP1": 0,
+    "terminalReadback": "quality-reviews/step-3-large-scale-validation/live-readback.json"
   },
-  "activeStep4Redesign": {
-    "status": "IN_PROGRESS",
-    "acceptance": "quality-reviews/step-4-twelve-screen-final-mockups/acceptance-matrix.json",
-    "userVisualRejection": "quality-reviews/step-4-twelve-screen-final-mockups/user-visual-rejection-round-001.json",
-    "rejectedSvgTree": "980ed3686346f48ddf5e53c8e24a0f697a3219cd",
-    "rejectedGalleryBlob": "9f93c10fd10cc901c329ccb040682c79e89ccd59",
-    "transportValidityMayCountAsVisualQuality": false,
-    "projectSourceImagesRole": "USER_DEFINED_VISUAL_PROTOTYPE_BASELINE",
-    "anchorScreensBeforeExpansion": [
-      "S01",
-      "S02",
-      "S08",
-      "S10"
-    ],
-    "anchorScreensMustBeShownToUser": true,
-    "browserRenderedEvidenceRequired": true,
-    "largeTextEvidenceRequired": true,
-    "reducedMotionEvidenceRequired": true,
-    "independentCriticsRequired": 5,
-    "unresolvedP0Required": 0,
-    "unresolvedP1Required": 0,
-    "userVisualDirectionApprovalRequired": true,
-    "finalJudgeRequired": true,
-    "completionEvidenceRequired": true,
-    "terminalLiveReadbackRequired": true,
+  "activeStep4Recovery": {
+    "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-024.json",
+    "acceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-acceptance.json",
+    "criticSummary": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-critic-summary.json",
+    "finalJudge": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-final-judge.json",
+    "completionEvidence": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-completion-evidence.json",
+    "technicalCommit": "32675a7f268e1da20552c26a19b8d5d50b0c8400",
+    "technicalTree": "bb0a010fe7ddebe4530029f66f1f2f6d6f137821",
+    "workflowRunId": "33338326176",
+    "jobId": "99329176306",
+    "artifactId": "9739733397",
+    "artifactDigest": "sha256:45d2709621aa8c3636e235f52f6b5a8ec51216ea5f989231bc5a25da528ec6ad",
+    "technicalStatus": "PASS",
+    "visualStatus": "FAIL_P1",
+    "openFinding": "S4-RECOVERY-VIS-001",
     "step4Pass": false,
     "step5Allowed": false
   },
-  "governanceRepair": {
-    "acceptance": "quality-reviews/step-2-governance-repair-round-001/acceptance-matrix.json",
-    "completion": "quality-reviews/step-2-governance-repair-round-001/completion-evidence.json",
-    "liveReadback": "quality-reviews/step-2-governance-repair-round-001/live-readback.json",
-    "legacyRound7Mode": "IMMUTABLE_HISTORICAL_WORKTREE_ONLY",
-    "currentStatusMode": "STEP4_VISUAL_REDESIGN",
-    "obsoleteMarkerRestorationAllowed": false
-  },
-  "permanentEconomyAuthority": "server",
   "completionContract": {
     "insufficientAlone": [
       "files exist",
-      "SVG exists",
-      "XML parses",
-      "deterministic generator succeeds",
+      "code exists",
       "build succeeds",
       "tests pass",
       "deployment READY",
-      "sandbox provider responds"
+      "screenshots exist"
     ],
     "required": [
       "requirements coverage",
-      "rendered-result self-inspection",
-      "production-quality visual comparison against the project-source prototype baseline",
-      "screen-specific composition and Cat's Tower identity",
-      "browser-rendered screenshots",
+      "actual rendered-result inspection",
+      "production-quality comparison against the user-defined completed-screen baseline",
+      "screen-specific Cat's Tower identity",
+      "browser screenshots at required viewports",
       "large-text and reduced-motion verification",
       "independent critics and final judge",
-      "unresolved P0/P1 zero",
+      "unresolved P0 and P1 equal zero",
       "user visual-direction acceptance",
-      "exact commit/tree/workflow/evidence binding",
-      "forbidden path and Production changes zero"
+      "exact commit, tree, workflow and artifact binding",
+      "forbidden path and Production changes equal zero"
     ]
   },
   "writeBoundary": {
     "currentAllowed": [
-      "Step 4 production-fidelity visual redesign",
-      "Step 4 rendered screenshots and visual audit",
-      "Step 4 accessibility evidence",
-      "Step 4 critics, repairs and status mirrors"
+      "Step 4 S02 visual repair under new explicit acceptance",
+      "Step 4 rendered screenshots and adversarial visual audit",
+      "Step 4 critics, repair and status mirrors"
     ],
     "currentForbidden": [
-      "runtime",
-      "final product assets before Step 4 approval",
+      "Step 5 gameplay expansion",
       "backend",
       "payment provider",
       "ad network",
-      "PR operation",
       "Production alias",
-      "Step 2 or Step 3 executable mutation",
-      "Step 5 implementation",
+      "other branch or PR operation",
+      "mutation of sealed Step 2 or Step 3 evidence",
       "physical-iPhone PASS claim"
     ]
   },
@@ -182,19 +137,18 @@
     "userNeededFor": [
       "material product-direction tie",
       "final visual preference between production-credible alternatives",
-      "unavailable credentials/contracts",
+      "unavailable credentials or contracts",
       "destructive or public operation approval",
       "physical iPhone evidence"
-    ],
-    "forbiddenDelegation": "Do not ask the user to write code, diagnose ordinary defects, or accept a design merely because files exist."
+    ]
   },
   "reporting": {
     "required": [
       "repository",
       "branch",
-      "content/evidence commit and tree",
-      "workflow run/job when available",
-      "phase/verdict",
+      "content and evidence commit/tree",
+      "workflow run/job/artifact when available",
+      "phase and verdict",
       "P0/P1",
       "changed paths",
       "Production change",
@@ -205,7 +159,6 @@
       "OK",
       "問題なし",
       "本番品質",
-      "Preview Ready",
       "Production Ready",
       "実機確認済み"
     ]
