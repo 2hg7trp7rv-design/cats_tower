@@ -13,72 +13,60 @@
 
 # Cat's Tower 引き継ぎ書
 
-更新日: **2026-08-31**  
-Repository: `2hg7trp7rv-design/cats_tower`  
+更新日: **2026-08-31**
+Repository: `2hg7trp7rv-design/cats_tower`
 Branch: existing `kimi` only
 
 ## 引き継ぎ結論
 
-現在はStep 4 S02 root統合のgovernance recovery中である。コード・ブラウザ・アクセシビリティはtechnical PASSしたが、実画面は完成画面基準に未達であり、Step 4 PASSではない。
+現在はStep 4のS02 actual-root visual repair中である。旧root統合の技術土台は維持しつつ、`window.__game`を表示正本として4枠編成、戦闘目標、接敵・攻撃・撃破・報酬因果、実戦場renderer、320幅資源表示を実装した。ただし初回実ブラウザ画像は完成画面基準へ未達で、専用CIの操作QAも修正中である。
 
-Current verdict: `IN_PROGRESS_S02_RECOVERY_TECHNICAL_PASS_VISUAL_P1_OPEN`
+Current verdict: `IN_PROGRESS_S02_ACTUAL_ROOT_VISUAL_REPAIR`
 
-## 完了した回復
+## 現在の実装
 
-- 失敗していたv2 execute / terminal連鎖を完成証拠から除外
-- active change-control round 023 / 024を追加
-- rootとisolated S02のpinch zoom阻害を解除
-- stale governance verifierをlatest addendum基準へ修正
-- existing S02 runtimeを固定blobとして監視し、任意runtime変更は許可しない
-- Chromium 320×667、375×667、390×844を再実行
-- 実招集、既存agency sheet、商会移動、pending stateを確認
-- large text / reduced motionを確認
-- console/page errors `0 / 0`
-- 無効な一時workflowと失敗したv2 terminal workflowを退役
+- content commit: `eedc47e576577f58a47994d0e8b689f5703de6a0`
+- tree: `af0d5149bd92aff53dbc2d6fe463caa56fc67019`
+- active change-control: `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-025.json`
+- acceptance: `quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-acceptance-round-001.json`
+- actual state authority: `window.__game`
+- actual units: `game.fieldCats` / `game.enemies`
+- gameplay-core、経済、保存、backend、Production変更: なし
 
-## Technical evidence
+## 初回browser run
 
-- technical commit: `32675a7f268e1da20552c26a19b8d5d50b0c8400`
-- technical tree: `bb0a010fe7ddebe4530029f66f1f2f6d6f137821`
-- workflow: `.github/workflows/verify-step-4-s02-runtime-integration.yml`
-- run/job: `33338326176` / `99329176306`
-- artifact: `9739733397`
-- digest: `sha256:45d2709621aa8c3636e235f52f6b5a8ec51216ea5f989231bc5a25da528ec6ad`
+- run: `33342628263`
+- job: `99340903899`
+- failed artifact: `9741022949`
+- 320×667 / 375×667 / 390×844画像: 生成済み
+- 静的検証: PASS
+- governance: PASS
+- 失敗原因: 操作QAが存在しない`data-runtime-action="battle"`を待機した。正しい塔navは`data-runtime-action="tower"`である。
 
-## 未解決
+## 実物批評
 
-### P1 `S4-RECOVERY-VIS-001`
+改善した点:
 
-実root S02は次が不足している。
+- 戦闘が画面の主役になった
+- 4枠編成の恒常表示が追加された
+- 現在目標と進行meterが追加された
+- 接敵、次攻撃、撃破報酬の因果が追加された
+- 実stateの猫・敵・攻撃・報酬をrendererへ結合した
 
-- 常設4体編成の戦闘アイデンティティ
-- 戦場の情報密度と構図
-- 接敵、攻撃、被弾、スキル、撃破、報酬の因果
-- boss・雑魚・味方の迫力とレイヤー
-- 320幅での資源可読性と下部商会情報の理解性
-- ユーザー定義完成画面基準に並ぶ商用品質
+残るP1:
 
-ユーザーによる実root S02の視覚承認は未取得。
+- 320幅で猫と敵が中央へ重なりすぎる
+- 実戦闘単位の識別性が不足する
+- 一部補助文字が小さい
+- 完成画面基準と比較した演出密度・商用品質がまだ不足する
+- ユーザー視覚承認が未取得
 
 ## 次に許可される作業
 
-S02 rootのビジュアル構成を修復し、3 viewport、large text、reduced motion、実操作を再検証した実ブラウザ画像を提示する。P1が閉じるまで別アンカーへ展開しない。
-
-## 禁止境界
-
-- Step 5実装
-- backend
-- payment provider
-- ad network
-- Production alias
-- PR operation
-- 他branch
-- 物理iPhone PASS claim
-- Step 2 / Step 3 sealed evidence mutation
+操作QAと末尾空白を修正し、専用CIを再実行する。その後、3 viewport画像を完成画面基準と横比較し、配置密度と可読性を再修正する。P1が閉じるまでは別アンカー、Step 5、backendへ進まない。
 
 ## 外部状態
 
 - Production変更: なし
 - Physical iPhone: `NOT_VERIFIED`
 - Vercel `READY`: build/preview証拠のみ
-- 旧PR #8: open historyとして残存。PR操作禁止のため未変更
