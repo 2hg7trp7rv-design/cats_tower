@@ -23,8 +23,13 @@ const requiredFiles = [
   'runtime/s02-runtime.js',
   'runtime/s02-battle-renderer.js',
   'tests/step4/s02-runtime-browser-qa.mjs',
+  'tests/governance/verify-current-step2-state.mjs',
   'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-023.json',
-  'quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-acceptance.json'
+  'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-024.json',
+  'quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-acceptance.json',
+  'quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-critic-summary.json',
+  'quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-final-judge.json',
+  'quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-completion-evidence.json'
 ];
 for (const file of requiredFiles) assert(exists(file), `Missing recovery file: ${file}`);
 
@@ -131,10 +136,11 @@ const allowedRecoveryPaths = [
   /^step4\/s02\/index\.html$/,
   /^tests\/step4\/verify-s02-runtime-integration\.mjs$/,
   /^tests\/step4\/s02-runtime-browser-qa\.mjs$/,
+  /^tests\/governance\/verify-current-step2-state\.mjs$/,
   /^\.github\/workflows\/verify-step-4-s02-runtime-integration\.yml$/,
   /^\.github\/workflows\/execute-step-4-s02-main-entry-v2\.yml$/,
-  /^\.github\/workflows\/verify-step-4-s02-terminal-readback-v2\.yml$/,
-  /^quality-reviews\/step-1-canonical-design\/active-change-control-addendum-round-023\.json$/,
+  /^\.github\/workflows\/terminalize-step-4-s02-main-entry-v2\.yml$/,
+  /^quality-reviews\/step-1-canonical-design\/active-change-control-addendum-round-02[34]\.json$/,
   /^quality-reviews\/step-4-twelve-screen-final-mockups\/s02-main-entry-governance-recovery-[^/]+\.json$/,
   /^(PROJECT_STATUS\.json|AI_PROJECT_POLICY\.json|QUALITY_GATE\.md|PROJECT_HANDOVER\.md|AGENTS\.md)$/,
   /^simulation\/CURRENT_STATUS\.json$/,
