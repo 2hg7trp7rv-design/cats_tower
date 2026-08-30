@@ -8,16 +8,14 @@ import process from 'node:process';
 const ROOT = process.cwd();
 const REPOSITORY = '2hg7trp7rv-design/cats_tower';
 const BRANCH = 'kimi';
-const RECOVERY_ENTRY = '3ccff631e9e9174a69ec4e5e904c4dfbc552dbe9';
+const VISUAL_REPAIR_ENTRY = '9495c97232213620346958f271913fd8a585ff50';
 const STEP3 = 'quality-reviews/step-3-large-scale-validation';
 const STEP4 = 'quality-reviews/step-4-twelve-screen-final-mockups';
-const LATEST_ADDENDUM = 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-024.json';
-const CRITIC = `${STEP4}/s02-main-entry-governance-recovery-critic-summary.json`;
-const JUDGE = `${STEP4}/s02-main-entry-governance-recovery-final-judge.json`;
-const COMPLETION = `${STEP4}/s02-main-entry-governance-recovery-completion-evidence.json`;
+const LATEST_ADDENDUM = 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-025.json';
+const ACCEPTANCE = `${STEP4}/s02-actual-root-visual-repair-acceptance-round-001.json`;
 const BLOCKS = [
   ['<!-- CATS_TOWER_STEP4_STATUS_BEGIN -->', '<!-- CATS_TOWER_STEP4_STATUS_END -->'],
-  ['<!-- CATS_TOWER_STEP3_STATUS_BEGIN -->', '<!-- CATS_TOWER_STEP3_STATUS_END -->'],
+  ['<!-- CATS_TOWER_STEP3_STATUS_BEGIN -->', '<!-- CATS_TOWER_STEP3_STATUS_END -->']
 ];
 
 const abs = (relativePath) => path.join(ROOT, relativePath);
@@ -31,7 +29,7 @@ assert.equal(process.env.GITHUB_REPOSITORY ?? REPOSITORY, REPOSITORY);
 assert.equal(process.env.GITHUB_REF_NAME ?? BRANCH, BRANCH);
 assert.equal(git('rev-parse', '--is-shallow-repository'), 'false');
 assert.equal(git('replace', '-l'), '');
-execFileSync('git', ['merge-base', '--is-ancestor', RECOVERY_ENTRY, 'HEAD'], { cwd: ROOT });
+execFileSync('git', ['merge-base', '--is-ancestor', VISUAL_REPAIR_ENTRY, 'HEAD'], { cwd: ROOT });
 
 const sealedImmutable = {
   'quality-reviews/step-1-reseal-round-008/seal-round-008.json': '0a959de0383b57ad6cd1f33c124b398aa51c1e00',
@@ -44,53 +42,54 @@ const sealedImmutable = {
   [`${STEP3}/final-judge.json`]: 'a089266f56076a0b2a59b2670188d95ae8eff3d2',
   [`${STEP3}/completion-evidence.json`]: 'bc808fc3129f81000f1c5e755ffb2fc3a05bcf0b',
   [`${STEP3}/live-readback.json`]: 'd0b73af25a8f0d449cfc083b007b84b8ff3fbc9b',
-  [`${STEP3}/terminal-mirror-correction.json`]: '14a9208b49c0b683e215cbefe587fedf67c2cac0',
+  [`${STEP3}/terminal-mirror-correction.json`]: '14a9208b49c0b683e215cbefe587fedf67c2cac0'
 };
 for (const [relativePath, expectedBlob] of Object.entries(sealedImmutable)) {
   assert(exists(relativePath), `${relativePath}: missing immutable authority`);
   assert.equal(blob(relativePath), expectedBlob, `${relativePath}: immutable authority blob mismatch`);
 }
 
-const recoveredRuntimeImmutable = {
+const implementationImmutable = {
+  'app.js': '258f8cef77fb37a07d00aaab99ae1e678de764fd',
   'game-core.js': '34471eaa185b2355f17a8e8860261f63ee86bdaf',
   'game-data.js': 'fa01689275f05f1e0879c40586499cc74c337cf9',
   'sw.js': '16aca2f8f94fdfbcf8b228a331e35288fcbc2365',
   'simulation/candidate-v2.json': '1e633de1c6ecb1f98cee262b88575387816cf310',
-  'runtime/s02-runtime.css': '6633698d77511d1e0725545e16aec9c2a18ca49c',
-  'runtime/s02-runtime-fixes.css': 'fcbbeba2d8541691dbdd11c96c7c8817b1e6842b',
-  'runtime/s02-runtime.js': 'fb03de942075ec05bcab476234205288688d639d',
-  'runtime/s02-battle-renderer.js': 'de2f6fbfe1f316d6bc15081088bab6b0179344ff',
+  'runtime/s02-runtime.css': '6633698d77511d1e0725545e16aec9c2a18ca49c'
 };
-for (const [relativePath, expectedBlob] of Object.entries(recoveredRuntimeImmutable)) {
-  assert(exists(relativePath), `${relativePath}: missing recovery-bound runtime file`);
-  assert.equal(blob(relativePath), expectedBlob, `${relativePath}: recovery-bound runtime changed`);
+for (const [relativePath, expectedBlob] of Object.entries(implementationImmutable)) {
+  assert(exists(relativePath), `${relativePath}: missing immutable implementation file`);
+  assert.equal(blob(relativePath), expectedBlob, `${relativePath}: forbidden implementation mutation`);
 }
 
-for (const required of [LATEST_ADDENDUM, CRITIC, JUDGE, COMPLETION]) {
-  assert(exists(required), `${required}: missing current recovery authority`);
+const repairedRuntime = {
+  'runtime/s02-runtime.js': '2d9560981b285b84f43f466729431c9e827380ee',
+  'runtime/s02-battle-renderer.js': '56b5850b7092e75c9090e51161466418a9abf813',
+  'runtime/s02-runtime-fixes.css': '4ea83015756fd3fa1aa38e32ec779ed442ac9264'
+};
+for (const [relativePath, expectedBlob] of Object.entries(repairedRuntime)) {
+  assert(exists(relativePath), `${relativePath}: missing repaired runtime file`);
+  assert.equal(blob(relativePath), expectedBlob, `${relativePath}: repaired runtime blob mismatch`);
 }
+
+for (const required of [LATEST_ADDENDUM, ACCEPTANCE]) assert(exists(required), `${required}: missing current visual-repair authority`);
 const activeRoot = readJson('quality-reviews/step-1-canonical-design/active-change-control.json');
 const latest = readJson(LATEST_ADDENDUM);
-const critic = readJson(CRITIC);
-const judge = readJson(JUDGE);
-const completion = readJson(COMPLETION);
+const acceptance = readJson(ACCEPTANCE);
 assert.equal(activeRoot.status, 'PASS');
 assert.equal(latest.status, 'IN_PROGRESS');
-assert.equal(latest.verdict, 'IN_PROGRESS_STEP4_S02_GOVERNANCE_VERIFIER_AND_MIRROR_SYNC');
+assert.equal(latest.verdict, 'IN_PROGRESS_STEP4_S02_ACTUAL_ROOT_VISUAL_REPAIR');
+assert.equal(latest.step4Allowed, true);
+assert.equal(latest.step4Pass, false);
 assert.equal(latest.step5Allowed, false);
-assert.equal(critic.verdict, 'IN_PROGRESS_S02_RECOVERY_TECHNICAL_PASS_VISUAL_P1_OPEN');
-assert.equal(critic.unresolved.P0, 0);
-assert.equal(critic.unresolved.P1, 1);
-assert.equal(critic.step4Pass, false);
-assert.equal(critic.step5Allowed, false);
-assert.equal(judge.verdict, 'IN_PROGRESS_S02_RECOVERY_TECHNICAL_PASS_VISUAL_P1_OPEN');
-assert.equal(judge.unresolvedP0, 0);
-assert.equal(judge.unresolvedP1, 1);
-assert.equal(judge.step4Pass, false);
-assert.equal(judge.step5Allowed, false);
-assert.equal(completion.recoveryCompletionClaimed, false);
-assert.equal(completion.step4Pass, false);
-assert.equal(completion.step5Allowed, false);
+assert.equal(latest.unresolvedP0, 0);
+assert.equal(latest.unresolvedP1, 1);
+assert.equal(latest.openFinding, 'S4-RECOVERY-VIS-001');
+assert.equal(latest.scope.stateAuthority, 'window.__game');
+assert.equal(latest.scope.gameplayCoreMutationAllowed, false);
+assert.equal(acceptance.status, 'ACTIVE_BEFORE_VISUAL_REPAIR_WRITE');
+assert.equal(acceptance.truthfulnessContract.stateSource, 'window.__game');
+assert.equal(acceptance.completionBoundary.step5Allowed, false);
 
 const project = readJson('PROJECT_STATUS.json');
 const simulation = readJson('simulation/CURRENT_STATUS.json');
@@ -101,6 +100,10 @@ assert.equal(simulation.repository, REPOSITORY);
 assert.equal(simulation.branch, BRANCH);
 assert.equal(policy.repository.fullName, REPOSITORY);
 assert.equal(policy.repository.allowedBranch, BRANCH);
+assert.equal(project.activeChangeControl.path, LATEST_ADDENDUM);
+assert.equal(simulation.step4.changeControl, LATEST_ADDENDUM);
+assert.equal(policy.sourceOfTruthOrder.includes(LATEST_ADDENDUM), true);
+assert.equal(policy.activeStep4Recovery.changeControl, LATEST_ADDENDUM);
 assert.equal(project.currentStep, 4);
 assert.equal(simulation.currentStep, 4);
 assert.equal(policy.currentPhase.step, 4);
@@ -108,15 +111,23 @@ assert.equal(project.currentStepStatus, 'IN_PROGRESS');
 assert.equal(project.status, 'IN_PROGRESS');
 assert.equal(simulation.status, 'IN_PROGRESS');
 assert.equal(policy.currentPhase.status, 'IN_PROGRESS');
+assert.equal(project.phase, 'STEP4_S02_ACTUAL_ROOT_VISUAL_REPAIR');
+assert.equal(simulation.phase, 'STEP4_S02_ACTUAL_ROOT_VISUAL_REPAIR');
+assert.equal(policy.currentPhase.phase, 'STEP4_S02_ACTUAL_ROOT_VISUAL_REPAIR');
 assert.equal(Boolean(project.step5Allowed), false);
 assert.equal(Boolean(simulation.step5Allowed), false);
 assert.equal(Boolean(policy.currentPhase.step5Allowed), false);
+assert.equal(project.step4.unresolvedP0, 0);
+assert.equal(project.step4.unresolvedP1, 1);
+assert.equal(simulation.step4.unresolvedP1, 1);
+assert.equal(policy.currentPhase.unresolvedP1, 1);
 assert.equal(project.physicalIPhoneVerified, false);
 assert.equal(simulation.physicalIPhoneVerified, false);
 assert.equal(policy.currentPhase.physicalIPhone, 'NOT_VERIFIED');
 assert.equal(project.productionChangedByCurrentWork, false);
 assert.equal(project.productionAliasChanged, false);
 assert.equal(simulation.productionChanged, false);
+assert.equal(simulation.gameplayCoreMutationByCurrentRepair, false);
 
 function currentBlock(relativePath) {
   const content = readText(relativePath);
@@ -139,39 +150,34 @@ for (const relativePath of ['QUALITY_GATE.md', '.github/workflows/CURRENT_STATUS
   assert(block.includes('- Physical iPhone: **NOT_VERIFIED**'), `${relativePath}: physical iPhone mismatch`);
   assert(block.includes('- Production alias changed: **false**'), `${relativePath}: Production mismatch`);
 }
+assert(readText('AGENTS.md').includes('active-change-control-addendum-round-025.json'), 'AGENTS.md does not point to round 025.');
 
-const allowedExact = new Set([
-  'index.html',
-  'step4/s02/index.html',
-  'tests/step4/verify-s02-runtime-integration.mjs',
-  'tests/step4/s02-runtime-browser-qa.mjs',
-  'tests/governance/verify-current-step2-state.mjs',
-  '.github/workflows/verify-step-4-s02-runtime-integration.yml',
-  '.github/workflows/execute-step-4-s02-main-entry-v2.yml',
-  '.github/workflows/terminalize-step-4-s02-main-entry-v2.yml',
-  'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-023.json',
-  'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-024.json',
-  'PROJECT_STATUS.json',
-  'simulation/CURRENT_STATUS.json',
-  'AI_PROJECT_POLICY.json',
-  'QUALITY_GATE.md',
-  '.github/workflows/CURRENT_STATUS.md',
-  'AGENTS.md',
-  'PROJECT_HANDOVER.md',
-]);
-const allowedRecoveryEvidence = (relativePath) =>
-  relativePath.startsWith(`${STEP4}/s02-main-entry-governance-recovery-`);
-const changedOutput = git('diff', '--name-only', `${RECOVERY_ENTRY}..HEAD`);
+const allowedPatterns = [
+  /^runtime\/s02-runtime\.js$/,
+  /^runtime\/s02-battle-renderer\.js$/,
+  /^runtime\/s02-runtime-fixes\.css$/,
+  /^tests\/step4\/verify-s02-runtime-integration\.mjs$/,
+  /^tests\/step4\/s02-runtime-browser-qa\.mjs$/,
+  /^tests\/governance\/verify-current-step2-state\.mjs$/,
+  /^\.github\/workflows\/verify-step-4-s02-runtime-integration\.yml$/,
+  /^quality-reviews\/step-1-canonical-design\/active-change-control-addendum-round-025\.json$/,
+  /^quality-reviews\/step-4-twelve-screen-final-mockups\/s02-actual-root-visual-repair-[^/]+\.json$/,
+  /^quality-reviews\/step-4-twelve-screen-final-mockups\/s02-actual-root-visual-repair-browser-evidence\//,
+  /^(PROJECT_STATUS\.json|AI_PROJECT_POLICY\.json|QUALITY_GATE\.md|PROJECT_HANDOVER\.md|AGENTS\.md)$/,
+  /^simulation\/CURRENT_STATUS\.json$/,
+  /^\.github\/workflows\/CURRENT_STATUS\.md$/
+];
+const changedOutput = git('diff', '--name-only', `${VISUAL_REPAIR_ENTRY}..HEAD`);
 const changed = changedOutput ? changedOutput.split('\n').filter(Boolean) : [];
-const forbidden = changed.filter((relativePath) => !allowedExact.has(relativePath) && !allowedRecoveryEvidence(relativePath));
-assert.deepEqual(forbidden, [], `forbidden recovery path(s): ${forbidden.join(', ')}`);
+const forbidden = changed.filter((relativePath) => !allowedPatterns.some(pattern => pattern.test(relativePath)));
+assert.deepEqual(forbidden, [], `forbidden visual-repair path(s): ${forbidden.join(', ')}`);
 assert.deepEqual(changed.filter((relativePath) => /^(backend\/|public\/|\.vercel\/|vercel\.json$)/u.test(relativePath)), []);
 assert.deepEqual(changed.filter((relativePath) => /^simulation\/(candidate-v2\.json|candidate-v2\.schema\.json|run-plan-v2\.json|execution-contract-v2\.json|executable-seal-v2\.json|engine-v2\/|fixtures\/v2\/|migrations\/v1-to-v2\/)/u.test(relativePath)), []);
 
-git('diff', '--check', `${RECOVERY_ENTRY}..HEAD`);
+git('diff', '--check', `${VISUAL_REPAIR_ENTRY}..HEAD`);
 
 console.log(JSON.stringify({
-  verdict: 'PASS_CURRENT_CATS_TOWER_STEP4_RECOVERY_GOVERNANCE',
+  verdict: 'PASS_CURRENT_CATS_TOWER_STEP4_S02_VISUAL_REPAIR_GOVERNANCE',
   head: git('rev-parse', 'HEAD'),
   tree: git('rev-parse', 'HEAD^{tree}'),
   currentStep: 4,
@@ -180,8 +186,10 @@ console.log(JSON.stringify({
   step5: 'BLOCKED_UNTIL_STEP4_PASS',
   unresolvedP0: 0,
   unresolvedP1: 1,
+  stateAuthority: 'window.__game',
+  gameplayCoreChanged: false,
   changedPathCount: changed.length,
   forbiddenPathCount: forbidden.length,
   physicalIPhone: 'NOT_VERIFIED',
-  productionChanged: false,
+  productionChanged: false
 }));

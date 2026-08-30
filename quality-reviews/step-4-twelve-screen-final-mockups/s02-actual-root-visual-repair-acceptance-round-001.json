@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-s02-actual-root-visual-repair-acceptance-round-001",
+  "createdAt": "2026-08-31",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-025.json",
+  "status": "ACTIVE_BEFORE_VISUAL_REPAIR_WRITE",
+  "screen": "S02 actual root playable battle screen",
+  "route": "/",
+  "failureBeingRepaired": {
+    "id": "S4-RECOVERY-VIS-001",
+    "severity": "P1",
+    "summary": "The technically integrated root screen is materially below the binding completed-screen baseline in battle density, four-member party identity, attack/reward causality, layer hierarchy and mobile commercial finish."
+  },
+  "visualAuthority": {
+    "primary": "The user-defined completed S02 battle-screen image supplied in the project conversation, interpreted as structural direction rather than copyable art or exact UI.",
+    "bindingTraits": [
+      "battle is the dominant scene within five seconds",
+      "a persistent four-slot party identity is visible",
+      "enemy threat and current objective are immediately legible",
+      "contact, attack, hit, defeat and reward form an understandable visual chain",
+      "warm wood and brass Cat's Tower chrome frames the scene without crushing it",
+      "commerce remains a support layer below the battle rather than the screen's protagonist",
+      "five-tab navigation remains stable and thumb reachable"
+    ],
+    "copyingForbidden": [
+      "competitor characters or art",
+      "exact competitor UI arrangement",
+      "competitor names, probabilities, prices or game values",
+      "flattened generated full-screen art used as the interface"
+    ]
+  },
+  "truthfulnessContract": {
+    "stateSource": "window.__game",
+    "actualCombatUnits": "game.fieldCats and game.enemies only",
+    "actualProgress": "game.floor, game.kills, game.killNeed and guardian HP",
+    "actualCausality": "actual attack timers plus non-consuming observation of game.emit events",
+    "fourSlotIdentity": "first four canonical visible job slots with explicit owned, on-field, available or locked labels",
+    "prohibited": [
+      "showing an unowned member as an active field unit",
+      "adding fake active skills",
+      "minting or modifying coins, ruby, rewards, ownership, levels or unlocks",
+      "changing game-core.js, game-data.js, app.js or sealed simulation contracts",
+      "using a second persistent state store"
+    ]
+  },
+  "requiredVisualRepair": [
+    "replace the sparse center field with a staged combat corridor, foreground depth, readable enemy threat and active contact lane",
+    "keep actual cats and enemies large enough to identify on 320px width",
+    "show four persistent party slots and the real status of each slot",
+    "show a visible encounter objective and progress meter derived from actual state",
+    "show actual hit, faint, kill and reward feedback without consuming or duplicating game events",
+    "show an actual contact and next-attack explanation so the player understands why damage occurs",
+    "keep summon as the playable core's explicit temporary reinforcement command and do not mislabel it as a canonical active skill",
+    "reduce event-banner and shortcut dominance so they no longer displace the battle",
+    "repair 320px resource values, labels and lower information hierarchy",
+    "retain actual agency, forge, item, shop, return and commerce navigation behavior"
+  ],
+  "viewportAcceptance": {
+    "required": [
+      "320x667",
+      "375x667",
+      "390x844"
+    ],
+    "rules": [
+      "no document or body horizontal overflow",
+      "battle scene height is at least 320 CSS pixels",
+      "four party slots remain present and distinguishable",
+      "critical interactive controls remain at least 44 CSS pixels",
+      "resource values are not clipped",
+      "bottom navigation remains pinned and reachable",
+      "large-text simulation introduces no horizontal overflow",
+      "reduced-motion preserves all state information"
+    ]
+  },
+  "browserAcceptance": [
+    "root runtime bridge and renderer report ready",
+    "renderer reports source window.__game",
+    "renderer reports partySlotCount 4 and visualCausalityReady true",
+    "normal screenshots are captured only after real summon button interactions create a readable active battle; the report records this interaction",
+    "summon changes actual game.fieldCats",
+    "agency opens the actual existing sheet",
+    "commerce moves to the actual merchant section",
+    "unavailable events expose an explicit pending state",
+    "console and uncaught page errors equal zero"
+  ],
+  "visualCriticQuestions": [
+    "Can a new player identify the cats, enemy, floor, current objective and next action within five seconds?",
+    "Does the screen read as a Cat's Tower battle rather than a generic dashboard or sparse prototype?",
+    "Are the four party slots honest about active, owned and locked state?",
+    "Can the player follow contact to attack to damage to defeat to reward?",
+    "At 320px, are resource values and primary actions readable without zoom?",
+    "Does commerce remain visibly subordinate to battle?"
+  ],
+  "automaticFailConditions": [
+    "game-core, game-data, app, save schema or economy values changed",
+    "unowned members shown as active field combatants",
+    "fake skill or reward state presented as functional",
+    "actual event queue consumed or duplicated",
+    "horizontal overflow at a required viewport",
+    "critical target below 44 CSS pixels",
+    "console or page error",
+    "browser screenshots absent",
+    "visual comparison absent",
+    "user approval assumed",
+    "Production alias changed",
+    "physical-iPhone PASS claimed"
+  ],
+  "completionBoundary": {
+    "technicalAndVisualEvidenceMayCloseFinding": "S4-RECOVERY-VIS-001 only after independent criticism finds no remaining P0/P1",
+    "userApprovalStillRequiredFor": "final visual acceptance and any Step 4 completion claim",
+    "step5Allowed": false,
+    "productionAllowed": false,
+    "physicalIPhoneVerified": false
+  }
+}

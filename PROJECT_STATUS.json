@@ -1,5 +1,5 @@
 {
-  "statusDocumentSchemaVersion": 17,
+  "statusDocumentSchemaVersion": 18,
   "updatedDate": "2026-08-31",
   "project": "Cat's Tower",
   "canonicalRepository": "2hg7trp7rv-design/cats_tower",
@@ -18,7 +18,7 @@
   "currentStep": 4,
   "currentStepName": "twelve-screen-final-mockups",
   "currentStepStatus": "IN_PROGRESS",
-  "currentCheckpoint": "step4-s02-recovery-technical-pass-visual-p1-open",
+  "currentCheckpoint": "step4-s02-actual-root-visual-repair-in-progress",
   "advanceAllowed": false,
   "step2Allowed": true,
   "step3Allowed": true,
@@ -28,9 +28,9 @@
   "productionChangedByCurrentWork": false,
   "productionAliasChanged": false,
   "activeChangeControl": {
-    "path": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-024.json",
+    "path": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-025.json",
     "status": "IN_PROGRESS",
-    "verdict": "IN_PROGRESS_STEP4_S02_GOVERNANCE_VERIFIER_AND_MIRROR_SYNC"
+    "verdict": "IN_PROGRESS_STEP4_S02_ACTUAL_ROOT_VISUAL_REPAIR"
   },
   "round008": {
     "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
@@ -70,15 +70,16 @@
     "status": "IN_PROGRESS",
     "step4Pass": false,
     "step5Allowed": false,
-    "currentScope": "S02 main-entry governance recovery and visual repair",
-    "technicalTargetCommit": "32675a7f268e1da20552c26a19b8d5d50b0c8400",
-    "technicalTargetTree": "bb0a010fe7ddebe4530029f66f1f2f6d6f137821",
-    "technicalWorkflowRunId": "33338326176",
-    "technicalJobId": "99329176306",
-    "technicalArtifactId": "9739733397",
-    "technicalArtifactDigest": "sha256:45d2709621aa8c3636e235f52f6b5a8ec51216ea5f989231bc5a25da528ec6ad",
-    "technicalVerdict": "PASS_S02_RUNTIME_BROWSER_INTEGRATION",
-    "overallVerdict": "IN_PROGRESS_S02_RECOVERY_TECHNICAL_PASS_VISUAL_P1_OPEN",
+    "currentScope": "S02 actual root visual repair under round 025",
+    "baselineTechnicalCommit": "32675a7f268e1da20552c26a19b8d5d50b0c8400",
+    "baselineTechnicalTree": "bb0a010fe7ddebe4530029f66f1f2f6d6f137821",
+    "baselineWorkflowRunId": "33338326176",
+    "baselineJobId": "99329176306",
+    "baselineArtifactId": "9739733397",
+    "baselineTechnicalVerdict": "PASS_S02_RUNTIME_BROWSER_INTEGRATION",
+    "repairAcceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-acceptance-round-001.json",
+    "repairStatus": "IMPLEMENTATION_AND_RENDER_EVIDENCE_PENDING",
+    "overallVerdict": "IN_PROGRESS_S02_ACTUAL_ROOT_VISUAL_REPAIR",
     "unresolvedP0": 0,
     "unresolvedP1": 1,
     "openFinding": "S4-RECOVERY-VIS-001",
@@ -88,9 +89,9 @@
       "S08",
       "S10"
     ],
-    "criticSummary": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-critic-summary.json",
-    "finalJudge": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-final-judge.json",
-    "completionEvidence": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-completion-evidence.json"
+    "previousCriticSummary": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-critic-summary.json",
+    "previousFinalJudge": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-final-judge.json",
+    "previousCompletionEvidence": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-completion-evidence.json"
   },
   "authorizedExecutionSequence": [
     { "order": 1, "name": "canonical-integration-and-reseal", "status": "PASS" },
@@ -101,14 +102,15 @@
     { "order": 6, "name": "physical-iphone-validation", "status": "BLOCKED_UNTIL_ELIGIBLE_BUILD" }
   ],
   "nextAuthorizedChat": "04_UIUX・12画面完成見本",
-  "nextAction": "Repair the actual root S02 battle composition against the user-defined completed-screen baseline, show the rendered screen to the user, and close S4-RECOVERY-VIS-001 before another anchor or Step 5.",
+  "nextAction": "Render, test and adversarially compare the repaired actual root S02 screen at 320x667, 375x667 and 390x844; keep S4-RECOVERY-VIS-001 open until evidence supports closure and the rendered result is shown to the user.",
   "writeBoundary": {
     "allowedNext": [
-      "S02 visual composition repair under a new explicit Step 4 acceptance",
+      "S02 actual-root visual repair under round 025 acceptance",
       "S02 rendered screenshot evidence and adversarial comparison",
-      "Step 4 status and critic evidence"
+      "Step 4 status, critic and evidence synchronization"
     ],
     "forbiddenUntilLaterGates": [
+      "gameplay-core or economy mutation",
       "Step 5 gameplay expansion",
       "backend",
       "payment provider",
@@ -118,7 +120,7 @@
     ]
   },
   "status": "IN_PROGRESS",
-  "phase": "STEP4_S02_VISUAL_P1_OPEN",
+  "phase": "STEP4_S02_ACTUAL_ROOT_VISUAL_REPAIR",
   "balanceVerdict": "PASS_STEP3_LARGE_SCALE_VALIDATION",
-  "reason": "S02 technical integration and browser accessibility checks pass, but the rendered battle screen remains materially below the binding completed-screen visual baseline."
+  "reason": "The user authorized actual game-screen repair. The only allowed work is a truthful Step 4 presentation repair of the root S02 screen while gameplay, economy and Step 5 remain blocked."
 }

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 9,
+  "schemaVersion": 10,
   "updatedDate": "2026-08-31",
   "repository": {
     "fullName": "2hg7trp7rv-design/cats_tower",
@@ -12,6 +12,7 @@
   "sourceOfTruthOrder": [
     "latest explicit user decision",
     "CHATGPT_PROJECT_INSTRUCTIONS1.md",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-025.json",
     "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-024.json",
     "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-023.json",
     "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
@@ -26,14 +27,14 @@
     "step": 4,
     "name": "twelve-screen-final-mockups",
     "status": "IN_PROGRESS",
-    "phase": "STEP4_S02_VISUAL_P1_OPEN",
+    "phase": "STEP4_S02_ACTUAL_ROOT_VISUAL_REPAIR",
     "step1Status": "PASS",
     "step2Status": "PASS_SEALED",
     "step3Status": "PASS",
     "step4Allowed": true,
     "step5Allowed": false,
-    "s02TechnicalVerdict": "PASS_S02_RUNTIME_BROWSER_INTEGRATION",
-    "overallVerdict": "IN_PROGRESS_S02_RECOVERY_TECHNICAL_PASS_VISUAL_P1_OPEN",
+    "s02BaselineTechnicalVerdict": "PASS_S02_RUNTIME_BROWSER_INTEGRATION",
+    "overallVerdict": "IN_PROGRESS_S02_ACTUAL_ROOT_VISUAL_REPAIR",
     "unresolvedP0": 0,
     "unresolvedP1": 1,
     "userVisualDirectionApproval": false,
@@ -65,22 +66,37 @@
     "terminalReadback": "quality-reviews/step-3-large-scale-validation/live-readback.json"
   },
   "activeStep4Recovery": {
-    "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-024.json",
-    "acceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-acceptance.json",
-    "criticSummary": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-critic-summary.json",
-    "finalJudge": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-final-judge.json",
-    "completionEvidence": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-completion-evidence.json",
-    "technicalCommit": "32675a7f268e1da20552c26a19b8d5d50b0c8400",
-    "technicalTree": "bb0a010fe7ddebe4530029f66f1f2f6d6f137821",
-    "workflowRunId": "33338326176",
-    "jobId": "99329176306",
-    "artifactId": "9739733397",
-    "artifactDigest": "sha256:45d2709621aa8c3636e235f52f6b5a8ec51216ea5f989231bc5a25da528ec6ad",
-    "technicalStatus": "PASS",
-    "visualStatus": "FAIL_P1",
+    "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-025.json",
+    "acceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-acceptance-round-001.json",
+    "baselineCriticSummary": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-critic-summary.json",
+    "baselineFinalJudge": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-final-judge.json",
+    "baselineCompletionEvidence": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-completion-evidence.json",
+    "baselineTechnicalCommit": "32675a7f268e1da20552c26a19b8d5d50b0c8400",
+    "baselineTechnicalTree": "bb0a010fe7ddebe4530029f66f1f2f6d6f137821",
+    "baselineWorkflowRunId": "33338326176",
+    "baselineJobId": "99329176306",
+    "baselineArtifactId": "9739733397",
+    "baselineTechnicalStatus": "PASS",
+    "visualRepairStatus": "IMPLEMENTATION_AND_RENDER_EVIDENCE_PENDING",
     "openFinding": "S4-RECOVERY-VIS-001",
     "step4Pass": false,
     "step5Allowed": false
+  },
+  "visualRepairTruthBoundary": {
+    "stateAuthority": "window.__game",
+    "actualCombatUnits": [
+      "game.fieldCats",
+      "game.enemies"
+    ],
+    "eventObservation": "non-consuming wrapper around window.__game.emit",
+    "fourSlotIdentity": "owned, on-field, available and locked states must be distinguished",
+    "forbidden": [
+      "fake active skills",
+      "unowned characters shown as active field units",
+      "gameplay-core mutation",
+      "economy mutation",
+      "second persistent state store"
+    ]
   },
   "completionContract": {
     "insufficientAlone": [
@@ -107,11 +123,12 @@
   },
   "writeBoundary": {
     "currentAllowed": [
-      "Step 4 S02 visual repair under new explicit acceptance",
+      "Step 4 S02 actual-root visual repair under round 025 acceptance",
       "Step 4 rendered screenshots and adversarial visual audit",
       "Step 4 critics, repair and status mirrors"
     ],
     "currentForbidden": [
+      "game-core, game-data, app or economy mutation",
       "Step 5 gameplay expansion",
       "backend",
       "payment provider",
@@ -119,7 +136,8 @@
       "Production alias",
       "other branch or PR operation",
       "mutation of sealed Step 2 or Step 3 evidence",
-      "physical-iPhone PASS claim"
+      "physical-iPhone PASS claim",
+      "user approval inference"
     ]
   },
   "userBoundary": {
