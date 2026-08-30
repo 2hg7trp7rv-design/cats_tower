@@ -4,75 +4,53 @@
 - Step 1: **PASS**
 - Step 2: **PASS / SEALED**
 - Step 3: **PASS**
-- Step 4: **IN_PROGRESS — CURRENT VISUAL DRAFT REJECTED**
+- Step 4: **IN_PROGRESS**
 - Step 5: **BLOCKED_UNTIL_STEP4_PASS**
-- Existing Step 4 draft: **12 screens / 3 viewports / 36 XML-valid SVG — history only, not visually approved**
-- Step 4 independent critics: **0 / required 5**
-- User visual-direction approval: **NOT_GRANTED**
+- Unresolved P0/P1: **0 / 1**
 - Physical iPhone: **NOT_VERIFIED**
 - Production alias changed: **false**
 <!-- CATS_TOWER_STEP4_STATUS_END -->
 
 # Cat's Tower workflow status
 
-Updated: **2026-08-28**
+Updated: **2026-08-31**
 
 ## Current verdict
 
-- Step 1 Round 008: `PASS`
-- Step 2 executable contract: `PASS — SEALED`
-- Step 3 large-scale validation: `PASS`
-- Step 4 twelve-screen final mockups: `IN_PROGRESS`
-- Current Step 4 SVG/contact-sheet direction: `REJECTED_BY_USER_NOT_PRODUCTION_QUALITY`
-- Step 5 implementation: `BLOCKED_UNTIL_STEP4_PASS`
-- physical iPhone: `NOT_VERIFIED`
-- Production change: `false`
+`IN_PROGRESS_S02_RECOVERY_TECHNICAL_PASS_VISUAL_P1_OPEN`
 
-## Binding Step 4 rejection evidence
+S02 root統合は技術・ブラウザ・アクセシビリティ検証を通過したが、完成画面基準との目視比較でP1が1件残っている。Step 4とStep 5の認可は変更しない。
 
-- User visual rejection: `quality-reviews/step-4-twelve-screen-final-mockups/user-visual-rejection-round-001.json`
-- The project-source images are a user-defined visual-prototype baseline for art density, illustrated cats and enemies, scene-led composition, warm dark-brown and brass framing, and premium mobile-game finish.
-- XML validity, deterministic generation, file count and gallery rendering are transport evidence only. They are not evidence of visual quality or production readiness.
+## Current authority
 
-## Existing draft evidence retained as history
+- change-control: `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-024.json`
+- acceptance: `quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-acceptance.json`
+- critic: `quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-critic-summary.json`
+- judge: `quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-final-judge.json`
+- evidence: `quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-completion-evidence.json`
 
-- Acceptance: `quality-reviews/step-4-twelve-screen-final-mockups/acceptance-matrix.json`
-- prior reference audit: `quality-reviews/step-4-twelve-screen-final-mockups/reference-audit.json`
-- rejected design system: `quality-reviews/step-4-twelve-screen-final-mockups/design-system.json`
-- S01–S12 screen specification: `quality-reviews/step-4-twelve-screen-final-mockups/screen-specs.json`
-- canonical UI-state coverage: `quality-reviews/step-4-twelve-screen-final-mockups/state-coverage.json`
-- rejected responsive gallery: `quality-reviews/step-4-twelve-screen-final-mockups/mockup-gallery.html`
-- draft render manifest: `quality-reviews/step-4-twelve-screen-final-mockups/render-manifest.json`
-- existing renders: `12 screens × 3 viewports = 36 XML-valid SVG`
-- existing viewports: `320×667`, `375×667`, `390×844`
+## Technical evidence
 
-These files remain as rejected historical work and may not authorize Step 4 PASS or Step 5.
+- commit/tree: `32675a7f268e1da20552c26a19b8d5d50b0c8400` / `bb0a010fe7ddebe4530029f66f1f2f6d6f137821`
+- run/job: `33338326176` / `99329176306`
+- artifact/digest: `9739733397` / `sha256:45d2709621aa8c3636e235f52f6b5a8ec51216ea5f989231bc5a25da528ec6ad`
+- Chromium: 320×667、375×667、390×844
+- normal、interaction、large text、reduced motion: PASS
+- console/page errors: `0 / 0`
+- pinch zoom阻害: 修正済み
+- actual state: `window.__game`
 
-## Required next sequence
+## Open P1
 
-1. Rebuild four production-fidelity anchor screens first: S01, S02, S08 and S10.
-2. Match or exceed the project-source visual-prototype baseline in illustration density, Cat's Tower identity, screen-specific composition and commercial finish while retaining original assets and layout decisions.
-3. Perform adversarial self-review and reject any generic dashboard, placeholder-art or card-wall result.
-4. Show actual rendered screenshots to the user in the chat.
-5. Expand to S01–S12 only after the anchor direction is visually credible.
-6. Complete browser-rendered screenshots at all target viewports, large-text, reduced-motion, critical states, five independent critics, defect repair, final judge, completion evidence and terminal live read-back.
+`S4-RECOVERY-VIS-001`: 実root S02は戦場密度、4体編成の見え方、戦闘・報酬因果、演出密度、商用品質がユーザー定義の完成画面基準に未達。
 
-## Current write boundary
+## Retired false evidence
 
-Allowed:
+- 失敗したv2 execute workflowはPASS証拠に使わない
+- 失敗したv2 terminal workflowはPASS証拠に使わない
+- 一時的に壊れた回復workflowは削除済み
+- Vercel `READY`はbuild/preview証拠だけであり、画面品質を承認しない
 
-- Step 4 visual redesign and production-fidelity mockups
-- Step 4 render and accessibility evidence
-- Step 4 critics, repair, final judge and completion evidence
-- current Step 4 status mirrors
+## Next authorized work
 
-Forbidden until later gates:
-
-- product runtime
-- product assets presented as final without Step 4 approval
-- backend
-- payment provider
-- ad network
-- Production alias
-- physical-iPhone PASS claim
-- mutation of sealed Step 2/Step 3 executable evidence
+S02 root画面のビジュアル修復と実ブラウザ画像の再提示だけを先に行う。S01、S08、S10への展開、Step 5、backend、決済、広告、Production、物理iPhone PASSは未認可。
