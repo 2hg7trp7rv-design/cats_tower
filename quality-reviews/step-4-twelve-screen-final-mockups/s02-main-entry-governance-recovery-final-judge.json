@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-s02-main-entry-governance-recovery-final-judge",
+  "createdAt": "2026-08-31",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "acceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-acceptance.json",
+  "criticSummary": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-critic-summary.json",
+  "reviewTarget": {
+    "technicalCommit": "32675a7f268e1da20552c26a19b8d5d50b0c8400",
+    "technicalTree": "bb0a010fe7ddebe4530029f66f1f2f6d6f137821",
+    "workflowRunId": "33338326176",
+    "jobId": "99329176306",
+    "artifactId": "9739733397",
+    "artifactDigest": "sha256:45d2709621aa8c3636e235f52f6b5a8ec51216ea5f989231bc5a25da528ec6ad"
+  },
+  "technicalJudgement": {
+    "verdict": "PASS",
+    "basis": [
+      "Static recovery contract passed.",
+      "Chromium passed all required viewports, interaction, large-text and reduced-motion modes.",
+      "Console errors, page errors, horizontal-overflow violations and critical tap-target violations were zero.",
+      "Root and isolated S02 no longer block user zoom.",
+      "The actual game state remains window.__game and the renderer follows it."
+    ]
+  },
+  "visualJudgement": {
+    "verdict": "FAIL_P1",
+    "findingId": "S4-RECOVERY-VIS-001",
+    "basis": "The rendered screen is not yet credible as the final S02 production-facing anchor when compared with the user-defined completed-screen baseline. The battle field is sparse, the named four-member party is not legible as the persistent combat identity, and combat/reward causality lacks the required spectacle and density."
+  },
+  "governanceJudgement": {
+    "verdict": "RECOVERY_CORRECTED_NOT_TERMINAL",
+    "basis": [
+      "The false terminal claim was superseded by round 023 recovery control.",
+      "Failed v2 execution evidence was retained as history and not used as authorization.",
+      "Obsolete failed workflows were retired.",
+      "Historic scope drift remains disclosed."
+    ]
+  },
+  "unresolvedP0": 0,
+  "unresolvedP1": 1,
+  "verdict": "IN_PROGRESS_S02_RECOVERY_TECHNICAL_PASS_VISUAL_P1_OPEN",
+  "completionAllowed": false,
+  "step4Pass": false,
+  "step5Allowed": false,
+  "userVisualApproval": false,
+  "productionAliasChanged": false,
+  "physicalIPhoneVerified": false,
+  "requiredNextAction": "Repair the actual root S02 visual composition against the user-defined completed-screen baseline, show the rendered result to the user, and close S4-RECOVERY-VIS-001 before any Step 4 PASS or Step 5 authorization."
+}
