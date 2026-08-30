@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-active-change-control-addendum-round-023",
+  "createdAt": "2026-08-31",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "parentAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-022.json",
+  "entry": {
+    "head": "3ccff631e9e9174a69ec4e5e904c4dfbc552dbe9",
+    "tree": "e0988adbc3fade99d30678647dc3b93f24c6b33c"
+  },
+  "trigger": "A live audit requested by the user found that the commit labelled as terminalizing the S02 main-entry integration did not produce a valid completion chain: the exact-head terminal workflow failed, required v2 evidence files are absent, status mirrors are stale, both root and isolated S02 viewport metadata prevent user zoom, and runtime files introduced during round 020 exceeded that round's exact allowed-path list.",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS_STEP4_S02_MAIN_ENTRY_GOVERNANCE_RECOVERY",
+  "advanceAllowed": false,
+  "step4Allowed": true,
+  "step5Allowed": false,
+  "authoritativeCorrection": {
+    "round022Terminalized": false,
+    "step4Pass": false,
+    "step5Allowed": false,
+    "failedTerminalWorkflow": {
+      "workflow": ".github/workflows/verify-step-4-s02-terminal-readback-v2.yml",
+      "runId": "33249088315",
+      "jobId": "99083679955",
+      "conclusion": "FAILURE"
+    },
+    "failedExecuteWorkflow": {
+      "workflow": ".github/workflows/execute-step-4-s02-main-entry-v2.yml",
+      "runId": "33249006752",
+      "jobId": "99091321093",
+      "conclusion": "FAILURE",
+      "reason": "The apply script refused an unexpected root blob and no browser or completion evidence was produced."
+    },
+    "missingRequiredEvidence": [
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-integration-acceptance-v2.json",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-integration-evidence.json",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-integration-critic-summary.json",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-integration-final-judge.json",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-integration-completion-evidence.json",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-integration-live-readback.json"
+    ],
+    "vercelPreview": {
+      "deploymentId": "dpl_9ekLd5UVJ1JDTGKXf3s8wXA9Uj93",
+      "commit": "3ccff631e9e9174a69ec4e5e904c4dfbc552dbe9",
+      "state": "READY",
+      "target": null,
+      "qualityMeaning": "BUILD_AND_PREVIEW_ONLY_NOT_A_QUALITY_PASS"
+    }
+  },
+  "scopeDrift": {
+    "status": "RECORDED_NOT_SILENTLY_AUTHORIZED",
+    "finding": "runtime/s02-runtime.css, runtime/s02-runtime-fixes.css, runtime/s02-runtime.js and runtime/s02-battle-renderer.js were introduced while round 020 was active even though its exact path list did not authorize all of those new runtime paths.",
+    "disposition": "Freeze the existing files for recovery verification. This addendum does not authorize gameplay expansion or Step 5; it only permits evidence, accessibility and governance repair around the already-live integration."
+  },
+  "bindingAcceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-acceptance.json",
+  "currentWriteBoundary": {
+    "allowed": [
+      "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-023.json",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-*.json",
+      "index.html viewport accessibility metadata only",
+      "step4/s02/index.html viewport accessibility metadata only",
+      "tests/step4/verify-s02-runtime-integration.mjs",
+      "tests/step4/s02-runtime-browser-qa.mjs only when required by an observed browser defect",
+      ".github/workflows/verify-step-4-s02-runtime-integration.yml",
+      "retirement of the two failed v2 execute and terminal workflows",
+      "PROJECT_STATUS.json",
+      "AI_PROJECT_POLICY.json",
+      "simulation/CURRENT_STATUS.json",
+      "QUALITY_GATE.md",
+      ".github/workflows/CURRENT_STATUS.md",
+      "PROJECT_HANDOVER.md",
+      "AGENTS.md"
+    ],
+    "forbidden": [
+      "game-core.js",
+      "game-data.js",
+      "sw.js",
+      "manifest.webmanifest",
+      "vercel.json",
+      "new gameplay or economy behavior",
+      "backend",
+      "payment provider",
+      "ad network",
+      "Production alias",
+      "other branch",
+      "pull request operation",
+      "physical-iPhone PASS claim",
+      "Step 5 implementation"
+    ]
+  },
+  "requiredRecoverySequence": [
+    "Remove viewport directives that block user zoom in both the root and isolated S02 documents.",
+    "Replace stale diff assumptions with an exact recovery-entry boundary and immutable Step 2/3 blob checks.",
+    "Run static verification and Chromium at 320x667, 375x667 and 390x844.",
+    "Exercise the real summon, existing sheet, merchant navigation and explicit pending-state controls.",
+    "Capture large-text and reduced-motion evidence with console and page errors equal to zero.",
+    "Inspect the generated screenshots against the user-defined completed-screen baseline.",
+    "Record a critic verdict; do not infer user approval.",
+    "Synchronize all current-state mirrors.",
+    "Bind any narrow S02 recovery PASS to an exact commit, tree, workflow run, job and artifact digest."
+  ],
+  "automaticFailConditions": [
+    "build or Vercel READY used as a visual-quality proxy",
+    "missing screenshots",
+    "user visual approval inferred rather than observed",
+    "unresolved P0 or P1 greater than zero",
+    "Step 5 started",
+    "Production alias changed",
+    "physical-iPhone verification claimed"
+  ],
+  "completionBoundary": {
+    "s02RecoveryPassDoesNotEqualStep4Pass": true,
+    "s02RecoveryPassDoesNotAuthorizeStep5": true,
+    "remainingAnchorScreens": [
+      "S01",
+      "S08",
+      "S10"
+    ],
+    "fiveIndependentStep4CriticsStillRequired": true,
+    "userVisualDirectionApprovalStillRequiredForStep4": true
+  },
+  "scopeReadback": {
+    "backendChanged": false,
+    "paymentProviderChanged": false,
+    "adNetworkChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "otherBranchWritten": false,
+    "pullRequestOperation": false
+  }
+}
