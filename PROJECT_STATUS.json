@@ -1,6 +1,6 @@
 {
-  "statusDocumentSchemaVersion": 16,
-  "updatedDate": "2026-08-28",
+  "statusDocumentSchemaVersion": 17,
+  "updatedDate": "2026-08-31",
   "project": "Cat's Tower",
   "canonicalRepository": "2hg7trp7rv-design/cats_tower",
   "canonicalBranch": "kimi",
@@ -18,7 +18,7 @@
   "currentStep": 4,
   "currentStepName": "twelve-screen-final-mockups",
   "currentStepStatus": "IN_PROGRESS",
-  "currentCheckpoint": "step4-user-visual-rejection-round-001",
+  "currentCheckpoint": "step4-s02-recovery-technical-pass-visual-p1-open",
   "advanceAllowed": false,
   "step2Allowed": true,
   "step3Allowed": true,
@@ -27,6 +27,11 @@
   "physicalIPhoneVerified": false,
   "productionChangedByCurrentWork": false,
   "productionAliasChanged": false,
+  "activeChangeControl": {
+    "path": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-024.json",
+    "status": "IN_PROGRESS",
+    "verdict": "IN_PROGRESS_STEP4_S02_GOVERNANCE_VERIFIER_AND_MIRROR_SYNC"
+  },
   "round008": {
     "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
     "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce",
@@ -34,182 +39,86 @@
     "sealBlob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
     "sealCommit": "0b17f9b5b8decdab8ce329287a4dc073790c4bf7",
     "sealTree": "9eac6b6103d65cf8bcb13859d00e43cd3389fa8a",
-    "finalJudgeCommit": "cd57005ef12c5ca4c923f436c2bcce0a5cc8aadf",
     "unresolvedP0": 0,
-    "unresolvedP1": 0
-  },
-  "canonicalProductBoundary": {
-    "playerVisibleTowerMaximum": null,
-    "floor100Role": "first-major-milestone-not-ending",
-    "floor101Exists": true,
-    "activeNamedPartySize": 4,
-    "directTapDamage": 0,
-    "singleResetId": "reset.tower_return",
-    "coinLevelCap": null,
-    "evolutionEligibilityEveryLevels": 100,
-    "rarities": [
-      "N",
-      "R",
-      "RR",
-      "SR",
-      "SSR",
-      "UR"
-    ],
-    "characterAndWeaponGachaSeparated": true,
-    "hardPityTarget": 100,
-    "featuredGuaranteeTarget": 200,
-    "minimumAdditionalEffectiveCopiesForFullMastery": 20,
-    "canonicalScreenCount": 12,
-    "serverAuthoritativePermanentEconomy": true
+    "unresolvedP1": 0,
+    "status": "PASS"
   },
   "step2Evidence": {
-    "acceptancePath": "quality-reviews/step-2-executable-contract-v2/acceptance-matrix.json",
     "semanticCommit": "724d04940f9f3794b993cddbc5af3a7163a0395b",
     "semanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
     "sealPath": "simulation/executable-seal-v2.json",
     "sealBlob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
-    "sealActivationCommit": "89174eeebb033fe807a0592c8df0279c2a7b9a6f",
-    "sealActivationTree": "ccf444df436d63d86fd4da0355f20349753b0546",
-    "dedicatedWorkflow": ".github/workflows/verify-step-2-v2.yml",
+    "workflow": ".github/workflows/verify-step-2-v2.yml",
     "workflowRunId": "33104391753",
     "jobId": "98630217077",
     "ciConclusion": "SUCCESS",
-    "sealValidatorVerdict": "PASS_EXECUTABLE_SEAL_V2",
-    "criticSummaryPath": "quality-reviews/step-2-executable-contract-v2/critic-summary.json",
-    "criticSummaryBlob": "4d85d95c0b00b3e2aed4aecc6025ceea9253308e",
-    "criticCount": 5,
+    "status": "PASS_SEALED"
+  },
+  "step3": {
+    "status": "PASS",
+    "acceptance": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
+    "finalJudge": "quality-reviews/step-3-large-scale-validation/final-judge.json",
+    "completionEvidence": "quality-reviews/step-3-large-scale-validation/completion-evidence.json",
+    "liveReadback": "quality-reviews/step-3-large-scale-validation/live-readback.json",
+    "gameplayScenarios": 15000,
+    "highVolumeSamples": 1700000,
     "unresolvedP0": 0,
     "unresolvedP1": 0,
-    "trackedP2": 6,
-    "finalJudgePath": "quality-reviews/step-2-executable-contract-v2/final-judge.json",
-    "finalJudgeBlob": "44fe4c83e3ea1ceefba836200100b6d6628028d1",
-    "completionEvidencePath": "quality-reviews/step-2-executable-contract-v2/completion-evidence.json",
-    "completionEvidenceBlob": "1f771b02f0982c879e038bfd36925ed889142d95",
-    "liveReadbackPath": "quality-reviews/step-2-executable-contract-v2/live-readback.json",
-    "liveReadbackBlob": "cfec952f14680482409ff621e9c89ed36cf4e6d6",
-    "qualificationScenarioCount": "30",
-    "qualificationDigest": "a24fa5a4a12cf132ac477c80e77431cd0b97ab070bbbef83c3881c160f42562c",
-    "balanceVerdict": "NOT_EVALUATED_STEP2",
-    "completionClaimed": true,
-    "step3Authorized": true
+    "balanceVerdict": "PASS_STEP3_LARGE_SCALE_VALIDATION"
+  },
+  "step4": {
+    "status": "IN_PROGRESS",
+    "step4Pass": false,
+    "step5Allowed": false,
+    "currentScope": "S02 main-entry governance recovery and visual repair",
+    "technicalTargetCommit": "32675a7f268e1da20552c26a19b8d5d50b0c8400",
+    "technicalTargetTree": "bb0a010fe7ddebe4530029f66f1f2f6d6f137821",
+    "technicalWorkflowRunId": "33338326176",
+    "technicalJobId": "99329176306",
+    "technicalArtifactId": "9739733397",
+    "technicalArtifactDigest": "sha256:45d2709621aa8c3636e235f52f6b5a8ec51216ea5f989231bc5a25da528ec6ad",
+    "technicalVerdict": "PASS_S02_RUNTIME_BROWSER_INTEGRATION",
+    "overallVerdict": "IN_PROGRESS_S02_RECOVERY_TECHNICAL_PASS_VISUAL_P1_OPEN",
+    "unresolvedP0": 0,
+    "unresolvedP1": 1,
+    "openFinding": "S4-RECOVERY-VIS-001",
+    "userVisualDirectionApproval": false,
+    "remainingAnchorScreens": [
+      "S01",
+      "S08",
+      "S10"
+    ],
+    "criticSummary": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-critic-summary.json",
+    "finalJudge": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-final-judge.json",
+    "completionEvidence": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-completion-evidence.json"
   },
   "authorizedExecutionSequence": [
-    {
-      "order": 1,
-      "name": "canonical-integration-and-reseal",
-      "status": "PASS"
-    },
-    {
-      "order": 2,
-      "name": "executable-contract-and-simulation",
-      "status": "PASS"
-    },
-    {
-      "order": 3,
-      "name": "large-scale-validation",
-      "status": "PASS"
-    },
-    {
-      "order": 4,
-      "name": "twelve-screen-final-mockups",
-      "status": "IN_PROGRESS_VISUAL_DRAFT_REJECTED"
-    },
-    {
-      "order": 5,
-      "name": "first-production-slice-and-backend-implementation",
-      "status": "BLOCKED_UNTIL_STEP4_PASS"
-    },
-    {
-      "order": 6,
-      "name": "physical-iphone-validation",
-      "status": "BLOCKED_UNTIL_ELIGIBLE_BUILD"
-    }
+    { "order": 1, "name": "canonical-integration-and-reseal", "status": "PASS" },
+    { "order": 2, "name": "executable-contract-and-simulation", "status": "PASS" },
+    { "order": 3, "name": "large-scale-validation", "status": "PASS" },
+    { "order": 4, "name": "twelve-screen-final-mockups", "status": "IN_PROGRESS" },
+    { "order": 5, "name": "first-production-slice-and-backend-implementation", "status": "BLOCKED_UNTIL_STEP4_PASS" },
+    { "order": 6, "name": "physical-iphone-validation", "status": "BLOCKED_UNTIL_ELIGIBLE_BUILD" }
   ],
-  "step2Entry": {
-    "source": "canonical/STEP2_DEPENDENCY_CLOSURE.json",
-    "status": "PASS",
-    "acceptanceSatisfied": true,
-    "newV2ContentMaterialized": true,
-    "sourceBoundCiPassed": true,
-    "executableSealPassed": true,
-    "criticGatePassed": true,
-    "completionChainPassed": true,
-    "legacyV1Usable": false,
-    "observedHoldoutReusable": false,
-    "step3MayStartBeforeStep2Seal": false
-  },
   "nextAuthorizedChat": "04_UIUX・12画面完成見本",
-  "nextAction": "Redesign S01, S02, S08 and S10 as production-fidelity anchor screens, adversarially review the rendered result, and show the actual screens to the user before expanding to all twelve.",
+  "nextAction": "Repair the actual root S02 battle composition against the user-defined completed-screen baseline, show the rendered screen to the user, and close S4-RECOVERY-VIS-001 before another anchor or Step 5.",
   "writeBoundary": {
     "allowedNext": [
-      "Step 4 production-fidelity visual redesign",
-      "Step 4 rendered screenshot evidence",
-      "Step 4 visual and accessibility critics"
+      "S02 visual composition repair under a new explicit Step 4 acceptance",
+      "S02 rendered screenshot evidence and adversarial comparison",
+      "Step 4 status and critic evidence"
     ],
     "forbiddenUntilLaterGates": [
-      "runtime",
-      "final product assets",
+      "Step 5 gameplay expansion",
       "backend",
       "payment provider",
       "ad network",
       "Production alias",
-      "physical-iPhone PASS claim",
-      "Step 5 implementation"
+      "physical-iPhone PASS claim"
     ]
   },
   "status": "IN_PROGRESS",
-  "phase": "STEP4_VISUAL_REDESIGN",
+  "phase": "STEP4_S02_VISUAL_P1_OPEN",
   "balanceVerdict": "PASS_STEP3_LARGE_SCALE_VALIDATION",
-  "reason": "The user explicitly rejected the current Step 4 SVG/contact-sheet visual direction as materially below the project-source visual prototypes and not credible as production-quality game design.",
-  "step3": {
-    "status": "PASS",
-    "acceptance": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
-    "executionGate": "quality-reviews/step-3-large-scale-validation/execution-gate.json",
-    "analysis": "quality-reviews/step-3-large-scale-validation/analysis.json",
-    "criticSummary": "quality-reviews/step-3-large-scale-validation/critic-summary.json",
-    "finalJudge": "PASS",
-    "completionEvidence": "PASS",
-    "liveReadback": "PASS",
-    "gameplayScenarios": "15000",
-    "highVolumeSamples": "1700000",
-    "candidateMutation": false,
-    "holdoutTuningReuse": false,
-    "finalJudgeVerdict": "PASS_STEP3_CONTENT_PENDING_COMPLETION_AND_LIVE_READBACK",
-    "liveReadbackVerdict": "PASS_FINAL_LIVE_READBACK_STEP3_LARGE_SCALE_VALIDATION",
-    "terminalMirrorCorrection": "quality-reviews/step-3-large-scale-validation/terminal-mirror-correction.json"
-  },
-  "step4": {
-    "status": "IN_PROGRESS",
-    "acceptance": "quality-reviews/step-4-twelve-screen-final-mockups/acceptance-matrix.json",
-    "userVisualRejection": "quality-reviews/step-4-twelve-screen-final-mockups/user-visual-rejection-round-001.json",
-    "currentSvgDraft": "REJECTED_AS_VISUAL_DIRECTION",
-    "currentSvgDraftTree": "980ed3686346f48ddf5e53c8e24a0f697a3219cd",
-    "existingScreenCount": 12,
-    "existingViewportCount": 3,
-    "existingSvgCount": 36,
-    "xmlValidity": "PASS_TRANSPORT_ONLY",
-    "browserRenderedEvidence": "NOT_COMPLETE",
-    "userVisualDirectionApproval": false,
-    "independentCriticsCompleted": 0,
-    "independentCriticsRequired": 5,
-    "finalJudge": "PENDING",
-    "completionEvidence": "PENDING",
-    "liveReadback": "PENDING",
-    "step4Pass": false,
-    "step5Allowed": false,
-    "visualBaselineRole": "USER_DEFINED_VISUAL_PROTOTYPE_BASELINE",
-    "anchorScreensRequiredBeforeExpansion": [
-      "S01",
-      "S02",
-      "S08",
-      "S10"
-    ]
-  },
-  "resolvedCiHistory": {
-    "workflow": ".github/workflows/verify-main.yml",
-    "status": "RESOLVED_FOR_STEP3",
-    "resolution": "Historical Round 7 and current governance are separate jobs. Step 4 visual redesign requires a new dedicated quality chain.",
-    "verifiedRunId": "33144127913",
-    "conclusion": "SUCCESS"
-  }
+  "reason": "S02 technical integration and browser accessibility checks pass, but the rendered battle screen remains materially below the binding completed-screen visual baseline."
 }
