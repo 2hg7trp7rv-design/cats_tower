@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-s02-main-entry-governance-recovery-critic-summary",
+  "createdAt": "2026-08-31",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "acceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-acceptance.json",
+  "reviewTarget": {
+    "technicalCommit": "32675a7f268e1da20552c26a19b8d5d50b0c8400",
+    "technicalTree": "bb0a010fe7ddebe4530029f66f1f2f6d6f137821",
+    "entryPoint": "/",
+    "sourceOfTruth": "window.__game"
+  },
+  "technicalEvidence": {
+    "workflow": ".github/workflows/verify-step-4-s02-runtime-integration.yml",
+    "runId": "33338326176",
+    "jobId": "99329176306",
+    "conclusion": "SUCCESS",
+    "artifactId": "9739733397",
+    "artifactName": "step4-s02-main-entry-governance-recovery-32675a7f268e1da20552c26a19b8d5d50b0c8400",
+    "artifactDigest": "sha256:45d2709621aa8c3636e235f52f6b5a8ec51216ea5f989231bc5a25da528ec6ad",
+    "browserVerdict": "PASS_S02_RUNTIME_BROWSER_INTEGRATION",
+    "viewports": [
+      "320x667",
+      "375x667",
+      "390x844"
+    ],
+    "modes": [
+      "normal",
+      "interaction",
+      "large-text-browser-simulation",
+      "reduced-motion"
+    ],
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "horizontalOverflowViolations": 0,
+    "criticalTapTargetViolations": 0,
+    "viewportZoomBlocking": false,
+    "actualStateMutationVerified": true,
+    "actualStateRendererVerified": true
+  },
+  "criticScopes": [
+    {
+      "scope": "code-and-state-integrity",
+      "verdict": "PASS",
+      "findings": [
+        "The root S02 bridge and battle renderer use window.__game instead of introducing a second persistent state store.",
+        "Summon changes the actual fieldCats state and the rendered cat count follows it.",
+        "No backend, payment, ad or permanent-economy issuance was added by the recovery."
+      ]
+    },
+    {
+      "scope": "mobile-layout-and-accessibility",
+      "verdict": "PASS_WITH_PHYSICAL_DEVICE_UNVERIFIED",
+      "findings": [
+        "The root and isolated S02 entries no longer disable pinch zoom.",
+        "All required Chromium viewports passed without horizontal overflow and critical controls were at least 44 CSS pixels.",
+        "Large-text and reduced-motion browser evidence passed.",
+        "Physical iPhone tap feel, Dynamic Island interaction, heat, battery and PWA restoration remain NOT_VERIFIED."
+      ]
+    },
+    {
+      "scope": "visual-product-quality",
+      "verdict": "FAIL_P1",
+      "findingId": "S4-RECOVERY-VIS-001",
+      "severity": "P1",
+      "finding": "The actual root S02 is functionally stable but materially below the user-defined completed-screen baseline and the previously approved S02 direction in battle density, four-member party presence, combat spectacle, scene layering and commercial finish.",
+      "evidence": [
+        "At the captured initial state the screen presents one field cat against one to three enemies, while the accepted S02 responsibility requires the named four-member battle identity to be visually legible.",
+        "The centre of the battlefield has a large low-information region and limited attack, impact, skill, forecast and reward causality compared with the completed-screen baseline.",
+        "The wood-and-brass chrome, fixed header, contextual strip, merchant support and five-tab navigation are directionally aligned, but chrome compliance does not compensate for sparse battle composition.",
+        "The 320x667 layout is technically contained yet leaves the commerce section largely below the fold and compresses resource readability.",
+        "The rendered result was manually compared with the project-source completed-screen contact sheet; automation did not make this visual judgement."
+      ]
+    },
+    {
+      "scope": "governance-and-evidence",
+      "verdict": "PASS_RECOVERY_ONLY",
+      "findings": [
+        "The failed execute and terminal claims were not reused as PASS evidence.",
+        "The invalid temporary recovery workflow and failed v2 terminal workflow were retired.",
+        "Historic runtime scope drift is recorded rather than silently authorized.",
+        "This recovery does not authorize Step 4 PASS or Step 5."
+      ]
+    }
+  ],
+  "unresolved": {
+    "P0": 0,
+    "P1": 1,
+    "P2": 0,
+    "items": [
+      "S4-RECOVERY-VIS-001"
+    ]
+  },
+  "verdict": "IN_PROGRESS_S02_RECOVERY_TECHNICAL_PASS_VISUAL_P1_OPEN",
+  "step4Pass": false,
+  "step5Allowed": false,
+  "userVisualApproval": false,
+  "productionAliasChanged": false,
+  "physicalIPhoneVerified": false
+}
