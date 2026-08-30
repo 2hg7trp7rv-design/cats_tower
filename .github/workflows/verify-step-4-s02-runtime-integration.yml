@@ -1,4 +1,4 @@
-name: Verify Step 4 S02 runtime integration
+name: Verify Step 4 S02 governance recovery
 
 on:
   workflow_dispatch:
@@ -7,18 +7,11 @@ on:
       - kimi
     paths:
       - "index.html"
-      - "sw.js"
-      - "runtime/s02-runtime.css"
-      - "runtime/s02-runtime-fixes.css"
-      - "runtime/s02-runtime.js"
-      - "runtime/s02-battle-renderer.js"
-      - "step4/s02/assets/s02-forest-approved.webp"
-      - "step4/s02/assets/s02-ui-icons.svg"
+      - "step4/s02/index.html"
       - "tests/step4/verify-s02-runtime-integration.mjs"
       - "tests/step4/s02-runtime-browser-qa.mjs"
-      - "quality-reviews/step-4-twelve-screen-final-mockups/s02-runtime-integration-*"
-      - "quality-reviews/step-1-canonical-design/active-change-control.json"
-      - "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-020.json"
+      - "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-023.json"
+      - "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-*.json"
       - "PROJECT_STATUS.json"
       - "AI_PROJECT_POLICY.json"
       - "simulation/CURRENT_STATUS.json"
@@ -32,14 +25,14 @@ permissions:
   contents: read
 
 concurrency:
-  group: verify-step4-s02-runtime-kimi
+  group: verify-step4-s02-governance-recovery-kimi
   cancel-in-progress: true
 
 jobs:
-  verify-runtime-integration:
-    name: Root game static and Chromium evidence
+  verify-recovery:
+    name: Static, Chromium, accessibility and evidence
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
 
     steps:
       - name: Checkout exact kimi commit
@@ -54,22 +47,23 @@ jobs:
           test "${GITHUB_REPOSITORY}" = "2hg7trp7rv-design/cats_tower"
           test "${GITHUB_REF_NAME}" = "kimi"
           test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
-          git merge-base --is-ancestor 4e5cc9923c7db37e21001407f3bcd8a77fb48504 HEAD
+          git merge-base --is-ancestor 3ccff631e9e9174a69ec4e5e904c4dfbc552dbe9 HEAD
           echo "head=$(git rev-parse HEAD)"
           echo "tree=$(git rev-parse HEAD^{tree})"
 
-      - name: Run fail-closed root integration contract
+      - name: Run fail-closed governance recovery contract
         shell: bash
         run: |
           set -euo pipefail
-          node tests/step4/verify-s02-runtime-integration.mjs | tee s02-runtime-static-report.json
+          node tests/step4/verify-s02-runtime-integration.mjs | tee s02-main-entry-recovery-static-report.json
+          grep -q 'PASS_S02_MAIN_ENTRY_RECOVERY_STATIC' s02-main-entry-recovery-static-report.json
 
       - name: Install pinned Playwright and Chromium
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p /tmp/s02-runtime-playwright
-          cd /tmp/s02-runtime-playwright
+          mkdir -p /tmp/s02-recovery-playwright
+          cd /tmp/s02-recovery-playwright
           npm init -y >/dev/null 2>&1
           npm install --save-exact playwright@1.62.1
           npx playwright install --with-deps chromium
@@ -78,44 +72,45 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/s02-runtime-http.log 2>&1 &
-          echo $! > /tmp/s02-runtime-http.pid
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/s02-recovery-http.log 2>&1 &
+          echo $! > /tmp/s02-recovery-http.pid
           for attempt in $(seq 1 30); do
             if curl --fail --silent http://127.0.0.1:4173/ >/dev/null; then
               exit 0
             fi
             sleep 1
           done
-          cat /tmp/s02-runtime-http.log
+          cat /tmp/s02-recovery-http.log
           exit 1
 
-      - name: Run root game Chromium integration QA
+      - name: Run root game Chromium recovery QA
         shell: bash
         env:
-          PLAYWRIGHT_PACKAGE: /tmp/s02-runtime-playwright/node_modules/playwright
+          PLAYWRIGHT_PACKAGE: /tmp/s02-recovery-playwright/node_modules/playwright
           S02_RUNTIME_BASE_URL: http://127.0.0.1:4173/
-          S02_RUNTIME_EVIDENCE_DIR: quality-reviews/step-4-twelve-screen-final-mockups/s02-runtime-integration-browser-evidence
+          S02_RUNTIME_EVIDENCE_DIR: quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-browser-evidence
         run: |
           set -euo pipefail
           node tests/step4/s02-runtime-browser-qa.mjs
 
-      - name: Verify evidence payload and patch hygiene
+      - name: Verify exact-head evidence payload
         shell: bash
         run: |
           set -euo pipefail
-          test -f quality-reviews/step-4-twelve-screen-final-mockups/s02-runtime-integration-browser-evidence/report.json
-          test "$(find quality-reviews/step-4-twelve-screen-final-mockups/s02-runtime-integration-browser-evidence -maxdepth 1 -name '*.png' | wc -l | tr -d ' ')" = "6"
-          grep -q 'PASS_S02_RUNTIME_BROWSER_INTEGRATION' quality-reviews/step-4-twelve-screen-final-mockups/s02-runtime-integration-browser-evidence/report.json
-          git diff --check 4e5cc9923c7db37e21001407f3bcd8a77fb48504..HEAD
+          report=quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-browser-evidence/report.json
+          test -f "${report}"
+          grep -q 'PASS_S02_RUNTIME_BROWSER_INTEGRATION' "${report}"
+          test "$(find quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-browser-evidence -maxdepth 1 -name '*.png' | wc -l | tr -d ' ')" = "6"
+          git diff --check 3ccff631e9e9174a69ec4e5e904c4dfbc552dbe9..HEAD
 
-      - name: Upload exact-head root game evidence
+      - name: Upload exact-head governance recovery evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: step4-s02-runtime-integration-${{ github.sha }}
+          name: step4-s02-main-entry-governance-recovery-${{ github.sha }}
           if-no-files-found: error
           retention-days: 30
           path: |
-            s02-runtime-static-report.json
-            quality-reviews/step-4-twelve-screen-final-mockups/s02-runtime-integration-browser-evidence/**
-            /tmp/s02-runtime-http.log
+            s02-main-entry-recovery-static-report.json
+            quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-browser-evidence/**
+            /tmp/s02-recovery-http.log
