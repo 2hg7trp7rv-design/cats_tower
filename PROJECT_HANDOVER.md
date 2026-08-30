@@ -1,76 +1,84 @@
-<!-- CATS_TOWER_STEP3_STATUS_BEGIN -->
+<!-- CATS_TOWER_STEP4_STATUS_BEGIN -->
 ## 現在の正式Gate
 
 - Step 1: **PASS**
 - Step 2: **PASS / SEALED**
 - Step 3: **PASS**
-- Step 4: **READY_TO_START**
-- Balance verdict: **PASS_STEP3_LARGE_SCALE_VALIDATION**
+- Step 4: **IN_PROGRESS**
+- Step 5: **BLOCKED_UNTIL_STEP4_PASS**
+- Unresolved P0/P1: **0 / 1**
 - Physical iPhone: **NOT_VERIFIED**
 - Production alias changed: **false**
-<!-- CATS_TOWER_STEP3_STATUS_END -->
+<!-- CATS_TOWER_STEP4_STATUS_END -->
 
 # Cat's Tower 引き継ぎ書
 
-更新日: **2026-08-28**
-Repository: `2hg7trp7rv-design/cats_tower`
+更新日: **2026-08-31**  
+Repository: `2hg7trp7rv-design/cats_tower`  
 Branch: existing `kimi` only
-Current: **Step 3 — PASS**
-Next: **Step 4 — READY_TO_START**
-Physical iPhone: **NOT_VERIFIED**
-Production: **変更なし**
 
-## 結論
+## 引き継ぎ結論
 
-Step 3「3ビルド・ガチャ・重複熟練・進化・課金検証」は、実行、holdout分離、6 high-volume suites、5独立critic、final judge、completion evidence、terminal live read-backまでPASSした。Step 4の12画面完成見本へ移行できる。
+現在はStep 4 S02 root統合のgovernance recovery中である。コード・ブラウザ・アクセシビリティはtechnical PASSしたが、実画面は完成画面基準に未達であり、Step 4 PASSではない。
 
-## Step 3 evidence
+Current verdict: `IN_PROGRESS_S02_RECOVERY_TECHNICAL_PASS_VISUAL_P1_OPEN`
 
-- acceptance: `quality-reviews/step-3-large-scale-validation/acceptance-matrix.json`
-- execution gate: `quality-reviews/step-3-large-scale-validation/execution-gate.json`
-- analysis: `quality-reviews/step-3-large-scale-validation/analysis.json`
-- critic summary: `quality-reviews/step-3-large-scale-validation/critic-summary.json`
-- final judge: `quality-reviews/step-3-large-scale-validation/final-judge.json`
-- completion evidence: `quality-reviews/step-3-large-scale-validation/completion-evidence.json`
-- terminal read-back: `quality-reviews/step-3-large-scale-validation/live-readback.json`
-- post-terminal mirror correction: `quality-reviews/step-3-large-scale-validation/terminal-mirror-correction.json`
+## 完了した回復
 
-## Volumes and verdicts
+- 失敗していたv2 execute / terminal連鎖を完成証拠から除外
+- active change-control round 023 / 024を追加
+- rootとisolated S02のpinch zoom阻害を解除
+- stale governance verifierをlatest addendum基準へ修正
+- existing S02 runtimeを固定blobとして監視し、任意runtime変更は許可しない
+- Chromium 320×667、375×667、390×844を再実行
+- 実招集、既存agency sheet、商会移動、pending stateを確認
+- large text / reduced motionを確認
+- console/page errors `0 / 0`
+- 無効な一時workflowと失敗したv2 terminal workflowを退役
 
-- calibration: `12,000`
-- unseen holdout: `3,000`
-- gameplay total: `15,000`
-- high-volume total: `1,700,000`
-- critic count: `5`
-- unresolved P0/P1: `0 / 0`
-- balance verdict: `PASS_STEP3_LARGE_SCALE_VALIDATION`
+## Technical evidence
 
-## Key measured results
+- technical commit: `32675a7f268e1da20552c26a19b8d5d50b0c8400`
+- technical tree: `bb0a010fe7ddebe4530029f66f1f2f6d6f137821`
+- workflow: `.github/workflows/verify-step-4-s02-runtime-integration.yml`
+- run/job: `33338326176` / `99329176306`
+- artifact: `9739733397`
+- digest: `sha256:45d2709621aa8c3636e235f52f6b5a8ec51216ea5f989231bc5a25da528ec6ad`
 
-- first reset: 20〜29分、p50 24分
-- no-ad F2P featured guarantee: day 40
-- no-ad F2P combined daily draws: 44
-- build spread violations: 0
-- repeated-reset sequence violations: 0
-- first-evolution uncovered scenarios: 0
-- pity/gacha boundary violations: 0
-- free-ledger refund violations: 0
-- state-machine unexpected transitions: 0
-- large-number canonical/background/modifier violations: 0
+## 未解決
 
-## Scope unchanged
+### P1 `S4-RECOVERY-VIS-001`
 
-- runtime: unchanged
-- assets: unchanged
-- backend: unchanged
-- payment provider: unchanged
-- ad network: unchanged
-- Production alias: unchanged
-- physical iPhone: not verified
-- other branch / PR: none
+実root S02は次が不足している。
 
-## Next authorized work
+- 常設4体編成の戦闘アイデンティティ
+- 戦場の情報密度と構図
+- 接敵、攻撃、被弾、スキル、撃破、報酬の因果
+- boss・雑魚・味方の迫力とレイヤー
+- 320幅での資源可読性と下部商会情報の理解性
+- ユーザー定義完成画面基準に並ぶ商用品質
 
-`04_12画面完成見本`
+ユーザーによる実root S02の視覚承認は未取得。
 
-S01〜S12の完成見本、スマホ3 viewport、safe area、large text、reduced motion、視認性、情報階層、操作導線を固定する。runtime/backend/Productionへはまだ進まない。
+## 次に許可される作業
+
+S02 rootのビジュアル構成を修復し、3 viewport、large text、reduced motion、実操作を再検証した実ブラウザ画像を提示する。P1が閉じるまで別アンカーへ展開しない。
+
+## 禁止境界
+
+- Step 5実装
+- backend
+- payment provider
+- ad network
+- Production alias
+- PR operation
+- 他branch
+- 物理iPhone PASS claim
+- Step 2 / Step 3 sealed evidence mutation
+
+## 外部状態
+
+- Production変更: なし
+- Physical iPhone: `NOT_VERIFIED`
+- Vercel `READY`: build/preview証拠のみ
+- 旧PR #8: open historyとして残存。PR操作禁止のため未変更
