@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-s02-main-entry-governance-recovery-acceptance",
+  "createdAt": "2026-08-31",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "entry": {
+    "head": "3ccff631e9e9174a69ec4e5e904c4dfbc552dbe9",
+    "tree": "e0988adbc3fade99d30678647dc3b93f24c6b33c"
+  },
+  "status": "ACTIVE_BEFORE_RECOVERY_WRITE",
+  "scope": "Recover governance, accessibility and evidence for the already-live S02 root integration without expanding gameplay or entering Step 5.",
+  "acceptance": {
+    "repositoryBoundary": [
+      "Only existing kimi is written.",
+      "No PR, merge, rebase, cherry-pick, force-push or other branch operation.",
+      "Step 2 and Step 3 sealed blobs remain unchanged."
+    ],
+    "accessibility": [
+      "Root and isolated S02 viewport metadata retain viewport-fit=cover.",
+      "Neither document disables pinch zoom with user-scalable=no.",
+      "Neither document caps maximum-scale below 2."
+    ],
+    "static": [
+      "Root exposes the real S02 runtime shell, actual Canvas battle, summon, tower list, tower-return control and five-tab navigation.",
+      "The runtime bridge and battle renderer read window.__game rather than creating a second persistent store.",
+      "No iframe, flattened full-screen screenshot, inline event handler or Step 4 backend call is introduced.",
+      "No recovery change exists outside the round 023 allow-list."
+    ],
+    "browser": [
+      "Chromium passes 320x667, 375x667 and 390x844 with no horizontal overflow.",
+      "Critical controls are at least 44 CSS pixels.",
+      "Bottom navigation remains pinned and battle renderer covers the scene.",
+      "Visible floor, cat count and enemy count are sourced from the actual game state.",
+      "Summon mutates actual game state; the existing agency sheet opens; commerce navigation reaches the merchant section; unavailable events expose an explicit pending state.",
+      "Large-text and reduced-motion evidence pass.",
+      "Console error count and uncaught page error count are zero."
+    ],
+    "visual": [
+      "All generated screenshots are manually inspected against the user-defined completed-screen baseline.",
+      "No production-quality or user-approval claim is made from automation alone."
+    ],
+    "evidence": [
+      "The workflow artifact is bound to exact head and tree.",
+      "Critic, completion and read-back records distinguish narrow S02 recovery from Step 4 PASS.",
+      "All state mirrors identify Step 4 as IN_PROGRESS and Step 5 as blocked."
+    ]
+  },
+  "automaticFailConditions": [
+    "Any protected sealed blob changes.",
+    "Any forbidden path changes.",
+    "Any required browser mode is absent.",
+    "Any unresolved P0 or P1 remains.",
+    "User approval is assumed.",
+    "Production or physical-iPhone PASS is claimed."
+  ],
+  "expectedVerdictOnSuccess": "PASS_S02_MAIN_ENTRY_GOVERNANCE_RECOVERY_ONLY",
+  "step4PassOnSuccess": false,
+  "step5AllowedOnSuccess": false
+}
