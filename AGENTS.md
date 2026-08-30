@@ -1,85 +1,78 @@
-<!-- CATS_TOWER_STEP3_STATUS_BEGIN -->
+<!-- CATS_TOWER_STEP4_STATUS_BEGIN -->
 ## 現在の正式Gate
 
 - Step 1: **PASS**
 - Step 2: **PASS / SEALED**
 - Step 3: **PASS**
-- Step 4: **READY_TO_START**
-- Balance verdict: **PASS_STEP3_LARGE_SCALE_VALIDATION**
+- Step 4: **IN_PROGRESS**
+- Step 5: **BLOCKED_UNTIL_STEP4_PASS**
+- Unresolved P0/P1: **0 / 1**
 - Physical iPhone: **NOT_VERIFIED**
 - Production alias changed: **false**
-<!-- CATS_TOWER_STEP3_STATUS_END -->
+<!-- CATS_TOWER_STEP4_STATUS_END -->
 
 # Cat's Tower repository instructions
 
-更新日: **2026-08-28**
-Repository: `2hg7trp7rv-design/cats_tower`
+更新日: **2026-08-31**  
+Repository: `2hg7trp7rv-design/cats_tower`  
 書込みbranch: **既存の`kimi`のみ**
 
 ## Branch hard lock
 
-- 書込みは既存`kimi`のみ。毎回live HEAD/treeを取得する。
-- branch作成・切替・書込み・削除、PR、merge、rebase、cherry-pick、force-pushは禁止。
-- Production alias、課金商品公開、広告network有効化、data deletionは明示承認なしに実行しない。
+- 他branchの作成、切替、書込み、削除は禁止
+- PR、merge、rebase、cherry-pick、force-pushは禁止
+- GitHub書込みでは常に`branch=kimi`を明示する
+- Production aliasはユーザーの明示承認なしに変更しない
 
-## Authority order
+## Current authority
 
-1. 最新のユーザー明示決定
+1. 最新のユーザー決定
 2. `CHATGPT_PROJECT_INSTRUCTIONS1.md`
-3. active change-controlと最新addendum
-4. Step 1 Round 008 seal
-5. Step 2 executable sealとcompletion/read-back chain
-6. Step 3 acceptance、execution gate、analysis、5 critics、final judge、completion、terminal read-back、mirror correction
-7. `PROJECT_STATUS.json`、`simulation/CURRENT_STATUS.json`、`QUALITY_GATE.md`
-8. historical PASS、legacy、参考資料
+3. `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-024.json`
+4. Round 008 Step 1 seal
+5. Step 2 executable seal
+6. Step 3 terminal evidence
+7. S02 governance recovery acceptance / critic / judge / evidence
+8. current status mirrors
 
-過去証拠は改変しない。旧Round 7 current markerや旧Step 2 READY文言を現行状態へ復元しない。
+旧Step 4 draft、失敗したv2 execute / terminal、Vercel `READY`は現在の完成認可に使わない。
 
-## Sealed checkpoints
+## Current work boundary
 
-### Step 1
+現在許可されるのは、S02 root実画面のStep 4ビジュアル修復、実ブラウザ画像、アクセシビリティ、批評、回帰、status同期だけである。
 
-- status: `PASS`
-- unresolved P0/P1: `0 / 0`
+次は禁止。
 
-### Step 2
-
-- status: `PASS_SEALED`
-- executable seal blob: `ee3507969c03b08fe27350263cf0bc093a1c18e1`
-- critics: `5`
-- unresolved P0/P1: `0 / 0`
-
-### Step 3
-
-- status: `PASS`
-- gameplay: `15,000`
-- high-volume: `1,700,000`
-- critics: `5`
-- unresolved P0/P1: `0 / 0`
-- terminal verdict: `PASS_FINAL_LIVE_READBACK_STEP3_LARGE_SCALE_VALIDATION`
-- holdout reused for tuning: `false`
-- candidate mutation: `false`
-
-## Product non-negotiables
-
-- cat/catfolk、常設4体、一時増援別層
-- unbounded visible tower、100F milestone、101F+
-- tap direct damage 0、auto/offline基礎
-- one reset `reset.tower_return`、Floor 1、高速reclear、repeat-best ruby 0
-- uncapped coin level、every-100 ruby evolution、evolution非gate
-- rarity `N < R < RR < SR < SSR < UR`
-- separate character/weapon gacha、100/200 guarantees、carryover/exchange/history
-- first copy functional、20+ optional full mastery、diminishing returns、overflow
-- paid/free ruby provenance、explicit spent-grant refund deficit
-- S01〜S12、server-authoritative permanent economy
-- arbitrary-precision numeric contract
-
-## Current write boundary
-
-Allowed next: **Step 4 twelve-screen final mockups**.
-
-Forbidden: runtime、assets、backend、payment provider、ad network、Production alias、physical-iPhone PASS claim、Step 2 executable mutation。
+- Step 5 gameplay expansion
+- backend
+- payment provider
+- ad network
+- Production alias
+- physical-iPhone PASS claim
+- sealed Step 2 / Step 3 mutation
+- user approvalの推定
 
 ## Completion rule
 
-files、build、tests、deployment READYだけで完成判定しない。Acceptance、意味対応、決定論、確率・経済、台帳・race、独立批評、修正、回帰、exact commit/tree/evidence、P0/P1=0を必要とする。physical iPhone証拠なしに実機確認済みとしない。
+コード、画像、build、test、Vercel、スクリーンショットの存在だけでは完成ではない。実物比較、操作、異常状態、critic、P0/P1ゼロ、ユーザー視覚承認、exact commit/tree/evidenceが必要。
+
+現在のS02はtechnical PASSだが、`S4-RECOVERY-VIS-001`が未解決である。画面品質PASS、Step 4 PASS、Step 5認可を出してはならない。
+
+## Technical evidence
+
+- commit/tree: `32675a7f268e1da20552c26a19b8d5d50b0c8400` / `bb0a010fe7ddebe4530029f66f1f2f6d6f137821`
+- run/job: `33338326176` / `99329176306`
+- artifact: `9739733397`
+- Chromium viewports: 320×667、375×667、390×844
+- console/page errors: `0 / 0`
+- source of truth: `window.__game`
+
+## Required next sequence
+
+1. S02 visual acceptanceを新しく固定する
+2. 常設4体編成、敵、接敵、攻撃、被弾、skill、撃破、報酬因果を画面上で成立させる
+3. 320幅の資源可読性と下部情報階層を修正する
+4. 3 viewport、large text、reduced motion、interactionを再実行する
+5. 完成画面基準と横比較する
+6. 実root画面をユーザーへ提示する
+7. P1が閉じた後だけ次アンカーを検討する
