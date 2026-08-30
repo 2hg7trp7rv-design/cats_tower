@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step4-s02-main-entry-governance-recovery-completion-evidence",
+  "createdAt": "2026-08-31",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-023.json",
+  "acceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-acceptance.json",
+  "criticSummary": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-critic-summary.json",
+  "finalJudge": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-final-judge.json",
+  "technicalTarget": {
+    "commit": "32675a7f268e1da20552c26a19b8d5d50b0c8400",
+    "tree": "bb0a010fe7ddebe4530029f66f1f2f6d6f137821"
+  },
+  "workflowEvidence": {
+    "workflow": ".github/workflows/verify-step-4-s02-runtime-integration.yml",
+    "runId": "33338326176",
+    "jobId": "99329176306",
+    "conclusion": "SUCCESS",
+    "artifactId": "9739733397",
+    "artifactName": "step4-s02-main-entry-governance-recovery-32675a7f268e1da20552c26a19b8d5d50b0c8400",
+    "artifactDigest": "sha256:45d2709621aa8c3636e235f52f6b5a8ec51216ea5f989231bc5a25da528ec6ad",
+    "screenshotCount": 6,
+    "browserVerdict": "PASS_S02_RUNTIME_BROWSER_INTEGRATION"
+  },
+  "recoveryWorkCompleted": [
+    "Opened round 023 fail-closed recovery control.",
+    "Recorded that the previous v2 terminal and execute workflows failed and did not form a completion chain.",
+    "Removed zoom-blocking viewport directives from the root and isolated S02 documents.",
+    "Replaced stale blob assumptions with an exact recovery-entry static boundary and immutable sealed-blob checks.",
+    "Passed Chromium at 320x667, 375x667 and 390x844.",
+    "Passed actual summon-state mutation, existing agency sheet, commerce navigation and explicit pending-state interaction checks.",
+    "Passed large-text and reduced-motion evidence with zero console and page errors.",
+    "Retired the invalid temporary executor and failed v2 terminal workflow.",
+    "Manually inspected screenshots against the user-defined completed-screen baseline."
+  ],
+  "notCompleted": [
+    "S4-RECOVERY-VIS-001 remains open: actual root S02 battle density, four-member party identity, combat spectacle and commercial finish are below the binding visual baseline.",
+    "User approval of the actual root S02 rendered result has not been granted.",
+    "S01, S08 and S10 anchor screens remain incomplete.",
+    "The five independent Step 4 critic scopes and full S01-S12 completion chain remain incomplete.",
+    "Physical iPhone verification has not occurred."
+  ],
+  "unresolvedP0": 0,
+  "unresolvedP1": 1,
+  "verdict": "IN_PROGRESS_S02_RECOVERY_TECHNICAL_PASS_VISUAL_P1_OPEN",
+  "recoveryCompletionClaimed": false,
+  "step4Pass": false,
+  "step5Allowed": false,
+  "productionAliasChanged": false,
+  "physicalIPhoneVerified": false
+}
