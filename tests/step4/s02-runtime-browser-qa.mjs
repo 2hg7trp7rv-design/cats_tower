@@ -15,7 +15,7 @@ const viewports = [
 ];
 const failures = [];
 const results = [];
-const assert = (condition, message) => { if (!condition) failures.push(message); };
+const check = (condition, message) => { if (!condition) failures.push(message); };
 
 async function boot(page, url = baseUrl) {
   await page.goto(url, { waitUntil: 'networkidle' });
@@ -41,28 +41,32 @@ async function summonTo(page, target = 4) {
   }
   await page.waitForFunction(minimum => window.__game.fieldCats.length >= minimum, Math.min(target, before + 1));
   await page.waitForTimeout(450);
-  const state = await page.evaluate(() => ({
+  const actual = await page.evaluate(() => ({
     after: window.__game.fieldCats.length,
     floor: window.__game.floor,
     enemies: window.__game.enemies.length
   }));
-  return { before, ...state };
+  return { before, ...actual };
 }
 
 async function inspect(page, viewport) {
   return page.evaluate(({ width, height }) => {
-    const rect = selector => document.querySelector(selector).getBoundingClientRect();
+    const box = selector => document.querySelector(selector).getBoundingClientRect();
     const root = document.documentElement;
     const shell = document.querySelector('[data-testid="s02-runtime-shell"]');
-    const battle = rect('#battle-wrap');
-    const nav = rect('.runtime-bottom-nav');
     const canvas = document.querySelector('#runtime-battle-canvas');
-    const party = rect('[data-testid="runtime-party-dock"]');
+    const battle = box('#battle-wrap');
+    const nav = box('.runtime-bottom-nav');
+    const party = box('[data-testid="runtime-party-dock"]');
     const critical = ['#btn-summon', '#btn-mute', '#runtime-next-target', '.runtime-nav-button', '.runtime-shortcut', '.runtime-party-slot']
       .flatMap(selector => [...document.querySelectorAll(selector)])
       .map(element => {
-        const box = element.getBoundingClientRect();
-        return { label: element.getAttribute('aria-label') || element.textContent.trim().slice(0, 40), width: box.width, height: box.height };
+        const rect = element.getBoundingClientRect();
+        return {
+          label: element.getAttribute('aria-label') || element.textContent.trim().slice(0, 40),
+          width: rect.width,
+          height: rect.height
+        };
       });
     const resources = ['#hud-coins', '#hud-sparkles', '.runtime-resource-card b']
       .flatMap(selector => [...document.querySelectorAll(selector)])
@@ -89,7 +93,8 @@ async function inspect(page, viewport) {
         floor: canvas.dataset.gameFloor,
         cats: Number(canvas.dataset.actualCatCount),
         enemies: Number(canvas.dataset.actualEnemyCount),
-        partySlots: Number(canvas.dataset.partySlotCount),
+        partySlotCount: Number(canvas.dataset.partySlotCount),
+        visualCausalityReady: canvas.dataset.visualCausalityReady,
         repair: canvas.dataset.visualRepairVersion
       },
       game: {
@@ -99,7 +104,8 @@ async function inspect(page, viewport) {
       },
       party: {
         count: document.querySelectorAll('.runtime-party-slot').length,
-        withinBattle: party.left >= battle.left - 1 && party.right <= battle.right + 1 && party.top >= battle.top - 1 && party.bottom <= battle.bottom + 1
+        withinBattle: party.left >= battle.left - 1 && party.right <= battle.right + 1 &&
+          party.top >= battle.top - 1 && party.bottom <= battle.bottom + 1
       },
       objective: document.querySelector('#runtime-objective-title')?.textContent || '',
       feed: document.querySelector('#runtime-feed-text')?.textContent || '',
@@ -113,116 +119,117 @@ async function inspect(page, viewport) {
 }
 
 function validate(layout, viewport, consoleErrors, pageErrors) {
-  assert(layout.overflow <= 1 && layout.bodyOverflow <= 1, `${viewport.name}: horizontal overflow.`);
-  assert(Math.abs(layout.nav.bottom - viewport.height) <= 2, `${viewport.name}: bottom navigation not pinned.`);
-  assert(layout.battle.height >= 330, `${viewport.name}: battle scene too shallow.`);
-  assert(layout.shell.ready === 'true' && layout.shell.visual === 'true', `${viewport.name}: runtime or visual layer not ready.`);
-  assert(layout.shell.observer === 'true' && layout.shell.causality === 'true', `${viewport.name}: event/causality bridge missing.`);
-  assert(layout.canvas.ready === 'true' && layout.canvas.repair === 's02-visual-repair-round-001', `${viewport.name}: renderer repair not ready.`);
-  assert(layout.canvas.floor === layout.game.floor, `${viewport.name}: rendered floor differs from actual game.`);
-  assert(layout.canvas.cats === layout.game.cats && layout.canvas.enemies === layout.game.enemies, `${viewport.name}: rendered unit counts differ from actual game.`);
-  assert(layout.party.count === 4 && layout.canvas.partySlots === 4 && layout.party.withinBattle, `${viewport.name}: four-slot party identity invalid.`);
-  assert(layout.objective.length > 0 && layout.feed.length > 0 && layout.causalityCells === 3, `${viewport.name}: battle causality text missing.`);
-  assert(layout.criticalTooSmall.length === 0, `${viewport.name}: critical targets under 44px: ${JSON.stringify(layout.criticalTooSmall)}`);
-  assert(layout.resourceValues.every(item => item.text && item.scrollWidth <= item.clientWidth + 1 && item.fontSize >= 9), `${viewport.name}: resource value clipping/readability failure: ${JSON.stringify(layout.resourceValues)}`);
-  assert(layout.bridge?.source === 'window.__game' && layout.renderer?.source === 'window.__game', `${viewport.name}: actual game is not the display authority.`);
-  assert(consoleErrors.length === 0, `${viewport.name}: console errors: ${consoleErrors.join(' | ')}`);
-  assert(pageErrors.length === 0, `${viewport.name}: page errors: ${pageErrors.join(' | ')}`);
+  check(layout.overflow <= 1 && layout.bodyOverflow <= 1, `${viewport.name}: horizontal overflow.`);
+  check(Math.abs(layout.nav.bottom - viewport.height) <= 2, `${viewport.name}: bottom navigation not pinned.`);
+  check(layout.battle.height >= 330, `${viewport.name}: battle scene too shallow.`);
+  check(layout.shell.ready === 'true' && layout.shell.visual === 'true', `${viewport.name}: runtime/visual layer not ready.`);
+  check(layout.shell.observer === 'true' && layout.shell.causality === 'true', `${viewport.name}: actual event/causality bridge missing.`);
+  check(layout.canvas.ready === 'true' && layout.canvas.repair === 's02-visual-repair-round-001', `${viewport.name}: renderer repair not ready.`);
+  check(layout.canvas.floor === layout.game.floor, `${viewport.name}: rendered floor differs from actual game.`);
+  check(layout.canvas.cats === layout.game.cats && layout.canvas.enemies === layout.game.enemies, `${viewport.name}: rendered units differ from actual game.`);
+  check(layout.party.count === 4 && layout.canvas.partySlotCount === 4 && layout.party.withinBattle, `${viewport.name}: four-slot party identity invalid.`);
+  check(layout.canvas.visualCausalityReady === 'true' && layout.objective && layout.feed && layout.causalityCells === 3, `${viewport.name}: visualCausalityReady contract missing.`);
+  check(layout.criticalTooSmall.length === 0, `${viewport.name}: critical targets under 44px: ${JSON.stringify(layout.criticalTooSmall)}`);
+  check(layout.resourceValues.every(item => item.text && item.scrollWidth <= item.clientWidth + 1 && item.fontSize >= 9),
+    `${viewport.name}: resource value clipping/readability failure: ${JSON.stringify(layout.resourceValues)}`);
+  check(layout.bridge?.source === 'window.__game' && layout.renderer?.source === 'window.__game', `${viewport.name}: actual game is not display authority.`);
+  check(consoleErrors.length === 0, `${viewport.name}: console errors: ${consoleErrors.join(' | ')}`);
+  check(pageErrors.length === 0, `${viewport.name}: page errors: ${pageErrors.join(' | ')}`);
+}
+
+async function createPage(browser, viewport, reducedMotion = 'no-preference') {
+  const context = await browser.newContext({ viewport, locale: 'ja-JP', reducedMotion });
+  await context.addInitScript(() => { try { localStorage.clear(); } catch {} });
+  const page = await context.newPage();
+  const consoleErrors = [];
+  const pageErrors = [];
+  page.on('console', message => { if (message.type() === 'error') consoleErrors.push(message.text()); });
+  page.on('pageerror', error => pageErrors.push(error.message));
+  return { context, page, consoleErrors, pageErrors };
 }
 
 async function viewportRun(browser, viewport) {
-  const browserContext = await browser.newContext({ viewport: { width: viewport.width, height: viewport.height }, locale: 'ja-JP', reducedMotion: 'no-preference' });
-  await browserContext.addInitScript(() => { try { localStorage.clear(); } catch {} });
-  const page = await browserContext.newPage();
-  const consoleErrors = [];
-  const pageErrors = [];
-  page.on('console', message => { if (message.type() === 'error') consoleErrors.push(message.text()); });
-  page.on('pageerror', error => pageErrors.push(error.message));
-  await boot(page);
-  const hydration = await summonTo(page, 4);
-  const layout = await inspect(page, viewport);
-  validate(layout, viewport, consoleErrors, pageErrors);
+  const session = await createPage(browser, { width: viewport.width, height: viewport.height });
+  await boot(session.page);
+  const hydration = await summonTo(session.page, 4);
+  const layout = await inspect(session.page, viewport);
+  validate(layout, viewport, session.consoleErrors, session.pageErrors);
   const screenshot = path.join(outputDir, `s02-root-${viewport.name}.png`);
-  await page.screenshot({ path: screenshot, animations: 'disabled' });
-  results.push({ mode: 'normal-after-explicit-summon', viewport, hydration, layout, consoleErrors, pageErrors, screenshot: path.basename(screenshot) });
-  await browserContext.close();
+  await session.page.screenshot({ path: screenshot, animations: 'disabled' });
+  results.push({ mode: 'normal-after-explicit-summon', viewport, hydration, layout, screenshot: path.basename(screenshot) });
+  await session.context.close();
 }
 
 async function interactionRun(browser) {
-  const browserContext = await browser.newContext({ viewport: { width: 390, height: 844 }, locale: 'ja-JP' });
-  await browserContext.addInitScript(() => { try { localStorage.clear(); } catch {} });
-  const page = await browserContext.newPage();
-  const consoleErrors = [];
-  const pageErrors = [];
-  page.on('console', message => { if (message.type() === 'error') consoleErrors.push(message.text()); });
-  page.on('pageerror', error => pageErrors.push(error.message));
+  const session = await createPage(browser, { width: 390, height: 844 });
+  const page = session.page;
   await boot(page);
   await summonTo(page, 4);
   const before = await page.evaluate(() => window.__game.fieldCats.length);
   await page.locator('#btn-summon').click();
   await page.waitForFunction(value => window.__game.fieldCats.length > value, before);
+
   await page.locator('.runtime-party-slot').first().click();
   await page.waitForSelector('.sheet.open');
   const close = page.locator('.sheet.open .close').last();
-  if (await close.count()) await close.click();
-  const commerce = page.locator('.runtime-nav-button[data-runtime-action="commerce"]');
-  await commerce.click();
+  check(await close.count() === 1, 'Interaction: agency close button missing.');
+  await close.click();
+  await page.waitForSelector('.sheet', { state: 'detached' });
+
+  await page.locator('.runtime-nav-button[data-runtime-action="commerce"]').click();
   await page.waitForFunction(() => document.querySelector('#runtime-scroll')?.scrollTop > 0);
   await page.locator('.runtime-nav-button[data-runtime-action="events"]').click();
-  assert((await page.locator('#runtime-toast').textContent()).includes('制作中'), 'Interaction: pending event state not explicit.');
-  await page.locator('.runtime-nav-button[data-runtime-action="battle"]').click();
+  check((await page.locator('#runtime-toast').textContent()).includes('制作中'), 'Interaction: pending event state not explicit.');
+  await page.locator('.runtime-nav-button[data-runtime-action="tower"]').click();
   await page.waitForFunction(() => document.querySelector('#runtime-scroll')?.scrollTop === 0);
+
   const state = await page.evaluate(() => ({
     gameCats: window.__game.fieldCats.length,
     renderedCats: Number(document.querySelector('#runtime-battle-canvas').dataset.actualCatCount),
-    partySlots: document.querySelectorAll('.runtime-party-slot').length,
-    feed: document.querySelector('#runtime-feed-text').textContent
+    partySlotCount: document.querySelectorAll('.runtime-party-slot').length,
+    feed: document.querySelector('#runtime-feed-text').textContent,
+    activeNav: document.querySelector('.runtime-nav-button.is-active')?.dataset.runtimeAction || ''
   }));
-  assert(state.gameCats === state.renderedCats && state.partySlots === 4 && state.feed.length > 0, 'Interaction: actual state/party/feed divergence.');
-  assert(consoleErrors.length === 0 && pageErrors.length === 0, `Interaction errors: ${consoleErrors.join(' | ')} ${pageErrors.join(' | ')}`);
+  check(state.gameCats === state.renderedCats && state.partySlotCount === 4 && state.feed && state.activeNav === 'tower',
+    'Interaction: actual state, party, feed or tower navigation diverged.');
+  check(session.consoleErrors.length === 0 && session.pageErrors.length === 0, `Interaction browser errors: ${session.consoleErrors.join(' | ')} ${session.pageErrors.join(' | ')}`);
   const screenshot = path.join(outputDir, 's02-root-390x844-interaction.png');
   await page.screenshot({ path: screenshot, animations: 'disabled' });
-  results.push({ mode: 'actual-interaction', state, consoleErrors, pageErrors, screenshot: path.basename(screenshot) });
-  await browserContext.close();
+  results.push({ mode: 'actual-interaction', state, screenshot: path.basename(screenshot) });
+  await session.context.close();
 }
 
 async function alternateRun(browser, mode) {
   const reduced = mode === 'reduced-motion';
-  const browserContext = await browser.newContext({ viewport: { width: 390, height: 844 }, locale: 'ja-JP', reducedMotion: reduced ? 'reduce' : 'no-preference' });
-  await browserContext.addInitScript(() => { try { localStorage.clear(); } catch {} });
-  const page = await browserContext.newPage();
-  const consoleErrors = [];
-  const pageErrors = [];
-  page.on('console', message => { if (message.type() === 'error') consoleErrors.push(message.text()); });
-  page.on('pageerror', error => pageErrors.push(error.message));
-  await boot(page, mode === 'large-text' ? `${baseUrl}?largeText=1` : baseUrl);
-  await summonTo(page, 4);
-  const evidence = await page.evaluate(({ reduced }) => {
-    const root = document.documentElement;
+  const session = await createPage(browser, { width: 390, height: 844 }, reduced ? 'reduce' : 'no-preference');
+  await boot(session.page, mode === 'large-text' ? `${baseUrl}?largeText=1` : baseUrl);
+  await summonTo(session.page, 4);
+  const evidence = await session.page.evaluate(({ reduced }) => {
     const nav = document.querySelector('.runtime-bottom-nav').getBoundingClientRect();
     const party = document.querySelector('[data-testid="runtime-party-dock"]').getBoundingClientRect();
     const battle = document.querySelector('#battle-wrap').getBoundingClientRect();
     return {
       largeText: document.body.classList.contains('runtime-large-text'),
       reducedMatches: matchMedia('(prefers-reduced-motion: reduce)').matches,
-      overflow: root.scrollWidth - root.clientWidth,
+      overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
       navPinned: Math.abs(nav.bottom - innerHeight) <= 2,
       partyWithinBattle: party.left >= battle.left - 1 && party.right <= battle.right + 1 && party.bottom <= battle.bottom + 1,
-      partySlots: document.querySelectorAll('.runtime-party-slot').length,
+      partySlotCount: document.querySelectorAll('.runtime-party-slot').length,
       rendererReady: document.querySelector('#runtime-battle-canvas').dataset.rendererReady,
+      visualCausalityReady: document.querySelector('#runtime-battle-canvas').dataset.visualCausalityReady,
       objective: document.querySelector('#runtime-objective-title').textContent,
       feed: document.querySelector('#runtime-feed-text').textContent,
       expectedReduced: reduced
     };
   }, { reduced });
-  assert(evidence.overflow <= 1 && evidence.navPinned && evidence.partyWithinBattle && evidence.partySlots === 4, `${mode}: layout failure.`);
-  assert(evidence.rendererReady === 'true' && evidence.objective && evidence.feed, `${mode}: state information missing.`);
-  assert(reduced ? evidence.reducedMatches : evidence.largeText, `${mode}: requested browser mode not active.`);
-  assert(consoleErrors.length === 0 && pageErrors.length === 0, `${mode}: browser errors.`);
+  check(evidence.overflow <= 1 && evidence.navPinned && evidence.partyWithinBattle && evidence.partySlotCount === 4, `${mode}: layout failure.`);
+  check(evidence.rendererReady === 'true' && evidence.visualCausalityReady === 'true' && evidence.objective && evidence.feed, `${mode}: state information missing.`);
+  check(reduced ? evidence.reducedMatches : evidence.largeText, `${mode}: requested browser mode not active.`);
+  check(session.consoleErrors.length === 0 && session.pageErrors.length === 0, `${mode}: browser errors.`);
   const screenshot = path.join(outputDir, `s02-root-390x844-${mode}.png`);
-  await page.screenshot({ path: screenshot, animations: 'disabled' });
-  results.push({ mode, evidence, consoleErrors, pageErrors, screenshot: path.basename(screenshot) });
-  await browserContext.close();
+  await session.page.screenshot({ path: screenshot, animations: 'disabled' });
+  results.push({ mode, evidence, screenshot: path.basename(screenshot) });
+  await session.context.close();
 }
 
 await fs.rm(outputDir, { recursive: true, force: true });
@@ -245,7 +252,7 @@ const report = {
   source: 'window.__game',
   eventSource: 'non-consuming window.__game.emit observation',
   visualRepairVersion: 's02-visual-repair-round-001',
-  normalScreenshotState: 'after explicit actual summon-button interaction',
+  normalScreenshotState: 'normal-after-explicit-summon interactions',
   resultCount: results.length,
   results,
   failures,
