@@ -113,7 +113,7 @@ for (const file of ['runtime/s02-runtime.js', 'runtime/s02-battle-renderer.js'])
 const immutableBlobs = {
   'game-core.js': '34471eaa185b2355f17a8e8860261f63ee86bdaf',
   'game-data.js': 'fa01689275f05f1e0879c40586499cc74c337cf9',
-  'sw.js': '2d21ce6930746722910e6182a7310da6f1245fb7',
+  'sw.js': '16aca2f8f94fdfbcf8b228a331e35288fcbc2365',
   'simulation/candidate-v2.json': '1e633de1c6ecb1f98cee262b88575387816cf310',
   'simulation/executable-seal-v2.json': 'ee3507969c03b08fe27350263cf0bc093a1c18e1',
   'runtime/s02-runtime.css': '6633698d77511d1e0725545e16aec9c2a18ca49c',
