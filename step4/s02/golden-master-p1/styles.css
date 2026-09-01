@@ -710,16 +710,21 @@ a,
 }
 
 .in-screen-review strong {
+  flex: 0 0 auto;
   color: #f6cd78;
+  white-space: nowrap;
 }
 
 .in-screen-review span {
+  min-width: 0;
+  flex: 1 1 auto;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .in-screen-review b {
+  flex: 0 0 auto;
   margin-left: auto;
   padding: 3px 5px;
   border: 1px solid #aa5552;
@@ -757,9 +762,9 @@ a,
 }
 
 .profile-chip {
-  flex: 0 1 112px;
-  gap: 7px;
-  padding: 4px 8px 4px 5px;
+  flex: 0 1 118px;
+  gap: 5px;
+  padding: 4px 6px 4px 5px;
 }
 
 .profile-mark {
@@ -805,6 +810,11 @@ a,
   font-size: 12px;
   font-variant-numeric: tabular-nums;
   line-height: 1;
+}
+
+.profile-chip strong {
+  font-size: 11px;
+  letter-spacing: -0.025em;
 }
 
 .resource-row {
@@ -2148,16 +2158,25 @@ a,
 
 .density-compact .profile-chip {
   flex-basis: 88px;
+  gap: 4px;
   padding-left: 4px;
 }
 
 .density-compact .profile-mark {
-  flex-basis: 30px;
-  height: 30px;
+  flex-basis: 26px;
+  width: 26px;
+  height: 26px;
+  font-size: 10px;
 }
 
-.density-compact .profile-chip small {
+.density-compact .profile-chip small,
+.density-compact .resource-chip small {
   display: none;
+}
+
+.density-compact .profile-chip strong,
+.density-compact .resource-chip strong {
+  margin-top: 0;
 }
 
 .density-compact .coin-resource {
@@ -2294,14 +2313,14 @@ a,
 .density-compact .portrait {
   position: absolute;
   inset: 0 auto 0 0;
-  width: 33px;
+  width: 31px;
 }
 
 .density-compact .party-copy {
   position: absolute;
   top: 5px;
   right: 2px;
-  left: 34px;
+  left: 32px;
   padding: 0 2px;
 }
 
@@ -2313,7 +2332,7 @@ a,
   position: absolute;
   right: 0;
   bottom: 0;
-  left: 33px;
+  left: 31px;
   height: 18px;
   padding-inline: 3px;
   font-size: 11px;
@@ -2370,7 +2389,8 @@ a,
 }
 
 .density-compact .bottom-nav {
-  flex-basis: 64px;
+  flex-basis: 62px;
+  min-height: 62px;
   padding-top: 3px;
 }
 
@@ -2602,8 +2622,8 @@ a,
 }
 
 .density-short .bottom-nav {
-  flex-basis: 60px;
-  min-height: 60px;
+  flex-basis: 58px;
+  min-height: 58px;
   padding-top: 2px;
 }
 
