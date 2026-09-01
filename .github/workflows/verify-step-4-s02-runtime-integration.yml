@@ -35,7 +35,7 @@ jobs:
           test "${GITHUB_REPOSITORY}" = "2hg7trp7rv-design/cats_tower"
           test "${GITHUB_REF_NAME}" = "kimi"
           test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
-          test "$(git rev-parse HEAD^1)" = "cb24b39fe23745874966dd8785160b185bd24a16"
+          test "$(git rev-parse HEAD^1)" = "14a684707fd8d4ce6ca8f5516101367777739749"
 
       - name: Recover verified repair payload from immutable Git blobs
         shell: bash
@@ -76,15 +76,15 @@ jobs:
 
           allowed=/tmp/s02-allowed.txt
           actual=/tmp/s02-actual.txt
-          cat > "${allowed}" <<'EOF'
-.github/workflows/verify-step-4-s02-runtime-integration.yml
-quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-responsive-acceptance-round-002.json
-runtime/s02-battle-renderer.js
-runtime/s02-runtime-fixes.css
-runtime/s02-runtime.js
-tests/step4/s02-runtime-browser-qa.mjs
-tests/step4/verify-s02-runtime-integration.mjs
-EOF
+          printf '%s\n' \
+            '.github/workflows/verify-step-4-s02-runtime-integration.yml' \
+            'quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-responsive-acceptance-round-002.json' \
+            'runtime/s02-battle-renderer.js' \
+            'runtime/s02-runtime-fixes.css' \
+            'runtime/s02-runtime.js' \
+            'tests/step4/s02-runtime-browser-qa.mjs' \
+            'tests/step4/verify-s02-runtime-integration.mjs' \
+            > "${allowed}"
           git status --short | sed 's/^...//' | sort > "${actual}"
           diff -u "${allowed}" "${actual}"
           git diff --check
