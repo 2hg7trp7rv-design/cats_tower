@@ -104,8 +104,33 @@ jobs:
           set -euo pipefail
           report=quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-browser-evidence/report.json
           test -f "${report}"
-          grep -q 'PASS_S02_ACTUAL_ROOT_VISUAL_REPAIR_BROWSER' "${report}"
-          grep -q 'after explicit actual summon-button interaction' "${report}"
+          node --input-type=module - "${report}" <<'NODE'
+          import fs from 'node:fs';
+
+          const reportPath = process.argv[2];
+          const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+          const modes = new Set((report.results || []).map(result => result.mode));
+          const normal = (report.results || []).filter(result => result.mode === 'normal-after-explicit-summon');
+
+          if (report.verdict !== 'PASS_S02_ACTUAL_ROOT_VISUAL_REPAIR_BROWSER') {
+            throw new Error(`Unexpected browser verdict: ${report.verdict}`);
+          }
+          if (report.normalScreenshotState !== 'normal-after-explicit-summon interactions') {
+            throw new Error(`Normal screenshot state is not explicitly labelled: ${report.normalScreenshotState}`);
+          }
+          if (report.resultCount !== 6 || (report.results || []).length !== 6) {
+            throw new Error(`Expected six evidence results, found ${report.resultCount}`);
+          }
+          if (normal.length !== 3 || normal.some(result => !(result.hydration?.after > result.hydration?.before))) {
+            throw new Error('All three normal screenshots must follow an actual summon-button state change.');
+          }
+          for (const requiredMode of ['actual-interaction', 'large-text', 'reduced-motion']) {
+            if (!modes.has(requiredMode)) throw new Error(`Missing evidence mode: ${requiredMode}`);
+          }
+          if (report.productionChanged !== false || report.physicalIPhone !== 'NOT_VERIFIED') {
+            throw new Error('External-state truth boundary changed.');
+          }
+          NODE
           test "$(find quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-browser-evidence -maxdepth 1 -name '*.png' | wc -l | tr -d ' ')" = "6"
           git diff --check 9495c97232213620346958f271913fd8a585ff50..HEAD
 
@@ -122,3 +147,14 @@ jobs:
             s02-actual-root-visual-repair-browser-report.log
             quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-browser-evidence/**
             /tmp/s02-visual-repair-http.log
+            index.html
+            app.js
+            game-core.js
+            game-data.js
+            styles.css
+            manifest.webmanifest
+            runtime/**
+            assets/**
+            step4/s02/assets/**
+            tests/step4/s02-runtime-browser-qa.mjs
+            tests/step4/verify-s02-runtime-integration.mjs
