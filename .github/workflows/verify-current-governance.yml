@@ -83,7 +83,10 @@ jobs:
           test ! -e "$DIR"
           git worktree add --detach "$DIR" "$ENTRY"
           test "$(git -C "$DIR" rev-parse HEAD)" = "$ENTRY"
-          node "$DIR/simulation/verify-step2-v2.mjs"
+          (
+            cd "$DIR"
+            node simulation/verify-step2-v2.mjs
+          )
 
       - name: Parse current JSON documents
         run: |
