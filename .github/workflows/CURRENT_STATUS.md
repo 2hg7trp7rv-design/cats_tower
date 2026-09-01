@@ -5,11 +5,11 @@ Authority: `CURRENT_AUTHORITY_INDEX.json`
 
 ## Current verdict
 
-`IN_PROGRESS_S02_P1_A_J_AUDIT`
+`IN_PROGRESS_PHASE0_CLOSURE_INTEGRITY_RECOVERY`
 
-- Phase 0: `PASS_PHASE0_GOVERNANCE_RECOVERY`
+- Phase 0: `IN_PROGRESS` after independent closure-integrity failure
 - Step 1: `PASS_CANONICAL`
-- Step 2: `PASS_CONTRACT`
+- Step 2: `IN_PROGRESS_CONTRACT_CORRECTION_REQUIRED`
 - Step 3: `PASS_MODEL`
 - Step 4: `IN_PROGRESS`
 - Step 5: `BLOCKED`
@@ -26,15 +26,22 @@ Only these current workflows remain:
 
 Old Step 1-3 execute/repair/seal workflows and old Step 4 actual-root write/recovery workflows are absent from the live workflow directory. Their Git commits and Actions runs remain history.
 
-## Phase 0 evidence
+## Phase 0 correction
 
-- closure: `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json`
+- superseded closure attempt: `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json`
+- active correction: `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json`
+- planned Step 2 correction: `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json`
+- planned corrected closure: `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json`
 - run/job: `33539938108` / `99963403759`
 - artifact ID: `9813183649`
-- result: `PASS_PHASE0_GOVERNANCE_RECOVERY`
-- Phase 0 P0/P1: `0 / 0`
+- prior result: superseded by late independent critic
+- current Phase 0 P0/P1: `0 / 4`
+
+Current governance now runs on every push to `kimi`; path filters may not permit forbidden product writes to bypass the boundary.
 
 ## Step 2 verification
+
+Independent semantic mutation testing found `S2-P0-SCREEN-PROJECTION-001`: candidate-v2 screen responsibilities and states do not fully project canonical SCREEN_STATE_REGISTRY. Byte integrity still passes, but semantic contract status is reopened until round 032 repairs the projection.
 
 Current governance:
 

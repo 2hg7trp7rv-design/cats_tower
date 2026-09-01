@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-phase0-governance-recovery-acceptance-addendum-round-001",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "parentAcceptance": "quality-reviews/phase-0-governance-recovery/acceptance-matrix.json",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json",
+  "entry": {
+    "head": "406754c66a38099b6e25a453bbc515b6d31ff3b0",
+    "tree": "6cae87c6580e9974ea79a43cfb76ef6a53518396"
+  },
+  "status": "FROZEN_BEFORE_CORRECTION_COMMIT",
+  "correction": {
+    "criterionId": "P0-EVIDENCE",
+    "priorClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json",
+    "attemptedClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
+    "step2Correction": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
+    "authoritativeClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
+    "reason": "Round 029 became historical-verifier repair. Round 030 landed before independent criticism completed and is retained as a superseded closure attempt."
+  },
+  "addedCriteria": [
+    {
+      "id": "P0-POST-CLOSURE-BOUNDARY",
+      "acceptance": "Every kimi push runs current governance, and all changes after the corrected closure commit are enforced against the returned round 026 allowed and forbidden paths."
+    },
+    {
+      "id": "P0-INDEPENDENT-EVIDENCE-ORDER",
+      "acceptance": "Independent critic evidence is complete before the final judge and corrected closure; premature evidence remains immutable history and is superseded by numbered artifacts."
+    },
+    {
+      "id": "P0-EVIDENCE-IMMUTABILITY",
+      "acceptance": "The already-overwritten completion path is frozen at its round 030 blob and never edited again; all corrected evidence uses new numbered paths."
+    },
+    {
+      "id": "P0-CROSS-SCOPE-FINDING-HANDOFF",
+      "acceptance": "The independently reproduced Step 2 screen-projection P0 is repaired under a dedicated change-control before Phase 0 closes or S02 product writing resumes."
+    }
+  ],
+  "requiredCurrentWorkflow": {
+    "branch": "kimi",
+    "trigger": "every push",
+    "exactHeadRunRequired": true,
+    "machineReadableArtifactRequired": true
+  },
+  "requiredHistoryWorkflow": {
+    "run": 33538227665,
+    "job": 99957691209,
+    "head": "8abb6d3f8e23136996761616a31785faf5b679d7",
+    "tree": "5fc2ab02914d3c76bd9ab98f997bdd001355e082",
+    "artifact": "NOT_EMITTED_BY_WORKFLOW"
+  },
+  "automaticFail": [
+    "round 029, round 030 or round 032 is described as the authoritative corrected closure",
+    "a kimi push can bypass current governance through path filtering",
+    "post-closure writes are not checked against round 026",
+    "original critic, judge or completion files are overwritten",
+    "round 033 binds the original premature critic or judge",
+    "S2-P0-SCREEN-PROJECTION-001 remains open at Phase 0 closure"
+  ],
+  "immutableParentPreserved": true,
+  "maximumVerdict": "PASS_PHASE0_GOVERNANCE_RECOVERY",
+  "step4Pass": false,
+  "step5Allowed": false,
+  "productionAllowed": false,
+  "physicalIPhoneVerified": false
+}

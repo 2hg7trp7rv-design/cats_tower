@@ -6,9 +6,9 @@
 
 | Scope | Status |
 |---|---|
-| Phase 0 governance recovery | `PASS_PHASE0_GOVERNANCE_RECOVERY` |
+| Phase 0 governance recovery | `IN_PROGRESS` · closure-integrity correction |
 | Step 1 canonical | `PASS_CANONICAL` |
-| Step 2 executable contract | `PASS_CONTRACT` |
+| Step 2 executable contract | `IN_PROGRESS_CONTRACT_CORRECTION_REQUIRED` |
 | Step 3 model validation | `PASS_MODEL` |
 | Step 4 screen families | `IN_PROGRESS` |
 | S02-P1 route | present; requires audit |
@@ -32,7 +32,7 @@ The existing root browser game is **legacy technical history, not the canonical 
 
 ## Current work
 
-Audit the preserved S02-P1 content against deliverables A-J and GM01-GM08 before creating more product content. Existing material must be reused when it satisfies the contract and repaired only where evidence shows a gap. The actual root, gameplay core, economy, backend, Production and physical-device verdict remain unchanged.
+First repair the Phase 0 closure evidence and post-closure write boundary under round 031, then repair the narrow Step 2 screen projection under round 032. After corrected round 033 closure returns authority to round 026, audit the preserved S02-P1 content against deliverables A-J and GM01-GM08. The actual root, gameplay core, economy, backend, Production and physical-device verdict remain unchanged.
 
 ## Phase 0 delivery
 

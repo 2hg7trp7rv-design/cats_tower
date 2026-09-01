@@ -1,27 +1,29 @@
 {
-  "schemaVersion": 12,
+  "schemaVersion": 13,
   "updatedAt": "2026-09-02",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "authorityIndex": "CURRENT_AUTHORITY_INDEX.json",
   "currentRepositoryStep": 4,
-  "currentInternalPhase": "S02-P1-GOLDEN-MASTER",
-  "status": "IN_PROGRESS_S02_P1_A_J_AUDIT",
+  "currentInternalPhase": "PHASE0-GOVERNANCE-RECOVERY",
+  "status": "IN_PROGRESS_PHASE0_CLOSURE_INTEGRITY_RECOVERY",
   "governanceRecovery": {
-    "status": "PASS_PHASE0_GOVERNANCE_RECOVERY",
-    "closure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json"
+    "status": "REOPENED_PHASE0_CLOSURE_INTEGRITY",
+    "supersededClosureAttempt": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
+    "plannedCorrectedClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json"
   },
   "step1": {
     "status": "PASS_CANONICAL",
     "seal": "quality-reviews/step-1-reseal-round-008/seal-round-008.json"
   },
   "step2": {
-    "status": "PASS_CONTRACT",
+    "status": "IN_PROGRESS_CONTRACT_CORRECTION_REQUIRED",
     "seal": "simulation/executable-seal-v2.json",
     "candidate": "simulation/candidate-v2.json",
     "executionContract": "simulation/execution-contract-v2.json",
     "bindingDrift": 0,
-    "verification": "current binding validation plus source-bound historical worktree reproduction"
+    "verification": "byte bindings reproduce, but screen responsibility/state semantic projection failed independent mutation testing",
+    "openFinding": "S2-P0-SCREEN-PROJECTION-001"
   },
   "step3": {
     "status": "PASS_MODEL",
@@ -47,5 +49,5 @@
   "step5Allowed": false,
   "physicalIPhoneVerified": false,
   "productionAliasChanged": false,
-  "nextAction": "Do not tune or rerun the model during S02-P1. Audit existing S02 visual artifacts first. Resume simulation only when an authorized product change affects the sealed model or after canonical runtime shares the domain engine."
+  "nextAction": "Do not mutate simulation or S02 content during Phase 0 closure-integrity recovery. Independently assess the newly reported screen-projection drift before changing any sealed Step 2 artifact."
 }

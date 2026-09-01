@@ -25,10 +25,12 @@ Do not infer current status from historical headers, chat history, old workflows
 ## Current boundary
 
 - Repository Step: `4`
-- Internal phase: `S02-P1-GOLDEN-MASTER`
-- Current verdict: `IN_PROGRESS_S02_P1_A_J_AUDIT`
-- Active authority: `active-change-control-addendum-round-026.json`
-- Phase 0 closure: `active-change-control-addendum-round-030.json`
+- Internal phase: `PHASE0-GOVERNANCE-RECOVERY`
+- Current verdict: `IN_PROGRESS_PHASE0_CLOSURE_INTEGRITY_RECOVERY`
+- Active authority: `active-change-control-addendum-round-031.json`
+- Superseded closure attempt: `active-change-control-addendum-round-030.json`
+- Planned Step 2 screen correction: `active-change-control-addendum-round-032.json`
+- Planned corrected closure: `active-change-control-addendum-round-033.json`
 - Step 4 PASS: `false`
 - Step 5 allowed: `false`
 - Production allowed: `false`
@@ -36,7 +38,7 @@ Do not infer current status from historical headers, chat history, old workflows
 
 ## Required next action
 
-Audit the preserved S02-P1 route, A-J artifacts and GM01-GM08 before any additional product write. Reuse conforming artifacts; repair only evidenced gaps. Existence does not equal acceptance.
+Repair the Phase 0 closure boundary, then correct the canonical S01-S12 screen projection under round 032. Keep the preserved S02-P1 route, A-J artifacts and GM01-GM08 read-only until round 033 returns authority to round 026.
 
 Forbidden during S02-P1:
 
@@ -56,7 +58,7 @@ Step 2 is `PASS_CONTRACT`. At current HEAD verify immutable seal bindings; run i
 ## Truth labels
 
 - Step 1: `PASS_CANONICAL`
-- Step 2: `PASS_CONTRACT`
+- Step 2: `IN_PROGRESS_CONTRACT_CORRECTION_REQUIRED`
 - Step 3: `PASS_MODEL`
 - Step 4: `IN_PROGRESS`
 - legacy root: `LEGACY_RUNTIME_NOT_CANONICAL`

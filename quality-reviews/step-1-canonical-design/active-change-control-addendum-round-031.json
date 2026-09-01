@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-active-change-control-addendum-round-031",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "parentChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
+  "entry": {
+    "head": "406754c66a38099b6e25a453bbc515b6d31ff3b0",
+    "tree": "6cae87c6580e9974ea79a43cfb76ef6a53518396"
+  },
+  "trigger": "An independent critic completed after round 030 landed and found that the claimed closure used premature critic and judge evidence, retained an obsolete closure-round statement in Acceptance, did not run current governance on every kimi push, and did not enforce the returned S02-P1 write boundary after the closure commit.",
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS_PHASE0_CLOSURE_INTEGRITY_RECOVERY",
+  "currentRepositoryStep": 4,
+  "internalPhase": "PHASE0-GOVERNANCE-RECOVERY",
+  "internalPhaseIsRepositoryStep": false,
+  "round030Classification": "SUPERSEDED_CLOSURE_FAILED_INDEPENDENT_CRITIC",
+  "preserves": [
+    "round 030 and its evidence as immutable attempted-closure history",
+    "sealed Step 1, Step 2 and Step 3 artifacts",
+    "all preserved S02-P1 content without mutation",
+    "Production, provider and physical-device state"
+  ],
+  "findings": [
+    {
+      "id": "PHASE0-POST-CLOSURE-BOUNDARY-001",
+      "severity": "P1",
+      "problem": "The verifier checked the correction range only through the round 030 addition commit and did not validate subsequent writes against round 026. The workflow path filter also allowed unrelated forbidden pushes to bypass governance."
+    },
+    {
+      "id": "PHASE0-ACCEPTANCE-CLOSURE-ID-001",
+      "severity": "P1",
+      "problem": "The immutable Phase 0 Acceptance still named round 029 as closure although round 029 became verifier repair and round 030 became the attempted closure."
+    },
+    {
+      "id": "PHASE0-PREMATURE-EVIDENCE-001",
+      "severity": "P1",
+      "problem": "The original critic, final judge and completion evidence declared P1 zero before the independent critic completed and before the closure commit existed."
+    },
+    {
+      "id": "PHASE0-IMMUTABLE-EVIDENCE-OVERWRITE-001",
+      "severity": "P1",
+      "problem": "Round 030 overwrote completion-evidence.json after its first evidence commit instead of creating a numbered completion-evidence round. The current blob is frozen as invalid-for-closure history and may not be edited again."
+    }
+  ],
+  "confirmedCrossScopeFinding": {
+    "id": "S2-P0-SCREEN-PROJECTION-001",
+    "severity": "P0",
+    "status": "OPEN_REQUIRES_NARROW_STEP2_REPAIR",
+    "impact": "The sealed candidate maps S01-S12 responsibilities and states differently from canonical SCREEN_STATE_REGISTRY, and the validator accepts semantic mutations. S02 H data binding and J feasibility may not be accepted until repaired.",
+    "numericEngineImpact": "NOT_YET_DEMONSTRATED; candidate.screens currently has no numeric-engine consumer"
+  },
+  "requiredDeliverables": [
+    "Acceptance addendum preserving the original and correcting closure lineage to round 032",
+    "current governance on every kimi push",
+    "post-closure round 026 path-boundary verification",
+    "critic-summary-round-002 recording the failed audit",
+    "evidence-supersession-register freezing the old evidence blobs",
+    "critic-summary-round-003 after correction",
+    "final-judge-round-002 and completion-evidence-round-002",
+    "live-readback-round-002",
+    "round 032 narrow Step 2 screen-projection correction",
+    "round 033 corrected Phase 0 closure"
+  ],
+  "allowedWrites": [
+    "quality-reviews/step-1-canonical-design/active-change-control.json",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
+    "quality-reviews/phase-0-governance-recovery/**",
+    "CURRENT_AUTHORITY_INDEX.json",
+    "PROJECT_STATUS.json",
+    "AI_PROJECT_POLICY.json",
+    "QUALITY_GATE.md",
+    "PROJECT_HANDOVER.md",
+    "AGENTS.md",
+    "README.md",
+    "simulation/CURRENT_STATUS.json",
+    ".github/workflows/CURRENT_STATUS.md",
+    ".github/workflows/verify-current-governance.yml",
+    "tests/governance/verify-current-authority.mjs"
+  ],
+  "forbiddenWrites": [
+    "MASTER_SPEC.md",
+    "FLOORS_1_10_DESIGN.md",
+    "canonical/**",
+    "simulation/candidate-v2.json",
+    "simulation/candidate-v2.schema.json",
+    "simulation/execution-contract-v2.json",
+    "simulation/executable-seal-v2.json",
+    "simulation/engine-v2/**",
+    "quality-reviews/step-1-reseal-round-008/**",
+    "quality-reviews/step-2-executable-contract-v2/**",
+    "quality-reviews/step-3-large-scale-validation/**",
+    "index.html",
+    "app.js",
+    "styles.css",
+    "game-core.js",
+    "game-data.js",
+    "sw.js",
+    "runtime/**",
+    "step4/s02/**",
+    "assets/**",
+    "backend/**",
+    "payment/**",
+    "ads/**",
+    ".vercel/**",
+    "vercel.json"
+  ],
+  "completionBoundary": {
+    "requiredPhase0P0": 0,
+    "requiredPhase0P1": 0,
+    "maximumVerdict": "READY_FOR_STEP2_SCREEN_PROJECTION_CORRECTION",
+    "step2CorrectionAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
+    "closureAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
+    "nextProductAuthorityAfterCorrectionAndClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
+    "nextProductWork": "audit preserved S02-P1 A-J and repair only evidenced gaps",
+    "step4Pass": false,
+    "step5Allowed": false,
+    "productionAllowed": false,
+    "physicalIPhoneVerified": false
+  }
+}

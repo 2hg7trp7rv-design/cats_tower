@@ -46,6 +46,10 @@ const sim = json('simulation/CURRENT_STATUS.json');
 const dispatcher = json('quality-reviews/step-1-canonical-design/active-change-control.json');
 const rootControl = json('quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json');
 const correction = json('quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json');
+const attemptedClosure = json('quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json');
+const reopen = json('quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json');
+const productControl = json('quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json');
+const acceptanceAddendum = json('quality-reviews/phase-0-governance-recovery/acceptance-addendum-round-001.json');
 const active = json(authority.activeChangeControl);
 
 assert(authority.repository === '2hg7trp7rv-design/cats_tower', 'authority repository mismatch');
@@ -59,7 +63,7 @@ assert(status.activeChangeControl === authority.activeChangeControl, 'PROJECT_ST
 assert(policy.authority.activeChangeControl === authority.activeChangeControl, 'AI policy active addendum differs');
 
 assert(authority.canonicalProduct.step1Status === 'PASS_CANONICAL', 'Step 1 scope label wrong');
-assert(authority.executableContract.step2Status === 'PASS_CONTRACT', 'Step 2 scope label wrong');
+assert(authority.executableContract.step2Status === 'IN_PROGRESS_CONTRACT_CORRECTION_REQUIRED', 'Step 2 screen-projection correction status missing');
 assert(authority.modelValidation.step3Status === 'PASS_MODEL', 'Step 3 scope label wrong');
 assert(authority.currentProductWork.step4Pass === false, 'Step 4 must not pass');
 assert(authority.currentProductWork.step5Allowed === false, 'Step 5 must remain blocked');
@@ -80,6 +84,16 @@ const fixedHistoricalBlobs = {
 for (const [p, expectedBlob] of Object.entries(fixedHistoricalBlobs)) {
   assert(exists(p), `sealed evidence missing: ${p}`);
   assert(git(['rev-parse', `HEAD:${p}`]) === expectedBlob, `sealed evidence blob changed: ${p}`);
+}
+
+const frozenAttemptedClosureBlobs = {
+  'quality-reviews/phase-0-governance-recovery/critic-summary.json': 'bc411bd18ab7ef12825f463ed4486f370ff9d85e',
+  'quality-reviews/phase-0-governance-recovery/final-judge.json': '7af39af4b1e40255a38421e0606766e086d1f29f',
+  'quality-reviews/phase-0-governance-recovery/completion-evidence.json': 'd1bdb3eb93734d3cd758c50355793d857f915c56',
+  'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json': '20011a1007dd9795486b870293d2aeac89909fb1'
+};
+for (const [p, expectedBlob] of Object.entries(frozenAttemptedClosureBlobs)) {
+  assert(git(['rev-parse', `HEAD:${p}`]) === expectedBlob, `superseded Phase 0 evidence changed again: ${p}`);
 }
 
 const step2Seal = json('simulation/executable-seal-v2.json');
@@ -128,26 +142,30 @@ assert(!currentDocs.includes('active-change-control-addendum-round-024.json'), '
 assert(!currentDocs.includes('Step 4: `READY_TO_START`'), 'stale Step 4 ready state remains in current mirrors');
 
 assertBoundary(changedPaths(rootControl.entry.head, correction.entry.head), rootControl, 'round 028 content');
+assert(acceptanceAddendum.parentAcceptance === 'quality-reviews/phase-0-governance-recovery/acceptance-matrix.json', 'Phase 0 acceptance addendum parent mismatch');
+assert(acceptanceAddendum.correction.step2Correction.endsWith('round-032.json'), 'Step 2 correction lineage missing');
+assert(acceptanceAddendum.correction.authoritativeClosure.endsWith('round-033.json'), 'corrected Phase 0 closure lineage missing');
+assert(attemptedClosure.status === 'PASS_PHASE0_GOVERNANCE_RECOVERY', 'attempted round 030 closure history changed');
 
-const closurePath = 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json';
+const closurePath = 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json';
 const closureEvidence = [
   'quality-reviews/phase-0-governance-recovery/step2-source-compatibility.json',
-  'quality-reviews/phase-0-governance-recovery/critic-summary.json',
-  'quality-reviews/phase-0-governance-recovery/final-judge.json',
-  'quality-reviews/phase-0-governance-recovery/completion-evidence.json',
-  'quality-reviews/phase-0-governance-recovery/live-readback.json'
+  'quality-reviews/phase-0-governance-recovery/critic-summary-round-003.json',
+  'quality-reviews/phase-0-governance-recovery/final-judge-round-002.json',
+  'quality-reviews/phase-0-governance-recovery/completion-evidence-round-002.json',
+  'quality-reviews/phase-0-governance-recovery/live-readback-round-002.json'
 ];
 
-if (authority.activeChangeControl.endsWith('round-029.json')) {
-  assert(active.status === 'IN_PROGRESS', 'round 029 must be in progress');
+if (authority.activeChangeControl.endsWith('round-031.json')) {
+  assert(active.status === 'IN_PROGRESS', 'round 031 must be in progress');
   assert(status.currentInternalPhase === 'PHASE0-GOVERNANCE-RECOVERY', 'Phase 0 mirror mismatch');
-  assertBoundary(changedPaths(correction.entry.head, 'HEAD'), correction, 'round 029 correction');
-  assert(!exists(closurePath), 'round 030 must not exist before Phase 0 closure');
+  assertBoundary(changedPaths(reopen.entry.head, 'HEAD'), reopen, 'round 031 closure-integrity repair');
+  assert(!exists(closurePath), 'round 033 must not exist before corrected Phase 0 closure');
 } else {
   assert(authority.activeChangeControl.endsWith('round-026.json'), 'post-Phase0 authority must return to round 026');
-  assert(exists(closurePath), 'Phase 0 closure addendum missing');
+  assert(exists(closurePath), 'corrected Phase 0 closure addendum missing');
   const closure = json(closurePath);
-  assert(closure.status === 'PASS_PHASE0_GOVERNANCE_RECOVERY', 'round 030 must close Phase 0');
+  assert(closure.status === 'PASS_PHASE0_GOVERNANCE_RECOVERY', 'round 033 must close corrected Phase 0');
   assert(authority.governanceRecovery?.closure === closurePath, 'authority must bind Phase 0 closure');
   assert(dispatcher.governanceRecoveryClosure === closurePath, 'dispatcher must bind Phase 0 closure');
   assert(status.currentInternalPhase === 'S02-P1-GOLDEN-MASTER', 'post-Phase0 phase mismatch');
@@ -159,7 +177,9 @@ if (authority.activeChangeControl.endsWith('round-029.json')) {
   assert(judge.unresolved.P0 === 0 && judge.unresolved.P1 === 0, 'Phase 0 P0/P1 must be zero');
   const closureCommit = git(['log', '--diff-filter=A', '--format=%H', '--', closurePath]).split('\n').filter(Boolean).at(-1);
   assert(closureCommit, 'cannot resolve Phase 0 closure commit');
-  assertBoundary(changedPaths(correction.entry.head, closureCommit), correction, 'round 029 closure');
+  assert(git(['merge-base', '--is-ancestor', reopen.entry.head, closureCommit]) === '', 'round 033 closure is not descended from round 031 entry');
+  assertBoundary(changedPaths(reopen.entry.head, closureCommit), reopen, 'round 031 corrected closure');
+  assertBoundary(changedPaths(closureCommit, 'HEAD'), productControl, 'post-Phase0 S02-P1 product work');
 }
 
 console.log(JSON.stringify({

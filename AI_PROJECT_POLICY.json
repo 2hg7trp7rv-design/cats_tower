@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 13,
+  "schemaVersion": 14,
   "updatedAt": "2026-09-02",
   "repository": {
     "fullName": "2hg7trp7rv-design/cats_tower",
@@ -12,17 +12,19 @@
   },
   "authority": {
     "index": "CURRENT_AUTHORITY_INDEX.json",
-    "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
-    "governanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
+    "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json",
+    "supersededGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
+    "step2ScreenProjectionCorrection": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
+    "plannedGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
     "instructions": "CHATGPT_PROJECT_INSTRUCTIONS1.md",
     "playbook": "DEVELOPMENT_PLAYBOOK.md",
     "projectSourceManifest": "PROJECT_SOURCE_MANIFEST.md"
   },
   "current": {
     "repositoryStep": 4,
-    "internalPhase": "S02-P1-GOLDEN-MASTER",
+    "internalPhase": "PHASE0-GOVERNANCE-RECOVERY",
     "status": "IN_PROGRESS",
-    "verdict": "IN_PROGRESS_S02_P1_A_J_AUDIT",
+    "verdict": "IN_PROGRESS_PHASE0_CLOSURE_INTEGRITY_RECOVERY",
     "step4Pass": false,
     "step5Allowed": false,
     "productionAllowed": false,
@@ -72,8 +74,8 @@
     "legacyOperationalWorkflowsRetired": true
   },
   "currentWriteBoundary": {
-    "allowed": "round 026 allowedWrites only",
-    "preWriteRequirement": "Inventory and audit the preserved S02-P1 content against A-J; do not recreate conforming artifacts.",
+    "allowed": "round 031 allowedWrites only",
+    "preWriteRequirement": "Repair Phase 0 closure integrity and complete independent re-judgment before any S02-P1 product write.",
     "forbidden": [
       "actual root replacement",
       "gameplay runtime mutation",

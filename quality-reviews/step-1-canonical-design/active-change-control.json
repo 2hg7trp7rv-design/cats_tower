@@ -1,16 +1,18 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "artifactId": "cats-tower-active-change-control-dispatcher",
   "updatedAt": "2026-09-02",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "status": "IN_PROGRESS",
   "currentAuthorityIndex": "CURRENT_AUTHORITY_INDEX.json",
-  "currentAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
-  "currentVerdict": "IN_PROGRESS_S02_P1_A_J_AUDIT",
+  "currentAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json",
+  "currentVerdict": "IN_PROGRESS_PHASE0_CLOSURE_INTEGRITY_RECOVERY",
   "currentRepositoryStep": 4,
-  "currentInternalPhase": "S02-P1-GOLDEN-MASTER",
-  "governanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
+  "currentInternalPhase": "PHASE0-GOVERNANCE-RECOVERY",
+  "supersededGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
+  "step2ScreenProjectionCorrection": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
+  "plannedGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
   "canonicalSeals": {
     "step1": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
     "step2": "simulation/executable-seal-v2.json",
@@ -19,7 +21,7 @@
   },
   "scopeTruth": {
     "step1": "PASS_CANONICAL",
-    "step2": "PASS_CONTRACT",
+    "step2": "IN_PROGRESS_CONTRACT_CORRECTION_REQUIRED",
     "step3": "PASS_MODEL",
     "step4": "IN_PROGRESS",
     "step5Allowed": false,
@@ -27,12 +29,15 @@
     "physicalIPhoneVerified": false
   },
   "lineage": {
-    "round026Role": "active S02-P1 Golden Master product-work authority",
+    "round026Role": "next S02-P1 Golden Master product-work authority after corrected closure",
     "round027Role": "Phase 0 opening history",
     "round028Role": "Phase 0 corrected baseline and source replacement history",
     "round029Role": "historical verifier repair history",
-    "round030Role": "PASS_PHASE0_GOVERNANCE_RECOVERY closure",
+    "round030Role": "superseded closure attempt that failed later independent criticism",
+    "round031Role": "active Phase 0 closure-integrity recovery",
+    "round032Role": "planned narrow Step 2 screen-projection correction",
+    "round033Role": "planned corrected Phase 0 closure",
     "supersededAddendaRemainHistory": true
   },
-  "rule": "Read CURRENT_AUTHORITY_INDEX.json and currentAddendum on live kimi. Before writing S02-P1 content, inventory and audit existing A-J artifacts and GM states; do not infer acceptance from existence."
+  "rule": "Read CURRENT_AUTHORITY_INDEX.json and currentAddendum on live kimi. Do not mutate S02-P1 product content until round 032 independently closes the governance recovery and returns authority to round 026."
 }

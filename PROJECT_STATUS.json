@@ -1,25 +1,27 @@
 {
-  "schemaVersion": 21,
+  "schemaVersion": 22,
   "updatedAt": "2026-09-02",
   "project": "Cat's Tower",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "authorityIndex": "CURRENT_AUTHORITY_INDEX.json",
-  "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
+  "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json",
   "status": "IN_PROGRESS",
   "currentRepositoryStep": 4,
-  "currentInternalPhase": "S02-P1-GOLDEN-MASTER",
-  "currentVerdict": "IN_PROGRESS_S02_P1_A_J_AUDIT",
+  "currentInternalPhase": "PHASE0-GOVERNANCE-RECOVERY",
+  "currentVerdict": "IN_PROGRESS_PHASE0_CLOSURE_INTEGRITY_RECOVERY",
   "governanceRecovery": {
-    "status": "PASS_PHASE0_GOVERNANCE_RECOVERY",
-    "closure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
+    "status": "REOPENED_PHASE0_CLOSURE_AND_CONTRACT_INTEGRITY",
+    "supersededClosureAttempt": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
+    "step2Correction": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
+    "plannedCorrectedClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
     "phase0P0": 0,
     "phase0P1": 0,
     "phase0P2": 1
   },
   "scopedPasses": {
     "step1": "PASS_CANONICAL",
-    "step2": "PASS_CONTRACT",
+    "step2": "IN_PROGRESS_CONTRACT_CORRECTION_REQUIRED",
     "step3": "PASS_MODEL",
     "step4": "IN_PROGRESS",
     "step5": "BLOCKED",
@@ -39,11 +41,16 @@
     "currentState": "AUDIT_REQUIRED_BEFORE_ADDITIONAL_PRODUCT_WRITE"
   },
   "openFindings": {
-    "P0": 0,
-    "P1": 1,
+    "P0": 1,
+    "P1": 5,
     "P2": 1,
     "items": [
+      "S2-P0-SCREEN-PROJECTION-001",
       "S4-RECOVERY-VIS-001",
+      "PHASE0-POST-CLOSURE-BOUNDARY-001",
+      "PHASE0-ACCEPTANCE-CLOSURE-ID-001",
+      "PHASE0-PREMATURE-EVIDENCE-001",
+      "PHASE0-IMMUTABLE-EVIDENCE-OVERWRITE-001",
       "PHASE0-P2-PR8-STALE-METADATA"
     ]
   },
@@ -61,7 +68,7 @@
     "productionAliasChanged": false,
     "productionReady": false
   },
-  "nextAuthorizedAction": "Audit the preserved S02-P1 artifacts against A-J and GM01-GM08 before any new product-content write. Reuse conforming content; repair only demonstrated gaps.",
+  "nextAuthorizedAction": "Repair Phase 0 closure integrity, then perform the narrow Step 2 screen-projection correction under round 032. Keep S02-P1 product content read-only until corrected closure round 033 returns authority to round 026.",
   "step5Allowed": false,
   "productionAllowed": false,
   "physicalIPhoneVerified": false

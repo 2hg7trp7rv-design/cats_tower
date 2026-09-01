@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-phase0-evidence-supersession-register",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json",
+  "reason": "Round 030 closed before the independent critic completed, and completion-evidence.json was modified after its first evidence commit. These paths remain immutable attempted-closure history but are invalid for the corrected closure.",
+  "frozenHistory": [
+    {
+      "path": "quality-reviews/phase-0-governance-recovery/critic-summary.json",
+      "currentBlob": "bc411bd18ab7ef12825f463ed4486f370ff9d85e",
+      "classification": "PREMATURE_INVALID_FOR_CORRECTED_CLOSURE"
+    },
+    {
+      "path": "quality-reviews/phase-0-governance-recovery/final-judge.json",
+      "currentBlob": "7af39af4b1e40255a38421e0606766e086d1f29f",
+      "classification": "PREMATURE_INVALID_FOR_CORRECTED_CLOSURE"
+    },
+    {
+      "path": "quality-reviews/phase-0-governance-recovery/completion-evidence.json",
+      "firstEvidenceCommitBlob": "7403b4dd8bc8cb5ed4a7edd1d268ba045edae215",
+      "currentBlob": "d1bdb3eb93734d3cd758c50355793d857f915c56",
+      "classification": "OVERWRITTEN_ONCE_FREEZE_CURRENT_INVALID_FOR_CORRECTED_CLOSURE"
+    },
+    {
+      "path": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
+      "currentBlob": "20011a1007dd9795486b870293d2aeac89909fb1",
+      "classification": "SUPERSEDED_CLOSURE_ATTEMPT"
+    }
+  ],
+  "requiredReplacementPaths": [
+    "quality-reviews/phase-0-governance-recovery/critic-summary-round-003.json",
+    "quality-reviews/phase-0-governance-recovery/final-judge-round-002.json",
+    "quality-reviews/phase-0-governance-recovery/completion-evidence-round-002.json",
+    "quality-reviews/phase-0-governance-recovery/live-readback-round-002.json",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json"
+  ],
+  "mayOverwriteFrozenHistory": false
+}
