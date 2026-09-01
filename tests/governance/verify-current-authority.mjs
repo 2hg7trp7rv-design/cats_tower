@@ -81,6 +81,16 @@ function assertNoPathChangesSince(base, head, paths, label) {
   }
 }
 
+function runNodeVerifier(file, label) {
+  assert(exists(file), `${label}: verifier missing: ${file}`);
+  try {
+    execFileSync(process.execPath, [rel(file)], { cwd: root, encoding: 'utf8', stdio: 'pipe' });
+  } catch (error) {
+    const detail = [error?.stdout, error?.stderr].filter(Boolean).join('\n').trim();
+    throw new Error(`${label}: verifier failed: ${file}${detail ? `\n${detail}` : ''}`);
+  }
+}
+
 function assertDeleted(paths, label) {
   for (const p of paths) assert(!exists(p), `${label}: obsolete live path remains: ${p}`);
 }
@@ -97,8 +107,14 @@ const reopen = json('quality-reviews/step-1-canonical-design/active-change-contr
 const step2CorrectionPath = 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json';
 const step2Correction = exists(step2CorrectionPath) ? json(step2CorrectionPath) : null;
 const step2ContinuityPath = 'quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/step3-continuity-bridge.json';
+const v3SealPath = 'simulation/executable-seal-v3.json';
+const v3SealValidatorPath = 'simulation/validate-executable-seal-v3.mjs';
+const v3ProjectionVerifierPath = 'tests/governance/verify-step2-screen-projection-round-032.mjs';
+const v3ContinuityVerifierPath = 'tests/governance/verify-step3-continuity-round-032.mjs';
 // Round 032 opening must replace this null with the immutable blob created for the new control.
 const expectedStep2CorrectionControlBlob = null;
+// The closure-integrity critic commit must replace this null with the immutable critic blob.
+const expectedClosureRepairCriticBlob = null;
 const productControl = json('quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json');
 const acceptanceAddendum = json('quality-reviews/phase-0-governance-recovery/acceptance-addendum-round-001.json');
 const active = json(authority.activeChangeControl);
@@ -169,12 +185,18 @@ const frozenCorrectionBlobs = {
 for (const [p, expectedBlob] of Object.entries(frozenCorrectionBlobs)) {
   assert(git(['rev-parse', `HEAD:${p}`]) === expectedBlob, `Phase 0 correction history or boundary control changed: ${p}`);
 }
+const frozenCurrentRecoveryBlobs = {
+  'quality-reviews/phase-0-governance-recovery/evidence-supersession-register-round-002.json': '69d76534cadcbedeff272cf39003ab55c939f9f8'
+};
+for (const [p, expectedBlob] of Object.entries(frozenCurrentRecoveryBlobs)) {
+  assert(git(['rev-parse', `HEAD:${p}`]) === expectedBlob, `current Phase 0 recovery evidence changed: ${p}`);
+}
 assert(exists('quality-reviews/phase-0-governance-recovery/evidence-supersession-register-round-002.json'), 'complete evidence supersession register missing');
 const closureIntegrityFreezeBaseline = '52261184fe895bf17c01a8cc5bc55ccf561064da';
 assertNoPathChangesSince(
   closureIntegrityFreezeBaseline,
   'HEAD',
-  [...Object.keys(fixedHistoricalBlobs), ...Object.keys(frozenAttemptedClosureBlobs), ...Object.keys(frozenCorrectionBlobs)],
+  [...Object.keys(fixedHistoricalBlobs), ...Object.keys(frozenAttemptedClosureBlobs), ...Object.keys(frozenCorrectionBlobs), ...Object.keys(frozenCurrentRecoveryBlobs)],
   'immutable governance history'
 );
 
@@ -231,6 +253,11 @@ const closureRepairCriticPath = 'quality-reviews/phase-0-governance-recovery/clo
 const closureRepairCriticComplete = exists(closureRepairCriticPath);
 const closureRepairCritic = closureRepairCriticComplete ? json(closureRepairCriticPath) : null;
 if (closureRepairCritic) {
+  assert(typeof expectedClosureRepairCriticBlob === 'string' && /^[a-f0-9]{40}$/.test(expectedClosureRepairCriticBlob), 'closure-integrity critic blob was not frozen when added');
+  assert(git(['rev-parse', `HEAD:${closureRepairCriticPath}`]) === expectedClosureRepairCriticBlob, 'closure-integrity critic blob differs from its frozen value');
+  assert(closureRepairCritic.artifactId === 'cats-tower-phase0-closure-integrity-critic-round-001', 'closure-integrity critic artifact ID mismatch');
+  assert(closureRepairCritic.repository === '2hg7trp7rv-design/cats_tower' && closureRepairCritic.branch === 'kimi', 'closure-integrity critic repository/branch mismatch');
+  assert(closureRepairCritic.changeControl === 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json', 'closure-integrity critic change-control mismatch');
   assert(closureRepairCritic.verdict === 'PASS_PHASE0_CLOSURE_INTEGRITY_REPAIR', 'closure-integrity critic verdict is not a scoped pass');
   assert(closureRepairCritic.unresolved?.P0 === 0 && closureRepairCritic.unresolved?.P1 === 0, 'closure-integrity critic P0/P1 must be zero');
   assert(closureRepairCritic.maximumVerdict === 'READY_FOR_STEP2_SCREEN_PROJECTION_CORRECTION', 'closure-integrity critic maximum verdict is wrong');
@@ -238,10 +265,13 @@ if (closureRepairCritic) {
   assert(repairTarget && closureRepairCritic.auditTarget?.tree === git(['rev-parse', `${repairTarget}^{tree}`]), 'closure-integrity critic target commit/tree mismatch');
   const repairCriticCommit = firstAddCommit(closureRepairCriticPath);
   assert(repairCriticCommit && repairCriticCommit !== repairTarget && isAncestor(repairTarget, repairCriticCommit), 'closure-integrity critic commit must follow its audit target');
+  assert(git(['rev-parse', `${repairCriticCommit}^`]) === repairTarget, 'closure-integrity critic must audit its exact immediate predecessor');
+  assert(assertAddedOnceAndUnchanged(closureRepairCriticPath, repairCriticCommit) === expectedClosureRepairCriticBlob, 'closure-integrity critic immutable blob mismatch');
   assert(closureRepairCritic.workflow?.commit === repairTarget && closureRepairCritic.workflow?.tree === closureRepairCritic.auditTarget.tree, 'closure-integrity critic workflow target mismatch');
   assert(closureRepairCritic.workflow?.conclusion === 'SUCCESS', 'closure-integrity critic workflow was not successful');
   assert(Number.isInteger(closureRepairCritic.workflow?.runId) && Number.isInteger(closureRepairCritic.workflow?.jobId), 'closure-integrity critic run/job binding missing');
   assert(Number.isInteger(closureRepairCritic.workflow?.artifactId) && /^sha256:[a-f0-9]{64}$/.test(closureRepairCritic.workflow?.artifactDigest ?? ''), 'closure-integrity critic artifact binding missing');
+  assert(closureRepairCritic.workflow?.artifactName === `phase0-current-governance-${repairTarget}`, 'closure-integrity critic artifact name mismatch');
   const requiredFindingIds = [
     'PHASE0-POST-CLOSURE-BOUNDARY-001',
     'PHASE0-ACCEPTANCE-CLOSURE-ID-001',
@@ -251,18 +281,111 @@ if (closureRepairCritic) {
   assert(JSON.stringify(closureRepairCritic.findings?.map(entry => entry.id)) === JSON.stringify(requiredFindingIds), 'closure-integrity critic finding set mismatch');
   assert(closureRepairCritic.findings.every(entry => entry.resolved === true), 'closure-integrity critic contains an unresolved finding');
 }
+
+if (step2Correction) {
+  assert(closureRepairCriticComplete, 'round 032 may not open before the closure-integrity critic passes');
+  assert(step2Correction.repository === '2hg7trp7rv-design/cats_tower' && step2Correction.branch === 'kimi', 'round 032 repository/branch mismatch');
+  assert(step2Correction.parentChangeControl === 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json', 'round 032 parent change-control mismatch');
+  assert(step2Correction.internalPhase === 'STEP2-SCREEN-PROJECTION-CORRECTION', 'round 032 internal phase mismatch');
+  assert(step2Correction.scope === 'VERSIONED_V3_SCREEN_PROJECTION_ONLY', 'round 032 scope mismatch');
+  const correctionControlCommit = firstAddCommit(step2CorrectionPath);
+  const closureRepairCriticCommit = firstAddCommit(closureRepairCriticPath);
+  assert(correctionControlCommit, 'cannot resolve round 032 control addition commit');
+  assert(step2Correction.entry?.head === git(['rev-parse', `${correctionControlCommit}^`]), 'round 032 entry must be the exact parent of its opening commit');
+  assert(step2Correction.entry?.tree === git(['rev-parse', `${step2Correction.entry.head}^{tree}`]), 'round 032 entry commit/tree mismatch');
+  assert(step2Correction.entry.head === closureRepairCriticCommit, 'round 032 must open directly from the closure-integrity critic evidence commit');
+  assert(assertAddedOnceAndUnchanged(step2CorrectionPath, correctionControlCommit) === expectedStep2CorrectionControlBlob, 'round 032 control immutable blob mismatch');
+  const entryWorkflow = step2Correction.entryWorkflow;
+  assert(entryWorkflow?.commit === step2Correction.entry.head && entryWorkflow?.tree === step2Correction.entry.tree, 'round 032 entry workflow target mismatch');
+  assert(entryWorkflow?.conclusion === 'SUCCESS', 'round 032 entry workflow must succeed');
+  assert(Number.isInteger(entryWorkflow?.runId) && Number.isInteger(entryWorkflow?.jobId), 'round 032 entry workflow run/job missing');
+  assert(Number.isInteger(entryWorkflow?.artifactId) && /^sha256:[a-f0-9]{64}$/.test(entryWorkflow?.artifactDigest ?? ''), 'round 032 entry workflow artifact binding missing');
+}
+
+const requiredV3BindingPaths = [
+  'canonical/STEP2_DEPENDENCY_CLOSURE.json',
+  'canonical/SCREEN_STATE_REGISTRY.json',
+  'quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/acceptance-matrix.json',
+  'quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/qualification-result-v3.json',
+  'quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/screen-projection-coverage-ledger.json',
+  'quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/numeric-non-impact.json',
+  'simulation/candidate-v3.json',
+  'simulation/candidate-v3.schema.json',
+  'simulation/validate-candidate-v3.mjs',
+  'simulation/execution-contract-v3.json',
+  'simulation/execution-contract-v3.schema.json',
+  'simulation/validate-execution-contract-v3.mjs',
+  'simulation/run-plan-v3.json',
+  'simulation/run-plan-v3.schema.json',
+  'simulation/validate-run-plan-v3.mjs',
+  'simulation/fixtures/v3/manifest.json',
+  'simulation/fixtures/v3/negative.json',
+  'simulation/fixtures/v3/validate-fixtures.mjs',
+  'simulation/result-v3.schema.json',
+  'simulation/validate-result-v3.mjs',
+  'simulation/engine-v2/run-plan.mjs',
+  'simulation/engine-v2/run-scenario.mjs',
+  'simulation/engine-v2/high-volume.mjs',
+  'simulation/lib-v2/schema-validator.mjs',
+  'simulation/migrations/v1-to-v2/migration-map.json',
+  'simulation/executable-seal-v3.schema.json',
+  v3SealValidatorPath,
+  v3ProjectionVerifierPath,
+  v3ContinuityVerifierPath
+];
+
+function verifyV3PassContract() {
+  assert(exists(v3SealPath), 'Step 2 PASS requires a v3 seal');
+  const seal = json(v3SealPath);
+  assert(seal.verdict === 'SEALED_STEP2_EXECUTABLE_CONTRACT_SCREEN_PROJECTION_CORRECTED', 'Step 2 PASS v3 seal verdict mismatch');
+  assert(Array.isArray(seal.bindings) && seal.bindings.length > 0, 'Step 2 PASS v3 seal has no bindings');
+  const bindingPaths = seal.bindings.map(binding => binding.path);
+  assert(new Set(bindingPaths).size === bindingPaths.length, 'Step 2 PASS v3 seal contains duplicate binding paths');
+  for (const requiredPath of requiredV3BindingPaths) {
+    assert(bindingPaths.includes(requiredPath), `Step 2 PASS v3 seal omits required binding: ${requiredPath}`);
+  }
+  for (const binding of seal.bindings) {
+    assert(typeof binding.path === 'string' && /^[a-f0-9]{40}$/.test(binding.blob ?? ''), 'Step 2 PASS v3 seal contains an invalid binding');
+    assert(exists(binding.path), `Step 2 PASS v3 binding missing: ${binding.path}`);
+    assert(git(['rev-parse', `HEAD:${binding.path}`]) === binding.blob, `Step 2 PASS v3 binding changed: ${binding.path}`);
+  }
+  runNodeVerifier(v3SealValidatorPath, 'Step 2 v3 seal');
+  runNodeVerifier(v3ProjectionVerifierPath, 'Step 2 screen projection');
+  runNodeVerifier(v3ContinuityVerifierPath, 'Step 3 continuity');
+  return seal;
+}
+
+function verifyContinuityClaims(continuity, v3Seal) {
+  assert(continuity.verdict === 'PASS_STEP3_NUMERIC_MODEL_CONTINUITY_NO_EXECUTION_RERUN_REQUIRED', 'Step 3 continuity bridge verdict wrong');
+  assert(continuity.changedJsonPointers?.length === 1 && continuity.changedJsonPointers[0] === '/screens', 'Step 3 continuity bridge does not prove a screens-only change');
+  const outsideBefore = continuity.candidateOutsideScreens?.beforeSha256;
+  const outsideAfter = continuity.candidateOutsideScreens?.afterSha256;
+  assert(/^[a-f0-9]{64}$/.test(outsideBefore ?? '') && /^[a-f0-9]{64}$/.test(outsideAfter ?? ''), 'non-screen candidate hashes are missing');
+  assert(outsideBefore === outsideAfter, 'non-screen candidate content changed');
+  const payloadBefore = continuity.qualification?.beforeDeterministicPayloadSha256;
+  const payloadAfter = continuity.qualification?.afterDeterministicPayloadSha256;
+  assert(/^[a-f0-9]{64}$/.test(payloadBefore ?? '') && /^[a-f0-9]{64}$/.test(payloadAfter ?? ''), 'qualification deterministic payload hashes are missing');
+  assert(payloadBefore === payloadAfter, 'qualification deterministic payload changed');
+  assert(continuity.qualification?.deepEqual === true, 'qualification payload deep equality missing');
+  assert(continuity.v3Seal?.path === v3SealPath, 'continuity bridge does not bind v3 seal path');
+  assert(continuity.v3Seal?.blob === git(['rev-parse', `HEAD:${v3SealPath}`]), 'continuity bridge v3 seal blob mismatch');
+  assert(continuity.v3Seal.blob === git(['hash-object', v3SealPath]), 'continuity bridge v3 seal worktree hash mismatch');
+  assert(v3Seal.verdict === 'SEALED_STEP2_EXECUTABLE_CONTRACT_SCREEN_PROJECTION_CORRECTED', 'continuity bridge used an invalid v3 seal');
+}
+
 const expectedPhase0P1 = closureRepairCriticComplete ? 0 : 4;
 const step2ProjectionOpen = authority.executableContract.step2Status !== 'PASS_CONTRACT';
 if (authority.activeChangeControl === 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json') {
   assert(step2ProjectionOpen, 'Step 2 cannot pass while round 031 is still active');
 }
+let verifiedV3Seal = null;
 if (!step2ProjectionOpen) {
+  assert(closureRepairCriticComplete, 'Step 2 cannot pass before the closure-integrity critic passes');
   assert(step2Correction, 'Step 2 PASS requires the frozen round 032 correction control');
-  assert(authority.executableContract.seal === 'simulation/executable-seal-v3.json', 'Step 2 PASS requires the v3 seal authority pointer');
-  assert(exists('simulation/executable-seal-v3.json'), 'Step 2 PASS requires a v3 seal');
-  const currentV3Seal = json('simulation/executable-seal-v3.json');
-  assert(currentV3Seal.verdict === 'SEALED_STEP2_EXECUTABLE_CONTRACT_SCREEN_PROJECTION_CORRECTED', 'Step 2 PASS v3 seal verdict mismatch');
+  assert(authority.executableContract.seal === v3SealPath, 'Step 2 PASS requires the v3 seal authority pointer');
   assert(exists(step2ContinuityPath), 'Step 2 PASS requires continuity evidence');
+  verifiedV3Seal = verifyV3PassContract();
+  verifyContinuityClaims(json(step2ContinuityPath), verifiedV3Seal);
 }
 const expectedOpenFindings = [
   ...(step2ProjectionOpen ? ['S2-P0-SCREEN-PROJECTION-001'] : []),
@@ -337,6 +460,7 @@ if (authority.activeChangeControl === 'quality-reviews/step-1-canonical-design/a
   assert(!exists(closurePath), 'round 033 must not exist before corrected Phase 0 closure');
 } else if (authority.activeChangeControl === step2CorrectionPath) {
   assert(step2Correction, 'active round 032 change-control missing');
+  assert(closureRepairCriticComplete && authority.governanceRecovery.phase0P0 === 0 && expectedPhase0P1 === 0, 'round 032 cannot be active while Phase 0 P0/P1 remains');
   assert(active.status === 'IN_PROGRESS', 'round 032 must remain in progress before corrected closure');
   assert(status.currentInternalPhase === 'STEP2-SCREEN-PROJECTION-CORRECTION', 'round 032 phase mirror mismatch');
   assertBoundaryHistory(reopen.entry.head, step2Correction.entry.head, reopen, 'completed round 031 repair range');
@@ -352,20 +476,13 @@ if (authority.activeChangeControl === 'quality-reviews/step-1-canonical-design/a
   assert(dispatcher.governanceRecoveryClosure === closurePath, 'dispatcher must bind Phase 0 closure');
   assert(status.currentInternalPhase === 'S02-P1-GOLDEN-MASTER', 'post-Phase0 phase mismatch');
   assert(authority.executableContract.step2Status === 'PASS_CONTRACT', 'round 033 may not close while Step 2 P0 remains open');
-  assert(authority.executableContract.seal === 'simulation/executable-seal-v3.json', 'current Step 2 seal must be v3 after correction');
-  assert(exists('simulation/executable-seal-v3.json'), 'corrected v3 Step 2 seal missing');
-  const v3Seal = json('simulation/executable-seal-v3.json');
-  assert(v3Seal.verdict === 'SEALED_STEP2_EXECUTABLE_CONTRACT_SCREEN_PROJECTION_CORRECTED', 'v3 Step 2 seal verdict wrong');
+  assert(authority.executableContract.seal === v3SealPath, 'current Step 2 seal must be v3 after correction');
+  assert(verifiedV3Seal, 'corrected v3 Step 2 contract was not verified');
+  const v3Seal = verifiedV3Seal;
   for (const p of Object.values(closureEvidence)) assert(exists(p), `Phase 0 closure evidence missing: ${p}`);
   for (const [key, p] of Object.entries(closureEvidence)) assert(closure.evidence?.[key] === p, `round 033 does not exactly bind numbered ${key} evidence`);
   const continuity = json(closureEvidence.step2Continuity);
-  assert(continuity.verdict === 'PASS_STEP3_NUMERIC_MODEL_CONTINUITY_NO_EXECUTION_RERUN_REQUIRED', 'Step 3 continuity bridge verdict wrong');
-  assert(continuity.changedJsonPointers?.length === 1 && continuity.changedJsonPointers[0] === '/screens', 'Step 3 continuity bridge does not prove a screens-only change');
-  assert(continuity.candidateOutsideScreens?.beforeSha256 === continuity.candidateOutsideScreens?.afterSha256, 'non-screen candidate content changed');
-  assert(continuity.qualification?.beforeDeterministicPayloadSha256 === continuity.qualification?.afterDeterministicPayloadSha256, 'qualification deterministic payload changed');
-  assert(continuity.qualification?.deepEqual === true, 'qualification payload deep equality missing');
-  assert(continuity.v3Seal?.path === 'simulation/executable-seal-v3.json', 'continuity bridge does not bind v3 seal path');
-  assert(continuity.v3Seal?.blob === git(['rev-parse', 'HEAD:simulation/executable-seal-v3.json']), 'continuity bridge v3 seal blob mismatch');
+  verifyContinuityClaims(continuity, v3Seal);
   const critic = json(closureEvidence.critic);
   const judge = json(closureEvidence.finalJudge);
   const completion = json(closureEvidence.completion);
@@ -404,6 +521,9 @@ if (authority.activeChangeControl === 'quality-reviews/step-1-canonical-design/a
   assert(targetCommit !== criticCommit, 'independent critic must be committed after its audited target');
   const v3SealCommit = firstAddCommit('simulation/executable-seal-v3.json');
   assert(v3SealCommit && isAncestor(v3SealCommit, targetCommit), 'critic target does not contain the v3 correction seal');
+  const continuityCommit = firstAddCommit(step2ContinuityPath);
+  assert(continuityCommit && isAncestor(continuityCommit, targetCommit), 'critic target does not contain the Step 3 continuity evidence');
+  assert(git(['rev-parse', `${targetCommit}:${step2ContinuityPath}`]) === git(['rev-parse', `HEAD:${step2ContinuityPath}`]), 'Step 3 continuity evidence changed after the critic target');
   assert(isAncestor(targetCommit, criticCommit), 'critic evidence must follow its target commit');
   assert(judge.target?.commit === targetCommit && judge.target?.tree === targetTree, 'judge target differs from critic target');
   assert(completion.verifiedContent?.commit === targetCommit && completion.verifiedContent?.tree === targetTree, 'completion target differs from critic target');
@@ -418,6 +538,35 @@ if (authority.activeChangeControl === 'quality-reviews/step-1-canonical-design/a
     assert(Number.isInteger(workflow?.artifactId) && /^sha256:[a-f0-9]{64}$/.test(workflow?.artifactDigest ?? ''), 'workflow artifact binding missing');
   }
   assert(Array.isArray(step2Correction.evidenceOnlyWrites) && step2Correction.evidenceOnlyWrites.length > 0, 'round 032 evidence-only boundary missing');
+  const expectedEvidenceOnlyWrites = [
+    'quality-reviews/phase-0-governance-recovery/critic-summary-round-003.json',
+    'quality-reviews/phase-0-governance-recovery/final-judge-round-002.json',
+    'quality-reviews/phase-0-governance-recovery/completion-evidence-round-002.json',
+    'quality-reviews/phase-0-governance-recovery/live-readback-round-002.json',
+    'quality-reviews/step-1-canonical-design/active-change-control.json',
+    'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json',
+    'CURRENT_AUTHORITY_INDEX.json',
+    'PROJECT_STATUS.json',
+    'AI_PROJECT_POLICY.json',
+    'QUALITY_GATE.md',
+    'PROJECT_HANDOVER.md',
+    'AGENTS.md',
+    'README.md',
+    'simulation/CURRENT_STATUS.json',
+    '.github/workflows/CURRENT_STATUS.md'
+  ];
+  assert(JSON.stringify(step2Correction.evidenceOnlyWrites) === JSON.stringify(expectedEvidenceOnlyWrites), 'round 032 evidence-only allowlist is not the exact reviewed set');
+  const postTargetImmutablePaths = [
+    step2ContinuityPath,
+    v3SealPath,
+    ...requiredV3BindingPaths,
+    step2CorrectionPath,
+    'tests/governance/verify-current-authority.mjs',
+    '.github/workflows/verify-current-governance.yml'
+  ];
+  for (const immutablePath of new Set(postTargetImmutablePaths)) {
+    assert(!step2Correction.evidenceOnlyWrites.some(pattern => globMatch(pattern, immutablePath)), `post-target evidence allowlist covers immutable content: ${immutablePath}`);
+  }
   const evidenceOnlyControl = { allowedWrites: step2Correction.evidenceOnlyWrites, forbiddenWrites: step2Correction.forbiddenWrites };
   assertBoundaryHistory(targetCommit, closureCommit, evidenceOnlyControl, 'post-target evidence-only range');
   const boundContentPaths = (v3Seal.bindings ?? []).map(binding => binding.path);
@@ -426,7 +575,8 @@ if (authority.activeChangeControl === 'quality-reviews/step-1-canonical-design/a
     assert(git(['rev-parse', `${targetCommit}:${binding.path}`]) === binding.blob, `critic target differs from v3 seal binding: ${binding.path}`);
     assert(git(['rev-parse', `HEAD:${binding.path}`]) === binding.blob, `v3 seal binding changed after criticism: ${binding.path}`);
   }
-  assertNoPathChangesSince(targetCommit, closureCommit, boundContentPaths, 'post-critic v3 content freeze');
+  assert(git(['rev-parse', `${targetCommit}:${v3SealPath}`]) === git(['rev-parse', `HEAD:${v3SealPath}`]), 'v3 seal changed after the critic target');
+  assertNoPathChangesSince(targetCommit, closureCommit, [...new Set([...boundContentPaths, ...postTargetImmutablePaths])], 'post-critic v3 content freeze');
   assert(isAncestor(reopen.entry.head, closureCommit), 'round 033 closure is not descended from round 031 entry');
   assertBoundaryHistory(reopen.entry.head, step2Correction.entry.head, reopen, 'completed round 031 repair range');
   assertBoundaryHistory(step2Correction.entry.head, closureCommit, step2Correction, 'round 032 correction and round 033 closure range');
