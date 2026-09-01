@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 12,
+  "schemaVersion": 13,
   "updatedAt": "2026-09-02",
   "repository": {
     "fullName": "2hg7trp7rv-design/cats_tower",
@@ -12,26 +12,46 @@
   },
   "authority": {
     "index": "CURRENT_AUTHORITY_INDEX.json",
-    "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json",
+    "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
+    "governanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
     "instructions": "CHATGPT_PROJECT_INSTRUCTIONS1.md",
     "playbook": "DEVELOPMENT_PLAYBOOK.md",
     "projectSourceManifest": "PROJECT_SOURCE_MANIFEST.md"
   },
   "current": {
     "repositoryStep": 4,
-    "internalPhase": "PHASE0-GOVERNANCE-RECOVERY",
+    "internalPhase": "S02-P1-GOLDEN-MASTER",
     "status": "IN_PROGRESS",
-    "verdict": "IN_PROGRESS_PHASE0_HISTORICAL_VERIFIER_REPAIR",
-    "nextProductPhase": "S02-P1-GOLDEN-MASTER",
+    "verdict": "IN_PROGRESS_S02_P1_A_J_AUDIT",
     "step4Pass": false,
     "step5Allowed": false,
     "productionAllowed": false,
     "physicalIPhoneVerified": false,
     "userVisualApproval": false
   },
-  "scopedPassVocabulary": ["PASS_CANONICAL","PASS_CONTRACT","PASS_MODEL","PASS_VISUAL","PASS_ASSET","PASS_RUNTIME","PASS_SERVER","PASS_DEVICE","PASS_RELEASE"],
+  "scopedPassVocabulary": [
+    "PASS_CANONICAL",
+    "PASS_CONTRACT",
+    "PASS_MODEL",
+    "PASS_VISUAL",
+    "PASS_ASSET",
+    "PASS_RUNTIME",
+    "PASS_SERVER",
+    "PASS_DEVICE",
+    "PASS_RELEASE"
+  ],
   "forbiddenUnscopedVerdict": "PASS",
-  "completionInsufficientAlone": ["file exists","code exists","image exists","build succeeds","unit tests pass","CI is green","Vercel is READY","screenshot exists","sandbox endpoint responds"],
+  "completionInsufficientAlone": [
+    "file exists",
+    "code exists",
+    "image exists",
+    "build succeeds",
+    "unit tests pass",
+    "CI is green",
+    "Vercel is READY",
+    "screenshot exists",
+    "sandbox endpoint responds"
+  ],
   "lowReworkRules": {
     "downstreamUsabilityContractRequired": true,
     "representativeProofBeforeVolume": true,
@@ -41,7 +61,8 @@
     "contentAndEvidenceCommitsSeparated": true,
     "independentCriticRequired": true,
     "P0P1MustBeZero": true,
-    "userDoesNotPerformRoutineQA": true
+    "userDoesNotPerformRoutineQA": true,
+    "auditExistingBeforeRebuilding": true
   },
   "verificationPolicy": {
     "sealedArtifactsImmutable": true,
@@ -51,14 +72,38 @@
     "legacyOperationalWorkflowsRetired": true
   },
   "currentWriteBoundary": {
-    "allowed": "round 029 allowedWrites only",
-    "forbidden": ["sealed Step 1/2/3 mutation","gameplay runtime mutation","economy or save mutation","production asset generation","backend/payment/ad implementation","Production alias change","PR operation","physical-iPhone PASS claim"]
+    "allowed": "round 026 allowedWrites only",
+    "preWriteRequirement": "Inventory and audit the preserved S02-P1 content against A-J; do not recreate conforming artifacts.",
+    "forbidden": [
+      "actual root replacement",
+      "gameplay runtime mutation",
+      "economy or save mutation",
+      "production asset volume generation",
+      "backend/payment/ad implementation",
+      "sealed Step 1/2/3 mutation",
+      "Production alias change",
+      "PR operation",
+      "physical-iPhone PASS claim"
+    ]
   },
   "legacy": {
     "runtimeStatus": "LEGACY_RUNTIME_NOT_CANONICAL",
-    "obsoleteProjectSourcesMustBeDeleted": true,
+    "obsoleteProjectSourcesMustBeAbsent": true,
     "historicalQualityEvidenceMustBePreserved": true,
     "historicalSnapshotStatusDoesNotDefineCurrentStatus": true
   },
-  "reportingRequired": ["repository","branch","authority","entry/content/evidence commit and tree","changed and deleted paths","workflow run/job/artifact","deployment identity if relevant","scoped verdict","P0/P1/P2","Production state","physical-device state","next authorized action"]
+  "reportingRequired": [
+    "repository",
+    "branch",
+    "authority",
+    "entry/content/evidence commit and tree",
+    "changed and deleted paths",
+    "workflow run/job/artifact",
+    "deployment identity if relevant",
+    "scoped verdict",
+    "P0/P1/P2",
+    "Production state",
+    "physical-device state",
+    "next authorized action"
+  ]
 }

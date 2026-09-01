@@ -6,17 +6,19 @@
 
 | Scope | Status |
 |---|---|
+| Phase 0 governance recovery | `PASS_PHASE0_GOVERNANCE_RECOVERY` |
 | Step 1 canonical | `PASS_CANONICAL` |
 | Step 2 executable contract | `PASS_CONTRACT` |
 | Step 3 model validation | `PASS_MODEL` |
 | Step 4 screen families | `IN_PROGRESS` |
-| S02-P1 review route | present; 8 states claimed for audit |
+| S02-P1 route | present; requires audit |
 | S02-P1 accepted Golden Masters | `0 / 8` |
+| S02-P1 accepted A-J deliverables | `0 / 10` |
 | Step 5 canonical runtime/server | `BLOCKED` |
 | Physical iPhone | `NOT_VERIFIED` |
 | Production Ready | `false` |
 
-The existing root browser game is **legacy technical history, not the canonical 1〜10F implementation**. Step 3 validates the sealed model; it does not mean that the legacy browser runtime was playtested 15,000 times.
+The existing root browser game is **legacy technical history, not the canonical 1-10F implementation**. Step 3 validates the sealed model; it does not mean that the legacy browser runtime was playtested 15,000 times.
 
 ## Read order
 
@@ -26,11 +28,15 @@ The existing root browser game is **legacy technical history, not the canonical 
 4. `DEVELOPMENT_PLAYBOOK.md`
 5. Step 1/2 seals and Step 3 evidence
 6. current task Acceptance/evidence
-7. status mirrors
+7. current mirrors
 
 ## Current work
 
-Phase 0 is repairing governance and Project sources. S02-P1 review content and eight GM states were written concurrently and are preserved, but they are not Phase 0 evidence and are not accepted yet. After Phase 0 passes, that content must be audited against A〜J before any further product write. The actual root, gameplay core, economy, backend, Production and physical-device verdict remain unchanged.
+Audit the preserved S02-P1 content against deliverables A-J and GM01-GM08 before creating more product content. Existing material must be reused when it satisfies the contract and repaired only where evidence shows a gap. The actual root, gameplay core, economy, backend, Production and physical-device verdict remain unchanged.
+
+## Phase 0 delivery
+
+Phase 0 established one current authority index, completely replaced the Project instructions, added a downstream-usability Development Playbook, synchronized mirrors, separated current/history verification and removed 33 obsolete current-facing paths while preserving Git history and sealed evidence.
 
 ## Product invariants
 
@@ -44,7 +50,7 @@ Phase 0 is repairing governance and Project sources. S02-P1 review content and e
 - separate character/weapon gacha
 - first copy functional; 20+ duplicate is optional long mastery
 - paid/free ruby provenance
-- S01〜S12
+- S01-S12
 - server-authoritative permanent economy
 
 ## PASS vocabulary

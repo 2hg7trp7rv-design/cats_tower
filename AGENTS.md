@@ -7,9 +7,9 @@ Updated: **2026-09-02**
 - Repository: `2hg7trp7rv-design/cats_tower`
 - Write branch: existing `kimi` only
 - Always pass `branch=kimi`
-- No branch creation/switch/write/delete
+- No branch creation, switching, write or deletion
 - No PR, merge, rebase, cherry-pick or force-push
-- No Production/public/provider/destructive operation without explicit user approval
+- No Production, public, provider or destructive operation without explicit user approval
 
 ## Start here
 
@@ -20,29 +20,38 @@ Updated: **2026-09-02**
 5. task-specific canonical and Acceptance
 6. current mirrors
 
-Do not infer current status from historical headers, chat history or old workflow files.
+Do not infer current status from historical headers, chat history, old workflows or file existence.
 
 ## Current boundary
 
 - Repository Step: `4`
-- Internal phase: `PHASE0-GOVERNANCE-RECOVERY`
-- Active authority: `active-change-control-addendum-round-029.json`
-- Planned Phase 0 closure: `round-030.json`
-- Next product authority after closure: `round-026.json`
-- Next product phase: `S02-P1-GOLDEN-MASTER`
+- Internal phase: `S02-P1-GOLDEN-MASTER`
+- Current verdict: `IN_PROGRESS_S02_P1_A_J_AUDIT`
+- Active authority: `active-change-control-addendum-round-026.json`
+- Phase 0 closure: `active-change-control-addendum-round-030.json`
+- Step 4 PASS: `false`
+- Step 5 allowed: `false`
+- Production allowed: `false`
+- Physical iPhone verified: `false`
 
-Forbidden now:
+## Required next action
 
+Audit the preserved S02-P1 route, A-J artifacts and GM01-GM08 before any additional product write. Reuse conforming artifacts; repair only evidenced gaps. Existence does not equal acceptance.
+
+Forbidden during S02-P1:
+
+- actual-root replacement or incremental production polish
 - gameplay/runtime/economy/save mutation
-- production asset generation
+- production asset volume generation
 - backend/payment/ads
 - sealed Step 1/2/3 mutation
-- Production alias
+- Production alias change
+- PR operation
 - user approval or physical-iPhone inference
 
 ## Verification rule
 
-Step 2 is `PASS_CONTRACT`, but its full source-bound verifier must run in an intact historical worktree because the Project instructions were intentionally replaced. At current HEAD verify the immutable seal and every seal binding. Do not modify the seal to make current instructions match.
+Step 2 is `PASS_CONTRACT`. At current HEAD verify immutable seal bindings; run its source-bound verifier in the intact historical worktree. Do not modify the seal to match current Project instructions.
 
 ## Truth labels
 

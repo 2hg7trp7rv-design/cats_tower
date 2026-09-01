@@ -1,15 +1,22 @@
 {
-  "schemaVersion": 20,
+  "schemaVersion": 21,
   "updatedAt": "2026-09-02",
   "project": "Cat's Tower",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "authorityIndex": "CURRENT_AUTHORITY_INDEX.json",
-  "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json",
+  "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
   "status": "IN_PROGRESS",
   "currentRepositoryStep": 4,
-  "currentInternalPhase": "PHASE0-GOVERNANCE-RECOVERY",
-  "currentVerdict": "IN_PROGRESS_PHASE0_HISTORICAL_VERIFIER_REPAIR",
+  "currentInternalPhase": "S02-P1-GOLDEN-MASTER",
+  "currentVerdict": "IN_PROGRESS_S02_P1_A_J_AUDIT",
+  "governanceRecovery": {
+    "status": "PASS_PHASE0_GOVERNANCE_RECOVERY",
+    "closure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
+    "phase0P0": 0,
+    "phase0P1": 0,
+    "phase0P2": 1
+  },
   "scopedPasses": {
     "step1": "PASS_CANONICAL",
     "step2": "PASS_CONTRACT",
@@ -18,7 +25,7 @@
     "step5": "BLOCKED",
     "step6": "BLOCKED"
   },
-  "currentProductWorkAfterRecovery": {
+  "currentProductWork": {
     "phase": "S02-P1-GOLDEN-MASTER",
     "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
     "acceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-acceptance-matrix-round-001.json",
@@ -28,12 +35,17 @@
     "goldenMastersClaimedForAudit": 8,
     "goldenMastersAccepted": 0,
     "deliverablesClaimedForAudit": 10,
-    "deliverablesAccepted": 0
+    "deliverablesAccepted": 0,
+    "currentState": "AUDIT_REQUIRED_BEFORE_ADDITIONAL_PRODUCT_WRITE"
   },
   "openFindings": {
     "P0": 0,
-    "P1": 2,
-    "items": ["S4-RECOVERY-VIS-001","PHASE0-EVIDENCE-PENDING"]
+    "P1": 1,
+    "P2": 1,
+    "items": [
+      "S4-RECOVERY-VIS-001",
+      "PHASE0-P2-PR8-STALE-METADATA"
+    ]
   },
   "truthBoundaries": {
     "legacyRuntime": "LEGACY_RUNTIME_NOT_CANONICAL",
@@ -49,17 +61,7 @@
     "productionAliasChanged": false,
     "productionReady": false
   },
-  "phase0": {
-    "status": "IN_PROGRESS",
-    "rootEntryHead": "83a1aa388e6467f0c34597533540b4ff61971ef6",
-    "rootEntryTree": "599e484953ffde90caed95de2de0e4a31d7be3a8",
-    "sourceReplacementCommit": "8abb6d3f8e23136996761616a31785faf5b679d7",
-    "sourceReplacementTree": "5fc2ab02914d3c76bd9ab98f997bdd001355e082",
-    "activeCorrection": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json",
-    "plannedClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
-    "correctionReason": "Run the source-bound Step 2 verifier in historical worktree and retire false-triggering legacy operational workflows."
-  },
-  "nextAuthorizedAction": "Repair current verification, retire obsolete Step 1-3 operational workflows, then create Phase 0 evidence. No product-content write is authorized.",
+  "nextAuthorizedAction": "Audit the preserved S02-P1 artifacts against A-J and GM01-GM08 before any new product-content write. Reuse conforming content; repair only demonstrated gaps.",
   "step5Allowed": false,
   "productionAllowed": false,
   "physicalIPhoneVerified": false

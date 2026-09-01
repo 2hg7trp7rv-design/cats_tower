@@ -1,17 +1,16 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "artifactId": "cats-tower-active-change-control-dispatcher",
   "updatedAt": "2026-09-02",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "status": "IN_PROGRESS",
   "currentAuthorityIndex": "CURRENT_AUTHORITY_INDEX.json",
-  "currentAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json",
-  "currentVerdict": "IN_PROGRESS_PHASE0_HISTORICAL_VERIFIER_REPAIR",
+  "currentAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
+  "currentVerdict": "IN_PROGRESS_S02_P1_A_J_AUDIT",
   "currentRepositoryStep": 4,
-  "currentInternalPhase": "PHASE0-GOVERNANCE-RECOVERY",
-  "plannedGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
-  "nextProductChangeControlAfterRecovery": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
+  "currentInternalPhase": "S02-P1-GOLDEN-MASTER",
+  "governanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
   "canonicalSeals": {
     "step1": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
     "step2": "simulation/executable-seal-v2.json",
@@ -28,12 +27,12 @@
     "physicalIPhoneVerified": false
   },
   "lineage": {
-    "round026Role": "S02-P1 Golden Master product-work authority",
-    "round027Role": "Phase 0 opening",
-    "round028Role": "corrected Phase 0 baseline and source replacement",
-    "round029Role": "historical verifier repair and obsolete workflow retirement",
-    "round030Role": "planned Phase 0 closure",
+    "round026Role": "active S02-P1 Golden Master product-work authority",
+    "round027Role": "Phase 0 opening history",
+    "round028Role": "Phase 0 corrected baseline and source replacement history",
+    "round029Role": "historical verifier repair history",
+    "round030Role": "PASS_PHASE0_GOVERNANCE_RECOVERY closure",
     "supersededAddendaRemainHistory": true
   },
-  "rule": "Read CURRENT_AUTHORITY_INDEX.json and currentAddendum on live kimi. Do not infer current phase from historical headers or previous workflow runs."
+  "rule": "Read CURRENT_AUTHORITY_INDEX.json and currentAddendum on live kimi. Before writing S02-P1 content, inventory and audit existing A-J artifacts and GM states; do not infer acceptance from existence."
 }

@@ -1,13 +1,14 @@
 # Cat's Tower — Current Handover
 
-更新日: **2026-09-02**  
-Repository: `2hg7trp7rv-design/cats_tower`  
+更新日: **2026-09-02**
+Repository: `2hg7trp7rv-design/cats_tower`
 Branch: existing `kimi` only
 
 ## Current conclusion
 
-Repository Step 4 remains `IN_PROGRESS`. Product work is paused while Phase 0 repairs historical verification and retires obsolete operational workflows.
+Phase 0 governance and Project-source recovery is complete.
 
+- Phase 0: `PASS_PHASE0_GOVERNANCE_RECOVERY`
 - Step 1: `PASS_CANONICAL`
 - Step 2: `PASS_CONTRACT`
 - Step 3: `PASS_MODEL`
@@ -19,42 +20,64 @@ Repository Step 4 remains `IN_PROGRESS`. Product work is paused while Phase 0 re
 Current authority:
 
 - `CURRENT_AUTHORITY_INDEX.json`
-- `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json`
+- `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json`
 
-Phase 0 root entry:
+Phase 0 closure:
 
-- HEAD: `83a1aa388e6467f0c34597533540b4ff61971ef6`
-- tree: `599e484953ffde90caed95de2de0e4a31d7be3a8`
+- `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json`
+- verified content commit/tree: `21f5ce897c24b45a0a559d7a2e39002d59e00e70` / `941780c9e2a482f91597cbda0bd5e09d8bc42e57`
+- evidence commit/tree: `02d5e5bdf017447617d1a874ef2d86a114328463` / `c0071113541f0c6fea1864f3b43e56b8fc9a4cfa`
+- workflow run/job: `33539938108` / `99963403759`
+- artifact ID/digest: `9813183649` / `sha256:01ea8293921134370f8e2e30cb9f9a1f4a6f8d50bb9259af30646b766197140c`
+- Phase 0 P0/P1: `0 / 0`
 
-Source-replacement content:
+## What Phase 0 changed
 
-- commit: `8abb6d3f8e23136996761616a31785faf5b679d7`
-- tree: `5fc2ab02914d3c76bd9ab98f997bdd001355e082`
+- established `CURRENT_AUTHORITY_INDEX.json` as the single current dispatcher
+- completely replaced `CHATGPT_PROJECT_INSTRUCTIONS1.md`
+- added `DEVELOPMENT_PLAYBOOK.md`
+- added `PROJECT_SOURCE_MANIFEST.md`
+- synchronized all current mirrors
+- split current governance and immutable Round 7 verification
+- validated all Step 2 seal bindings and reproduced the source-bound verifier in an intact historical worktree
+- deleted 6 obsolete root design/Project-source files
+- deleted 14 obsolete Step 4 write/recovery workflows
+- deleted 13 obsolete Step 1-3 operational workflows
+- preserved sealed Step 1-3 evidence and all Git/Actions history
+- did not mutate gameplay, economy, save, assets, backend, payment, ads or Production
 
-## Verification correction
+## Current product work
 
-The Step 2 seal binds the Project-instructions blob that existed when the contract was sealed. Replacing the Project source correctly changed that live blob, so running the source-bound verifier at current HEAD creates a false failure.
+Phase: **S02-P1 Golden Master A-J audit**
 
-The seal and all bindings remain immutable. Correct verification now consists of:
-
-1. exact binding read-back at current HEAD
-2. standalone seal validation at current HEAD
-3. full source-bound verifier in a detached worktree at the Phase 0 root entry
-4. a separate current-instructions compatibility audit
-
-Obsolete Step 1-3 execute/repair/seal/current-mirror workflows are being removed from live workflow inventory; Git and Actions history remain intact.
-
-## Preserved S02-P1 content
+Existing route and artifacts were written concurrently during Phase 0 and were preserved:
 
 - route: `step4/s02/golden-master-p1/`
-- eight GM states: claimed for audit
-- A-J support artifacts: claimed for audit
-- accepted Golden Masters: `0 / 8`
+- GM states claimed: `8`
+- A-J artifacts claimed: `10`
+- accepted GM states: `0 / 8`
 - accepted A-J deliverables: `0 / 10`
-- classification: `PRESERVED_NOT_PHASE0_EVIDENCE_REQUIRES_A_J_AUDIT`
 
-Phase 0 does not approve this content.
+They are not rejected merely because they were concurrent, but they are not accepted merely because they exist.
 
-## Next action
+## Exact next action
 
-Complete round 029 correction, obtain a green current-governance run, create compatibility/critic/judge/completion/live-readback evidence, then close Phase 0 with round 030. Product work resumes under round 026 only after Phase 0 P0/P1=0.
+Before any further product-content write:
+
+1. freeze the exact S02-P1 content commit/tree
+2. inventory each A-J artifact and GM01-GM08
+3. inspect source quality, decision mapping, state coverage, text separation, asset decomposition, responsive rules and implementation feasibility
+4. run actual browser/render verification at all required viewports and modes
+5. identify P0/P1 gaps
+6. reuse conforming material and repair only demonstrated gaps
+7. create content/evidence commits and independent critics
+8. reach at most `READY_FOR_USER_VISUAL_REVIEW`
+
+Do not alter actual root, gameplay core, economy, save schema, backend, payment, ads, Production or physical-device verdict during S02-P1.
+
+## Remaining findings
+
+- Product P1: `S4-RECOVERY-VIS-001`
+- Nonblocking governance P2: `PHASE0-P2-PR8-STALE-METADATA`
+
+PR #8 was not edited or closed because PR operations are prohibited. It is excluded from current authority and release evidence.

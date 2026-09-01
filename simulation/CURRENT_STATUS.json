@@ -1,12 +1,16 @@
 {
-  "schemaVersion": 11,
+  "schemaVersion": 12,
   "updatedAt": "2026-09-02",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "authorityIndex": "CURRENT_AUTHORITY_INDEX.json",
   "currentRepositoryStep": 4,
-  "currentInternalPhase": "PHASE0-GOVERNANCE-RECOVERY",
-  "status": "IN_PROGRESS",
+  "currentInternalPhase": "S02-P1-GOLDEN-MASTER",
+  "status": "IN_PROGRESS_S02_P1_A_J_AUDIT",
+  "governanceRecovery": {
+    "status": "PASS_PHASE0_GOVERNANCE_RECOVERY",
+    "closure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json"
+  },
   "step1": {
     "status": "PASS_CANONICAL",
     "seal": "quality-reviews/step-1-reseal-round-008/seal-round-008.json"
@@ -15,7 +19,9 @@
     "status": "PASS_CONTRACT",
     "seal": "simulation/executable-seal-v2.json",
     "candidate": "simulation/candidate-v2.json",
-    "executionContract": "simulation/execution-contract-v2.json"
+    "executionContract": "simulation/execution-contract-v2.json",
+    "bindingDrift": 0,
+    "verification": "current binding validation plus source-bound historical worktree reproduction"
   },
   "step3": {
     "status": "PASS_MODEL",
@@ -25,7 +31,7 @@
     "completionEvidence": "quality-reviews/step-3-large-scale-validation/completion-evidence.json",
     "unresolvedP0": 0,
     "unresolvedP1": 0,
-    "limitation": "The scenario model and high-volume state tests passed their sealed acceptance. They are not proof that the current legacy browser runtime implements the canonical game or that it was playtested 15,000 times."
+    "limitation": "The scenario model and high-volume state tests passed their sealed acceptance. They are not proof that the legacy browser runtime implements the canonical game or was playtested 15,000 times."
   },
   "runtimeRevalidation": {
     "requiredAfterCanonicalRuntimeImplementation": true,
@@ -35,11 +41,11 @@
     "status": "NOT_STARTED"
   },
   "currentMutationAllowed": false,
-  "candidateMutationByPhase0": false,
-  "sealedEvidenceMutationByPhase0": false,
+  "candidateMutationDuringS02P1": false,
+  "sealedEvidenceMutationDuringS02P1": false,
   "step4Pass": false,
   "step5Allowed": false,
   "physicalIPhoneVerified": false,
   "productionAliasChanged": false,
-  "nextAction": "Do not tune or rerun the model during Phase 0 or S02-P1. Resume simulation only when an authorized change affects the sealed model or after the canonical runtime shares the domain engine."
+  "nextAction": "Do not tune or rerun the model during S02-P1. Audit existing S02 visual artifacts first. Resume simulation only when an authorized product change affects the sealed model or after canonical runtime shares the domain engine."
 }

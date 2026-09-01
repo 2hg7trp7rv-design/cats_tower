@@ -1,22 +1,24 @@
 # Cat's Tower — Current Quality Gate
 
-更新日: **2026-09-02**  
-Repository: `2hg7trp7rv-design/cats_tower`  
-Branch: existing `kimi` only  
+更新日: **2026-09-02**
+Repository: `2hg7trp7rv-design/cats_tower`
+Branch: existing `kimi` only
 Authority: `CURRENT_AUTHORITY_INDEX.json`
 
 ## Current verdict
 
-`IN_PROGRESS_PHASE0_HISTORICAL_VERIFIER_REPAIR`
+`IN_PROGRESS_S02_P1_A_J_AUDIT`
 
 | Scope | Verdict |
 |---|---|
+| Phase 0 governance recovery | `PASS_PHASE0_GOVERNANCE_RECOVERY` |
 | Step 1 product canonical | `PASS_CANONICAL` |
 | Step 2 executable contract | `PASS_CONTRACT` |
 | Step 3 sealed model validation | `PASS_MODEL` |
 | Step 4 twelve screen families | `IN_PROGRESS` |
-| S02-P1 review content | route present; 8 states claimed for audit |
+| S02-P1 route and artifacts | present; requires A-J audit |
 | S02-P1 accepted Golden Masters | `0 / 8` |
+| S02-P1 accepted deliverables | `0 / 10` |
 | Step 5 canonical runtime/server | `BLOCKED` |
 | Physical iPhone | `NOT_VERIFIED` |
 | Production Ready | `false` |
@@ -26,23 +28,27 @@ Authority: `CURRENT_AUTHORITY_INDEX.json`
 ## Open findings
 
 - P0: **0**
-- P1: **2**
-  - `PHASE0-EVIDENCE-PENDING`
+- P1: **1**
   - `S4-RECOVERY-VIS-001`
+- P2: **1**
+  - `PHASE0-P2-PR8-STALE-METADATA`
 
-## G0 — Governance and source integrity
+P2は旧Draft PR #8の外部metadataである。PR操作は明示的に禁止されているためPhase 0では変更せず、current authority、CI、release routeから除外した。製品作業を妨げるP0/P1ではない。
 
-Status: **IN_PROGRESS**
+## G0 — Governance and Project sources
 
-Phase 0 source replacement is committed. Verification found that Step 2's source-bound verifier was incorrectly run at current HEAD after the Project-instructions file was deliberately replaced. The seal remains immutable. The corrected gate is:
+Status: `PASS_PHASE0_GOVERNANCE_RECOVERY`
 
-- every Step 2 seal binding must match at current HEAD
-- the standalone seal validator must pass at current HEAD
-- the full source-bound verifier must run in a detached worktree containing the original bound instruction blob
-- a compatibility audit must prove current Project instructions preserve sealed product meaning without claiming a Step 2 reseal
-- obsolete Step 1-3 operational workflows must be removed from live `.github/workflows`
+Evidence:
 
-G0 PASS also requires one current authority index, synchronized mirrors, obsolete root documents removed, replacement Project sources, low-rework Playbook, separate read-only history/current verification, critic, judge, completion evidence, live read-back and Phase 0 P0/P1=0.
+- closure: `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json`
+- content commit/tree: `21f5ce897c24b45a0a559d7a2e39002d59e00e70` / `941780c9e2a482f91597cbda0bd5e09d8bc42e57`
+- evidence commit/tree: `02d5e5bdf017447617d1a874ef2d86a114328463` / `c0071113541f0c6fea1864f3b43e56b8fc9a4cfa`
+- workflow run/job: `33539938108` / `99963403759`
+- artifact: `9813183649`
+- Phase 0 P0/P1: `0 / 0`
+
+Phase 0 removed 33 stale current-facing paths, completely replaced Project instructions, added the Development Playbook, synchronized current mirrors, separated current and immutable-history verification, and preserved sealed Step 1-3 artifacts.
 
 ## G1 — Canonical
 
@@ -68,7 +74,7 @@ Evidence:
 - `simulation/execution-contract-v2.json`
 - `simulation/run-plan-v2.json`
 
-The Project-instructions replacement is governance/methodology work; it may not rewrite or silently reseal the Step 2 contract.
+The replacement Project instructions were compatibility-audited without mutating or resealing Step 2.
 
 ## G3 — Model
 
@@ -80,23 +86,44 @@ Status: `PASS_MODEL`
 
 It is model validation, not 15,000 live runtime playtests. Shared-engine runtime revalidation remains required after implementation.
 
-## G4 — Visual / Asset / Runtime
+## G4 — S02-P1 Visual Design
 
-Status: **FAIL / NOT COMPLETE**
+Status: **IN_PROGRESS**
 
-- current S02 visual P1 remains open
-- S02-P1 states present for audit: `8 claimed`
-- accepted Golden Masters: `0 / 8`
-- production asset proof: not started
-- canonical runtime: not implemented
-- user visual approval: false
+Existing S02-P1 files are preserved and must be audited before new production work.
 
-## G5 — Server / Device / Release
+Required audit:
+
+- A current competitive research
+- B player-experience definition
+- C P0-P3 information priority
+- D art direction
+- E GM01-GM08
+- F UI Design System
+- G asset decomposition and animation contract
+- H data-binding matrix
+- I responsive contract
+- J implementation-feasibility audit
+
+Existence is not acceptance. Until evidence proves each item, accepted counts remain `0 / 10` and `0 / 8`.
+
+Maximum verdict before explicit user visual approval: `READY_FOR_USER_VISUAL_REVIEW`.
+
+## G5 — Asset / Runtime / Server / Device / Release
 
 Status: **BLOCKED**
 
-Authoritative account/wallet/gacha/reset/offline/login/payment/ad, ledger recovery, physical iPhone and release policy refresh remain unimplemented or unverified.
+Unimplemented or unverified:
+
+- representative production asset proof
+- canonical client architecture
+- canonical 1-10F runtime
+- authoritative account/wallet/gacha/reset/offline/login/payment/ad
+- ledger/refund/revocation/restore
+- runtime-driven model revalidation
+- physical iPhone
+- release policy refresh
 
 ## Completion rule
 
-Files, code, images, build, tests, CI, screenshots or Vercel READY alone are insufficient. `PASS_RELEASE` requires all applicable scoped gates, unresolved P0/P1=0, user approval and physical-device evidence.
+Files, code, images, build, tests, CI, screenshots or Vercel READY alone are insufficient. `PASS_RELEASE` requires all applicable scoped gates, unresolved P0/P1=0, explicit user approval where required and physical-device evidence.
