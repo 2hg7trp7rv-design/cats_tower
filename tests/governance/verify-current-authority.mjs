@@ -47,6 +47,9 @@ function assertAddedOnceAndUnchanged(file, addCommit) {
   const firstBlob = git(['rev-parse', `${addCommit}:${file}`]);
   const currentBlob = git(['rev-parse', `HEAD:${file}`]);
   assert(firstBlob === currentBlob, `numbered evidence changed after first addition: ${file}`);
+  assertNoPathChangesSince(addCommit, 'HEAD', [file], 'numbered evidence immutability');
+  const priorObjects = git(['rev-list', '--objects', `${addCommit}^`]);
+  assert(!priorObjects.split('\n').some(line => line.split(' ')[0] === firstBlob), `numbered evidence blob existed before its authoritative path: ${file}`);
   return currentBlob;
 }
 
@@ -93,6 +96,7 @@ const attemptedClosure = json('quality-reviews/step-1-canonical-design/active-ch
 const reopen = json('quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json');
 const step2CorrectionPath = 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json';
 const step2Correction = exists(step2CorrectionPath) ? json(step2CorrectionPath) : null;
+const step2ContinuityPath = 'quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/step3-continuity-bridge.json';
 // Round 032 opening must replace this null with the immutable blob created for the new control.
 const expectedStep2CorrectionControlBlob = null;
 const productControl = json('quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json');
@@ -249,6 +253,17 @@ if (closureRepairCritic) {
 }
 const expectedPhase0P1 = closureRepairCriticComplete ? 0 : 4;
 const step2ProjectionOpen = authority.executableContract.step2Status !== 'PASS_CONTRACT';
+if (authority.activeChangeControl === 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json') {
+  assert(step2ProjectionOpen, 'Step 2 cannot pass while round 031 is still active');
+}
+if (!step2ProjectionOpen) {
+  assert(step2Correction, 'Step 2 PASS requires the frozen round 032 correction control');
+  assert(authority.executableContract.seal === 'simulation/executable-seal-v3.json', 'Step 2 PASS requires the v3 seal authority pointer');
+  assert(exists('simulation/executable-seal-v3.json'), 'Step 2 PASS requires a v3 seal');
+  const currentV3Seal = json('simulation/executable-seal-v3.json');
+  assert(currentV3Seal.verdict === 'SEALED_STEP2_EXECUTABLE_CONTRACT_SCREEN_PROJECTION_CORRECTED', 'Step 2 PASS v3 seal verdict mismatch');
+  assert(exists(step2ContinuityPath), 'Step 2 PASS requires continuity evidence');
+}
 const expectedOpenFindings = [
   ...(step2ProjectionOpen ? ['S2-P0-SCREEN-PROJECTION-001'] : []),
   'S4-RECOVERY-VIS-001',
@@ -307,7 +322,7 @@ for (const [p, expectedBlob] of Object.entries({ ...frozenAttemptedClosureBlobs,
 
 const closurePath = 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json';
 const closureEvidence = {
-  step2Continuity: 'quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/step3-continuity-bridge.json',
+  step2Continuity: step2ContinuityPath,
   critic: 'quality-reviews/phase-0-governance-recovery/critic-summary-round-003.json',
   finalJudge: 'quality-reviews/phase-0-governance-recovery/final-judge-round-002.json',
   completion: 'quality-reviews/phase-0-governance-recovery/completion-evidence-round-002.json',
@@ -386,6 +401,7 @@ if (authority.activeChangeControl === 'quality-reviews/step-1-canonical-design/a
   const targetTree = critic.auditTarget?.tree;
   assert(targetCommit && targetTree === git(['rev-parse', `${targetCommit}^{tree}`]), 'critic target commit/tree binding is invalid');
   assert(targetCommit !== step2Correction.entry.head && isAncestor(step2Correction.entry.head, targetCommit), 'critic target must be a corrected round 032 descendant, not its entry');
+  assert(targetCommit !== criticCommit, 'independent critic must be committed after its audited target');
   const v3SealCommit = firstAddCommit('simulation/executable-seal-v3.json');
   assert(v3SealCommit && isAncestor(v3SealCommit, targetCommit), 'critic target does not contain the v3 correction seal');
   assert(isAncestor(targetCommit, criticCommit), 'critic evidence must follow its target commit');
@@ -401,6 +417,16 @@ if (authority.activeChangeControl === 'quality-reviews/step-1-canonical-design/a
     assert(Number.isInteger(workflow?.runId) && Number.isInteger(workflow?.jobId), 'workflow run/job binding missing');
     assert(Number.isInteger(workflow?.artifactId) && /^sha256:[a-f0-9]{64}$/.test(workflow?.artifactDigest ?? ''), 'workflow artifact binding missing');
   }
+  assert(Array.isArray(step2Correction.evidenceOnlyWrites) && step2Correction.evidenceOnlyWrites.length > 0, 'round 032 evidence-only boundary missing');
+  const evidenceOnlyControl = { allowedWrites: step2Correction.evidenceOnlyWrites, forbiddenWrites: step2Correction.forbiddenWrites };
+  assertBoundaryHistory(targetCommit, closureCommit, evidenceOnlyControl, 'post-target evidence-only range');
+  const boundContentPaths = (v3Seal.bindings ?? []).map(binding => binding.path);
+  assert(boundContentPaths.length > 0, 'v3 seal has no bound content paths');
+  for (const binding of v3Seal.bindings) {
+    assert(git(['rev-parse', `${targetCommit}:${binding.path}`]) === binding.blob, `critic target differs from v3 seal binding: ${binding.path}`);
+    assert(git(['rev-parse', `HEAD:${binding.path}`]) === binding.blob, `v3 seal binding changed after criticism: ${binding.path}`);
+  }
+  assertNoPathChangesSince(targetCommit, closureCommit, boundContentPaths, 'post-critic v3 content freeze');
   assert(isAncestor(reopen.entry.head, closureCommit), 'round 033 closure is not descended from round 031 entry');
   assertBoundaryHistory(reopen.entry.head, step2Correction.entry.head, reopen, 'completed round 031 repair range');
   assertBoundaryHistory(step2Correction.entry.head, closureCommit, step2Correction, 'round 032 correction and round 033 closure range');
