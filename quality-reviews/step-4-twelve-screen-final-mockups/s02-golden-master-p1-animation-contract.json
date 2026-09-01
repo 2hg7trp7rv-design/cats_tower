@@ -1,0 +1,393 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-animation-contract",
+  "createdAt": "2026-09-01",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "screen": "S02 normal battle",
+  "status": "DESIGN_TIMING_CONTRACT_NOT_GAMEPLAY_IMPLEMENTATION",
+  "purpose": "接敵、予備動作、攻撃、弾着、damage、hit reaction、撃破、報酬を一つの因果として読み取れるようにし、P2/P3で同一modelを壊さず再構築する。",
+  "hardRules": [
+    "tapまたはpointer入力で敵へ直接damageを与えない。",
+    "AUTOは基礎戦闘状態であり、偽active skill buttonを作らない。",
+    "damage numberはauthoritative combat eventより前に表示しない。",
+    "reward feedbackはreward eventまたはsettlement stateより前に表示しない。",
+    "projectile attackはreleaseではなくarrivalをimpact時刻とする。",
+    "hit reactionはimpact後に開始し、anticipationと同時開始しない。",
+    "defeatはHPまたはauthoritative defeat eventを確認した後だけ開始する。",
+    "offline catch-upは高速戦闘を捏造再生せず、照合状態と結果を別表示する。",
+    "animation frameごとにキャラクターの体格、模様、装備、顔が変わるassetをrejectする。",
+    "reduced motionでも因果、脅威、報酬状態をshape、label、progressで保持する。"
+  ],
+  "timebase": {
+    "simulation": "canonical deterministic tick; render timingから分離",
+    "render": "requestAnimationFrameまたはengine render loop。delta clamp 50ms。",
+    "eventTimestamp": "simulation timeを基準とし、wall clockへ依存しない",
+    "frameRateTargets": [60, 30],
+    "timingToleranceMs": 34,
+    "speedPolicy": "見た目のdurationはcombat intervalに収めて調整できるが、因果順序とminimum recognition windowを壊さない。"
+  },
+  "stateMachine": {
+    "ally": {
+      "states": ["idle", "walk", "anticipation", "attack", "recovery", "hit", "faint", "rewardReaction", "victory"],
+      "allowedTransitions": [
+        "idle -> walk",
+        "walk -> idle",
+        "walk -> anticipation",
+        "idle -> anticipation",
+        "anticipation -> attack",
+        "attack -> recovery",
+        "recovery -> idle",
+        "recovery -> walk",
+        "idle|walk|anticipation|attack|recovery -> hit",
+        "hit -> idle|walk|faint",
+        "idle|walk|recovery -> rewardReaction",
+        "rewardReaction -> idle|walk|victory"
+      ],
+      "interruptRules": [
+        "authoritative faintはvisual stateを中断できる",
+        "通常hitはattack release前のanticipationを中断する場合だけcombat eventのcancel状態を必要とする",
+        "attack release済みprojectileはattacker hit後もarrival eventが存在すれば継続する",
+        "reward reactionはcombat threatが再開したら短縮可能"
+      ]
+    },
+    "enemy": {
+      "states": ["idle", "move", "threat", "attack", "recovery", "hit", "defeat"],
+      "allowedTransitions": [
+        "idle -> move|threat",
+        "move -> idle|threat",
+        "threat -> attack|hit|defeat",
+        "attack -> recovery",
+        "recovery -> idle|move|threat",
+        "idle|move|threat|attack|recovery -> hit",
+        "hit -> idle|move|threat|defeat"
+      ],
+      "interruptRules": [
+        "defeat eventは全stateを中断する",
+        "telegraph cancel時は残像を100ms以内に消し、攻撃が来るように見せ続けない"
+      ]
+    }
+  },
+  "clips": [
+    {
+      "id": "ally.idle",
+      "durationMs": "1800 to 2800 loop",
+      "keyRead": "breathing、ear/tail micro motion、weapon weight",
+      "rootMotion": false,
+      "loop": true,
+      "reducedMotion": "first pose with occasional non-loop blink no faster than 5s"
+    },
+    {
+      "id": "ally.walk",
+      "durationMs": "700 to 900 per step cycle",
+      "keyRead": "foot contact and body weight; weapon lag",
+      "rootMotion": "simulation position drives root; clip contains no net displacement",
+      "loop": true,
+      "footContacts": [0.08, 0.56],
+      "reducedMotion": "two-pose step at no more than 4 changes per second"
+    },
+    {
+      "id": "ally.attackAnticipation.melee",
+      "durationMs": "180 to 260",
+      "minimumRecognitionMs": 160,
+      "keyRead": "weight shifts back、weapon path becomes clear、target direction fixed",
+      "eventMarkers": ["anticipationStart", "aimLocked"],
+      "loop": false
+    },
+    {
+      "id": "ally.attackAnticipation.ranged",
+      "durationMs": "220 to 340",
+      "minimumRecognitionMs": 180,
+      "keyRead": "Lunaのbow draw、Totoの支援bell timing、projectileまたはheal path preview without damage",
+      "eventMarkers": ["anticipationStart", "aimLocked", "chargeReady"],
+      "loop": false
+    },
+    {
+      "id": "ally.attack.melee",
+      "durationMs": "120 to 180",
+      "keyRead": "single readable arc from preparation to contact",
+      "eventMarkers": ["release", "contactCandidate"],
+      "hitRule": "combat event confirms impact at contactCandidate; visual does not mint damage",
+      "loop": false
+    },
+    {
+      "id": "ally.attack.ranged",
+      "durationMs": "120 to 180",
+      "keyRead": "release recoil and projectile separation",
+      "eventMarkers": ["release", "projectileSpawn"],
+      "hitRule": "projectileSpawn is not damage; arrival event controls impact",
+      "loop": false
+    },
+    {
+      "id": "projectile.travel",
+      "durationMs": "160 to 420 based on actual distance and bounded visual speed",
+      "keyRead": "clear origin-to-target trajectory with no unreadable teleport",
+      "eventMarkers": ["spawn", "arrival"],
+      "arrivalToleranceMs": 17,
+      "loop": false
+    },
+    {
+      "id": "impact.normal",
+      "durationMs": "90 to 150",
+      "keyRead": "contact flash at enemy hitTarget、short directional lines、dust",
+      "hitStopMs": "45 to 65 visual-only",
+      "eventMarkers": ["impactStart", "damageNumberStart", "impactEnd"],
+      "loop": false,
+      "occlusionLimit": "enemy face/center massの50%を150ms超えて覆わない"
+    },
+    {
+      "id": "impact.critical",
+      "durationMs": "130 to 210",
+      "keyRead": "normalより大きなshape、critical text、追加flash一回",
+      "hitStopMs": "65 to 85 visual-only",
+      "eventMarkers": ["impactStart", "criticalLabelStart", "damageNumberStart", "impactEnd"],
+      "loop": false,
+      "flashLimit": "3 flashes per second未満; full-screen flash禁止"
+    },
+    {
+      "id": "target.hit",
+      "durationMs": "160 to 240",
+      "keyRead": "impact方向へbody compress後、反対方向へrecoil",
+      "eventMarkers": ["recoilPeak", "recover"],
+      "loop": false
+    },
+    {
+      "id": "enemy.defeat",
+      "durationMs": "420 to 620",
+      "keyRead": "stance loss、ground contact、silhouette dissolve。reward sourceを残す",
+      "eventMarkers": ["defeatStart", "grounded", "rewardSourceAvailable", "removeFromField"],
+      "loop": false,
+      "removeRule": "reward origin取得前にdisplay objectを破棄しない"
+    },
+    {
+      "id": "ally.faint",
+      "durationMs": "360 to 520",
+      "keyRead": "weapon lower、kneel/curl、non-graphic star or breath cue only if original asset",
+      "eventMarkers": ["faintStart", "grounded"],
+      "loop": false,
+      "rule": "defeatしたように消さず、field stateとの違いを保持"
+    },
+    {
+      "id": "ally.rewardReaction",
+      "durationMs": "360 to 560",
+      "keyRead": "short glance or uplift; combat readiness remains",
+      "eventMarkers": ["reactionStart", "reactionPeak", "reactionEnd"],
+      "loop": false,
+      "rule": "confirmed or explicitly provisional reward eventなしに再生しない"
+    },
+    {
+      "id": "enemy.threat",
+      "durationMs": "420 to 900 based on actual attack timing",
+      "minimumRecognitionMs": 300,
+      "keyRead": "body anticipation plus ground shape plus direction; countdown only if canonical timing exists",
+      "eventMarkers": ["telegraphStart", "attackCommit"],
+      "loop": false,
+      "rule": "色だけで警告せず、attack canceled時は即座にcancel cue"
+    },
+    {
+      "id": "floor.transition",
+      "durationMs": "600 to 900",
+      "keyRead": "defeat/reward完了後にupward light、floor text exact crossfade、battlefield advance",
+      "eventMarkers": ["transitionStart", "floorLabelSwap", "nextEncounterReveal", "transitionEnd"],
+      "loop": false,
+      "rule": "settlementStatusが進行を許可する前に次floorを確定表示しない"
+    },
+    {
+      "id": "support.arrival",
+      "durationMs": "500 to 800",
+      "keyRead": "battle外縁から配送signifierが入り、対象へeffectを渡して退出",
+      "eventMarkers": ["arrivalVisible", "effectTransfer", "supportApplied", "exit"],
+      "loop": false,
+      "rule": "temporarySupport eventがないとき再生しない。常設4体のparty slotへ混入させない。"
+    }
+  ],
+  "combatCausality": {
+    "requiredOrder": [
+      "contact or range condition",
+      "attack anticipation",
+      "release",
+      "projectile travel or melee contact",
+      "impact",
+      "damage number and HP change",
+      "hit reaction",
+      "defeat when authoritative",
+      "reward feedback when event exists",
+      "floor transition when settlement permits"
+    ],
+    "minimumVisualWindowsMs": {
+      "anticipation": 160,
+      "impact": 90,
+      "damageNumber": 450,
+      "defeatSilhouette": 280,
+      "rewardFeedback": 900
+    },
+    "damageNumber": {
+      "start": "same render frame as authoritative impact or immediately after",
+      "durationMs": "650 to 900",
+      "motion": "8 to 20px upward with ease-out; never blocks enemy HP",
+      "stacking": "same target within100msを一つに集約可。ただしcriticalとhealを混ぜない",
+      "maximumConcurrent": 4,
+      "textSource": "exact event amount through canonical formatter"
+    },
+    "hpBar": {
+      "authoritativeFill": "impact event受信時に更新",
+      "lagFillDurationMs": "180 to 260",
+      "zeroRule": "defeat event前に視覚上0へ到達してもdefeatを勝手に生成しない",
+      "unknownRule": "unknown値を100%として表示しない"
+    },
+    "hitStop": {
+      "scope": "attacker, target and contact effect only; UI、timer、accessibility announcementは止めない",
+      "normalMs": "45 to 65",
+      "criticalMs": "65 to 85",
+      "simulationPaused": false
+    }
+  },
+  "gm06Storyboard": {
+    "purpose": "静止画一枚でも攻撃から報酬までの順序が誤認されない瞬間を定義する。全eventが同時発生したという意味ではない。",
+    "timelineMs": [
+      {"t": 0, "event": "frontline cat begins anticipation"},
+      {"t": 220, "event": "weapon release or ranged projectile spawn"},
+      {"t": 390, "event": "impact, HP update and damage text begin"},
+      {"t": 440, "event": "enemy hit reaction reaches readable recoil"},
+      {"t": 520, "event": "authoritative defeat begins if HP/event qualifies"},
+      {"t": 680, "event": "reward event creates labeled provisional or confirmed feedback"},
+      {"t": 980, "event": "reward trail reaches destination; next-floor transition may become eligible"}
+    ],
+    "captureMomentMs": 700,
+    "captureRequirements": [
+      "attackerはfollow-through poseで攻撃方向が読める",
+      "impact残像とdamage textがenemy hitTargetに残る",
+      "enemyはdefeat開始poseで直前の被弾方向が読める",
+      "reward feedbackはdefeat sourceと視覚線でつながる",
+      "small causal labelsまたはshape sequenceが順序を補い、同時発生を暗示しない"
+    ]
+  },
+  "partyLayering": {
+    "frontline": ["character.launch.001", "context-dependent runner"],
+    "backline": ["character.launch.002", "character.launch.003", "context-dependent character.launch.004"],
+    "depthSort": "footAnchor worldY、同値はstable party slot order",
+    "minimumSeparationCssPx": 8,
+    "overlapLimit": "各catの顔と主装備のvisible bounds合計65%以上を保持",
+    "samePosePhaseOffsetMs": "150 to 420 between different cats",
+    "rule": "四体を同じframe、同じ歩調、同じhorizontal lineへ並べない。"
+  },
+  "cameraAndSceneMotion": {
+    "cameraFollow": "party centroidを低周波で追従。振幅はstandard viewport幅の3%以下。",
+    "shake": {
+      "normalImpactCssPx": "0 to 2",
+      "criticalImpactCssPx": "2 to 4",
+      "durationMs": "70 to 120",
+      "fullUiShake": false,
+      "reducedMotion": 0
+    },
+    "parallax": "background decomposition contractの係数以内",
+    "tallViewport": "高さ増分は視野と奥行きへ使用し、catを過剰拡大しない",
+    "shortViewport": "camera cropを詰めてもfootAnchor、enemy HP、attack pathを切らない"
+  },
+  "offlineReconciliation": {
+    "entryStates": ["BACKGROUND_RECONCILE", "OFFLINE", "RETRYABLE_ERROR"],
+    "motion": [
+      "modalまたはsheet entry 180 to 240ms",
+      "labeled progress is determinate only with real progress",
+      "unknown progress uses calm non-percent indicator",
+      "provisional rows enter without celebratory reward burst",
+      "confirmed result may play one reward cue after settlement event"
+    ],
+    "forbidden": [
+      "架空の戦闘高速再生",
+      "未確定報酬のcoin burst",
+      "server未接続なのに同期完了表示",
+      "永久報酬の確定前wallet加算表示"
+    ]
+  },
+  "rewardIntegrity": {
+    "eventIdentity": "reward eventまたはsettlement IDでdeduplicate",
+    "states": ["none", "provisional", "confirming", "confirmed", "rejected", "retryable_error"],
+    "visualRules": {
+      "provisional": "見込み label、blue edge、wallet destination animationなし",
+      "confirming": "照合中 label、stable value、spinner may be shown",
+      "confirmed": "確定 label、green or gold edge、one destination trail",
+      "rejected": "付与なし label、previous wallet retained、reason or support path",
+      "retryable_error": "再確認 label、no duplication"
+    },
+    "never": ["client animationからwalletへmint", "same eventを二度祝う", "toastだけで確定を示す"]
+  },
+  "reducedMotion": {
+    "trigger": "prefers-reduced-motion or engine accessibility setting",
+    "disabled": ["parallax", "screen shake", "loop pulse", "coin travel arc", "rapid particles", "full-screen sweep"],
+    "replaced": {
+      "anticipation": "two-state pose plus telegraph shape",
+      "impact": "static impact mark for 160ms",
+      "damage": "number appears without travel for 700ms",
+      "defeat": "120ms crossfade after defeat label/state",
+      "reward": "feedback panel changes from provisional to confirmed without travel",
+      "floorTransition": "floor label crossfade 120ms and scene cut"
+    },
+    "causalityPreserved": true
+  },
+  "performanceAndPooling": {
+    "pooled": ["projectiles", "impact sprites", "damage text", "minor particles", "reward trails"],
+    "maximumConcurrent": {
+      "projectiles": 8,
+      "impactEffects": 4,
+      "damageNumbers": 4,
+      "minorParticles": 24,
+      "rewardTrails": 1
+    },
+    "degradationOrder": [
+      "decorative dust",
+      "background particles",
+      "secondary weapon trails",
+      "duplicate minor damage numbers"
+    ],
+    "neverDegrade": ["attack anticipation", "impact mark", "HP state", "defeat state", "reward integrity label"]
+  },
+  "eventInterfaceForP3": {
+    "readOnlyInputEvents": [
+      "combat.contact_entered",
+      "combat.attack_started",
+      "combat.attack_released",
+      "combat.projectile_spawned",
+      "combat.projectile_arrived",
+      "combat.damage_applied",
+      "combat.entity_hit",
+      "combat.entity_defeated",
+      "reward.provisional",
+      "reward.confirmed",
+      "tower.floor_transition_allowed",
+      "support.arrival_started",
+      "support.effect_applied",
+      "offline.reconciliation_changed"
+    ],
+    "minimumEventFields": ["eventId", "simulationTick", "entityId", "stateVersion"],
+    "damageFields": ["sourceEntityId", "targetEntityId", "amountDecimal", "critical", "elementOrTypeIfCanonical"],
+    "rewardFields": ["rewardEventId", "settlementId", "status", "currencyCanonicalId", "amountDecimal"],
+    "uiWriteBack": "none from visual animation; only explicit navigation or permitted state toggle actions are emitted"
+  },
+  "qaMatrix": [
+    "melee anticipation -> contact -> damage -> hit reaction order",
+    "ranged release -> travel -> arrival -> damage order",
+    "projectile attacker is hit after release but projectile event remains valid",
+    "canceled telegraph clears within100ms and does not deal visual damage",
+    "HP reaches zero without defeat event and visual does not invent reward",
+    "defeat plus provisional reward remains provisional",
+    "confirmed reward deduplicates on rerender and reconnect",
+    "four cats overlap at 320x568 without face or weapon loss",
+    "30fps and delayed frame maintain event order",
+    "reduced motion retains threat, impact, defeat and reward labels",
+    "background tab resume uses reconciliation state instead of fabricated catch-up",
+    "temporary support remains separate from party4"
+  ],
+  "p1EvidenceStillRequired": [
+    "GM06 exact capture against this storyboard",
+    "GM07 offline state capture against reward integrity rules",
+    "independent critic confirmation of five-second causality",
+    "browser reduced-motion capture"
+  ],
+  "verdictBoundary": {
+    "gameplayValuesChanged": false,
+    "runtimeImplemented": false,
+    "step4Pass": false,
+    "physicalIPhoneVerified": false
+  }
+}

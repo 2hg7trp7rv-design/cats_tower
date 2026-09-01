@@ -1,0 +1,366 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-ui-design-system",
+  "createdAt": "2026-09-01",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "screen": "S02 normal battle",
+  "phase": "S02 production-quality Vertical Slice Phase 1",
+  "status": "DESIGN_CONTRACT_NOT_RUNTIME",
+  "authority": "S02 P1 Golden Master acceptance matrix round 001",
+  "scopeBoundary": {
+    "included": [
+      "S02 Golden MasterとP2以降の再構築で共用する視覚・操作トークン",
+      "通常戦闘、戦闘因果、放置復帰、4枠状態差で必要な再利用コンポーネント",
+      "320x568から430x932までのレスポンシブ変形規則"
+    ],
+    "excluded": [
+      "actual root runtimeの差替え",
+      "game-core.js、game-data.js、economy、save schemaの変更",
+      "S08ボス専用UI、課金詳細、ガチャ詳細、イベント管理",
+      "Production公開"
+    ]
+  },
+  "designPrinciples": [
+    "猫、敵、攻撃因果、塔進行の順に視線を固定し、商会支援は戦闘より一段低く扱う。",
+    "暖かな木材と真鍮を外装、石と鉄を戦場、羊皮紙を情報面に限定して素材の意味を混ぜない。",
+    "重要状態は色だけで伝えず、ラベル、輪郭、形、アイコン、位置のうち最低二つを併用する。",
+    "画面全体を一律拡縮せず、戦場アートは比率保持、UIはreflow、補助情報はcollapseする。",
+    "生成画像へ日本語、数字、HP、階数、通貨、ボタン名を焼き込まない。",
+    "絵文字、Unicode記号、OS依存グリフを本番アイコンとして使用しない。",
+    "AUTOは戦闘方式の状態表示であり、存在しないactive skillとして扱わない。",
+    "報酬、wallet、所有、server settlementはfuture canonical stateが存在するときだけ表示する。"
+  ],
+  "grid": {
+    "baseCssPx": 4,
+    "alignmentRule": "外周、コンポーネント寸法、余白、アイコン枠、文字ベースラインは原則4px倍数。1px線と光学補正のみ例外。",
+    "baselineCssPx": 4,
+    "screenGutterCssPx": {
+      "compact320": 12,
+      "standard360To390": 16,
+      "expanded412To430": 20
+    },
+    "battleSafeInsetCssPx": {
+      "horizontalCompact": 12,
+      "horizontalStandard": 16,
+      "top": 12,
+      "bottom": 16
+    }
+  },
+  "tokens": {
+    "spacingCssPx": {
+      "0": 0,
+      "1": 4,
+      "2": 8,
+      "3": 12,
+      "4": 16,
+      "5": 20,
+      "6": 24,
+      "8": 32,
+      "10": 40,
+      "12": 48,
+      "16": 64
+    },
+    "color": {
+      "inkPrimary": "#241711",
+      "inkSecondary": "#5E493B",
+      "inkInverse": "#FFF7E8",
+      "woodDeep": "#2B1712",
+      "wood": "#4A2A1E",
+      "woodLight": "#714733",
+      "parchment": "#F4E5C5",
+      "parchmentShadow": "#D8C29C",
+      "brass": "#C99A4A",
+      "brassHighlight": "#F3D58A",
+      "iron": "#56606A",
+      "steelHighlight": "#9BA8B1",
+      "stone": "#59606A",
+      "velvet": "#6B2730",
+      "healthy": "#5C9762",
+      "danger": "#B94E45",
+      "dangerDeep": "#6E2724",
+      "information": "#4E7E9D",
+      "magic": "#8062A6",
+      "reward": "#DDAE43",
+      "disabledSurface": "#716B63",
+      "disabledInk": "#CFC6B8",
+      "focus": "#F7E49C",
+      "scrim": "rgba(24, 14, 11, 0.68)"
+    },
+    "semanticColorRules": {
+      "gold": "現在位置、選択、一次操作、確定報酬のみに使用する。全面装飾へ乱用しない。",
+      "blue": "情報、味方、同期中。",
+      "violet": "魔力、成長、敵の異質さ。",
+      "green": "健全、利用可能、確定済み。",
+      "red": "敵脅威、被弾、error。課金誘導には使用しない。",
+      "brown": "通常面、木枠、非選択操作。"
+    },
+    "radiusCssPx": {
+      "small": 8,
+      "chip": 12,
+      "control": 12,
+      "card": 16,
+      "modal": 20,
+      "round": 999
+    },
+    "strokeCssPx": {
+      "hairline": 1,
+      "normal": 2,
+      "selected": 3
+    },
+    "elevation": {
+      "inset": "inset 0 1px 0 rgba(255,255,255,.20), inset 0 -2px 0 rgba(43,23,18,.26)",
+      "card": "0 6px 16px rgba(24,14,11,.28)",
+      "floating": "0 12px 28px rgba(24,14,11,.40)",
+      "modal": "0 24px 64px rgba(12,7,5,.56)"
+    },
+    "opacity": {
+      "disabled": 0.56,
+      "supporting": 0.78,
+      "scrim": 0.68
+    }
+  },
+  "materialConstruction": {
+    "wood": "外枠とbottom navigationの構造材。木目は低コントラストで文字の背後へ通さない。",
+    "brass": "縁、留め具、選択、一次操作。面積はコンポーネント面の18%以下を目安にする。",
+    "iron": "敵脅威、戦場機構、disabledの硬質部。",
+    "cloth": "所属・役割を示す旗と細いリボン。大面積パネルにしない。",
+    "stone": "戦場と塔の奥行き。操作可能面には使用しない。",
+    "parchment": "正確に読む必要がある文字面とmodal本文。焦げ・汚れは文字コントラストを損なわない範囲。"
+  },
+  "typography": {
+    "fontFamily": "system-ui, -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Yu Gothic UI', 'Noto Sans JP', sans-serif",
+    "fontFileDelivery": "P1ではユーザーへfont fileを配布しない。P2でライセンス確認済みsubsetを採用するまでsystem fallbackを正本とする。",
+    "roles": {
+      "floorDisplay": {"sizeCssPx": 22, "lineHeight": 1.1, "weight": 850, "minimumCssPx": 18},
+      "screenHeading": {"sizeCssPx": 18, "lineHeight": 1.25, "weight": 800, "minimumCssPx": 16},
+      "componentHeading": {"sizeCssPx": 15, "lineHeight": 1.3, "weight": 750, "minimumCssPx": 14},
+      "body": {"sizeCssPx": 14, "lineHeight": 1.45, "weight": 550, "minimumCssPx": 14},
+      "criticalLabel": {"sizeCssPx": 13, "lineHeight": 1.3, "weight": 750, "minimumCssPx": 12},
+      "buttonLabel": {"sizeCssPx": 14, "lineHeight": 1.2, "weight": 800, "minimumCssPx": 14},
+      "supporting": {"sizeCssPx": 12, "lineHeight": 1.35, "weight": 600, "minimumCssPx": 11},
+      "microStatus": {"sizeCssPx": 11, "lineHeight": 1.25, "weight": 700, "minimumCssPx": 11},
+      "damageNumber": {"sizeCssPx": 24, "lineHeight": 1, "weight": 900, "minimumCssPx": 20},
+      "rewardNumber": {"sizeCssPx": 18, "lineHeight": 1.1, "weight": 850, "minimumCssPx": 16}
+    },
+    "minimums": {
+      "primaryBodyTargetCssPx": 14,
+      "criticalTextCssPx": 12,
+      "supportingTextCssPx": 11,
+      "rule": "320px幅でもminimumを下回らない。幅不足時は補助文を短縮・折返し・非表示にし、文字を縮めない。"
+    },
+    "numbers": {
+      "fontVariantNumeric": "tabular-nums lining-nums",
+      "fontFeatureSettings": "'tnum' 1, 'lnum' 1",
+      "decimalSource": "canonical decimal stringを表示専用formatterへ渡し、内部値をJavaScript Numberへ丸めない。",
+      "abbreviation": "canonical display abbreviation規則が確定するまでは勝手なK/M/B変換をしない。",
+      "separators": "日本語localeの視認性を使うが、IDや監査値には適用しない。",
+      "alignment": "HP、進行、報酬、資源は桁変動で周辺UIが揺れないよう右揃えまたは固定幅。",
+      "sign": "増減符号はtext layerで表示し、色だけに依存しない。"
+    }
+  },
+  "iconography": {
+    "format": "original SVG symbolまたはP2承認済みvector asset",
+    "baseViewBox": "0 0 24 24",
+    "visibleSizesCssPx": [18, 20, 24, 28],
+    "touchTargetMinimumCssPx": 44,
+    "preferredTouchTargetCssPx": 48,
+    "stroke": "1.75から2.25、round cap、round join。小サイズでは細部を削る。",
+    "labelRule": "単独で意味が一意でないicon buttonはvisible labelまたはaccessible nameを持つ。",
+    "forbidden": [
+      "emoji",
+      "Unicode記号",
+      "OS依存フォントグリフ",
+      "競合作品のicon trace",
+      "意味未確定の仮icon"
+    ]
+  },
+  "interaction": {
+    "criticalTargetMinimumCssPx": 44,
+    "preferredTargetCssPx": 48,
+    "targetSpacingMinimumCssPx": 8,
+    "onePrimaryActionPerState": true,
+    "tapDamageForbidden": true,
+    "pressFeedback": ["1px optical depression", "brass highlight reduction", "label remains stable"],
+    "focusVisible": "3px focus token outline with 2px offset; focus must not be removed",
+    "oneHandedRule": "primary navigation and next useful action remain in the lower 44% when the state permits; combat itself requires no tap damage action."
+  },
+  "componentStates": {
+    "normal": {"visual": "material, border and label at full contrast", "behavior": "available"},
+    "pressed": {"visual": "1px depression, highlight -20%, shadow reduced", "behavior": "active only during pointer/key press"},
+    "selected": {"visual": "3px brass edge plus persistent selected marker and label", "behavior": "aria-current or aria-selected"},
+    "disabled": {"visual": "56% opacity, desaturated surface, reason label retained", "behavior": "not focusable when native disabled; no click side effect"},
+    "locked": {"visual": "iron crossbar, original SVG lock, explicit 未解放 label", "behavior": "may open requirement explanation but cannot imply ownership"},
+    "loading": {"visual": "stable geometry, labeled progress or skeleton; no layout jump", "behavior": "repeat action suppressed"},
+    "error": {"visual": "danger edge, error label, retry target when safe", "behavior": "previous confirmed state retained"},
+    "cooldown": {"visual": "clockwise mask plus remaining text and label", "behavior": "never invented for a nonexistent active skill"}
+  },
+  "components": [
+    {
+      "id": "button.primary",
+      "anatomy": ["brass outer edge", "wood or velvet face", "original SVG leading icon optional", "single action label", "optional honest state suffix"],
+      "heightCssPx": 48,
+      "minimumHeightCssPx": 44,
+      "horizontalPaddingCssPx": 16,
+      "states": ["normal", "pressed", "disabled", "loading", "error"],
+      "rule": "同一画面状態に一つ。戦闘へ直接damageを与えるactionには使用しない。"
+    },
+    {
+      "id": "button.secondary",
+      "anatomy": ["2px brass or iron edge", "low-emphasis wood face", "label"],
+      "heightCssPx": 44,
+      "horizontalPaddingCssPx": 12,
+      "states": ["normal", "pressed", "selected", "disabled", "loading"],
+      "rule": "一次操作より面積、明度、brass量を低くする。"
+    },
+    {
+      "id": "button.icon",
+      "anatomy": ["44x44 minimum hit area", "18 to 24px original SVG", "optional badge"],
+      "visibleFrameCssPx": 36,
+      "hitAreaMinimumCssPx": 44,
+      "preferredHitAreaCssPx": 48,
+      "states": ["normal", "pressed", "selected", "disabled", "loading"],
+      "rule": "見た目が小さくてもhit areaを縮めない。"
+    },
+    {
+      "id": "tab.segmented",
+      "anatomy": ["group rail", "label", "selected underline or plate", "optional count"],
+      "minimumHeightCssPx": 44,
+      "states": ["normal", "pressed", "selected", "disabled", "loading"],
+      "rule": "状態切替はURLまたはstate labelと同期し、色だけで選択を示さない。"
+    },
+    {
+      "id": "navigation.bottom",
+      "anatomy": ["wood frame", "five equal destinations", "original SVG icon", "visible label", "selected paw plate", "notification badge optional", "safe-area pad"],
+      "destinationCount": 5,
+      "itemMinimumHeightCssPx": 48,
+      "barContentHeightCssPx": 60,
+      "states": ["normal", "pressed", "selected", "disabled", "loading"],
+      "rule": "safe areaを除く操作面は60px。320px幅でも五等分し、labelは11px未満にしない。"
+    },
+    {
+      "id": "chip.resource",
+      "anatomy": ["original SVG currency icon", "exact text value", "optional pending label"],
+      "minimumHeightCssPx": 36,
+      "horizontalPaddingCssPx": 10,
+      "states": ["normal", "selected", "loading", "error", "disabled"],
+      "rule": "future canonical wallet bindingがない値は非表示。無料・有料ruby provenanceを曖昧に合算しない。"
+    },
+    {
+      "id": "bar.hp",
+      "anatomy": ["labeled owner", "track", "current fill", "damage lag fill optional", "exact current/max text when space permits"],
+      "heightCssPx": {"ally": 10, "enemy": 14},
+      "states": ["normal", "loading", "error", "disabled"],
+      "rule": "0からmaxへclampし、未知値を満タン表示しない。敵脅威panelと同じred tokenを使う。"
+    },
+    {
+      "id": "meter.progress",
+      "anatomy": ["objective label", "current/max exact text", "track", "progress fill", "next marker optional"],
+      "minimumHeightCssPx": 40,
+      "states": ["normal", "loading", "error", "disabled"],
+      "rule": "撃破数、wave、floor transitionのうちcanonical encounterが定義する一つだけを表示する。"
+    },
+    {
+      "id": "card.character",
+      "anatomy": ["portrait crop", "name", "role mark", "state stripe", "explicit state label", "HP optional", "lock requirement optional"],
+      "minimumWidthCssPx": 64,
+      "minimumHeightCssPx": 68,
+      "states": ["normal", "pressed", "selected", "disabled", "locked", "loading", "error", "cooldown"],
+      "stateLabels": ["戦場参加中", "所有済み", "加入可能", "未解放"],
+      "rule": "所有と戦場参加を同義にしない。GM08ではlabel、輪郭、shapeの三重化を行う。"
+    },
+    {
+      "id": "panel.enemyThreat",
+      "anatomy": ["enemy name or class", "threat label", "HP bar", "telegraph shape", "target or modifier only when real"],
+      "minimumHeightCssPx": 48,
+      "states": ["normal", "loading", "error", "disabled"],
+      "rule": "S02通常敵をS08ボスの巨大panelへ見せない。未知modifierや偽skillを表示しない。"
+    },
+    {
+      "id": "feedback.reward",
+      "anatomy": ["source cue", "original SVG reward icon", "amount", "provisional or confirmed label", "destination cue optional"],
+      "minimumHeightCssPx": 44,
+      "states": ["normal", "loading", "error"],
+      "rule": "reward event受信前に生成しない。provisionalとconfirmedを色だけでなく文言で分離する。"
+    },
+    {
+      "id": "modal.standard",
+      "anatomy": ["title", "state label", "scrollable body", "outcome summary", "primary and optional secondary action", "safe-area pad"],
+      "maximumWidthCssPx": 400,
+      "minimumActionHeightCssPx": 48,
+      "states": ["normal", "loading", "error", "disabled"],
+      "rule": "320幅はbottom sheet、360幅以上はcenter sheetを基本とし、本文だけがscrollする。"
+    },
+    {
+      "id": "feedback.toast",
+      "anatomy": ["status icon", "one concise sentence", "optional safe retry"],
+      "minimumHeightCssPx": 44,
+      "maximumVisibleCount": 1,
+      "states": ["normal", "loading", "error"],
+      "rule": "重大なsettlementやrewardの唯一の証拠にしない。bottom navigationと重ならない。"
+    },
+    {
+      "id": "help.tooltip",
+      "anatomy": ["short explanation", "pointer", "close or dismiss behavior"],
+      "maximumWidthCssPx": 240,
+      "states": ["normal", "loading", "error"],
+      "rule": "hover必須にせずtap、keyboard、dismissを提供する。重要情報をtooltipだけへ置かない。"
+    },
+    {
+      "id": "badge.notification",
+      "anatomy": ["shape", "bounded count or dot", "accessible label"],
+      "minimumVisibleCssPx": 8,
+      "maximumCountLabel": "99+",
+      "states": ["normal", "disabled", "loading"],
+      "rule": "S02で商業・event導線を赤点で過剰強調しない。"
+    }
+  ],
+  "battlePresentation": {
+    "normalCatVisibleHeightMinimumCssPx": 54,
+    "normalEnemyVisibleHeightMinimumCssPx": 68,
+    "normalEnemyToCatScale": "1.2から1.5倍",
+    "partyIdentity": "frontlineとbacklineの二層で最大4体を識別可能にし、同一水平列へ小さく詰めない。",
+    "effectOcclusion": "攻撃effectは顔、party label、enemy HPの各25%以上を連続して隠さない。",
+    "supportHierarchy": "商会・配送表示の総面積は戦場可視面積の18%以下。"
+  },
+  "accessibility": {
+    "contrast": "意味のあるbody、button、state labelはWCAG AA相当をP2実色で測定する。装飾金文字を本文へ使用しない。",
+    "largeText": "200%相当でcritical contentをreflow。補助文をcollapseしても階、敵脅威、HP、編成状態、主要遷移は残す。",
+    "colorOnlyForbidden": true,
+    "reducedMotion": "parallax、shake、loop pulse、粒子を止め、shape、label、progress、静止impact markを残す。",
+    "screenReader": "decorative artは空alt、状態値は一つの意味単位で読み、damage連打を逐次live announcementしない。",
+    "focusOrder": ["floor and encounter", "auto state", "party", "support", "next action", "bottom navigation", "conditional modal"]
+  },
+  "responsiveHooks": {
+    "widthCompact": "max-width: 343px",
+    "widthStandard": "344px to 399px",
+    "widthExpanded": "min-width: 400px",
+    "heightShort": "max-height: 699px",
+    "heightStandard": "700px to 879px",
+    "heightTall": "min-height: 880px",
+    "viewportUnits": "outer shellは100svhを安全下限、可変表示領域は100dvh。safe areaはenv(safe-area-inset-*)を使用する。",
+    "uniformScale": false
+  },
+  "p2Handoff": {
+    "requiredOutputs": [
+      "CSS custom-property token fileまたはengine theme token table",
+      "original SVG icon sprite with accessible titles outside generated art",
+      "9-slice frame source and cap inset manifest",
+      "component state story fixtures",
+      "contrast report at final colors",
+      "320x568から430x932までのbrowser captures"
+    ],
+    "acceptance": [
+      "全componentが同一tokenを参照する",
+      "文字と数値が画像から分離される",
+      "44px未満のcritical hit targetがない",
+      "11px未満の意味ある文字がない",
+      "locked、disabled、loading、error、pressed、selected、cooldownが欠けない"
+    ]
+  },
+  "verdictBoundary": {
+    "thisArtifactMayAuthorizeRuntimeReplacement": false,
+    "thisArtifactMayCloseS4RecoveryVis001": false,
+    "maximumBeforeUserVisualApproval": "READY_FOR_USER_VISUAL_REVIEW"
+  }
+}

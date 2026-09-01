@@ -1,0 +1,296 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-responsive-contract",
+  "createdAt": "2026-09-01",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "screen": "S02 normal battle",
+  "status": "DESIGN_CONTRACT_NOT_RUNTIME",
+  "referenceViewport": "390x844",
+  "requiredViewports": ["320x568", "320x667", "375x667", "360x800", "390x844", "412x915", "430x932"],
+  "hardRules": {
+    "uniformFullScreenScaling": false,
+    "nonUniformArtStretching": false,
+    "deviceNameBreakpoints": false,
+    "viewportDrivenLayout": true,
+    "initialScrollPosition": "top; no automatic scroll that moves the battlefield outside the viewport",
+    "backgroundAndCharacters": "aspect ratio保持、anchor crop、reflowしない",
+    "ui": "available inline/block sizeに応じてreflow、collapse、hide、expand",
+    "heightGrowth": "UIを巨大化せずbattlefieldとatmospheric depthへ配分",
+    "widthReduction": "critical text、target、catをminimum未満に縮めず、補助文と装飾を先に減らす"
+  },
+  "measurement": {
+    "cssViewport": "window.visualViewportが利用可能なら実可視領域も観測し、layout viewportとの差をevidenceへ記録",
+    "shellMinimum": "min-block-size: 100svh",
+    "activeViewport": "block-size calculations use 100dvh where supported with 100svh fallback",
+    "safeArea": "env(safe-area-inset-top/right/bottom/left, 0px)",
+    "keyboard": "modal/inputが将来入る場合はvisualViewportでactionをkeyboard上へ保持。P1 S02 battle本体にtext inputは置かない。",
+    "browserBars": "dvh変化時にbattlefieldのfoot anchorまたはbottom navがjumpしないようstable minimum + flow layoutを使う"
+  },
+  "globalMinimums": {
+    "battlefieldCssPx": {"short": 300, "standard": 352, "tall": 404},
+    "catVisibleHeightCssPx": 54,
+    "enemyVisibleHeightCssPx": 68,
+    "criticalTextCssPx": 12,
+    "supportingTextCssPx": 11,
+    "bodyTargetCssPx": 14,
+    "criticalTargetCssPx": 44,
+    "preferredTargetCssPx": 48,
+    "targetGapCssPx": 8,
+    "bottomNavItemTargetCssPx": 48,
+    "rule": "viewport不足を理由にminimumを下げない。document heightを増やしてscroll continuationを許可する。"
+  },
+  "layoutOrder": [
+    "safe top spacer and compact resource/floor header",
+    "encounter objective and AUTO state",
+    "battlefield",
+    "persistent four-slot party dock",
+    "subordinate shop/delivery support summary",
+    "contextual next useful action if separate from navigation",
+    "five-destination bottom navigation with safe bottom"
+  ],
+  "heightBands": {
+    "short": "available viewport height <= 699px",
+    "standard": "700px to 879px",
+    "tall": "880px or more",
+    "rule": "width bandとheight bandを独立判定する。375x667はwide-short、320x800はcompact-standardとして扱う。"
+  },
+  "widthBands": {
+    "compact": "available viewport width <= 343px",
+    "standard": "344px to 399px",
+    "expanded": "400px or more"
+  },
+  "viewportContracts": [
+    {
+      "viewport": "320x568",
+      "goldenMaster": "GM04",
+      "bands": ["compact", "short"],
+      "battlefieldMinimumCssPx": 300,
+      "battlefieldTargetCssPx": 300,
+      "maintain": [
+        "catとenemyの比率、foot anchor、attack path",
+        "floor、objective、enemy HP、AUTO state",
+        "4 party slotsのidentityとstate label",
+        "five-destination bottom navigation",
+        "44px critical targetとtext minimum"
+      ],
+      "shrink": [
+        "screen gutterを12px",
+        "panel decoration depth and brass ornaments",
+        "party portraitをminimum card sizeまで。ただしcat visible faceを保つ"
+      ],
+      "reflow": [
+        "resource chipをfloor header内の一列へ統合",
+        "party state labelをportrait下の一行へ固定し、nameは必要時に省略規則を使う",
+        "bottom navigation labelsを11pxの二行以内にする"
+      ],
+      "collapse": [
+        "shop/delivery detailを一つのreal status rowまたはS05 navigationへ",
+        "enemy explanatory sentenceをthreat labelへ",
+        "support countdownをcanonical値がない場合は完全に消す"
+      ],
+      "hide": [
+        "decorative subtitle",
+        "background particles",
+        "secondary event and commercial badges",
+        "resource not required for current combat decision"
+      ],
+      "expand": ["document flow below battlefield; critical content may continue by vertical scroll"],
+      "scroll": "initial viewportはfloor + battlefieldを保持。party dock以降はflowで続き、bottom navはsafe-area付sticky。focusによるbattle auto-scrollは禁止。",
+      "primaryAction": "direct damage actionは置かない。next navigationは48px bottom-nav character/tower destinationまたはreal contextual action。",
+      "modal": "bottom sheet; max-height = 100dvh - safeTop - 8px; header/action fixed, body scrollable"
+    },
+    {
+      "viewport": "320x667",
+      "goldenMaster": "GM02",
+      "bands": ["compact", "short"],
+      "battlefieldMinimumCssPx": 300,
+      "battlefieldTargetCssPx": 312,
+      "maintain": ["P0/P1 information", "four distinct cats or honest field subset", "enemy threat", "44px targets"],
+      "shrink": ["gutter 12px", "ornament", "vertical panel padding by 4px tokens"],
+      "reflow": ["four party cards in four equal columns", "objective label and progress on two rows if needed"],
+      "collapse": ["support explanation to icon + exact state label"],
+      "hide": ["decorative environment labels", "secondary commerce copy", "non-action notification badges"],
+      "expand": ["12px vertical breathing room between battle and party compared with 320x568"],
+      "modal": "bottom sheet by default; actions full width and at least48px"
+    },
+    {
+      "viewport": "375x667",
+      "goldenMaster": "GM03",
+      "bands": ["standard", "short"],
+      "battlefieldMinimumCssPx": 300,
+      "battlefieldTargetCssPx": 320,
+      "maintain": ["standard width information hierarchy", "enemy exact HP text when it fits", "four party names"],
+      "shrink": ["vertical gaps before text or targets", "background upper crop"],
+      "reflow": ["objective and AUTO share row only when each target retains44px", "support summary uses one row"],
+      "collapse": ["long shop effect description to one-line battle impact"],
+      "hide": ["ambient particles if they compete with attack effects", "secondary forecast"],
+      "expand": ["battle width and attack-path separation, not UI scale"],
+      "modal": "center sheet if content fits; otherwise bottom sheet with scroll body"
+    },
+    {
+      "viewport": "360x800",
+      "goldenMaster": "browser acceptance variant",
+      "bands": ["standard", "standard"],
+      "battlefieldMinimumCssPx": 352,
+      "battlefieldTargetCssPx": 360,
+      "maintain": ["full combat hierarchy", "four-slot dock", "one-line support summary", "bottom nav"],
+      "shrink": ["gutter 16px retained; only decorative cap size may shrink"],
+      "reflow": ["resource chips may share header row", "party card labels remain visible"],
+      "collapse": ["secondary support explanation if it causes initial overflow"],
+      "hide": ["nonessential event badge"],
+      "expand": ["battlefield above 352px before any UI grows"],
+      "modal": "center sheet up to calc(100dvh - safe areas - 32px)"
+    },
+    {
+      "viewport": "390x844",
+      "goldenMaster": "GM01, GM06, GM07, GM08",
+      "bands": ["standard", "standard"],
+      "battlefieldMinimumCssPx": 352,
+      "battlefieldTargetCssPx": 372,
+      "maintain": ["reference composition", "full P0/P1 labels", "four party cards", "subordinate support summary"],
+      "shrink": ["none from reference; token sizes are canonical"],
+      "reflow": ["GM07 modal overlays but battlefield remains identifiable beneath scrim", "GM08 uses full state labels"],
+      "collapse": ["only P2 copy when large text is active"],
+      "hide": ["P3 store, gacha, event and monetization detail"],
+      "expand": ["battlefield and atmosphere before top or bottom chrome"],
+      "modal": "center sheet maximum width358px; safe-area bounded; footer action48px"
+    },
+    {
+      "viewport": "412x915",
+      "goldenMaster": "browser acceptance variant",
+      "bands": ["expanded", "tall"],
+      "battlefieldMinimumCssPx": 404,
+      "battlefieldTargetCssPx": 412,
+      "maintain": ["all reference P0/P1 information", "cat preferred size without boss-like enemy scale"],
+      "shrink": ["none"],
+      "reflow": ["support summary may show effect plus next arrival on two balanced lines"],
+      "collapse": ["nothing required; P2 remains conditional"],
+      "hide": ["P3 commerce detail remains separate despite space"],
+      "expand": ["battlefield vertical architecture", "space between frontline/backline", "ambient depth"],
+      "modal": "center sheet maximum width380px"
+    },
+    {
+      "viewport": "430x932",
+      "goldenMaster": "GM05",
+      "bands": ["expanded", "tall"],
+      "battlefieldMinimumCssPx": 404,
+      "battlefieldTargetCssPx": 424,
+      "maintain": ["all reference P0/P1 information", "control dimensions", "cat/enemy scale contract"],
+      "shrink": ["none"],
+      "reflow": ["party dock may use wider text but same four-column structure"],
+      "collapse": ["nothing required for size; content priority still limits P2"],
+      "hide": ["P3 store/gacha/event detail remains absent"],
+      "expand": ["upper tower depth", "battlefield", "frontline/backline separation", "effect breathing room"],
+      "antiBloat": "header, chips, buttons, bottom nav remain reference token size; no proportional enlargement",
+      "modal": "center sheet maximum width398px"
+    }
+  ],
+  "battlefieldRules": {
+    "anchor": "ground lineとcombatant foot anchorsを固定し、top cropの増減でheightへ対応",
+    "horizontalComposition": {
+      "compact": "cats occupy x=0.08..0.53, enemy x=0.68..0.94; attack corridor至少15% width",
+      "standard": "cats x=0.08..0.56, enemy x=0.70..0.94",
+      "expanded": "cats x=0.08..0.54, enemy x=0.72..0.93; extra width becomes spacing"
+    },
+    "verticalComposition": "frontline foot y=0.80..0.86、backline foot y=0.72..0.78。enemy foot y=0.80..0.86。",
+    "catMinimum": "visible bounds height 54px以上、顔幅18px以上をbrowser evidenceで測定",
+    "enemyMinimum": "visible bounds height 68px以上。通常敵はcatの1.2から1.5倍、S08 boss scaleへしない。",
+    "overlap": "各catの顔と主装備の65%以上、enemy silhouetteの75%以上を維持",
+    "effects": "damage textとimpactがenemy HP、floor、party labelsを隠さない",
+    "backgroundCrop": "320幅は左右の補助物をcropし、doorway、ground path、light directionは残す。430幅はhidden extentを見せる。"
+  },
+  "headerRules": {
+    "safeTopPadding": "max(8px, env(safe-area-inset-top))",
+    "compact": "floor、objective、AUTO、run coin only if bound。secondary resource hidden。",
+    "standard": "floor + objective、AUTO、one or two real resource chips",
+    "expanded": "余白を増やしてもheader高さは最大92px。P3情報を追加しない。",
+    "dynamicIsland": "center top 126px幅を必須tap targetで占有しない。左右またはsafe inset下へ置く。"
+  },
+  "partyDockRules": {
+    "slotCount": 4,
+    "layout": "four equal columns; no horizontal carousel for the persistent four slots",
+    "compactCardMinimumCssPx": "64x68",
+    "gapCssPx": 4,
+    "standardGapCssPx": 8,
+    "labels": "戦場参加中、所有済み、加入可能、未解放を11px以上で表示。shape/edge/iconを併用。",
+    "overflow": "name ellipsis may occur only after state label remains intact; accessible full name retained",
+    "battleOverlap": false
+  },
+  "bottomNavigationRules": {
+    "destinations": 5,
+    "contentHeightCssPx": 60,
+    "safeBottomPadding": "max(8px, env(safe-area-inset-bottom))",
+    "background": "safe area through viewport bottom",
+    "itemTargetMinimumCssPx": "equal width x 48px height",
+    "labelMinimumCssPx": 11,
+    "selected": "shape + 3px brass edge + label + aria-current",
+    "homeIndicator": "target content ends above bottom safe inset",
+    "sticky": "position sticky at document bottom preferred; fixed only with content padding equal to total bar height",
+    "overlapForbidden": ["modal action", "toast", "party card", "scroll continuation content"]
+  },
+  "modalRules": {
+    "compact": "bottom sheet width100%, rounded top corners only, safe bottom action padding",
+    "standard": "center sheet with 16px side margin unless content/keyboard forces bottom sheet",
+    "expanded": "center sheet within 398px",
+    "maximumHeight": "calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 16px)",
+    "scroll": "title and actions fixed within sheet; body only scrolls",
+    "actions": "minimum48px, one primary, optional secondary separated8px",
+    "offlineReconciliation": "state label、elapsed、provisional/confirmed rows、retry statusをclipしない",
+    "largeText": "action labels wrap to two lines; no horizontal button squeeze below44px"
+  },
+  "largeText": {
+    "testScale": "browser 200% text or equivalent OS accessibility setting",
+    "preserve": ["floor", "objective", "enemy threat/HP", "AUTO", "party state", "settlement label", "primary action", "bottom nav destination"],
+    "collapseFirst": ["flavor subtitle", "support explanation", "secondary forecast", "decorative labels"],
+    "reflow": ["header into two rows", "objective under floor", "modal actions vertical", "support into summary row"],
+    "never": ["reduce below11px", "clip amount", "ellipsis critical state", "hide party state", "overlap battle characters"]
+  },
+  "orientationAndUnsupported": {
+    "portrait": "supported target",
+    "landscape": "P1 Golden Master対象外。将来実装ではrotation guidanceまたはsafe reflowを定義するまでproduction-readyとしない。",
+    "below320Width": "not a P1 supported viewport; preserve zoom and expose horizontal-safe fallback rather than silent scaling",
+    "zoom": "pinch zoomを無効化しない"
+  },
+  "reviewPageModes": {
+    "fitWidth": "outer review chrome only scales preview to container; dimensions label and effective scale are visible",
+    "oneToOne": "Golden Master viewport is rendered at1 CSS px per design px with page scroll",
+    "isolated": "one GM only, no collage dependency",
+    "referenceComparison": "reference and GM are separate panels with explicit labels; reference is not runtime input",
+    "largeText": "same GM state rendered with text-only scale",
+    "reducedMotion": "same state without motion dependency"
+  },
+  "browserEvidence": {
+    "requiredMeasurementsPerViewport": [
+      "document and visual viewport width/height",
+      "safe area treatment",
+      "battlefield visible bounding box and intersection with viewport",
+      "each cat visible bounds and minimum height",
+      "enemy visible bounds and minimum height",
+      "critical text computed sizes",
+      "critical target bounding boxes",
+      "party dock position and non-overlap",
+      "bottom nav position and safe-bottom pad",
+      "horizontal overflow",
+      "initial scrollY"
+    ],
+    "fail": [
+      "battlefield top or bottom outside expected initial view because of automatic scroll",
+      "battlefield below band minimum",
+      "cat below54px or enemy below68px",
+      "critical target below44px",
+      "critical text below12px or supporting text below11px",
+      "horizontal overflow",
+      "bottom nav intersects home indicator safe area",
+      "320 variant is a uniform downscale",
+      "430 variant bloats UI instead of expanding battlefield"
+    ]
+  },
+  "verdictBoundary": {
+    "physicalIPhoneVerified": false,
+    "browserEvidenceRequiredBeforeUserReview": true,
+    "runtimeReplacementAuthorized": false,
+    "productionAliasChangeAllowed": false,
+    "step4Pass": false
+  }
+}

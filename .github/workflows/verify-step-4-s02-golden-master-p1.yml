@@ -1,0 +1,101 @@
+name: Verify Step 4 S02 Golden Master P1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - kimi
+    paths:
+      - "step4/s02/golden-master-p1/**"
+      - "tests/step4/s02-golden-master-p1-browser.mjs"
+      - "tests/step4/verify-s02-golden-master-p1.mjs"
+      - "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-*"
+      - ".github/workflows/verify-step-4-s02-golden-master-p1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-step4-s02-golden-master-p1-kimi-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify-golden-master-p1:
+    name: Static, ten-view Chromium and accessibility boundaries
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - name: Checkout exact kimi commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Assert repository and branch boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${GITHUB_REPOSITORY}" = "2hg7trp7rv-design/cats_tower"
+          test "${GITHUB_REF_NAME}" = "kimi"
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          echo "head=$(git rev-parse HEAD)"
+          echo "tree=$(git rev-parse HEAD^{tree})"
+
+      - name: Run fail-closed P1 static contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          node tests/step4/verify-s02-golden-master-p1.mjs | tee s02-golden-master-p1-static-report.json
+          grep -q 'PASS_S02_GOLDEN_MASTER_P1_STATIC' s02-golden-master-p1-static-report.json
+
+      - name: Install pinned Playwright and Chromium
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/s02-gm-p1-playwright
+          cd /tmp/s02-gm-p1-playwright
+          npm init -y >/dev/null 2>&1
+          npm install --save-exact playwright@1.62.1
+          npx playwright install --with-deps chromium
+
+      - name: Start exact-head static review
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/s02-gm-p1-http.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4173/step4/s02/golden-master-p1/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/s02-gm-p1-http.log
+          exit 1
+
+      - name: Capture and verify eight masters plus two responsive variants
+        shell: bash
+        env:
+          PLAYWRIGHT_PACKAGE: /tmp/s02-gm-p1-playwright/node_modules/playwright
+          S02_GM_BASE_URL: http://127.0.0.1:4173/step4/s02/golden-master-p1/
+          S02_GM_EVIDENCE_DIR: quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-browser-evidence
+        run: |
+          set -euo pipefail
+          node tests/step4/s02-golden-master-p1-browser.mjs | tee s02-golden-master-p1-browser-report.log
+          grep -q 'PASS_S02_GOLDEN_MASTER_P1_BROWSER' s02-golden-master-p1-browser-report.log
+          test "$(find quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-browser-evidence -maxdepth 1 -name '*.png' | wc -l | tr -d ' ')" = "10"
+
+      - name: Upload exact-head P1 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: step4-s02-golden-master-p1-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 30
+          path: |
+            s02-golden-master-p1-static-report.json
+            s02-golden-master-p1-browser-report.log
+            quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-browser-evidence/**
+            /tmp/s02-gm-p1-http.log
+            step4/s02/golden-master-p1/**
+            tests/step4/s02-golden-master-p1-browser.mjs
+            tests/step4/verify-s02-golden-master-p1.mjs

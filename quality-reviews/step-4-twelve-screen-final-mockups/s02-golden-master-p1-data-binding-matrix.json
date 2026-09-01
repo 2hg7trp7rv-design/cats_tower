@@ -1,0 +1,518 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-data-binding-matrix",
+  "createdAt": "2026-09-01",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "screen": "S02 normal battle",
+  "status": "FUTURE_BINDING_CONTRACT_NOT_RUNTIME_SCHEMA_CHANGE",
+  "canonicalAuthority": [
+    "canonical/SCREEN_STATE_REGISTRY.json S02 battle-follow",
+    "canonical/STABLE_ID_REGISTRY.json",
+    "canonical/STATE_TRANSITION_CONTRACT.json",
+    "canonical/STEP2_DEPENDENCY_CLOSURE.json"
+  ],
+  "canonicalS02Boundary": {
+    "authority": "local deterministic run cache plus server-verifiable settlement",
+    "requiredState": ["floorId", "party4", "temporarySupport", "enemyWave", "autoState", "offlineCatchup", "settlementStatus"],
+    "serverOwnedState": ["permanent reward settlement", "highest-floor candidate"],
+    "uiStates": ["TUTORIAL", "READY", "LOADING", "PAUSED", "OFFLINE", "BACKGROUND_RECONCILE", "DESYNC", "RETRYABLE_ERROR", "DEFEAT", "VICTORY_PENDING"]
+  },
+  "adapterBoundary": {
+    "proposedName": "S02BattleViewModel",
+    "role": "canonical stateを表示専用に正規化するread-only adapter。P1はinterfaceを定義するだけで実装しない。",
+    "mustNot": [
+      "canonical objectへUI convenience fieldを書き戻す",
+      "JavaScript Numberへunbounded decimalを変換する",
+      "animationからdamage、reward、wallet、ownershipを生成する",
+      "missing valueをもっともらしいsampleで補う",
+      "paid/free ruby provenanceを曖昧に合算する",
+      "temporary supportをparty4へ混入させる"
+    ],
+    "versionFields": ["schemaVersion", "stateVersion", "simulationTick", "settlementVersion when present"],
+    "unknownPolicy": "unknown、missing、conflictingはfail closed。critical値はunknown label、非critical値は非表示。直前のconfirmed値を使う場合はstale labelを付ける。"
+  },
+  "fixturePolicy": {
+    "goldenMasterData": "GM01からGM08内の数字と状態はレイアウト検証用の明示的DESIGN FIXTUREであり、実プレイヤーstate、server state、報酬付与を表さない。",
+    "requiredReviewLabels": ["DESIGN REVIEW", "S02 GOLDEN MASTER", "NOT RUNTIME"],
+    "fixtureNamespace": "s02.p1.fixture.<GM-ID>",
+    "runtimeImportForbidden": true,
+    "testRule": "P2/P3 runtime buildはfixture namespaceがproduction bundleへ入るとfailする。"
+  },
+  "formatters": {
+    "floor": {
+      "input": "positive normalized unsigned decimal string",
+      "output": "localized grouping plus 階",
+      "rule": "上限を示す語を付けず、100Fを最終階と表現しない。"
+    },
+    "amount": {
+      "input": "canonical decimal string or versioned arbitrary-precision representation",
+      "output": "canonical display abbreviation policy when available",
+      "rule": "policy不在時にK/M/Bへ独自変換しない。"
+    },
+    "hp": {
+      "input": "currentDecimal, maxDecimal",
+      "output": "clamped visual ratio plus exact text",
+      "rule": "max unknown or non-positiveはratioを表示せず、値確認中とする。"
+    },
+    "duration": {
+      "input": "non-negative integer seconds from canonical elapsed source",
+      "output": "日・時間・分、必要時だけ秒",
+      "rule": "client wall clock差分だけでoffline elapsedを確定しない。"
+    },
+    "stateLabel": {
+      "input": "closed enum",
+      "output": "Japanese dictionary entry",
+      "rule": "未知enumは推測せず不明または再確認表示。"
+    }
+  },
+  "bindings": [
+    {
+      "id": "review.watermark",
+      "priority": "P0_REVIEW_ONLY",
+      "visibleIn": ["GM01", "GM02", "GM03", "GM04", "GM05", "GM06", "GM07", "GM08"],
+      "source": "static review route metadata",
+      "authority": "P1 review artifact",
+      "display": "DESIGN REVIEW / S02 GOLDEN MASTER / NOT RUNTIME",
+      "runtimeBehavior": "actual runtimeには表示しない",
+      "fallback": "missing is review-page failure"
+    },
+    {
+      "id": "screen.uiState",
+      "priority": "P0",
+      "visibleIn": ["all runtime states by composition"],
+      "source": "S02.uiState",
+      "canonicalRoot": "SCREEN_STATE_REGISTRY.S02.uiStates",
+      "authority": "state orchestrator",
+      "display": "stateに応じたscreen、sheet、error。enum自体を通常時に露出しない。",
+      "fallback": "RETRYABLE_ERROR presentation; no combat interaction"
+    },
+    {
+      "id": "tower.floor",
+      "priority": "P0_ALWAYS",
+      "visibleIn": ["GM01", "GM02", "GM03", "GM04", "GM05", "GM06", "GM08"],
+      "source": "S02.floorId",
+      "canonicalRoot": "SCREEN_STATE_REGISTRY.S02.requiredState.floorId",
+      "authority": "local deterministic run cache, server-verifiable for progression",
+      "type": "positive normalized decimal string or canonical floor ID",
+      "display": "floor formatter",
+      "fallback": "階数確認中; never show 0 or invented floor"
+    },
+    {
+      "id": "encounter.identity",
+      "priority": "P0_ALWAYS",
+      "visibleIn": ["GM01", "GM02", "GM03", "GM04", "GM05", "GM06", "GM08"],
+      "source": "S02.enemyWave.currentEncounterId and enemy canonical ID",
+      "canonicalRoot": "S02.enemyWave plus STABLE_ID_REGISTRY.enemies",
+      "authority": "deterministic encounter state",
+      "display": "approved localized enemy class/name only",
+      "fallback": "敵情報確認中 with neutral silhouette; never substitute another enemy"
+    },
+    {
+      "id": "encounter.objective",
+      "priority": "P0_ALWAYS",
+      "visibleIn": ["GM01", "GM02", "GM03", "GM04", "GM05", "GM06"],
+      "source": "S02.enemyWave.objectiveKind, currentDecimal, requiredDecimal",
+      "canonicalRoot": "S02.enemyWave",
+      "authority": "deterministic encounter state",
+      "display": "one explicit objective such as 撃破 current/required; kind must be canonical",
+      "fallback": "目標確認中; hide progress ratio",
+      "antiFake": "UI does not infer kill need from visual enemy count"
+    },
+    {
+      "id": "enemy.hp",
+      "priority": "P0_ALWAYS",
+      "visibleIn": ["GM01", "GM02", "GM03", "GM04", "GM05", "GM06"],
+      "source": "S02.enemyWave.activeEnemy.currentHpDecimal, maxHpDecimal",
+      "canonicalRoot": "S02.enemyWave",
+      "authority": "deterministic combat state",
+      "display": "enemy HP bar and exact text when width permits",
+      "fallback": "HP確認中; indeterminate track; never full bar"
+    },
+    {
+      "id": "enemy.threat",
+      "priority": "P0_WHEN_ATTACK_TELEGRAPHED",
+      "visibleIn": ["conditional normal battle", "GM06 if scenario contains enemy counterattack"],
+      "source": "combat telegraph event: enemyEntityId, actionKind, target, commitTick, cancelState",
+      "canonicalRoot": "S02 enemyWave deterministic combat events",
+      "authority": "combat simulation",
+      "display": "body pose plus shape and label; countdown only when commit timing is real",
+      "fallback": "no countdown; clear telegraph on missing/cancel"
+    },
+    {
+      "id": "battle.autoState",
+      "priority": "P1_ALWAYS",
+      "visibleIn": ["GM01", "GM02", "GM03", "GM04", "GM05", "GM06", "GM08"],
+      "source": "S02.autoState",
+      "canonicalRoot": "SCREEN_STATE_REGISTRY.S02.requiredState.autoState",
+      "authority": "local deterministic run control with persisted policy as defined later",
+      "type": "closed enum; not a generic boolean until schema is fixed",
+      "display": "AUTO + explicit state label",
+      "fallback": "状態確認中; no visual toggle mutation",
+      "antiFake": "not presented as active skill or damage command"
+    },
+    {
+      "id": "party.slotIdentity",
+      "priority": "P1_ALWAYS",
+      "visibleIn": ["GM01", "GM02", "GM03", "GM04", "GM05", "GM06", "GM08"],
+      "source": "S02.party4[0..3].characterId and slotIndex",
+      "canonicalRoot": "SCREEN_STATE_REGISTRY.S02.requiredState.party4 plus STABLE_ID_REGISTRY.coreCharacters",
+      "authority": "server ownership/formation plus server-verifiable run state",
+      "display": "approved portrait、name、slot order、explicit participation state",
+      "fallback": "slot skeleton with 読込中; never show an unowned character portrait as fielded"
+    },
+    {
+      "id": "party.slotState",
+      "priority": "P1_ALWAYS",
+      "visibleIn": ["GM08 required", "all normal screens as compact label"],
+      "source": "derived only from party4 slot, ownership eligibility and active field entity linkage",
+      "canonicalRoot": "S02.party4 plus S06 ownership/party authority",
+      "authority": "server ownership and formation; local field entity is run cache",
+      "closedStates": {
+        "field": "owned=true AND slot assignment exists AND active fieldEntityId references this character; label 戦場参加中",
+        "ownedReserve": "owned=true AND no active field entity; label 所有済み",
+        "available": "owned=false AND deterministic acquisition eligibility is explicitly eligible; label 加入可能",
+        "locked": "owned=false AND eligibility is locked with known requirement; label 未解放",
+        "unknown": "conflict or missing source; label 状態確認中"
+      },
+      "display": "label + frame shape + icon/stripe; color only is forbidden",
+      "fallback": "unknown; interaction disabled",
+      "antiFake": "available is never field or owned; locked portrait treatment never implies battle participation"
+    },
+    {
+      "id": "party.allyHp",
+      "priority": "P1_ALWAYS_WHEN_COMBAT_RULE_USES_HP",
+      "visibleIn": ["battlefield labels or character cards when canonical state exists"],
+      "source": "S02.party4[].combatSnapshot.currentHpDecimal, maxHpDecimal",
+      "canonicalRoot": "S02.party4 deterministic run snapshot",
+      "authority": "combat simulation",
+      "display": "compact ally HP; exact text in detail surface only",
+      "fallback": "hide fill and show 状態確認中; never assume full health"
+    },
+    {
+      "id": "party.fieldEntity",
+      "priority": "P0_VISUAL",
+      "visibleIn": ["battlefield"],
+      "source": "S02.party4[].fieldEntity snapshot: position, facing, animationState, targetEntityId",
+      "canonicalRoot": "S02 deterministic run cache",
+      "authority": "combat simulation",
+      "display": "approved cat asset attached by canonical characterId",
+      "fallback": "loading composition; do not substitute another cat",
+      "antiFake": "only an active field entity may appear as fighting"
+    },
+    {
+      "id": "combat.attackEvent",
+      "priority": "P0_CONDITIONAL",
+      "visibleIn": ["normal animation", "GM06"],
+      "source": "combat attack started/released/projectile arrived events",
+      "canonicalRoot": "future deterministic combat event adapter",
+      "authority": "combat simulation",
+      "display": "animation contract timeline",
+      "fallback": "idle/walk only; no visual attack",
+      "antiFake": "CSS timer alone cannot create attack"
+    },
+    {
+      "id": "combat.damageEvent",
+      "priority": "P0_CONDITIONAL",
+      "visibleIn": ["normal battle transient", "GM06"],
+      "source": "combat damage applied event with eventId, source, target, amountDecimal, critical, simulationTick",
+      "canonicalRoot": "future deterministic combat event adapter",
+      "authority": "combat simulation",
+      "display": "exact text damage number, HP update, hit reaction",
+      "fallback": "no number and no hit effect",
+      "antiFake": "visual layer never calculates or samples damage"
+    },
+    {
+      "id": "combat.defeatEvent",
+      "priority": "P0_CONDITIONAL",
+      "visibleIn": ["normal battle transient", "GM06"],
+      "source": "combat entity defeated event with eventId and entityId",
+      "canonicalRoot": "future deterministic combat event adapter",
+      "authority": "combat simulation",
+      "display": "defeat clip and encounter progress change",
+      "fallback": "entity remains in last valid non-defeat state",
+      "antiFake": "visual HP ratio alone does not mint defeat"
+    },
+    {
+      "id": "reward.feedback",
+      "priority": "P0_WHEN_REWARD_EVENT_EXISTS",
+      "visibleIn": ["GM06", "conditional normal battle", "GM07 after appropriate state"],
+      "source": "reward event or settlement result: eventId, settlementId, status, currencyCanonicalId, amountDecimal",
+      "canonicalRoot": "S02.settlementStatus and server-owned permanent reward settlement",
+      "authority": "server-verifiable settlement for permanent reward; local provisional run result when explicitly marked",
+      "display": "source cue + amount + 見込み/照合中/確定 label",
+      "fallback": "報酬を表示しない; error state may say 報酬を再確認",
+      "antiFake": "no random coin amount, no animation-generated wallet update, no confirmed label before settlement"
+    },
+    {
+      "id": "wallet.runCoin",
+      "priority": "P1_ALWAYS_IF_CANONICAL_VALUE_AVAILABLE",
+      "visibleIn": ["resource chip"],
+      "source": "wallet.coin.run canonical decimal value with stateVersion",
+      "canonicalRoot": "STABLE_ID_REGISTRY.namespaces.wallet.wallet.coin.run",
+      "authority": "versioned run wallet state",
+      "display": "coin icon + exact formatted amount; pending delta separately labeled",
+      "fallback": "chip hidden or 残高確認中; never show zero as fallback",
+      "antiFake": "reward feedback does not directly mutate the displayed wallet"
+    },
+    {
+      "id": "wallet.ruby",
+      "priority": "P3_SEPARATE_SCREEN",
+      "visibleIn": [],
+      "source": "wallet.ruby.paid and provenance-specific free ledgers",
+      "canonicalRoot": "STABLE_ID_REGISTRY.namespaces.wallet",
+      "authority": "server wallet ledger",
+      "display": "not displayed on S02 P1 Golden Master; S11 owns detail",
+      "fallback": "none",
+      "antiFake": "no aggregate ruby chip without a canonical disclosure-preserving display policy"
+    },
+    {
+      "id": "support.temporary",
+      "priority": "P1_WHEN_ACTIVE_OR_ARRIVING",
+      "visibleIn": ["subordinate battle support strip"],
+      "source": "S02.temporarySupport: supportId, state, arrivalTick, effect summary, remaining if canonical",
+      "canonicalRoot": "SCREEN_STATE_REGISTRY.S02.requiredState.temporarySupport and STABLE_ID_REGISTRY.temporarySupports",
+      "authority": "local run cache with server-verifiable eligibility where required",
+      "display": "支援名、到着/発動/終了state、real effect summary",
+      "fallback": "support strip hidden; no invented countdown",
+      "antiFake": "temporary support never consumes a party4 slot and never appears as a permanent owned cat"
+    },
+    {
+      "id": "support.shopDelivery",
+      "priority": "P1_SUMMARY_ONLY",
+      "visibleIn": ["subordinate support area"],
+      "source": "S05 projectedCombatSupport or delivery event snapshot passed into S02",
+      "canonicalRoot": "SCREEN_STATE_REGISTRY.S05.requiredState.projectedCombatSupport and deliveryQueue",
+      "authority": "server profile configuration plus local forecast",
+      "display": "battle impact summary or real next arrival; details navigate to S05",
+      "fallback": "支援詳細を非表示; neutral S05 navigation may remain if route available",
+      "antiFake": "no sale price, fake delivery timer, unconfigured buff, or shop management panel on S02"
+    },
+    {
+      "id": "offline.elapsed",
+      "priority": "P0_IN_GM07",
+      "visibleIn": ["GM07", "BACKGROUND_RECONCILE", "OFFLINE"],
+      "source": "S02.offlineCatchup.eligibleElapsedSeconds and cap information",
+      "canonicalRoot": "SCREEN_STATE_REGISTRY.S02.requiredState.offlineCatchup",
+      "authority": "reconciliation input; not client wall clock alone",
+      "display": "duration formatter and cap disclosure when applicable",
+      "fallback": "経過時間確認中",
+      "antiFake": "do not claim an exact duration from an untrusted local timestamp"
+    },
+    {
+      "id": "offline.progress",
+      "priority": "P0_IN_GM07",
+      "visibleIn": ["GM07", "BACKGROUND_RECONCILE"],
+      "source": "S02.offlineCatchup.status and progress only if determinate",
+      "canonicalRoot": "SCREEN_STATE_REGISTRY.S02.requiredState.offlineCatchup",
+      "authority": "reconciliation orchestrator",
+      "display": "照合中、暫定、確定、再確認のexplicit label",
+      "fallback": "indeterminate labeled progress; never fake percent"
+    },
+    {
+      "id": "offline.outcome",
+      "priority": "P0_IN_GM07",
+      "visibleIn": ["GM07 after a provisional or confirmed result exists"],
+      "source": "S02.offlineCatchup.outcome rows plus S02.settlementStatus",
+      "canonicalRoot": "offlineCatchup and server-owned permanent reward settlement",
+      "authority": "provisional local calculation or server settlement according to row status",
+      "display": "each amount carries 見込み or 確定; confirmed result separated visually",
+      "fallback": "amount rows hidden; outcome state retained",
+      "antiFake": "no server完了、no confirmed reward、no wallet delta until actual state"
+    },
+    {
+      "id": "settlement.status",
+      "priority": "P0_WHEN_PENDING_OR_ERROR",
+      "visibleIn": ["GM06 reward feedback", "GM07", "VICTORY_PENDING", "DESYNC", "RETRYABLE_ERROR"],
+      "source": "S02.settlementStatus with settlementId and version",
+      "canonicalRoot": "SCREEN_STATE_REGISTRY.S02.requiredState.settlementStatus",
+      "authority": "server-verifiable settlement orchestrator",
+      "display": "pending/confirmed/retry/error label and permitted action",
+      "fallback": "状態確認中; reward and floor transition remain unconfirmed"
+    },
+    {
+      "id": "tower.highestFloorCandidate",
+      "priority": "P2_CONDITIONAL",
+      "visibleIn": ["only when candidate/pending state is relevant"],
+      "source": "server-owned highest-floor candidate state",
+      "canonicalRoot": "SCREEN_STATE_REGISTRY.S02.serverOwnedState.highest-floor candidate",
+      "authority": "server",
+      "display": "記録候補 or 記録確定 with exact floor; ordinary S02 may omit",
+      "fallback": "hidden; never claim new record"
+    },
+    {
+      "id": "navigation.primaryNext",
+      "priority": "P1_ALWAYS",
+      "visibleIn": ["state-dependent primary or bottom navigation"],
+      "source": "canonical screen route availability plus current uiState",
+      "canonicalRoot": "SCREEN_STATE_REGISTRY screen ownership and future routing contract",
+      "authority": "UI router; no economy mutation",
+      "display": "編成、塔、商会などのreal destination only; action name must describe navigation",
+      "fallback": "disabled with 読込中 or hidden",
+      "antiFake": "no active skill, no direct damage button, no route that is not implemented"
+    },
+    {
+      "id": "navigation.bottom",
+      "priority": "P1_ALWAYS",
+      "visibleIn": ["all non-blocking S02 states"],
+      "source": "future canonical route registry and per-route availability",
+      "canonicalRoot": "SCREEN_STATE_REGISTRY screen IDs",
+      "authority": "UI router",
+      "display": "five destinations with visible labels and current S02 selection",
+      "fallback": "known routes only; unavailable route disabled with reason",
+      "antiFake": "notification badges require real counts/events"
+    },
+    {
+      "id": "error.recovery",
+      "priority": "P0_IN_ERROR_STATE",
+      "visibleIn": ["DESYNC", "RETRYABLE_ERROR", "OFFLINE"],
+      "source": "S02 error domain, stable error code, retry capability, lastConfirmedStateVersion",
+      "canonicalRoot": "S02 state orchestrator",
+      "authority": "state/error orchestrator",
+      "display": "plain-language status、retained confirmed values、safe retry or support path",
+      "fallback": "一般的な再確認表示; destructive actionなし",
+      "antiFake": "no server status claim from HTTP success alone"
+    }
+  ],
+  "partyStateDecisionTable": [
+    {
+      "owned": true,
+      "slotAssigned": true,
+      "activeFieldEntity": true,
+      "eligible": true,
+      "result": "field",
+      "label": "戦場参加中"
+    },
+    {
+      "owned": true,
+      "slotAssigned": true,
+      "activeFieldEntity": false,
+      "eligible": true,
+      "result": "ownedReserve",
+      "label": "所有済み"
+    },
+    {
+      "owned": true,
+      "slotAssigned": false,
+      "activeFieldEntity": false,
+      "eligible": true,
+      "result": "ownedReserve",
+      "label": "所有済み"
+    },
+    {
+      "owned": false,
+      "slotAssigned": false,
+      "activeFieldEntity": false,
+      "eligible": true,
+      "result": "available",
+      "label": "加入可能"
+    },
+    {
+      "owned": false,
+      "slotAssigned": false,
+      "activeFieldEntity": false,
+      "eligible": false,
+      "result": "locked",
+      "label": "未解放"
+    },
+    {
+      "owned": false,
+      "slotAssigned": true,
+      "activeFieldEntity": true,
+      "eligible": "any",
+      "result": "unknown",
+      "label": "状態確認中",
+      "severity": "P0 data conflict"
+    }
+  ],
+  "settlementDecisionTable": [
+    {
+      "settlementStatus": "none",
+      "rewardEvent": "none",
+      "display": "no reward feedback"
+    },
+    {
+      "settlementStatus": "pending",
+      "rewardEvent": "provisional",
+      "display": "見込み amount; no wallet destination animation"
+    },
+    {
+      "settlementStatus": "confirming",
+      "rewardEvent": "provisional",
+      "display": "照合中 amount; repeat action suppressed"
+    },
+    {
+      "settlementStatus": "confirmed",
+      "rewardEvent": "confirmed matching settlementId",
+      "display": "確定 amount; one deduplicated reward feedback"
+    },
+    {
+      "settlementStatus": "error",
+      "rewardEvent": "provisional or none",
+      "display": "再確認; no confirmed wallet mutation"
+    }
+  ],
+  "deduplication": {
+    "combatVisualKey": "eventId",
+    "rewardVisualKey": "rewardEventId + settlementId + status version",
+    "partySnapshotKey": "stateVersion + slotIndex",
+    "rule": "rerender、resume、reconnectで同一confirmed eventのeffectやtoastを再生しない。"
+  },
+  "loadingAndError": {
+    "criticalLoading": ["floor", "party4", "enemyWave"],
+    "composition": "battle artを偽stateで埋めず、stable skeletonとDESIGN/LOADING labelを使用",
+    "staleState": "last confirmed snapshotを表示する場合は更新待ち labelとversionを保持",
+    "retry": "idempotent read/reconciliationだけ。reward claimやwallet operationはcanonical operation contractへ委譲。"
+  },
+  "p2P3ImplementationTests": [
+    "floorId is rendered from a decimal string without precision loss",
+    "unknown floor never becomes 0 or 1",
+    "party field, owned, available and locked states match the decision table",
+    "unowned or locked character never appears as fighting",
+    "temporary support never occupies party4",
+    "attack effect is absent without attack event",
+    "damage text is absent without damage event",
+    "defeat and reward are absent without their events",
+    "provisional reward never changes confirmed wallet presentation",
+    "confirmed reward is deduplicated after rerender and reconnect",
+    "offline percent is absent when progress is indeterminate",
+    "ruby aggregate is absent on S02 until provenance-safe policy exists",
+    "missing shop projection hides effect rather than inventing a buff",
+    "error retains last confirmed data with an explicit stale label",
+    "review fixtures are excluded from runtime bundle"
+  ],
+  "openSchemaQuestionsForP2Adapter": [
+    {
+      "id": "P2-SCHEMA-01",
+      "severity": "implementation detail, not P1 visual blocker",
+      "question": "autoStateのclosed enumとpersistence authorityの正確なschema path",
+      "defaultSafety": "read-only 状態確認中"
+    },
+    {
+      "id": "P2-SCHEMA-02",
+      "severity": "implementation detail, not P1 visual blocker",
+      "question": "enemyWave内のactive enemy HP、objective、telegraph eventのexact field names",
+      "defaultSafety": "unknown values and no fabricated effect"
+    },
+    {
+      "id": "P2-SCHEMA-03",
+      "severity": "implementation detail, not P1 visual blocker",
+      "question": "run coin provisional deltaとconfirmed displayのversion contract",
+      "defaultSafety": "confirmed snapshot only with pending amount separate"
+    },
+    {
+      "id": "P2-SCHEMA-04",
+      "severity": "implementation detail, not P1 visual blocker",
+      "question": "S05 projectedCombatSupportをS02へ渡すread-only projection envelope",
+      "defaultSafety": "support summary hidden"
+    }
+  ],
+  "verdictBoundary": {
+    "canonicalSchemaChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "runtimeImplemented": false,
+    "fakeStateAllowed": false,
+    "step4Pass": false
+  }
+}

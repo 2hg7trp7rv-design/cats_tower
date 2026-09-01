@@ -1,0 +1,458 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-asset-decomposition",
+  "createdAt": "2026-09-01",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "screen": "S02 normal battle",
+  "status": "P2_HANDOFF_CONTRACT_NOT_RUNTIME_ASSET_APPROVAL",
+  "principles": [
+    "Golden Master全画面画像は比較基準であり、runtime背景として貼り付けない。",
+    "背景、猫、敵、effect、UI、文字、数値を独立layerへ分ける。",
+    "生成画像内に日本語、HP、階、通貨、報酬額、button名を含めない。",
+    "同一キャラクターは全animationで体格、模様、装備、顔、色を固定する。",
+    "見えていない背景余白と動作中の四肢余白をP2制作時に確保する。",
+    "UI枠は固定画像ではなく9-sliceまたはvectorで伸縮する。"
+  ],
+  "coordinateSystem": {
+    "artboardReferenceCssPx": "390x844",
+    "normalizedOrigin": "各asset bounds左上を(0,0)、右下を(1,1)",
+    "battleWorldOrigin": "battlefield左下",
+    "worldX": "0が味方進入口、1が敵進入口",
+    "worldY": "0がground contact、1がbattlefield上端",
+    "zOrderBackToFront": [
+      "sky",
+      "farTower",
+      "midArchitecture",
+      "atmosphereBack",
+      "ground",
+      "charactersBackline",
+      "charactersFrontline",
+      "enemy",
+      "contactEffects",
+      "foregroundArchitecture",
+      "weatherParticles",
+      "battleTextAndUI"
+    ],
+    "footAnchorRule": "移動、影、被弾、depth sortはtransparent assetのfootAnchorを基準にし、visible bounds左上を基準にしない。"
+  },
+  "background": {
+    "commonRequirements": {
+      "textFree": true,
+      "characterFree": true,
+      "uiFree": true,
+      "aspectRatioPreserved": true,
+      "hiddenHorizontalExtent": "standard cropの左右各12%以上",
+      "hiddenVerticalExtent": "standard cropの上下各10%以上",
+      "parallax": "far 0.10、mid 0.28、ground 0.55、foreground 0.80を上限目安としreduced motionでは0",
+      "seamRule": "必要なrepeat layerは左右端を検査し、主構造物はrepeatさせない。"
+    },
+    "layers": [
+      {
+        "id": "bg.sky",
+        "content": "塔外の夜空、遠い月光、低密度の雲",
+        "alpha": false,
+        "movement": "固定または極低速parallax",
+        "minimumSourcePx": "960x1280",
+        "runtimeFormat": ["AVIF", "WebP"],
+        "budgetKiB": 180
+      },
+      {
+        "id": "bg.far",
+        "content": "無制限塔の遠景、上方向の反復感、遠い窓灯り",
+        "alpha": true,
+        "movement": "0.10以下のparallax",
+        "minimumSourcePx": "1152x1536",
+        "runtimeFormat": ["WebP with alpha", "PNG fallback only if required"],
+        "budgetKiB": 260
+      },
+      {
+        "id": "bg.mid",
+        "content": "石造回廊、木梁、真鍮設備、奥へ続く階段またはdoorway",
+        "alpha": true,
+        "movement": "0.28以下のparallax",
+        "minimumSourcePx": "1152x1536",
+        "runtimeFormat": ["WebP with alpha"],
+        "budgetKiB": 360
+      },
+      {
+        "id": "bg.ground",
+        "content": "接地可能な石床、足元shadowを受ける面、左右移動余白",
+        "alpha": true,
+        "movement": "camera followにのみ追従",
+        "minimumSourcePx": "1536x512",
+        "runtimeFormat": ["WebP with alpha"],
+        "budgetKiB": 260,
+        "groundLineNormalizedY": 0.82
+      },
+      {
+        "id": "bg.foreground",
+        "content": "画面端の梁、鎖、前景石、猫や敵を隠し過ぎない欄干",
+        "alpha": true,
+        "movement": "0.80以下のparallax",
+        "minimumSourcePx": "1152x1536",
+        "runtimeFormat": ["WebP with alpha"],
+        "budgetKiB": 220,
+        "occlusionLimit": "戦場有効面の左右各8%、下端12%以内"
+      },
+      {
+        "id": "bg.light",
+        "content": "味方側のamber pool、敵側のviolet rim、窓からのcool shaft",
+        "alpha": true,
+        "blendMode": "screen or normal; engine差を比較する",
+        "minimumSourcePx": "960x1280",
+        "runtimeFormat": ["WebP with alpha", "procedural gradient"],
+        "budgetKiB": 120
+      },
+      {
+        "id": "bg.fog",
+        "content": "低い床霧と遠景の深度霧",
+        "alpha": true,
+        "movement": "slow loop; reduced motionで静止",
+        "minimumSourcePx": "1024x384",
+        "runtimeFormat": ["WebP with alpha", "sprite strip"],
+        "budgetKiB": 100
+      },
+      {
+        "id": "bg.particles",
+        "content": "埃、火の粉、微かな魔力粒子",
+        "alpha": true,
+        "movement": "low density; reduced motionで非表示",
+        "runtimeFormat": ["particle atlas", "procedural"],
+        "budgetKiB": 64,
+        "densityLimit": "同時可視24粒子、戦闘impact中は12まで"
+      }
+    ]
+  },
+  "characters": {
+    "sharedModelSheet": {
+      "views": ["front", "front-three-quarter", "side", "back-three-quarter", "back"],
+      "expressions": ["neutral", "focused", "hurt", "relieved", "reward-delight"],
+      "equipmentViews": ["front", "side", "back", "detached prop"],
+      "bodyProportion": "頭身、耳高、胴長、手足長、tail長をcharacterごとに数値固定",
+      "palette": "base、shadow、highlight、outline、metal、clothをhexまたはlinear colorで固定",
+      "lineWeight": "reference height 768pxで外形4から6px、内線2から4px。runtime縮小時は輪郭が潰れない別mipを確認",
+      "consistencyReject": [
+        "frameごとに目色、耳形、縞、尻尾、指、装備数が変わる",
+        "frontとsideで頭身または装備位置が変わる",
+        "武器が手から浮く、左右が無理由で反転する",
+        "AI生成のcheckerboardを透明背景として納品する"
+      ]
+    },
+    "party": [
+      {
+        "canonicalId": "character.launch.001",
+        "displayName": "ムギ",
+        "role": "frontline-control",
+        "silhouette": "丸いshieldと短剣、低い重心、burgundy scarf",
+        "visualDifferentiator": "cream-ginger fur、丸盾、前傾姿勢",
+        "footAnchor": {"x": 0.50, "y": 0.93},
+        "collisionBounds": {"x": 0.34, "y": 0.38, "width": 0.32, "height": 0.52},
+        "visibleBounds": {"x": 0.12, "y": 0.05, "width": 0.76, "height": 0.90},
+        "attackOrigin": {"x": 0.72, "y": 0.54},
+        "equipment": ["round shield", "short sword", "burgundy scarf"]
+      },
+      {
+        "canonicalId": "character.launch.002",
+        "displayName": "ルナ",
+        "role": "ranged-anti-air",
+        "silhouette": "高いear hood、bow arc、背面quiver",
+        "visualDifferentiator": "russet fur、green hood、long bow",
+        "footAnchor": {"x": 0.49, "y": 0.94},
+        "collisionBounds": {"x": 0.37, "y": 0.39, "width": 0.28, "height": 0.51},
+        "visibleBounds": {"x": 0.09, "y": 0.04, "width": 0.82, "height": 0.91},
+        "projectileOrigin": {"x": 0.77, "y": 0.47},
+        "equipment": ["long bow", "quiver", "green hood"]
+      },
+      {
+        "canonicalId": "character.launch.003",
+        "displayName": "トト",
+        "role": "healing-support",
+        "silhouette": "bell staff、satchel、rounded teal coat",
+        "visualDifferentiator": "silver-white fur、teal coat、bell staff",
+        "footAnchor": {"x": 0.50, "y": 0.94},
+        "collisionBounds": {"x": 0.36, "y": 0.40, "width": 0.29, "height": 0.50},
+        "visibleBounds": {"x": 0.15, "y": 0.05, "width": 0.72, "height": 0.90},
+        "effectOrigin": {"x": 0.58, "y": 0.36},
+        "equipment": ["bell staff", "medicine satchel", "teal coat"]
+      },
+      {
+        "canonicalId": "character.launch.004",
+        "displayName": "コハク",
+        "role": "runner-backline-disruption",
+        "silhouette": "long hood tail、lantern staff、slim diagonal pose",
+        "visualDifferentiator": "charcoal fur、plum hood、lantern glow",
+        "footAnchor": {"x": 0.50, "y": 0.94},
+        "collisionBounds": {"x": 0.38, "y": 0.40, "width": 0.26, "height": 0.50},
+        "visibleBounds": {"x": 0.13, "y": 0.04, "width": 0.75, "height": 0.91},
+        "attackOrigin": {"x": 0.72, "y": 0.43},
+        "equipment": ["lantern staff", "plum hood", "utility belt"]
+      }
+    ],
+    "runtimeAtlasPerCharacter": {
+      "logicalFrameBoxPx": "384x384 at 1x source scale",
+      "trimTransparentPixels": true,
+      "trimManifestRequired": true,
+      "premultipliedAlphaTest": true,
+      "runtimeFormat": ["WebP lossless alpha", "PNG fallback after measured comparison"],
+      "maximumAtlasDimensionPx": "2048x2048 per density tier",
+      "budgetKiBPerCharacter": 320,
+      "minimumRenderedVisibleHeightCssPx": 54,
+      "preferredRenderedVisibleHeightCssPx": "78 to 112 at 390x844"
+    },
+    "cardPortrait": {
+      "source": "同じapproved model sheetから専用cropを制作し、battle frameの単純切抜きを使わない",
+      "minimumSourcePx": "256x256",
+      "safeFaceZone": {"x": 0.20, "y": 0.08, "width": 0.60, "height": 0.58},
+      "runtimeFormat": ["WebP with alpha"]
+    }
+  },
+  "enemies": {
+    "normalEnemyContract": {
+      "canonicalIds": ["enemy.normal.001", "enemy.normal.002", "enemy.normal.003", "enemy.normal.004", "enemy.normal.005", "enemy.normal.006"],
+      "modelSheetViews": ["front-three-quarter", "side", "back-three-quarter", "silhouette"],
+      "expressionsOrStates": ["idle threat", "attack intent", "hit", "defeat"],
+      "normalScaleToCat": "1.2 to 1.5",
+      "minimumRenderedVisibleHeightCssPx": 68,
+      "bossScaleForbiddenInS02": ">2.5はS08責務",
+      "footAnchor": {"x": 0.50, "y": 0.94},
+      "collisionBounds": {"x": 0.28, "y": 0.33, "width": 0.44, "height": 0.59},
+      "visibleBounds": {"x": 0.08, "y": 0.04, "width": 0.84, "height": 0.91},
+      "hitTarget": {"x": 0.48, "y": 0.42},
+      "attackOrigin": {"x": 0.28, "y": 0.48},
+      "readability": "味方と重ならないviolet rim、非人間的silhouette、通常敵として一目で分かる威圧感"
+    },
+    "atlas": {
+      "logicalFrameBoxPx": "448x448 at 1x source scale",
+      "maximumAtlasDimensionPx": "2048x2048 per enemy",
+      "runtimeFormat": ["WebP lossless alpha", "PNG fallback after measured comparison"],
+      "budgetKiBPerNormalEnemy": 280,
+      "preload": "current encounter plus next encounter only"
+    },
+    "threatStateAssets": [
+      "ground telegraph shape",
+      "attack direction wedge",
+      "impact target mark",
+      "threat rim mask"
+    ]
+  },
+  "ui": {
+    "textAsImage": false,
+    "numberAsImage": false,
+    "assetFamilies": [
+      {
+        "id": "ui.panel.wood",
+        "type": "9-slice",
+        "sourcePx": "192x192",
+        "capInsetsPx": {"top": 40, "right": 40, "bottom": 40, "left": 40},
+        "minimumRenderedCssPx": "72x44",
+        "states": ["normal", "selected", "disabled", "error"]
+      },
+      {
+        "id": "ui.panel.parchment",
+        "type": "9-slice",
+        "sourcePx": "192x192",
+        "capInsetsPx": {"top": 36, "right": 36, "bottom": 36, "left": 36},
+        "minimumRenderedCssPx": "96x64",
+        "states": ["normal", "loading", "error"]
+      },
+      {
+        "id": "ui.button.primary",
+        "type": "9-slice plus vector state overlay",
+        "sourcePx": "192x96",
+        "capInsetsPx": {"top": 28, "right": 36, "bottom": 28, "left": 36},
+        "minimumRenderedCssPx": "88x44",
+        "states": ["normal", "pressed", "disabled", "loading", "error"]
+      },
+      {
+        "id": "ui.card.character",
+        "type": "9-slice frame plus portrait mask",
+        "sourcePx": "160x192",
+        "capInsetsPx": {"top": 28, "right": 28, "bottom": 36, "left": 28},
+        "minimumRenderedCssPx": "64x68",
+        "states": ["field", "owned", "available", "locked", "selected", "disabled", "loading", "error"]
+      },
+      {
+        "id": "ui.bar",
+        "type": "vector track and mask",
+        "sourcePx": "256x32",
+        "capInsetsPx": {"top": 12, "right": 16, "bottom": 12, "left": 16},
+        "families": ["ally HP", "enemy HP", "objective progress", "cooldown"]
+      },
+      {
+        "id": "ui.nav.bottom",
+        "type": "9-slice rail plus SVG destination icons",
+        "sourcePx": "320x96",
+        "capInsetsPx": {"top": 24, "right": 24, "bottom": 32, "left": 24},
+        "safeAreaExtension": "background extends through bottom inset; targets remain above inset"
+      },
+      {
+        "id": "ui.modal",
+        "type": "9-slice frame with separately scrolling content",
+        "sourcePx": "256x256",
+        "capInsetsPx": {"top": 48, "right": 48, "bottom": 56, "left": 48},
+        "minimumRenderedCssPx": "288x240"
+      }
+    ],
+    "icons": {
+      "format": "original SVG symbols",
+      "required": [
+        "floor",
+        "auto",
+        "coin",
+        "ruby provenance-specific only if displayed",
+        "enemy threat",
+        "party",
+        "shop support",
+        "delivery",
+        "reward",
+        "lock",
+        "loading",
+        "error",
+        "close",
+        "battle nav",
+        "tower nav",
+        "party nav",
+        "shop nav",
+        "menu nav"
+      ],
+      "forbidden": ["emoji", "Unicode symbol", "font icon", "traced competitor icon"],
+      "budgetKiBTotal": 96
+    },
+    "budgetKiBTotalExcludingFont": 360
+  },
+  "effects": {
+    "layers": [
+      {
+        "id": "fx.attack",
+        "content": "weapon arc、bow release、staff pulse",
+        "format": ["sprite atlas", "vector or shader where consistent"],
+        "anchor": "character attackOrigin",
+        "budgetKiB": 96
+      },
+      {
+        "id": "fx.projectile",
+        "content": "arrow、magic mote、support pulse",
+        "format": ["sprite", "vector path"],
+        "anchor": "projectileOrigin to enemy hitTarget",
+        "budgetKiB": 64
+      },
+      {
+        "id": "fx.hit",
+        "content": "contact flash、dust、short radial lines",
+        "format": ["sprite atlas"],
+        "anchor": "enemy hitTarget",
+        "budgetKiB": 72
+      },
+      {
+        "id": "fx.critical",
+        "content": "larger impact shape and exact text-layer critical label",
+        "format": ["sprite atlas plus DOM or engine text"],
+        "anchor": "enemy hitTarget",
+        "budgetKiB": 48
+      },
+      {
+        "id": "fx.heal",
+        "content": "small upward ring and health tick; only if actual heal event exists",
+        "format": ["sprite atlas"],
+        "anchor": "target chestAnchor",
+        "budgetKiB": 48
+      },
+      {
+        "id": "fx.damageNumber",
+        "content": "exact runtime text plus subtle shadow; no baked numerals",
+        "format": ["text layer"],
+        "anchor": "hitTarget with deterministic offset",
+        "budgetKiB": 0
+      },
+      {
+        "id": "fx.defeat",
+        "content": "dust collapse、violet residue、silhouette fade",
+        "format": ["sprite atlas plus character animation"],
+        "anchor": "enemy footAnchor",
+        "budgetKiB": 96
+      },
+      {
+        "id": "fx.coinReward",
+        "content": "source coin sparks to reward feedback destination; amount is text layer",
+        "format": ["sprite atlas or particle"],
+        "anchor": "enemy footAnchor to resource chip or feedback panel",
+        "budgetKiB": 80
+      },
+      {
+        "id": "fx.floorTransition",
+        "content": "upward light sweep、door or stair cue、floor text crossfade",
+        "format": ["shader or sprite overlay plus text layer"],
+        "anchor": "battlefield center",
+        "budgetKiB": 72
+      }
+    ],
+    "simultaneousBudget": {
+      "fullEffects": 3,
+      "minorEffects": 8,
+      "damageNumbers": 4,
+      "rewardTrails": 1,
+      "rule": "超過時は古いminor effectを統合し、攻撃因果とcriticalを優先する。"
+    },
+    "budgetKiBTotal": 576
+  },
+  "audioHandoff": {
+    "includedInP1VisualAssetBudget": false,
+    "futureCues": ["footstep", "attack anticipation", "release", "impact", "hit", "defeat", "reward confirmed", "floor transition"],
+    "rule": "visual causalityをaudioだけに依存させない。"
+  },
+  "runtimeBudget": {
+    "initialCriticalCompressedKiB": 2860,
+    "breakdownKiB": {
+      "backgroundInitial": 1040,
+      "fourPartyCharacters": 1280,
+      "currentEnemy": 280,
+      "uiAndIcons": 180,
+      "initialEffects": 80
+    },
+    "deferredCompressedKiB": 1360,
+    "deferred": ["next enemy", "rare effects", "alternate environment", "reward celebration", "model-sheet-only source"],
+    "textureMaximumDimensionPx": 2048,
+    "reviewSourcesExcludedFromRuntime": true,
+    "performanceTargets": {
+      "noLayoutShiftAfterCriticalLoad": true,
+      "decodeTestRequired": true,
+      "transparentEdgeHaloTestRequired": true,
+      "memoryMeasurementRequiredOnPhysicalIPhoneInLaterPhase": true
+    }
+  },
+  "fileNaming": {
+    "pattern": "s02-<family>-<entity-or-layer>-<state>-<density>.<ext>",
+    "examples": [
+      "s02-bg-mid-tower-corridor-1x.webp",
+      "s02-cat-character-launch-001-attack-1x.webp",
+      "s02-enemy-normal-001-hit-1x.webp",
+      "s02-ui-panel-wood-9slice.svg",
+      "s02-fx-impact-normal-1x.webp"
+    ],
+    "forbidden": ["parentheses", "spaces", "final-final", "temporary", "emoji"]
+  },
+  "sourceAndExport": {
+    "modelSheetSource": "layered lossless source with generation reference, prompt/version provenance and manual correction log",
+    "runtimeExport": "trimmed atlas plus machine-readable manifest containing frame bounds, source size, anchor, collision and visible bounds",
+    "colorSpace": "sRGB for browser delivery; conversion recorded",
+    "alpha": "straight versus premultiplied handlingをengineごとに固定し、fringeを検査",
+    "textSeparation": "全てruntime text layer。Golden Master screenshotだけがflattened evidenceを持てる。"
+  },
+  "p2ProductionGates": [
+    "四体それぞれのmodel sheetをfront、side、backまで承認する",
+    "同一catの全animation frameで模様、装備、頭身の差分をpixel reviewする",
+    "background hidden extentを320x568と430x932のcropで確認する",
+    "全9-sliceをminimumとmaximum幅でstretch testする",
+    "生成assetの実alpha channelを検査し、checkerboard焼込みをrejectする",
+    "全assetをruntimeでdecodeし、拡張子だけの偽formatをrejectする",
+    "criticalとdeferred budgetをnetwork traceで測る",
+    "Golden Master screenshotをruntime asset packageへ混入させない"
+  ],
+  "verdictBoundary": {
+    "assetsProducedByThisContract": false,
+    "runtimeReplacementAuthorized": false,
+    "productionReadyClaimAllowed": false,
+    "physicalIPhoneVerified": false
+  }
+}

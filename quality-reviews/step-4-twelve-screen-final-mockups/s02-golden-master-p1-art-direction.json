@@ -1,0 +1,568 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-art-direction",
+  "researchedAt": "2026-09-02T00:00:00+09:00",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "screen": "S02 normal battle",
+  "status": "IN_PROGRESS",
+  "directionName": "塔内工房の四猫行軍",
+  "oneSentenceDirection": "温かい木と真鍮で組まれた無制限塔の工房回廊を、役割の異なる四体のpixel-art chibi猫が自動戦闘で前進し、敵側の冷たい光を押し戻していく、明るさと危険が両立した商用モバイルRPG画面。",
+  "visualBaseline": {
+    "bindingLanguage": [
+      "portraitの単独モバイル画面",
+      "pixel-art chibiの猫と敵",
+      "温かい暗褐色、木、真鍮、鉄、石、布",
+      "topのplayer/resource chrome",
+      "contextual encounter header",
+      "中央の最大戦場",
+      "常設四枠party dock",
+      "五destinationのbottom navigation",
+      "高密度でも戦闘を最初に読む情報階層"
+    ],
+    "interpretation": "参考画像の構造、質感、密度、世界観を設計入力にするが、画像、exact配置、固有icon、固有キャラクター、固有文言を複製しない。S02の通常戦闘、四体、無制限塔、auto battle、店舗・配送支援へ再構成する。",
+    "forbiddenBaseline": "dark painterly high-fantasy、人型英雄中心、巨大な一枚絵、generic gothic RPG、低品質仮panel、既存runtimeのflat gradientを本番規格として継承しない。"
+  },
+  "world": {
+    "place": "無制限塔の内部に増築された行商隊の工房回廊。石造塔の骨格へ、猫の商会が木床、真鍮レール、昇降機、配送棚を手作りで取り付けている。",
+    "storyInOneFrame": "味方側の暖かい工房灯から四体が出発し、中央の接敵点を越え、敵側の青紫の暗がりを押し戻す。遠景の昇降路と上方の小さな開口が、最上階のない継続を示す。",
+    "mood": [
+      "猫を見守りたくなる親しみ",
+      "戦況を読める十分な緊張",
+      "木と金属を使い続けた手作り感",
+      "毎回少し遠くへ進める期待",
+      "課金画面ではなく冒険画面としての高級感"
+    ],
+    "notThis": [
+      "静かな店舗経営画面",
+      "genericな森林または草原だけの戦場",
+      "巨大城塞が猫を隠す画面",
+      "暗く写実的な人型catfolk",
+      "児童向けに単純化したflat UI",
+      "広告とnotificationを主役にした放置ゲームdashboard"
+    ]
+  },
+  "renderLanguage": {
+    "style": "PREMIUM_PIXEL_ART_CHIBI",
+    "characterRule": "頭身はchibiだが、顔、耳、尻尾、装備、前後姿勢が54 CSS pxでも区別できるpixel clusterを使う。輪郭は一色の太い線で囲まず、影側を濃色、光側を素材色で切る。",
+    "environmentRule": "背景も同じpixel-art言語で描き、疑似pixel filterを高解像度paintへ後掛けしない。遠景ほどclusterを大きく、彩度とcontrastを下げる。",
+    "mastering": {
+      "logicalGrid": "production assetごとに一貫したlogical pixel gridを決め、同一animation内で変更しない",
+      "exportDensity": "logical masterから2xまたは4xの整数倍でexportし、sourceとruntimeでaspect ratioを維持する",
+      "scaling": "breakpointごとに整数由来の表示寸法を優先し、非均一scale、ぼけた再sample、画面全体の一律縮小を禁止する",
+      "noiseRule": "単独pixelのnoise、AI由来の溶け、材質を説明しないditherを削除する",
+      "textRule": "日本語、数字、HP、floor、currency、button labelは生成画像へ焼き込まず、正確なtext layerで合成する"
+    },
+    "densityTarget": "背景は奥行きを作るだけの中密度、characterは最も高い輪郭密度、UI frameは中密度、文字周辺は低密度の休息域にする。全領域を同じ密度にしない。"
+  },
+  "palette": {
+    "principle": "通常UIは暗褐色、素材の縁は真鍮、味方環境光は琥珀、敵環境光は低彩度青紫。金、赤、緑、青、紫にはsemantic roleを与え、装飾だけで混用しない。",
+    "tokens": [
+      {
+        "token": "ink.deep",
+        "hex": "#17130F",
+        "role": "最深部、文字の影、panel背面"
+      },
+      {
+        "token": "wood.shadow",
+        "hex": "#3A251B",
+        "role": "木枠の影、通常panel外周"
+      },
+      {
+        "token": "wood.base",
+        "hex": "#6A4028",
+        "role": "主要木材"
+      },
+      {
+        "token": "wood.light",
+        "hex": "#A86C3C",
+        "role": "木目の光面"
+      },
+      {
+        "token": "brass.shadow",
+        "hex": "#725021",
+        "role": "真鍮の影、非選択のmetal edge"
+      },
+      {
+        "token": "brass.base",
+        "hex": "#C7923E",
+        "role": "frame、mechanism、現在状態"
+      },
+      {
+        "token": "brass.highlight",
+        "hex": "#F1D184",
+        "role": "primary、selected、rewardの限定highlight"
+      },
+      {
+        "token": "iron.shadow",
+        "hex": "#292D32",
+        "role": "構造金属の影"
+      },
+      {
+        "token": "iron.base",
+        "hex": "#59636B",
+        "role": "rail、hinge、disabled component"
+      },
+      {
+        "token": "stone.shadow",
+        "hex": "#3B3936",
+        "role": "塔の石壁の影"
+      },
+      {
+        "token": "stone.base",
+        "hex": "#68645C",
+        "role": "塔の石材"
+      },
+      {
+        "token": "cloth.burgundy",
+        "hex": "#7B3037",
+        "role": "見出しbanner、ムギの識別cloth"
+      },
+      {
+        "token": "cloth.burgundyLight",
+        "hex": "#B45358",
+        "role": "布の光面、危険でないwarm accent"
+      },
+      {
+        "token": "ally.amber",
+        "hex": "#E7B95C",
+        "role": "味方側の環境光、通常攻撃のwarm rim"
+      },
+      {
+        "token": "info.blue",
+        "hex": "#4D89B5",
+        "role": "情報、味方状態、AUTO"
+      },
+      {
+        "token": "enemy.violet",
+        "hex": "#69528D",
+        "role": "敵側環境光、魔法脅威"
+      },
+      {
+        "token": "growth.purple",
+        "hex": "#8C5FB3",
+        "role": "成長、magic。敵色と形で区別"
+      },
+      {
+        "token": "state.healthy",
+        "hex": "#5F9B68",
+        "role": "healthy、受領可能。文字・形を併用"
+      },
+      {
+        "token": "state.threat",
+        "hex": "#C44D4D",
+        "role": "危険、damage、error。常設装飾へ使わない"
+      },
+      {
+        "token": "text.primary",
+        "hex": "#FFF1D4",
+        "role": "主文字"
+      },
+      {
+        "token": "text.secondary",
+        "hex": "#D9C6A5",
+        "role": "補助文字"
+      }
+    ],
+    "semanticRules": [
+      "brass highlightはprimary、selected、current、rewardへ限定し、全panelを金色にしない。",
+      "redはthreat、damage、errorだけに使い、notification decorationへ乱用しない。",
+      "greenはhealthyまたはclaimableの実状態だけに使う。",
+      "blueはinformationと味方、purpleはgrowth / magicへ使い、labelとshapeも併用する。",
+      "猫の毛色はstate色で塗り替えず、outline、badge、barで状態を示す。"
+    ]
+  },
+  "materials": {
+    "wood": {
+      "role": "通常panel、party dock、bottom navigationの大面積base",
+      "surface": "太い木目を2〜3段階、端の擦れ、組み継ぎ。小panelへ細かい木目を増やさない。",
+      "edge": "木の暗縁の内側へ限定的なbrass cap",
+      "forbidden": ["plasticに見えるgradient", "すべて同じ木目tile", "意味のないgloss"]
+    },
+    "brass": {
+      "role": "hinge、corner、current marker、primary button edge",
+      "surface": "暖色のbase、狭いhighlight、暗いoxide shadowの三段階",
+      "quantity": "面ではなくedgeとmechanismに限定し、希少性を保つ",
+      "forbidden": ["screenごとに異なるgold", "黄色一色", "全iconの金色化"]
+    },
+    "iron": {
+      "role": "rail、敵側mechanism、disabled、lock",
+      "surface": "青みの暗影、低彩度base、点状のwear",
+      "forbidden": ["brassと同じhighlight", "chrome mirror", "generic gray system button"]
+    },
+    "cloth": {
+      "role": "encounter banner、party role accent、商会印",
+      "surface": "大きいfoldを少数、糸目を描き込み過ぎない",
+      "forbidden": ["文字を布assetへ焼き込む", "全panelを布にする"]
+    },
+    "stone": {
+      "role": "戦場と塔の構造背景",
+      "surface": "遠景ほど大きいblock、床は足anchorが読める水平面、敵側ほど冷色",
+      "forbidden": ["UI buttonに使う", "charactersと同contrast", "地面anchorのない霧だけの背景"]
+    }
+  },
+  "lighting": {
+    "key": "味方左上の工房灯からwarm amber。顔、耳、武器の上面へ1〜2 clusterのhighlight。",
+    "fill": "中央はneutralに近付け、接敵点のeffect色を正しく読める余白を作る。",
+    "enemyRim": "敵右側または背後からlow-saturation blue-violet rim。敵の脅威を示すが、全背景をpurpleにしない。",
+    "rewardLight": "撃破位置からresource方向へ短いgold light。reward eventがない通常時は消す。",
+    "shadow": "character foot anchor直下へ短いcontact shadow、背景objectは一方向のcast shadow。panelには素材由来の内影を使い、黒い半透明boxを重ねない。",
+    "contrastHierarchy": [
+      "character faceとattack contact",
+      "enemy silhouetteとHP",
+      "current floorとprimary action",
+      "party dock",
+      "support",
+      "background props"
+    ]
+  },
+  "characterDirection": {
+    "common": {
+      "species": "猫または猫人。一般的な人間主人公を置かない。",
+      "bodyProportion": "約2.2〜2.7頭身のchibi。頭を大きくするが、手足と装備のattack silhouetteを省略しない。",
+      "minimumVisibleHeightCssPx": 54,
+      "standardVisibleHeightCssPx": "68〜88",
+      "faceRule": "目、耳、口、ひげを最小サイズで判別できるclusterにまとめ、左右目や耳がanimationで入れ替わらない。",
+      "footAnchor": "両足接地点の中央をasset共通anchorにし、尻尾、武器、particleはvisible boundsへ含めるがground positionを変えない。",
+      "outlineRule": "背景側のvalueに応じてshadow outlineを調整し、黒一色の太線を全身へ回さない。",
+      "stateRule": "field、owned、available、lockedは猫の画像を別characterへ変えず、frame、label、opacity、lock shapeで示す。色だけに依存しない。"
+    },
+    "party": [
+      {
+        "stableId": "character.launch.001",
+        "displayName": "ムギ",
+        "role": "frontline-control",
+        "visualIdentity": "golden tabbyの低い重心、burgundy scarf、幅広の防御具、前へ向けた制圧武器",
+        "motionIdentity": "短い踏み込み、敵を止める横方向のbrace、味方を隠さない低いattack arc",
+        "mustRead": "戦場の接触点を作る前衛",
+        "mustNotRead": "戦わない商人、後衛caster、巨大tank"
+      },
+      {
+        "stableId": "character.launch.002",
+        "displayName": "ルナ",
+        "role": "ranged-anti-air",
+        "visualIdentity": "russet tabbyの毛、moss-green hood、上向きにも構えられるbowとquiver、長い耳と細い縦silhouette",
+        "motionIdentity": "視線を上へ追うanticipation、明快なrelease、対象まで追えるprojectile",
+        "mustRead": "射程を取る対空後衛",
+        "mustNotRead": "汎用mage、直接tap砲台、競合作品の武器"
+      },
+      {
+        "stableId": "character.launch.003",
+        "displayName": "トト",
+        "role": "healing-support",
+        "visualIdentity": "silver-whiteの毛、teal apothecary coat、field medic satchel、開いた手と小型brass bell",
+        "motionIdentity": "味方へ向く予備動作、足元から味方へ広がる短いheal arc、戦闘を止めないreaction",
+        "mustRead": "味方側の回復・支援",
+        "mustNotRead": "攻撃mage、敵caster、常設active skill buttonの所有者"
+      },
+      {
+        "stableId": "character.launch.004",
+        "displayName": "コハク",
+        "role": "runner-backline-disruption",
+        "visualIdentity": "charcoalの毛とamber/blueの左右非対称な瞳、短いplum scout mantle、軽量boots、rope spoolと二本の小型hook blade、長い尻尾",
+        "motionIdentity": "低い前傾、短いdash trail、敵の奥で止まるfoot anchor、戻り経路が読める",
+        "mustRead": "敵後方へ走る撹乱役",
+        "mustNotRead": "healer、重装前衛、恒常四枠とは別の一時増援"
+      }
+    ],
+    "canonicalConflict": {
+      "binding": "canonical/STABLE_ID_REGISTRY.json のムギ frontline-control を採用する。",
+      "legacy": "game-data.js の旧introにある『ムギは戦いません』は stale contradiction としてP2以降の明示修正対象にし、S02-P1のartへ反映しない。"
+    }
+  },
+  "enemyDirection": {
+    "normalScaleRelativeToCat": "1.2〜1.5",
+    "eliteScaleRelativeToCat": "1.5〜1.9",
+    "bossBoundary": "2.5倍超、全幅HP、phase演出は原則S08",
+    "silhouette": "猫と混同しない低い頭部、高い肩、敵側へ傾いた装備、青紫rim。normal enemyでもattack limbとhit reactionが読める。",
+    "originality": "塔の煤、鉄片、壊れた昇降機部品を身に付けたoriginal tower creatureとし、競合のslime、mushroom、fortress、hero、bossを参照形状としてコピーしない。",
+    "threatStates": [
+      "idle",
+      "movement",
+      "attack anticipation",
+      "attack active",
+      "hit",
+      "low HP",
+      "defeat"
+    ],
+    "overlapRule": "味方前衛とのcontact point、後衛projectileのflight path、damage number anchorを確保し、party dockやenemy HPへ重ならない。"
+  },
+  "battleComposition": {
+    "dominance": "390×844の標準では、context headerを含む戦場へ画面高のおおむね45〜52%を割り当てる。",
+    "horizontalFlow": "味方のwarm baseから敵のcool baseへ進み、接敵点を中心よりわずか敵側へ置く。",
+    "depthLayers": [
+      "backline: ルナ、トト",
+      "frontline: ムギ",
+      "disruption lane: コハク",
+      "enemy lane: current normal enemy"
+    ],
+    "camera": "portrait画面の軽いside view。床面を見せてfoot anchorと距離を読み、俯瞰にし過ぎない。",
+    "safeZones": [
+      "上端: current floor、objective、enemy HP",
+      "中央: attack path、contact、damage",
+      "下端: foot anchorsと移動",
+      "戦場外下: party dock、primary action"
+    ],
+    "forbidden": [
+      "四体を同じ横一列へ極小表示",
+      "全員のbodyをUIで隠す",
+      "enemyを中央へ置いて猫を端へ追いやる",
+      "boss scaleを通常画面へ使う",
+      "support店舗を戦場内の最大objectにする"
+    ]
+  },
+  "backgroundLayers": [
+    {
+      "order": 0,
+      "name": "sky / shaft void",
+      "role": "上方へ続く空気と深さ",
+      "motion": "静止または極低速parallax"
+    },
+    {
+      "order": 1,
+      "name": "far tower",
+      "role": "遠い梁、昇降路、上方開口で無制限塔を示す",
+      "motion": "低速parallax"
+    },
+    {
+      "order": 2,
+      "name": "mid workshop",
+      "role": "石壁、木梁、真鍮rail、配送棚。戦闘を支援する世界の証拠",
+      "motion": "中低速parallax"
+    },
+    {
+      "order": 3,
+      "name": "ground lane",
+      "role": "foot anchor、接敵点、前進方向を読む床",
+      "motion": "floor transition時だけ明確に移動"
+    },
+    {
+      "order": 4,
+      "name": "foreground",
+      "role": "画面端の短い梁、chain、railで奥行きを作る",
+      "motion": "backgroundより速いparallax。characterを覆う面積を制限"
+    },
+    {
+      "order": 5,
+      "name": "light / mist",
+      "role": "味方と敵の色温度分離、距離表現",
+      "motion": "低速。重要eventと混同しない"
+    },
+    {
+      "order": 6,
+      "name": "ambient particles",
+      "role": "煤、木粉、工房の火の粉を少数",
+      "motion": "reduced motionで停止または削除"
+    }
+  ],
+  "uiIntegration": {
+    "principle": "UIは戦場へ貼り付けたsystem overlayではなく、塔内工房の木枠、真鍮留め、布bannerとして同じ世界へ属する。ただし正確なtext、progress、stateは独立DOMまたはruntime layerにする。",
+    "frameRule": "panel、button、cardは9-slice可能なcorner / edge / fillへ分解する。画面ごとの完成panel画像を作らない。",
+    "shapeRule": "通常panel、threat、reward、lockedに異なるsemantic silhouetteを与えるが、corner半径、brass幅、shadow方向はtokenへ統一する。",
+    "iconRule": "original vectorまたはpixel icon assetを同一24-unit gridで制作する。emoji、Unicode記号、OS依存glyphを使わない。",
+    "textRestArea": "文字の背後は木目、石目、particleのcontrastを落とし、黒半透明boxの大量重ねで解決しない。",
+    "cardToBattleRule": "party cardの毛色、衣装色、装備silhouetteを戦場spriteと一致させ、別characterに見せない。",
+    "supportRule": "商会・配送は同じ木・真鍮の小componentにするが、brass highlight、サイズ、animationをprimary actionより弱くする。"
+  },
+  "effects": {
+    "densityPrinciple": "通常時はambientを少なく保ち、attack contactへ局所的に密度を集め、0.2〜0.8秒で戦場の休息状態へ戻す。",
+    "normalBudget": {
+      "simultaneousHighContrastEffects": 2,
+      "damageNumbersPerTarget": "短い時間窓で集約し、重なりを回避",
+      "ambientParticleShare": "character silhouetteを横切らない少量",
+      "screenFlash": "使用しない。局所flashへ限定"
+    },
+    "effectLanguage": [
+      {
+        "event": "normal attack",
+        "shape": "短い方向線とcontact spark",
+        "color": "ally amberまたはweapon固有の低彩度色"
+      },
+      {
+        "event": "critical",
+        "shape": "通常より太い二重contact shapeと短いlabel",
+        "color": "brass highlightとstate threatを限定併用"
+      },
+      {
+        "event": "heal",
+        "shape": "味方方向へ開くarcとHPbarの回復区間",
+        "color": "state healthy。coinと異なる形"
+      },
+      {
+        "event": "hit stop",
+        "shape": "局所のpose holdとcontact outline",
+        "color": "追加色ではなくvalue差"
+      },
+      {
+        "event": "defeat",
+        "shape": "enemy silhouetteの崩れ、煤の上方抜け、shadowの消失",
+        "color": "enemy violetから低彩度へ"
+      },
+      {
+        "event": "coin reward",
+        "shape": "撃破anchorからresource chipへ向かう小さなcoin trail",
+        "color": "brass highlight。実reward時だけ"
+      },
+      {
+        "event": "floor transition",
+        "shape": "床、遠景、floor markerの上方向同期",
+        "color": "環境色。reward flashを重ね過ぎない"
+      }
+    ],
+    "reducedMotion": "trail、parallax、flashを減らし、pose、bar変化、label、shape、final stateを残す。"
+  },
+  "responsiveArt": {
+    "fixed": [
+      "characterとenemyのaspect ratio",
+      "character identityと装備",
+      "味方warm / 敵coolの方向",
+      "contact pointとattack path",
+      "material palette",
+      "textの独立layer"
+    ],
+    "compact": {
+      "viewports": ["320x568", "320x667", "375x667"],
+      "composition": "横距離を詰めるだけでなく、backlineを一段上、frontlineを一段下へずらす。foreground props、ambient particle、遠景小物を先に減らす。",
+      "minimums": {
+        "characterVisibleHeightCssPx": 54,
+        "enemyVisibleHeightCssPx": 68,
+        "battlefieldHeightCssPx": 300
+      }
+    },
+    "standard": {
+      "viewports": ["360x800", "390x844"],
+      "composition": "四体の二層とenemyの横距離を十分に取り、attack pathの中間を空ける。"
+    },
+    "tall": {
+      "viewports": ["412x915", "430x932"],
+      "composition": "UIを大きくせず、遠景の昇降路、床の移動距離、上方の光と空気を広げる。",
+      "minimumBattlefieldHeightCssPx": 404
+    },
+    "croppingRule": "背景はsafe crop領域を持ち、隠れる左右・上下の背景も制作する。character、enemy、UIを背景assetへ含めない。"
+  },
+  "productionAssetRules": {
+    "background": "sky、far、mid、ground、foreground、light、mist、particleを独立layerで納品する。隠れた背景範囲を含める。",
+    "character": "各四体にfront、side、back、equipment、face、body proportion、foot anchor、collision bounds、visible boundsを固定するmodel sheetを作る。",
+    "animation": "idle、walk、attack anticipation、attack、projectileまたはcontact、hit、defeat、reward reactionを同一model sheet基準で制作する。",
+    "enemy": "normal enemyのidle、movement、attack、hit、defeat、threatを同一体形で作る。",
+    "ui": "9-slice panel、button、card、frame、icon、bar、nav、modal、notification、lockを再利用componentへ分解する。",
+    "effects": "attack、critical、heal、hit stop、damage number、defeat、coin reward、floor transitionをevent anchorへ接続する。",
+    "formatPrinciple": "alphaが必要なartはtransparent asset、背景はlayerごとのlossless masterとdelivery向け圧縮形式を分ける。asset容量とdecodeはP2で実測し、P1画像をflattened runtimeへ使用しない。"
+  },
+  "referenceImageAudit": {
+    "independentEvidence": "01〜10は一つのconcept系列。11〜16はそれらを表示したchat screenshotであり独立証拠として数えない。",
+    "adopt": [
+      "warm wood、brass、iron、stone、burgundy cloth",
+      "中央戦闘を最大にする構造",
+      "cat cardとbattle characterの世界統合",
+      "damageとrewardの近い因果",
+      "高密度でも重要情報を埋めない装飾の奥行き"
+    ],
+    "reject": [
+      "参考09の約四分の一程度しかないbattle領域",
+      "参考09の戦闘中の出撃label",
+      "参考09の右側mission / present / daily rail",
+      "参考02のboss scaleとskill rowをS02へ転用",
+      "画像へ焼き込まれた文字、数字、HP、floor、currency",
+      "AI concept間で変形する猫、武器、顔",
+      "一枚絵、単純切り抜き、透明button overlay"
+    ],
+    "directAssetUseAllowed": false
+  },
+  "rejectCriteria": [
+    {
+      "id": "ART-REJECT-001",
+      "severity": "P0",
+      "condition": "猫、敵、floor、objectiveより商会、店舗、event、課金が強い"
+    },
+    {
+      "id": "ART-REJECT-002",
+      "severity": "P0",
+      "condition": "生成画像へ日本語、数字、HP、button、currencyが焼き込まれている"
+    },
+    {
+      "id": "ART-REJECT-003",
+      "severity": "P0",
+      "condition": "未所有、加入可能、未解放の猫が戦場参加中に見える"
+    },
+    {
+      "id": "ART-REJECT-004",
+      "severity": "P1",
+      "condition": "pixel-art chibiのbinding baselineがdark painterly、semi-realistic、generic high-fantasyへ置換される"
+    },
+    {
+      "id": "ART-REJECT-005",
+      "severity": "P1",
+      "condition": "ムギを戦わない商人として描き、canonical frontline-controlと矛盾する"
+    },
+    {
+      "id": "ART-REJECT-006",
+      "severity": "P1",
+      "condition": "トトが攻撃mage、コハクがhealerなど、canonical roleとsilhouetteが逆転する"
+    },
+    {
+      "id": "ART-REJECT-007",
+      "severity": "P1",
+      "condition": "四体の顔、毛色、装備、頭身がmodel sheetまたはanimation frame間で変形する"
+    },
+    {
+      "id": "ART-REJECT-008",
+      "severity": "P1",
+      "condition": "猫が54 CSS px未満、敵が68 CSS px未満、または装備と輪郭で識別できない"
+    },
+    {
+      "id": "ART-REJECT-009",
+      "severity": "P1",
+      "condition": "通常敵がboss scaleになり、四体の猫を脇役にする"
+    },
+    {
+      "id": "ART-REJECT-010",
+      "severity": "P1",
+      "condition": "木、真鍮、鉄、布、石のrole、metal color、shadow direction、frame幅がcomponentごとに変わる"
+    },
+    {
+      "id": "ART-REJECT-011",
+      "severity": "P1",
+      "condition": "emoji、Unicode記号、仮icon、system button、意味のないgradientを本番componentとして使う"
+    },
+    {
+      "id": "ART-REJECT-012",
+      "severity": "P1",
+      "condition": "黒い半透明boxを大量に重ね、背景とUIの統合を代替する"
+    },
+    {
+      "id": "ART-REJECT-013",
+      "severity": "P1",
+      "condition": "9-sliceできない完成panel、隠れた範囲のない背景、単純crop前提のassetしかない"
+    },
+    {
+      "id": "ART-REJECT-014",
+      "severity": "P1",
+      "condition": "320幅を390×844の一律縮小で作り、猫、文字、hit areaを小さくする"
+    },
+    {
+      "id": "ART-REJECT-015",
+      "severity": "P1",
+      "condition": "attack、projectileまたはcontact、hit、damage、defeat、rewardのanchorが一致しない"
+    },
+    {
+      "id": "ART-REJECT-016",
+      "severity": "P1",
+      "condition": "競合作品または参考画像のcharacter、exact UI、icon、background、effect、固有名称、価格、確率、数式をコピーする"
+    }
+  ],
+  "reviewBoundary": {
+    "openFinding": "S4-RECOVERY-VIS-001",
+    "openFindingMayCloseInP1": false,
+    "userVisualApproval": false,
+    "maximumVerdictBeforeUserApproval": "READY_FOR_USER_VISUAL_REVIEW",
+    "mayNotDeclare": [
+      "S02 complete",
+      "Step 4 PASS",
+      "Step 5 allowed",
+      "production quality confirmed",
+      "Production Ready",
+      "physical iPhone verified"
+    ]
+  }
+}

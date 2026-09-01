@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "s02-golden-master-p1-review-asset-manifest-round-001",
+  "purpose": "DESIGN_REVIEW_ONLY_NOT_RUNTIME",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "assets": [
+    {
+      "path": "assets/tower-corridor.webp",
+      "role": "layered-composition background target for the Golden Master",
+      "dimensions": "941x1672",
+      "channels": "RGB",
+      "alpha": false,
+      "sha256": "7fe1fbfdba1539b067c72781b64b331e5de55474e312a62cb8b9ee0f0fed63eb",
+      "textBakedIn": false,
+      "runtimeUseAuthorized": false
+    },
+    {
+      "path": "assets/party-roster.webp",
+      "role": "four-character neutral key-pose sheet",
+      "dimensions": "1824x862",
+      "channels": "RGBA",
+      "alpha": true,
+      "sha256": "da90dd79a97306538c765f3f570a10e437ab8dd5b0c17c72f619c29eb48b4247",
+      "textBakedIn": false,
+      "characters": [
+        {"stableId": "character.launch.001", "displayName": "ムギ", "role": "frontline-control", "cell": 0},
+        {"stableId": "character.launch.002", "displayName": "ルナ", "role": "ranged-anti-air", "cell": 1},
+        {"stableId": "character.launch.003", "displayName": "トト", "role": "healing-support", "cell": 2},
+        {"stableId": "character.launch.004", "displayName": "コハク", "role": "runner-backline-disruption", "cell": 3}
+      ],
+      "artLanguage": "PREMIUM_PIXEL_ART_CHIBI",
+      "runtimeUseAuthorized": false
+    },
+    {
+      "path": "assets/party-actions.webp",
+      "role": "four-character basic-combat action key-pose sheet for GM06",
+      "dimensions": "1823x863",
+      "channels": "RGBA",
+      "alpha": true,
+      "sha256": "a8dd8ca25654da7725965a969cf48a4d10227889c3e8d66f1dadf8517d93bd84",
+      "textBakedIn": false,
+      "isActiveSkillRepresentation": false,
+      "canonicalRoleOrderMatchesRoster": true,
+      "artLanguage": "PREMIUM_PIXEL_ART_CHIBI",
+      "runtimeUseAuthorized": false
+    },
+    {
+      "path": "assets/clockwork-marten.webp",
+      "role": "original normal-floor enemy Golden Master key pose",
+      "dimensions": "1329x1183",
+      "channels": "RGBA",
+      "alpha": true,
+      "sha256": "11b34debc68231a9a2434e4643bc42ecc000c46f6db47970032d9d806bf92cfa",
+      "textBakedIn": false,
+      "bossRepresentation": false,
+      "artLanguage": "PREMIUM_PIXEL_ART_CHIBI",
+      "runtimeUseAuthorized": false
+    },
+    {
+      "path": "assets/prior-reference-s02.webp",
+      "role": "user-supplied prior concept shown only in the rejected-reference comparison",
+      "dimensions": "864x1536",
+      "channels": "RGB",
+      "alpha": false,
+      "sha256": "0b65a7d38446e7b432f56b7b4b5ad4b7761fcbf4ecb5b52312c1f8507e0fea2b",
+      "isGoldenMaster": false,
+      "runtimeUseAuthorized": false
+    }
+  ],
+  "hardBoundary": "These files are P1 design targets. P2 must create animation-consistent production assets; the final runtime may not paste a complete Golden Master screenshot or use the prior reference image."
+}
