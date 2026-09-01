@@ -250,9 +250,9 @@
   function renderHud() {
     return `
       <header class="game-hud">
-        <div class="profile-chip">
+        <div class="profile-chip" aria-label="塔商会、ランク18">
           <span class="profile-mark">CT</span>
-          <span><small>塔商会</small><strong>RANK 18</strong></span>
+          <span><small>塔商会</small><strong><span class="rank-full">RANK 18</span><span class="rank-compact" aria-hidden="true">R18</span></strong></span>
         </div>
         <div class="resource-row">
           <span class="resource-chip coin-resource">${icon('coin')}<span><small>所持金</small><strong>12,480</strong></span></span>
