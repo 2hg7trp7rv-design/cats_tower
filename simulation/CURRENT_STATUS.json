@@ -10,7 +10,8 @@
   "governanceRecovery": {
     "status": "REOPENED_PHASE0_CLOSURE_INTEGRITY",
     "supersededClosureAttempt": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
-    "plannedCorrectedClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json"
+    "step2Correction": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
+    "plannedCorrectedClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json"
   },
   "step1": {
     "status": "PASS_CANONICAL",
@@ -49,5 +50,5 @@
   "step5Allowed": false,
   "physicalIPhoneVerified": false,
   "productionAliasChanged": false,
-  "nextAction": "Do not mutate simulation or S02 content during Phase 0 closure-integrity recovery. Independently assess the newly reported screen-projection drift before changing any sealed Step 2 artifact."
+  "nextAction": "Complete round 031 repair verification, then open round 032 for the narrow Step 2 screen-projection correction. Keep S02 content read-only through round 033."
 }

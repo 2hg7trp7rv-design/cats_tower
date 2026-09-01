@@ -106,8 +106,9 @@
     "goldenMastersClaimedForAudit": 8,
     "deliverablesAccepted": 0,
     "goldenMastersAccepted": 0,
-    "currentState": "AUDIT_EXISTING_A_J_AND_GM01_GM08_BEFORE_NEW_PRODUCT_WRITE",
-    "nextAuthorizedAction": "Inventory and audit the preserved S02-P1 artifacts against A-J and GM01-GM08; reuse conforming material and repair only evidenced gaps.",
+    "currentState": "READ_ONLY_UNTIL_ROUND_033_CORRECTED_CLOSURE",
+    "nextAuthorizedAction": "Do not mutate S02-P1 product content before round 033 closes Phase 0 and returns authority to round 026.",
+    "nextProductActionAfterCorrectedClosure": "Inventory and audit the preserved S02-P1 artifacts against A-J and GM01-GM08; reuse conforming material and repair only evidenced gaps.",
     "step4Pass": false,
     "step5Allowed": false,
     "userVisualApproval": false

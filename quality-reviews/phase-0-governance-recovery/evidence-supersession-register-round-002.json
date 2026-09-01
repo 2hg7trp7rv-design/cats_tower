@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-phase0-evidence-supersession-register-round-002",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json",
+  "parentRegister": "quality-reviews/phase-0-governance-recovery/evidence-supersession-register.json",
+  "reason": "The complete round 030 attempted-closure evidence set, the late independent failure record and the governing write-boundary controls must be immutable. Corrected closure evidence must use new numbered paths and a critic-before-judge-before-closure commit sequence.",
+  "frozenAttemptedClosureHistory": [
+    {
+      "path": "quality-reviews/phase-0-governance-recovery/acceptance-matrix.json",
+      "blob": "66b243ce69e976913413a944e3fd1290072c304f",
+      "classification": "ORIGINAL_ACCEPTANCE_PRESERVED_WITH_NUMBERED_ADDENDUM"
+    },
+    {
+      "path": "quality-reviews/phase-0-governance-recovery/change-manifest.json",
+      "blob": "1bcd8add6fc463922bd4fbd652e83601f1f5aa7d",
+      "classification": "ATTEMPTED_CLOSURE_HISTORY"
+    },
+    {
+      "path": "quality-reviews/phase-0-governance-recovery/step2-source-compatibility.json",
+      "blob": "efeeea2a33e77bff8822b8c3aa4743f7448b1641",
+      "classification": "SUPERSEDED_BY_SCREEN_PROJECTION_FINDING"
+    },
+    {
+      "path": "quality-reviews/phase-0-governance-recovery/critic-summary.json",
+      "blob": "bc411bd18ab7ef12825f463ed4486f370ff9d85e",
+      "classification": "PREMATURE_INVALID_FOR_CORRECTED_CLOSURE"
+    },
+    {
+      "path": "quality-reviews/phase-0-governance-recovery/final-judge.json",
+      "blob": "7af39af4b1e40255a38421e0606766e086d1f29f",
+      "classification": "PREMATURE_INVALID_FOR_CORRECTED_CLOSURE"
+    },
+    {
+      "path": "quality-reviews/phase-0-governance-recovery/completion-evidence.json",
+      "blob": "d1bdb3eb93734d3cd758c50355793d857f915c56",
+      "classification": "OVERWRITTEN_ONCE_FREEZE_CURRENT_INVALID_FOR_CORRECTED_CLOSURE"
+    },
+    {
+      "path": "quality-reviews/phase-0-governance-recovery/live-readback.json",
+      "blob": "dd045fc9526bde19c561412da11a67761afd13b5",
+      "classification": "PREMATURE_INVALID_FOR_CORRECTED_CLOSURE"
+    },
+    {
+      "path": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
+      "blob": "20011a1007dd9795486b870293d2aeac89909fb1",
+      "classification": "SUPERSEDED_CLOSURE_ATTEMPT"
+    }
+  ],
+  "frozenCorrectionHistory": [
+    {
+      "path": "quality-reviews/phase-0-governance-recovery/acceptance-addendum-round-001.json",
+      "blob": "15001d7dcf998008be3f049dbdb34d9621142309"
+    },
+    {
+      "path": "quality-reviews/phase-0-governance-recovery/critic-summary-round-002.json",
+      "blob": "8acef973ee08cfdca45de8a4c790a626af002acc"
+    },
+    {
+      "path": "quality-reviews/phase-0-governance-recovery/evidence-supersession-register.json",
+      "blob": "4fa508cf4f6206b15022b09d54cac41617548c74"
+    }
+  ],
+  "frozenBoundaryControls": [
+    {
+      "path": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
+      "blob": "7f7337a9954f1a2c0229b681a53091fa2e349489",
+      "role": "POST_CLOSURE_S02_PRODUCT_BOUNDARY"
+    },
+    {
+      "path": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-027.json",
+      "blob": "b05545d5a768ec1e3001c10633a98209f672c646",
+      "role": "PHASE0_OPENING_HISTORY"
+    },
+    {
+      "path": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json",
+      "blob": "073e83818b88b5d8b808c65859540adaada10f19",
+      "role": "PHASE0_ROOT_BOUNDARY"
+    },
+    {
+      "path": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json",
+      "blob": "e42b0afa3494427d5dd34e6c8777a7aecbedf102",
+      "role": "PHASE0_VERIFIER_REPAIR_BOUNDARY"
+    },
+    {
+      "path": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json",
+      "blob": "fbbd5c4baecac4b1ef5e9b8e741338acd50f1c97",
+      "role": "PHASE0_CLOSURE_INTEGRITY_BOUNDARY"
+    }
+  ],
+  "requiredReplacementPaths": [
+    "quality-reviews/phase-0-governance-recovery/critic-summary-round-003.json",
+    "quality-reviews/phase-0-governance-recovery/final-judge-round-002.json",
+    "quality-reviews/phase-0-governance-recovery/completion-evidence-round-002.json",
+    "quality-reviews/phase-0-governance-recovery/live-readback-round-002.json",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json"
+  ],
+  "requiredCommitOrder": [
+    "corrected content and successful workflow evidence",
+    "independent critic",
+    "final judge plus completion and live readback",
+    "round 033 closure"
+  ],
+  "mayOverwriteFrozenHistory": false,
+  "maySelfModifyBoundaryControls": false
+}

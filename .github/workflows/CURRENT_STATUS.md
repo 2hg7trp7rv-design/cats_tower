@@ -35,7 +35,7 @@ Old Step 1-3 execute/repair/seal workflows and old Step 4 actual-root write/reco
 - run/job: `33539938108` / `99963403759`
 - artifact ID: `9813183649`
 - prior result: superseded by late independent critic
-- current Phase 0 P0/P1: `0 / 4`
+- current Phase 0 P0/P1 pending independent re-criticism of the repair: `0 / 4`
 
 Current governance now runs on every push to `kimi`; path filters may not permit forbidden product writes to bypass the boundary.
 
@@ -52,4 +52,4 @@ Current governance:
 
 ## Current product workflow
 
-The S02-P1 workflow and product files are preserved. Before another product write, audit A-J and GM01-GM08 against round 026 Acceptance. Prior runs, file counts or route existence do not establish visual acceptance.
+The S02-P1 workflow and product files are preserved. Only after round 033 returns authority to round 026 may A-J and GM01-GM08 be audited and repaired. Prior runs, file counts or route existence do not establish visual acceptance.

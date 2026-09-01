@@ -44,18 +44,19 @@ P2は旧Draft PR #8の外部metadataである。PR操作は明示的に禁止さ
 
 Status: **IN_PROGRESS**
 
-Round 030 is preserved as a superseded closure attempt. Independent criticism completed afterward and found three P1 closure-integrity defects. Product writes remain paused until round 032 binds numbered replacement evidence and returns authority to round 026.
+Round 030 is preserved as a superseded closure attempt. Independent criticism completed afterward and found four P1 closure-integrity defects. Round 031 now implements the every-push boundary, Acceptance lineage, numbered-evidence requirement, immutable-history freeze and future evidence-order checks; all four remain open until an independent re-critic verifies this repair commit. Product writes remain paused while round 032 corrects Step 2 and until round 033 binds the numbered replacement evidence and returns authority to round 026.
 
 Evidence:
 
 - superseded closure attempt: `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json`
 - active correction: `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json`
-- planned corrected closure: `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json`
+- planned Step 2 correction: `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json`
+- planned corrected closure: `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json`
 - content commit/tree: `21f5ce897c24b45a0a559d7a2e39002d59e00e70` / `941780c9e2a482f91597cbda0bd5e09d8bc42e57`
 - evidence commit/tree: `02d5e5bdf017447617d1a874ef2d86a114328463` / `c0071113541f0c6fea1864f3b43e56b8fc9a4cfa`
 - workflow run/job: `33539938108` / `99963403759`
 - artifact: `9813183649`
-- Current Phase 0 P0/P1: `0 / 4`
+- Current Phase 0 P0/P1: `0 / 4` pending independent re-criticism
 
 Phase 0 removed 33 stale current-facing paths, completely replaced Project instructions, added the Development Playbook, synchronized current mirrors, separated current and immutable-history verification, and preserved sealed Step 1-3 artifacts.
 

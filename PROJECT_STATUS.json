@@ -16,7 +16,7 @@
     "step2Correction": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
     "plannedCorrectedClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
     "phase0P0": 0,
-    "phase0P1": 0,
+    "phase0P1": 4,
     "phase0P2": 1
   },
   "scopedPasses": {

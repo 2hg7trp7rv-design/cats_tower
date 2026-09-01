@@ -39,5 +39,5 @@
     "round033Role": "planned corrected Phase 0 closure",
     "supersededAddendaRemainHistory": true
   },
-  "rule": "Read CURRENT_AUTHORITY_INDEX.json and currentAddendum on live kimi. Do not mutate S02-P1 product content until round 032 independently closes the governance recovery and returns authority to round 026."
+  "rule": "Read CURRENT_AUTHORITY_INDEX.json and currentAddendum on live kimi. Round 032 repairs the Step 2 screen projection; only corrected closure round 033 may return authority to round 026. Do not mutate S02-P1 product content before that closure."
 }
