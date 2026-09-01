@@ -817,6 +817,10 @@ a,
   letter-spacing: -0.025em;
 }
 
+.rank-compact {
+  display: none;
+}
+
 .resource-row {
   min-width: 0;
   flex: 1 1 auto;
@@ -2179,6 +2183,16 @@ a,
   margin-top: 0;
 }
 
+.density-compact .rank-full,
+.density-short .rank-full {
+  display: none;
+}
+
+.density-compact .rank-compact,
+.density-short .rank-compact {
+  display: inline;
+}
+
 .density-compact .coin-resource {
   flex-basis: 88px;
   padding-inline: 5px;
@@ -2313,14 +2327,14 @@ a,
 .density-compact .portrait {
   position: absolute;
   inset: 0 auto 0 0;
-  width: 31px;
+  width: 29px;
 }
 
 .density-compact .party-copy {
   position: absolute;
   top: 5px;
   right: 2px;
-  left: 32px;
+  left: 30px;
   padding: 0 2px;
 }
 
@@ -2332,7 +2346,7 @@ a,
   position: absolute;
   right: 0;
   bottom: 0;
-  left: 31px;
+  left: 29px;
   height: 18px;
   padding-inline: 3px;
   font-size: 11px;
@@ -2571,14 +2585,14 @@ a,
 .density-short .portrait {
   position: absolute;
   inset: 0 auto 0 0;
-  width: 31px;
+  width: 29px;
 }
 
 .density-short .party-copy {
   position: absolute;
   top: 4px;
   right: 1px;
-  left: 32px;
+  left: 30px;
   padding: 0 2px;
 }
 
@@ -2590,7 +2604,7 @@ a,
   position: absolute;
   right: 0;
   bottom: 0;
-  left: 31px;
+  left: 29px;
   height: 17px;
   padding-inline: 2px;
   font-size: 11px;
