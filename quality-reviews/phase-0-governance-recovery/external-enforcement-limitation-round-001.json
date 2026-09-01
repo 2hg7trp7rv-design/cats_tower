@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-phase0-external-enforcement-limitation-round-001",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "finding": {
+    "id": "PHASE0-P2-KIMI-UNPROTECTED-EXTERNAL-ENFORCEMENT",
+    "severity": "P2",
+    "status": "OPEN_NONBLOCKING_EXTERNAL_SETTING",
+    "liveReadback": {
+      "endpoint": "GET /repos/2hg7trp7rv-design/cats_tower/branches/kimi",
+      "protected": false,
+      "protectionEnabled": false,
+      "requiredStatusChecksEnforcement": "off",
+      "observedAt": "2026-09-02"
+    }
+  },
+  "scope": "The repository verifier detects and records violations made through the authorized cooperative workflow. Without GitHub branch protection or a ruleset, it cannot prevent another authorized writer from replacing the workflow and verifier in the same push.",
+  "whyNonBlockingNow": [
+    "No parallel writer or unauthorized mutation was observed.",
+    "Every write in this work is independently read back by exact commit and tree.",
+    "Production, public release and Step 5 remain blocked.",
+    "The feasible in-repository controls still inspect every commit edge and freeze governed evidence after the audited baseline."
+  ],
+  "requiredBefore": [
+    "parallel-writer operation",
+    "release-branch enforcement",
+    "Production release authorization"
+  ],
+  "resolutionRequires": "Explicit authority to change external GitHub repository settings and confirmation that the resulting rule will not block the only permitted kimi write workflow.",
+  "repositorySettingsChanged": false,
+  "productionChanged": false,
+  "step4Pass": false,
+  "step5Allowed": false
+}

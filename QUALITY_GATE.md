@@ -35,10 +35,11 @@ Authority: `CURRENT_AUTHORITY_INDEX.json`
   - `PHASE0-PREMATURE-EVIDENCE-001`
   - `PHASE0-IMMUTABLE-EVIDENCE-OVERWRITE-001`
   - `S4-RECOVERY-VIS-001`
-- P2: **1**
+- P2: **2**
   - `PHASE0-P2-PR8-STALE-METADATA`
+  - `PHASE0-P2-KIMI-UNPROTECTED-EXTERNAL-ENFORCEMENT`
 
-P2は旧Draft PR #8の外部metadataである。PR操作は明示的に禁止されているためPhase 0では変更せず、current authority、CI、release routeから除外した。製品作業を妨げるP0/P1ではない。
+P2の1件目は旧Draft PR #8の外部metadataである。PR操作は明示的に禁止されているためPhase 0では変更せず、current authority、CI、release routeから除外した。2件目はlive GitHubで`kimi protected=false`を確認した外部強制力の限界である。現在の検査は許可された作業者による誤変更を検出・証拠化するが、workflow自体を無効化できる権限保持者に対するbranch protectionではない。Repository設定変更は今回の許可範囲外なので変更せず、releaseまたは並行書込み前の承認事項として残す。いずれも現在の製品作業を妨げるP0/P1ではない。
 
 ## G0 — Governance and Project sources
 

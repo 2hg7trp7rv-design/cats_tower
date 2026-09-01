@@ -23,7 +23,7 @@
     "artifactId": 9813183649,
     "phase0P0": 0,
     "phase0P1": 4,
-    "phase0P2": 1
+    "phase0P2": 2
   },
   "readOrder": [
     "latest explicit user decision",
@@ -142,7 +142,7 @@
     "overallStatus": "IN_PROGRESS",
     "unresolvedP0": 1,
     "unresolvedP1": 5,
-    "unresolvedP2": 1,
+    "unresolvedP2": 2,
     "openFindings": [
       "S2-P0-SCREEN-PROJECTION-001",
       "S4-RECOVERY-VIS-001",
@@ -150,7 +150,8 @@
       "PHASE0-ACCEPTANCE-CLOSURE-ID-001",
       "PHASE0-PREMATURE-EVIDENCE-001",
       "PHASE0-IMMUTABLE-EVIDENCE-OVERWRITE-001",
-      "PHASE0-P2-PR8-STALE-METADATA"
+      "PHASE0-P2-PR8-STALE-METADATA",
+      "PHASE0-P2-KIMI-UNPROTECTED-EXTERNAL-ENFORCEMENT"
     ],
     "productionAliasChanged": false,
     "physicalIPhoneVerified": false,

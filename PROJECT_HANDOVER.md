@@ -82,5 +82,7 @@ Do not alter actual root, gameplay core, economy, save schema, backend, payment,
 
 - Product P1: `S4-RECOVERY-VIS-001`
 - Nonblocking governance P2: `PHASE0-P2-PR8-STALE-METADATA`
+- Nonblocking external-enforcement P2: `PHASE0-P2-KIMI-UNPROTECTED-EXTERNAL-ENFORCEMENT`
 
 PR #8 was not edited or closed because PR operations are prohibited. It is excluded from current authority and release evidence.
+Live GitHub reports `kimi protected=false`. The current verifier is an auditable cooperative-process gate, not protection against an authorized writer disabling the workflow in the same push. No repository setting was changed; branch protection requires a separately authorized external setting change before release or parallel-writer operation.
