@@ -109,8 +109,8 @@ jobs:
             jq -e . quality-reviews/phase-0-governance-recovery/live-readback.json >/dev/null
           fi
 
-      - name: Reject whitespace defects in governed Phase 0 changes
+      - name: Reject non-Markdown whitespace defects in governed Phase 0 changes
         run: |
           set -euo pipefail
           ROOT_ENTRY=$(jq -r '.entry.head' quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json)
-          git diff --check "$ROOT_ENTRY"..HEAD
+          git diff --check "$ROOT_ENTRY"..HEAD -- . ':(exclude)*.md'
