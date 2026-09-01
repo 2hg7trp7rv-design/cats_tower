@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-phase0-governance-recovery-critic-summary",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json",
+  "acceptance": "quality-reviews/phase-0-governance-recovery/acceptance-matrix.json",
+  "reviewTarget": {
+    "commit": "21f5ce897c24b45a0a559d7a2e39002d59e00e70",
+    "tree": "941780c9e2a482f91597cbda0bd5e09d8bc42e57",
+    "workflowRun": 33539938108,
+    "workflowJob": 99963403759,
+    "artifactId": 9813183649,
+    "artifactDigest": "sha256:01ea8293921134370f8e2e30cb9f9a1f4a6f8d50bb9259af30646b766197140c"
+  },
+  "criticScopes": [
+    {
+      "scope": "current-authority-and-mirror-integrity",
+      "verdict": "PASS_GOVERNANCE_SCOPE",
+      "findings": [
+        "CURRENT_AUTHORITY_INDEX.json is the single dispatcher.",
+        "Project, policy, simulation, handover, agent and workflow mirrors point to the same active addendum.",
+        "Round 024 and 025 actual-root repair text is no longer current-facing."
+      ]
+    },
+    {
+      "scope": "project-source-completeness",
+      "verdict": "PASS_PROJECT_SOURCE_SCOPE",
+      "findings": [
+        "The replacement instructions are self-contained and no longer activate candidate-v1 or the pre-Step-1-seal snapshot.",
+        "The Project Source Manifest defines the exact replacement set and forbids old/new coexistence.",
+        "The Development Playbook defines downstream consumer, state family, authority, responsive, failure, performance, evidence and change-impact requirements."
+      ]
+    },
+    {
+      "scope": "low-rework-production-method",
+      "verdict": "PASS_METHOD_SCOPE",
+      "findings": [
+        "Representative in-engine proof is required before volume production.",
+        "Screen state families are required before happy-path polish.",
+        "Runtime and simulation must share domain logic rather than duplicate formulas.",
+        "Content and evidence commits, independent criticism and P0/P1-zero rules are explicit."
+      ]
+    },
+    {
+      "scope": "obsolete-source-and-workflow-removal",
+      "verdict": "PASS_REMOVAL_SCOPE",
+      "findings": [
+        "Six obsolete root design/Project-source documents were removed.",
+        "Fourteen obsolete Step 4 write/recovery workflows were removed.",
+        "Thirteen obsolete Step 1-3 operational workflows were removed.",
+        "Git and Actions history and immutable quality-review evidence remain available."
+      ]
+    },
+    {
+      "scope": "sealed-step1-step2-step3-preservation",
+      "verdict": "PASS_IMMUTABILITY_SCOPE",
+      "findings": [
+        "Step 1 seal, Step 2 executable seal, Step 3 final judge and Step 3 completion blobs are unchanged.",
+        "All sixteen Step 2 seal bindings match at current HEAD.",
+        "The full source-bound Step 2 verifier passed in an intact historical worktree.",
+        "The new Project instructions do not claim or require a Step 2 reseal."
+      ]
+    },
+    {
+      "scope": "product-scope-containment",
+      "verdict": "PASS_PHASE0_CONTAINMENT",
+      "findings": [
+        "Legacy gameplay runtime, economy, save, assets, S02-P1 product content, backend, payment, ads and Production were not mutated by Phase 0.",
+        "Concurrent S02-P1 content was preserved but was not accepted as Phase 0 evidence or product completion.",
+        "Step 4 remains IN_PROGRESS and Step 5 remains blocked."
+      ]
+    },
+    {
+      "scope": "residual-external-metadata",
+      "verdict": "PASS_WITH_P2_NOTICE",
+      "findings": [
+        "Historic draft PR 8 remains open and associates kimi commits with obsolete PR text.",
+        "PR operation is explicitly prohibited by current repository rules, so Phase 0 did not close or edit it.",
+        "The PR is not accepted as current authority, workflow evidence or release route."
+      ]
+    }
+  ],
+  "phase0Unresolved": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 1,
+    "items": [
+      {
+        "id": "PHASE0-P2-PR8-STALE-METADATA",
+        "severity": "P2",
+        "blocking": false,
+        "ownerBoundary": "Requires a separate explicit authorization because PR operations are prohibited."
+      }
+    ]
+  },
+  "productUnresolvedOutsidePhase0": {
+    "P0": 0,
+    "P1": 1,
+    "items": ["S4-RECOVERY-VIS-001"]
+  },
+  "verdict": "PASS_PHASE0_CRITIC_WITH_NONBLOCKING_P2",
+  "step4Pass": false,
+  "step5Allowed": false,
+  "productionAllowed": false,
+  "physicalIPhoneVerified": false
+}

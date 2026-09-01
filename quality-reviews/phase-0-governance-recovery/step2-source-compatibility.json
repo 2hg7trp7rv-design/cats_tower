@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-phase0-step2-source-compatibility",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json",
+  "reviewTarget": {
+    "commit": "21f5ce897c24b45a0a559d7a2e39002d59e00e70",
+    "tree": "941780c9e2a482f91597cbda0bd5e09d8bc42e57",
+    "currentInstructionsBlob": "2cceb4cdaa27c2b76985ea4340b5f29ebab07551",
+    "historicalBoundInstructionsBlob": "2b42e9907bf19724dd5eb3342872aaa931424be9",
+    "historicalWorktreeCommit": "83a1aa388e6467f0c34597533540b4ff61971ef6"
+  },
+  "sealedContract": {
+    "sealPath": "simulation/executable-seal-v2.json",
+    "sealBlob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
+    "semanticCommit": "724d04940f9f3794b993cddbc5af3a7163a0395b",
+    "semanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
+    "bindingCount": 16,
+    "sealMutated": false,
+    "bindingDrift": 0
+  },
+  "verification": {
+    "workflow": ".github/workflows/verify-current-governance.yml",
+    "runId": 33539938108,
+    "jobId": 99963403759,
+    "conclusion": "SUCCESS",
+    "currentHeadSealValidation": "PASS_EXECUTABLE_SEAL_V2",
+    "historicalSourceBoundVerification": "PASS_CONTRACT_SOURCE_REPRODUCTION",
+    "requiredContentPaths": 43,
+    "simulationSyntaxFiles": 26,
+    "qualificationScenarioCount": 30,
+    "qualificationDigest": "a24fa5a4a12cf132ac477c80e77431cd0b97ab070bbbef83c3881c160f42562c",
+    "calibrationHoldoutOverlap": 0,
+    "migrationIdempotent": true,
+    "negativeExecutionCases": 45
+  },
+  "semanticCompatibility": [
+    {
+      "invariant": "unbounded tower; 100F is not ending",
+      "canonicalPreserved": true,
+      "newInstructionsPreserved": true
+    },
+    {
+      "invariant": "four named permanent party members; temporary support separate",
+      "canonicalPreserved": true,
+      "newInstructionsPreserved": true
+    },
+    {
+      "invariant": "tap direct damage zero; auto and offline foundation",
+      "canonicalPreserved": true,
+      "newInstructionsPreserved": true
+    },
+    {
+      "invariant": "one reset.tower_return system",
+      "canonicalPreserved": true,
+      "newInstructionsPreserved": true
+    },
+    {
+      "invariant": "N<R<RR<SR<SSR<UR and N/R retain major roles",
+      "canonicalPreserved": true,
+      "newInstructionsPreserved": true
+    },
+    {
+      "invariant": "separate character and weapon gacha; first copy functional",
+      "canonicalPreserved": true,
+      "newInstructionsPreserved": true
+    },
+    {
+      "invariant": "server authority for permanent economy, gacha, reset, login, payment and ads",
+      "canonicalPreserved": true,
+      "newInstructionsPreserved": true
+    }
+  ],
+  "replacementClassification": {
+    "type": "GOVERNANCE_AND_DEVELOPMENT_METHOD_REPLACEMENT",
+    "changesProductMeaning": false,
+    "changesStep2Candidate": false,
+    "changesStep2Schema": false,
+    "changesStep2Engine": false,
+    "changesStep2Seal": false,
+    "requiresStep2Reseal": false,
+    "historicalSourceBindingPreservedByWorktree": true
+  },
+  "verdict": "COMPATIBLE_GOVERNANCE_REPLACEMENT_DOES_NOT_RESEAL_STEP2",
+  "unresolved": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  }
+}
