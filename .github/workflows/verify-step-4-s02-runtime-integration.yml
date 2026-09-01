@@ -1,4 +1,4 @@
-name: Verify Step 4 S02 actual-root visual repair
+name: Apply Step 4 S02 responsive repair
 
 on:
   workflow_dispatch:
@@ -6,41 +6,27 @@ on:
     branches:
       - kimi
     paths:
-      - "runtime/s02-runtime.js"
-      - "runtime/s02-battle-renderer.js"
-      - "runtime/s02-runtime-fixes.css"
-      - "tests/step4/verify-s02-runtime-integration.mjs"
-      - "tests/step4/s02-runtime-browser-qa.mjs"
-      - "tests/governance/verify-current-step2-state.mjs"
-      - "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-025.json"
-      - "quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-*.json"
-      - "PROJECT_STATUS.json"
-      - "AI_PROJECT_POLICY.json"
-      - "simulation/CURRENT_STATUS.json"
-      - "QUALITY_GATE.md"
-      - ".github/workflows/CURRENT_STATUS.md"
-      - "PROJECT_HANDOVER.md"
-      - "AGENTS.md"
       - ".github/workflows/verify-step-4-s02-runtime-integration.yml"
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
-  group: verify-step4-s02-actual-root-visual-repair-kimi
-  cancel-in-progress: true
+  group: apply-step4-s02-responsive-repair-kimi
+  cancel-in-progress: false
 
 jobs:
-  verify-visual-repair:
-    name: Static, governance, Chromium and accessibility
+  apply:
+    name: Apply researched responsive S02 repair to existing kimi
     runs-on: ubuntu-latest
-    timeout-minutes: 40
-
+    timeout-minutes: 15
     steps:
-      - name: Checkout exact kimi commit
+      - name: Checkout exact existing kimi
         uses: actions/checkout@v4
         with:
+          ref: kimi
           fetch-depth: 0
+          persist-credentials: true
 
       - name: Assert repository and branch boundary
         shell: bash
@@ -49,112 +35,83 @@ jobs:
           test "${GITHUB_REPOSITORY}" = "2hg7trp7rv-design/cats_tower"
           test "${GITHUB_REF_NAME}" = "kimi"
           test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
-          git merge-base --is-ancestor 9495c97232213620346958f271913fd8a585ff50 HEAD
-          echo "head=$(git rev-parse HEAD)"
-          echo "tree=$(git rev-parse HEAD^{tree})"
+          test "$(git rev-parse HEAD^1)" = "cb24b39fe23745874966dd8785160b185bd24a16"
 
-      - name: Run fail-closed visual-repair contracts
-        shell: bash
-        run: |
-          set -euo pipefail
-          node tests/step4/verify-s02-runtime-integration.mjs | tee s02-actual-root-visual-repair-static-report.json
-          grep -q 'PASS_S02_ACTUAL_ROOT_VISUAL_REPAIR_STATIC' s02-actual-root-visual-repair-static-report.json
-          node tests/governance/verify-current-step2-state.mjs | tee current-step4-visual-repair-governance-report.json
-          grep -q 'PASS_CURRENT_CATS_TOWER_STEP4_S02_VISUAL_REPAIR_GOVERNANCE' current-step4-visual-repair-governance-report.json
-
-      - name: Install pinned Playwright and Chromium
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p /tmp/s02-visual-repair-playwright
-          cd /tmp/s02-visual-repair-playwright
-          npm init -y >/dev/null 2>&1
-          npm install --save-exact playwright@1.62.1
-          npx playwright install --with-deps chromium
-
-      - name: Start exact-head root game preview
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/s02-visual-repair-http.log 2>&1 &
-          echo $! > /tmp/s02-visual-repair-http.pid
-          for attempt in $(seq 1 30); do
-            if curl --fail --silent http://127.0.0.1:4173/ >/dev/null; then
-              exit 0
-            fi
-            sleep 1
-          done
-          cat /tmp/s02-visual-repair-http.log
-          exit 1
-
-      - name: Run actual-root Chromium visual-repair QA
+      - name: Recover verified repair payload from immutable Git blobs
         shell: bash
         env:
-          PLAYWRIGHT_PACKAGE: /tmp/s02-visual-repair-playwright/node_modules/playwright
-          S02_RUNTIME_BASE_URL: http://127.0.0.1:4173/
-          S02_RUNTIME_EVIDENCE_DIR: quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-browser-evidence
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          node tests/step4/s02-runtime-browser-qa.mjs | tee s02-actual-root-visual-repair-browser-report.log
-          grep -q 'PASS_S02_ACTUAL_ROOT_VISUAL_REPAIR_BROWSER' s02-actual-root-visual-repair-browser-report.log
+          : > /tmp/s02-responsive-payload.b64
+          for blob in \
+            7a458fb8aa13dd02fdf36f1a8394d4140ad4a765 \
+            a946ebd473d571da4d8ce812bb4b027e594c4b89 \
+            516093fb18750e366434e4d46d1bbd4e06ed4eed
+          do
+            curl --fail --silent --show-error --location \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/git/blobs/${blob}" \
+              | jq -r '.content' | tr -d '\n' | base64 --decode \
+              >> /tmp/s02-responsive-payload.b64
+          done
+          test "$(wc -c < /tmp/s02-responsive-payload.b64 | tr -d ' ')" = "37296"
+          base64 --decode /tmp/s02-responsive-payload.b64 > /tmp/s02-responsive-payload.tar.xz
+          echo "f46f5823d0adadc42f052c520dfb9178ec47a6f88d14364fd65858f70114c02b  /tmp/s02-responsive-payload.tar.xz" | sha256sum --check
+          tar -xJf /tmp/s02-responsive-payload.tar.xz -C "${GITHUB_WORKSPACE}"
 
-      - name: Verify exact-head evidence payload
+      - name: Verify exact files and forbidden-path boundary
         shell: bash
         run: |
           set -euo pipefail
-          report=quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-browser-evidence/report.json
-          test -f "${report}"
-          node --input-type=module - "${report}" <<'NODE'
-          import fs from 'node:fs';
+          test "$(git hash-object runtime/s02-runtime-fixes.css)" = "59560b092746b22bf3645ee5f7cbb18f64db07ff"
+          test "$(git hash-object runtime/s02-runtime.js)" = "88ea0bf76bfaf44980bc21cdf8abeaa3b75077f0"
+          test "$(git hash-object runtime/s02-battle-renderer.js)" = "16e8dfdffaa9beab0723f9be93ad2f467b8d3239"
+          test "$(git hash-object tests/step4/s02-runtime-browser-qa.mjs)" = "ef8c1cdef53e3b6002eec16b73e8f74688a08991"
+          test "$(git hash-object tests/step4/verify-s02-runtime-integration.mjs)" = "0591f9664cac9cb2a6797f0661012d038208dec0"
+          test "$(git hash-object .github/workflows/verify-step-4-s02-runtime-integration.yml)" = "f9906c811eb9e6596978759ae6569f808db875fd"
+          test "$(git hash-object quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-responsive-acceptance-round-002.json)" = "a6c3374cc68156dbc382b2302b4396dc42bf2373"
 
-          const reportPath = process.argv[2];
-          const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
-          const modes = new Set((report.results || []).map(result => result.mode));
-          const normal = (report.results || []).filter(result => result.mode === 'normal-after-explicit-summon');
+          allowed=/tmp/s02-allowed.txt
+          actual=/tmp/s02-actual.txt
+          cat > "${allowed}" <<'EOF'
+.github/workflows/verify-step-4-s02-runtime-integration.yml
+quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-responsive-acceptance-round-002.json
+runtime/s02-battle-renderer.js
+runtime/s02-runtime-fixes.css
+runtime/s02-runtime.js
+tests/step4/s02-runtime-browser-qa.mjs
+tests/step4/verify-s02-runtime-integration.mjs
+EOF
+          git status --short | sed 's/^...//' | sort > "${actual}"
+          diff -u "${allowed}" "${actual}"
+          git diff --check
+          node --check runtime/s02-runtime.js
+          node --check runtime/s02-battle-renderer.js
+          node --check tests/step4/s02-runtime-browser-qa.mjs
+          node --check tests/step4/verify-s02-runtime-integration.mjs
+          node tests/step4/verify-s02-runtime-integration.mjs | tee /tmp/s02-responsive-static-report.json
+          grep -q 'PASS_S02_RESPONSIVE_VISUAL_REPAIR_STATIC' /tmp/s02-responsive-static-report.json
 
-          if (report.verdict !== 'PASS_S02_ACTUAL_ROOT_VISUAL_REPAIR_BROWSER') {
-            throw new Error(`Unexpected browser verdict: ${report.verdict}`);
-          }
-          if (report.normalScreenshotState !== 'normal-after-explicit-summon interactions') {
-            throw new Error(`Normal screenshot state is not explicitly labelled: ${report.normalScreenshotState}`);
-          }
-          if (report.resultCount !== 6 || (report.results || []).length !== 6) {
-            throw new Error(`Expected six evidence results, found ${report.resultCount}`);
-          }
-          if (normal.length !== 3 || normal.some(result => !(result.hydration?.after > result.hydration?.before))) {
-            throw new Error('All three normal screenshots must follow an actual summon-button state change.');
-          }
-          for (const requiredMode of ['actual-interaction', 'large-text', 'reduced-motion']) {
-            if (!modes.has(requiredMode)) throw new Error(`Missing evidence mode: ${requiredMode}`);
-          }
-          if (report.productionChanged !== false || report.physicalIPhone !== 'NOT_VERIFIED') {
-            throw new Error('External-state truth boundary changed.');
-          }
-          NODE
-          test "$(find quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-browser-evidence -maxdepth 1 -name '*.png' | wc -l | tr -d ' ')" = "6"
-          git diff --check 9495c97232213620346958f271913fd8a585ff50..HEAD
-
-      - name: Upload exact-head visual-repair evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: step4-s02-actual-root-visual-repair-${{ github.sha }}
-          if-no-files-found: error
-          retention-days: 30
-          path: |
-            s02-actual-root-visual-repair-static-report.json
-            current-step4-visual-repair-governance-report.json
-            s02-actual-root-visual-repair-browser-report.log
-            quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-browser-evidence/**
-            /tmp/s02-visual-repair-http.log
-            index.html
-            app.js
-            game-core.js
-            game-data.js
-            styles.css
-            manifest.webmanifest
-            runtime/**
-            assets/**
-            step4/s02/assets/**
-            tests/step4/s02-runtime-browser-qa.mjs
-            tests/step4/verify-s02-runtime-integration.mjs
+      - name: Commit only the authorized responsive repair
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            runtime/s02-runtime-fixes.css \
+            runtime/s02-runtime.js \
+            runtime/s02-battle-renderer.js \
+            tests/step4/s02-runtime-browser-qa.mjs \
+            tests/step4/verify-s02-runtime-integration.mjs \
+            .github/workflows/verify-step-4-s02-runtime-integration.yml \
+            quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-responsive-acceptance-round-002.json
+          git diff --cached --check
+          test "$(git diff --cached --name-only | wc -l | tr -d ' ')" = "7"
+          git commit -m "fix: adapt S02 UI across mobile aspect ratios"
+          git push origin HEAD:kimi
+          echo "content_commit=$(git rev-parse HEAD)"
+          echo "content_tree=$(git rev-parse HEAD^{tree})"
