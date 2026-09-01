@@ -114,3 +114,43 @@ jobs:
           set -euo pipefail
           ROOT_ENTRY=$(jq -r '.entry.head' quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json)
           git diff --check "$ROOT_ENTRY"..HEAD -- . ':(exclude)*.md'
+
+      - name: Write machine-readable governance evidence
+        run: |
+          set -euo pipefail
+          TREE=$(git rev-parse 'HEAD^{tree}')
+          ACTIVE=$(jq -r '.activeChangeControl' CURRENT_AUTHORITY_INDEX.json)
+          jq -n \
+            --arg repository '2hg7trp7rv-design/cats_tower' \
+            --arg branch 'kimi' \
+            --arg commit "$GITHUB_SHA" \
+            --arg tree "$TREE" \
+            --arg activeChangeControl "$ACTIVE" \
+            '{
+              schemaVersion: 1,
+              artifactId: "cats-tower-current-governance-result",
+              repository: $repository,
+              branch: $branch,
+              commit: $commit,
+              tree: $tree,
+              activeChangeControl: $activeChangeControl,
+              verdict: "PASS_CURRENT_AUTHORITY_GOVERNANCE",
+              step1: "PASS_CANONICAL",
+              step2: "PASS_CONTRACT",
+              step2BindingCount: 16,
+              step2SourceBoundHistoricalWorktree: "PASS_CONTRACT_SOURCE_REPRODUCTION",
+              step3: "PASS_MODEL",
+              step4: "IN_PROGRESS",
+              step5Allowed: false,
+              physicalIPhoneVerified: false,
+              productionAliasChanged: false
+            }' > current-governance-result.json
+          jq -e . current-governance-result.json >/dev/null
+
+      - name: Upload governance evidence artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase0-current-governance-${{ github.sha }}
+          path: current-governance-result.json
+          if-no-files-found: error
+          retention-days: 90
