@@ -1,44 +1,36 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "artifactId": "cats-tower-current-authority-index",
   "updatedAt": "2026-09-02",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
-  "status": "IN_PROGRESS_PHASE0_GOVERNANCE_RECOVERY",
+  "status": "IN_PROGRESS_PHASE0_HISTORICAL_VERIFIER_REPAIR",
   "currentRepositoryStep": 4,
   "currentInternalPhase": "PHASE0-GOVERNANCE-RECOVERY",
-  "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json",
+  "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json",
+  "phase0RootChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json",
+  "plannedPhase0Closure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
   "nextProductChangeControlAfterRecovery": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
-  "singleSourceRule": "All current status mirrors must derive their current phase, gate and write boundary from this index and the active change-control. Snapshot headers inside sealed historical files do not define current project status.",
+  "singleSourceRule": "All current mirrors derive current phase, gate and write boundary from this index and the active change-control. Historical headers and workflow files do not define current status.",
   "readOrder": [
     "latest explicit user decision",
     "CURRENT_AUTHORITY_INDEX.json",
     "activeChangeControl",
     "CHATGPT_PROJECT_INSTRUCTIONS1.md",
     "DEVELOPMENT_PLAYBOOK.md",
-    "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
-    "MASTER_SPEC.md and sealed canonical registries",
-    "simulation/executable-seal-v2.json and executable contract chain",
-    "quality-reviews/step-3-large-scale-validation/final-judge.json and completion evidence",
+    "Step 1 Round 008 seal and sealed canonical",
+    "Step 2 executable seal and contract",
+    "Step 3 final judge, completion evidence and live read-back",
     "current task Acceptance, critic, judge, evidence and live read-back",
-    "PROJECT_STATUS.json, AI_PROJECT_POLICY.json, QUALITY_GATE.md, PROJECT_HANDOVER.md, AGENTS.md and workflow status",
+    "current mirrors and handover",
     "historical evidence and legacy runtime",
     "chat history, reference images and general knowledge"
   ],
   "projectSources": {
     "active": [
-      {
-        "path": "CHATGPT_PROJECT_INSTRUCTIONS1.md",
-        "role": "project-wide authority, safety and operating rules"
-      },
-      {
-        "path": "DEVELOPMENT_PLAYBOOK.md",
-        "role": "low-rework production method, downstream-usability contract and phase sequencing"
-      },
-      {
-        "path": "PROJECT_SOURCE_MANIFEST.md",
-        "role": "installation and replacement manifest for ChatGPT Project sources"
-      }
+      {"path":"CHATGPT_PROJECT_INSTRUCTIONS1.md","role":"project-wide authority, safety and operating rules"},
+      {"path":"DEVELOPMENT_PLAYBOOK.md","role":"low-rework production method and downstream-usability contract"},
+      {"path":"PROJECT_SOURCE_MANIFEST.md","role":"Project-source replacement manifest"}
     ],
     "mustNotBeActiveAsProjectSources": [
       "CHATGPT_PROJECT_BOOTSTRAP.md",
@@ -47,7 +39,7 @@
       "IDLE_DESIGN.md",
       "PROTOTYPE_SPEC.md",
       "BASELINE_V082.md",
-      "any prior downloaded copy of CHATGPT_PROJECT_INSTRUCTIONS1.md"
+      "any prior downloaded Project-instructions copy"
     ]
   },
   "canonicalProduct": {
@@ -67,7 +59,8 @@
     "schema": "simulation/candidate-v2.schema.json",
     "executionContract": "simulation/execution-contract-v2.json",
     "runPlan": "simulation/run-plan-v2.json",
-    "engine": "simulation/engine-v2/"
+    "engine": "simulation/engine-v2/",
+    "currentVerificationMethod": "Verify every seal binding at current HEAD and run the source-bound verifier in a detached worktree at the Phase 0 corrected entry; do not rewrite the seal for Project-source changes."
   },
   "modelValidation": {
     "step3Status": "PASS_MODEL",
@@ -76,7 +69,7 @@
     "liveReadback": "quality-reviews/step-3-large-scale-validation/live-readback.json",
     "gameplayScenarioCount": 15000,
     "highVolumeSampleCount": 1700000,
-    "limitation": "Step 3 validates the sealed model and transition tests. It is not evidence that the current browser runtime implements the canonical game or that real players completed runtime playtests. Runtime implementation must later share the domain engine and be revalidated."
+    "limitation": "Step 3 validates the sealed model and transition tests. It is not evidence that the current browser runtime implements the canonical game or that real players completed runtime playtests."
   },
   "currentProductWork": {
     "step4Status": "IN_PROGRESS",
@@ -84,51 +77,32 @@
     "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
     "acceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-acceptance-matrix-round-001.json",
     "reviewRoute": "/step4/s02/golden-master-p1/",
-    "deliverables": [
-      "A competitive research",
-      "B player experience definition",
-      "C information priority map",
-      "D art direction",
-      "E GM01-GM08",
-      "F UI design system",
-      "G asset decomposition and animation contract",
-      "H data-binding matrix",
-      "I responsive contract",
-      "J implementation feasibility audit"
-    ],
-    "requiredGoldenMasters": 8,
-    "step4Pass": false,
-    "step5Allowed": false,
-    "userVisualApproval": false,
+    "deliverablesRequired": 10,
+    "goldenMastersRequired": 8,
     "goldenMasterRoutePresent": true,
+    "deliverablesClaimedForAudit": 10,
     "goldenMastersClaimedForAudit": 8,
+    "deliverablesAccepted": 0,
     "goldenMastersAccepted": 0,
     "currentState": "PRESERVED_CONCURRENT_CONTENT_REQUIRES_A_J_AUDIT",
-    "deliverablesClaimedForAudit": 10,
-    "deliverablesAccepted": 0
+    "step4Pass": false,
+    "step5Allowed": false,
+    "userVisualApproval": false
   },
   "legacyRuntime": {
     "status": "LEGACY_RUNTIME_NOT_CANONICAL",
-    "paths": [
-      "index.html",
-      "app.js",
-      "styles.css",
-      "game-core.js",
-      "game-data.js",
-      "runtime/",
-      "step4/s02/"
-    ],
+    "paths": ["index.html","app.js","styles.css","game-core.js","game-data.js","runtime/","step4/s02/"],
     "allowedUse": "technical history and temporary comparison only",
-    "forbiddenUse": "may not be described as the current canonical 1-10F implementation and may not receive incremental production polish during S02-P1"
+    "forbiddenUse": "may not be described as the canonical 1-10F implementation or receive incremental production polish during S02-P1"
   },
   "scopedVerdicts": {
     "PASS_CANONICAL": "product meaning, IDs, state and trust boundaries are sealed",
     "PASS_CONTRACT": "schema, validator, fixture and model contract are executable",
     "PASS_MODEL": "the sealed model passed its stated simulations and transition tests",
-    "PASS_VISUAL": "the actual required rendered states and viewports passed independent visual review",
+    "PASS_VISUAL": "required rendered states and viewports passed independent visual review",
     "PASS_ASSET": "production assets passed decomposition, animation, budget, provenance and in-engine proof",
-    "PASS_RUNTIME": "the canonical product is implemented in the runtime and passed browser interaction and regression",
-    "PASS_SERVER": "authoritative transactions, ledger, recovery, security and reconciliation passed",
+    "PASS_RUNTIME": "canonical product is implemented and passed browser interaction and regression",
+    "PASS_SERVER": "authoritative transactions, ledger, recovery and security passed",
     "PASS_DEVICE": "physical target-device behavior passed",
     "PASS_RELEASE": "all release gates passed with unresolved P0 and P1 equal to zero"
   },
@@ -136,24 +110,20 @@
     "overallStatus": "IN_PROGRESS",
     "unresolvedP0": 0,
     "unresolvedP1": 2,
-    "openFindings": [
-      "S4-RECOVERY-VIS-001",
-      "PHASE0-EVIDENCE-PENDING"
-    ],
+    "openFindings": ["S4-RECOVERY-VIS-001","PHASE0-EVIDENCE-PENDING"],
     "productionAliasChanged": false,
     "physicalIPhoneVerified": false,
     "productionReady": false
   },
+  "workflowPolicy": {
+    "current": ".github/workflows/verify-current-governance.yml",
+    "immutableRound7": ".github/workflows/verify-history-round7.yml",
+    "currentProduct": ".github/workflows/verify-step-4-s02-golden-master-p1.yml",
+    "obsoleteOperationalWorkflowsMustBeAbsent": true,
+    "historicalRunsRemainEvidence": true
+  },
   "immutableHistoryPolicy": {
-    "keep": [
-      "quality-reviews/** acceptance, critic, judge, completion and live-readback artifacts",
-      ".github/baselines/v0.8.2/**"
-    ],
-    "doNotUseAsCurrentAuthority": [
-      "historical Step 4 SVG drafts",
-      "legacy runtime",
-      "superseded addenda",
-      "snapshot status headers inside sealed documents"
-    ]
+    "keep": ["quality-reviews/** acceptance, critic, judge, completion and live-readback artifacts",".github/baselines/v0.8.2/**"],
+    "doNotUseAsCurrentAuthority": ["historical Step 4 SVG drafts","legacy runtime","superseded addenda","snapshot status headers"]
   }
 }

@@ -1,15 +1,15 @@
 {
-  "schemaVersion": 19,
+  "schemaVersion": 20,
   "updatedAt": "2026-09-02",
   "project": "Cat's Tower",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "authorityIndex": "CURRENT_AUTHORITY_INDEX.json",
-  "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json",
+  "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json",
   "status": "IN_PROGRESS",
   "currentRepositoryStep": 4,
   "currentInternalPhase": "PHASE0-GOVERNANCE-RECOVERY",
-  "currentVerdict": "IN_PROGRESS_PHASE0_GOVERNANCE_AND_PROJECT_SOURCE_RECOVERY",
+  "currentVerdict": "IN_PROGRESS_PHASE0_HISTORICAL_VERIFIER_REPAIR",
   "scopedPasses": {
     "step1": "PASS_CANONICAL",
     "step2": "PASS_CONTRACT",
@@ -33,10 +33,7 @@
   "openFindings": {
     "P0": 0,
     "P1": 2,
-    "items": [
-      "S4-RECOVERY-VIS-001",
-      "PHASE0-EVIDENCE-PENDING"
-    ]
+    "items": ["S4-RECOVERY-VIS-001","PHASE0-EVIDENCE-PENDING"]
   },
   "truthBoundaries": {
     "legacyRuntime": "LEGACY_RUNTIME_NOT_CANONICAL",
@@ -54,28 +51,15 @@
   },
   "phase0": {
     "status": "IN_PROGRESS",
-    "entryHead": "83a1aa388e6467f0c34597533540b4ff61971ef6",
-    "entryTree": "599e484953ffde90caed95de2de0e4a31d7be3a8",
-    "openedByCommit": "fb27b428bf7f821551b70b07c63dfd97a0eb72f2",
-    "concurrencyContainmentHead": "83a1aa388e6467f0c34597533540b4ff61971ef6",
-    "concurrencyContainmentTree": "599e484953ffde90caed95de2de0e4a31d7be3a8",
-    "required": [
-      "single current authority index",
-      "complete replacement Project instructions",
-      "low-rework development playbook",
-      "synchronized mirrors",
-      "current/history workflow separation",
-      "obsolete root document and workflow deletion",
-      "critic, judge, completion evidence and live read-back"
-    ],
-    "preservedConcurrentProductContent": {
-      "route": "step4/s02/golden-master-p1/",
-      "claimedGoldenMasters": 8,
-      "acceptedGoldenMasters": 0,
-      "status": "PRESERVED_NOT_PHASE0_EVIDENCE_REQUIRES_A_J_AUDIT"
-    }
+    "rootEntryHead": "83a1aa388e6467f0c34597533540b4ff61971ef6",
+    "rootEntryTree": "599e484953ffde90caed95de2de0e4a31d7be3a8",
+    "sourceReplacementCommit": "8abb6d3f8e23136996761616a31785faf5b679d7",
+    "sourceReplacementTree": "5fc2ab02914d3c76bd9ab98f997bdd001355e082",
+    "activeCorrection": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json",
+    "plannedClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
+    "correctionReason": "Run the source-bound Step 2 verifier in historical worktree and retire false-triggering legacy operational workflows."
   },
-  "nextAuthorizedAction": "Complete Phase 0 verification and evidence. After Phase 0 closes, audit the preserved S02-P1 content against A-J before any further product-content write.",
+  "nextAuthorizedAction": "Repair current verification, retire obsolete Step 1-3 operational workflows, then create Phase 0 evidence. No product-content write is authorized.",
   "step5Allowed": false,
   "productionAllowed": false,
   "physicalIPhoneVerified": false

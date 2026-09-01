@@ -1,15 +1,16 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "artifactId": "cats-tower-active-change-control-dispatcher",
   "updatedAt": "2026-09-02",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "status": "IN_PROGRESS",
   "currentAuthorityIndex": "CURRENT_AUTHORITY_INDEX.json",
-  "currentAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json",
-  "currentVerdict": "IN_PROGRESS_PHASE0_GOVERNANCE_AND_PROJECT_SOURCE_RECOVERY",
+  "currentAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json",
+  "currentVerdict": "IN_PROGRESS_PHASE0_HISTORICAL_VERIFIER_REPAIR",
   "currentRepositoryStep": 4,
   "currentInternalPhase": "PHASE0-GOVERNANCE-RECOVERY",
+  "plannedGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
   "nextProductChangeControlAfterRecovery": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
   "canonicalSeals": {
     "step1": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
@@ -27,11 +28,12 @@
     "physicalIPhoneVerified": false
   },
   "lineage": {
-    "phase0Parent": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
     "round026Role": "S02-P1 Golden Master product-work authority",
-    "round027Role": "temporary Phase 0 governance and Project-source recovery authority",
-    "supersededAddendaRemainHistory": true,
-    "round028Role": "corrected Phase 0 baseline and active recovery authority"
+    "round027Role": "Phase 0 opening",
+    "round028Role": "corrected Phase 0 baseline and source replacement",
+    "round029Role": "historical verifier repair and obsolete workflow retirement",
+    "round030Role": "planned Phase 0 closure",
+    "supersededAddendaRemainHistory": true
   },
-  "rule": "Do not infer the current phase from this file's older Git history or from snapshot headers in sealed documents. Read CURRENT_AUTHORITY_INDEX.json and currentAddendum on live kimi."
+  "rule": "Read CURRENT_AUTHORITY_INDEX.json and currentAddendum on live kimi. Do not infer current phase from historical headers or previous workflow runs."
 }

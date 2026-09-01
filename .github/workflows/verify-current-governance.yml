@@ -22,8 +22,22 @@ on:
       - 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-027.json'
       - 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json'
       - 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json'
+      - 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json'
       - 'quality-reviews/phase-0-governance-recovery/**'
       - 'tests/governance/verify-current-authority.mjs'
+      - '.github/workflows/execute-step-3-final-validation.yml'
+      - '.github/workflows/finalize-step-3-large-scale-validation.yml'
+      - '.github/workflows/repair-step-3-calibration-artifact.yml'
+      - '.github/workflows/repair-step-3-final-aggregate.yml'
+      - '.github/workflows/seal-step-3-calibration.yml'
+      - '.github/workflows/seal-step-3-final-execution-v2.yml'
+      - '.github/workflows/seal-step-3-final-execution.yml'
+      - '.github/workflows/verify-step-1-artifacts.yml'
+      - '.github/workflows/verify-step-2-v2.yml'
+      - '.github/workflows/verify-step-3-calibration.yml'
+      - '.github/workflows/verify-step-3-large-scale-validation-v2.yml'
+      - '.github/workflows/verify-step-3-large-scale-validation.yml'
+      - '.github/workflows/verify-step-3-terminal-mirror-correction.yml'
   workflow_dispatch:
 
 permissions:
@@ -37,7 +51,7 @@ jobs:
   current-authority:
     name: current-authority
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -58,8 +72,18 @@ jobs:
       - name: Verify current authority, mirrors, source replacement and deletion boundary
         run: node tests/governance/verify-current-authority.mjs
 
-      - name: Re-run sealed Step 2 executable verifier
-        run: node simulation/verify-step2-v2.mjs
+      - name: Validate the immutable Step 2 seal at current HEAD
+        run: node simulation/validate-executable-seal-v2.mjs simulation/executable-seal-v2.json
+
+      - name: Re-run the source-bound Step 2 verifier in an intact historical worktree
+        run: |
+          set -euo pipefail
+          ENTRY=$(jq -r '.entry.head' quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json)
+          DIR="$RUNNER_TEMP/step2-source-bound"
+          test ! -e "$DIR"
+          git worktree add --detach "$DIR" "$ENTRY"
+          test "$(git -C "$DIR" rev-parse HEAD)" = "$ENTRY"
+          node "$DIR/simulation/verify-step2-v2.mjs"
 
       - name: Parse current JSON documents
         run: |
@@ -71,23 +95,19 @@ jobs:
           jq -e . quality-reviews/step-1-canonical-design/active-change-control.json >/dev/null
           jq -e . quality-reviews/step-1-canonical-design/active-change-control-addendum-round-027.json >/dev/null
           jq -e . quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json >/dev/null
+          jq -e . quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json >/dev/null
           jq -e . quality-reviews/phase-0-governance-recovery/acceptance-matrix.json >/dev/null
-          if test -f quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json; then
-            jq -e . quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json >/dev/null
+          if test -f quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json; then
+            jq -e . quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json >/dev/null
+            jq -e . quality-reviews/phase-0-governance-recovery/step2-source-compatibility.json >/dev/null
             jq -e . quality-reviews/phase-0-governance-recovery/critic-summary.json >/dev/null
             jq -e . quality-reviews/phase-0-governance-recovery/final-judge.json >/dev/null
             jq -e . quality-reviews/phase-0-governance-recovery/completion-evidence.json >/dev/null
             jq -e . quality-reviews/phase-0-governance-recovery/live-readback.json >/dev/null
           fi
 
-      - name: Reject whitespace defects in Phase 0 changes
+      - name: Reject whitespace defects in governed Phase 0 changes
         run: |
           set -euo pipefail
-          ENTRY=$(jq -r '.entry.head' quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json)
-          if test -f quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json; then
-            CLOSURE_COMMIT=$(git log --diff-filter=A --format='%H' -- quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json | tail -n 1)
-            test -n "$CLOSURE_COMMIT"
-            git diff --check "$ENTRY".."$CLOSURE_COMMIT"
-          else
-            git diff --check "$ENTRY"..HEAD
-          fi
+          ROOT_ENTRY=$(jq -r '.entry.head' quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json)
+          git diff --check "$ROOT_ENTRY"..HEAD
