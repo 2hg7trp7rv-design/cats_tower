@@ -23,6 +23,25 @@
 
   if (query.get('largeText') === '1') document.body.classList.add('runtime-large-text');
 
+  function classifyViewport() {
+    const width = Math.max(1, window.innerWidth || document.documentElement.clientWidth || 390);
+    const height = Math.max(1, window.innerHeight || document.documentElement.clientHeight || 844);
+    const aspect = height / width;
+    const widthClass = width <= 359 ? 'compact' : width <= 399 ? 'standard' : 'wide';
+    const heightClass = height <= 720 ? 'short' : height >= 780 ? 'tall' : 'regular';
+    const aspectClass = aspect < 1.90 ? 'classic' : aspect > 2.12 ? 'extra-tall' : 'tall';
+
+    shell.dataset.layoutWidth = widthClass;
+    shell.dataset.layoutHeight = heightClass;
+    shell.dataset.layoutAspect = aspectClass;
+    shell.dataset.responsiveStrategy = 'reference-width-reflow-safe-area';
+    shell.style.setProperty('--s02-live-width', `${width}px`);
+    shell.style.setProperty('--s02-live-height', `${height}px`);
+  }
+
+  classifyViewport();
+  window.addEventListener('resize', classifyViewport, { passive: true });
+
   function safeNumber(value, fallback = 0) {
     return Number.isFinite(Number(value)) ? Number(value) : fallback;
   }
@@ -250,7 +269,8 @@
       partyGrid.appendChild(button);
     });
     partyDock.appendChild(partyGrid);
-    battle.appendChild(partyDock);
+    battle.insertAdjacentElement('afterend', partyDock);
+    partyDock.dataset.placement = 'after-battle';
 
     const causality = createElement('section', 'runtime-causality-strip', {
       'aria-label': '接敵、攻撃、報酬の因果',
@@ -499,10 +519,14 @@
       mirrorTimer = window.setInterval(mirrorGameState, 120);
       window.__s02Runtime = Object.freeze({
         ready: true,
-        version: 's02-visual-repair-round-001',
+        version: 's02-responsive-repair-round-002',
         source: 'window.__game',
         eventSource: 'window.__game.emit observer',
         partySlots: 4,
+        responsiveStrategy: 'reference-width-reflow-safe-area',
+        referenceWidthCssPx: 390,
+        minimumReadableTextCssPx: 11,
+        preferredTouchTargetCssPx: 48,
         gameplayCoreChanged: false,
         productionChanged: false
       });
@@ -519,6 +543,7 @@
   window.addEventListener('pagehide', () => {
     window.clearInterval(mirrorTimer);
     window.clearTimeout(toastTimer);
+    window.removeEventListener('resize', classifyViewport);
   });
 
   shell.dataset.runtimeReady = 'false';

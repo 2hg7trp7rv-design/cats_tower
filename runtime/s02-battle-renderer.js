@@ -220,7 +220,7 @@
   function drawHpBar(x, y, width, ratio, color, label = '') {
     const safeRatio = clamp(ratio);
     context.save();
-    roundedPath(x - width / 2 - 2, y - 2, width + 4, label ? 15 : 10, 3);
+    roundedPath(x - width / 2 - 2, y - 2, width + 4, label ? 19 : 10, 3);
     context.fillStyle = 'rgba(28,10,9,.88)';
     context.fill();
     context.strokeStyle = 'rgba(255,220,126,.72)';
@@ -232,9 +232,9 @@
     context.fillRect(x - width / 2 + 1, y + 1, Math.max(0, (width - 2) * safeRatio), 4);
     if (label) {
       context.fillStyle = '#fff1c8';
-      context.font = '8px DotGothic16, sans-serif';
+      context.font = '11px DotGothic16, sans-serif';
       context.textAlign = 'center';
-      context.fillText(label, x, y + 13);
+      context.fillText(label, x, y + 16);
     }
     context.restore();
   }
@@ -245,11 +245,11 @@
     context.strokeStyle = color;
     context.lineWidth = 1.4;
     context.beginPath();
-    context.arc(x, y, 10, 0, Math.PI * 2);
+    context.arc(x, y, 11, 0, Math.PI * 2);
     context.fill();
     context.stroke();
     context.fillStyle = '#fff0c6';
-    context.font = '8px DotGothic16, sans-serif';
+    context.font = '11px DotGothic16, sans-serif';
     context.textAlign = 'center';
     context.textBaseline = 'middle';
     context.fillText(text, x, y + .5);
@@ -267,65 +267,83 @@
     }
   }
 
-  function catScreenPosition(cat, index, enemy) {
-    const lanes = [
-      { x: .69, y: .69 },
-      { x: .78, y: .55 },
-      { x: .81, y: .72 },
-      { x: .70, y: .47 }
+  function formationLanes() {
+    if (cssWidth <= 340) {
+      return [
+        { x: .64, y: .71 },
+        { x: .81, y: .57 },
+        { x: .82, y: .74 },
+        { x: .66, y: .50 }
+      ];
+    }
+    return [
+      { x: .65, y: .71 },
+      { x: .80, y: .56 },
+      { x: .82, y: .74 },
+      { x: .66, y: .48 }
     ];
-    const lane = lanes[index % lanes.length];
+  }
+
+  function enemyLanes() {
+    if (cssWidth <= 340) {
+      return [
+        { x: .23, y: .70 },
+        { x: .39, y: .56 },
+        { x: .20, y: .47 }
+      ];
+    }
+    return [
+      { x: .24, y: .70 },
+      { x: .40, y: .55 },
+      { x: .21, y: .46 }
+    ];
+  }
+
+  function catScreenPosition(cat, index, enemy) {
+    const lane = formationLanes()[index % 4];
     const targetWorld = enemy ? Math.max(70, safeNumber(enemy.x, 258) - 30) : 228;
     const progress = clamp((safeNumber(cat.x, 30) - 30) / Math.max(1, targetWorld - 30));
+    const contactShift = cat.state === 'fight' ? .08 : progress * .08;
     return {
-      x: cssWidth * (lane.x - progress * .18),
+      x: cssWidth * (lane.x - contactShift),
       y: cssHeight * lane.y,
       progress
     };
   }
 
   function enemyScreenPosition(enemy, index) {
-    if (enemy.boss) return { x: cssWidth * .31, y: cssHeight * .68 };
-    const lanes = [
-      { x: .29, y: .67 },
-      { x: .38, y: .55 },
-      { x: .22, y: .49 }
-    ];
+    if (enemy.boss) return { x: cssWidth * .28, y: cssHeight * .69 };
+    const lane = enemyLanes()[index % 3];
     return {
-      x: cssWidth * lanes[index % lanes.length].x,
-      y: cssHeight * lanes[index % lanes.length].y
+      x: cssWidth * lane.x,
+      y: cssHeight * lane.y
     };
   }
 
   function drawFormationMarkers(actualCount) {
-    const lanes = [
-      { x: .69, y: .69 },
-      { x: .78, y: .55 },
-      { x: .81, y: .72 },
-      { x: .70, y: .47 }
-    ];
+    const lanes = formationLanes();
     context.save();
     for (let index = actualCount; index < 4; index += 1) {
       const lane = lanes[index];
       const x = cssWidth * lane.x;
       const y = cssHeight * lane.y;
-      context.setLineDash([3, 3]);
-      context.strokeStyle = 'rgba(255,219,122,.28)';
-      context.lineWidth = 1.2;
+      context.setLineDash([4, 4]);
+      context.strokeStyle = 'rgba(255,219,122,.34)';
+      context.lineWidth = 1.4;
       context.beginPath();
-      context.ellipse(x, y, 19, 7, 0, 0, Math.PI * 2);
+      context.ellipse(x, y, 21, 8, 0, 0, Math.PI * 2);
       context.stroke();
       context.setLineDash([]);
-      context.fillStyle = 'rgba(39,18,12,.52)';
+      context.fillStyle = 'rgba(39,18,12,.62)';
       context.beginPath();
-      context.arc(x, y - 22, 12, 0, Math.PI * 2);
+      context.arc(x, y - 24, 14, 0, Math.PI * 2);
       context.fill();
-      context.strokeStyle = 'rgba(255,219,122,.34)';
+      context.strokeStyle = 'rgba(255,219,122,.44)';
       context.stroke();
-      context.fillStyle = 'rgba(255,237,190,.55)';
-      context.font = '9px DotGothic16, sans-serif';
+      context.fillStyle = 'rgba(255,237,190,.74)';
+      context.font = '11px DotGothic16, sans-serif';
       context.textAlign = 'center';
-      context.fillText(`${index + 1}枠`, x, y - 19);
+      context.fillText(`${index + 1}枠`, x, y - 20);
     }
     context.restore();
   }
@@ -401,14 +419,14 @@
     context.stroke();
     context.setLineDash([]);
     context.fillStyle = 'rgba(39,12,12,.78)';
-    roundedPath(position.x - 47, position.y - 126, 94, 18, 4);
+    roundedPath(position.x - 57, position.y - 132, 114, 24, 5);
     context.fill();
     context.strokeStyle = '#efb95a';
     context.stroke();
     context.fillStyle = '#ffe6a4';
-    context.font = '9px DotGothic16, sans-serif';
+    context.font = '11px DotGothic16, sans-serif';
     context.textAlign = 'center';
-    context.fillText(`反撃まで ${remaining.toFixed(1)}秒`, position.x, position.y - 114);
+    context.fillText(`反撃まで ${remaining.toFixed(1)}秒`, position.x, position.y - 115);
     context.restore();
   }
 
@@ -425,7 +443,7 @@
 
     enemies.forEach((enemy, index) => {
       const position = enemyPositions[index];
-      const height = enemy.boss ? Math.min(178, cssHeight * .50) : Math.min(78, cssHeight * .22);
+      const height = enemy.boss ? Math.min(cssWidth <= 340 ? 150 : 178, cssHeight * .48) : Math.min(cssWidth <= 340 ? 66 : 76, cssHeight * .20);
       const hitFlash = effects.some((effect) => effect.kind === 'hit' && effect.age < .11);
       drawShadow(position.x, position.y, enemy.boss ? 45 : 20, enemy.boss ? .52 : .40);
       if (enemy.boss) {
@@ -453,7 +471,7 @@
       const job = DATA.JOBS?.[cat.jobId];
       if (!job) return;
       const position = catScreenPosition(cat, index, primaryEnemy);
-      const targetHeight = Math.min(index === 0 ? 86 : 76, cssHeight * .25);
+      const targetHeight = Math.min(cssWidth <= 340 ? (index === 0 ? 76 : 68) : (index === 0 ? 86 : 76), cssHeight * .23);
       const role = roleMeta(cat.jobId);
       drawShadow(position.x, position.y, 20);
       drawAttackFx(cat, position, primaryPos, time, game);
@@ -464,29 +482,20 @@
         phase: time * 6 + safeNumber(cat.uid, index)
       });
       drawHpBar(position.x, position.y - targetHeight * .79, 56, cat.state === 'faint' ? .18 : 1, '#56c961');
-      drawRoleBadge(position.x + 21, position.y - 22, role.mark, role.color);
-      context.save();
-      context.fillStyle = 'rgba(30,12,9,.74)';
-      roundedPath(position.x - 32, position.y + 7, 64, 14, 4);
-      context.fill();
-      context.fillStyle = '#fff0c8';
-      context.font = '8px DotGothic16, sans-serif';
-      context.textAlign = 'center';
-      context.fillText(job.name.replace('ねこ', ''), position.x, position.y + 17);
-      context.restore();
+      drawRoleBadge(position.x + 22, position.y - 24, role.mark, role.color);
     });
 
     if (Array.isArray(game.fieldCats) && game.fieldCats.length > cats.length) {
       context.save();
       context.fillStyle = 'rgba(41,17,11,.88)';
       context.strokeStyle = '#e2a846';
-      roundedPath(cssWidth - 112, cssHeight * .26, 54, 23, 5);
+      roundedPath(cssWidth - 126, cssHeight * .24, 70, 28, 5);
       context.fill();
       context.stroke();
       context.fillStyle = '#ffe39a';
-      context.font = '10px DotGothic16, sans-serif';
+      context.font = '11px DotGothic16, sans-serif';
       context.textAlign = 'center';
-      context.fillText(`増援 +${game.fieldCats.length - cats.length}`, cssWidth - 85, cssHeight * .26 + 15);
+      context.fillText(`増援 +${game.fieldCats.length - cats.length}`, cssWidth - 91, cssHeight * .24 + 18);
       context.restore();
     }
 
@@ -599,14 +608,14 @@
     context.stroke();
     context.setLineDash([]);
     context.fillStyle = 'rgba(32,14,10,.76)';
-    roundedPath(cssWidth * .43, cssHeight * .43, cssWidth * .18, 20, 5);
+    roundedPath(cssWidth * .39, cssHeight * .40, cssWidth * .25, 25, 5);
     context.fill();
     context.strokeStyle = 'rgba(237,187,82,.58)';
     context.stroke();
     context.fillStyle = '#ffe5a4';
-    context.font = '9px DotGothic16, sans-serif';
+    context.font = '11px DotGothic16, sans-serif';
     context.textAlign = 'center';
-    context.fillText(cat.state === 'fight' ? '接敵・攻撃中' : '前線へ接近', cssWidth * .52, cssHeight * .43 + 13);
+    context.fillText(cat.state === 'fight' ? '接敵・攻撃中' : '前線へ接近', cssWidth * .515, cssHeight * .40 + 16);
     context.restore();
   }
 
@@ -645,7 +654,8 @@
     canvas.dataset.actualEnemyCount = game && Array.isArray(game.enemies) ? String(game.enemies.length) : '0';
     canvas.dataset.partySlotCount = '4';
     canvas.dataset.visualCausalityReady = 'true';
-    canvas.dataset.visualRepairVersion = 's02-visual-repair-round-001';
+    canvas.dataset.responsiveStrategy = 'reference-width-reflow-safe-area';
+    canvas.dataset.visualRepairVersion = 's02-responsive-repair-round-002';
     canvas.dataset.rendererReady = 'true';
 
     frameHandle = window.requestAnimationFrame(draw);
@@ -669,12 +679,17 @@
   frameHandle = window.requestAnimationFrame(draw);
   window.__s02BattleRenderer = Object.freeze({
     ready: true,
-    version: 's02-visual-repair-round-001',
+    version: 's02-responsive-repair-round-002',
     source: 'window.__game',
     eventSource: 'cats-tower:s02-event',
     background: 'step4/s02/assets/s02-forest-approved.webp',
     partySlots: 4,
     visualCausality: true,
+    responsiveStrategy: 'reference-width-reflow-safe-area',
+    referenceWidthCssPx: 390,
+    artworkAspectRatioPreserved: true,
+    minimumReadableTextCssPx: 11,
+    preferredTouchTargetCssPx: 48,
     legacyCanvasVisible: false,
     gameplayCoreChanged: false,
     productionChanged: false

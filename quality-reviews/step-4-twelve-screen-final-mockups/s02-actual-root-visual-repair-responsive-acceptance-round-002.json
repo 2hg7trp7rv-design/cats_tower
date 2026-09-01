@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-responsive-visual-repair-acceptance-round-002",
+  "createdAt": "2026-09-01",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "parentAcceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-acceptance-round-001.json",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-025.json",
+  "status": "ACTIVE_BEFORE_RESPONSIVE_REPAIR_WRITE",
+  "screen": "S02 actual root playable battle screen",
+  "route": "/",
+  "userDecision": {
+    "date": "2026-09-01",
+    "summary": "Do not ask the user to judge physical UI size from a small screenshot. Research real mobile-game adaptation practice, apply it to S02, keep all repository work on live kimi, and report the matching Vercel preview URL after each repository change."
+  },
+  "rejectedApproach": {
+    "name": "uniform-full-screen-scaling",
+    "reason": "The supported portrait viewports do not share one aspect ratio. Uniformly shrinking the complete screen would also shrink text and touch targets below readable and operable minimums. Non-uniform stretching would distort the artwork and UI chrome."
+  },
+  "responsiveStrategy": {
+    "id": "reference-width-reflow-safe-area",
+    "referenceWidthCssPx": 390,
+    "artwork": "Preserve aspect ratio and crop or reveal additional background as necessary.",
+    "interface": "Reflow and collapse secondary information by width and available height; do not scale the entire interface as a flattened image.",
+    "extraHeight": "Allocate additional height primarily to the battlefield.",
+    "shortScreen": "Retain critical text and controls, hide or move secondary explanation into the scroll flow, and allow vertical scrolling.",
+    "safeArea": "Keep critical controls inside top and bottom safe-area insets while decorative background may extend edge to edge.",
+    "minimumReadableTextCssPx": 11,
+    "preferredTouchTargetCssPx": 48,
+    "absoluteMinimumTouchTargetCssPx": 44
+  },
+  "researchBasis": [
+    {
+      "source": "Apple Human Interface Guidelines — Designing for games and UI design tips",
+      "finding": "iOS game text should remain at least 11 pt and touch controls at least 44 by 44 pt; imagery should retain its aspect ratio."
+    },
+    {
+      "source": "Unity Canvas Scaler",
+      "finding": "Use a reference resolution with width/height matching or expansion; independent x/y stretching for mismatched aspect ratios is undesirable."
+    },
+    {
+      "source": "Unreal Engine DPI Scaling",
+      "finding": "Resolution-independent game UI commonly scales from the viewport's shortest side and a configured curve rather than from one fixed screenshot."
+    },
+    {
+      "source": "Godot Multiple Resolutions",
+      "finding": "Modern mobile devices vary in size, density and aspect ratio; portrait games use a base resolution, expand behavior and anchored controls."
+    },
+    {
+      "source": "Riot Games — Legends of Runeterra UI tooling",
+      "finding": "The production game used platform-specific mobile text sizes, a device/aspect/notch simulator and safe-area constraints."
+    },
+    {
+      "source": "Cocos Creator SafeArea",
+      "finding": "Interactive UI is constrained to a device-safe rectangle while backgrounds may continue to the screen edges."
+    }
+  ],
+  "requiredDeviceMatrix": [
+    "320x568 stress",
+    "320x667",
+    "360x800",
+    "375x667",
+    "390x844",
+    "412x915",
+    "430x932"
+  ],
+  "requiredModes": [
+    "normal after explicit actual summon interaction",
+    "actual navigation and sheet interaction",
+    "large text",
+    "reduced motion"
+  ],
+  "requiredRepairs": [
+    "remove redundant event and shortcut controls from the battle viewport while retaining their real destinations elsewhere",
+    "move the four-slot party identity into document flow immediately after the battlefield so it can be enlarged without covering combat units",
+    "keep all visible critical copy at or above 11 CSS pixels",
+    "keep tested interactive targets at or above 48 CSS pixels",
+    "allocate more battlefield height on tall phones while maintaining a 340 CSS pixel battlefield on short supported phones",
+    "separate cat and enemy lanes at compact widths",
+    "retain actual state authority, actual summon interaction, actual sheet navigation and actual commerce scrolling"
+  ],
+  "automaticFailConditions": [
+    "uniformly scaling a flattened full-screen image as the interface",
+    "non-uniform artwork distortion",
+    "visible critical text below 11 CSS pixels",
+    "tested interactive target below 48 CSS pixels",
+    "horizontal overflow",
+    "party dock covering the combat field",
+    "critical controls outside the safe-area strategy",
+    "game-core, game-data, app, economy, save schema, backend or Production mutation",
+    "browser evidence absent from the required matrix",
+    "user visual approval assumed",
+    "physical-iPhone PASS claimed"
+  ],
+  "completionBoundary": {
+    "s02MayPassAutomatically": false,
+    "p1ClosureRequires": "responsive browser evidence, independent visual criticism and user visual-direction approval",
+    "step4Pass": false,
+    "step5Allowed": false,
+    "productionAllowed": false,
+    "physicalIPhoneVerified": false
+  }
+}

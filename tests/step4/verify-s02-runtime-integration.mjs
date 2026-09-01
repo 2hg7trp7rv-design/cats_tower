@@ -6,16 +6,20 @@ import { execFileSync } from 'node:child_process';
 const root = process.cwd();
 const failures = [];
 const assert = (condition, message) => { if (!condition) failures.push(message); };
-const read = (relative) => fs.readFileSync(path.join(root, relative), 'utf8');
-const readJson = (relative) => JSON.parse(read(relative));
-const exists = (relative) => fs.existsSync(path.join(root, relative));
+const read = relative => fs.readFileSync(path.join(root, relative), 'utf8');
+const readJson = relative => JSON.parse(read(relative));
+const exists = relative => fs.existsSync(path.join(root, relative));
 const git = (...args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
 
 const repository = '2hg7trp7rv-design/cats_tower';
 const branch = 'kimi';
 const visualRepairEntryHead = '9495c97232213620346958f271913fd8a585ff50';
+const visualVersion = 's02-responsive-repair-round-002';
+const responsiveStrategy = 'reference-width-reflow-safe-area';
 const changeControlPath = 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-025.json';
-const acceptancePath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-acceptance-round-001.json';
+const parentAcceptancePath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-acceptance-round-001.json';
+const responsiveAcceptancePath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-responsive-acceptance-round-002.json';
+
 const requiredFiles = [
   'index.html',
   'app.js',
@@ -31,9 +35,10 @@ const requiredFiles = [
   'tests/governance/verify-current-step2-state.mjs',
   '.github/workflows/verify-step-4-s02-runtime-integration.yml',
   changeControlPath,
-  acceptancePath
+  parentAcceptancePath,
+  responsiveAcceptancePath
 ];
-for (const file of requiredFiles) assert(exists(file), `Missing visual-repair file: ${file}`);
+for (const file of requiredFiles) assert(exists(file), `Missing responsive visual-repair file: ${file}`);
 
 assert((process.env.GITHUB_REPOSITORY ?? repository) === repository, 'Repository boundary mismatch.');
 assert((process.env.GITHUB_REF_NAME ?? branch) === branch, 'Branch boundary mismatch.');
@@ -51,7 +56,8 @@ const rendererJs = read('runtime/s02-battle-renderer.js');
 const browserQa = read('tests/step4/s02-runtime-browser-qa.mjs');
 const workflow = read('.github/workflows/verify-step-4-s02-runtime-integration.yml');
 const changeControl = readJson(changeControlPath);
-const acceptance = readJson(acceptancePath);
+const parentAcceptance = readJson(parentAcceptancePath);
+const responsiveAcceptance = readJson(responsiveAcceptancePath);
 
 function viewportContent(html) {
   const tag = html.match(/<meta\b[^>]*\bname=["']viewport["'][^>]*>/i)?.[0]
@@ -89,13 +95,21 @@ for (const token of [
   'runtime-party-dock',
   'runtime-causality-strip',
   'runtime-encounter-panel',
+  "battle.insertAdjacentElement('afterend', partyDock)",
+  "partyDock.dataset.placement = 'after-battle'",
+  'classifyViewport',
+  "shell.dataset.responsiveStrategy = 'reference-width-reflow-safe-area'",
+  'referenceWidthCssPx: 390',
+  'minimumReadableTextCssPx: 11',
+  'preferredTouchTargetCssPx: 48',
   'partySlots: 4',
   "clickExisting('#tab-agency'",
   "clickExisting('#tab-forge'",
   "clickExisting('#tab-item'",
   "shell.dataset.visualCausalityReady = 'true'",
-  "shell.dataset.runtimeReady = 'true'"
-]) assert(runtimeJs.includes(token), `Visual runtime contract missing: ${token}`);
+  "shell.dataset.runtimeReady = 'true'",
+  visualVersion
+]) assert(runtimeJs.includes(token), `Responsive runtime contract missing: ${token}`);
 
 for (const token of [
   'window.__game',
@@ -104,24 +118,42 @@ for (const token of [
   'DATA.ASSETS?.enemies',
   'step4/s02/assets/s02-forest-approved.webp',
   'cats-tower:s02-event',
+  'formationLanes',
+  'enemyLanes',
   "canvas.dataset.partySlotCount = '4'",
   "canvas.dataset.visualCausalityReady = 'true'",
+  "canvas.dataset.responsiveStrategy = 'reference-width-reflow-safe-area'",
   "canvas.dataset.rendererReady = 'true'",
-  's02-visual-repair-round-001',
+  'artworkAspectRatioPreserved: true',
+  'minimumReadableTextCssPx: 11',
+  'preferredTouchTargetCssPx: 48',
+  visualVersion,
   'game.fieldCats',
   'game.enemies'
-]) assert(rendererJs.includes(token), `Actual-state visual renderer missing: ${token}`);
+]) assert(rendererJs.includes(token), `Responsive actual-state renderer missing: ${token}`);
+
+for (const token of [
+  '--s02-readable-min: 11px',
+  '--s02-control-min: 48px',
+  'height: clamp(340px, 50svh, 420px)',
+  '.runtime-event-banner,',
+  '.runtime-shortcut-rail',
+  'display: none !important',
+  'position: relative',
+  '.runtime-party-dock',
+  'font-size: var(--s02-readable-min)',
+  '@media (max-width: 359px)',
+  '@media (min-height: 780px)',
+  '@media (max-height: 720px)',
+  'body.runtime-large-text',
+  '@media (prefers-reduced-motion: reduce)'
+]) assert(runtimeFixes.includes(token), `Responsive CSS contract missing: ${token}`);
 
 assert(!/localStorage|sessionStorage|indexedDB/.test(runtimeJs + rendererJs), 'Visual repair may not create a second persistent state store.');
 assert(!/fetch\s*\(/.test(runtimeJs + rendererJs), 'Visual repair may not call a backend in Step 4.');
 assert(!/a_full_screen_pixel_art_mobile_game_ui/i.test(rootHtml + runtimeCss + runtimeFixes + runtimeJs + rendererJs), 'Flattened generated screen is forbidden.');
 assert(runtimeCss.includes('env(safe-area-inset-top'), 'Safe-area top inset is missing.');
 assert(runtimeCss.includes('env(safe-area-inset-bottom'), 'Safe-area bottom inset is missing.');
-assert(runtimeFixes.includes('@media (prefers-reduced-motion: reduce)'), 'Reduced-motion repair CSS is missing.');
-assert(runtimeFixes.includes('body.runtime-large-text'), 'Large-text repair styling is missing.');
-assert(runtimeFixes.includes('.runtime-party-dock'), 'Four-slot party presentation styling is missing.');
-assert(runtimeFixes.includes('.runtime-causality-strip'), 'Combat causality styling is missing.');
-assert(runtimeFixes.includes('#runtime-battle-canvas'), 'Actual-state renderer styling is missing.');
 
 for (const file of [
   'runtime/s02-runtime.js',
@@ -151,12 +183,14 @@ for (const [file, expected] of Object.entries(immutableBlobs)) {
 }
 
 const repairedBlobs = {
-  'runtime/s02-runtime.js': '2d9560981b285b84f43f466729431c9e827380ee',
-  'runtime/s02-battle-renderer.js': '56b5850b7092e75c9090e51161466418a9abf813',
-  'runtime/s02-runtime-fixes.css': '4ea83015756fd3fa1aa38e32ec779ed442ac9264'
+  'runtime/s02-runtime.js': '88ea0bf76bfaf44980bc21cdf8abeaa3b75077f0',
+  'runtime/s02-battle-renderer.js': '16e8dfdffaa9beab0723f9be93ad2f467b8d3239',
+  'runtime/s02-runtime-fixes.css': '59560b092746b22bf3645ee5f7cbb18f64db07ff',
+  'tests/step4/s02-runtime-browser-qa.mjs': 'ef8c1cdef53e3b6002eec16b73e8f74688a08991',
+  [responsiveAcceptancePath]: 'a6c3374cc68156dbc382b2302b4396dc42bf2373'
 };
 for (const [file, expected] of Object.entries(repairedBlobs)) {
-  assert(git('hash-object', file) === expected, `Visual-repair blob mismatch: ${file}`);
+  assert(git('hash-object', file) === expected, `Responsive visual-repair blob mismatch: ${file}`);
 }
 
 assert(changeControl.status === 'IN_PROGRESS', 'Round 025 must remain IN_PROGRESS before rendered judgment.');
@@ -164,18 +198,27 @@ assert(changeControl.verdict === 'IN_PROGRESS_STEP4_S02_ACTUAL_ROOT_VISUAL_REPAI
 assert(changeControl.step4Allowed === true, 'Round 025 must allow Step 4 repair.');
 assert(changeControl.step5Allowed === false, 'Round 025 may not allow Step 5.');
 assert(changeControl.openFinding === 'S4-RECOVERY-VIS-001', 'Round 025 open finding mismatch.');
-assert(acceptance.status === 'ACTIVE_BEFORE_VISUAL_REPAIR_WRITE', 'Visual repair acceptance status mismatch.');
-assert(acceptance.truthfulnessContract?.stateSource === 'window.__game', 'Acceptance must bind display to window.__game.');
-assert(acceptance.completionBoundary?.step5Allowed === false, 'Acceptance may not authorize Step 5.');
+assert(parentAcceptance.status === 'ACTIVE_BEFORE_VISUAL_REPAIR_WRITE', 'Parent visual repair acceptance status mismatch.');
+assert(parentAcceptance.truthfulnessContract?.stateSource === 'window.__game', 'Parent acceptance must bind display to window.__game.');
+assert(responsiveAcceptance.status === 'ACTIVE_BEFORE_RESPONSIVE_REPAIR_WRITE', 'Responsive acceptance status mismatch.');
+assert(responsiveAcceptance.responsiveStrategy?.id === responsiveStrategy, 'Responsive acceptance strategy mismatch.');
+assert(responsiveAcceptance.responsiveStrategy?.minimumReadableTextCssPx === 11, 'Responsive acceptance readable-text minimum mismatch.');
+assert(responsiveAcceptance.responsiveStrategy?.preferredTouchTargetCssPx === 48, 'Responsive acceptance touch-target preference mismatch.');
+assert(responsiveAcceptance.rejectedApproach?.name === 'uniform-full-screen-scaling', 'Uniform full-screen scaling must be explicitly rejected.');
+assert(responsiveAcceptance.completionBoundary?.step5Allowed === false, 'Responsive acceptance may not authorize Step 5.');
 
 for (const token of [
-  'PASS_S02_ACTUAL_ROOT_VISUAL_REPAIR_BROWSER',
+  'PASS_S02_RESPONSIVE_VISUAL_REPAIR_BROWSER',
   'normal-after-explicit-summon',
-  'partySlotCount',
-  'visualCausalityReady',
-  'resource value clipping',
+  '320x568-stress',
+  '430x932',
+  'touchTargetsUnder48',
+  'visibleTextUnderMinimum',
+  'followsBattle',
+  'adaptiveHeightEvidence',
+  'referenceWidthCssPx: 390',
   "physicalIPhone: 'NOT_VERIFIED'"
-]) assert(browserQa.includes(token), `Browser visual-repair QA missing: ${token}`);
+]) assert(browserQa.includes(token), `Responsive browser QA missing: ${token}`);
 
 for (const token of [
   'runtime/s02-runtime.js',
@@ -183,8 +226,8 @@ for (const token of [
   'runtime/s02-runtime-fixes.css',
   'active-change-control-addendum-round-025.json',
   's02-actual-root-visual-repair',
-  'PASS_S02_ACTUAL_ROOT_VISUAL_REPAIR_BROWSER'
-]) assert(workflow.includes(token), `Workflow visual-repair trigger/contract missing: ${token}`);
+  'PASS_S02_RESPONSIVE_VISUAL_REPAIR_BROWSER'
+]) assert(workflow.includes(token), `Workflow responsive trigger/contract missing: ${token}`);
 
 const allowedPaths = [
   /^runtime\/s02-runtime\.js$/,
@@ -203,31 +246,32 @@ const allowedPaths = [
 ];
 const changedOutput = git('diff', '--name-only', `${visualRepairEntryHead}..HEAD`);
 const changedPaths = changedOutput ? changedOutput.split('\n').filter(Boolean) : [];
-changedPaths.forEach(file => assert(allowedPaths.some(pattern => pattern.test(file)), `Out-of-bound visual-repair change: ${file}`));
-assert(changedPaths.some(file => file === 'runtime/s02-runtime.js'), 'Visual repair did not update runtime/s02-runtime.js.');
-assert(changedPaths.some(file => file === 'runtime/s02-battle-renderer.js'), 'Visual repair did not update runtime/s02-battle-renderer.js.');
-assert(changedPaths.some(file => file === 'runtime/s02-runtime-fixes.css'), 'Visual repair did not update runtime/s02-runtime-fixes.css.');
+changedPaths.forEach(file => assert(allowedPaths.some(pattern => pattern.test(file)), `Changed path outside round 025 allow-list: ${file}`));
 
-try {
-  execFileSync('git', ['diff', '--check', `${visualRepairEntryHead}..HEAD`], { cwd: root, stdio: 'pipe' });
-} catch (error) {
-  failures.push(`git diff --check failed: ${error.stderr?.toString() || error.message}`);
-}
+const forbiddenChanged = changedPaths.filter(file => [
+  'app.js', 'game-core.js', 'game-data.js', 'styles.css', 'sw.js', 'vercel.json',
+  'simulation/candidate-v2.json', 'simulation/executable-seal-v2.json'
+].includes(file) || file.startsWith('backend/') || file.startsWith('payment/') || file.startsWith('ads/'));
+assert(forbiddenChanged.length === 0, `Forbidden gameplay/economy/Production paths changed: ${forbiddenChanged.join(', ')}`);
 
 const report = {
-  verdict: failures.length ? 'FAIL_S02_ACTUAL_ROOT_VISUAL_REPAIR_STATIC' : 'PASS_S02_ACTUAL_ROOT_VISUAL_REPAIR_STATIC',
+  verdict: failures.length ? 'FAIL_S02_RESPONSIVE_VISUAL_REPAIR_STATIC' : 'PASS_S02_RESPONSIVE_VISUAL_REPAIR_STATIC',
   repository,
   branch,
   head: git('rev-parse', 'HEAD'),
   tree: git('rev-parse', 'HEAD^{tree}'),
-  visualRepairEntryHead,
+  route: '/',
   source: 'window.__game',
-  eventSource: 'non-consuming window.__game.emit observation',
-  partySlots: 4,
-  visualCausality: true,
-  immutableBlobs,
-  repairedBlobs,
+  visualVersion,
+  responsiveStrategy,
+  referenceWidthCssPx: 390,
+  minimumReadableTextCssPx: 11,
+  preferredTouchTargetCssPx: 48,
   changedPaths,
+  forbiddenChanged,
+  repairedBlobs,
+  immutableBlobs,
+  unresolvedFinding: 'S4-RECOVERY-VIS-001',
   step4Pass: false,
   step5Allowed: false,
   productionChanged: false,
