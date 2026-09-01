@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-actual-root-visual-repair-responsive-run-request-round-001",
+  "createdAt": "2026-09-01",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "sourceContentCommit": "ad32b09ce50e27a152a2c99e2d58e68c21a027d1",
+  "sourceContentTree": "426739995aebe213732cd0359e62eb4dd9040c7a",
+  "acceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-responsive-acceptance-round-002.json",
+  "workflow": ".github/workflows/verify-step-4-s02-runtime-integration.yml",
+  "requestedChecks": [
+    "static and governance verification",
+    "actual root Chromium verification",
+    "seven normal mobile viewports",
+    "actual summon and navigation interaction",
+    "large text",
+    "reduced motion",
+    "minimum 11 CSS pixel visible text",
+    "preferred 48 CSS pixel tested touch targets",
+    "safe-area and horizontal-overflow checks",
+    "adaptive-height evidence"
+  ],
+  "status": "REQUESTED",
+  "step4Pass": false,
+  "step5Allowed": false,
+  "userApprovalAssumed": false,
+  "productionChanged": false,
+  "physicalIPhone": "NOT_VERIFIED"
+}
