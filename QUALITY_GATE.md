@@ -1,60 +1,126 @@
-<!-- CATS_TOWER_STEP4_STATUS_BEGIN -->
-## 現在の正式Gate
+# Cat's Tower — Current Quality Gate
 
-- Step 1: **PASS**
-- Step 2: **PASS / SEALED**
-- Step 3: **PASS**
-- Step 4: **IN_PROGRESS**
-- Step 5: **BLOCKED_UNTIL_STEP4_PASS**
-- Unresolved P0/P1: **0 / 1**
-- Physical iPhone: **NOT_VERIFIED**
-- Production alias changed: **false**
-<!-- CATS_TOWER_STEP4_STATUS_END -->
+更新日: **2026-09-02**  
+Repository: `2hg7trp7rv-design/cats_tower`  
+Branch: existing `kimi` only  
+Authority: `CURRENT_AUTHORITY_INDEX.json`
 
-# Cat's Tower — 完成判定と工程Gate
+## Current verdict
 
-更新日: **2026-08-31**
-Repository: `2hg7trp7rv-design/cats_tower`
-Branch: existing `kimi` only
+`IN_PROGRESS_PHASE0_GOVERNANCE_AND_PROJECT_SOURCE_RECOVERY`
 
-## 現在の判定
+| Scope | Verdict |
+|---|---|
+| Step 1 product canonical | `PASS_CANONICAL` |
+| Step 2 executable contract | `PASS_CONTRACT` |
+| Step 3 sealed model validation | `PASS_MODEL` |
+| Step 4 twelve screen families | `IN_PROGRESS` |
+| S02-P1 review content | route present; 8 states claimed for audit |
+| S02-P1 accepted Golden Masters | `0 / 8` |
+| Step 5 canonical 1〜10F runtime/server | `BLOCKED` |
+| Physical iPhone | `NOT_VERIFIED` |
+| Production Ready | `false` |
 
-`IN_PROGRESS_S02_ACTUAL_ROOT_VISUAL_REPAIR`
+単独の`PASS`は禁止する。上記のscopeを越えて解釈しない。
 
-S02 rootの実表示修復は開始済みである。表示は`window.__game`の実stateへ結合され、4枠編成表示、階層目標、接敵・攻撃・報酬因果、実戦場renderer、320幅資源表示を追加した。ただし専用CIの操作QA修正と、実ブラウザ画像に対する視覚再修正が継続中であり、Step 4 PASSではない。
+## Open findings
 
-## G1 正本・branch — PASS
+- P0: **0**
+- P1: **2**
+  - `PHASE0-EVIDENCE-PENDING`
+  - `S4-RECOVERY-VIS-001`
 
-- Step 1 Round 008 seal: `0a959de0383b57ad6cd1f33c124b398aa51c1e00`
-- Step 2 executable seal: `ee3507969c03b08fe27350263cf0bc093a1c18e1`
-- Step 3 terminal evidence: immutable
-- Current change-control: `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-025.json`
-- 書込みは既存`kimi`のみ
+Phase 0のcritic、judge、completion evidence、live read-backが揃うまで前者を未解決とする。後者は保存済みS02-P1成果をA〜Jへ監査し、P0/P1修正が完了するまで未解決とする。
 
-## G2 経済・確率・長期進行 — PASS / SEALED
+## G0 — Governance and source integrity
+
+Status: **IN_PROGRESS**
+
+PASS条件:
+
+- `CURRENT_AUTHORITY_INDEX.json`が唯一のcurrent dispatcher
+- all current mirrorsが同じactive change-controlを参照
+- obsolete root design/source filesがlive `kimi`から削除
+- Project instructionsが完全置換
+- Development Playbookが存在しDownstream Usability Contractを固定
+- current governanceとRound 7 immutable historyのworkflowが分離
+- obsolete Step 4 write workflowsが削除
+- legacy runtimeが`LEGACY_RUNTIME_NOT_CANONICAL`
+- critic、final judge、completion evidence、live read-back
+- P0/P1=0
+
+## G1 — Canonical
+
+Status: `PASS_CANONICAL`
+
+Evidence:
+
+- `quality-reviews/step-1-reseal-round-008/seal-round-008.json`
+- `MASTER_SPEC.md`
+- `canonical/STABLE_ID_REGISTRY.json`
+- `canonical/SCREEN_STATE_REGISTRY.json`
+- `canonical/STATE_TRANSITION_CONTRACT.json`
+- `canonical/POLICY_RELEASE_GATES.json`
+
+このPASSはruntime、server、visual、deviceを承認しない。
+
+## G2 — Contract
+
+Status: `PASS_CONTRACT`
+
+Evidence:
+
+- `simulation/executable-seal-v2.json`
+- `simulation/candidate-v2.json`
+- `simulation/candidate-v2.schema.json`
+- `simulation/execution-contract-v2.json`
+- `simulation/run-plan-v2.json`
+
+このPASSは実装済みゲームを意味しない。
+
+## G3 — Model
+
+Status: `PASS_MODEL`
 
 - gameplay scenarios: `15,000`
 - high-volume samples: `1,700,000`
 - Step 3 unresolved P0/P1: `0 / 0`
-- 今回の修復によるcandidate、seal、経済値、保存schemaの変更: `false`
 
-## G3 S02コード・ブラウザ・アクセシビリティ — IN_PROGRESS
+制限:
 
-Content commit: `eedc47e576577f58a47994d0e8b689f5703de6a0`
-Tree: `af0d5149bd92aff53dbc2d6fe463caa56fc67019`
+- model validationであり、現在root runtimeの15,000実playtestではない
+- runtime実装後、shared domain engineで再封印が必要
 
-静的・governance検証はPASSした。最初の専用Chromium runは3 viewport画像を生成したが、操作QAが存在しない`data-runtime-action="battle"`を参照して失敗した。実際の塔navは`data-runtime-action="tower"`であり、シート閉鎖確認を含めて修正中である。
+## G4 — Visual / Asset / Runtime
 
-## G4 見た目・操作感 — FAIL P1
+Status: **FAIL / NOT COMPLETE**
 
-Open finding: `S4-RECOVERY-VIS-001`
+- current S02 technical history exists
+- current S02 visual P1 remains open
+- S02-P1 states present for audit: `8 claimed`
+- accepted Golden Masters: `0 / 8`
+- production asset proof: not started
+- canonical runtime: not implemented
+- user visual approval: false
 
-初回の修復画像は旧画面より戦闘密度と因果が改善した。一方、320幅では猫と敵の重なりが強く、戦闘単位の識別、文字サイズ、商用品質は完成画面基準に未達である。実root S02に対するユーザー承認も未取得である。
+## G5 — Server / Device / Release
 
-Unresolved P0/P1: `0 / 1`
+Status: **BLOCKED**
 
-## G5 Step 4 / Step 5 — BLOCKED
+未実装・未検証:
 
-Step 4 PASS条件は未達。S02の再修正・実画像批評に加え、S01、S08、S10アンカー、S01〜S12全画面、独立critic、ユーザー視覚承認、P0/P1ゼロ、final judge、completion、terminal live read-backが残る。
+- authoritative account/wallet/gacha/reset/offline/login/payment/ad
+- ledger/refund/revocation/restore
+- physical iPhone tap/haptic/heat/battery/PWA/native adapters
+- release policy refresh
 
-Step 5、backend、決済、広告、Production、物理iPhone PASSへ進んではならない。
+## Completion rule
+
+以下だけでは完成にならない。
+
+- files/code/images exist
+- build/test/CI success
+- Vercel READY
+- screenshot exists
+
+`PASS_RELEASE`は、G0〜G5の該当gateがすべてscope別PASS、unresolved P0/P1=0、user approvalとphysical-device evidenceが揃った場合だけ宣言できる。

@@ -1,126 +1,82 @@
 {
-  "statusDocumentSchemaVersion": 18,
-  "updatedDate": "2026-08-31",
+  "schemaVersion": 19,
+  "updatedAt": "2026-09-02",
   "project": "Cat's Tower",
-  "canonicalRepository": "2hg7trp7rv-design/cats_tower",
-  "canonicalBranch": "kimi",
-  "branchPolicy": {
-    "onlyExistingKimiMayBeModified": true,
-    "pullRequestWorkflowAllowed": false,
-    "mergeRebaseCherryPickForcePushAllowed": false
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "authorityIndex": "CURRENT_AUTHORITY_INDEX.json",
+  "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json",
+  "status": "IN_PROGRESS",
+  "currentRepositoryStep": 4,
+  "currentInternalPhase": "PHASE0-GOVERNANCE-RECOVERY",
+  "currentVerdict": "IN_PROGRESS_PHASE0_GOVERNANCE_AND_PROJECT_SOURCE_RECOVERY",
+  "scopedPasses": {
+    "step1": "PASS_CANONICAL",
+    "step2": "PASS_CONTRACT",
+    "step3": "PASS_MODEL",
+    "step4": "IN_PROGRESS",
+    "step5": "BLOCKED",
+    "step6": "BLOCKED"
   },
-  "activeProjectInstructions": {
-    "path": "CHATGPT_PROJECT_INSTRUCTIONS1.md",
-    "status": "ACTIVE_COMPLETE_REPLACEMENT",
-    "oldPathStatus": "DELETED_FROM_LIVE_KIMI"
+  "currentProductWorkAfterRecovery": {
+    "phase": "S02-P1-GOLDEN-MASTER",
+    "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
+    "acceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-acceptance-matrix-round-001.json",
+    "goldenMastersRequired": 8,
+    "deliverablesRequired": 10,
+    "goldenMasterRoutePresent": true,
+    "goldenMastersClaimedForAudit": 8,
+    "goldenMastersAccepted": 0,
+    "deliverablesClaimedForAudit": 10,
+    "deliverablesAccepted": 0
   },
-  "currentChat": "04_UIUX・12画面完成見本",
-  "currentStep": 4,
-  "currentStepName": "twelve-screen-final-mockups",
-  "currentStepStatus": "IN_PROGRESS",
-  "currentCheckpoint": "step4-s02-actual-root-visual-repair-in-progress",
-  "advanceAllowed": false,
-  "step2Allowed": true,
-  "step3Allowed": true,
-  "step4Allowed": true,
-  "step5Allowed": false,
-  "physicalIPhoneVerified": false,
-  "productionChangedByCurrentWork": false,
-  "productionAliasChanged": false,
-  "activeChangeControl": {
-    "path": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-025.json",
-    "status": "IN_PROGRESS",
-    "verdict": "IN_PROGRESS_STEP4_S02_ACTUAL_ROOT_VISUAL_REPAIR"
-  },
-  "round008": {
-    "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
-    "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce",
-    "sealPath": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
-    "sealBlob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
-    "sealCommit": "0b17f9b5b8decdab8ce329287a4dc073790c4bf7",
-    "sealTree": "9eac6b6103d65cf8bcb13859d00e43cd3389fa8a",
-    "unresolvedP0": 0,
-    "unresolvedP1": 0,
-    "status": "PASS"
-  },
-  "step2Evidence": {
-    "semanticCommit": "724d04940f9f3794b993cddbc5af3a7163a0395b",
-    "semanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
-    "sealPath": "simulation/executable-seal-v2.json",
-    "sealBlob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
-    "workflow": ".github/workflows/verify-step-2-v2.yml",
-    "workflowRunId": "33104391753",
-    "jobId": "98630217077",
-    "ciConclusion": "SUCCESS",
-    "status": "PASS_SEALED"
-  },
-  "step3": {
-    "status": "PASS",
-    "acceptance": "quality-reviews/step-3-large-scale-validation/acceptance-matrix.json",
-    "finalJudge": "quality-reviews/step-3-large-scale-validation/final-judge.json",
-    "completionEvidence": "quality-reviews/step-3-large-scale-validation/completion-evidence.json",
-    "liveReadback": "quality-reviews/step-3-large-scale-validation/live-readback.json",
-    "gameplayScenarios": 15000,
-    "highVolumeSamples": 1700000,
-    "unresolvedP0": 0,
-    "unresolvedP1": 0,
-    "balanceVerdict": "PASS_STEP3_LARGE_SCALE_VALIDATION"
-  },
-  "step4": {
-    "status": "IN_PROGRESS",
-    "step4Pass": false,
-    "step5Allowed": false,
-    "currentScope": "S02 actual root visual repair under round 025",
-    "baselineTechnicalCommit": "32675a7f268e1da20552c26a19b8d5d50b0c8400",
-    "baselineTechnicalTree": "bb0a010fe7ddebe4530029f66f1f2f6d6f137821",
-    "baselineWorkflowRunId": "33338326176",
-    "baselineJobId": "99329176306",
-    "baselineArtifactId": "9739733397",
-    "baselineTechnicalVerdict": "PASS_S02_RUNTIME_BROWSER_INTEGRATION",
-    "repairAcceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-acceptance-round-001.json",
-    "repairStatus": "IMPLEMENTATION_AND_RENDER_EVIDENCE_PENDING",
-    "overallVerdict": "IN_PROGRESS_S02_ACTUAL_ROOT_VISUAL_REPAIR",
-    "unresolvedP0": 0,
-    "unresolvedP1": 1,
-    "openFinding": "S4-RECOVERY-VIS-001",
-    "userVisualDirectionApproval": false,
-    "remainingAnchorScreens": [
-      "S01",
-      "S08",
-      "S10"
-    ],
-    "previousCriticSummary": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-critic-summary.json",
-    "previousFinalJudge": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-final-judge.json",
-    "previousCompletionEvidence": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-completion-evidence.json"
-  },
-  "authorizedExecutionSequence": [
-    { "order": 1, "name": "canonical-integration-and-reseal", "status": "PASS" },
-    { "order": 2, "name": "executable-contract-and-simulation", "status": "PASS" },
-    { "order": 3, "name": "large-scale-validation", "status": "PASS" },
-    { "order": 4, "name": "twelve-screen-final-mockups", "status": "IN_PROGRESS" },
-    { "order": 5, "name": "first-production-slice-and-backend-implementation", "status": "BLOCKED_UNTIL_STEP4_PASS" },
-    { "order": 6, "name": "physical-iphone-validation", "status": "BLOCKED_UNTIL_ELIGIBLE_BUILD" }
-  ],
-  "nextAuthorizedChat": "04_UIUX・12画面完成見本",
-  "nextAction": "Render, test and adversarially compare the repaired actual root S02 screen at 320x667, 375x667 and 390x844; keep S4-RECOVERY-VIS-001 open until evidence supports closure and the rendered result is shown to the user.",
-  "writeBoundary": {
-    "allowedNext": [
-      "S02 actual-root visual repair under round 025 acceptance",
-      "S02 rendered screenshot evidence and adversarial comparison",
-      "Step 4 status, critic and evidence synchronization"
-    ],
-    "forbiddenUntilLaterGates": [
-      "gameplay-core or economy mutation",
-      "Step 5 gameplay expansion",
-      "backend",
-      "payment provider",
-      "ad network",
-      "Production alias",
-      "physical-iPhone PASS claim"
+  "openFindings": {
+    "P0": 0,
+    "P1": 2,
+    "items": [
+      "S4-RECOVERY-VIS-001",
+      "PHASE0-EVIDENCE-PENDING"
     ]
   },
-  "status": "IN_PROGRESS",
-  "phase": "STEP4_S02_ACTUAL_ROOT_VISUAL_REPAIR",
-  "balanceVerdict": "PASS_STEP3_LARGE_SCALE_VALIDATION",
-  "reason": "The user authorized actual game-screen repair. The only allowed work is a truthful Step 4 presentation repair of the root S02 screen while gameplay, economy and Step 5 remain blocked."
+  "truthBoundaries": {
+    "legacyRuntime": "LEGACY_RUNTIME_NOT_CANONICAL",
+    "step3RuntimePlaytestEvidence": false,
+    "canonicalOneToTenRuntimeImplemented": false,
+    "backendImplemented": false,
+    "paymentImplemented": false,
+    "adsImplemented": false,
+    "productionAssetsApproved": false,
+    "twelveScreensApproved": 0,
+    "userVisualApproval": false,
+    "physicalIPhoneVerified": false,
+    "productionAliasChanged": false,
+    "productionReady": false
+  },
+  "phase0": {
+    "status": "IN_PROGRESS",
+    "entryHead": "83a1aa388e6467f0c34597533540b4ff61971ef6",
+    "entryTree": "599e484953ffde90caed95de2de0e4a31d7be3a8",
+    "openedByCommit": "fb27b428bf7f821551b70b07c63dfd97a0eb72f2",
+    "concurrencyContainmentHead": "83a1aa388e6467f0c34597533540b4ff61971ef6",
+    "concurrencyContainmentTree": "599e484953ffde90caed95de2de0e4a31d7be3a8",
+    "required": [
+      "single current authority index",
+      "complete replacement Project instructions",
+      "low-rework development playbook",
+      "synchronized mirrors",
+      "current/history workflow separation",
+      "obsolete root document and workflow deletion",
+      "critic, judge, completion evidence and live read-back"
+    ],
+    "preservedConcurrentProductContent": {
+      "route": "step4/s02/golden-master-p1/",
+      "claimedGoldenMasters": 8,
+      "acceptedGoldenMasters": 0,
+      "status": "PRESERVED_NOT_PHASE0_EVIDENCE_REQUIRES_A_J_AUDIT"
+    }
+  },
+  "nextAuthorizedAction": "Complete Phase 0 verification and evidence. After Phase 0 closes, audit the preserved S02-P1 content against A-J before any further product-content write.",
+  "step5Allowed": false,
+  "productionAllowed": false,
+  "physicalIPhoneVerified": false
 }

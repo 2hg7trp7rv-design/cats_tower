@@ -1,63 +1,45 @@
 {
-  "schemaVersion": 10,
-  "updatedDate": "2026-08-31",
+  "schemaVersion": 11,
+  "updatedAt": "2026-09-02",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
-  "currentStep": 4,
+  "authorityIndex": "CURRENT_AUTHORITY_INDEX.json",
+  "currentRepositoryStep": 4,
+  "currentInternalPhase": "PHASE0-GOVERNANCE-RECOVERY",
   "status": "IN_PROGRESS",
-  "phase": "STEP4_S02_ACTUAL_ROOT_VISUAL_REPAIR",
   "step1": {
-    "status": "PASS",
-    "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
-    "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce",
-    "sealPath": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
-    "sealBlob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00"
+    "status": "PASS_CANONICAL",
+    "seal": "quality-reviews/step-1-reseal-round-008/seal-round-008.json"
   },
   "step2": {
-    "status": "PASS_SEALED",
-    "sealPath": "simulation/executable-seal-v2.json",
-    "sealBlob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
-    "workflowRunId": "33104391753",
-    "jobId": "98630217077"
+    "status": "PASS_CONTRACT",
+    "seal": "simulation/executable-seal-v2.json",
+    "candidate": "simulation/candidate-v2.json",
+    "executionContract": "simulation/execution-contract-v2.json"
   },
   "step3": {
-    "status": "PASS",
-    "gameplayCalibration": 12000,
-    "gameplayHoldout": 3000,
-    "gameplayTotal": 15000,
-    "highVolumeTotal": 1700000,
+    "status": "PASS_MODEL",
+    "gameplayScenarios": 15000,
+    "highVolumeSamples": 1700000,
+    "finalJudge": "quality-reviews/step-3-large-scale-validation/final-judge.json",
+    "completionEvidence": "quality-reviews/step-3-large-scale-validation/completion-evidence.json",
     "unresolvedP0": 0,
     "unresolvedP1": 0,
-    "balanceVerdict": "PASS_STEP3_LARGE_SCALE_VALIDATION",
-    "terminalReadback": "quality-reviews/step-3-large-scale-validation/live-readback.json"
+    "limitation": "The scenario model and high-volume state tests passed their sealed acceptance. They are not proof that the current legacy browser runtime implements the canonical game or that it was playtested 15,000 times."
   },
-  "step4": {
-    "status": "IN_PROGRESS",
-    "scope": "S02 actual root visual repair under round 025",
-    "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-025.json",
-    "acceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-acceptance-round-001.json",
-    "baselineTechnicalVerdict": "PASS_S02_RUNTIME_BROWSER_INTEGRATION",
-    "baselineTechnicalCommit": "32675a7f268e1da20552c26a19b8d5d50b0c8400",
-    "baselineTechnicalTree": "bb0a010fe7ddebe4530029f66f1f2f6d6f137821",
-    "baselineWorkflowRunId": "33338326176",
-    "baselineJobId": "99329176306",
-    "baselineArtifactId": "9739733397",
-    "overallVerdict": "IN_PROGRESS_S02_ACTUAL_ROOT_VISUAL_REPAIR",
-    "unresolvedP0": 0,
-    "unresolvedP1": 1,
-    "openFinding": "S4-RECOVERY-VIS-001",
-    "userVisualApproval": false,
-    "step4Pass": false
+  "runtimeRevalidation": {
+    "requiredAfterCanonicalRuntimeImplementation": true,
+    "mustShareDomainEngineWithRuntime": true,
+    "mustShareContentAndRounding": true,
+    "calibrationAndHoldoutMustRemainSeparate": true,
+    "status": "NOT_STARTED"
   },
-  "step2Allowed": true,
-  "step3Allowed": true,
-  "step4Allowed": true,
+  "currentMutationAllowed": false,
+  "candidateMutationByPhase0": false,
+  "sealedEvidenceMutationByPhase0": false,
+  "step4Pass": false,
   "step5Allowed": false,
   "physicalIPhoneVerified": false,
-  "productionChanged": false,
   "productionAliasChanged": false,
-  "candidateMutationByCurrentRecovery": false,
-  "sealedSimulationMutationByCurrentRecovery": false,
-  "gameplayCoreMutationByCurrentRepair": false,
-  "nextAction": "Do not run more balance simulation or begin Step 5. Render, inspect and repair the actual root S02 visual result first."
+  "nextAction": "Do not tune or rerun the model during Phase 0 or S02-P1. Resume simulation only when an authorized change affects the sealed model or after the canonical runtime shares the domain engine."
 }

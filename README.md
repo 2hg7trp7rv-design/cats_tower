@@ -1,56 +1,52 @@
 # Cat's Tower
 
-猫と猫人の4体編成を育て、店舗・配送の支援を受けながら上限のない塔を登り、一つの「塔還り」で1Fから前回より速く再攻略する、スマートフォン縦画面向け放置インクリメンタルRPGです。
+猫と猫人の4体編成を育て、店舗・配送の支援を受けながら上限のない塔を登り、一つの`reset.tower_return`で1Fから前回より速く再攻略する、スマートフォン縦画面向け放置インクリメンタルRPG。
 
-## 現在地
+## Current truth
 
-- Repository: `2hg7trp7rv-design/cats_tower`
-- Writable branch: 既存の`kimi`のみ
-- Step 1: **Round 008 — PASS**
-- Step 2: **PASS / SEALED**
-- Step 3: **PASS / LARGE_SCALE_VALIDATION_COMPLETE**
-- Step 4: **READY_TO_START**
-- unresolved P0/P1: `0 / 0`
-- balance verdict: `PASS_STEP3_LARGE_SCALE_VALIDATION`
-- physical iPhone: `NOT_VERIFIED`
-- Production alias変更: なし
+| Scope | Status |
+|---|---|
+| Step 1 canonical | `PASS_CANONICAL` |
+| Step 2 executable contract | `PASS_CONTRACT` |
+| Step 3 model validation | `PASS_MODEL` |
+| Step 4 screen families | `IN_PROGRESS` |
+| S02-P1 review route | present; 8 states claimed for audit |
+| S02-P1 accepted Golden Masters | `0 / 8` |
+| Step 5 canonical runtime/server | `BLOCKED` |
+| Physical iPhone | `NOT_VERIFIED` |
+| Production Ready | `false` |
 
-## 読む順序
+The existing root browser game is **legacy technical history, not the canonical 1〜10F implementation**. Step 3 validates the sealed model; it does not mean that the legacy browser runtime was playtested 15,000 times.
 
-1. `CHATGPT_PROJECT_INSTRUCTIONS1.md`
-2. active change-controlと最新addendum
-3. Step 1 / Step 2 seals
-4. Step 3 terminal read-backとmirror correction
-5. `PROJECT_STATUS.json`
-6. `QUALITY_GATE.md`
-7. `AGENTS.md`
-8. 対象Acceptance/evidence
+## Read order
 
-## 現行製品の要点
+1. `CURRENT_AUTHORITY_INDEX.json`
+2. the active change-control named by the index
+3. `CHATGPT_PROJECT_INSTRUCTIONS1.md`
+4. `DEVELOPMENT_PLAYBOOK.md`
+5. Step 1/2 seals and Step 3 evidence
+6. current task Acceptance/evidence
+7. status mirrors
 
-- player-visible floor capなし。100Fは最初の大型節目、101F+継続
-- 常設4体、一時増援別層、tap direct damage 0、auto/offline基礎
-- shop/income/delivery/recruitment/reinvestmentはcombat support
-- single reset `reset.tower_return`、Floor 1再開、高速reclear、repeat-best ruby 0
-- uncapped coin level、every-100 ruby evolution
+## Current work
+
+Phase 0 is repairing governance and Project sources. S02-P1 review content and eight GM states were written concurrently and are preserved, but they are not Phase 0 evidence and are not accepted yet. After Phase 0 passes, that content must be audited against A〜J before any further product write. The actual root, gameplay core, economy, backend, Production and physical-device verdict remain unchanged.
+
+## Product invariants
+
+- no player-visible floor cap; 100F is a milestone, not ending
+- four named permanent party members; temporary support separate
+- tap direct damage 0; auto/offline foundation
+- shop/delivery support combat
+- one tower return system
+- uncapped coin levels and every-100 ruby evolution
 - rarity `N < R < RR < SR < SSR < UR`
-- separate character/weapon gacha、100/200 targets、carryover/exchange/history
-- first copyで機能完成、20+ duplicateは任意長期熟練、post-cap overflow
-- paid/free ruby provenance、explicit refund deficit、immutable ad/login versions
-- S01〜S12、server-authoritative permanent economy
+- separate character/weapon gacha
+- first copy functional; 20+ duplicate is optional long mastery
+- paid/free ruby provenance
+- S01〜S12
+- server-authoritative permanent economy
 
-## Step 3 result
+## PASS vocabulary
 
-- gameplay scenarios: `15,000`
-- high-volume samples: `1,700,000`
-- independent critics: `5`
-- unresolved P0/P1: `0 / 0`
-- terminal verdict: `PASS_FINAL_LIVE_READBACK_STEP3_LARGE_SCALE_VALIDATION`
-
-Step 3 PASSはruntime、backend、payment、ads、Production、物理iPhone完成を意味しません。
-
-## 次の許可作業
-
-`04_12画面完成見本`
-
-12画面の完成見本とスマホ閲覧・操作要件を固定します。
+Use `PASS_CANONICAL`, `PASS_CONTRACT`, `PASS_MODEL`, `PASS_VISUAL`, `PASS_ASSET`, `PASS_RUNTIME`, `PASS_SERVER`, `PASS_DEVICE` or `PASS_RELEASE`. Build, CI or Vercel READY alone is not a quality verdict.

@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-phase0-governance-recovery-acceptance",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json",
+  "entry": {
+    "head": "83a1aa388e6467f0c34597533540b4ff61971ef6",
+    "tree": "599e484953ffde90caed95de2de0e4a31d7be3a8",
+    "openingCommit": "fb27b428bf7f821551b70b07c63dfd97a0eb72f2"
+  },
+  "status": "FROZEN_BEFORE_CONTENT_COMMIT",
+  "purpose": "Remove ambiguous current-facing sources, establish one current authority dispatcher, replace Project instructions, and add a production method that prevents downstream-unusable deliverables and avoidable rebuilding.",
+  "criteria": [
+    {
+      "id": "P0-AUTHORITY",
+      "acceptance": "CURRENT_AUTHORITY_INDEX.json exists and all current mirrors point to the same active change-control."
+    },
+    {
+      "id": "P0-PROJECT-SOURCE",
+      "acceptance": "CHATGPT_PROJECT_INSTRUCTIONS1.md is a complete current replacement, DEVELOPMENT_PLAYBOOK.md defines a Downstream Usability Contract, and PROJECT_SOURCE_MANIFEST.md defines the user-side replacement set."
+    },
+    {
+      "id": "P0-STALE-DELETE",
+      "acceptance": "All paths in round 028 deleteFromLiveKimi are absent from the live tree; historical evidence paths, sealed Step 1/2/3 artifacts and the preserved legacy runtime remain unmodified."
+    },
+    {
+      "id": "P0-MIRRORS",
+      "acceptance": "PROJECT_STATUS, AI policy, quality gate, handover, agents, simulation status and workflow status agree on scoped Step 1/2/3 passes, Step 4 IN_PROGRESS, Step 5 blocked, Production unchanged and physical iPhone unverified."
+    },
+    {
+      "id": "P0-WORKFLOW",
+      "acceptance": "Immutable Round 7 history verification and current governance verification are separate workflows; the current verifier validates authority, deletion, truth boundaries and sealed Step 2 without using legacy status as current."
+    },
+    {
+      "id": "P0-LEGACY-BOUNDARY",
+      "acceptance": "The current root runtime is labeled LEGACY_RUNTIME_NOT_CANONICAL; Step 3 is labeled PASS_MODEL rather than runtime playtest evidence."
+    },
+    {
+      "id": "P0-EVIDENCE",
+      "acceptance": "Content commit/tree, changed and deleted paths, critic, final judge, completion evidence and live read-back are recorded; Phase 0 P0/P1 are zero before round 029 closes the recovery."
+    }
+  ],
+  "automaticFail": [
+    "any current mirror points to round 024 or round 025",
+    "any current mirror describes actual-root visual repair as the current task",
+    "candidate-v1 is listed as the active executable input",
+    "any obsolete live root document or retired Step 4 write workflow remains",
+    "immutable Step 1/2/3 evidence or gameplay/runtime/asset paths change",
+    "unscoped PASS appears as the current verdict",
+    "build, CI or Vercel READY is treated as product quality",
+    "Step 5, Production or physical iPhone is inferred",
+    "Phase 0 critic leaves P0 or P1 unresolved"
+  ],
+  "requiredEvidence": [
+    "content commit and tree",
+    "changed path allowlist proof",
+    "deleted path proof",
+    "JSON and whitespace verification",
+    "sealed Step 2 verifier result",
+    "independent critic",
+    "final judge",
+    "completion evidence",
+    "live branch read-back"
+  ],
+  "maximumVerdict": "PASS_PHASE0_GOVERNANCE_RECOVERY",
+  "nextProductWork": "Audit preserved S02-P1 Golden Master content against A-J under round 026 before any further product-content write",
+  "step4Pass": false,
+  "step5Allowed": false,
+  "productionAllowed": false,
+  "physicalIPhoneVerified": false
+}

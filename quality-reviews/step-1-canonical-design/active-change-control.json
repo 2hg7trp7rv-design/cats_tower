@@ -1,245 +1,37 @@
 {
-  "schemaVersion": 1,
-  "artifactId": "step-1-canonical-design-active-change-control",
-  "revision": 9,
-  "createdAt": "2026-08-26",
-  "updatedAt": "2026-08-28",
+  "schemaVersion": 2,
+  "artifactId": "cats-tower-active-change-control-dispatcher",
+  "updatedAt": "2026-09-02",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
-  "status": "PASS",
-  "verdict": "PASS",
-  "advanceAllowed": true,
-  "step2Allowed": true,
-  "step3Allowed": true,
-  "trigger": "Advance repository governance from the activated Round 008 Step 1 seal through the exact sealed Step 2 executable contract and authorize Step 3 large-scale validation. Repair stale mirrors and separate legacy Round 7 historical assertions from current status assertions without restoring obsolete markers.",
-  "projectInstructions": {
-    "activePath": "CHATGPT_PROJECT_INSTRUCTIONS1.md",
-    "status": "ACTIVE_COMPLETE_REPLACEMENT",
-    "oldPathStatus": "DELETED_FROM_LIVE_KIMI",
-    "oldAndNewMayBeActiveTogether": false
-  },
-  "activeSeal": {
-    "path": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
-    "blob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
-    "commit": "0b17f9b5b8decdab8ce329287a4dc073790c4bf7",
-    "tree": "9eac6b6103d65cf8bcb13859d00e43cd3389fa8a",
-    "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
-    "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce",
-    "finalJudgeCommit": "cd57005ef12c5ca4c923f436c2bcce0a5cc8aadf",
-    "unresolvedP0": 0,
-    "unresolvedP1": 0,
-    "status": "PASS"
-  },
-  "activeStep2Seal": {
-    "path": "simulation/executable-seal-v2.json",
-    "blob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
-    "semanticCommit": "724d04940f9f3794b993cddbc5af3a7163a0395b",
-    "semanticTree": "3552f5820681bd1fe037ac637fafc96b485e35f6",
-    "activationCommit": "89174eeebb033fe807a0592c8df0279c2a7b9a6f",
-    "activationTree": "ccf444df436d63d86fd4da0355f20349753b0546",
-    "workflow": ".github/workflows/verify-step-2-v2.yml",
-    "workflowRunId": "33104391753",
-    "jobId": "98630217077",
-    "conclusion": "SUCCESS",
-    "validatorVerdict": "PASS_EXECUTABLE_SEAL_V2",
-    "criticCount": 5,
-    "unresolvedP0": 0,
-    "unresolvedP1": 0,
-    "trackedP2": 6,
-    "balanceVerdict": "NOT_EVALUATED_STEP2",
-    "status": "PASS_SEALED"
-  },
-  "activationEvidence": {
-    "latestAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-016.json",
-    "step1Completion": "quality-reviews/step-1-reseal-round-008/activation-completion-evidence-round-008.json",
-    "step1LiveReadback": "quality-reviews/step-1-reseal-round-008/live-readback-round-008.json",
-    "step2Completion": "quality-reviews/step-2-executable-contract-v2/completion-evidence.json",
-    "step2ActivationReadback": "quality-reviews/step-2-executable-contract-v2/live-readback.json",
-    "step2FinalReadback": "quality-reviews/step-2-executable-contract-v2/final-live-readback.json",
-    "governanceRepairAcceptance": "quality-reviews/step-2-governance-repair-round-001/acceptance-matrix.json",
-    "governanceRepairCompletion": "quality-reviews/step-2-governance-repair-round-001/completion-evidence.json",
-    "governanceRepairLiveReadback": "quality-reviews/step-2-governance-repair-round-001/live-readback.json",
+  "status": "IN_PROGRESS",
+  "currentAuthorityIndex": "CURRENT_AUTHORITY_INDEX.json",
+  "currentAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json",
+  "currentVerdict": "IN_PROGRESS_PHASE0_GOVERNANCE_AND_PROJECT_SOURCE_RECOVERY",
+  "currentRepositoryStep": 4,
+  "currentInternalPhase": "PHASE0-GOVERNANCE-RECOVERY",
+  "nextProductChangeControlAfterRecovery": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
+  "canonicalSeals": {
+    "step1": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
+    "step2": "simulation/executable-seal-v2.json",
     "step3FinalJudge": "quality-reviews/step-3-large-scale-validation/final-judge.json",
-    "step3CompletionEvidence": "quality-reviews/step-3-large-scale-validation/completion-evidence.json",
-    "step3LiveReadback": "quality-reviews/step-3-large-scale-validation/live-readback.json",
-    "step3TerminalMirrorCorrection": "quality-reviews/step-3-large-scale-validation/terminal-mirror-correction.json"
+    "step3Completion": "quality-reviews/step-3-large-scale-validation/completion-evidence.json"
   },
-  "historicalEvidence": {
-    "finite100FNoGachaPassesRemainImmutable": true,
-    "mayAuthorizeCurrentProduct": false,
-    "mayAuthorizeStep2OrStep3": false,
-    "round7CurrentMarkerMayBeRestoredToLiveFiles": false,
-    "round7ValidationMode": "IMMUTABLE_HISTORICAL_WORKTREE_ONLY"
+  "scopeTruth": {
+    "step1": "PASS_CANONICAL",
+    "step2": "PASS_CONTRACT",
+    "step3": "PASS_MODEL",
+    "step4": "IN_PROGRESS",
+    "step5Allowed": false,
+    "productionAllowed": false,
+    "physicalIPhoneVerified": false
   },
-  "productBoundary": {
-    "tower": "no player-visible maximum; 100F is the first major milestone and 101F+ is normal progression",
-    "playableSpecies": [
-      "cat",
-      "catfolk"
-    ],
-    "activeNamedParty": 4,
-    "temporaryReinforcementSeparate": true,
-    "merchantRole": "shop, income, delivery, recruitment and reinvestment support combat; merchant-chairman identity is excluded",
-    "tapDirectDamage": 0,
-    "reset": {
-      "count": 1,
-      "id": "reset.tower_return",
-      "restartFloor": 1,
-      "repeatBestNewRuby": 0
-    },
-    "coinLevelCap": null,
-    "evolutionEligibilityEveryLevels": 100,
-    "rarities": [
-      "N",
-      "R",
-      "RR",
-      "SR",
-      "SSR",
-      "UR"
-    ],
-    "catalogTargets": {
-      "characters": 24,
-      "weapons": 36
-    },
-    "gacha": {
-      "characterWeaponSeparated": true,
-      "hardPityTarget": 100,
-      "featuredGuaranteeTarget": 200,
-      "compatibleCarryover": true
-    },
-    "duplicateMastery": {
-      "firstCopyFunctional": true,
-      "minimumAdditionalEffectiveCopiesForFullMastery": 20,
-      "normalPveRequiresFullMastery": false,
-      "overflowRequired": true
-    },
-    "wallet": [
-      "paid",
-      "free-reset",
-      "free-ad",
-      "free-other"
-    ],
-    "ads": "rewarded opt-in only in the initial product",
-    "screens": 12,
-    "serverAuthority": "all permanent economy and entitlements",
-    "numeric": "versioned arbitrary precision with deterministic serialization and rounding"
+  "lineage": {
+    "phase0Parent": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
+    "round026Role": "S02-P1 Golden Master product-work authority",
+    "round027Role": "temporary Phase 0 governance and Project-source recovery authority",
+    "supersededAddendaRemainHistory": true,
+    "round028Role": "corrected Phase 0 baseline and active recovery authority"
   },
-  "completedCheckpoints": {
-    "step1Round008": {
-      "status": "PASS",
-      "criticCount": 10,
-      "unresolvedP0": 0,
-      "unresolvedP1": 0,
-      "trackedP2": 6
-    },
-    "step2ExecutableContractV2": {
-      "status": "PASS_SEALED",
-      "criticCount": 5,
-      "unresolvedP0": 0,
-      "unresolvedP1": 0,
-      "trackedP2": 6,
-      "qualificationScenarios": 30,
-      "balanceVerdict": "NOT_EVALUATED_STEP2"
-    },
-    "step3LargeScaleValidation": {
-      "status": "PASS",
-      "gameplayScenarios": 15000,
-      "highVolumeSamples": 1700000,
-      "criticCount": 5,
-      "unresolvedP0": 0,
-      "unresolvedP1": 0,
-      "balanceVerdict": "PASS_STEP3_LARGE_SCALE_VALIDATION"
-    }
-  },
-  "authorizedExecutionSequence": [
-    {
-      "order": 1,
-      "name": "canonical-integration-and-reseal",
-      "status": "PASS"
-    },
-    {
-      "order": 2,
-      "name": "executable-contract-and-simulation",
-      "status": "PASS"
-    },
-    {
-      "order": 3,
-      "name": "large-scale-validation",
-      "status": "PASS"
-    },
-    {
-      "order": 4,
-      "name": "twelve-screen-final-mockups",
-      "status": "READY_TO_START"
-    },
-    {
-      "order": 5,
-      "name": "first-production-slice-and-backend-implementation",
-      "status": "BLOCKED_UNTIL_PRIOR_GATES"
-    },
-    {
-      "order": 6,
-      "name": "physical-iphone-validation",
-      "status": "BLOCKED_UNTIL_ELIGIBLE_BUILD"
-    }
-  ],
-  "step3Boundary": {
-    "requiredRunPlan": "simulation/run-plan-v2.json",
-    "minimumGameplayScenarios": 15000,
-    "calibrationScenarios": 12000,
-    "unseenHoldoutScenarios": 3000,
-    "requiredHighVolumeSuites": [
-      "gacha-tails",
-      "pity-conformance",
-      "duplicate-skew-overflow",
-      "refund-replay-race",
-      "state-machine-model",
-      "large-number-properties"
-    ],
-    "holdoutMayBeReusedForTuning": false,
-    "step2QualificationMayBeClaimedAsBalancePass": false,
-    "allowed": [
-      "Step 3 large-scale validation artifacts and evidence"
-    ],
-    "forbidden": [
-      "runtime",
-      "assets",
-      "backend",
-      "payment provider",
-      "ad network",
-      "PR operation",
-      "Production alias",
-      "physical-iPhone PASS claim"
-    ]
-  },
-  "governanceRepair": {
-    "acceptancePath": "quality-reviews/step-2-governance-repair-round-001/acceptance-matrix.json",
-    "acceptanceBlob": "fd4ad16e056370bdf0b3c6e2e4ed8b97ca91db64",
-    "workflow": ".github/workflows/verify-main.yml",
-    "historicalJob": "historical-round7-evidence",
-    "currentJob": "current-governance",
-    "completionPath": "quality-reviews/step-2-governance-repair-round-001/completion-evidence.json",
-    "liveReadbackPath": "quality-reviews/step-2-governance-repair-round-001/live-readback.json"
-  },
-  "nextAuthorizedChat": "04_12画面完成見本",
-  "nextAuthorizedAction": "Start Step 4 twelve-screen final mockups.",
-  "physicalIPhoneVerified": false,
-  "productionAliasChanged": false,
-  "step4Allowed": true,
-  "currentWriteBoundary": {
-    "allowed": [
-      "Step 4 twelve-screen final mockups"
-    ],
-    "forbidden": [
-      "runtime",
-      "assets",
-      "backend",
-      "payment provider",
-      "ad network",
-      "PR operation",
-      "Production alias",
-      "Step 2 executable mutation",
-      "physical-iPhone PASS claim"
-    ]
-  }
+  "rule": "Do not infer the current phase from this file's older Git history or from snapshot headers in sealed documents. Read CURRENT_AUTHORITY_INDEX.json and currentAddendum on live kimi."
 }

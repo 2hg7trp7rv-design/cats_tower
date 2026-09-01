@@ -1,184 +1,99 @@
 {
-  "schemaVersion": 10,
-  "updatedDate": "2026-08-31",
+  "schemaVersion": 11,
+  "updatedAt": "2026-09-02",
   "repository": {
     "fullName": "2hg7trp7rv-design/cats_tower",
     "allowedBranch": "kimi",
-    "createOrWriteOtherBranch": false,
+    "writeOtherBranch": false,
+    "createBranch": false,
     "pullRequestWorkflow": false,
     "mergeRebaseCherryPickForcePush": false,
-    "productionAliasChangeWithoutApproval": false
+    "productionAliasChangeWithoutExplicitApproval": false
   },
-  "sourceOfTruthOrder": [
-    "latest explicit user decision",
-    "CHATGPT_PROJECT_INSTRUCTIONS1.md",
-    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-025.json",
-    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-024.json",
-    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-023.json",
-    "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
-    "MASTER_SPEC.md and sealed canonical contracts",
-    "simulation/executable-seal-v2.json and its completion/read-back chain",
-    "quality-reviews/step-3-large-scale-validation/terminal-mirror-correction.json",
-    "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-final-judge.json",
-    "PROJECT_STATUS.json, simulation/CURRENT_STATUS.json, QUALITY_GATE.md, CURRENT_STATUS.md, PROJECT_HANDOVER.md and AGENTS.md",
-    "historical Step 4 drafts and legacy runtime"
-  ],
-  "currentPhase": {
-    "step": 4,
-    "name": "twelve-screen-final-mockups",
+  "authority": {
+    "index": "CURRENT_AUTHORITY_INDEX.json",
+    "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json",
+    "instructions": "CHATGPT_PROJECT_INSTRUCTIONS1.md",
+    "playbook": "DEVELOPMENT_PLAYBOOK.md",
+    "projectSourceManifest": "PROJECT_SOURCE_MANIFEST.md"
+  },
+  "current": {
+    "repositoryStep": 4,
+    "internalPhase": "PHASE0-GOVERNANCE-RECOVERY",
     "status": "IN_PROGRESS",
-    "phase": "STEP4_S02_ACTUAL_ROOT_VISUAL_REPAIR",
-    "step1Status": "PASS",
-    "step2Status": "PASS_SEALED",
-    "step3Status": "PASS",
-    "step4Allowed": true,
-    "step5Allowed": false,
-    "s02BaselineTechnicalVerdict": "PASS_S02_RUNTIME_BROWSER_INTEGRATION",
-    "overallVerdict": "IN_PROGRESS_S02_ACTUAL_ROOT_VISUAL_REPAIR",
-    "unresolvedP0": 0,
-    "unresolvedP1": 1,
-    "userVisualDirectionApproval": false,
-    "balanceVerdict": "PASS_STEP3_LARGE_SCALE_VALIDATION",
-    "physicalIPhone": "NOT_VERIFIED"
-  },
-  "activeStep1Seal": {
-    "path": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
-    "blob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
-    "commit": "0b17f9b5b8decdab8ce329287a4dc073790c4bf7",
-    "tree": "9eac6b6103d65cf8bcb13859d00e43cd3389fa8a",
-    "status": "PASS"
-  },
-  "activeStep2Seal": {
-    "path": "simulation/executable-seal-v2.json",
-    "blob": "ee3507969c03b08fe27350263cf0bc093a1c18e1",
-    "workflow": ".github/workflows/verify-step-2-v2.yml",
-    "workflowRunId": "33104391753",
-    "jobId": "98630217077",
-    "conclusion": "SUCCESS",
-    "status": "PASS_SEALED"
-  },
-  "activeStep3Validation": {
-    "status": "PASS",
-    "gameplayScenarios": 15000,
-    "highVolumeSamples": 1700000,
-    "unresolvedP0": 0,
-    "unresolvedP1": 0,
-    "terminalReadback": "quality-reviews/step-3-large-scale-validation/live-readback.json"
-  },
-  "activeStep4Recovery": {
-    "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-025.json",
-    "acceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-actual-root-visual-repair-acceptance-round-001.json",
-    "baselineCriticSummary": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-critic-summary.json",
-    "baselineFinalJudge": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-final-judge.json",
-    "baselineCompletionEvidence": "quality-reviews/step-4-twelve-screen-final-mockups/s02-main-entry-governance-recovery-completion-evidence.json",
-    "baselineTechnicalCommit": "32675a7f268e1da20552c26a19b8d5d50b0c8400",
-    "baselineTechnicalTree": "bb0a010fe7ddebe4530029f66f1f2f6d6f137821",
-    "baselineWorkflowRunId": "33338326176",
-    "baselineJobId": "99329176306",
-    "baselineArtifactId": "9739733397",
-    "baselineTechnicalStatus": "PASS",
-    "visualRepairStatus": "IMPLEMENTATION_AND_RENDER_EVIDENCE_PENDING",
-    "openFinding": "S4-RECOVERY-VIS-001",
+    "verdict": "IN_PROGRESS_PHASE0_GOVERNANCE_AND_PROJECT_SOURCE_RECOVERY",
+    "nextProductPhase": "S02-P1-GOLDEN-MASTER",
     "step4Pass": false,
-    "step5Allowed": false
+    "step5Allowed": false,
+    "productionAllowed": false,
+    "physicalIPhoneVerified": false,
+    "userVisualApproval": false
   },
-  "visualRepairTruthBoundary": {
-    "stateAuthority": "window.__game",
-    "actualCombatUnits": [
-      "game.fieldCats",
-      "game.enemies"
-    ],
-    "eventObservation": "non-consuming wrapper around window.__game.emit",
-    "fourSlotIdentity": "owned, on-field, available and locked states must be distinguished",
+  "scopedPassVocabulary": [
+    "PASS_CANONICAL",
+    "PASS_CONTRACT",
+    "PASS_MODEL",
+    "PASS_VISUAL",
+    "PASS_ASSET",
+    "PASS_RUNTIME",
+    "PASS_SERVER",
+    "PASS_DEVICE",
+    "PASS_RELEASE"
+  ],
+  "forbiddenUnscopedVerdict": "PASS",
+  "completionInsufficientAlone": [
+    "file exists",
+    "code exists",
+    "image exists",
+    "build succeeds",
+    "unit tests pass",
+    "CI is green",
+    "Vercel is READY",
+    "screenshot exists",
+    "sandbox endpoint responds"
+  ],
+  "lowReworkRules": {
+    "downstreamUsabilityContractRequired": true,
+    "representativeProofBeforeVolume": true,
+    "stateFamilyBeforeHappyPathPolish": true,
+    "runtimeAndSimulationShareDomainEngine": true,
+    "oneCurrentAuthorityIndex": true,
+    "contentAndEvidenceCommitsSeparated": true,
+    "independentCriticRequired": true,
+    "P0P1MustBeZero": true,
+    "userDoesNotPerformRoutineQA": true
+  },
+  "currentWriteBoundary": {
+    "allowed": "round 028 allowedWrites only",
     "forbidden": [
-      "fake active skills",
-      "unowned characters shown as active field units",
-      "gameplay-core mutation",
-      "economy mutation",
-      "second persistent state store"
+      "sealed Step 1/2/3 mutation",
+      "gameplay runtime mutation",
+      "economy or save schema mutation",
+      "production asset generation",
+      "backend/payment/ad implementation",
+      "Production alias change",
+      "PR operation",
+      "physical-iPhone PASS claim"
     ]
   },
-  "completionContract": {
-    "insufficientAlone": [
-      "files exist",
-      "code exists",
-      "build succeeds",
-      "tests pass",
-      "deployment READY",
-      "screenshots exist"
-    ],
-    "required": [
-      "requirements coverage",
-      "actual rendered-result inspection",
-      "production-quality comparison against the user-defined completed-screen baseline",
-      "screen-specific Cat's Tower identity",
-      "browser screenshots at required viewports",
-      "large-text and reduced-motion verification",
-      "independent critics and final judge",
-      "unresolved P0 and P1 equal zero",
-      "user visual-direction acceptance",
-      "exact commit, tree, workflow and artifact binding",
-      "forbidden path and Production changes equal zero"
-    ]
+  "legacy": {
+    "runtimeStatus": "LEGACY_RUNTIME_NOT_CANONICAL",
+    "obsoleteProjectSourcesMustBeDeleted": true,
+    "historicalQualityEvidenceMustBePreserved": true,
+    "historicalSnapshotStatusDoesNotDefineCurrentStatus": true
   },
-  "writeBoundary": {
-    "currentAllowed": [
-      "Step 4 S02 actual-root visual repair under round 025 acceptance",
-      "Step 4 rendered screenshots and adversarial visual audit",
-      "Step 4 critics, repair and status mirrors"
-    ],
-    "currentForbidden": [
-      "game-core, game-data, app or economy mutation",
-      "Step 5 gameplay expansion",
-      "backend",
-      "payment provider",
-      "ad network",
-      "Production alias",
-      "other branch or PR operation",
-      "mutation of sealed Step 2 or Step 3 evidence",
-      "physical-iPhone PASS claim",
-      "user approval inference"
-    ]
-  },
-  "userBoundary": {
-    "chatgptOwns": [
-      "research",
-      "specification",
-      "visual production",
-      "self-rejection of weak designs",
-      "tests",
-      "defect discovery",
-      "repair",
-      "regression",
-      "handover"
-    ],
-    "userNeededFor": [
-      "material product-direction tie",
-      "final visual preference between production-credible alternatives",
-      "unavailable credentials or contracts",
-      "destructive or public operation approval",
-      "physical iPhone evidence"
-    ]
-  },
-  "reporting": {
-    "required": [
-      "repository",
-      "branch",
-      "content and evidence commit/tree",
-      "workflow run/job/artifact when available",
-      "phase and verdict",
-      "P0/P1",
-      "changed paths",
-      "Production change",
-      "physical iPhone state"
-    ],
-    "forbiddenWithoutPass": [
-      "完成",
-      "OK",
-      "問題なし",
-      "本番品質",
-      "Production Ready",
-      "実機確認済み"
-    ]
-  }
+  "reportingRequired": [
+    "repository",
+    "branch",
+    "authority",
+    "entry/content/evidence commit and tree",
+    "changed and deleted paths",
+    "workflow run/job/artifact",
+    "deployment identity if relevant",
+    "scoped verdict",
+    "P0/P1/P2",
+    "Production state",
+    "physical-device state",
+    "next authorized action"
+  ]
 }

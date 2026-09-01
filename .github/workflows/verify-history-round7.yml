@@ -1,32 +1,23 @@
-name: Verify Cat's Tower history and current governance
+name: Verify immutable Cat's Tower Round 7 history
 
 on:
   push:
     branches: [kimi]
     paths:
-      - '.github/workflows/verify-main.yml'
-      - '.github/workflows/CURRENT_STATUS.md'
-      - 'AI_PROJECT_POLICY.json'
-      - 'QUALITY_GATE.md'
-      - 'PROJECT_STATUS.json'
-      - 'PROJECT_HANDOVER.md'
-      - 'AGENTS.md'
-      - 'CHATGPT_PROJECT_INSTRUCTIONS1.md'
-      - 'MASTER_SPEC.md'
-      - 'canonical/**'
-      - 'simulation/**'
-      - 'quality-reviews/step-1-canonical-design/**'
-      - 'quality-reviews/step-1-reseal-round-008/**'
-      - 'quality-reviews/step-2-executable-contract-v2/**'
-      - 'quality-reviews/step-2-governance-repair-round-001/**'
-      - 'tests/governance/**'
+      - '.github/workflows/verify-history-round7.yml'
+      - 'quality-reviews/step-1-legacy-baseline-round-007/**'
+      - 'quality-reviews/step-1-legacy-baseline/**'
+      - '.github/baselines/v0.8.2/**'
+      - 'tests/verify-step-1-baseline.mjs'
+      - 'tests/artifact-download-transport.mjs'
+      - 'tests/artifact-download-transport.test.mjs'
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: cats-governance-${{ github.sha }}
+  group: cats-history-round7-${{ github.sha }}
   cancel-in-progress: false
 
 jobs:
@@ -119,26 +110,3 @@ jobs:
           test "$(git -C "$COMPLETION_DIR" rev-parse "HEAD:$COMPLETION")" = '9071044e64dfdb4cfa3f66f52da01d110d4512d3'
 
           echo 'PASS_HISTORICAL_ROUND7_IMMUTABLE_WORKTREES'
-
-  current-governance:
-    name: current-governance
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.sha }}
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Verify current Round 008 and Step 2 state
-        run: node tests/governance/verify-current-step2-state.mjs
-
-      - name: Re-run the sealed Step 2 executable verifier
-        run: node simulation/verify-step2-v2.mjs
-
-      - name: Reject whitespace and patch defects
-        run: git diff --check 510157c97e7e94456df8d45c3af20082e71aced6..HEAD

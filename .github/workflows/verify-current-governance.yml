@@ -1,0 +1,93 @@
+name: Verify Cat's Tower current authority
+
+on:
+  push:
+    branches: [kimi]
+    paths:
+      - 'CURRENT_AUTHORITY_INDEX.json'
+      - 'CHATGPT_PROJECT_INSTRUCTIONS1.md'
+      - 'DEVELOPMENT_PLAYBOOK.md'
+      - 'PROJECT_SOURCE_MANIFEST.md'
+      - 'README.md'
+      - 'PROJECT_STATUS.json'
+      - 'AI_PROJECT_POLICY.json'
+      - 'QUALITY_GATE.md'
+      - 'PROJECT_HANDOVER.md'
+      - 'AGENTS.md'
+      - 'simulation/CURRENT_STATUS.json'
+      - '.github/workflows/CURRENT_STATUS.md'
+      - '.github/workflows/verify-current-governance.yml'
+      - '.github/workflows/verify-history-round7.yml'
+      - 'quality-reviews/step-1-canonical-design/active-change-control.json'
+      - 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-027.json'
+      - 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json'
+      - 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json'
+      - 'quality-reviews/phase-0-governance-recovery/**'
+      - 'tests/governance/verify-current-authority.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cats-current-governance-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  current-authority:
+    name: current-authority
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Confirm exact source commit
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          test "$(git rev-parse --is-shallow-repository)" = 'false'
+          test -z "$(git replace -l)"
+
+      - name: Verify current authority, mirrors, source replacement and deletion boundary
+        run: node tests/governance/verify-current-authority.mjs
+
+      - name: Re-run sealed Step 2 executable verifier
+        run: node simulation/verify-step2-v2.mjs
+
+      - name: Parse current JSON documents
+        run: |
+          set -euo pipefail
+          jq -e . CURRENT_AUTHORITY_INDEX.json >/dev/null
+          jq -e . PROJECT_STATUS.json >/dev/null
+          jq -e . AI_PROJECT_POLICY.json >/dev/null
+          jq -e . simulation/CURRENT_STATUS.json >/dev/null
+          jq -e . quality-reviews/step-1-canonical-design/active-change-control.json >/dev/null
+          jq -e . quality-reviews/step-1-canonical-design/active-change-control-addendum-round-027.json >/dev/null
+          jq -e . quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json >/dev/null
+          jq -e . quality-reviews/phase-0-governance-recovery/acceptance-matrix.json >/dev/null
+          if test -f quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json; then
+            jq -e . quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json >/dev/null
+            jq -e . quality-reviews/phase-0-governance-recovery/critic-summary.json >/dev/null
+            jq -e . quality-reviews/phase-0-governance-recovery/final-judge.json >/dev/null
+            jq -e . quality-reviews/phase-0-governance-recovery/completion-evidence.json >/dev/null
+            jq -e . quality-reviews/phase-0-governance-recovery/live-readback.json >/dev/null
+          fi
+
+      - name: Reject whitespace defects in Phase 0 changes
+        run: |
+          set -euo pipefail
+          ENTRY=$(jq -r '.entry.head' quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json)
+          if test -f quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json; then
+            CLOSURE_COMMIT=$(git log --diff-filter=A --format='%H' -- quality-reviews/step-1-canonical-design/active-change-control-addendum-round-029.json | tail -n 1)
+            test -n "$CLOSURE_COMMIT"
+            git diff --check "$ENTRY".."$CLOSURE_COMMIT"
+          else
+            git diff --check "$ENTRY"..HEAD
+          fi
