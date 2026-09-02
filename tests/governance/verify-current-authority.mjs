@@ -247,6 +247,8 @@ function assertS02HistoryWithIncrementalRenewals(base, head, control, label, evi
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02ExternalPreviewOriginAccessCorrectionChangedPaths].sort()), `${label}: external-preview origin-access correction changed an unreviewed path`);
     } else if (s02ExternalPreviewProtectedAliasCorrectionCommit && commit === s02ExternalPreviewProtectedAliasCorrectionCommit) {
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02ExternalPreviewProtectedAliasCorrectionChangedPaths].sort()), `${label}: external-preview protected-alias correction changed an unreviewed path`);
+    } else if (s02ExternalPreviewCanonicalRedirectCorrectionCommit && commit === s02ExternalPreviewCanonicalRedirectCorrectionCommit) {
+      assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02ExternalPreviewCanonicalRedirectCorrectionChangedPaths].sort()), `${label}: external-preview canonical-redirect correction changed an unreviewed path`);
     } else {
       assertBoundary(paths, control, `${label} commit ${commit}`);
     }
@@ -3965,6 +3967,14 @@ const s02ExternalPreviewProtectedAliasCorrectionChangedPaths = [
   s02ExternalPreviewProtectedAliasCorrectionPath,
   'tests/governance/verify-current-authority.mjs'
 ];
+const s02ExternalPreviewCanonicalRedirectCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-canonical-path-redirect-correction-round-007.json';
+const s02ExternalPreviewCanonicalRedirectCorrection = exists(s02ExternalPreviewCanonicalRedirectCorrectionPath) ? json(s02ExternalPreviewCanonicalRedirectCorrectionPath) : null;
+const s02ExternalPreviewCanonicalRedirectCorrectionCommit = s02ExternalPreviewCanonicalRedirectCorrection ? firstAddCommit(s02ExternalPreviewCanonicalRedirectCorrectionPath) : null;
+const s02ExternalPreviewCanonicalRedirectCorrectionChangedPaths = [
+  '.github/workflows/verify-current-governance.yml',
+  s02ExternalPreviewCanonicalRedirectCorrectionPath,
+  'tests/governance/verify-current-authority.mjs'
+];
 
 // BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001
 const s02HarnessCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-001.json';
@@ -5572,7 +5582,9 @@ if (s02ExternalPreviewProtectedAliasCorrection) {
   const correctedWorkflow = textAt(s02ExternalPreviewProtectedAliasCorrectionCommit, '.github/workflows/verify-current-governance.yml');
   assert(correctedWorkflow.includes('PROTECTED_ALIAS_CORRECTION') && correctedWorkflow.includes('await authenticateOrigin(immutableOrigin)') && correctedWorkflow.includes('immutableServesReviewedContent: true') && correctedWorkflow.includes('PROTECTED_MOVING_ALIAS_NOT_AUTOMATION_FETCHED') && correctedWorkflow.includes('REVIEW_ROUTE_DOES_NOT_EQUAL_TARGET_INDEX') && correctedWorkflow.includes('oidcVerified: true'), 'S02 protected-alias workflow lacks immutable byte, explicit alias boundary or OIDC guards');
   assert(JSON.stringify(correction.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }) && correction.status === 'CORRECTED_PROTECTED_MOVING_ALIAS_PROOF_BOUNDARY_PENDING_RERUN', 'S02 protected-alias boundary or status mismatch');
-  assertNoPathChangesSince(s02ExternalPreviewProtectedAliasCorrectionCommit, 'HEAD', s02ExternalPreviewProtectedAliasCorrectionChangedPaths, 'S02 protected-alias correction freeze');
+  const protectedAliasFreezeEnd = s02ExternalPreviewCanonicalRedirectCorrectionCommit ? git(['rev-parse', `${s02ExternalPreviewCanonicalRedirectCorrectionCommit}^`]) : 'HEAD';
+  assertNoPathChangesSince(s02ExternalPreviewProtectedAliasCorrectionCommit, protectedAliasFreezeEnd, s02ExternalPreviewProtectedAliasCorrectionChangedPaths, 'S02 protected-alias correction freeze');
+  if (s02ExternalPreviewCanonicalRedirectCorrectionCommit) assertNoPathChangesSince(s02ExternalPreviewProtectedAliasCorrectionCommit, 'HEAD', [s02ExternalPreviewProtectedAliasCorrectionPath], 'S02 protected-alias correction record freeze');
   if (requireLiveActions) {
     const failedRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${correction.failedWorkflow.runId}/attempts/${correction.failedWorkflow.runAttempt}`);
     const failedJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${correction.failedWorkflow.jobId}`);
@@ -5582,13 +5594,48 @@ if (s02ExternalPreviewProtectedAliasCorrection) {
 }
 // END_S02_PROTECTED_ALIAS_PROOF_BOUNDARY_CORRECTION_ROUND_006
 
+// BEGIN_S02_CANONICAL_REVIEW_PATH_REDIRECT_CORRECTION_ROUND_007
+if (s02ExternalPreviewCanonicalRedirectCorrection) {
+  const correction = s02ExternalPreviewCanonicalRedirectCorrection;
+  assertExactKeySet(correction, ['schemaVersion', 'artifactId', 'createdAt', 'repository', 'branch', 'changeControl', 'entry', 'failedWorkflow', 'request', 'priorCorrection', 'diagnosis', 'correction', 'boundaries', 'status'], 'S02 canonical-redirect correction');
+  assertExactKeySet(correction.entry, ['head', 'tree'], 'S02 canonical-redirect entry');
+  assertExactKeySet(correction.failedWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'failedStep', 'error'], 'S02 canonical-redirect failed workflow');
+  assertExactKeySet(correction.request, ['path', 'commit', 'tree', 'blob'], 'S02 canonical-redirect request');
+  assertExactKeySet(correction.priorCorrection, ['path', 'commit', 'tree', 'blob'], 'S02 canonical-redirect predecessor');
+  assertExactKeySet(correction.diagnosis, ['type', 'status', 'location', 'sourcePath', 'targetPath', 'sameOrigin', 'allowlistedPair', 'productQualityAffected', 'originalFailurePreserved'], 'S02 canonical-redirect diagnosis');
+  assertExactKeySet(correction.correction, ['rule', 'changedPaths', 'repairedWorkflowBlob', 'repairedVerifierBlob', 'maxCanonicalRedirects', 'allowedStatuses', 'sameOriginRequired', 'allowedPathPair', 'queryRejected', 'fragmentRejected', 'credentialsRejected', 'final200Required', 'byteExactChecksRetained', 'responseCapsRetained', 'oidcProofRetained', 'providerSettingsChanged', 'productContentChanged'], 'S02 exact canonical-redirect correction');
+  assertExactKeySet(correction.boundaries, ['rootRuntimeChanged', 'gameCoreChanged', 'gameDataChanged', 'economyChanged', 'saveSchemaChanged', 'backendChanged', 'productionChanged', 'productionAliasChanged', 'physicalIPhoneVerified', 'step4Pass', 'step5Allowed'], 'S02 canonical-redirect boundaries');
+  assert(correction.schemaVersion === 1 && correction.artifactId === 'cats-tower-s02-golden-master-p1-canonical-path-redirect-correction-round-007' && correction.createdAt === '2026-09-02' && correction.repository === '2hg7trp7rv-design/cats_tower' && correction.branch === 'kimi' && correction.changeControl === s02RepairControlPath, 'S02 canonical-redirect identity mismatch');
+  assert(JSON.stringify(correction.entry) === JSON.stringify({ head: '555d7a04e436855344930608fa551324a9d26ff6', tree: 'a731b8a97f3b7872a44ddadbd4fa00927013048a' }), 'S02 canonical-redirect entry mismatch');
+  assert(JSON.stringify(correction.failedWorkflow) === JSON.stringify({ commit: correction.entry.head, tree: correction.entry.tree, runId: 33621332135, runAttempt: 1, jobId: 100219009311, conclusion: 'FAILURE', failedStep: 'Generate external S02 Preview proof', error: 'UNEXPECTED_AUTHENTICATED_REDIRECT:308:CANONICAL_REVIEW_PATH' }), 'S02 canonical-redirect failed workflow mismatch');
+  assert(JSON.stringify(correction.request) === JSON.stringify({ path: s02ReviewEvidencePaths.deploymentRequest, commit: 'e5ba5ed92d0eeb0da67f956637b7ebb1cb6c2a11', tree: 'f706c3146d09f3c30368e0e0d4a92afbfd7850da', blob: 'c034073b7b9beaa34bcffd4a685e36fefc3a0861' }), 'S02 canonical-redirect request mismatch');
+  assert(JSON.stringify(correction.priorCorrection) === JSON.stringify({ path: s02ExternalPreviewProtectedAliasCorrectionPath, commit: correction.entry.head, tree: correction.entry.tree, blob: 'c8e694df40797cda97926a90801f561aefe0fec6' }), 'S02 canonical-redirect predecessor mismatch');
+  assert(correction.priorCorrection.commit === firstAddCommit(correction.priorCorrection.path) && git(['rev-parse', `${correction.priorCorrection.commit}:${correction.priorCorrection.path}`]) === correction.priorCorrection.blob, 'S02 canonical-redirect immutable predecessor mismatch');
+  assert(JSON.stringify(correction.diagnosis) === JSON.stringify({ type: 'VERCEL_CANONICALIZED_TRAILING_SLASH_WITH_SAME_ORIGIN_308', status: 308, location: '/step4/s02/golden-master-p1', sourcePath: '/step4/s02/golden-master-p1/', targetPath: '/step4/s02/golden-master-p1', sameOrigin: true, allowlistedPair: true, productQualityAffected: false, originalFailurePreserved: true }), 'S02 canonical-redirect diagnosis mismatch');
+  assert(s02ExternalPreviewCanonicalRedirectCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewCanonicalRedirectCorrectionCommit}^`]) === correction.entry.head, 'S02 canonical-redirect lineage mismatch');
+  assertExactChangedPaths(correction.entry.head, s02ExternalPreviewCanonicalRedirectCorrectionCommit, s02ExternalPreviewCanonicalRedirectCorrectionChangedPaths, 'S02 canonical-redirect correction commit');
+  assertAddedOnceAndUnchanged(s02ExternalPreviewCanonicalRedirectCorrectionPath, s02ExternalPreviewCanonicalRedirectCorrectionCommit);
+  assert(JSON.stringify(correction.correction) === JSON.stringify({ rule: 'FOLLOW_AT_MOST_ONE_SAME_ORIGIN_307_OR_308_BETWEEN_THE_TWO_EXACT_REVIEW_ROUTE_VARIANTS', changedPaths: s02ExternalPreviewCanonicalRedirectCorrectionChangedPaths, repairedWorkflowBlob: git(['rev-parse', `${s02ExternalPreviewCanonicalRedirectCorrectionCommit}:.github/workflows/verify-current-governance.yml`]), repairedVerifierBlob: git(['rev-parse', `${s02ExternalPreviewCanonicalRedirectCorrectionCommit}:tests/governance/verify-current-authority.mjs`]), maxCanonicalRedirects: 1, allowedStatuses: [307, 308], sameOriginRequired: true, allowedPathPair: ['/step4/s02/golden-master-p1/', '/step4/s02/golden-master-p1'], queryRejected: true, fragmentRejected: true, credentialsRejected: true, final200Required: true, byteExactChecksRetained: true, responseCapsRetained: true, oidcProofRetained: true, providerSettingsChanged: false, productContentChanged: false }), 'S02 canonical-redirect correction blob or redirect boundary mismatch');
+  const correctedWorkflow = textAt(s02ExternalPreviewCanonicalRedirectCorrectionCommit, '.github/workflows/verify-current-governance.yml');
+  assert(correctedWorkflow.includes('CANONICAL_REDIRECT_CORRECTION') && correctedWorkflow.includes('const exactRoutePair =') && correctedWorkflow.includes('response.status === 307 || response.status === 308') && correctedWorkflow.includes('await response.body?.cancel()') && correctedWorkflow.includes('REVIEW_ROUTE_DOES_NOT_EQUAL_TARGET_INDEX') && correctedWorkflow.includes('oidcVerified: true'), 'S02 canonical-redirect workflow lacks one-hop same-origin route, byte or OIDC guards');
+  assert(JSON.stringify(correction.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }) && correction.status === 'CORRECTED_CANONICAL_REVIEW_PATH_REDIRECT_PENDING_RERUN', 'S02 canonical-redirect boundary or status mismatch');
+  assertNoPathChangesSince(s02ExternalPreviewCanonicalRedirectCorrectionCommit, 'HEAD', s02ExternalPreviewCanonicalRedirectCorrectionChangedPaths, 'S02 canonical-redirect correction freeze');
+  if (requireLiveActions) {
+    const failedRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${correction.failedWorkflow.runId}/attempts/${correction.failedWorkflow.runAttempt}`);
+    const failedJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${correction.failedWorkflow.jobId}`);
+    assert(failedRun.id === correction.failedWorkflow.runId && failedRun.head_sha === correction.entry.head && failedRun.head_branch === 'kimi' && failedRun.status === 'completed' && failedRun.conclusion === 'failure', 'S02 canonical-redirect failed run mismatch');
+    assert(failedJob.id === correction.failedWorkflow.jobId && failedJob.run_id === failedRun.id && failedJob.head_sha === correction.entry.head && failedJob.name === 'current-authority' && failedJob.conclusion === 'failure' && (failedJob.steps ?? []).filter(step => step.name === correction.failedWorkflow.failedStep && step.conclusion === 'failure').length === 1, 'S02 canonical-redirect failed job mismatch');
+  }
+}
+// END_S02_CANONICAL_REVIEW_PATH_REDIRECT_CORRECTION_ROUND_007
+
 function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath = s02ReviewEvidencePaths.deploymentRequest, requireLiveApi = true) {
   assertWorkflowEvidenceKeys(evidence, `${label} workflow evidence`, true);
   for (const key of ['runId', 'runAttempt', 'jobId', 'artifactId']) assert(Number.isSafeInteger(evidence[key]) && evidence[key] > 0, `${label}: ${key} is invalid`);
   assert(/^[a-f0-9]{40}$/.test(evidence.commit ?? '') && evidence.tree === git(['rev-parse', `${evidence.commit}^{tree}`]), `${label}: commit/tree mismatch`);
-  const correctedExternalProof = requestPath === s02ReviewEvidencePaths.deploymentRequest && Boolean(s02ExternalPreviewVerifierCorrection || s02ExternalPreviewRedirectCorrection || s02ExternalPreviewBrowserCorrection || s02ExternalPreviewUploadCorrection || s02ExternalPreviewOriginAccessCorrection || s02ExternalPreviewProtectedAliasCorrection);
+  const correctedExternalProof = requestPath === s02ReviewEvidencePaths.deploymentRequest && Boolean(s02ExternalPreviewVerifierCorrection || s02ExternalPreviewRedirectCorrection || s02ExternalPreviewBrowserCorrection || s02ExternalPreviewUploadCorrection || s02ExternalPreviewOriginAccessCorrection || s02ExternalPreviewProtectedAliasCorrection || s02ExternalPreviewCanonicalRedirectCorrection);
   const protectedAliasProof = requestPath === s02ReviewEvidencePaths.deploymentRequest && Boolean(s02ExternalPreviewProtectedAliasCorrection);
-  const expectedProofCommit = s02ExternalPreviewProtectedAliasCorrectionCommit ?? s02ExternalPreviewOriginAccessCorrectionCommit ?? s02ExternalPreviewUploadCorrectionCommit ?? s02ExternalPreviewBrowserCorrectionCommit ?? s02ExternalPreviewRedirectCorrectionCommit ?? (correctedExternalProof ? s02ExternalPreviewVerifierCorrectionCommit : firstAddCommit(requestPath));
+  const expectedProofCommit = s02ExternalPreviewCanonicalRedirectCorrectionCommit ?? s02ExternalPreviewProtectedAliasCorrectionCommit ?? s02ExternalPreviewOriginAccessCorrectionCommit ?? s02ExternalPreviewUploadCorrectionCommit ?? s02ExternalPreviewBrowserCorrectionCommit ?? s02ExternalPreviewRedirectCorrectionCommit ?? (correctedExternalProof ? s02ExternalPreviewVerifierCorrectionCommit : firstAddCommit(requestPath));
   assert(evidence.commit === expectedProofCommit, `${label}: workflow does not bind the exact request or its reviewed external-proof correction commit`);
   assert(evidence.conclusion === 'SUCCESS' && evidence.artifactName === `s02-external-preview-${evidence.commit}-${evidence.runId}-${evidence.runAttempt}` && /^sha256:[a-f0-9]{64}$/.test(evidence.artifactDigest ?? ''), `${label}: conclusion or artifact identity mismatch`);
   verifyDurableActionsOidc(evidence, label);
@@ -6109,9 +6156,11 @@ function verifyS02ReviewEvidencePrefix(options = {}) {
   assertExactChangedPaths(completionCommit, requestCommit, [paths.deploymentRequest], `${labelPrefix} deployment-readback request commit`);
   assertAddedOnceAndUnchanged(paths.deploymentRequest, requestCommit);
   const externalProofCommit = paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest
-    ? (s02ExternalPreviewProtectedAliasCorrectionCommit ?? s02ExternalPreviewOriginAccessCorrectionCommit ?? s02ExternalPreviewUploadCorrectionCommit ?? s02ExternalPreviewBrowserCorrectionCommit ?? s02ExternalPreviewRedirectCorrectionCommit ?? s02ExternalPreviewVerifierCorrectionCommit ?? requestCommit)
+    ? (s02ExternalPreviewCanonicalRedirectCorrectionCommit ?? s02ExternalPreviewProtectedAliasCorrectionCommit ?? s02ExternalPreviewOriginAccessCorrectionCommit ?? s02ExternalPreviewUploadCorrectionCommit ?? s02ExternalPreviewBrowserCorrectionCommit ?? s02ExternalPreviewRedirectCorrectionCommit ?? s02ExternalPreviewVerifierCorrectionCommit ?? requestCommit)
     : requestCommit;
-  if (s02ExternalPreviewProtectedAliasCorrectionCommit && paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest) {
+  if (s02ExternalPreviewCanonicalRedirectCorrectionCommit && paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest) {
+    assert(git(['rev-parse', `${externalProofCommit}^`]) === s02ExternalPreviewProtectedAliasCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewProtectedAliasCorrectionCommit}^`]) === s02ExternalPreviewOriginAccessCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewOriginAccessCorrectionCommit}^`]) === s02ExternalPreviewUploadCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewUploadCorrectionCommit}^`]) === s02ExternalPreviewBrowserCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewBrowserCorrectionCommit}^`]) === s02ExternalPreviewRedirectCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewRedirectCorrectionCommit}^`]) === s02ExternalPreviewVerifierCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewVerifierCorrectionCommit}^`]) === requestCommit, `${labelPrefix} seven-step external-proof correction chain is not exact`);
+  } else if (s02ExternalPreviewProtectedAliasCorrectionCommit && paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest) {
     assert(git(['rev-parse', `${externalProofCommit}^`]) === s02ExternalPreviewOriginAccessCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewOriginAccessCorrectionCommit}^`]) === s02ExternalPreviewUploadCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewUploadCorrectionCommit}^`]) === s02ExternalPreviewBrowserCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewBrowserCorrectionCommit}^`]) === s02ExternalPreviewRedirectCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewRedirectCorrectionCommit}^`]) === s02ExternalPreviewVerifierCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewVerifierCorrectionCommit}^`]) === requestCommit, `${labelPrefix} six-step external-proof correction chain is not exact`);
   } else if (s02ExternalPreviewOriginAccessCorrectionCommit && paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest) {
     assert(git(['rev-parse', `${externalProofCommit}^`]) === s02ExternalPreviewUploadCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewUploadCorrectionCommit}^`]) === s02ExternalPreviewBrowserCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewBrowserCorrectionCommit}^`]) === s02ExternalPreviewRedirectCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewRedirectCorrectionCommit}^`]) === s02ExternalPreviewVerifierCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewVerifierCorrectionCommit}^`]) === requestCommit, `${labelPrefix} five-step external-proof correction chain is not exact`);

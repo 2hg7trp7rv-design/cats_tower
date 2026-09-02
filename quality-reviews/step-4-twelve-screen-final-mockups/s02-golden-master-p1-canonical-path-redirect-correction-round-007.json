@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-canonical-path-redirect-correction-round-007",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "555d7a04e436855344930608fa551324a9d26ff6",
+    "tree": "a731b8a97f3b7872a44ddadbd4fa00927013048a"
+  },
+  "failedWorkflow": {
+    "commit": "555d7a04e436855344930608fa551324a9d26ff6",
+    "tree": "a731b8a97f3b7872a44ddadbd4fa00927013048a",
+    "runId": 33621332135,
+    "runAttempt": 1,
+    "jobId": 100219009311,
+    "conclusion": "FAILURE",
+    "failedStep": "Generate external S02 Preview proof",
+    "error": "UNEXPECTED_AUTHENTICATED_REDIRECT:308:CANONICAL_REVIEW_PATH"
+  },
+  "request": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-request-round-001.json",
+    "commit": "e5ba5ed92d0eeb0da67f956637b7ebb1cb6c2a11",
+    "tree": "f706c3146d09f3c30368e0e0d4a92afbfd7850da",
+    "blob": "c034073b7b9beaa34bcffd4a685e36fefc3a0861"
+  },
+  "priorCorrection": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-protected-alias-proof-boundary-correction-round-006.json",
+    "commit": "555d7a04e436855344930608fa551324a9d26ff6",
+    "tree": "a731b8a97f3b7872a44ddadbd4fa00927013048a",
+    "blob": "c8e694df40797cda97926a90801f561aefe0fec6"
+  },
+  "diagnosis": {
+    "type": "VERCEL_CANONICALIZED_TRAILING_SLASH_WITH_SAME_ORIGIN_308",
+    "status": 308,
+    "location": "/step4/s02/golden-master-p1",
+    "sourcePath": "/step4/s02/golden-master-p1/",
+    "targetPath": "/step4/s02/golden-master-p1",
+    "sameOrigin": true,
+    "allowlistedPair": true,
+    "productQualityAffected": false,
+    "originalFailurePreserved": true
+  },
+  "correction": {
+    "rule": "FOLLOW_AT_MOST_ONE_SAME_ORIGIN_307_OR_308_BETWEEN_THE_TWO_EXACT_REVIEW_ROUTE_VARIANTS",
+    "changedPaths": [
+      ".github/workflows/verify-current-governance.yml",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-canonical-path-redirect-correction-round-007.json",
+      "tests/governance/verify-current-authority.mjs"
+    ],
+    "repairedWorkflowBlob": "8c2d6a582b9c0e3b1f4db5f23ebc607db3c207af",
+    "repairedVerifierBlob": "2306c07f23602a790bc05247be4a6520b4ca1864",
+    "maxCanonicalRedirects": 1,
+    "allowedStatuses": [
+      307,
+      308
+    ],
+    "sameOriginRequired": true,
+    "allowedPathPair": [
+      "/step4/s02/golden-master-p1/",
+      "/step4/s02/golden-master-p1"
+    ],
+    "queryRejected": true,
+    "fragmentRejected": true,
+    "credentialsRejected": true,
+    "final200Required": true,
+    "byteExactChecksRetained": true,
+    "responseCapsRetained": true,
+    "oidcProofRetained": true,
+    "providerSettingsChanged": false,
+    "productContentChanged": false
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_CANONICAL_REVIEW_PATH_REDIRECT_PENDING_RERUN"
+}

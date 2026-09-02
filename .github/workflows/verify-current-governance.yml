@@ -196,7 +196,12 @@ jobs:
           UPLOAD_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-upload-transport-correction-round-004.json'
           ORIGIN_ACCESS_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-origin-access-correction-round-005.json'
           PROTECTED_ALIAS_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-protected-alias-proof-boundary-correction-round-006.json'
-          if test -f "$PROTECTED_ALIAS_CORRECTION"; then
+          CANONICAL_REDIRECT_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-canonical-path-redirect-correction-round-007.json'
+          if test -f "$CANONICAL_REDIRECT_CORRECTION"; then
+            test "$(git log --diff-filter=A --format=%H -- "$CANONICAL_REDIRECT_CORRECTION" | tail -n 1)" = "$GITHUB_SHA"
+            test "$(git rev-parse HEAD^)" = "$(jq -er '.entry.head' "$CANONICAL_REDIRECT_CORRECTION")"
+            test "$(jq -er '.request.commit' "$CANONICAL_REDIRECT_CORRECTION")" = "$REQUEST_COMMIT"
+          elif test -f "$PROTECTED_ALIAS_CORRECTION"; then
             test "$(git log --diff-filter=A --format=%H -- "$PROTECTED_ALIAS_CORRECTION" | tail -n 1)" = "$GITHUB_SHA"
             test "$(git rev-parse HEAD^)" = "$(jq -er '.entry.head' "$PROTECTED_ALIAS_CORRECTION")"
             test "$(jq -er '.request.commit' "$PROTECTED_ALIAS_CORRECTION")" = "$REQUEST_COMMIT"
@@ -326,23 +331,35 @@ jobs:
           };
           await authenticateOrigin(immutableOrigin);
           const fetchBounded = async (value, cap, allowedPaths) => {
-            const url = validateFetchUrl(value);
-            if (!allowedPaths.includes(url.pathname) || url.search || url.hash) throw new Error(`UNEXPECTED_FETCH_PATH:${url.href}`);
-            const context = contexts.get(url.origin);
-            if (!context) throw new Error(`UNAUTHENTICATED_FETCH_ORIGIN:${url.origin}`);
-            const cookies = await context.cookies(url.href);
+            const initialUrl = validateFetchUrl(value);
+            if (!allowedPaths.includes(initialUrl.pathname) || initialUrl.search || initialUrl.hash) throw new Error(`UNEXPECTED_FETCH_PATH:${initialUrl.href}`);
+            const context = contexts.get(initialUrl.origin);
+            if (!context) throw new Error(`UNAUTHENTICATED_FETCH_ORIGIN:${initialUrl.origin}`);
+            const cookies = await context.cookies(initialUrl.href);
             const cookieHeader = cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ');
-            if (!cookieHeader) throw new Error(`VERCEL_BROWSER_COOKIE_MISSING:${url.origin}`);
-            const response = await fetch(url.href, {
+            if (!cookieHeader) throw new Error(`VERCEL_BROWSER_COOKIE_MISSING:${initialUrl.origin}`);
+            const requestOnce = target => fetch(target.href, {
               redirect: 'manual',
               signal: AbortSignal.timeout(40_000),
-              headers: { cookie: cookieHeader, 'accept-encoding': 'identity', 'user-agent': 'cats-tower-s02-preview-proof/3' }
+              headers: { cookie: cookieHeader, 'accept-encoding': 'identity', 'user-agent': 'cats-tower-s02-preview-proof/4' }
             });
+            let finalUrl = initialUrl;
+            let response = await requestOnce(finalUrl);
+            if (response.status === 307 || response.status === 308) {
+              const location = response.headers.get('location');
+              if (!location) throw new Error(`CANONICAL_REDIRECT_LOCATION_MISSING:${response.status}`);
+              const redirectedUrl = validateFetchUrl(new URL(location, finalUrl).href);
+              const exactRoutePair = routePaths.includes(finalUrl.pathname) && routePaths.includes(redirectedUrl.pathname) && finalUrl.pathname !== redirectedUrl.pathname;
+              if (redirectedUrl.origin !== finalUrl.origin || !exactRoutePair || !allowedPaths.includes(redirectedUrl.pathname) || redirectedUrl.search || redirectedUrl.hash) throw new Error(`UNTRUSTED_CANONICAL_REDIRECT:${response.status}:${location}`);
+              await response.body?.cancel();
+              finalUrl = redirectedUrl;
+              response = await requestOnce(finalUrl);
+            }
             if (response.status >= 300 && response.status < 400) throw new Error(`UNEXPECTED_AUTHENTICATED_REDIRECT:${response.status}:${response.headers.get('location') ?? ''}`);
             const chunks = [];
             let responseBytes = 0;
             const reader = response.body?.getReader();
-            if (!reader) throw new Error(`HTTP_BODY_MISSING:${url.href}`);
+            if (!reader) throw new Error(`HTTP_BODY_MISSING:${finalUrl.href}`);
             for (;;) {
               const { done, value: chunk } = await reader.read();
               if (done) break;
@@ -350,12 +367,12 @@ jobs:
               aggregateResponseBytes += chunk.byteLength;
               if (responseBytes > cap || aggregateResponseBytes > 60 * 1024 * 1024) {
                 await reader.cancel();
-                throw new Error(`HTTP_BODY_TOO_LARGE:${url.href}`);
+                throw new Error(`HTTP_BODY_TOO_LARGE:${finalUrl.href}`);
               }
               chunks.push(Buffer.from(chunk));
             }
             const bytes = Buffer.concat(chunks, responseBytes);
-            return { response, bytes, finalPath: url.pathname };
+            return { response, bytes, finalPath: finalUrl.pathname };
           };
           const indexPath = 'step4/s02/golden-master-p1/index.html';
           const indexBytes = execFileSync('git', ['show', `${request.verifiedContent.commit}:${indexPath}`], { encoding: null, maxBuffer: 2 * 1024 * 1024 });
