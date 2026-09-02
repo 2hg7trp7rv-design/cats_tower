@@ -13,6 +13,9 @@ on:
       - 'tests/v2/**'
       - 'tests/e2e/**'
       - 'docs/v2/**'
+      - '.claude/**'
+      - 'CLAUDE.md'
+      - 'PROJECT_SOURCE_MANIFEST.md'
       - 'package.json'
       - 'package-lock.json'
       - 'tsconfig.json'
@@ -87,6 +90,21 @@ jobs:
       - name: Browser, responsive and determinism checks
         run: npm run test:e2e
 
+      - name: Build tracked full-repository handoff archive
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .handoff-export
+          mkdir -p .handoff-export
+          if test -n "${GITHUB_HEAD_REF:-}"; then
+            git fetch --no-tags origin "${GITHUB_HEAD_REF}"
+            git archive --format=zip --prefix=cats_tower/ FETCH_HEAD -o .handoff-export/cats2.zip
+          else
+            git archive --format=zip --prefix=cats_tower/ HEAD -o .handoff-export/cats2.zip
+          fi
+          test -s .handoff-export/cats2.zip
+
       - name: Upload bootstrap evidence and generated lock
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -100,3 +118,13 @@ jobs:
             dist/v2/**
             test-results/**
             playwright-report/**
+
+      - name: Upload full-repository Claude handoff
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cats2-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+          path: .handoff-export/cats2.zip

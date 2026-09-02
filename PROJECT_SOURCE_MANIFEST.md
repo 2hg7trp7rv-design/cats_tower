@@ -1,73 +1,122 @@
-# Cat's Tower — ChatGPT Project Source Manifest
+# Cat's Tower — Current Source and Authority Manifest
 
-更新日: **2026-09-02**
+Updated: 2026-09-03 JST  
+Repository: `2hg7trp7rv-design/cats_tower`  
+Pipeline: `AI_NATIVE_V2`  
+Current stage: `V2-0 bootstrap`
 
-このmanifestは、ChatGPTの「Cat's Tower 開発本部」Projectへ入れる情報源を一意にする。古いファイルと新しいファイルを同時に有効化しない。
+## 1. Current branch map
 
-## 1. Projectへ追加するファイル
+| Role | Branch | Write rule |
+|---|---|---|
+| active task | `task/v2-bootstrap` | current handoff writes only |
+| integration / PR base | `kimi` | no direct writes |
+| release history | `main` | frozen; no direct writes or V2 merge |
 
-| 優先 | 配布ファイル | Repository canonical | 用途 |
-|---|---|---|---|
-| 1 | `CHATGPT_PROJECT_INSTRUCTIONS2.md` | `CHATGPT_PROJECT_INSTRUCTIONS1.md` | 権限、情報源順、現在工程、完成判定、禁止事項 |
-| 2 | `CATS_TOWER_DEVELOPMENT_PLAYBOOK1.md` | `DEVELOPMENT_PLAYBOOK.md` | 作り直しを減らす制作順、Downstream Usability Contract、実装・QA方法 |
-| 3 | `CATS_TOWER_PROJECT_SOURCE_MANIFEST1.md` | `PROJECT_SOURCE_MANIFEST.md` | Project sourceの入替手順と重複防止 |
+Current Draft PR: #9, `task/v2-bootstrap` → `kimi`.
 
-## 2. Projectから削除する旧情報源
+Old statements that make `kimi` the only writable branch are stale for the current V2 workflow.
 
-次の旧版または同内容の過去copyをProject sourceから削除する。
+## 2. Claude Code entry package
 
-- 旧`CHATGPT_PROJECT_INSTRUCTIONS.md`
-- 現在Projectへ入っている旧`CHATGPT_PROJECT_INSTRUCTIONS1.md`
-- `CHATGPT_PROJECT_BOOTSTRAP.md`
-- `CUSTOM_GPT_CONFIGURATION.md`
-- `CLONE_DESIGN.md`
-- `IDLE_DESIGN.md`
-- `PROTOTYPE_SPEC.md`
-- `BASELINE_V082.md`
-- 「Step 4 READY_TO_START」「新Step 1 seal前」「candidate-v1を読む」「01_正本仕様が次」と書かれた旧source
-- 旧S02 actual-root visual repairをcurrent workとするsource
+Claude must start from:
 
-GitHubのquality-review evidenceやsealed canonicalをProject sourceとして大量に重複追加する必要はない。ChatGPTはlive GitHubの`CURRENT_AUTHORITY_INDEX.json`から読む。
+1. `CLAUDE.md`
+2. `docs/v2/CLAUDE_HANDOFF.md`
+3. `docs/v2/PRODUCT_AND_SYSTEM_SPEC.md`
+4. `docs/v2/VISUAL_DIRECTION.md`
+5. `docs/v2/DECISION_REGISTER.json`
+6. `.claude/settings.json`
+7. `.claude/hooks/enforce-handoff.mjs`
 
-## 3. 入替手順
+These files do not supersede higher authority; they resolve it into a current Claude-operational contract.
 
-1. Project source内の旧instructionsと上記旧sourceを削除する
-2. `CHATGPT_PROJECT_INSTRUCTIONS2.md`を追加する
-3. `CATS_TOWER_DEVELOPMENT_PLAYBOOK1.md`を追加する
-4. このmanifestを追加する
-5. 新しいチャットでlive `kimi`のHEAD/treeと`CURRENT_AUTHORITY_INDEX.json`を読ませる
-6. current phaseがPhase 0完了後のS02-P1であることを確認する
+## 3. Authority precedence
 
-## 4. 重複・競合時の判定
+1. latest explicit user decision
+2. `CURRENT_AUTHORITY_INDEX.json`
+3. `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-035.json`
+4. `AI_PROJECT_POLICY.json`
+5. current Claude handoff package
+6. `MASTER_SPEC.md`
+7. `FLOORS_1_10_DESIGN.md`
+8. sealed `canonical/**`
+9. current V2 code, tests and docs
+10. S02 design package as reference only
+11. legacy runtime and historical review files
 
-Project source内の静的文書よりlive GitHubを優先する。順序は次。
+## 4. Preserved product truth
 
-1. 最新のユーザー決定
-2. live `CURRENT_AUTHORITY_INDEX.json`
-3. active change-control
-4. Project instructions
-5. Development Playbook
-6. sealed canonical / executable contract / model evidence
-7. current Acceptance/evidence
-8. historical evidence
+- `MASTER_SPEC.md`: sealed product meaning and S01–S12 responsibilities.
+- `FLOORS_1_10_DESIGN.md`: canonical first slice, roster and teaching order.
+- `canonical/**`: IDs, screen states, transitions, numeric and policy contracts.
+- `simulation/**`: preserved model evidence; not a substitute for browser/gameplay proof.
+- Step 1/2/3 evidence: preserved and immutable unless a later authority explicitly opens it.
 
-## 5. 正常に入替できた確認文
+## 5. Current V2 implementation
 
-新しいチャットで以下を満たすこと。
+- `apps/game/**`: React HUD, Phaser renderer and browser adapter.
+- `packages/domain/**`: deterministic battle state and events.
+- `tests/v2/**`: unit/domain behavior.
+- `tests/e2e/**`: browser, viewport, determinism and console checks.
+- `docs/v2/**`: architecture, bootstrap plan and current handoff.
+- `dist/v2`: generated Preview build; not a source-of-truth file set.
 
-- Repositoryが`2hg7trp7rv-design/cats_tower`
-- branchが`kimi`
-- Step 1=`PASS_CANONICAL`
-- Step 2=`PASS_CONTRACT`
-- Step 3=`PASS_MODEL`
-- Step 4=`IN_PROGRESS`
-- Step 5 allowed=`false`
-- current product work=`S02-P1 Golden Master`
-- legacy runtime=`LEGACY_RUNTIME_NOT_CANONICAL`
-- Production alias changed=`false`
-- physical iPhone=`NOT_VERIFIED`
-- build/CI/Vercel READYだけでは品質PASSにならない
+Current bootstrap visuals and values are provisional and explicitly not production.
 
-## 6. ファイル名について
+## 6. Visual source classification
 
-Repositoryでは参照互換性のため`CHATGPT_PROJECT_INSTRUCTIONS1.md`を維持する。ユーザーへ返す完全置換版は、既存Project sourceと識別できるよう`CHATGPT_PROJECT_INSTRUCTIONS2.md`とする。内容は同じであり、両方をProjectへ入れない。
+### Working direction, not final approval
+
+- `docs/v2/VISUAL_DIRECTION.md`
+- `quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-art-direction.json`
+- `quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-ui-design-system.json`
+- `quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-information-priority.json`
+- `quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-player-experience.json`
+- `quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-responsive-contract.json`
+
+### Reference assets, runtime unauthorized
+
+- `step4/s02/golden-master-p1/**`
+- prior screenshots and flattened Golden Master images
+
+No complete reference screenshot is a runtime asset. No final user visual approval has been recorded.
+
+## 7. Legacy/runtime classification
+
+The following root files are legacy reference, not the V2 implementation base:
+
+- `index.html`
+- `app.js`
+- `game-core.js`
+- `game-data.js`
+- `styles.css`
+- `sw.js`
+
+Do not extend, polish or silently migrate them during V2-0.
+
+## 8. Known stale documents
+
+- `CHATGPT_PROJECT_INSTRUCTIONS1.md`: contains pre-V2 branch and Step 4 rules. Read only for historical context below current authority.
+- older `PROJECT_STATUS.json`, Step 4 manifests and review PASS labels: do not infer current production status.
+- legacy Mugi introduction: conflicts with canonical frontline role.
+
+## 9. Current gate
+
+V2-0 requires:
+
+- typecheck;
+- unit tests;
+- production build;
+- Chromium at 320x568, 390x844, 430x932;
+- WebKit at 390x844;
+- deterministic state proof;
+- reward/wave progression;
+- zero console error and horizontal overflow;
+- Vercel Preview evidence tied to the candidate commit.
+
+Physical iPhone, production readiness and user visual approval remain separate and currently unverified.
+
+## 10. Delivery packaging
+
+The V2 quality workflow creates `cats2.zip` from the tracked head of `task/v2-bootstrap`. The archive contains a top-level `cats_tower/` directory and excludes `.git`, dependency caches and untracked build residue.
