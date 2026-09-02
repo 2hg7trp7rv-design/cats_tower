@@ -11,12 +11,12 @@ PHYSICAL_IPHONE_VERIFIED: false
 USER_VISUAL_APPROVAL: false
 ```
 
-CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json | STEP 4 | S02-P1-GOLDEN-MASTER | IN_PROGRESS_S02_P1_VISUAL_REPAIR
+CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json | STEP 4 | S02-P1-GOLDEN-MASTER | READY_FOR_USER_VISUAL_REVIEW
 
 ## Enforced state
 
 - corrected Phase 0 returned through round 026; current authority is the latest-user-decision S02 repair control round 034
 - immutable Step 2 v3 seal and Step 3 continuity evidence remain verified
-- current product work repairs 10 independently evidenced S02 Golden Master P1 groups
+- the 10 internal Golden Master repair groups are independently resolved; current state is `READY_FOR_USER_VISUAL_REVIEW`
 - root runtime, economy, save, Production and physical-device state remain unchanged
 - current maximum is `READY_FOR_USER_VISUAL_REVIEW`

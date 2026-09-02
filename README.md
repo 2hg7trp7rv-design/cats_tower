@@ -11,8 +11,8 @@ PHYSICAL_IPHONE_VERIFIED: false
 USER_VISUAL_APPROVAL: false
 ```
 
-CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json | STEP 4 | S02-P1-GOLDEN-MASTER | IN_PROGRESS_S02_P1_VISUAL_REPAIR
+CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json | STEP 4 | S02-P1-GOLDEN-MASTER | READY_FOR_USER_VISUAL_REVIEW
 
 ## Current work
 
-Repository Step 4 remains in progress under the latest-user-decision round 034 control. Ten independently evidenced S02 Golden Master P1 groups are being repaired before user visual review; the preserved route and eight states remain unaccepted inputs. Runtime, gameplay numbers, economy, save data, backend, Production and physical-device verdicts are unchanged.
+Repository Step 4 remains in progress under round 034. The 10 internal Golden Master repair groups are independently resolved and the eight individual states are ready for user visual review on the immutable Preview deployment. User approval is not yet obtained. Runtime, gameplay numbers, economy, save data, backend, Production and physical-device verdicts are unchanged.

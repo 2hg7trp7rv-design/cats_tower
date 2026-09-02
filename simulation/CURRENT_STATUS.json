@@ -6,7 +6,7 @@
   "authorityIndex": "CURRENT_AUTHORITY_INDEX.json",
   "currentRepositoryStep": 4,
   "currentInternalPhase": "S02-P1-GOLDEN-MASTER",
-  "status": "IN_PROGRESS_S02_P1_VISUAL_REPAIR",
+  "status": "READY_FOR_USER_VISUAL_REVIEW",
   "governanceRecovery": {
     "status": "PASS_PHASE0_GOVERNANCE_RECOVERY",
     "supersededClosureAttempt": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",

@@ -7,7 +7,7 @@
   "status": "IN_PROGRESS",
   "currentAuthorityIndex": "CURRENT_AUTHORITY_INDEX.json",
   "currentAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
-  "currentVerdict": "IN_PROGRESS_S02_P1_VISUAL_REPAIR",
+  "currentVerdict": "READY_FOR_USER_VISUAL_REVIEW",
   "currentRepositoryStep": 4,
   "currentInternalPhase": "S02-P1-GOLDEN-MASTER",
   "supersededGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",

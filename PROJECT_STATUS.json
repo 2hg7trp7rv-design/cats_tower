@@ -9,7 +9,7 @@
   "status": "IN_PROGRESS",
   "currentRepositoryStep": 4,
   "currentInternalPhase": "S02-P1-GOLDEN-MASTER",
-  "currentVerdict": "IN_PROGRESS_S02_P1_VISUAL_REPAIR",
+  "currentVerdict": "READY_FOR_USER_VISUAL_REVIEW",
   "governanceRecovery": {
     "status": "PASS_PHASE0_GOVERNANCE_RECOVERY",
     "supersededClosureAttempt": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
@@ -39,24 +39,14 @@
     "goldenMastersAccepted": 0,
     "deliverablesClaimedForAudit": 10,
     "deliverablesAccepted": 0,
-    "currentState": "REPAIRING_INDEPENDENTLY_EVIDENCED_S02_P1_GAPS"
+    "currentState": "READY_FOR_USER_VISUAL_REVIEW"
   },
   "openFindings": {
     "P0": 0,
-    "P1": 11,
+    "P1": 1,
     "P2": 2,
     "items": [
       "S4-RECOVERY-VIS-001",
-      "S02-P1-VISIBLE-BOUNDS-001",
-      "S02-P1-PARTY-ATLAS-ANCHOR-001",
-      "S02-P1-DESIGN-TOKEN-MINIMUM-001",
-      "S02-P1-RESPONSIVE-SAFEAREA-001",
-      "S02-P1-RESOURCE-RANK-BINDING-001",
-      "S02-P1-COMBAT-REWARD-CAUSALITY-001",
-      "S02-P1-SUPPORT-CAUSALITY-001",
-      "S02-P1-OFFLINE-PARTY-SEMANTICS-001",
-      "S02-P1-ASSET-SEPARATION-001",
-      "S02-P1-TEST-RESEARCH-COVERAGE-001",
       "PHASE0-P2-PR8-STALE-METADATA",
       "PHASE0-P2-KIMI-UNPROTECTED-EXTERNAL-ENFORCEMENT"
     ]
@@ -75,7 +65,7 @@
     "productionAliasChanged": false,
     "productionReady": false
   },
-  "nextAuthorizedAction": "Repair only the independently evidenced S02-P1 P1 gaps under round 034, then rerun static, responsive, browser and accessibility verification.",
+  "nextAuthorizedAction": "Await explicit user visual review of the immutable Preview deployment. Do not infer approval and do not start P2 asset production.",
   "step5Allowed": false,
   "productionAllowed": false,
   "physicalIPhoneVerified": false,

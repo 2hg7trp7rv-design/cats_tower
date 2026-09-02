@@ -25,7 +25,7 @@
     "repositoryStep": 4,
     "internalPhase": "S02-P1-GOLDEN-MASTER",
     "status": "IN_PROGRESS",
-    "verdict": "IN_PROGRESS_S02_P1_VISUAL_REPAIR",
+    "verdict": "READY_FOR_USER_VISUAL_REVIEW",
     "step4Pass": false,
     "step5Allowed": false,
     "productionAllowed": false,
