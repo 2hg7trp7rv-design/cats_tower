@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-external-preview-browser-correction-round-003",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "ba31a5673d7d17d3d65745ca7959e5161b799be2",
+    "tree": "ac210e5a8b4f1847a4a3ace96e9ad10b99d20562"
+  },
+  "failedWorkflow": {
+    "commit": "ba31a5673d7d17d3d65745ca7959e5161b799be2",
+    "tree": "ac210e5a8b4f1847a4a3ace96e9ad10b99d20562",
+    "runId": 33614028091,
+    "runAttempt": 1,
+    "jobId": 100195863192,
+    "conclusion": "FAILURE",
+    "failedStep": "Generate external S02 Preview proof",
+    "error": "UNEXPECTED_FINAL_PATH:IMMUTABLE_REVIEW_ROUTE_WITH_REDACTED_SHARE_QUERY"
+  },
+  "request": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-request-round-001.json",
+    "commit": "e5ba5ed92d0eeb0da67f956637b7ebb1cb6c2a11",
+    "tree": "f706c3146d09f3c30368e0e0d4a92afbfd7850da",
+    "blob": "c034073b7b9beaa34bcffd4a685e36fefc3a0861"
+  },
+  "priorCorrection": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-redirect-correction-round-002.json",
+    "commit": "ba31a5673d7d17d3d65745ca7959e5161b799be2",
+    "tree": "ac210e5a8b4f1847a4a3ace96e9ad10b99d20562",
+    "blob": "7a1da277be849c506cdd1ecb4495d922d5edffb3"
+  },
+  "temporaryAccessReplacement": {
+    "kind": "VERCEL_TEMPORARY_SHARE_23H",
+    "url": "https://catstower-git-kimi-shinyaaas-projects.vercel.app/step4/s02/golden-master-p1/?_vercel_share=azIBXItXwzLog7VfNGaefOxKjdfeg2uK",
+    "expiresAt": "2026-09-03T08:34:48Z"
+  },
+  "diagnosis": {
+    "type": "VERCEL_SHARE_LINK_REQUIRES_BROWSER_EXECUTION_BEFORE_AUTHENTICATED_BYTE_READBACK",
+    "officialSources": [
+      "https://vercel.com/docs/deployment-protection/methods-to-bypass-deployment-protection/sharable-links",
+      "https://vercel.com/docs/deployment-protection/methods-to-protect-deployments/vercel-authentication",
+      "https://github.com/vercel-labs/agent-browser/blob/main/skill-data/protected-vercel-deployments/SKILL.md"
+    ],
+    "rawHttpCannotCompleteBrowserFlow": true,
+    "providerSettingsChanged": false,
+    "productQualityAffected": false,
+    "originalFailurePreserved": true
+  },
+  "correction": {
+    "rule": "EXECUTE_THE_SCOPED_VERCEL_SHARE_LINK_IN_AN_EXACT_PINNED_EPHEMERAL_BROWSER_THEN_RETAIN_FAIL_CLOSED_DUAL_ORIGIN_BYTE_EXACT_READBACK",
+    "changedPaths": [
+      ".github/workflows/verify-current-governance.yml",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-browser-correction-round-003.json",
+      "tests/governance/verify-current-authority.mjs"
+    ],
+    "workflowBeforeSha256": "5a1c13faff859bd9486d4201be507d2dac10d7c2b17dd9f00122970f157bcf33",
+    "workflowAfterSha256": "117632e7cc42589f5d35e6b73242de4d8f42542ee0409138739626c71b3574a3",
+    "workflowPatchSha256": "sha256:8d9eb3d749f17ebc238abb26b4ca569227c43ed41e0db0ff6d854785b99d72df",
+    "verifierAfterSha256": "c98f3e6425c5e94d0ac893b045680d0d6d0e37a604e1ead43f801c8d62f01fb9",
+    "verifierPatchSha256": "sha256:8a80e7f6f49b0bf5973896783fb0625601e274f7e92fb775ceafaa9fb9bee8e8",
+    "browserPackagePath": "step4/s02/golden-master-p1/browser-qa/package.json",
+    "browserPackageBlob": "8bf4083b2595c761394112d4f35181b2323be91d",
+    "browserLockBlob": "0c7ccf364c039a4dec276ef97abe61c967dc6330",
+    "playwrightVersion": "1.62.0",
+    "ephemeralBrowserContexts": true,
+    "separateOriginContexts": true,
+    "serviceWorkersBlocked": true,
+    "manualAuthenticatedReadback": true,
+    "finalOriginAndPathLocked": true,
+    "responseCapsRetained": true,
+    "immutableAndAliasByteChecksRetained": true,
+    "oidcProofRetained": true,
+    "trustedSourceSettingsChanged": false,
+    "acceptanceThresholdsChanged": false,
+    "productContentChanged": false
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_VERCEL_SHARE_BROWSER_FLOW_PENDING_RERUN"
+}
