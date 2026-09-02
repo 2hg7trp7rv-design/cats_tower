@@ -1,0 +1,198 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-screen-projection-coverage-ledger-round-001",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
+  "canonical": {
+    "path": "canonical/SCREEN_STATE_REGISTRY.json",
+    "blob": "0cf6337da2ed3993136dbf4a9e4918efac501d2e"
+  },
+  "screenCount": "12",
+  "fieldFamilies": [
+    "id",
+    "name",
+    "responsibilities",
+    "authority",
+    "requiredState",
+    "uiStates",
+    "serverOwnedState"
+  ],
+  "screenCoverage": [
+    {
+      "id": "S01",
+      "fieldFamilies": [
+        "id",
+        "name",
+        "responsibilities",
+        "authority",
+        "requiredState",
+        "uiStates",
+        "serverOwnedState"
+      ],
+      "canonicalEntrySha256": "ebc0f5e4984eb8ff450304ab42b2f1288797a1c7596671950574df0b1dc21163",
+      "status": "PASS"
+    },
+    {
+      "id": "S02",
+      "fieldFamilies": [
+        "id",
+        "name",
+        "responsibilities",
+        "authority",
+        "requiredState",
+        "uiStates",
+        "serverOwnedState"
+      ],
+      "canonicalEntrySha256": "285e6715987700e4d5ca9e52e40a99b5fe5f8fdca54759449cb8222ecbf40dcd",
+      "status": "PASS"
+    },
+    {
+      "id": "S03",
+      "fieldFamilies": [
+        "id",
+        "name",
+        "responsibilities",
+        "authority",
+        "requiredState",
+        "uiStates",
+        "serverOwnedState"
+      ],
+      "canonicalEntrySha256": "ad88875f7eaea005d47b403a15ad5fe5d65d34bfeb0ba2d31a5c85195361cccb",
+      "status": "PASS"
+    },
+    {
+      "id": "S04",
+      "fieldFamilies": [
+        "id",
+        "name",
+        "responsibilities",
+        "authority",
+        "requiredState",
+        "uiStates",
+        "serverOwnedState"
+      ],
+      "canonicalEntrySha256": "cb1a2153373b121758f1cda5142360a7c5b994ada189c11fe538d016220f4c85",
+      "status": "PASS"
+    },
+    {
+      "id": "S05",
+      "fieldFamilies": [
+        "id",
+        "name",
+        "responsibilities",
+        "authority",
+        "requiredState",
+        "uiStates",
+        "serverOwnedState"
+      ],
+      "canonicalEntrySha256": "dd2cb392728b69bd80448ec09787f27df6fc85887e19a4b98d628b0d3114c95a",
+      "status": "PASS"
+    },
+    {
+      "id": "S06",
+      "fieldFamilies": [
+        "id",
+        "name",
+        "responsibilities",
+        "authority",
+        "requiredState",
+        "uiStates",
+        "serverOwnedState"
+      ],
+      "canonicalEntrySha256": "a17be8ca09480112f9b2195df32b42a7623073c427ad294728dafc70d7d2b56f",
+      "status": "PASS"
+    },
+    {
+      "id": "S07",
+      "fieldFamilies": [
+        "id",
+        "name",
+        "responsibilities",
+        "authority",
+        "requiredState",
+        "uiStates",
+        "serverOwnedState"
+      ],
+      "canonicalEntrySha256": "e0683d0ce18cc0018bab2b4ec26f3f4199f22d2afb7df999b0fde41c5e356bf9",
+      "status": "PASS"
+    },
+    {
+      "id": "S08",
+      "fieldFamilies": [
+        "id",
+        "name",
+        "responsibilities",
+        "authority",
+        "requiredState",
+        "uiStates",
+        "serverOwnedState"
+      ],
+      "canonicalEntrySha256": "ccd7a67074049a252e40c741ee15c41510d734591ce85745924d80d372c09f72",
+      "status": "PASS"
+    },
+    {
+      "id": "S09",
+      "fieldFamilies": [
+        "id",
+        "name",
+        "responsibilities",
+        "authority",
+        "requiredState",
+        "uiStates",
+        "serverOwnedState"
+      ],
+      "canonicalEntrySha256": "c03828014dc7628959f92bf7fba3aea594b1742e556750515fdca2d3201cb086",
+      "status": "PASS"
+    },
+    {
+      "id": "S10",
+      "fieldFamilies": [
+        "id",
+        "name",
+        "responsibilities",
+        "authority",
+        "requiredState",
+        "uiStates",
+        "serverOwnedState"
+      ],
+      "canonicalEntrySha256": "7d751fa9fdca151289186cf67f4f6fba0d1c004d70faf21ad81b475e15dfe86d",
+      "status": "PASS"
+    },
+    {
+      "id": "S11",
+      "fieldFamilies": [
+        "id",
+        "name",
+        "responsibilities",
+        "authority",
+        "requiredState",
+        "uiStates",
+        "serverOwnedState"
+      ],
+      "canonicalEntrySha256": "cfc8218b630b61e1afc8eb61222be162f7d06d1638f123b3c1ed306b99e2a689",
+      "status": "PASS"
+    },
+    {
+      "id": "S12",
+      "fieldFamilies": [
+        "id",
+        "name",
+        "responsibilities",
+        "authority",
+        "requiredState",
+        "uiStates",
+        "serverOwnedState"
+      ],
+      "canonicalEntrySha256": "48fdc3e27c11693a853e92710357a32e1d2bb5caa103d0753dfbfb2010aa45d4",
+      "status": "PASS"
+    }
+  ],
+  "projectionSha256": "ebee3d249b83c6f7037f7a59853d45866c486d35cd298384e7e569715b44f22e",
+  "unresolved": {
+    "P0": 0,
+    "P1": 0
+  },
+  "verdict": "PASS_LOSSLESS_CANONICAL_SCREEN_PROJECTION",
+  "maximumVerdict": "READY_FOR_STEP2_V3_INDEPENDENT_REVIEW"
+}

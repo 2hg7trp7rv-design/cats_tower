@@ -1,0 +1,132 @@
+{
+  "schemaVersion": "2.1.0",
+  "planId": "cats-tower-run-plan-v3",
+  "candidateId": "cats-tower-v2-candidate-001",
+  "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+  "executionVersion": "cats-tower-step3-executor-v1.1.0",
+  "roundingVersion": "ct-rational-half-even-v1",
+  "step2Mode": "QUALIFICATION_ONLY",
+  "fullExecutionOwner": "STEP3",
+  "executionContract": {
+    "path": "simulation/execution-contract-v3.json",
+    "schemaPath": "simulation/execution-contract-v3.schema.json",
+    "validatorPath": "simulation/validate-execution-contract-v3.mjs"
+  },
+  "builds": [
+    "build.combat",
+    "build.reinforcement",
+    "build.commerce"
+  ],
+  "personas": [
+    "no-ad-f2p",
+    "rewarded-ad-f2p",
+    "monthly-pass",
+    "controlled-payer",
+    "high-spend-stress"
+  ],
+  "seeds": {
+    "perBuildPersona": "1000",
+    "calibrationPerCell": "800",
+    "holdoutPerCell": "200",
+    "qualificationPerCell": "2",
+    "calibrationNamespace": "cats-tower-v2-calibration",
+    "holdoutNamespace": "cats-tower-v2-holdout-unseen",
+    "qualificationNamespace": "cats-tower-v2-qualification",
+    "generation": "sha256(namespace|build|persona|ordinal)",
+    "v1ObservedReuse": false
+  },
+  "scenarioCount": {
+    "fullGameplayMatrix": "15000",
+    "calibration": "12000",
+    "holdout": "3000",
+    "qualification": "30"
+  },
+  "horizons": [
+    {
+      "id": "1-10F",
+      "targetFloor": "10",
+      "mode": "progression"
+    },
+    {
+      "id": "100F",
+      "targetFloor": "100",
+      "mode": "progression"
+    },
+    {
+      "id": "1000F",
+      "targetFloor": "1000",
+      "mode": "progression"
+    },
+    {
+      "id": "10000F-or-equivalent",
+      "targetFloor": "10000",
+      "mode": "progression"
+    },
+    {
+      "id": "repeated-resets",
+      "targetFloor": "1000",
+      "mode": "five-resets"
+    },
+    {
+      "id": "30-45-day-economy",
+      "targetFloor": "1000",
+      "mode": "economy-45d"
+    }
+  ],
+  "qualificationHorizons": [
+    "1-10F",
+    "100F",
+    "1000F",
+    "10000F-or-equivalent",
+    "repeated-resets",
+    "30-45-day-economy"
+  ],
+  "highVolumeSuites": [
+    {
+      "id": "gacha-tails",
+      "plannedSamples": "200000",
+      "execution": "STEP3_ONLY"
+    },
+    {
+      "id": "pity-conformance",
+      "plannedSamples": "1000000",
+      "execution": "STEP3_ONLY"
+    },
+    {
+      "id": "duplicate-skew-overflow",
+      "plannedSamples": "200000",
+      "execution": "STEP3_ONLY"
+    },
+    {
+      "id": "refund-replay-race",
+      "plannedSamples": "100000",
+      "execution": "STEP3_ONLY"
+    },
+    {
+      "id": "state-machine-model",
+      "plannedSamples": "100000",
+      "execution": "STEP3_ONLY"
+    },
+    {
+      "id": "large-number-properties",
+      "plannedSamples": "100000",
+      "execution": "STEP3_ONLY"
+    }
+  ],
+  "holdoutPolicy": {
+    "disjoint": true,
+    "tuningOutputContainsHoldout": false,
+    "unsealRequiresFinalJudge": true
+  },
+  "output": {
+    "qualificationPath": "quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/qualification-result-v3.json",
+    "calibrationPath": "quality-reviews/step-3-large-scale-validation/gameplay-calibration-result.json",
+    "holdoutPath": "quality-reviews/step-3-large-scale-validation/gameplay-holdout-result.json",
+    "highVolumeDirectory": "quality-reviews/step-3-large-scale-validation/high-volume",
+    "qualificationSchemaPath": "simulation/result-v3.schema.json",
+    "gameplaySchemaPath": "simulation/gameplay-result-v2.schema.json",
+    "highVolumeSchemaPath": "simulation/high-volume-result-v2.schema.json",
+    "canonicalJson": true,
+    "hashEachScenario": true
+  }
+}

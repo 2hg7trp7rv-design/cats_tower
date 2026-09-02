@@ -1330,7 +1330,7 @@ try {
     artifactId: '${artifactId}',
     errors: [{ code: 'SCHEMA', message: JSON.stringify(details) }]
   }));
-  process.exit(1);
+  process.exitCode = 1;
 }
 `;
 }
@@ -3551,7 +3551,15 @@ if (step2Correction) {
   assertCurrentDocBlobMap(expectedRound032CurrentDocBlobs, correctionControlCommit, 'round 032 opening');
   assertDocumentBlobMapDerivesFromTemplate(expectedRound033CurrentDocBlobs, expectedRound033DocumentText, 'round 033 closure');
   const governanceFreezeEnd = closureCommit ?? git(['rev-parse', 'HEAD']);
-  assertNoPathChangesSince(correctionControlCommit, governanceFreezeEnd, ['tests/governance/verify-current-authority.mjs', '.github/workflows/verify-current-governance.yml'], 'round 032 verifier/workflow freeze through round 033 closure');
+  const v3SemanticCommit = exists('simulation/candidate-v3.json') ? firstAddCommit('simulation/candidate-v3.json') : null;
+  if (v3SemanticCommit) {
+    assert(git(['rev-parse', `${v3SemanticCommit}^`]) === correctionControlCommit, 'round 032 v3 semantic target must immediately follow the opening commit');
+    assert(git(['log', '--format=%H', `${correctionControlCommit}..${v3SemanticCommit}`, '--', 'tests/governance/verify-current-authority.mjs']) === v3SemanticCommit, 'round 032 semantic target verifier correction is not one dedicated reviewed change');
+    assertNoPathChangesSince(v3SemanticCommit, governanceFreezeEnd, ['tests/governance/verify-current-authority.mjs'], 'round 032 verifier freeze after the exact semantic-target repair');
+  } else {
+    assertNoPathChangesSince(correctionControlCommit, governanceFreezeEnd, ['tests/governance/verify-current-authority.mjs'], 'round 032 verifier freeze before the semantic target');
+  }
+  assertNoPathChangesSince(correctionControlCommit, governanceFreezeEnd, ['.github/workflows/verify-current-governance.yml'], 'round 032 workflow freeze through round 033 closure');
   const entryWorkflow = step2Correction.entryWorkflow;
   assert(entryWorkflow?.commit === step2Correction.entry.head && entryWorkflow?.tree === step2Correction.entry.tree, 'round 032 entry workflow target mismatch');
   assert(entryWorkflow?.conclusion === 'SUCCESS', 'round 032 entry workflow must succeed');
@@ -6120,6 +6128,7 @@ const expectedRound032ConcreteWrites = new Set([
   'simulation/validate-run-plan-v3.mjs',
   'simulation/result-v3.schema.json',
   'simulation/validate-result-v3.mjs',
+  v3QualificationRunnerPath,
   'simulation/fixtures/v3/manifest.json',
   'simulation/fixtures/v3/negative.json',
   'simulation/fixtures/v3/validate-fixtures.mjs',

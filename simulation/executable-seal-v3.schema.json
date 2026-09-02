@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cats-tower.invalid/schema/executable-seal-v3.schema.json",
+  "title": "Cat's Tower Step 2 executable seal V3 screen-projection supplement",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "artifactId",
+    "repository",
+    "branch",
+    "changeControl",
+    "verdict",
+    "semanticCommit",
+    "semanticTree",
+    "bindings",
+    "reviewEvidence"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "3.0.0"
+    },
+    "artifactId": {
+      "const": "cats-tower-step2-executable-seal-v3-screen-projection-round-001"
+    },
+    "repository": {
+      "const": "2hg7trp7rv-design/cats_tower"
+    },
+    "branch": {
+      "const": "kimi"
+    },
+    "changeControl": {
+      "const": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json"
+    },
+    "verdict": {
+      "const": "SEALED_STEP2_EXECUTABLE_CONTRACT_SCREEN_PROJECTION_CORRECTED"
+    },
+    "semanticCommit": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "semanticTree": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "bindings": {
+      "type": "array",
+      "minItems": 43,
+      "maxItems": 43,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "blob"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "blob": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{40}$"
+          }
+        }
+      }
+    },
+    "reviewEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "critic",
+        "finalJudge",
+        "completion",
+        "liveReadback"
+      ],
+      "properties": {
+        "critic": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "blob"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "blob": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{40}$"
+            }
+          }
+        },
+        "finalJudge": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "blob"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "blob": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{40}$"
+            }
+          }
+        },
+        "completion": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "blob"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "blob": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{40}$"
+            }
+          }
+        },
+        "liveReadback": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "blob"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "blob": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{40}$"
+            }
+          }
+        }
+      }
+    }
+  }
+}

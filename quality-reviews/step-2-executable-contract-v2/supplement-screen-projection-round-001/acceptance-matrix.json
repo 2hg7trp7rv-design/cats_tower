@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-screen-projection-round-032-acceptance",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
+  "scope": "VERSIONED_V3_SCREEN_PROJECTION_ONLY",
+  "requirements": [
+    {
+      "id": "LOSSLESS_CANONICAL_SCREEN_PROJECTION",
+      "status": "PASS"
+    },
+    {
+      "id": "V2_NON_SCREEN_CONTENT_EXACTLY_PRESERVED",
+      "status": "PASS"
+    },
+    {
+      "id": "CLOSED_V3_SCHEMAS",
+      "status": "PASS"
+    },
+    {
+      "id": "MUTATION_REJECTION_AND_POSITIVE_TEMP_COPY",
+      "status": "PASS"
+    },
+    {
+      "id": "FROZEN_ENGINE_QUALIFICATION_REPRODUCTION",
+      "status": "PASS"
+    },
+    {
+      "id": "NUMERIC_NON_IMPACT_PROVEN",
+      "status": "PASS"
+    },
+    {
+      "id": "INDEPENDENT_REVIEW_CHAIN_REQUIRED",
+      "status": "PASS"
+    },
+    {
+      "id": "RUNTIME_S02_PRODUCTION_UNCHANGED",
+      "status": "PASS"
+    }
+  ],
+  "unresolved": {
+    "P0": 0,
+    "P1": 0
+  },
+  "verdict": "PASS_STEP2_SCREEN_PROJECTION_ACCEPTANCE",
+  "maximumVerdict": "READY_FOR_STEP2_V3_INDEPENDENT_REVIEW",
+  "releaseBoundaries": {
+    "step4Pass": false,
+    "step5Allowed": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "userVisualApproval": false,
+    "runtimeOrS02Changed": false
+  }
+}

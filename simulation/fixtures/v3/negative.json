@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-v3-negative-fixtures-round-001",
+  "caseCount": "11",
+  "cases": [
+    {
+      "id": "screen-count-drift",
+      "target": "candidate-v3",
+      "expectedCode": "SCHEMA"
+    },
+    {
+      "id": "screen-id-drift",
+      "target": "candidate-v3",
+      "expectedCode": "SCHEMA"
+    },
+    {
+      "id": "screen-entry-drift",
+      "target": "candidate-v3",
+      "expectedCode": "SCHEMA"
+    },
+    {
+      "id": "global-rules-drift",
+      "target": "candidate-v3",
+      "expectedCode": "SCHEMA"
+    },
+    {
+      "id": "universal-recovery-drift",
+      "target": "candidate-v3",
+      "expectedCode": "SCHEMA"
+    },
+    {
+      "id": "global-invariants-drift",
+      "target": "candidate-v3",
+      "expectedCode": "SCHEMA"
+    },
+    {
+      "id": "candidate-extra-property",
+      "target": "candidate-v3",
+      "expectedCode": "SCHEMA"
+    },
+    {
+      "id": "execution-contract-id-drift",
+      "target": "execution-contract-v3",
+      "expectedCode": "SCHEMA"
+    },
+    {
+      "id": "run-plan-id-drift",
+      "target": "run-plan-v3",
+      "expectedCode": "SCHEMA"
+    },
+    {
+      "id": "result-candidate-digest-drift",
+      "target": "result-v3",
+      "expectedCode": "SCHEMA"
+    },
+    {
+      "id": "result-false-step3-authorization",
+      "target": "result-v3",
+      "expectedCode": "SCHEMA"
+    }
+  ]
+}

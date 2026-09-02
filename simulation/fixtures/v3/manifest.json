@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-v3-fixture-manifest-round-001",
+  "verdict": "PASS_CLOSED_V3_MUTATION_FIXTURES",
+  "caseCount": "11",
+  "caseIds": [
+    "screen-count-drift",
+    "screen-id-drift",
+    "screen-entry-drift",
+    "global-rules-drift",
+    "universal-recovery-drift",
+    "global-invariants-drift",
+    "candidate-extra-property",
+    "execution-contract-id-drift",
+    "run-plan-id-drift",
+    "result-candidate-digest-drift",
+    "result-false-step3-authorization"
+  ],
+  "files": [
+    {
+      "path": "simulation/fixtures/v3/negative.json",
+      "sha256": "31f19463c57d0de55f3526eddad5ca770a40bb1169d95e9baf0cd82f1d1299d4",
+      "bytes": "1389"
+    },
+    {
+      "path": "simulation/fixtures/v3/validate-fixtures.mjs",
+      "sha256": "e47d5d0cf7f132d0a064aea397dd6a1799dfb561ffeacfed0408763c8e38f100",
+      "bytes": "2608"
+    }
+  ]
+}

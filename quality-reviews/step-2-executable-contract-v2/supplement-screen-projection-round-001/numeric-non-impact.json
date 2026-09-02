@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-screen-projection-numeric-non-impact-round-001",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
+  "changedJsonPointers": [
+    "/screens"
+  ],
+  "engineConsumerCount": 0,
+  "consumerScan": {
+    "files": [
+      "simulation/engine-v2/economy.mjs",
+      "simulation/engine-v2/hash.mjs",
+      "simulation/engine-v2/high-volume.mjs",
+      "simulation/engine-v2/index.mjs",
+      "simulation/engine-v2/numeric.mjs",
+      "simulation/engine-v2/rng.mjs",
+      "simulation/engine-v2/run-plan.mjs",
+      "simulation/engine-v2/run-scenario.mjs",
+      "simulation/engine-v2/state-machines.mjs",
+      "simulation/engine-v2/statistics.mjs",
+      "simulation/engine-v2/tower.mjs",
+      "simulation/lib-v2/schema-validator.mjs",
+      "simulation/migrations/v1-to-v2/migration-map.json"
+    ],
+    "literalMatches": 0
+  },
+  "candidateOutsideScreens": {
+    "beforeSha256": "dc0eb575481b866dab14a904957b582c513ec93fd96445f3985919ea9e217d85",
+    "afterSha256": "dc0eb575481b866dab14a904957b582c513ec93fd96445f3985919ea9e217d85"
+  },
+  "qualification": {
+    "beforeDeterministicPayloadSha256": "a24fa5a4a12cf132ac477c80e77431cd0b97ab070bbbef83c3881c160f42562c",
+    "afterDeterministicPayloadSha256": "a24fa5a4a12cf132ac477c80e77431cd0b97ab070bbbef83c3881c160f42562c",
+    "deepEqual": true
+  },
+  "executionRerunClaim": "NO_STEP3_EXECUTION_RERUN_CLAIMED",
+  "step3StatusRemains": "PASS_MODEL",
+  "runtimeOrS02Changed": false,
+  "unresolved": {
+    "P0": 0,
+    "P1": 0
+  },
+  "verdict": "PASS_NUMERIC_NON_IMPACT_NO_STEP3_RERUN_REQUIRED",
+  "maximumVerdict": "READY_FOR_STEP2_V3_INDEPENDENT_REVIEW"
+}

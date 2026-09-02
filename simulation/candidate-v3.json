@@ -1,0 +1,2726 @@
+{
+  "meta": {
+    "candidateId": "cats-tower-v2-candidate-001",
+    "schemaVersion": "2.0.0",
+    "algorithmVersion": "cats-tower-simulator-v2.0.0",
+    "createdAt": "2026-08-27",
+    "repository": "2hg7trp7rv-design/cats_tower",
+    "branch": "kimi",
+    "sourceStep1Seal": {
+      "path": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
+      "gitBlob": "0a959de0383b57ad6cd1f33c124b398aa51c1e00",
+      "commit": "0b17f9b5b8decdab8ce329287a4dc073790c4bf7",
+      "semanticCommit": "4b4d8abbf5388637101f7c5634d1ce5d60413fce",
+      "semanticTree": "99084efa0e6055977b01cf507d7d7e2a391c74ce"
+    },
+    "acceptance": {
+      "path": "quality-reviews/step-2-executable-contract-v2/acceptance-matrix.json",
+      "gitBlob": "f8986a3d436e93a003ff0f7e07f6a5d28d6faf2f",
+      "commit": "e02a9af48aaab1a82b1ac4563a4c03f4922eb388"
+    },
+    "sourceBindings": [
+      {
+        "path": "CHATGPT_PROJECT_INSTRUCTIONS1.md",
+        "gitBlob": "2b42e9907bf19724dd5eb3342872aaa931424be9",
+        "role": "project-governance"
+      },
+      {
+        "path": "MASTER_SPEC.md",
+        "gitBlob": "5d1e5ff37ba8d79f4c23e6051740c4c6957f1dbc",
+        "role": "canonical-product-specification"
+      },
+      {
+        "path": "canonical/STABLE_ID_REGISTRY.json",
+        "gitBlob": "0a835e778b27ca1cfab47c8b1b4e7797fdc1a3fd",
+        "role": "stable-ids"
+      },
+      {
+        "path": "canonical/SCREEN_STATE_REGISTRY.json",
+        "gitBlob": "0cf6337da2ed3993136dbf4a9e4918efac501d2e",
+        "role": "screen-states"
+      },
+      {
+        "path": "canonical/STATE_TRANSITION_CONTRACT.json",
+        "gitBlob": "fb730c31eaf978b3e56f528f99c28172dbb4e8bc",
+        "role": "state-transitions"
+      },
+      {
+        "path": "canonical/POLICY_RELEASE_GATES.json",
+        "gitBlob": "e50fbb73ac8095dc9681b150d3f902b236f87b9a",
+        "role": "policy-release-gates"
+      },
+      {
+        "path": "canonical/STEP2_DEPENDENCY_CLOSURE.json",
+        "gitBlob": "d23ea91754f6b11e4d452312752fc8850bd7ab9b",
+        "role": "step2-dependency-closure"
+      },
+      {
+        "path": "quality-reviews/step-1-hero-merchant-large-idle-integration/user-decision-lock-round-005.json",
+        "gitBlob": "35f1f545765d12b3f4ed84f9a6e549a24fefb8a1",
+        "role": "latest-sealed-user-decisions"
+      },
+      {
+        "path": "quality-reviews/step-2-executable-contract-v2/acceptance-matrix.json",
+        "gitBlob": "f8986a3d436e93a003ff0f7e07f6a5d28d6faf2f",
+        "role": "step2-acceptance"
+      }
+    ],
+    "seedContract": {
+      "algorithm": "sha256-to-splitmix64-v1",
+      "calibrationNamespace": "cats-tower-v2-calibration",
+      "holdoutNamespace": "cats-tower-v2-holdout-unseen",
+      "qualificationNamespace": "cats-tower-v2-qualification",
+      "v1ObservedSeedReuse": false
+    },
+    "roundingVersion": "ct-rational-half-even-v1",
+    "canonicalJsonVersion": "ct-canonical-json-v1"
+  },
+  "numeric": {
+    "representation": "normalized-decimal-string-and-exact-rational-v1",
+    "serialization": "utf8-canonical-json-sorted-keys-v1",
+    "roundingModes": [
+      "floor",
+      "ceil",
+      "half-even"
+    ],
+    "signedRepresentation": {
+      "shape": "explicit-sign-and-unsigned-magnitude",
+      "allowedDomains": [
+        "refund-deficit"
+      ]
+    },
+    "displayAbbreviation": {
+      "version": "ct-display-abbrev-v1",
+      "sourceOfTruth": false,
+      "significantDigits": 4,
+      "suffixCycle": [
+        "K",
+        "M",
+        "B",
+        "T",
+        "aa",
+        "ab"
+      ]
+    },
+    "limits": {
+      "playerVisibleFloorMaximum": "NONE",
+      "silentSaturation": false,
+      "unsafeNumberPersistence": false,
+      "resourceGuard": "FAIL_CLOSED_WITH_AUDIT_NO_VALUE_MUTATION"
+    },
+    "goldenFixtures": "simulation/fixtures/v2/cross-runtime-golden.json"
+  },
+  "tower": {
+    "districtSize": "10",
+    "cycleSize": "100",
+    "playerVisibleMaximum": "NONE",
+    "floor100Role": "FIRST_MAJOR_MILESTONE_NOT_END",
+    "floor101Normal": true,
+    "milestones": [
+      "10",
+      "100",
+      "1000",
+      "10000"
+    ],
+    "floorGenerator": {
+      "version": "tower-generator-v2",
+      "hpBase": "100",
+      "hpGrowth": {
+        "numerator": "105",
+        "denominator": "100"
+      },
+      "attackBase": "12",
+      "attackGrowth": {
+        "numerator": "103",
+        "denominator": "100"
+      },
+      "coinBase": "20",
+      "coinGrowth": {
+        "numerator": "104",
+        "denominator": "100"
+      },
+      "exactExpansionMaximumFloor": "1000",
+      "aboveThresholdRepresentation": "EXACT_SYMBOLIC_POWER"
+    },
+    "modifierPools": {
+      "poolIds": [
+        "tower.modifier.armored",
+        "tower.modifier.swarm",
+        "tower.modifier.flying",
+        "tower.modifier.regeneration",
+        "tower.modifier.haste",
+        "tower.modifier.fragile"
+      ],
+      "selectionCount": "2",
+      "adjacentRepeatMaximum": "1",
+      "windowRepeatMaximum": "3",
+      "windowSize": "10"
+    },
+    "repetitionLimits": {
+      "sameModifierPairAdjacentMaximum": "1",
+      "sameBossMechanicWithinDistrictMaximum": "1"
+    },
+    "bossCadence": {
+      "midBossEveryFloors": "5",
+      "districtBossEveryFloors": "10",
+      "firstMidBossId": "tower.boss.d01.mid.001",
+      "firstDistrictBossId": "tower.boss.d01.kagetsubasa"
+    },
+    "backgroundCadence": {
+      "districtChangeEveryFloors": "10",
+      "majorThemeCycleEveryFloors": "100"
+    },
+    "generatedIdFormatting": {
+      "districtMinimumWidth": "3",
+      "cycleMinimumWidth": "6",
+      "midBossDistrictMinimumWidth": "2",
+      "midBossOrdinalMinimumWidth": "3",
+      "extraLeadingZerosForbidden": true
+    }
+  },
+  "combat": {
+    "tickRate": {
+      "milliseconds": "50",
+      "version": "combat-tick-v1"
+    },
+    "formationSize": "4",
+    "temporarySupportLayerSeparate": true,
+    "movement": {
+      "automatic": true,
+      "directTapDamage": "0",
+      "contactOrRangeRequired": true
+    },
+    "range": {
+      "logicalUnit": "milli-tile",
+      "melee": "800",
+      "ranged": "4200"
+    },
+    "projectiles": {
+      "travelTimeMode": "distance-divided-by-speed",
+      "serverResultDeterministic": true
+    },
+    "damage": {
+      "formulaVersion": "combat-damage-v2",
+      "minimumDamage": "1",
+      "criticalUsesExactProbability": true
+    },
+    "healing": {
+      "mayBeCoreRole": true,
+      "firstCopyFunctional": true
+    },
+    "control": {
+      "tauntAntiAirAreaAvailableInNR": true,
+      "fullMasteryRequired": false
+    },
+    "bossPhases": {
+      "enabled": true,
+      "minimumTelegraphMilliseconds": "700"
+    },
+    "failureDiagnosis": {
+      "codes": [
+        "INSUFFICIENT_SURVIVAL",
+        "INSUFFICIENT_DAMAGE",
+        "MISSING_COUNTER",
+        "ECONOMY_UNDERFUNDED"
+      ],
+      "visibleToPlayer": true
+    }
+  },
+  "offline": {
+    "eligibility": {
+      "minimumAwayMilliseconds": "60000",
+      "serverTime": true
+    },
+    "cap": {
+      "baseMilliseconds": "28800000",
+      "monthlyPassMilliseconds": "43200000"
+    },
+    "calculation": {
+      "version": "offline-v2",
+      "autoBattleBaseline": true,
+      "directTapContribution": "0",
+      "deterministicKnownFloorReplay": true
+    },
+    "knownConfiguration": {
+      "savedFormation": true,
+      "savedShopConfiguration": true,
+      "automationRetainedAcrossReset": true
+    },
+    "serverReconciliation": {
+      "authoritative": true,
+      "clientPredictionMayMint": false,
+      "idempotentClaim": true
+    }
+  },
+  "shops": {
+    "catalog": [
+      {
+        "id": "shop.launch.001",
+        "role": "recruitment",
+        "firstTenSlice": true
+      },
+      {
+        "id": "shop.launch.002",
+        "role": "food-income",
+        "firstTenSlice": true
+      },
+      {
+        "id": "shop.launch.003",
+        "role": "forge-support",
+        "firstTenSlice": true
+      },
+      {
+        "id": "shop.launch.004",
+        "role": "toy-delivery",
+        "firstTenSlice": true
+      }
+    ],
+    "placement": {
+      "districtSlots": "4",
+      "reconfigurationAllowed": true
+    },
+    "levels": {
+      "uncappedWithinRun": true,
+      "resetLoss": true,
+      "bulkPurchase": true
+    },
+    "adjacency": {
+      "version": "shop-adjacency-v2",
+      "maximumStackedSameTag": "2"
+    },
+    "reconfiguration": {
+      "freeBeforeBattle": true,
+      "combatLock": true
+    },
+    "automation": {
+      "retainedAcrossReset": true,
+      "collectAllRequired": false,
+      "individualCollectionRequired": false
+    },
+    "supportEffects": {
+      "combatIncomeAndDeliveryOnly": true,
+      "merchantChairmanIdentity": false
+    }
+  },
+  "delivery": {
+    "routes": [
+      {
+        "id": "delivery.route.short",
+        "durationMilliseconds": "60000"
+      },
+      {
+        "id": "delivery.route.medium",
+        "durationMilliseconds": "300000"
+      },
+      {
+        "id": "delivery.route.long",
+        "durationMilliseconds": "1800000"
+      }
+    ],
+    "arrival": {
+      "serverTime": true,
+      "idempotentGrant": true
+    },
+    "forecast": {
+      "visibleBeforeDispatch": true,
+      "rewardRangeExact": true
+    },
+    "offline": {
+      "continues": true,
+      "capUsesOfflineCap": true
+    },
+    "failureRecovery": {
+      "duplicateGrantForbidden": true,
+      "pendingReconciliation": true
+    }
+  },
+  "characters": {
+    "catalog": [
+      {
+        "id": "character.launch.001",
+        "displayName": "ムギ",
+        "publicNameStatus": "SEALED",
+        "species": "cat",
+        "baseRarity": "N",
+        "role": "frontline-control",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "affinity-counter"
+      },
+      {
+        "id": "character.launch.002",
+        "displayName": "ルナ",
+        "publicNameStatus": "SEALED",
+        "species": "cat",
+        "baseRarity": "R",
+        "role": "ranged-anti-air",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "low-cost-scaling"
+      },
+      {
+        "id": "character.launch.003",
+        "displayName": "トト",
+        "publicNameStatus": "SEALED",
+        "species": "catfolk",
+        "baseRarity": "N",
+        "role": "healing-support",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "shop-delivery-synergy"
+      },
+      {
+        "id": "character.launch.004",
+        "displayName": "コハク",
+        "publicNameStatus": "SEALED",
+        "species": "cat",
+        "baseRarity": "R",
+        "role": "runner-backline-disruption",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "reset-reclear"
+      },
+      {
+        "id": "character.launch.005",
+        "displayName": "INTERNAL_CHARACTER_005",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "cat",
+        "baseRarity": "N",
+        "role": "area-damage",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "affinity-counter"
+      },
+      {
+        "id": "character.launch.006",
+        "displayName": "INTERNAL_CHARACTER_006",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "catfolk",
+        "baseRarity": "R",
+        "role": "commerce-support",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "low-cost-scaling"
+      },
+      {
+        "id": "character.launch.007",
+        "displayName": "INTERNAL_CHARACTER_007",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "cat",
+        "baseRarity": "N",
+        "role": "damage-mitigation",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "shop-delivery-synergy"
+      },
+      {
+        "id": "character.launch.008",
+        "displayName": "INTERNAL_CHARACTER_008",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "cat",
+        "baseRarity": "R",
+        "role": "cleanse-support",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "reset-reclear"
+      },
+      {
+        "id": "character.launch.009",
+        "displayName": "INTERNAL_CHARACTER_009",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "catfolk",
+        "baseRarity": "RR",
+        "role": "frontline-control",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "affinity-counter"
+      },
+      {
+        "id": "character.launch.010",
+        "displayName": "INTERNAL_CHARACTER_010",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "cat",
+        "baseRarity": "RR",
+        "role": "ranged-anti-air",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "low-cost-scaling"
+      },
+      {
+        "id": "character.launch.011",
+        "displayName": "INTERNAL_CHARACTER_011",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "cat",
+        "baseRarity": "RR",
+        "role": "healing-support",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "shop-delivery-synergy"
+      },
+      {
+        "id": "character.launch.012",
+        "displayName": "INTERNAL_CHARACTER_012",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "catfolk",
+        "baseRarity": "RR",
+        "role": "runner-backline-disruption",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "reset-reclear"
+      },
+      {
+        "id": "character.launch.013",
+        "displayName": "INTERNAL_CHARACTER_013",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "cat",
+        "baseRarity": "SR",
+        "role": "area-damage",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "affinity-counter"
+      },
+      {
+        "id": "character.launch.014",
+        "displayName": "INTERNAL_CHARACTER_014",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "cat",
+        "baseRarity": "SR",
+        "role": "commerce-support",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "low-cost-scaling"
+      },
+      {
+        "id": "character.launch.015",
+        "displayName": "INTERNAL_CHARACTER_015",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "catfolk",
+        "baseRarity": "SR",
+        "role": "damage-mitigation",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "shop-delivery-synergy"
+      },
+      {
+        "id": "character.launch.016",
+        "displayName": "INTERNAL_CHARACTER_016",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "cat",
+        "baseRarity": "SR",
+        "role": "cleanse-support",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "reset-reclear"
+      },
+      {
+        "id": "character.launch.017",
+        "displayName": "INTERNAL_CHARACTER_017",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "cat",
+        "baseRarity": "SSR",
+        "role": "frontline-control",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "affinity-counter"
+      },
+      {
+        "id": "character.launch.018",
+        "displayName": "INTERNAL_CHARACTER_018",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "catfolk",
+        "baseRarity": "SSR",
+        "role": "ranged-anti-air",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "low-cost-scaling"
+      },
+      {
+        "id": "character.launch.019",
+        "displayName": "INTERNAL_CHARACTER_019",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "cat",
+        "baseRarity": "SSR",
+        "role": "healing-support",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "shop-delivery-synergy"
+      },
+      {
+        "id": "character.launch.020",
+        "displayName": "INTERNAL_CHARACTER_020",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "cat",
+        "baseRarity": "SSR",
+        "role": "runner-backline-disruption",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "reset-reclear"
+      },
+      {
+        "id": "character.launch.021",
+        "displayName": "INTERNAL_CHARACTER_021",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "catfolk",
+        "baseRarity": "UR",
+        "role": "area-damage",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "affinity-counter"
+      },
+      {
+        "id": "character.launch.022",
+        "displayName": "INTERNAL_CHARACTER_022",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "cat",
+        "baseRarity": "UR",
+        "role": "commerce-support",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "low-cost-scaling"
+      },
+      {
+        "id": "character.launch.023",
+        "displayName": "INTERNAL_CHARACTER_023",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "cat",
+        "baseRarity": "UR",
+        "role": "damage-mitigation",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "shop-delivery-synergy"
+      },
+      {
+        "id": "character.launch.024",
+        "displayName": "INTERNAL_CHARACTER_024",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "species": "catfolk",
+        "baseRarity": "UR",
+        "role": "cleanse-support",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false,
+        "longTermUtilityTag": "reset-reclear"
+      }
+    ],
+    "catalogTarget": "24",
+    "requiredCoreRoles": [
+      "frontline-control",
+      "ranged-anti-air",
+      "healing-support",
+      "runner-backline-disruption",
+      "area-damage",
+      "commerce-support",
+      "damage-mitigation",
+      "cleanse-support"
+    ],
+    "deterministicNRMinimum": "8",
+    "coinLevel": {
+      "uncapped": true,
+      "currency": "wallet.coin.run"
+    },
+    "partyRules": {
+      "activeNamed": "4",
+      "temporarySupportSeparate": true,
+      "duplicateCharacterInParty": false
+    }
+  },
+  "weapons": {
+    "catalog": [
+      {
+        "id": "weapon.launch.001",
+        "displayName": "INTERNAL_WEAPON_001",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "N",
+        "role": "melee-control",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.002",
+        "displayName": "INTERNAL_WEAPON_002",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "N",
+        "role": "ranged-anti-air",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.003",
+        "displayName": "INTERNAL_WEAPON_003",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "N",
+        "role": "healing-focus",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.004",
+        "displayName": "INTERNAL_WEAPON_004",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "N",
+        "role": "mobility",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.005",
+        "displayName": "INTERNAL_WEAPON_005",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "N",
+        "role": "area-damage",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.006",
+        "displayName": "INTERNAL_WEAPON_006",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "N",
+        "role": "commerce-support",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.007",
+        "displayName": "INTERNAL_WEAPON_007",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "R",
+        "role": "guard",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.008",
+        "displayName": "INTERNAL_WEAPON_008",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "R",
+        "role": "cleanse",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.009",
+        "displayName": "INTERNAL_WEAPON_009",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "R",
+        "role": "melee-control",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.010",
+        "displayName": "INTERNAL_WEAPON_010",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "R",
+        "role": "ranged-anti-air",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.011",
+        "displayName": "INTERNAL_WEAPON_011",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "R",
+        "role": "healing-focus",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.012",
+        "displayName": "INTERNAL_WEAPON_012",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "R",
+        "role": "mobility",
+        "acquisition": "DETERMINISTIC_NON_GACHA",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.013",
+        "displayName": "INTERNAL_WEAPON_013",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "RR",
+        "role": "area-damage",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.014",
+        "displayName": "INTERNAL_WEAPON_014",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "RR",
+        "role": "commerce-support",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.015",
+        "displayName": "INTERNAL_WEAPON_015",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "RR",
+        "role": "guard",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.016",
+        "displayName": "INTERNAL_WEAPON_016",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "RR",
+        "role": "cleanse",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.017",
+        "displayName": "INTERNAL_WEAPON_017",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "RR",
+        "role": "melee-control",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.018",
+        "displayName": "INTERNAL_WEAPON_018",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "RR",
+        "role": "ranged-anti-air",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.019",
+        "displayName": "INTERNAL_WEAPON_019",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "RR",
+        "role": "healing-focus",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.020",
+        "displayName": "INTERNAL_WEAPON_020",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "RR",
+        "role": "mobility",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.021",
+        "displayName": "INTERNAL_WEAPON_021",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "SR",
+        "role": "area-damage",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.022",
+        "displayName": "INTERNAL_WEAPON_022",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "SR",
+        "role": "commerce-support",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.023",
+        "displayName": "INTERNAL_WEAPON_023",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "SR",
+        "role": "guard",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.024",
+        "displayName": "INTERNAL_WEAPON_024",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "SR",
+        "role": "cleanse",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.025",
+        "displayName": "INTERNAL_WEAPON_025",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "SR",
+        "role": "melee-control",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.026",
+        "displayName": "INTERNAL_WEAPON_026",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "SR",
+        "role": "ranged-anti-air",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.027",
+        "displayName": "INTERNAL_WEAPON_027",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "SR",
+        "role": "healing-focus",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.028",
+        "displayName": "INTERNAL_WEAPON_028",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "SR",
+        "role": "mobility",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.029",
+        "displayName": "INTERNAL_WEAPON_029",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "SSR",
+        "role": "area-damage",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.030",
+        "displayName": "INTERNAL_WEAPON_030",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "SSR",
+        "role": "commerce-support",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.031",
+        "displayName": "INTERNAL_WEAPON_031",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "SSR",
+        "role": "guard",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.032",
+        "displayName": "INTERNAL_WEAPON_032",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "SSR",
+        "role": "cleanse",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.033",
+        "displayName": "INTERNAL_WEAPON_033",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "SSR",
+        "role": "melee-control",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.034",
+        "displayName": "INTERNAL_WEAPON_034",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "UR",
+        "role": "ranged-anti-air",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.035",
+        "displayName": "INTERNAL_WEAPON_035",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "UR",
+        "role": "healing-focus",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      },
+      {
+        "id": "weapon.launch.036",
+        "displayName": "INTERNAL_WEAPON_036",
+        "publicNameStatus": "PLACEHOLDER_PENDING_STEP4_5_NAMING",
+        "baseRarity": "UR",
+        "role": "mobility",
+        "acquisition": "GACHA_WITH_GUARANTEED_RECOVERY",
+        "firstCopyFunctional": true,
+        "coreProgressionGate": false
+      }
+    ],
+    "catalogTarget": "36",
+    "requiredCoreRoles": [
+      "melee-control",
+      "ranged-anti-air",
+      "healing-focus",
+      "mobility",
+      "area-damage",
+      "commerce-support",
+      "guard",
+      "cleanse"
+    ],
+    "deterministicNRMinimum": "12",
+    "equipRules": {
+      "onePerActiveCharacter": true,
+      "randomSubstatMaze": false,
+      "mandatoryDismantleLoop": false
+    }
+  },
+  "rarities": {
+    "order": [
+      "N",
+      "R",
+      "RR",
+      "SR",
+      "SSR",
+      "UR"
+    ],
+    "catalog": [
+      {
+        "id": "rarity.n",
+        "code": "N",
+        "rank": 0,
+        "baselinePowerMultiplier": "1.00",
+        "mayGateCoreProgression": false,
+        "evolutionAxisSeparate": true
+      },
+      {
+        "id": "rarity.r",
+        "code": "R",
+        "rank": 1,
+        "baselinePowerMultiplier": "1.08",
+        "mayGateCoreProgression": false,
+        "evolutionAxisSeparate": true
+      },
+      {
+        "id": "rarity.rr",
+        "code": "RR",
+        "rank": 2,
+        "baselinePowerMultiplier": "1.18",
+        "mayGateCoreProgression": false,
+        "evolutionAxisSeparate": true
+      },
+      {
+        "id": "rarity.sr",
+        "code": "SR",
+        "rank": 3,
+        "baselinePowerMultiplier": "1.31",
+        "mayGateCoreProgression": false,
+        "evolutionAxisSeparate": true
+      },
+      {
+        "id": "rarity.ssr",
+        "code": "SSR",
+        "rank": 4,
+        "baselinePowerMultiplier": "1.47",
+        "mayGateCoreProgression": false,
+        "evolutionAxisSeparate": true
+      },
+      {
+        "id": "rarity.ur",
+        "code": "UR",
+        "rank": 5,
+        "baselinePowerMultiplier": "1.66",
+        "mayGateCoreProgression": false,
+        "evolutionAxisSeparate": true
+      }
+    ],
+    "strengthBoundary": {
+      "URGenerallyStrong": true,
+      "URUnconditionalBestAllRoles": false
+    },
+    "lowRarityUtility": {
+      "deterministicRoutes": true,
+      "longTermMeasurable": true
+    },
+    "highRarityNonGate": {
+      "corePve": true,
+      "reset": true,
+      "evolution": true,
+      "requiredCombatFunctions": true
+    }
+  },
+  "levels": {
+    "costCurve": {
+      "version": "coin-level-v2",
+      "baseCost": "25",
+      "growth": {
+        "numerator": "107",
+        "denominator": "100"
+      },
+      "rounding": "ceil"
+    },
+    "uncappedRule": true,
+    "bulkPurchase": {
+      "options": [
+        "1",
+        "10",
+        "MAX_AFFORDABLE"
+      ],
+      "deterministic": true
+    },
+    "resetLoss": true
+  },
+  "evolution": {
+    "eligibilityEveryLevels": "100",
+    "costCurve": {
+      "currency": "wallet.ruby.free.reset",
+      "stageCosts": [
+        "10",
+        "20",
+        "35",
+        "55",
+        "80"
+      ],
+      "afterListed": {
+        "base": "80",
+        "perStage": "30"
+      }
+    },
+    "orderedCatchUp": true,
+    "nonBlockingContinuation": true,
+    "visualCadence": {
+      "minorEveryLevels": "100",
+      "majorEveryStages": "5"
+    },
+    "resetRetention": true,
+    "firstEvolutionCoverage": {
+      "firstEffectiveResetMinimumReward": "15",
+      "firstStageCost": "10",
+      "adOrPaymentRequired": false
+    }
+  },
+  "characterMastery": {
+    "firstCopy": {
+      "functional": true,
+      "roleComplete": true
+    },
+    "practicalBreakpoints": {
+      "nodes": [
+        {
+          "additionalEffectiveCopies": "1",
+          "cumulativePowerBasisPoints": "300",
+          "functionalUnlock": false
+        },
+        {
+          "additionalEffectiveCopies": "3",
+          "cumulativePowerBasisPoints": "550",
+          "functionalUnlock": false
+        },
+        {
+          "additionalEffectiveCopies": "7",
+          "cumulativePowerBasisPoints": "750",
+          "functionalUnlock": false
+        }
+      ],
+      "latestAdditionalCopies": "7"
+    },
+    "fullMastery": {
+      "minimumAdditionalEffectiveCopies": "20",
+      "normalPvePrerequisite": false
+    },
+    "marginalCurve": {
+      "nodes": [
+        {
+          "additionalEffectiveCopies": "1",
+          "cumulativePowerBasisPoints": "300",
+          "functionalUnlock": false
+        },
+        {
+          "additionalEffectiveCopies": "3",
+          "cumulativePowerBasisPoints": "550",
+          "functionalUnlock": false
+        },
+        {
+          "additionalEffectiveCopies": "7",
+          "cumulativePowerBasisPoints": "750",
+          "functionalUnlock": false
+        },
+        {
+          "additionalEffectiveCopies": "12",
+          "cumulativePowerBasisPoints": "900",
+          "functionalUnlock": false
+        },
+        {
+          "additionalEffectiveCopies": "20",
+          "cumulativePowerBasisPoints": "1000",
+          "functionalUnlock": false
+        }
+      ],
+      "strictlyDiminishingMarginalGain": true
+    },
+    "overflow": {
+      "currency": "overflow.character.mastery",
+      "conversionPerDuplicate": "100",
+      "neverDiscard": true
+    },
+    "catchUp": {
+      "selectors": true,
+      "universalFragments": true,
+      "exchange": true,
+      "rerun": true
+    }
+  },
+  "weaponMastery": {
+    "firstCopy": {
+      "functional": true,
+      "roleComplete": true
+    },
+    "practicalBreakpoints": {
+      "nodes": [
+        {
+          "additionalEffectiveCopies": "1",
+          "cumulativePowerBasisPoints": "300",
+          "functionalUnlock": false
+        },
+        {
+          "additionalEffectiveCopies": "3",
+          "cumulativePowerBasisPoints": "550",
+          "functionalUnlock": false
+        },
+        {
+          "additionalEffectiveCopies": "7",
+          "cumulativePowerBasisPoints": "750",
+          "functionalUnlock": false
+        }
+      ],
+      "latestAdditionalCopies": "7"
+    },
+    "fullMastery": {
+      "minimumAdditionalEffectiveCopies": "20",
+      "normalPvePrerequisite": false
+    },
+    "marginalCurve": {
+      "nodes": [
+        {
+          "additionalEffectiveCopies": "1",
+          "cumulativePowerBasisPoints": "300",
+          "functionalUnlock": false
+        },
+        {
+          "additionalEffectiveCopies": "3",
+          "cumulativePowerBasisPoints": "550",
+          "functionalUnlock": false
+        },
+        {
+          "additionalEffectiveCopies": "7",
+          "cumulativePowerBasisPoints": "750",
+          "functionalUnlock": false
+        },
+        {
+          "additionalEffectiveCopies": "12",
+          "cumulativePowerBasisPoints": "900",
+          "functionalUnlock": false
+        },
+        {
+          "additionalEffectiveCopies": "20",
+          "cumulativePowerBasisPoints": "1000",
+          "functionalUnlock": false
+        }
+      ],
+      "strictlyDiminishingMarginalGain": true
+    },
+    "overflow": {
+      "currency": "overflow.weapon.mastery",
+      "conversionPerDuplicate": "100",
+      "neverDiscard": true
+    },
+    "catchUp": {
+      "selectors": true,
+      "universalFragments": true,
+      "exchange": true,
+      "rerun": true
+    }
+  },
+  "gacha": {
+    "characterPools": [
+      {
+        "id": "banner.character.standard",
+        "kind": "character",
+        "rateTable": "catalog.rate_table.character.v2",
+        "pityFamily": "pity.character.standard",
+        "carryoverFamily": "character-standard-v2"
+      },
+      {
+        "id": "banner.character.featured",
+        "kind": "character",
+        "rateTable": "catalog.rate_table.character.v2",
+        "pityFamily": "pity.character.featured",
+        "carryoverFamily": "character-featured-v2"
+      }
+    ],
+    "weaponPools": [
+      {
+        "id": "banner.weapon.standard",
+        "kind": "weapon",
+        "rateTable": "catalog.rate_table.weapon.v2",
+        "pityFamily": "pity.weapon.standard",
+        "carryoverFamily": "weapon-standard-v2"
+      },
+      {
+        "id": "banner.weapon.featured",
+        "kind": "weapon",
+        "rateTable": "catalog.rate_table.weapon.v2",
+        "pityFamily": "pity.weapon.featured",
+        "carryoverFamily": "weapon-featured-v2"
+      }
+    ],
+    "rates": [
+      {
+        "id": "catalog.rate_table.character.v2",
+        "entries": [
+          {
+            "rarity": "N",
+            "probability": "0.500"
+          },
+          {
+            "rarity": "R",
+            "probability": "0.300"
+          },
+          {
+            "rarity": "RR",
+            "probability": "0.120"
+          },
+          {
+            "rarity": "SR",
+            "probability": "0.050"
+          },
+          {
+            "rarity": "SSR",
+            "probability": "0.025"
+          },
+          {
+            "rarity": "UR",
+            "probability": "0.005"
+          }
+        ]
+      },
+      {
+        "id": "catalog.rate_table.weapon.v2",
+        "entries": [
+          {
+            "rarity": "N",
+            "probability": "0.500"
+          },
+          {
+            "rarity": "R",
+            "probability": "0.300"
+          },
+          {
+            "rarity": "RR",
+            "probability": "0.120"
+          },
+          {
+            "rarity": "SR",
+            "probability": "0.050"
+          },
+          {
+            "rarity": "SSR",
+            "probability": "0.025"
+          },
+          {
+            "rarity": "UR",
+            "probability": "0.005"
+          }
+        ]
+      }
+    ],
+    "hardPity": {
+      "draws": "100",
+      "guaranteedRarity": "UR",
+      "resetsOnUR": true
+    },
+    "featuredGuarantee": {
+      "draws": "200",
+      "guaranteedFeatured": true,
+      "featuredShareWithinUR": "0.500"
+    },
+    "carryoverFamilies": {
+      "compatibleOnly": true,
+      "expiresOnAccountDeletionOnly": true
+    },
+    "exchange": {
+      "characterSelector": "exchange.character.selector",
+      "weaponSelector": "exchange.weapon.selector",
+      "bannerMedal": "exchange.banner.medal",
+      "deterministicProgress": true
+    },
+    "history": {
+      "serverAuthoritative": true,
+      "rngAuditId": true,
+      "preDrawDisclosure": true
+    },
+    "bulkDraw": {
+      "options": [
+        "10",
+        "50",
+        "100"
+      ],
+      "firstAnimationThenSkip": true
+    },
+    "newcomerGuarantees": {
+      "firstDaySSRCharacterByDraw": "50",
+      "firstDaySRWeaponByDraw": "30",
+      "deterministicRoutesShown": true
+    },
+    "compGachaProhibited": true,
+    "rewardCadence": {
+      "firstTenMinutesCombinedDraws": {
+        "minimum": "50",
+        "target": "70",
+        "maximum": "100"
+      },
+      "firstHourCombinedDraws": {
+        "minimum": "150",
+        "target": "200",
+        "maximum": "250"
+      },
+      "firstSevenDaysCombinedDraws": {
+        "minimum": "500",
+        "target": "650",
+        "maximum": "800"
+      },
+      "noAdF2PDailyCombinedDraws": {
+        "minimum": "40",
+        "target": "44",
+        "maximum": "60"
+      },
+      "rewardedAdAdditionalDailyDraws": {
+        "target": "20",
+        "hardCap": "40"
+      },
+      "visibleUpgradeIntervalSeconds": {
+        "newPlayerMaximum": "45",
+        "normalSessionMaximum": "120"
+      }
+    }
+  },
+  "wallet": {
+    "coin": {
+      "id": "wallet.coin.run",
+      "resetLoss": true
+    },
+    "paidRuby": {
+      "id": "wallet.ruby.paid",
+      "expires": false,
+      "serverAuthority": true
+    },
+    "freeResetRuby": {
+      "id": "wallet.ruby.free.reset",
+      "serverAuthority": true
+    },
+    "freeAdRuby": {
+      "id": "wallet.ruby.free.ad",
+      "serverAuthority": true
+    },
+    "freeOtherRuby": {
+      "id": "wallet.ruby.free.other",
+      "serverAuthority": true
+    },
+    "tickets": {
+      "character": "ticket.character.standard",
+      "weapon": "ticket.weapon.standard",
+      "pickupCharacter": "ticket.pickup.character",
+      "pickupWeapon": "ticket.pickup.weapon"
+    },
+    "consumptionOrder": {
+      "generalRuby": [
+        "wallet.ruby.free.other",
+        "wallet.ruby.free.ad",
+        "wallet.ruby.free.reset",
+        "wallet.ruby.paid"
+      ],
+      "evolution": [
+        "wallet.ruby.free.reset",
+        "wallet.ruby.free.other",
+        "wallet.ruby.free.ad",
+        "wallet.ruby.paid"
+      ],
+      "paidRubyLast": true,
+      "version": "wallet-consumption-v2"
+    },
+    "conservation": {
+      "doubleEntry": true,
+      "transactionIdRequired": true,
+      "auditIdRequired": true,
+      "silentMintOrBurn": false
+    },
+    "refundDeficit": {
+      "states": [
+        "none",
+        "paid-ruby-deficit",
+        "purchase-restricted",
+        "support-review"
+      ],
+      "signedRepresentation": "explicit-sign-magnitude",
+      "silentFreeLedgerDebit": false,
+      "policyVersion": "refund-deficit-v2"
+    }
+  },
+  "reset": {
+    "id": "reset.tower_return",
+    "count": "1",
+    "eligibility": {
+      "minimumNewBestFloor": "30",
+      "targetFirstEffectiveMinutesP50": {
+        "minimum": "20",
+        "maximum": "35"
+      }
+    },
+    "losses": [
+      "current-floor",
+      "run-coin",
+      "run-character-levels",
+      "run-shop-levels",
+      "temporary-effects",
+      "current-combat"
+    ],
+    "retained": [
+      "owned-characters",
+      "owned-weapons",
+      "base-rarity",
+      "evolution-stage",
+      "character-mastery",
+      "weapon-mastery",
+      "ruby-ledgers",
+      "pity",
+      "exchange",
+      "purchase-entitlements",
+      "collection",
+      "achievements",
+      "highest-floor",
+      "saved-formation",
+      "shop-automation",
+      "known-floor-acceleration"
+    ],
+    "reward": {
+      "currency": "wallet.ruby.free.reset",
+      "formulaVersion": "new-record-milestone-v2",
+      "firstEffectiveMinimum": "15",
+      "repeatSameBest": "0",
+      "newRecordRequired": true
+    },
+    "antiFarm": {
+      "sameBestReward": "0",
+      "highestFloorAtomic": true
+    },
+    "floorOneRestart": true,
+    "reclearAcceleration": {
+      "savedFormation": true,
+      "shopAutomation": true,
+      "knownFloorSpeedMultiplierCap": "4.0",
+      "bulkPurchase": true
+    },
+    "quoteAndCommit": {
+      "lossKeepGainComplete": true,
+      "quoteExpiryMilliseconds": "300000",
+      "idempotent": true,
+      "serverAuthority": true
+    }
+  },
+  "login": {
+    "newcomer": {
+      "id": "login.newcomer",
+      "days": "7",
+      "missedDayResetsTrack": false
+    },
+    "monthly": {
+      "id": "login.monthly",
+      "days": "28",
+      "missedDayResetsTrack": false
+    },
+    "returner": {
+      "id": "login.returner",
+      "days": "7",
+      "missedDayResetsTrack": false
+    },
+    "campaignCatalogId": "catalog.login_campaign.v1",
+    "campaignVersion": "2026-08-27.1",
+    "serverTime": true,
+    "missedDay": "ADVANCE_ON_CLAIM_NOT_RESET_ALL",
+    "claimHistory": {
+      "serverAuthoritative": true,
+      "samePeriodExactlyOnce": true,
+      "multiTabConverges": true
+    }
+  },
+  "products": {
+    "catalogVersion": "catalog.product.v2",
+    "rubyPacks": [
+      {
+        "id": "product.ruby.pack.001",
+        "paidRuby": "100",
+        "bonusFreeOtherRuby": "0",
+        "contentsImmutable": true
+      }
+    ],
+    "starterPack": [
+      {
+        "id": "product.starter.bundle.001",
+        "paidRuby": "60",
+        "characterTickets": "50",
+        "weaponTickets": "50",
+        "oneTime": true
+      }
+    ],
+    "monthlyPass": [
+      {
+        "id": "product.monthly.entitlement.001",
+        "durationDays": "30",
+        "dailyFreeOtherRuby": "5",
+        "offlineCapMultiplier": "1.5",
+        "accelerationTargetMaximum": "2.0"
+      }
+    ],
+    "ticketPacks": [
+      {
+        "id": "product.ticket.pack.001",
+        "characterTickets": "100",
+        "weaponTickets": "100",
+        "randomContents": false
+      }
+    ],
+    "cosmeticPacks": [
+      {
+        "id": "product.cosmetic.pack.001",
+        "combatPower": "0",
+        "contentsImmutable": true
+      }
+    ],
+    "disclosures": {
+      "exactContents": true,
+      "period": true,
+      "claimConditions": true,
+      "fakeDiscount": false,
+      "forcedAdRemovalProduct": false
+    }
+  },
+  "payments": {
+    "pending": {
+      "grantsValue": false
+    },
+    "verification": {
+      "serverSide": true,
+      "providerTransactionUnique": true
+    },
+    "grant": {
+      "exactlyOnce": true,
+      "catalogVersionBound": true
+    },
+    "acknowledge": {
+      "afterDurableGrant": true
+    },
+    "refund": {
+      "unspentAffectedPaidGrantReversed": true,
+      "spentGrantCreatesDeficit": true
+    },
+    "refundDeficitPolicy": {
+      "version": "refund-deficit-v2",
+      "freeLedgersUntouched": true
+    },
+    "revocation": {
+      "providerTruth": true,
+      "auditRequired": true
+    },
+    "restore": {
+      "entitlementsFromProviderTruth": true,
+      "noDuplicateConsumableGrant": true
+    }
+  },
+  "ads": {
+    "rewardedOnly": true,
+    "forcedInterstitial": false,
+    "persistentBanner": false,
+    "placements": [
+      {
+        "id": "ad.reward.daily.draw",
+        "reward": "20-draw-tickets",
+        "allowedContexts": [
+          "home",
+          "gacha-lobby"
+        ]
+      },
+      {
+        "id": "ad.reward.offline_boost",
+        "reward": "offline-multiplier",
+        "allowedContexts": [
+          "offline-return"
+        ]
+      }
+    ],
+    "offerCatalogId": "catalog.ad_offer.v1",
+    "offerVersion": "2026-08-27.1",
+    "consent": {
+      "required": true,
+      "nonPersonalizedSupported": true
+    },
+    "dailyCaps": {
+      "targetAdditionalDraws": "20",
+      "hardCapAdditionalDraws": "40",
+      "visibleBeforeOptIn": true
+    },
+    "receiptVerification": {
+      "serverSide": true,
+      "exactlyOnce": true,
+      "acceptedVersionRetainedOnRetry": true
+    },
+    "noAdF2P": {
+      "progressionContinues": true,
+      "evolutionCoverage": true,
+      "featuredGuaranteeDays": {
+        "minimum": "30",
+        "maximum": "45"
+      }
+    }
+  },
+  "entitlements": {
+    "grant": {
+      "serverAuthoritative": true,
+      "transactionBound": true
+    },
+    "expiry": {
+      "serverTime": true,
+      "graceStateVisible": true
+    },
+    "restore": {
+      "providerTruth": true
+    },
+    "revocation": {
+      "auditable": true,
+      "unrelatedEntitlementUnaffected": true
+    }
+  },
+  "accounts": {
+    "guest": {
+      "serverProfile": true,
+      "localCacheOnly": true
+    },
+    "link": {
+      "idempotent": true,
+      "serverLock": true,
+      "rawGuestBackup": true
+    },
+    "conflict": {
+      "explicitReview": true,
+      "silentOverwrite": false
+    },
+    "merge": {
+      "duplicateGrantForbidden": true,
+      "paidEntitlementProviderTruth": true
+    },
+    "delete": {
+      "inAppInitiation": true,
+      "fullAccount": true,
+      "subscriptionDisclosure": true
+    },
+    "retention": {
+      "purposeAndPeriodRecorded": true,
+      "legalMinimumOnly": true
+    }
+  },
+  "screens": {
+    "count": "12",
+    "registry": [
+      {
+        "id": "S01",
+        "name": "title-resume-account",
+        "responsibilities": [
+          "new game",
+          "resume",
+          "guest/account link",
+          "migration recovery",
+          "account deletion"
+        ],
+        "authority": "local shell plus server account/profile",
+        "requiredState": [
+          "accountMode",
+          "saveSchema",
+          "serverSession",
+          "migrationStatus",
+          "linkStatus",
+          "deletionStatus",
+          "retentionNotice"
+        ],
+        "uiStates": [
+          "READY",
+          "LOADING",
+          "OFFLINE",
+          "MAINTENANCE",
+          "RETRYABLE_ERROR",
+          "FATAL_RECOVERY",
+          "LINK_PENDING",
+          "LINK_CONFLICT",
+          "DELETE_CONFIRM",
+          "DELETION_PENDING",
+          "DELETED",
+          "RECOVERED"
+        ],
+        "serverOwnedState": [
+          "account binding",
+          "guest merge",
+          "entitlement restore",
+          "deletion request",
+          "retention exception"
+        ]
+      },
+      {
+        "id": "S02",
+        "name": "battle-follow",
+        "responsibilities": [
+          "auto battle",
+          "movement/contact",
+          "projectile arrival",
+          "telegraph",
+          "support arrival",
+          "offline catch-up"
+        ],
+        "authority": "local deterministic run cache plus server-verifiable settlement",
+        "requiredState": [
+          "floorId",
+          "party4",
+          "temporarySupport",
+          "enemyWave",
+          "autoState",
+          "offlineCatchup",
+          "settlementStatus"
+        ],
+        "uiStates": [
+          "TUTORIAL",
+          "READY",
+          "LOADING",
+          "PAUSED",
+          "OFFLINE",
+          "BACKGROUND_RECONCILE",
+          "DESYNC",
+          "RETRYABLE_ERROR",
+          "DEFEAT",
+          "VICTORY_PENDING"
+        ],
+        "serverOwnedState": [
+          "permanent reward settlement",
+          "highest-floor candidate"
+        ]
+      },
+      {
+        "id": "S03",
+        "name": "unbounded-tower",
+        "responsibilities": [
+          "current/best floor",
+          "10F district",
+          "100F cycle",
+          "next milestone",
+          "virtualized browse"
+        ],
+        "authority": "server highest floor and milestones plus generated local browse cache",
+        "requiredState": [
+          "currentFloor",
+          "bestFloor",
+          "districtId",
+          "cycleId",
+          "nextMilestone",
+          "knownFloorRange"
+        ],
+        "uiStates": [
+          "READY",
+          "LOADING",
+          "OFFLINE",
+          "BROWSE_KNOWN",
+          "UNSEEN_LOCKED",
+          "STALE_CACHE",
+          "RETRYABLE_ERROR"
+        ],
+        "serverOwnedState": [
+          "best floor",
+          "milestone claims",
+          "cycle record"
+        ]
+      },
+      {
+        "id": "S04",
+        "name": "floor-clear-choice",
+        "responsibilities": [
+          "clear reward",
+          "stairs",
+          "shop/support/rescue choice",
+          "choose later"
+        ],
+        "authority": "server settlement and one-time choice plus local presentation",
+        "requiredState": [
+          "settlementId",
+          "rewardPreview",
+          "choiceSet",
+          "nextFloor",
+          "claimStatus"
+        ],
+        "uiStates": [
+          "READY",
+          "SETTLEMENT_PENDING",
+          "REWARD_CONFIRMED",
+          "CHOICE_PENDING",
+          "CHOICE_COMMITTED",
+          "CLAIM_RECOVERY",
+          "OFFLINE",
+          "RETRYABLE_ERROR"
+        ],
+        "serverOwnedState": [
+          "settlement",
+          "one-time choice",
+          "reward claim"
+        ]
+      },
+      {
+        "id": "S05",
+        "name": "shop-delivery",
+        "responsibilities": [
+          "placement",
+          "comparison",
+          "income",
+          "delivery",
+          "automation",
+          "reconfigure"
+        ],
+        "authority": "server profile configuration plus local forecast",
+        "requiredState": [
+          "shopLayout",
+          "deliveryQueue",
+          "automationRules",
+          "projectedCombatSupport",
+          "entityVersion"
+        ],
+        "uiStates": [
+          "READY",
+          "LOADING",
+          "EDITING",
+          "SAVE_PENDING",
+          "SYNC_CONFLICT",
+          "RESTORED",
+          "OFFLINE",
+          "RETRYABLE_ERROR"
+        ],
+        "serverOwnedState": [
+          "persistent layout",
+          "automation unlocks",
+          "permanent facility unlocks"
+        ]
+      },
+      {
+        "id": "S06",
+        "name": "character",
+        "responsibilities": [
+          "rarity",
+          "coin level",
+          "evolution",
+          "character mastery",
+          "party"
+        ],
+        "authority": "server ownership/evolution/mastery and server-verifiable run level",
+        "requiredState": [
+          "characterId",
+          "rarityId",
+          "levelBigInt",
+          "evolutionEligibility",
+          "evolutionStage",
+          "masteryTrack",
+          "partySlot"
+        ],
+        "uiStates": [
+          "READY",
+          "LOADING",
+          "INSUFFICIENT_COIN",
+          "INSUFFICIENT_RUBY",
+          "EVOLUTION_QUOTE",
+          "EVOLUTION_PENDING",
+          "MASTERY_PENDING",
+          "CONFLICT_RELOAD",
+          "REVOKED",
+          "RETRYABLE_ERROR"
+        ],
+        "serverOwnedState": [
+          "ownership",
+          "evolution",
+          "mastery",
+          "ruby debit",
+          "party profile"
+        ]
+      },
+      {
+        "id": "S07",
+        "name": "weapon-build",
+        "responsibilities": [
+          "rarity",
+          "equip",
+          "weapon mastery",
+          "build comparison",
+          "defeat diagnosis"
+        ],
+        "authority": "server ownership/mastery/equipment profile",
+        "requiredState": [
+          "weaponId",
+          "rarityId",
+          "owner",
+          "equippedBy",
+          "masteryTrack",
+          "buildImpact",
+          "entityVersion"
+        ],
+        "uiStates": [
+          "READY",
+          "LOADING",
+          "EQUIP_PENDING",
+          "EQUIP_CONFLICT",
+          "MASTERY_PENDING",
+          "OVERFLOW",
+          "REVOKED",
+          "RETRYABLE_ERROR"
+        ],
+        "serverOwnedState": [
+          "ownership",
+          "equipment",
+          "mastery",
+          "overflow"
+        ]
+      },
+      {
+        "id": "S08",
+        "name": "boss",
+        "responsibilities": [
+          "intro",
+          "phase",
+          "telegraph",
+          "break",
+          "failure diagnosis",
+          "retry",
+          "reward"
+        ],
+        "authority": "deterministic local battle plus server clear settlement",
+        "requiredState": [
+          "bossId",
+          "phase",
+          "breakGauge",
+          "dangerAction",
+          "failureDiagnosis",
+          "retryCost",
+          "settlementStatus"
+        ],
+        "uiStates": [
+          "INTRO",
+          "READY",
+          "BREAK",
+          "DEFEAT",
+          "RETRY",
+          "VICTORY_PENDING",
+          "REWARD_CONFIRMED",
+          "RECONNECT",
+          "REPLAY_SAFE"
+        ],
+        "serverOwnedState": [
+          "boss milestone settlement",
+          "one-time reward"
+        ]
+      },
+      {
+        "id": "S09",
+        "name": "tower-return",
+        "responsibilities": [
+          "lose/keep/gain",
+          "ruby",
+          "reclear forecast",
+          "quote",
+          "confirm"
+        ],
+        "authority": "server reset quote and commit",
+        "requiredState": [
+          "resetId",
+          "eligibility",
+          "losses",
+          "retained",
+          "rubyGrant",
+          "forecast",
+          "quoteVersion",
+          "idempotencyKey"
+        ],
+        "uiStates": [
+          "READY",
+          "INELIGIBLE",
+          "QUOTE_LOADING",
+          "QUOTE_READY",
+          "CONFIRMING",
+          "COMMIT_PENDING",
+          "QUOTE_EXPIRED",
+          "PENDING_RECONCILIATION",
+          "ALREADY_APPLIED",
+          "COMPLETED",
+          "RETRYABLE_ERROR"
+        ],
+        "serverOwnedState": [
+          "best floor",
+          "reset reward",
+          "ruby ledger",
+          "reset count",
+          "post-reset profile"
+        ]
+      },
+      {
+        "id": "S10",
+        "name": "recruit-gacha",
+        "responsibilities": [
+          "character banner",
+          "weapon banner",
+          "odds",
+          "pity",
+          "featured guarantee",
+          "exchange",
+          "history"
+        ],
+        "authority": "server RNG/result/pity/exchange/history",
+        "requiredState": [
+          "bannerId",
+          "bannerClass",
+          "rateTableVersion",
+          "pityCounter",
+          "featuredGuarantee",
+          "ticketBalance",
+          "rubyLedger",
+          "exchangeBalance",
+          "drawHistory"
+        ],
+        "uiStates": [
+          "READY",
+          "LOADING",
+          "CATALOG_STALE",
+          "ODDS_VIEW",
+          "DRAW_CONFIRM",
+          "DRAW_PENDING",
+          "RESULT",
+          "RESULT_RECOVERY",
+          "BANNER_ENDED",
+          "INSUFFICIENT_RESOURCE",
+          "OFFLINE",
+          "RETRYABLE_ERROR"
+        ],
+        "serverOwnedState": [
+          "RNG result",
+          "pity",
+          "guarantee",
+          "ownership",
+          "duplicates",
+          "exchange",
+          "history"
+        ]
+      },
+      {
+        "id": "S11",
+        "name": "store-ruby-ads",
+        "responsibilities": [
+          "paid/free wallet",
+          "products",
+          "payment",
+          "rewarded ads",
+          "entitlements"
+        ],
+        "authority": "server wallet/catalog/receipt/ad/entitlement",
+        "requiredState": [
+          "walletSubLedgers",
+          "catalogVersion",
+          "products",
+          "purchaseState",
+          "refundDeficitState",
+          "adOfferCatalogId",
+          "adOfferVersion",
+          "adAvailability",
+          "adDailyCap",
+          "entitlements",
+          "auditId"
+        ],
+        "uiStates": [
+          "READY",
+          "LOADING",
+          "CATALOG_STALE",
+          "PURCHASE_CONFIRM",
+          "PURCHASE_PENDING",
+          "PURCHASE_RECONCILIATION",
+          "VERIFICATION_FAILED",
+          "REFUNDED",
+          "REVOKED",
+          "RESTORE_PENDING",
+          "RESTORED",
+          "AD_OPT_IN",
+          "AD_PENDING",
+          "AD_GRANTED",
+          "AD_CAP_REACHED",
+          "OFFLINE"
+        ],
+        "serverOwnedState": [
+          "wallet",
+          "product catalog",
+          "ad-offer catalog",
+          "receipts",
+          "entitlements",
+          "ad receipts",
+          "refund/revocation/restore",
+          "paid-ruby refund deficit"
+        ]
+      },
+      {
+        "id": "S12",
+        "name": "login-inbox",
+        "responsibilities": [
+          "newcomer",
+          "monthly",
+          "returner",
+          "inbox",
+          "claim history"
+        ],
+        "authority": "server time/eligibility/claim/inbox history",
+        "requiredState": [
+          "campaignCatalogId",
+          "campaignVersion",
+          "campaigns",
+          "serverTime",
+          "eligibility",
+          "claimable",
+          "inbox",
+          "claimHistory"
+        ],
+        "uiStates": [
+          "READY",
+          "LOADING",
+          "CLAIM_PENDING",
+          "GRANTED",
+          "ALREADY_CLAIMED",
+          "NOT_ELIGIBLE",
+          "EXPIRED",
+          "SERVER_TIME_ERROR",
+          "DUPLICATE_REQUEST",
+          "RECOVERED",
+          "OFFLINE"
+        ],
+        "serverOwnedState": [
+          "login-campaign catalog",
+          "server time",
+          "eligibility",
+          "claim history",
+          "grants"
+        ]
+      }
+    ],
+    "globalRules": {
+      "screenIds": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07",
+        "S08",
+        "S09",
+        "S10",
+        "S11",
+        "S12"
+      ],
+      "combatRemainsPrimary": true,
+      "monetizationNotAlwaysOnBattle": true,
+      "errorStateCannotHideEconomicOutcome": true,
+      "serverTimeForClaims": true,
+      "economicTimeoutMeansFailure": false,
+      "immutableOfferAndCampaignVersions": true,
+      "physicalIPhone": "NOT_VERIFIED",
+      "mobileReview": [
+        "320x667",
+        "375x667",
+        "390x844",
+        "safe-area",
+        "large text",
+        "reduced motion"
+      ]
+    },
+    "universalRecovery": [
+      "economic intent carries an idempotency key",
+      "reload rehydrates authoritative status",
+      "multiple tabs converge by transaction, claim or entity version",
+      "timeout never retries as a new economic operation",
+      "partial completion exposes pending or recovery instead of duplicating grant",
+      "stale catalog, rate, ad-offer or login-campaign versions are rejected or reconciled without changing an accepted result",
+      "support-visible audit ID is available for permanent-economy operations"
+    ],
+    "globalInvariants": [
+      "Exactly S01-S12 are canonical.",
+      "All permanent-economy writes expose pending and reconciliation states.",
+      "No tap-damage state exists.",
+      "Purchase, draw, reset and claim never infer failure or success from client timeout.",
+      "Rewarded-ad and login claims display and submit the exact immutable offer or campaign version used for eligibility and grant.",
+      "A paid-ruby refund deficit is explicit and never hidden by silently consuming unrelated free ruby.",
+      "Account deletion and legally retained records are visible rather than implicit.",
+      "This registry cannot authorize Step 2 until the Round 008 seal validates it."
+    ]
+  },
+  "builds": [
+    {
+      "id": "build.combat",
+      "strategy": "direct-combat-scaling",
+      "powerMultiplier": "1.00",
+      "economyMultiplier": "1.00",
+      "reclearMultiplier": "1.10"
+    },
+    {
+      "id": "build.reinforcement",
+      "strategy": "temporary-support-timing",
+      "powerMultiplier": "0.96",
+      "economyMultiplier": "1.02",
+      "reclearMultiplier": "1.16"
+    },
+    {
+      "id": "build.commerce",
+      "strategy": "shop-delivery-reinvestment",
+      "powerMultiplier": "0.92",
+      "economyMultiplier": "1.10",
+      "reclearMultiplier": "1.20"
+    }
+  ],
+  "personas": [
+    {
+      "id": "no-ad-f2p",
+      "adMode": "no-ad",
+      "spendTier": "none",
+      "progressMultiplier": "1.00",
+      "dailyCharacterDraws": "22",
+      "dailyWeaponDraws": "22",
+      "dailyFeaturedProgress": "5",
+      "accelerationMaximum": "1.00"
+    },
+    {
+      "id": "rewarded-ad-f2p",
+      "adMode": "rewarded-opt-in",
+      "spendTier": "none",
+      "progressMultiplier": "1.18",
+      "dailyCharacterDraws": "32",
+      "dailyWeaponDraws": "32",
+      "dailyFeaturedProgress": "7",
+      "accelerationMaximum": "1.25"
+    },
+    {
+      "id": "monthly-pass",
+      "adMode": "rewarded-opt-in",
+      "spendTier": "monthly",
+      "progressMultiplier": "1.70",
+      "dailyCharacterDraws": "40",
+      "dailyWeaponDraws": "40",
+      "dailyFeaturedProgress": "10",
+      "accelerationMaximum": "2.00"
+    },
+    {
+      "id": "controlled-payer",
+      "adMode": "rewarded-opt-in",
+      "spendTier": "controlled",
+      "progressMultiplier": "2.70",
+      "dailyCharacterDraws": "55",
+      "dailyWeaponDraws": "55",
+      "dailyFeaturedProgress": "16",
+      "accelerationMaximum": "3.00"
+    },
+    {
+      "id": "high-spend-stress",
+      "adMode": "rewarded-opt-in",
+      "spendTier": "stress",
+      "progressMultiplier": "4.50",
+      "dailyCharacterDraws": "80",
+      "dailyWeaponDraws": "80",
+      "dailyFeaturedProgress": "28",
+      "accelerationMaximum": "5.00"
+    }
+  ],
+  "runMatrix": {
+    "planPath": "simulation/run-plan-v2.json",
+    "builds": "3",
+    "personas": "5",
+    "seedsPerBuildPersona": "1000",
+    "minimumScenarios": "15000",
+    "calibration": {
+      "seedsPerCell": "800",
+      "namespace": "cats-tower-v2-calibration",
+      "tuningVisible": true
+    },
+    "holdout": {
+      "seedsPerCell": "200",
+      "namespace": "cats-tower-v2-holdout-unseen",
+      "tuningVisible": false,
+      "observedV1Reuse": false
+    },
+    "horizons": [
+      "1-10F",
+      "100F",
+      "1000F",
+      "10000F-or-equivalent",
+      "repeated-resets",
+      "30-45-day-economy"
+    ],
+    "step2Execution": "QUALIFICATION_ONLY",
+    "fullMatrixExecution": "STEP3_ONLY"
+  },
+  "monteCarlo": {
+    "gachaTails": {
+      "plannedSeeds": "200000",
+      "metrics": [
+        "p50",
+        "p90",
+        "p99"
+      ]
+    },
+    "pityConformance": {
+      "plannedDraws": "1000000",
+      "boundaries": [
+        "99/100",
+        "199/200"
+      ]
+    },
+    "duplicateSkew": {
+      "plannedSeeds": "200000",
+      "stages": [
+        "first-copy",
+        "practical-breakpoint",
+        "long-term-full-mastery",
+        "overflow"
+      ]
+    },
+    "overflow": {
+      "plannedEvents": "100000"
+    },
+    "refundReplayRace": {
+      "plannedSequences": "100000",
+      "modelBased": true
+    },
+    "execution": "STEP3_ONLY"
+  },
+  "stateTransitions": {
+    "commonEnvelope": [
+      "requestId",
+      "idempotencyKey",
+      "accountId",
+      "clientObservedEntityVersion",
+      "transactionId",
+      "auditId"
+    ],
+    "machines": {
+      "draw": {
+        "id": "transition.draw.v2",
+        "states": [
+          "CREATED",
+          "VALIDATING",
+          "RESOURCES_RESERVED",
+          "RNG_COMMITTED",
+          "RESULT_GRANTED",
+          "RECORDED",
+          "FAILED_BEFORE_COMMIT",
+          "RECOVERY_REQUIRED"
+        ],
+        "terminal": [
+          "RECORDED",
+          "FAILED_BEFORE_COMMIT"
+        ]
+      },
+      "payment": {
+        "id": "transition.payment.v2",
+        "states": [
+          "CREATED",
+          "STORE_PENDING",
+          "STORE_PURCHASED",
+          "SERVER_VERIFYING",
+          "ENTITLEMENT_GRANTED",
+          "ACKNOWLEDGED",
+          "REFUNDED",
+          "REFUND_DEFICIT_RECORDED",
+          "REVOKED",
+          "RESTORED",
+          "FAILED"
+        ],
+        "terminal": [
+          "ACKNOWLEDGED",
+          "REFUNDED",
+          "REFUND_DEFICIT_RECORDED",
+          "REVOKED",
+          "RESTORED",
+          "FAILED"
+        ]
+      },
+      "rewardedAd": {
+        "id": "transition.rewarded_ad.v2",
+        "states": [
+          "OFFERED",
+          "OPTED_IN",
+          "CONSENT_CHECKED",
+          "STARTED",
+          "NETWORK_COMPLETED",
+          "SERVER_VERIFYING",
+          "GRANTED",
+          "CAP_REJECTED",
+          "OFFER_STALE",
+          "FAILED"
+        ],
+        "terminal": [
+          "GRANTED",
+          "CAP_REJECTED",
+          "OFFER_STALE",
+          "FAILED"
+        ]
+      },
+      "loginClaim": {
+        "id": "transition.login_claim.v2",
+        "states": [
+          "ELIGIBLE",
+          "CLAIM_REQUESTED",
+          "GRANTED",
+          "ALREADY_CLAIMED",
+          "NOT_ELIGIBLE",
+          "EXPIRED",
+          "CAMPAIGN_STALE",
+          "SERVER_TIME_ERROR"
+        ],
+        "terminal": [
+          "GRANTED",
+          "ALREADY_CLAIMED",
+          "NOT_ELIGIBLE",
+          "EXPIRED",
+          "CAMPAIGN_STALE",
+          "SERVER_TIME_ERROR"
+        ]
+      },
+      "towerReturn": {
+        "id": "transition.reset.v2",
+        "states": [
+          "NOT_ELIGIBLE",
+          "QUOTE_ISSUED",
+          "CONFIRMED",
+          "COMMITTING",
+          "APPLIED",
+          "QUOTE_EXPIRED",
+          "FAILED_BEFORE_COMMIT",
+          "RECOVERY_REQUIRED"
+        ],
+        "terminal": [
+          "NOT_ELIGIBLE",
+          "APPLIED",
+          "QUOTE_EXPIRED",
+          "FAILED_BEFORE_COMMIT"
+        ]
+      },
+      "evolution": {
+        "id": "transition.evolution.v2",
+        "states": [
+          "NOT_ELIGIBLE",
+          "ELIGIBLE",
+          "QUOTE_ISSUED",
+          "CONFIRMED",
+          "RUBY_DEBITED",
+          "EVOLUTION_GRANTED",
+          "RECORDED",
+          "QUOTE_EXPIRED",
+          "FAILED"
+        ],
+        "terminal": [
+          "NOT_ELIGIBLE",
+          "RECORDED",
+          "QUOTE_EXPIRED",
+          "FAILED"
+        ]
+      },
+      "masteryExchange": {
+        "id": "transition.mastery_exchange.v2",
+        "states": [
+          "QUOTE_ISSUED",
+          "CONFIRMED",
+          "RESOURCE_DEBITED",
+          "MASTERY_APPLIED",
+          "CAP_REACHED",
+          "OVERFLOW_CREDITED",
+          "RECORDED",
+          "QUOTE_STALE",
+          "FAILED"
+        ],
+        "terminal": [
+          "RECORDED",
+          "QUOTE_STALE",
+          "FAILED"
+        ]
+      },
+      "accountLink": {
+        "id": "transition.account_link.v2",
+        "states": [
+          "GUEST",
+          "AUTHENTICATING",
+          "SERVER_SNAPSHOT_FETCHED",
+          "CONFLICT_REVIEW",
+          "MERGING",
+          "LINKED",
+          "CANCELLED",
+          "RECOVERY_REQUIRED"
+        ],
+        "terminal": [
+          "LINKED",
+          "CANCELLED"
+        ]
+      },
+      "accountDeletion": {
+        "id": "transition.account_deletion.v1",
+        "states": [
+          "ACTIVE",
+          "DELETE_QUOTE_ISSUED",
+          "CONFIRMED",
+          "DELETION_PENDING",
+          "ENTITLEMENT_RECONCILIATION",
+          "DELETED",
+          "RETENTION_EXCEPTION_RECORDED",
+          "CANCELLED",
+          "FAILED"
+        ],
+        "terminal": [
+          "DELETED",
+          "RETENTION_EXCEPTION_RECORDED",
+          "CANCELLED",
+          "FAILED"
+        ]
+      }
+    },
+    "serverAuthority": true,
+    "clientTimeoutMeansFailure": false
+  },
+  "fixtures": {
+    "positive": "simulation/fixtures/v2/positive.json",
+    "boundary": "simulation/fixtures/v2/boundary.json",
+    "negative": "simulation/fixtures/v2/negative.json",
+    "stateTransitions": "simulation/fixtures/v2/state-transitions.json",
+    "crossRuntime": "simulation/fixtures/v2/cross-runtime-golden.json",
+    "manifest": "simulation/fixtures/v2/manifest.json"
+  },
+  "migrations": {
+    "path": "simulation/migrations/v1-to-v2",
+    "legacyIds": true,
+    "legacyDawnMergedInto": "reset.tower_return",
+    "legacyCurrencyTo": "wallet.ruby.free.reset",
+    "rawBackup": true,
+    "idempotentVersionMarker": "cats-tower-v1-to-v2.1",
+    "unknownOwnershipFailsClosed": true
+  },
+  "invariants": {
+    "product": [
+      "UNBOUNDED_TOWER",
+      "FLOOR_100_NOT_END",
+      "ONE_RESET_ONLY",
+      "FOUR_ACTIVE_PLUS_SEPARATE_SUPPORT",
+      "NO_DIRECT_TAP_DAMAGE"
+    ],
+    "economy": [
+      "FIRST_RESET_FUNDS_FIRST_EVOLUTION",
+      "REPEAT_BEST_ZERO_RUBY",
+      "PAID_FREE_PROVENANCE",
+      "PAID_RUBY_NO_EXPIRY",
+      "NO_AD_F2P_CORE_CONTINUES"
+    ],
+    "probability": [
+      "SEPARATE_CHARACTER_WEAPON_POOLS",
+      "EXACT_RATE_SUM",
+      "HARD_PITY_100",
+      "FEATURED_GUARANTEE_200",
+      "COMP_GACHA_PROHIBITED"
+    ],
+    "authority": [
+      "SERVER_PERMANENT_ECONOMY",
+      "IDEMPOTENT_GRANTS",
+      "RNG_AUDIT",
+      "NO_CLIENT_MINT"
+    ],
+    "policy": [
+      "REWARDED_ONLY_INITIAL_ADS",
+      "MINOR_PROTECTION_RELEASE_GATE",
+      "PRIVACY_MINIMIZATION_RELEASE_GATE"
+    ],
+    "recovery": [
+      "RETRY_RETURNS_ORIGINAL_RESULT",
+      "PARTIAL_RESUMES_OR_COMPENSATES",
+      "REFUND_DEFICIT_EXPLICIT",
+      "UNKNOWN_MIGRATION_FAILS_CLOSED"
+    ]
+  },
+  "output": {
+    "resultSchema": "simulation/result-v2.schema.json",
+    "summaryMetrics": [
+      "firstResetMinutes",
+      "floorReachMinutes",
+      "featuredGuaranteeDay",
+      "draws",
+      "resetRuby",
+      "evolutionCoverage"
+    ],
+    "tailMetrics": [
+      "p50",
+      "p90",
+      "p99"
+    ],
+    "violations": true,
+    "hashes": true,
+    "evidence": true,
+    "balanceVerdictAllowedInStep2": false
+  }
+}

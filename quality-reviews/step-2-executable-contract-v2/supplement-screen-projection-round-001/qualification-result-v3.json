@@ -1,0 +1,4094 @@
+{
+  "schemaVersion": "2.1.0",
+  "resultId": "cats-tower-step2-v2-qualification-001",
+  "deterministicPayload": {
+    "mode": "STEP2_QUALIFICATION_ONLY",
+    "candidateId": "cats-tower-v2-candidate-001",
+    "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+    "executionVersion": "cats-tower-step3-executor-v1.1.0",
+    "roundingVersion": "ct-rational-half-even-v1",
+    "seedNamespace": "cats-tower-v2-qualification",
+    "scenarioCount": "30",
+    "scenarios": [
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|no-ad-f2p|0",
+        "inputDigest": "baafd2ade0e71467be7d63ba8d464982713719e4bf88324dd4bf56c8ed894361",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.combat",
+        "personaId": "no-ad-f2p",
+        "seed": "0e38035aaaf106b5b9172d1fca42fb7e51fecf4a021722171e67831857188c33",
+        "ordinal": "0",
+        "firstResetMinutes": "28",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "40",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "8",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "115",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2309",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "43060",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2312",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "27",
+              "25",
+              "23",
+              "21",
+              "20"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2347",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "40",
+            "characterDraws45d": "990",
+            "weaponDraws45d": "990"
+          }
+        ],
+        "scenarioDigest": "c150da4d396099b971423a120d0d991c1be46d46258bad3111ab540a96ada689"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|no-ad-f2p|1",
+        "inputDigest": "025a0c9d27c3bca136c6e63ddbc2e9218a21ca705502b66d67fe1b907801793d",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.combat",
+        "personaId": "no-ad-f2p",
+        "seed": "ce264641efc319e89f6812ea9e8568d698108cd6d955f9e722aa8b52033e43d3",
+        "ordinal": "1",
+        "firstResetMinutes": "28",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "40",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "8",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "120",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2468",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "43157",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2445",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "27",
+              "25",
+              "23",
+              "21",
+              "20"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2331",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "40",
+            "characterDraws45d": "990",
+            "weaponDraws45d": "990"
+          }
+        ],
+        "scenarioDigest": "3bc1af674827024f636deb766bd95d860f7bbc23178a50a16017cb43e7de88aa"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|rewarded-ad-f2p|0",
+        "inputDigest": "c157830c24f1d9f1047abbc31fd254de9f4fb46947584fcfee092dc69fe26c94",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.combat",
+        "personaId": "rewarded-ad-f2p",
+        "seed": "7c599258a4f676992bc9cbe4632b1f7a39154e4e934a9d7080f0e81145ab9a13",
+        "ordinal": "0",
+        "firstResetMinutes": "26",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "29",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "7",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "101",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2090",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "36220",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1972",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "26",
+              "24",
+              "22",
+              "20",
+              "19"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2022",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "29",
+            "characterDraws45d": "1440",
+            "weaponDraws45d": "1440"
+          }
+        ],
+        "scenarioDigest": "ea8dd2a5c65f37cf2969c4ac7a3f104ef1bd1454c567463e2ef37dc8d23c838b"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|rewarded-ad-f2p|1",
+        "inputDigest": "609bc57b8015da49ec3c7503a6117a06659f9c96c32268490282196455415b42",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.combat",
+        "personaId": "rewarded-ad-f2p",
+        "seed": "3ec48b4963924ced59e3d482bba60b49aa51148a2c7065a64c7df3d40488b5da",
+        "ordinal": "1",
+        "firstResetMinutes": "26",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "29",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "7",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "102",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2092",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "36350",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2003",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "26",
+              "24",
+              "22",
+              "20",
+              "19"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2098",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "29",
+            "characterDraws45d": "1440",
+            "weaponDraws45d": "1440"
+          }
+        ],
+        "scenarioDigest": "c1503cbf9a7bb0bf0c9edbc95fac28857cc7b475131f61d59403b10db6d1b5e8"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|monthly-pass|0",
+        "inputDigest": "5b2acb1c63f2e9a9003548ba3632473ef53881b952bd197416432c1b7e1f68e8",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.combat",
+        "personaId": "monthly-pass",
+        "seed": "6550951dc03a4c5d375ff8a3371b002f31e6f8a21449c60c79f82bff465a6577",
+        "ordinal": "0",
+        "firstResetMinutes": "24",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "20",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "5",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "67",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1444",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "24803",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1434",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "24",
+              "22",
+              "20",
+              "19",
+              "18"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1368",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "20",
+            "characterDraws45d": "1800",
+            "weaponDraws45d": "1800"
+          }
+        ],
+        "scenarioDigest": "5e85e5fb422cff6b5eb30f16fe42878b4a818559b0df700b394b54dee9be1584"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|monthly-pass|1",
+        "inputDigest": "d34048789f8b2db117f702b4987c3613f716c13779d10d9a8a88a066259bcb6e",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.combat",
+        "personaId": "monthly-pass",
+        "seed": "19540ac388a6f51165be2963b2e2459c73c3273a2ab2ca9457d51c3aaabcc2f8",
+        "ordinal": "1",
+        "firstResetMinutes": "24",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "20",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "5",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "66",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1416",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "24598",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1436",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "24",
+              "22",
+              "20",
+              "19",
+              "18"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1371",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "20",
+            "characterDraws45d": "1800",
+            "weaponDraws45d": "1800"
+          }
+        ],
+        "scenarioDigest": "0506b17ec65cbe8af1878249029debfefbdc06f1b7f33ba10c90e380d4008ab2"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|controlled-payer|0",
+        "inputDigest": "4c11da3052430db21bd39b45fbcc668686ac629d67d6e60e3603ba846e26a9fe",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.combat",
+        "personaId": "controlled-payer",
+        "seed": "38b8cded32ef1ac8cefea5f524758b5a796b00ae804615ed45ecc9b12675caef",
+        "ordinal": "0",
+        "firstResetMinutes": "22",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "13",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "3",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "42",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "877",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "15561",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "915",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "23",
+              "21",
+              "20",
+              "19",
+              "18"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "866",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "13",
+            "characterDraws45d": "2475",
+            "weaponDraws45d": "2475"
+          }
+        ],
+        "scenarioDigest": "7fb749b4bae6b248ec5ee2ccd1cd62690d745bf63172570ceff03e0c03b42170"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|controlled-payer|1",
+        "inputDigest": "2e8a1187d7dc7f8ba697637e1cecefc73ffa97a5b5e08ecf52ab13a03e041371",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.combat",
+        "personaId": "controlled-payer",
+        "seed": "4f2d9b8a356492a17626d324f93187e66e8e35931c09fe5b4976169a8ba97def",
+        "ordinal": "1",
+        "firstResetMinutes": "24",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "13",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "3",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "45",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "872",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "15672",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "907",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "23",
+              "21",
+              "20",
+              "19",
+              "18"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "861",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "13",
+            "characterDraws45d": "2475",
+            "weaponDraws45d": "2475"
+          }
+        ],
+        "scenarioDigest": "8428d9bdb6bab30b3bacd7917188381b05a0957418b586055e67e75e126075d8"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|high-spend-stress|0",
+        "inputDigest": "e232bb365a4dce9dee42799cb737c8d9caa2a66fdba34f6f68020887d6eaba34",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.combat",
+        "personaId": "high-spend-stress",
+        "seed": "100cfc16df86edd13a5ae2a6b25a4bdf730a96c425e4e2d5e5f46a9624a9dee9",
+        "ordinal": "0",
+        "firstResetMinutes": "21",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "8",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "2",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "27",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "555",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "8997",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "518",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "22",
+              "20",
+              "19",
+              "18",
+              "17"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "528",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "8",
+            "characterDraws45d": "3600",
+            "weaponDraws45d": "3600"
+          }
+        ],
+        "scenarioDigest": "0de9296d618a7016519c547b9322c374e9f29c873a30e67e592f6ad1b222c6c2"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.combat|high-spend-stress|1",
+        "inputDigest": "2a4d768c2eab319b560f50a39fdcfd19c01890da1dd91a7336b5e040741ff4c0",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.combat",
+        "personaId": "high-spend-stress",
+        "seed": "fd953e0ab4cd76defea41acc0f7e12d50c368512db352e6cc38d46ee822c5698",
+        "ordinal": "1",
+        "firstResetMinutes": "23",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "8",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "2",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "26",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "528",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "9154",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "519",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "22",
+              "20",
+              "19",
+              "18",
+              "17"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "541",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "8",
+            "characterDraws45d": "3600",
+            "weaponDraws45d": "3600"
+          }
+        ],
+        "scenarioDigest": "cb327bcb23f11fd5316085b115168eca436a5346776044a72b938f1ec91797e8"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|no-ad-f2p|0",
+        "inputDigest": "0f92d295ba34c2dc3d7baff0781ea3a3cf754d1fc937feb9a0d70d2f6b7cb1f7",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.reinforcement",
+        "personaId": "no-ad-f2p",
+        "seed": "7d746ed0066c849c3547829d3cff019b3742d6ce2358ba2bb45aea29fdb7c536",
+        "ordinal": "0",
+        "firstResetMinutes": "27",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "40",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "9",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "120",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2505",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "45361",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2583",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "27",
+              "24",
+              "21",
+              "19",
+              "17"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2569",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "40",
+            "characterDraws45d": "990",
+            "weaponDraws45d": "990"
+          }
+        ],
+        "scenarioDigest": "0c344e692ef2b394f78bf37466646766b2b9c1bc5b565e196a1f3ea16fcc6a2c"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|no-ad-f2p|1",
+        "inputDigest": "f914949ddb81b2a84f8821ac93e949d16ef4e340ffe643db41b3a1e722aea8e6",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.reinforcement",
+        "personaId": "no-ad-f2p",
+        "seed": "d6dceafe49ff63be0a68a2cddf827d096bffe0204df9e024a19950c3be1e243a",
+        "ordinal": "1",
+        "firstResetMinutes": "25",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "40",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "9",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "117",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2447",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "45015",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2485",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "27",
+              "24",
+              "21",
+              "19",
+              "17"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2421",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "40",
+            "characterDraws45d": "990",
+            "weaponDraws45d": "990"
+          }
+        ],
+        "scenarioDigest": "ebd2bc0f92154fbfb67530ecb62aef4c45e2cc3f7478117283daaa41aaf3bce1"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|rewarded-ad-f2p|0",
+        "inputDigest": "68d06a4e9b37e0f75566a0fd22e6b64850e64a068c60e334cf8ab1e9a79b07b9",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.reinforcement",
+        "personaId": "rewarded-ad-f2p",
+        "seed": "ccd6f1a0b2fca66832eeb07b314ed4b8deb6dc4663f311e982735d943ee7685d",
+        "ordinal": "0",
+        "firstResetMinutes": "26",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "29",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "7",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "106",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2143",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "37508",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2113",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "26",
+              "23",
+              "20",
+              "18",
+              "16"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2167",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "29",
+            "characterDraws45d": "1440",
+            "weaponDraws45d": "1440"
+          }
+        ],
+        "scenarioDigest": "c2fa82e364c996f3868d4585a61a4fa75beea7c7f963daea304f18141068753a"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|rewarded-ad-f2p|1",
+        "inputDigest": "fff6b6b84925eb2f9622962f670d65060c28fb7dc21bab0fc5120adefb82d37e",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.reinforcement",
+        "personaId": "rewarded-ad-f2p",
+        "seed": "e10fb32aee0222d9956f4f8f40eba80a97a47aa1058193d86eed0644bfcf1e0a",
+        "ordinal": "1",
+        "firstResetMinutes": "24",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "29",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "8",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "100",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2133",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "37661",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2181",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "26",
+              "23",
+              "20",
+              "18",
+              "16"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2151",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "29",
+            "characterDraws45d": "1440",
+            "weaponDraws45d": "1440"
+          }
+        ],
+        "scenarioDigest": "4d65b339b6dfa444183b63279eec50835131d6808232736eae6861f1cca9347a"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|monthly-pass|0",
+        "inputDigest": "e8baf2e27711d1d417384d93a6e4e66528933d963998430a34da41036062763d",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.reinforcement",
+        "personaId": "monthly-pass",
+        "seed": "36f8c0d32579504f6cb412322a7387060f02f52f5583d5df889e34e84ad67970",
+        "ordinal": "0",
+        "firstResetMinutes": "22",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "20",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "5",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "72",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1530",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "26540",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1511",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "24",
+              "21",
+              "19",
+              "17",
+              "15"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1484",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "20",
+            "characterDraws45d": "1800",
+            "weaponDraws45d": "1800"
+          }
+        ],
+        "scenarioDigest": "c0d3401839ebe45b740e62a3c04d60f24872e5935144fcdce8f4adf0e8244184"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|monthly-pass|1",
+        "inputDigest": "261d2945abf760866028564ef2ed8d1a9b7d5ba6c058dce6e3fb63337cdbaa4c",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.reinforcement",
+        "personaId": "monthly-pass",
+        "seed": "9faa1e0d31f3f66ecd0d042fe4829a6f696b7082d63eeaa893fc39ecd7ce13bb",
+        "ordinal": "1",
+        "firstResetMinutes": "24",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "20",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "5",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "73",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1500",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "24887",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1424",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "24",
+              "21",
+              "19",
+              "17",
+              "15"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1475",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "20",
+            "characterDraws45d": "1800",
+            "weaponDraws45d": "1800"
+          }
+        ],
+        "scenarioDigest": "711c2809f019d53707da193897e6519e52014f218f356f80486d3758204ab87b"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|controlled-payer|0",
+        "inputDigest": "417077feb4da3dca5f99e106bac5b535567ec01ebcdeaedadff284b712a91fe7",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.reinforcement",
+        "personaId": "controlled-payer",
+        "seed": "b081898c738a7940b6e5a19276a7d0b859ef715bc6bff7b9a21d9cf462b6ef67",
+        "ordinal": "0",
+        "firstResetMinutes": "21",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "13",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "4",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "45",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "957",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "16542",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "949",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "23",
+              "20",
+              "18",
+              "16",
+              "14"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "921",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "13",
+            "characterDraws45d": "2475",
+            "weaponDraws45d": "2475"
+          }
+        ],
+        "scenarioDigest": "fc67ed600b52c1e3e37e73e69aaaa693fde951e22fca5ed5330cb746bc6d34c8"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|controlled-payer|1",
+        "inputDigest": "7d01986959d15fc3d96e697c50d97298aca50845e044baa5449e41461caaf967",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.reinforcement",
+        "personaId": "controlled-payer",
+        "seed": "059f8b5029a42876c344410bb92ab2a06c890f584a6a6242bd0c2396aa9118a3",
+        "ordinal": "1",
+        "firstResetMinutes": "21",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "13",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "4",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "43",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "935",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "16014",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "940",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "23",
+              "20",
+              "18",
+              "16",
+              "14"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "892",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "13",
+            "characterDraws45d": "2475",
+            "weaponDraws45d": "2475"
+          }
+        ],
+        "scenarioDigest": "ec70da906781f6840079beb111bb1b31205f08775c0030cff873a3e1a6dde392"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|high-spend-stress|0",
+        "inputDigest": "6c0d76cb2fff9b4f9e3f45c634511f3135243ee51abaadb813ae516fec84ad36",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.reinforcement",
+        "personaId": "high-spend-stress",
+        "seed": "70879baab581c88f15b3971cab96fb2e61ad6b4006f8209554e70a102f53e9ec",
+        "ordinal": "0",
+        "firstResetMinutes": "21",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "8",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "2",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "26",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "573",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "9487",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "547",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "22",
+              "19",
+              "17",
+              "15",
+              "13"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "576",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "8",
+            "characterDraws45d": "3600",
+            "weaponDraws45d": "3600"
+          }
+        ],
+        "scenarioDigest": "8a8e9699ce5ecc2b6e3d40fa1ae0db2e4eebf06c92f096b43dc666a749e17032"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.reinforcement|high-spend-stress|1",
+        "inputDigest": "92bda63048518f7bc9c629888b055da6698aaf10794b21b654519b14e4d4700f",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.reinforcement",
+        "personaId": "high-spend-stress",
+        "seed": "f4277393f07007892e87d56c9ac86e37edc22522c314a93c8b361d4c4d405584",
+        "ordinal": "1",
+        "firstResetMinutes": "22",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "8",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "2",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "28",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "579",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "9384",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "539",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "22",
+              "19",
+              "17",
+              "15",
+              "13"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "545",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "8",
+            "characterDraws45d": "3600",
+            "weaponDraws45d": "3600"
+          }
+        ],
+        "scenarioDigest": "ab0e5aed82711904aadf6d0fafa2675564433d59da431e42bcf70e87a356a356"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|no-ad-f2p|0",
+        "inputDigest": "07ff5a65087f581365415d0ae3928d48a5e8aa255f8470b69d1b60a6f5dfc183",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.commerce",
+        "personaId": "no-ad-f2p",
+        "seed": "bc33a7c92c8c14c6365eed96a156cf5337333b65b35ce08ca46765c34c7b1545",
+        "ordinal": "0",
+        "firstResetMinutes": "28",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "40",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "9",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "128",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2554",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "45134",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2717",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "27",
+              "23",
+              "20",
+              "17",
+              "15"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2640",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "40",
+            "characterDraws45d": "990",
+            "weaponDraws45d": "990"
+          }
+        ],
+        "scenarioDigest": "4d6d0027e266f62c2713ad0f054d9a73ab7e944403478fc70a58e840611a8272"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|no-ad-f2p|1",
+        "inputDigest": "ac64fefce627d34ee5ac791bbb0cbbd73e41fa581dc9139f0e1e69cf10ce088b",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.commerce",
+        "personaId": "no-ad-f2p",
+        "seed": "5e641f1b88c9b589b47411d5394c48b414698398fc5873a6fa3a22f2672c00b2",
+        "ordinal": "1",
+        "firstResetMinutes": "27",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "40",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "9",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "125",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2556",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "46713",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2525",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "27",
+              "23",
+              "20",
+              "17",
+              "15"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2577",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "40",
+            "characterDraws45d": "990",
+            "weaponDraws45d": "990"
+          }
+        ],
+        "scenarioDigest": "885b6cf2a63f58df9fababd8bc7cd142899bb6e699947af31070a587f8e6235f"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|rewarded-ad-f2p|0",
+        "inputDigest": "6b411a1991266c856ac03d9503f969700d1d6be2173ba0149b61bc40ed96ea27",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.commerce",
+        "personaId": "rewarded-ad-f2p",
+        "seed": "fa9a0adacfb639aadba3564db5a8c61c1f5e0f0436c6c725ff873c4d2198dafc",
+        "ordinal": "0",
+        "firstResetMinutes": "27",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "29",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "8",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "110",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2257",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "39972",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2242",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "26",
+              "22",
+              "19",
+              "16",
+              "14"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2193",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "29",
+            "characterDraws45d": "1440",
+            "weaponDraws45d": "1440"
+          }
+        ],
+        "scenarioDigest": "c8754b4fdd8849e426af80de220b45449b6fb900ec06b71fa8662bdec591a6f9"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|rewarded-ad-f2p|1",
+        "inputDigest": "bd8f2cf1c2c9659944e20f73958bcda1d47830f83a1c3fe20f02e36f68799e63",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.commerce",
+        "personaId": "rewarded-ad-f2p",
+        "seed": "895c85f7bca225904c455390308e4c24d5e7dad221bf89c43a4ab02e7f20bb47",
+        "ordinal": "1",
+        "firstResetMinutes": "27",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "29",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "8",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "104",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2135",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "37716",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2267",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "26",
+              "22",
+              "19",
+              "16",
+              "14"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "2195",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "29",
+            "characterDraws45d": "1440",
+            "weaponDraws45d": "1440"
+          }
+        ],
+        "scenarioDigest": "b65d61d72e5c3d9bae3a760ebbb7c2997327c609caa2beea08143e8da0875145"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|monthly-pass|0",
+        "inputDigest": "6bb167f2ebbd5ae7e870e658540b795ac89afc016d851472fb1a6ef32763e633",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.commerce",
+        "personaId": "monthly-pass",
+        "seed": "78b9b5177b01eedb47c691fbfddd7c1a8c49b959d12f2643299c1aed35250809",
+        "ordinal": "0",
+        "firstResetMinutes": "24",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "20",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "5",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "75",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1540",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "26385",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1493",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "24",
+              "20",
+              "17",
+              "15",
+              "13"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1515",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "20",
+            "characterDraws45d": "1800",
+            "weaponDraws45d": "1800"
+          }
+        ],
+        "scenarioDigest": "2be7a787ad928310cc18249d158160aff6b3ac6b6afcb53fe8eb9aa82524d2ff"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|monthly-pass|1",
+        "inputDigest": "77bf125a909e5f9bf6c123656f957e7befa2139d8c16cb1f16f8d477319a96b5",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.commerce",
+        "personaId": "monthly-pass",
+        "seed": "cd5111f743bb7bb1c3854e1fc3dc7fc094283ea4b7b34d6124b19a67eeb01b01",
+        "ordinal": "1",
+        "firstResetMinutes": "25",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "20",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "5",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "77",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1515",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "26882",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1551",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "24",
+              "20",
+              "17",
+              "15",
+              "13"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1526",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "20",
+            "characterDraws45d": "1800",
+            "weaponDraws45d": "1800"
+          }
+        ],
+        "scenarioDigest": "20f6ffc7702a9a1305170478b81112ca13edd1aedcd8d249afa22199535a7d31"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|controlled-payer|0",
+        "inputDigest": "53af3140bbb5bac0a1e8b8b907c5bdb0305410f05693fbdf5b1645da3805826d",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.commerce",
+        "personaId": "controlled-payer",
+        "seed": "cdb9ba55aec5e24f64178264a9366356b3de1a6efe0f4ec4e2d4445e8ad4c68b",
+        "ordinal": "0",
+        "firstResetMinutes": "24",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "13",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "4",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "46",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "974",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "16439",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "993",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "23",
+              "20",
+              "17",
+              "15",
+              "13"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "1000",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "13",
+            "characterDraws45d": "2475",
+            "weaponDraws45d": "2475"
+          }
+        ],
+        "scenarioDigest": "098d25c53dc69ef7b45f718ee48e321655ff88d15e3280c28ba7fe324497aaf6"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|controlled-payer|1",
+        "inputDigest": "5a3ca0fc749013102cb7a7d8b0b274248fbae7deaa8ecaff0a38ed38fac52b16",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.commerce",
+        "personaId": "controlled-payer",
+        "seed": "b1dd9c419067e3ae51e66d71b75b8bb435f84aa0c1b640cdbd9104ecd358abf8",
+        "ordinal": "1",
+        "firstResetMinutes": "23",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "13",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "4",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "47",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "977",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "17328",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "953",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "23",
+              "20",
+              "17",
+              "15",
+              "13"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "994",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "13",
+            "characterDraws45d": "2475",
+            "weaponDraws45d": "2475"
+          }
+        ],
+        "scenarioDigest": "c13ee97a7e1a4c099c1a034d584872cd8041b41bd770cb80c587663721d605bb"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|high-spend-stress|0",
+        "inputDigest": "9dd25594fc9b6c865853a3f46b96e9baf61f3f35935a58d42e49a0b758b03803",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.commerce",
+        "personaId": "high-spend-stress",
+        "seed": "4edde55a9b11ba9c0e70e89fcde40dc97090e69ec42c45b68efb9383515c238b",
+        "ordinal": "0",
+        "firstResetMinutes": "23",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "8",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "2",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "29",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "581",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "10220",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "564",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "22",
+              "19",
+              "16",
+              "14",
+              "12"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "562",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "8",
+            "characterDraws45d": "3600",
+            "weaponDraws45d": "3600"
+          }
+        ],
+        "scenarioDigest": "0cbea56134cb7b9e5e563b23129e49ee3ef92ac706c086c3cfcf8b68b75638c4"
+      },
+      {
+        "scenarioId": "cats-tower-v2-qualification|qualification|build.commerce|high-spend-stress|1",
+        "inputDigest": "5563895193fb7cdb027f6282172c2b8647413e47245c75938ded19d37954d2b5",
+        "partition": "qualification",
+        "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+        "executionVersion": "cats-tower-step3-executor-v1.1.0",
+        "buildId": "build.commerce",
+        "personaId": "high-spend-stress",
+        "seed": "7040353dd25d5f1b8a9b7f4fe98105774ab82936600d34c9c75eb1139f9ee2e1",
+        "ordinal": "1",
+        "firstResetMinutes": "23",
+        "firstResetRuby": "15",
+        "firstEvolutionCost": "10",
+        "firstEvolutionCovered": true,
+        "featuredGuaranteeDay": "8",
+        "masteryAt20": {
+          "masteredCopies": "20",
+          "overflowCopies": "0",
+          "overflowCredit": "0"
+        },
+        "masteryOverflowAt25": {
+          "masteredCopies": "20",
+          "overflowCopies": "5",
+          "overflowCredit": "500"
+        },
+        "horizons": [
+          {
+            "horizonId": "1-10F",
+            "targetFloor": "10",
+            "estimatedReachMinutes": "2",
+            "targetFloorDigest": "3a2848be338e34dea38966697798731a0bac6b01547c57cee33be22084af476d",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.001",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d01.kagetsubasa",
+            "modifierIds": [
+              "tower.modifier.flying",
+              "tower.modifier.haste"
+            ],
+            "backgroundDistrictThemeIndex": "1",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "100F",
+            "targetFloor": "100",
+            "estimatedReachMinutes": "28",
+            "targetFloorDigest": "e9a4059200026f592b4775cb13c524cace7fc8d91eb6fd5f4d629c0beffedf07",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.010",
+            "cycleId": "tower.cycle.000001",
+            "bossId": "tower.boss.d10.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "10",
+            "backgroundMajorThemeCycleIndex": "1"
+          },
+          {
+            "horizonId": "1000F",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "592",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10"
+          },
+          {
+            "horizonId": "10000F-or-equivalent",
+            "targetFloor": "10000",
+            "estimatedReachMinutes": "10261",
+            "targetFloorDigest": "9a18c5a9d6b281cac6ce877eba6c8e8e6406ab60af6cdff210edd83f75a4272c",
+            "targetFloorRepresentation": "exact-symbolic-power",
+            "districtId": "tower.district.1000",
+            "cycleId": "tower.cycle.000100",
+            "bossId": "tower.boss.d1000.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "1000",
+            "backgroundMajorThemeCycleIndex": "100"
+          },
+          {
+            "horizonId": "repeated-resets",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "561",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "resetMinutes": [
+              "22",
+              "19",
+              "16",
+              "14",
+              "12"
+            ]
+          },
+          {
+            "horizonId": "30-45-day-economy",
+            "targetFloor": "1000",
+            "estimatedReachMinutes": "598",
+            "targetFloorDigest": "35193d50ceeb792d1e4bb1083ac0f8eb42fdf504d390786e5baa2716f0d5592b",
+            "targetFloorRepresentation": "expanded-integer",
+            "districtId": "tower.district.100",
+            "cycleId": "tower.cycle.000010",
+            "bossId": "tower.boss.d100.end.001",
+            "modifierIds": [
+              "tower.modifier.armored",
+              "tower.modifier.fragile"
+            ],
+            "backgroundDistrictThemeIndex": "100",
+            "backgroundMajorThemeCycleIndex": "10",
+            "featuredGuaranteeDay": "8",
+            "characterDraws45d": "3600",
+            "weaponDraws45d": "3600"
+          }
+        ],
+        "scenarioDigest": "ceef4f8ee6187752fc1196ea80b157861d00fb552def1bb0fa05df067af33d2e"
+      }
+    ],
+    "summary": {
+      "buildCount": "3",
+      "personaCount": "5",
+      "seedsPerCell": "2",
+      "firstResetMinutesMinimum": "21",
+      "firstResetMinutesMaximum": "28",
+      "featuredGuaranteeDayMinimum": "8",
+      "featuredGuaranteeDayMaximum": "40",
+      "allFirstEvolutionsCovered": true,
+      "balanceVerdict": "NOT_EVALUATED_STEP2"
+    },
+    "violations": []
+  },
+  "hashes": {
+    "candidateSha256": "3a6495feb93cf6c3c6001bd404a9703b207595afd1894a606e77cb82145ef663",
+    "runPlanSha256": "b8f5744f5e504f438e52aef39234c056066d686d9bd5bf332227e17970ccc097",
+    "executionContractSha256": "18560b00b6732b82e961854881d344dc4ded362e44904496aa65225fabd1296e",
+    "deterministicPayloadSha256": "a24fa5a4a12cf132ac477c80e77431cd0b97ab070bbbef83c3881c160f42562c"
+  },
+  "evidence": {
+    "runtimeVersion": "v22.23.2",
+    "executedAt": "2026-09-02T00:00:00.000Z",
+    "reproductionCommand": "node simulation/run-qualification-v3.mjs",
+    "canonicalJsonSha256": "a24fa5a4a12cf132ac477c80e77431cd0b97ab070bbbef83c3881c160f42562c"
+  },
+  "verdict": {
+    "contractQualification": "PASS",
+    "balanceQualification": "NOT_RUN_STEP3_REQUIRED",
+    "step3AuthorizedByThisResult": false
+  }
+}

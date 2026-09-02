@@ -1,0 +1,164 @@
+{
+  "schemaVersion": "2.1.0",
+  "contractId": "cats-tower-step3-execution-contract-v3",
+  "candidateId": "cats-tower-v2-candidate-001",
+  "scenarioAlgorithmVersion": "cats-tower-scenario-v2.2.0",
+  "executionVersion": "cats-tower-step3-executor-v1.1.0",
+  "roundingVersion": "ct-rational-half-even-v1",
+  "sourcePaths": {
+    "candidate": "simulation/candidate-v3.json",
+    "runPlan": "simulation/run-plan-v3.json",
+    "acceptance": "quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/acceptance-matrix.json"
+  },
+  "model": {
+    "firstReset": {
+      "personaBaseMinutes": {
+        "no-ad-f2p": "27",
+        "rewarded-ad-f2p": "26",
+        "monthly-pass": "24",
+        "controlled-payer": "23",
+        "high-spend-stress": "22"
+      },
+      "buildAdjustmentMinutes": {
+        "build.combat": "0",
+        "build.reinforcement": "-1",
+        "build.commerce": "1"
+      },
+      "jitterMinimumMinutes": "-1",
+      "jitterMaximumMinutes": "1",
+      "minimumMinutes": "1"
+    },
+    "progression": {
+      "baselineMinutesByHorizon": {
+        "1-10F": "8",
+        "100F": "115",
+        "1000F": "2400",
+        "10000F-or-equivalent": "42000",
+        "repeated-resets": "2400",
+        "30-45-day-economy": "2400"
+      },
+      "jitterMinimumBasisPoints": "-400",
+      "jitterMaximumBasisPoints": "400",
+      "minimumMinutes": "1"
+    },
+    "repeatedReset": {
+      "runCount": "5",
+      "minimumMinutes": "6",
+      "usesBuildReclearMultiplier": true
+    },
+    "gachaItemSelection": {
+      "catalogEligibility": "all-catalog-items-by-rarity-v1",
+      "acquisitionFieldSemantics": "guaranteed-route-not-exclusive-v1",
+      "selectionWithinRarity": "uniform-stable-id-v1",
+      "nonFeaturedUrExcludesFeatured": true,
+      "character": {
+        "catalogPath": "characters.catalog",
+        "standardBannerId": "banner.character.standard",
+        "featuredBannerId": "banner.character.featured",
+        "featuredItemId": "character.launch.024"
+      },
+      "weapon": {
+        "catalogPath": "weapons.catalog",
+        "standardBannerId": "banner.weapon.standard",
+        "featuredBannerId": "banner.weapon.featured",
+        "featuredItemId": "weapon.launch.036"
+      }
+    },
+    "towerSequence": {
+      "modifierPairAlgorithm": "block-rotated-combination-permutation-v1",
+      "modifierCombinationOrdering": "sha256-stable-combination-v1",
+      "adjacentRepeatMaximum": "1",
+      "windowSize": "10",
+      "windowRepeatMaximum": "3",
+      "backgroundIndexAlgorithm": "ceil-floor-over-cadence-v1",
+      "scenarioInputDigest": "sha256-canonical-json-v1"
+    }
+  },
+  "statistics": {
+    "method": "nearest-rank-v1",
+    "percentiles": [
+      "0.50",
+      "0.90",
+      "0.99"
+    ],
+    "sort": "unsigned-decimal-ascending",
+    "emptyInput": "FAIL_CLOSED"
+  },
+  "partitions": {
+    "qualification": {
+      "namespace": "cats-tower-v2-qualification",
+      "seedsPerBuildPersona": "2",
+      "owner": "STEP2",
+      "tuningVisible": true,
+      "promotionEligible": false
+    },
+    "calibration": {
+      "namespace": "cats-tower-v2-calibration",
+      "seedsPerBuildPersona": "800",
+      "owner": "STEP3",
+      "tuningVisible": true,
+      "promotionEligible": false
+    },
+    "holdout": {
+      "namespace": "cats-tower-v2-holdout-unseen",
+      "seedsPerBuildPersona": "200",
+      "owner": "STEP3",
+      "tuningVisible": false,
+      "promotionEligible": true
+    }
+  },
+  "highVolumeSuites": [
+    {
+      "id": "gacha-tails",
+      "plannedSamples": "200000",
+      "contractSmokeSamples": "1000",
+      "implementationVersion": "gacha-tails-v3"
+    },
+    {
+      "id": "pity-conformance",
+      "plannedSamples": "1000000",
+      "contractSmokeSamples": "2000",
+      "implementationVersion": "pity-conformance-v1"
+    },
+    {
+      "id": "duplicate-skew-overflow",
+      "plannedSamples": "200000",
+      "contractSmokeSamples": "1000",
+      "implementationVersion": "duplicate-skew-overflow-v3"
+    },
+    {
+      "id": "refund-replay-race",
+      "plannedSamples": "100000",
+      "contractSmokeSamples": "1000",
+      "implementationVersion": "refund-replay-race-v2"
+    },
+    {
+      "id": "state-machine-model",
+      "plannedSamples": "100000",
+      "contractSmokeSamples": "1000",
+      "implementationVersion": "state-machine-model-v1"
+    },
+    {
+      "id": "large-number-properties",
+      "plannedSamples": "100000",
+      "contractSmokeSamples": "1000",
+      "implementationVersion": "large-number-properties-v1"
+    }
+  ],
+  "resultContracts": {
+    "qualificationSchema": "simulation/result-v3.schema.json",
+    "qualificationValidator": "simulation/validate-result-v3.mjs",
+    "gameplaySchema": "simulation/gameplay-result-v2.schema.json",
+    "gameplayValidator": "simulation/validate-gameplay-result-v2.mjs",
+    "highVolumeSchema": "simulation/high-volume-result-v2.schema.json",
+    "highVolumeValidator": "simulation/validate-high-volume-result-v2.mjs"
+  },
+  "executionGuard": {
+    "fullExecutionOwner": "STEP3",
+    "requiredOwnerArgument": "STEP3",
+    "requiredEnvironment": "CT_STEP3_AUTHORIZED=1",
+    "contractSmokeOwner": "STEP2",
+    "partialResultPromotionForbidden": true,
+    "holdoutMayNotEnterTuningOutput": true
+  }
+}
