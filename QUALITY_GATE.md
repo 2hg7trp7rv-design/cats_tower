@@ -38,11 +38,7 @@ USER_VISUAL_APPROVAL: false
 
 - P0: **1**
   - `S2-P0-SCREEN-PROJECTION-001`
-- P1: **5**
-  - `PHASE0-POST-CLOSURE-BOUNDARY-001`
-  - `PHASE0-ACCEPTANCE-CLOSURE-ID-001`
-  - `PHASE0-PREMATURE-EVIDENCE-001`
-  - `PHASE0-IMMUTABLE-EVIDENCE-OVERWRITE-001`
+- P1: **1**
   - `S4-RECOVERY-VIS-001`
 - P2: **2**
   - `PHASE0-P2-PR8-STALE-METADATA`
@@ -54,7 +50,7 @@ P2の1件目は旧Draft PR #8の外部metadataである。PR操作は明示的�
 
 Status: **IN_PROGRESS**
 
-Round 030 is preserved as a superseded closure attempt. Independent criticism completed afterward and found four P1 closure-integrity defects. Round 031 now implements the every-push boundary, Acceptance lineage, numbered-evidence requirement, immutable-history freeze and future evidence-order checks; all four remain open until an independent re-critic verifies this repair commit. Product writes remain paused while round 032 corrects Step 2 and until round 033 binds the numbered replacement evidence and returns authority to round 026.
+Round 030 is preserved as a superseded closure attempt. The numbered independent re-critic verified the round 031 repair with Phase 0 P0/P1 at 0/0. Product writes remain paused while round 032 corrects Step 2 and until round 033 binds the numbered replacement evidence and returns authority to round 026.
 
 Evidence:
 
@@ -66,7 +62,7 @@ Evidence:
 - evidence commit/tree: `02d5e5bdf017447617d1a874ef2d86a114328463` / `c0071113541f0c6fea1864f3b43e56b8fc9a4cfa`
 - workflow run/job: `33539938108` / `99963403759`
 - artifact: `9813183649`
-- Current Phase 0 P0/P1: `0 / 4` pending independent re-criticism
+- Current Phase 0 P0/P1: `0 / 0` after numbered independent re-criticism
 
 Phase 0 removed 33 stale current-facing paths, completely replaced Project instructions, added the Development Playbook, synchronized current mirrors, separated current and immutable-history verification, and preserved sealed Step 1-3 artifacts.
 

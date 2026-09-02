@@ -15,7 +15,7 @@ USER_VISUAL_APPROVAL: false
 
 ## Current conclusion
 
-Phase 0 governance closure was reopened after independent criticism found four closure-integrity P1 defects. Round 031 implements the repairs, but the four findings remain open until this repair commit passes independent re-criticism. Step 2 correction and corrected closure evidence remain pending.
+Phase 0 governance closure was reopened after independent criticism found four closure-integrity P1 defects. The numbered independent re-critic has now verified the round 031 repair at P0/P1 0/0. Step 2 correction and corrected closure evidence remain pending.
 
 - Phase 0: `IN_PROGRESS_PHASE0_CLOSURE_INTEGRITY_RECOVERY`
 - Step 1: `PASS_CANONICAL`
@@ -38,7 +38,7 @@ Superseded Phase 0 closure attempt:
 - evidence commit/tree: `02d5e5bdf017447617d1a874ef2d86a114328463` / `c0071113541f0c6fea1864f3b43e56b8fc9a4cfa`
 - workflow run/job: `33539938108` / `99963403759`
 - artifact ID/digest: `9813183649` / `sha256:01ea8293921134370f8e2e30cb9f9a1f4a6f8d50bb9259af30646b766197140c`
-- Current Phase 0 unresolved pending repair re-criticism: P0/P1 `0 / 4`
+- Current Phase 0 unresolved after numbered repair re-criticism: P0/P1 `0 / 0`
 
 Round 032 is reserved for the narrow Step 2 screen-projection correction. The corrected Phase 0 closure is round 033. Until both complete with numbered critic, judge, completion and live-readback evidence, S02-P1 product files remain read-only.
 
@@ -77,13 +77,12 @@ They are not rejected merely because they were concurrent, but they are not acce
 
 Before any further product-content write:
 
-1. independently re-criticize the round 031 closure-integrity repair
-2. open round 032 and correct the canonical S01-S12 projection without rewriting immutable v2 history
-3. reseal the corrected Step 2 contract and prove Step 3 numeric-model continuity
-4. bind numbered critic, judge, completion and live-readback evidence in round 033
-5. only after round 033 returns authority to round 026, freeze and audit S02-P1 A-J and GM01-GM08
-6. reuse conforming material, repair evidenced gaps and run browser/render verification
-7. reach at most `READY_FOR_USER_VISUAL_REVIEW`
+1. open round 032 and correct the canonical S01-S12 projection without rewriting immutable v2 history
+2. reseal the corrected Step 2 contract and prove Step 3 numeric-model continuity
+3. bind numbered critic, judge, completion and live-readback evidence in round 033
+4. only after round 033 returns authority to round 026, freeze and audit S02-P1 A-J and GM01-GM08
+5. reuse conforming material, repair evidenced gaps and run browser/render verification
+6. reach at most `READY_FOR_USER_VISUAL_REVIEW`
 
 Do not alter actual root, gameplay core, economy, save schema, backend, payment, ads, Production or physical-device verdict during S02-P1.
 

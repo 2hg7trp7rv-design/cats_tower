@@ -16,7 +16,7 @@
     "step2Correction": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
     "plannedCorrectedClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
     "phase0P0": 0,
-    "phase0P1": 4,
+    "phase0P1": 0,
     "phase0P2": 2
   },
   "scopedPasses": {
@@ -42,15 +42,11 @@
   },
   "openFindings": {
     "P0": 1,
-    "P1": 5,
+    "P1": 1,
     "P2": 2,
     "items": [
       "S2-P0-SCREEN-PROJECTION-001",
       "S4-RECOVERY-VIS-001",
-      "PHASE0-POST-CLOSURE-BOUNDARY-001",
-      "PHASE0-ACCEPTANCE-CLOSURE-ID-001",
-      "PHASE0-PREMATURE-EVIDENCE-001",
-      "PHASE0-IMMUTABLE-EVIDENCE-OVERWRITE-001",
       "PHASE0-P2-PR8-STALE-METADATA",
       "PHASE0-P2-KIMI-UNPROTECTED-EXTERNAL-ENFORCEMENT"
     ]

@@ -1690,12 +1690,12 @@ function isExactRepairBootstrapCommit(commit) {
 // Round 032 opening must replace this null with the immutable blob created for the new control.
 const expectedStep2CorrectionControlBlob = null;
 // The closure-integrity critic commit must replace this null with the immutable critic blob.
-const expectedClosureRepairCriticBlob = null;
+const expectedClosureRepairCriticBlob = '5c706202de5f32fa638e2abdb636a2b89f9b0fe5';
 // The closure-integrity critic commit must pin the independently reviewed repair-target sources.
-const expectedRepairTargetVerifierBlob = null;
-const expectedRepairTargetWorkflowBlob = null;
-const expectedRepairTargetCurrentDocBlobs = null;
-const expectedPostCriticCurrentDocBlobs = null;
+const expectedRepairTargetVerifierBlob = '7bb63b045593f7fa6f5c06ac3673ed90c4f97e76';
+const expectedRepairTargetWorkflowBlob = '3812269fb8c287a8d91ecee2fcc2f77ad551ca91';
+const expectedRepairTargetCurrentDocBlobs = {"QUALITY_GATE.md":"f65ed017a48c77e67f6dd0dbd8d068c381cfef96","PROJECT_HANDOVER.md":"cdcfbdd92764e9873a045006328dcdfb8b642730",".github/workflows/CURRENT_STATUS.md":"5474ad8ec2cc909ca488c2ee685f388c19cf1903","AGENTS.md":"5fc36abe3525d04d328343d62afda66b75a4af15","README.md":"f90c4d703836f4479388fd81f0367f669ce5c899"};
+const expectedPostCriticCurrentDocBlobs = {"QUALITY_GATE.md":"5253b1f5e503efa3dee7282464a64b50d7045cfb","PROJECT_HANDOVER.md":"69926893a6028415dd919168056b51147982e126",".github/workflows/CURRENT_STATUS.md":"2a78777b6798098a10307f712094d2e72141624b","AGENTS.md":"383b34fa094a99b4fb0929f8084d18d57332d4ed","README.md":"b994a822d7a45dc46f964e864828a3f52fbc2bb5"};
 // Round 032 opening must pin the complete current Markdown set for correction and closure phases.
 const expectedRound032CurrentDocBlobs = null;
 const expectedRound033CurrentDocBlobs = null;

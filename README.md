@@ -41,7 +41,7 @@ The existing root browser game is **legacy technical history, not the canonical 
 
 ## Current work
 
-First repair the Phase 0 closure evidence and post-closure write boundary under round 031, then repair the narrow Step 2 screen projection under round 032. After corrected round 033 closure returns authority to round 026, audit the preserved S02-P1 content against deliverables A-J and GM01-GM08. The actual root, gameplay core, economy, backend, Production and physical-device verdict remain unchanged.
+The numbered independent re-critic verified the round 031 repair at Phase 0 P0/P1 0/0. Next, correct the narrow Step 2 screen projection under round 032. After corrected round 033 closure returns authority to round 026, audit the preserved S02-P1 content against deliverables A-J and GM01-GM08. The actual root, gameplay core, economy, backend, Production and physical-device verdict remain unchanged.
 
 ## Phase 0 delivery
 

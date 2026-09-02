@@ -47,7 +47,7 @@ USER_VISUAL_APPROVAL: false
 
 ## Required next action
 
-Repair the Phase 0 closure boundary, then correct the canonical S01-S12 screen projection under round 032. Keep the preserved S02-P1 route, A-J artifacts and GM01-GM08 read-only until round 033 returns authority to round 026.
+The numbered round 031 repair critic passed at Phase 0 P0/P1 0/0. Open round 032 for the canonical S01-S12 screen projection correction. Keep the preserved S02-P1 route, A-J artifacts and GM01-GM08 read-only until round 033 returns authority to round 026.
 
 Forbidden during S02-P1:
 

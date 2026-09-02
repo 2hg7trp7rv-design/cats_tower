@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-phase0-closure-integrity-critic-round-001",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json",
+  "auditTarget": {
+    "commit": "dda7570ad5de3c45ba621452de163f3fab597e49",
+    "tree": "77de10eb0199170f34bbcb3751c8020e775bc310"
+  },
+  "workflow": {
+    "commit": "dda7570ad5de3c45ba621452de163f3fab597e49",
+    "tree": "77de10eb0199170f34bbcb3751c8020e775bc310",
+    "runId": 33583119569,
+    "runAttempt": 1,
+    "jobId": 100101553737,
+    "conclusion": "SUCCESS",
+    "artifactId": 9829092568,
+    "artifactName": "phase0-current-governance-dda7570ad5de3c45ba621452de163f3fab597e49-33583119569-1",
+    "artifactDigest": "sha256:b31a1df6bbb7fe8bc7a63660cf2a2dfc778251aae647db66b8efd1ddb2d862ad",
+    "oidcTokenSha256": "sha256:08175b3a56b8c39549080739c28f31c9134d42ce13294d5215c30113a8069c91",
+    "oidcClaims": {
+      "issuer": "https://token.actions.githubusercontent.com",
+      "audience": "cats-tower-current-governance",
+      "subject": "repo:2hg7trp7rv-design@245031448/cats_tower@1331488679:ref:refs/heads/kimi",
+      "repository": "2hg7trp7rv-design/cats_tower",
+      "repositoryId": "1331488679",
+      "repositoryOwnerId": "245031448",
+      "ref": "refs/heads/kimi",
+      "sha": "dda7570ad5de3c45ba621452de163f3fab597e49",
+      "runId": "33583119569",
+      "runAttempt": "1",
+      "workflowRef": "2hg7trp7rv-design/cats_tower/.github/workflows/verify-current-governance.yml@refs/heads/kimi"
+    },
+    "oidcVerified": true
+  },
+  "verdict": "PASS_PHASE0_CLOSURE_INTEGRITY_REPAIR",
+  "coverage": [
+    "VERIFIER_FALSE_PASS_CLOSED",
+    "WORKFLOW_LIVE_PROVENANCE_VERIFIED",
+    "VERSIONED_CORRECTION_PROOF_BOUNDARY",
+    "FALSE_RELEASE_CLAIM_REJECTION"
+  ],
+  "findings": [
+    {
+      "id": "PHASE0-POST-CLOSURE-BOUNDARY-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "PHASE0-ACCEPTANCE-CLOSURE-ID-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "PHASE0-PREMATURE-EVIDENCE-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "PHASE0-IMMUTABLE-EVIDENCE-OVERWRITE-001",
+      "severity": "P1",
+      "resolved": true
+    }
+  ],
+  "unresolved": {
+    "P0": 0,
+    "P1": 0
+  },
+  "maximumVerdict": "READY_FOR_STEP2_SCREEN_PROJECTION_CORRECTION"
+}

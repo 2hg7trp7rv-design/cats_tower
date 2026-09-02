@@ -44,7 +44,7 @@ Old Step 1-3 execute/repair/seal workflows and old Step 4 actual-root write/reco
 - run/job: `33539938108` / `99963403759`
 - artifact ID: `9813183649`
 - prior result: superseded by late independent critic
-- current Phase 0 P0/P1 pending independent re-criticism of the repair: `0 / 4`
+- current Phase 0 P0/P1 after numbered independent re-criticism: `0 / 0`
 
 Current governance now runs on every push to `kimi`; path filters may not permit forbidden product writes to bypass the boundary.
 Live GitHub reports `kimi protected=false`. This workflow supplies exact-commit audit evidence but is not an external branch-protection control against an authorized writer replacing the workflow itself.
