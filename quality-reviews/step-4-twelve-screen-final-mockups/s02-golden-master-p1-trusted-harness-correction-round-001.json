@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-trusted-harness-correction-round-001",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "47d093d4d528f3e1cf19788166a94b4f087d8f59",
+    "tree": "e3603698d83bcea07c85b8b10ebdc3ed74a79b5e"
+  },
+  "authorityWorkflow": {
+    "commit": "47d093d4d528f3e1cf19788166a94b4f087d8f59",
+    "tree": "e3603698d83bcea07c85b8b10ebdc3ed74a79b5e",
+    "runId": 33589755556,
+    "runAttempt": 1,
+    "jobId": 100121309882,
+    "conclusion": "SUCCESS",
+    "artifactId": 9831332548,
+    "artifactName": "phase0-current-governance-47d093d4d528f3e1cf19788166a94b4f087d8f59-33589755556-1",
+    "artifactDigest": "sha256:edda9794a5c4fbae4d74f2882fe198a18c6b52cacf1b1785166824d00667cee4"
+  },
+  "failedWorkflow": {
+    "commit": "47d093d4d528f3e1cf19788166a94b4f087d8f59",
+    "tree": "e3603698d83bcea07c85b8b10ebdc3ed74a79b5e",
+    "runId": 33589755596,
+    "runAttempt": 1,
+    "jobId": 100121173797,
+    "conclusion": "FAILURE",
+    "failedStep": "Verify immutable trusted harness",
+    "artifactCount": 0
+  },
+  "diagnosis": {
+    "type": "WORKFLOW_PINNED_SHA256_VALUES_DO_NOT_MATCH_COMMITTED_HARNESS_BYTES",
+    "oldPins": [
+      {
+        "path": "tests/step4/verify-s02-golden-master-p1.mjs",
+        "sha256": "20c97c0b687aff966374513910516a7c64b237e4f7f6c0240b1a55f5b407ef7d"
+      },
+      {
+        "path": "tests/step4/s02-golden-master-p1-browser.mjs",
+        "sha256": "be01517f51eedc3c65373d56410abbc359971d59934135bed0e919c674404a37"
+      },
+      {
+        "path": "tests/step4/s02-golden-master-p1-browser-qa.mjs",
+        "sha256": "771c7f8a1a0140a456e6044a7dd46bb7f76d7f1cf44ce98c80734181e8e0c74d"
+      }
+    ],
+    "committedSha256": [
+      {
+        "path": "tests/step4/verify-s02-golden-master-p1.mjs",
+        "sha256": "b712ba261f1fc66db97e54c15e833729199e17785b149b7459d0e95ddb13d011"
+      },
+      {
+        "path": "tests/step4/s02-golden-master-p1-browser.mjs",
+        "sha256": "2661c5a75ee756e0baf5a7d5b0470f97d3fc56e02f29bfa641c1e4510ff3fdd3"
+      },
+      {
+        "path": "tests/step4/s02-golden-master-p1-browser-qa.mjs",
+        "sha256": "f67bf7472b108d2e88ac24ac034a386e2c24896a18a95950e82ec5bbf9042d03"
+      }
+    ]
+  },
+  "correction": {
+    "rule": "REBIND_WORKFLOW_TO_EXACT_EXISTING_COMMITTED_HARNESS_BYTES_WITHOUT_REMOVING_OR_WEAKENING_ASSERTIONS",
+    "changedPaths": [
+      ".github/workflows/verify-step-4-s02-golden-master-p1.yml",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-001.json",
+      "tests/governance/verify-current-authority.mjs"
+    ],
+    "newPins": [
+      {
+        "path": "tests/step4/verify-s02-golden-master-p1.mjs",
+        "sha256": "b712ba261f1fc66db97e54c15e833729199e17785b149b7459d0e95ddb13d011"
+      },
+      {
+        "path": "tests/step4/s02-golden-master-p1-browser.mjs",
+        "sha256": "2661c5a75ee756e0baf5a7d5b0470f97d3fc56e02f29bfa641c1e4510ff3fdd3"
+      },
+      {
+        "path": "tests/step4/s02-golden-master-p1-browser-qa.mjs",
+        "sha256": "f67bf7472b108d2e88ac24ac034a386e2c24896a18a95950e82ec5bbf9042d03"
+      }
+    ],
+    "workflowBeforeSha256": "ae42536a3d30dff057afa189bf15a9ed7caa5fb90d3e375dc4671c8757fbe8dc",
+    "workflowAfterSha256": "7219aba5d01f68105339a9815ce61f2d5c265a1c0b9e544f30f50056a7242225",
+    "verifierAfterSha256": "6fa92eda77aaaa8ed567092ff955ca72f720b5627e2939aa3536c0a6a45dfeef",
+    "verifierPatchSha256": "sha256:ac6a5276cbba217a4717391716d4ed9c84c52e93bd665d7ba1ea21947ac33550",
+    "assertionSetChanged": false
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_TRUSTED_HARNESS_PINS_PENDING_RERUN"
+}

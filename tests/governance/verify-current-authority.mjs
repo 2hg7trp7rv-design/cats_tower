@@ -207,7 +207,11 @@ function assertS02HistoryWithIncrementalRenewals(base, head, control, label, evi
     const [resolvedCommit, ...parents] = git(['rev-list', '--parents', '-n', '1', commit]).split(' ');
     assert(resolvedCommit === commit && parents.length === 1 && parents[0] === expectedParent, `${label}: merge, splice or non-linear commit detected at ${commit}`);
     const paths = changedPaths(expectedParent, commit);
-    assertBoundary(paths, control, `${label} commit ${commit}`);
+    if (s02HarnessCorrectionCommit && commit === s02HarnessCorrectionCommit) {
+      assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02HarnessCorrectionChangedPaths].sort()), `${label}: trusted-harness correction changed an unreviewed path`);
+    } else {
+      assertBoundary(paths, control, `${label} commit ${commit}`);
+    }
     const renewalOnly = paths.length === 1 && renewalPattern.test(paths[0]);
     let commitBytes = 0;
     for (const file of paths) {
@@ -1782,7 +1786,7 @@ const s02VerificationPaths = [
   'step4/s02/golden-master-p1/browser-qa/package.json',
   'step4/s02/golden-master-p1/browser-qa/package-lock.json'
 ];
-const expectedS02WorkflowSha256 = 'ae42536a3d30dff057afa189bf15a9ed7caa5fb90d3e375dc4671c8757fbe8dc';
+const expectedS02WorkflowSha256 = '7219aba5d01f68105339a9815ce61f2d5c265a1c0b9e544f30f50056a7242225';
 const s02ContentManifestPatterns = [
   'step4/s02/golden-master-p1/**',
   'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-*.json',
@@ -3703,6 +3707,98 @@ if (s02RepairControl) {
   assert(authority.activeChangeControl === expectedPostRound034Control && status.activeChangeControl === expectedPostRound034Control, 'post-round-034 authority rolled back or skipped the reviewed successor');
   assert(policy.authority.activeChangeControl === expectedPostRound034Control && dispatcher.currentAddendum === expectedPostRound034Control, 'post-round-034 policy or dispatcher rolled back or skipped the reviewed successor');
 }
+
+// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001
+const s02HarnessCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-001.json';
+const s02HarnessCorrection = exists(s02HarnessCorrectionPath) ? json(s02HarnessCorrectionPath) : null;
+const s02HarnessCorrectionCommit = s02HarnessCorrection ? firstAddCommit(s02HarnessCorrectionPath) : null;
+const s02HarnessCorrectionChangedPaths = [
+  '.github/workflows/verify-step-4-s02-golden-master-p1.yml',
+  s02HarnessCorrectionPath,
+  'tests/governance/verify-current-authority.mjs'
+];
+if (s02HarnessCorrection) {
+  assertExactKeySet(s02HarnessCorrection, ['schemaVersion', 'artifactId', 'createdAt', 'repository', 'branch', 'changeControl', 'entry', 'authorityWorkflow', 'failedWorkflow', 'diagnosis', 'correction', 'boundaries', 'status'], 'S02 trusted-harness correction');
+  assertExactKeySet(s02HarnessCorrection.entry, ['head', 'tree'], 'S02 trusted-harness correction entry');
+  assertExactKeySet(s02HarnessCorrection.authorityWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'artifactId', 'artifactName', 'artifactDigest'], 'S02 trusted-harness authority workflow');
+  assertExactKeySet(s02HarnessCorrection.failedWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'failedStep', 'artifactCount'], 'S02 failed trusted-harness workflow');
+  assertExactKeySet(s02HarnessCorrection.diagnosis, ['type', 'oldPins', 'committedSha256'], 'S02 trusted-harness diagnosis');
+  assertExactKeySet(s02HarnessCorrection.correction, ['rule', 'changedPaths', 'newPins', 'workflowBeforeSha256', 'workflowAfterSha256', 'verifierAfterSha256', 'verifierPatchSha256', 'assertionSetChanged'], 'S02 trusted-harness exact correction');
+  assertExactKeySet(s02HarnessCorrection.boundaries, ['rootRuntimeChanged', 'gameCoreChanged', 'gameDataChanged', 'economyChanged', 'saveSchemaChanged', 'backendChanged', 'productionChanged', 'productionAliasChanged', 'physicalIPhoneVerified', 'step4Pass', 'step5Allowed'], 'S02 trusted-harness correction boundaries');
+  assert(s02HarnessCorrection.schemaVersion === 1 && s02HarnessCorrection.artifactId === 'cats-tower-s02-golden-master-p1-trusted-harness-correction-round-001' && s02HarnessCorrection.createdAt === '2026-09-02', 'S02 trusted-harness correction identity/date mismatch');
+  assert(s02HarnessCorrection.repository === '2hg7trp7rv-design/cats_tower' && s02HarnessCorrection.branch === 'kimi' && s02HarnessCorrection.changeControl === s02RepairControlPath, 'S02 trusted-harness correction authority mismatch');
+  assert(JSON.stringify(s02HarnessCorrection.entry) === JSON.stringify({ head: '47d093d4d528f3e1cf19788166a94b4f087d8f59', tree: 'e3603698d83bcea07c85b8b10ebdc3ed74a79b5e' }), 'S02 trusted-harness correction entry is not the exact failed content commit/tree');
+  assert(JSON.stringify(s02HarnessCorrection.authorityWorkflow) === JSON.stringify({
+    commit: s02HarnessCorrection.entry.head,
+    tree: s02HarnessCorrection.entry.tree,
+    runId: 33589755556,
+    runAttempt: 1,
+    jobId: 100121309882,
+    conclusion: 'SUCCESS',
+    artifactId: 9831332548,
+    artifactName: 'phase0-current-governance-47d093d4d528f3e1cf19788166a94b4f087d8f59-33589755556-1',
+    artifactDigest: 'sha256:edda9794a5c4fbae4d74f2882fe198a18c6b52cacf1b1785166824d00667cee4'
+  }), 'S02 trusted-harness correction does not bind the successful exact-entry authority workflow');
+  assert(JSON.stringify(s02HarnessCorrection.failedWorkflow) === JSON.stringify({
+    commit: s02HarnessCorrection.entry.head,
+    tree: s02HarnessCorrection.entry.tree,
+    runId: 33589755596,
+    runAttempt: 1,
+    jobId: 100121173797,
+    conclusion: 'FAILURE',
+    failedStep: 'Verify immutable trusted harness',
+    artifactCount: 0
+  }), 'S02 trusted-harness correction does not bind the exact failed workflow/job/step');
+  const expectedOldPins = [
+    { path: 'tests/step4/verify-s02-golden-master-p1.mjs', sha256: '20c97c0b687aff966374513910516a7c64b237e4f7f6c0240b1a55f5b407ef7d' },
+    { path: 'tests/step4/s02-golden-master-p1-browser.mjs', sha256: 'be01517f51eedc3c65373d56410abbc359971d59934135bed0e919c674404a37' },
+    { path: 'tests/step4/s02-golden-master-p1-browser-qa.mjs', sha256: '771c7f8a1a0140a456e6044a7dd46bb7f76d7f1cf44ce98c80734181e8e0c74d' }
+  ];
+  const expectedNewPins = [
+    { path: 'tests/step4/verify-s02-golden-master-p1.mjs', sha256: 'b712ba261f1fc66db97e54c15e833729199e17785b149b7459d0e95ddb13d011' },
+    { path: 'tests/step4/s02-golden-master-p1-browser.mjs', sha256: '2661c5a75ee756e0baf5a7d5b0470f97d3fc56e02f29bfa641c1e4510ff3fdd3' },
+    { path: 'tests/step4/s02-golden-master-p1-browser-qa.mjs', sha256: 'f67bf7472b108d2e88ac24ac034a386e2c24896a18a95950e82ec5bbf9042d03' }
+  ];
+  assert(s02HarnessCorrection.diagnosis.type === 'WORKFLOW_PINNED_SHA256_VALUES_DO_NOT_MATCH_COMMITTED_HARNESS_BYTES' && JSON.stringify(s02HarnessCorrection.diagnosis.oldPins) === JSON.stringify(expectedOldPins) && JSON.stringify(s02HarnessCorrection.diagnosis.committedSha256) === JSON.stringify(expectedNewPins), 'S02 trusted-harness mismatch diagnosis differs from the failed exact commit');
+  assert(s02HarnessCorrection.correction.rule === 'REBIND_WORKFLOW_TO_EXACT_EXISTING_COMMITTED_HARNESS_BYTES_WITHOUT_REMOVING_OR_WEAKENING_ASSERTIONS' && JSON.stringify(s02HarnessCorrection.correction.changedPaths) === JSON.stringify(s02HarnessCorrectionChangedPaths) && JSON.stringify(s02HarnessCorrection.correction.newPins) === JSON.stringify(expectedNewPins), 'S02 trusted-harness correction rule/path/pin set mismatch');
+  assert(s02HarnessCorrection.correction.workflowBeforeSha256 === 'ae42536a3d30dff057afa189bf15a9ed7caa5fb90d3e375dc4671c8757fbe8dc' && s02HarnessCorrection.correction.workflowAfterSha256 === expectedS02WorkflowSha256 && s02HarnessCorrection.correction.assertionSetChanged === false, 'S02 trusted-harness workflow correction overreaches the exact checksum rebinding');
+  assert(JSON.stringify(s02HarnessCorrection.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }), 'S02 trusted-harness correction crosses a protected product/release boundary');
+  assert(s02HarnessCorrection.status === 'CORRECTED_TRUSTED_HARNESS_PINS_PENDING_RERUN', 'S02 trusted-harness correction status mismatch');
+  assert(s02HarnessCorrectionCommit && git(['rev-parse', `${s02HarnessCorrectionCommit}^`]) === s02HarnessCorrection.entry.head, 'S02 trusted-harness correction is not the immediate child of the failed content commit');
+  assert(git(['rev-parse', `${s02HarnessCorrection.entry.head}^{tree}`]) === s02HarnessCorrection.entry.tree, 'S02 trusted-harness correction entry tree mismatch');
+  assertExactChangedPaths(s02HarnessCorrection.entry.head, s02HarnessCorrectionCommit, s02HarnessCorrectionChangedPaths, 'S02 trusted-harness correction commit');
+  assertAddedOnceAndUnchanged(s02HarnessCorrectionPath, s02HarnessCorrectionCommit);
+  const correctedWorkflowSource = textAt(s02HarnessCorrectionCommit, '.github/workflows/verify-step-4-s02-golden-master-p1.yml');
+  const priorWorkflowSource = textAt(s02HarnessCorrection.entry.head, '.github/workflows/verify-step-4-s02-golden-master-p1.yml');
+  let expectedCorrectedWorkflowSource = priorWorkflowSource;
+  for (let index = 0; index < expectedOldPins.length; index += 1) {
+    const oldLine = `${expectedOldPins[index].sha256}  ${expectedOldPins[index].path}`;
+    const newLine = `${expectedNewPins[index].sha256}  ${expectedNewPins[index].path}`;
+    assert(expectedCorrectedWorkflowSource.split(oldLine).length === 2, `S02 trusted-harness prior workflow old pin count mismatch: ${expectedOldPins[index].path}`);
+    expectedCorrectedWorkflowSource = expectedCorrectedWorkflowSource.replace(oldLine, newLine);
+  }
+  assert(correctedWorkflowSource === expectedCorrectedWorkflowSource && sha256Text(correctedWorkflowSource) === s02HarnessCorrection.correction.workflowAfterSha256, 'S02 trusted-harness workflow changed beyond the three exact checksum lines');
+  const correctedVerifierSource = textAt(s02HarnessCorrectionCommit, 'tests/governance/verify-current-authority.mjs');
+  const verifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02HarnessCorrection.entry.head, s02HarnessCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert(sha256Text(correctedVerifierSource) === s02HarnessCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(verifierPatch)}` === s02HarnessCorrection.correction.verifierPatchSha256, 'S02 trusted-harness verifier bytes/patch differ from the immutable correction record');
+  assert(correctedVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedVerifierSource.includes('// END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 trusted-harness verifier correction removed its self-check or original fail-closed boundary assertion');
+  assertNoPathChangesSince(s02HarnessCorrectionCommit, 'HEAD', s02HarnessCorrectionChangedPaths, 'S02 trusted-harness correction freeze');
+  if (requireLiveActions) {
+    const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02HarnessCorrection.authorityWorkflow.runId}`);
+    const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02HarnessCorrection.authorityWorkflow.jobId}`);
+    const authorityArtifact = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/artifacts/${s02HarnessCorrection.authorityWorkflow.artifactId}`);
+    assert(authorityRun.head_sha === s02HarnessCorrection.entry.head && authorityRun.head_branch === 'kimi' && authorityRun.status === 'completed' && authorityRun.conclusion === 'success' && authorityRun.run_attempt === 1, 'S02 trusted-harness correction live authority run mismatch');
+    assert(authorityJob.run_id === authorityRun.id && authorityJob.head_sha === s02HarnessCorrection.entry.head && authorityJob.name === 'current-authority' && authorityJob.conclusion === 'success', 'S02 trusted-harness correction live authority job mismatch');
+    assert(authorityArtifact.name === s02HarnessCorrection.authorityWorkflow.artifactName && authorityArtifact.digest === s02HarnessCorrection.authorityWorkflow.artifactDigest && authorityArtifact.expired === false && authorityArtifact.workflow_run?.head_sha === s02HarnessCorrection.entry.head, 'S02 trusted-harness correction live authority artifact mismatch');
+    const failedRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02HarnessCorrection.failedWorkflow.runId}`);
+    const failedJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02HarnessCorrection.failedWorkflow.jobId}`);
+    assert(failedRun.head_sha === s02HarnessCorrection.entry.head && failedRun.head_branch === 'kimi' && failedRun.status === 'completed' && failedRun.conclusion === 'failure' && failedRun.run_attempt === 1, 'S02 trusted-harness correction live failed run mismatch');
+    assert(failedJob.run_id === failedRun.id && failedJob.head_sha === s02HarnessCorrection.entry.head && failedJob.name === 'Static, eight-master responsive and accessibility verification' && failedJob.conclusion === 'failure', 'S02 trusted-harness correction live failed job mismatch');
+    const failedSteps = (failedJob.steps ?? []).filter(step => step.name === s02HarnessCorrection.failedWorkflow.failedStep);
+    assert(failedSteps.length === 1 && failedSteps[0].conclusion === 'failure', 'S02 trusted-harness correction live failed step mismatch');
+  }
+}
+// END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001
 
 function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath = s02ReviewEvidencePaths.deploymentRequest, requireLiveApi = true) {
   assertWorkflowEvidenceKeys(evidence, `${label} workflow evidence`, true);

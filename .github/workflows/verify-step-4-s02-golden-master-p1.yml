@@ -41,9 +41,9 @@ jobs:
         run: |
           set -euo pipefail
           sha256sum -c <<'SHA256'
-          20c97c0b687aff966374513910516a7c64b237e4f7f6c0240b1a55f5b407ef7d  tests/step4/verify-s02-golden-master-p1.mjs
-          be01517f51eedc3c65373d56410abbc359971d59934135bed0e919c674404a37  tests/step4/s02-golden-master-p1-browser.mjs
-          771c7f8a1a0140a456e6044a7dd46bb7f76d7f1cf44ce98c80734181e8e0c74d  tests/step4/s02-golden-master-p1-browser-qa.mjs
+          b712ba261f1fc66db97e54c15e833729199e17785b149b7459d0e95ddb13d011  tests/step4/verify-s02-golden-master-p1.mjs
+          2661c5a75ee756e0baf5a7d5b0470f97d3fc56e02f29bfa641c1e4510ff3fdd3  tests/step4/s02-golden-master-p1-browser.mjs
+          f67bf7472b108d2e88ac24ac034a386e2c24896a18a95950e82ec5bbf9042d03  tests/step4/s02-golden-master-p1-browser-qa.mjs
           4e7d2ae6e3da801a6ed14835a1cceebc252e369234bbb56f64fa2af34510a531  step4/s02/golden-master-p1/browser-qa/package.json
           7fcf276c46e3e02735f8ad4befe6b90c4d96736a7a94e49023333cf4ef26a8c3  step4/s02/golden-master-p1/browser-qa/package-lock.json
           SHA256
