@@ -1,18 +1,33 @@
-# Cat's Tower — Agent Execution Boundary
+# Cat's Tower — Agent Map
 
-Do not infer current status from historical headers, chat history, old workflows or file existence.
+Current authority: `CURRENT_AUTHORITY_INDEX.json`  
+Active control: `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-035.json`
 
 ```text
-STEP4_STATUS: IN_PROGRESS
-STEP5_ALLOWED: false
-PRODUCTION_ALIAS_CHANGED: false
-PRODUCTION_READY: false
+PIPELINE: AI_NATIVE_V2
+STAGE: V2-0-BOOTSTRAP
+INTEGRATION_BRANCH: kimi
+TASK_BRANCH_PATTERN: task/*
+PULL_REQUEST_BASE: kimi
+PRODUCTION_ALLOWED: false
 PHYSICAL_IPHONE_VERIFIED: false
-USER_VISUAL_APPROVAL: false
+EXISTING_S02_VISUAL_APPROVAL: false
 ```
 
-CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json | STEP 4 | S02-P1-GOLDEN-MASTER | READY_FOR_USER_VISUAL_REVIEW
+## Execution rule
 
-## Current authority
+After the round-035 transition bridge, do not write directly to `kimi`. Work on one small `task/*` branch, open a Pull Request to `kimi`, run the V2 quality gate, inspect the browser result and Preview, then recommend merge only when the scoped outcome is real.
 
-Read `CURRENT_AUTHORITY_INDEX.json`, then round 034. The internal S02 Golden Master critic is P0/P1 0/0 and the current maximum is `READY_FOR_USER_VISUAL_REVIEW`. Await explicit user visual approval; do not infer it or start P2. Do not replace the actual root runtime, change gameplay numbers, economy, save schema, backend, payment, ads, Production or physical-device verdicts.
+## Read only as history or reference
+
+- legacy root runtime
+- existing S02 Golden Masters
+- historical addenda and evidence
+- PR 8 framing
+
+## Never infer
+
+- CI green is not gameplay quality
+- Vercel READY is not user approval
+- model PASS is not runtime playtest
+- emulator PASS is not physical-iPhone PASS

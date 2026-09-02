@@ -1,19 +1,12 @@
 {
-  "schemaVersion": 13,
+  "schemaVersion": 14,
   "updatedAt": "2026-09-02",
   "repository": "2hg7trp7rv-design/cats_tower",
-  "branch": "kimi",
+  "integrationBranch": "kimi",
   "authorityIndex": "CURRENT_AUTHORITY_INDEX.json",
-  "currentRepositoryStep": 4,
-  "currentInternalPhase": "S02-P1-GOLDEN-MASTER",
-  "status": "READY_FOR_USER_VISUAL_REVIEW",
-  "governanceRecovery": {
-    "status": "PASS_PHASE0_GOVERNANCE_RECOVERY",
-    "supersededClosureAttempt": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
-    "step2Correction": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
-    "plannedCorrectedClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
-    "closure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json"
-  },
+  "currentPipeline": "AI_NATIVE_V2",
+  "currentStage": "V2-0-BOOTSTRAP",
+  "status": "PRESERVED_AWAITING_SHARED_RUNTIME",
   "step1": {
     "status": "PASS_CANONICAL",
     "seal": "quality-reviews/step-1-reseal-round-008/seal-round-008.json"
@@ -22,50 +15,28 @@
     "status": "PASS_CONTRACT",
     "seal": "simulation/executable-seal-v3.json",
     "candidate": "simulation/candidate-v3.json",
-    "executionContract": "simulation/execution-contract-v3.json",
-    "bindingDrift": 0,
-    "verification": "trusted current v3 seal, lossless canonical screen projection, and Step 3 continuity verification",
-    "authorityPointers": {
-      "seal": "simulation/executable-seal-v3.json",
-      "candidate": "simulation/candidate-v3.json",
-      "schema": "simulation/candidate-v3.schema.json",
-      "candidateValidator": "simulation/validate-candidate-v3.mjs",
-      "executionContract": "simulation/execution-contract-v3.json",
-      "executionContractSchema": "simulation/execution-contract-v3.schema.json",
-      "executionContractValidator": "simulation/validate-execution-contract-v3.mjs",
-      "runPlan": "simulation/run-plan-v3.json",
-      "runPlanSchema": "simulation/run-plan-v3.schema.json",
-      "runPlanValidator": "simulation/validate-run-plan-v3.mjs",
-      "resultSchema": "simulation/result-v3.schema.json",
-      "resultValidator": "simulation/validate-result-v3.mjs",
-      "engine": "simulation/engine-v2/",
-      "projectionVerifier": "tests/governance/verify-step2-screen-projection-round-032.mjs",
-      "continuityVerifier": "tests/governance/verify-step3-continuity-round-032.mjs"
-    }
+    "engine": "simulation/engine-v2/"
   },
   "step3": {
     "status": "PASS_MODEL",
     "gameplayScenarios": 15000,
     "highVolumeSamples": 1700000,
-    "finalJudge": "quality-reviews/step-3-large-scale-validation/final-judge.json",
-    "completionEvidence": "quality-reviews/step-3-large-scale-validation/completion-evidence.json",
-    "unresolvedP0": 0,
-    "unresolvedP1": 0,
-    "limitation": "The scenario model and high-volume state tests passed their sealed acceptance. They are not proof that the legacy browser runtime implements the canonical game or was playtested 15,000 times."
+    "limitation": "This is model evidence, not V2 runtime or human playtest evidence."
   },
-  "runtimeRevalidation": {
-    "requiredAfterCanonicalRuntimeImplementation": true,
-    "mustShareDomainEngineWithRuntime": true,
-    "mustShareContentAndRounding": true,
-    "calibrationAndHoldoutMustRemainSeparate": true,
-    "status": "NOT_STARTED"
+  "v2RuntimeRevalidation": {
+    "required": true,
+    "status": "NOT_STARTED",
+    "trigger": "after packages/domain and apps/game execute the same battle and progression operations",
+    "mustShare": [
+      "domain operations",
+      "content data",
+      "numeric representation",
+      "rounding",
+      "deterministic fixtures"
+    ]
   },
   "currentMutationAllowed": false,
-  "candidateMutationDuringS02P1": false,
-  "sealedEvidenceMutationDuringS02P1": false,
-  "step4Pass": false,
-  "step5Allowed": false,
-  "physicalIPhoneVerified": false,
   "productionAliasChanged": false,
-  "nextAction": "Do not tune or rerun the model during S02-P1. Resume simulation only when an authorized product change affects the sealed model or after canonical runtime shares the domain engine."
+  "physicalIPhoneVerified": false,
+  "nextAction": "Preserve the sealed model during bootstrap; create the shared-domain adapter and revalidate only after the First Playable consumes it."
 }

@@ -1,89 +1,53 @@
 {
-  "schemaVersion": 22,
+  "schemaVersion": 23,
   "updatedAt": "2026-09-02",
   "project": "Cat's Tower",
   "repository": "2hg7trp7rv-design/cats_tower",
-  "branch": "kimi",
+  "integrationBranch": "kimi",
   "authorityIndex": "CURRENT_AUTHORITY_INDEX.json",
-  "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-035.json",
   "status": "IN_PROGRESS",
-  "currentRepositoryStep": 4,
-  "currentInternalPhase": "S02-P1-GOLDEN-MASTER",
-  "currentVerdict": "READY_FOR_USER_VISUAL_REVIEW",
-  "governanceRecovery": {
-    "status": "PASS_PHASE0_GOVERNANCE_RECOVERY",
-    "supersededClosureAttempt": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
-    "step2Correction": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
-    "plannedCorrectedClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
-    "phase0P0": 0,
-    "phase0P1": 0,
-    "phase0P2": 2,
-    "closure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json"
+  "currentPipeline": "AI_NATIVE_V2",
+  "currentStage": "V2-0-BOOTSTRAP",
+  "currentVerdict": "IN_PROGRESS_AI_NATIVE_V2_BOOTSTRAP",
+  "preserved": {
+    "productCanon": "PASS_CANONICAL",
+    "executableContract": "PASS_CONTRACT",
+    "model": "PASS_MODEL"
   },
-  "scopedPasses": {
-    "step1": "PASS_CANONICAL",
-    "step2": "PASS_CONTRACT",
-    "step3": "PASS_MODEL",
-    "step4": "IN_PROGRESS",
-    "step5": "BLOCKED",
-    "step6": "BLOCKED"
+  "legacy": {
+    "rootRuntime": "LEGACY_RUNTIME_NOT_CANONICAL",
+    "s02GoldenMasters": "REFERENCE_NOT_APPROVED",
+    "oldGovernance": "HISTORY_NOT_CURRENT_EXECUTION_GATE"
   },
-  "currentProductWork": {
-    "phase": "S02-P1-GOLDEN-MASTER",
-    "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
-    "acceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-acceptance-matrix-round-001.json",
-    "goldenMastersRequired": 8,
-    "deliverablesRequired": 10,
-    "goldenMasterRoutePresent": true,
-    "goldenMastersClaimedForAudit": 8,
-    "goldenMastersAccepted": 0,
-    "deliverablesClaimedForAudit": 10,
-    "deliverablesAccepted": 0,
-    "currentState": "READY_FOR_USER_VISUAL_REVIEW"
+  "workflow": {
+    "main": "FROZEN",
+    "integrationBranch": "kimi",
+    "taskBranchPattern": "task/*",
+    "pullRequestBase": "kimi",
+    "directWriteToIntegrationAfterBridge": false,
+    "branchProtection": "PENDING_FIRST_V2_CHECK_CONTEXT"
+  },
+  "targets": {
+    "bootstrap": "buildable React + Phaser + TypeScript + Vite shell with automated browser smoke checks",
+    "firstPlayable": "four cats fight, defeat, reward, level and continue for three minutes",
+    "verticalSlice": "launch through 10F boss and 11F connection"
   },
   "openFindings": {
     "P0": 0,
-    "P1": 1,
-    "P2": 2,
+    "P1": 3,
+    "P2": 0,
     "items": [
-      "S4-RECOVERY-VIS-001",
-      "PHASE0-P2-PR8-STALE-METADATA",
-      "PHASE0-P2-KIMI-UNPROTECTED-EXTERNAL-ENFORCEMENT"
+      "V2-PR8-STALE-001",
+      "V2-KIMI-PROTECTION-001",
+      "V2-BOOTSTRAP-001"
     ]
   },
-  "truthBoundaries": {
-    "legacyRuntime": "LEGACY_RUNTIME_NOT_CANONICAL",
-    "step3RuntimePlaytestEvidence": false,
-    "canonicalOneToTenRuntimeImplemented": false,
-    "backendImplemented": false,
-    "paymentImplemented": false,
-    "adsImplemented": false,
-    "productionAssetsApproved": false,
-    "twelveScreensApproved": 0,
-    "userVisualApproval": false,
-    "physicalIPhoneVerified": false,
-    "productionAliasChanged": false,
-    "productionReady": false
-  },
-  "nextAuthorizedAction": "Await explicit user visual review of the immutable Preview deployment. Do not infer approval and do not start P2 asset production.",
-  "step5Allowed": false,
+  "userVisualApprovalOfExistingS02": false,
+  "step4Pass": false,
   "productionAllowed": false,
+  "productionAliasChanged": false,
   "physicalIPhoneVerified": false,
-  "executableContract": {
-    "seal": "simulation/executable-seal-v3.json",
-    "candidate": "simulation/candidate-v3.json",
-    "schema": "simulation/candidate-v3.schema.json",
-    "candidateValidator": "simulation/validate-candidate-v3.mjs",
-    "executionContract": "simulation/execution-contract-v3.json",
-    "executionContractSchema": "simulation/execution-contract-v3.schema.json",
-    "executionContractValidator": "simulation/validate-execution-contract-v3.mjs",
-    "runPlan": "simulation/run-plan-v3.json",
-    "runPlanSchema": "simulation/run-plan-v3.schema.json",
-    "runPlanValidator": "simulation/validate-run-plan-v3.mjs",
-    "resultSchema": "simulation/result-v3.schema.json",
-    "resultValidator": "simulation/validate-result-v3.mjs",
-    "engine": "simulation/engine-v2/",
-    "projectionVerifier": "tests/governance/verify-step2-screen-projection-round-032.mjs",
-    "continuityVerifier": "tests/governance/verify-step3-continuity-round-032.mjs"
-  }
+  "productionReady": false,
+  "nextAuthorizedAction": "Close PR 8 without merge and create task/v2-bootstrap from the exact transition commit."
 }

@@ -1,61 +1,20 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "artifactId": "cats-tower-active-change-control-dispatcher",
   "updatedAt": "2026-09-02",
   "repository": "2hg7trp7rv-design/cats_tower",
-  "branch": "kimi",
+  "integrationBranch": "kimi",
   "status": "IN_PROGRESS",
   "currentAuthorityIndex": "CURRENT_AUTHORITY_INDEX.json",
-  "currentAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
-  "currentVerdict": "READY_FOR_USER_VISUAL_REVIEW",
-  "currentRepositoryStep": 4,
-  "currentInternalPhase": "S02-P1-GOLDEN-MASTER",
-  "supersededGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
-  "step2ScreenProjectionCorrection": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
-  "plannedGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
-  "canonicalSeals": {
+  "currentAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-035.json",
+  "currentVerdict": "IN_PROGRESS_AI_NATIVE_V2_BOOTSTRAP",
+  "currentPipeline": "AI_NATIVE_V2",
+  "currentStage": "V2-0-BOOTSTRAP",
+  "preservedSeals": {
     "step1": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
     "step2": "simulation/executable-seal-v3.json",
-    "step3FinalJudge": "quality-reviews/step-3-large-scale-validation/final-judge.json",
-    "step3Completion": "quality-reviews/step-3-large-scale-validation/completion-evidence.json"
+    "step3": "quality-reviews/step-3-large-scale-validation/final-judge.json"
   },
-  "scopeTruth": {
-    "step1": "PASS_CANONICAL",
-    "step2": "PASS_CONTRACT",
-    "step3": "PASS_MODEL",
-    "step4": "IN_PROGRESS",
-    "step5Allowed": false,
-    "productionAllowed": false,
-    "physicalIPhoneVerified": false
-  },
-  "lineage": {
-    "round026Role": "next S02-P1 Golden Master product-work authority after corrected closure",
-    "round027Role": "Phase 0 opening history",
-    "round028Role": "Phase 0 corrected baseline and source replacement history",
-    "round029Role": "historical verifier repair history",
-    "round030Role": "superseded closure attempt that failed later independent criticism",
-    "round031Role": "active Phase 0 closure-integrity recovery",
-    "round032Role": "planned narrow Step 2 screen-projection correction",
-    "round033Role": "planned corrected Phase 0 closure",
-    "supersededAddendaRemainHistory": true
-  },
-  "rule": "Read CURRENT_AUTHORITY_INDEX.json and currentAddendum on live kimi. Round 032 repairs the Step 2 screen projection; only corrected closure round 033 may return authority to round 026. Do not mutate S02-P1 product content before that closure.",
-  "step2ExecutableContract": {
-    "seal": "simulation/executable-seal-v3.json",
-    "candidate": "simulation/candidate-v3.json",
-    "schema": "simulation/candidate-v3.schema.json",
-    "candidateValidator": "simulation/validate-candidate-v3.mjs",
-    "executionContract": "simulation/execution-contract-v3.json",
-    "executionContractSchema": "simulation/execution-contract-v3.schema.json",
-    "executionContractValidator": "simulation/validate-execution-contract-v3.mjs",
-    "runPlan": "simulation/run-plan-v3.json",
-    "runPlanSchema": "simulation/run-plan-v3.schema.json",
-    "runPlanValidator": "simulation/validate-run-plan-v3.mjs",
-    "resultSchema": "simulation/result-v3.schema.json",
-    "resultValidator": "simulation/validate-result-v3.mjs",
-    "engine": "simulation/engine-v2/",
-    "projectionVerifier": "tests/governance/verify-step2-screen-projection-round-032.mjs",
-    "continuityVerifier": "tests/governance/verify-step3-continuity-round-032.mjs"
-  },
-  "governanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json"
+  "rule": "Read CURRENT_AUTHORITY_INDEX.json and round 035. Work through task branches and pull requests to kimi. Do not modify main or Production.",
+  "nextAuthorizedAction": "Close PR 8 without merge, create task/v2-bootstrap, and establish the V2 scaffold through a PR to kimi."
 }

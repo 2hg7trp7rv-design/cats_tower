@@ -1,182 +1,112 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "artifactId": "cats-tower-current-authority-index",
   "updatedAt": "2026-09-02",
   "repository": "2hg7trp7rv-design/cats_tower",
-  "branch": "kimi",
-  "status": "READY_FOR_USER_VISUAL_REVIEW",
-  "currentRepositoryStep": 4,
-  "currentInternalPhase": "S02-P1-GOLDEN-MASTER",
-  "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
-  "singleSourceRule": "All current mirrors derive phase, gate and write boundary from this index and the active change-control. Historical headers, superseded addenda and old workflow files do not define current status.",
-  "governanceRecovery": {
-    "status": "PASS_PHASE0_GOVERNANCE_RECOVERY",
-    "supersededClosureAttempt": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
-    "step2Correction": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
-    "plannedCorrectedClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
-    "contentCommit": "3b5acb5ef73abdf0cb854ca6af1aab29a7203d9d",
-    "contentTree": "02a52abbf1e11fa03ede552a9e7824f7c35886a4",
-    "evidenceCommit": "79684051a6ebe4053aed7f9bebdf231dc139da58",
-    "evidenceTree": "0e1880789e1f4bc51e02c7a9968dbc6a329e3ce0",
-    "workflowRun": 33587170067,
-    "workflowJob": 100113733232,
-    "artifactId": 9830490978,
-    "phase0P0": 0,
-    "phase0P1": 0,
-    "phase0P2": 2,
-    "closure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json"
-  },
-  "readOrder": [
+  "integrationBranch": "kimi",
+  "status": "IN_PROGRESS_AI_NATIVE_V2_BOOTSTRAP",
+  "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-035.json",
+  "priority": [
     "latest explicit user decision",
     "CURRENT_AUTHORITY_INDEX.json",
     "activeChangeControl",
-    "CHATGPT_PROJECT_INSTRUCTIONS1.md",
-    "DEVELOPMENT_PLAYBOOK.md",
-    "Step 1 Round 008 seal and sealed canonical",
-    "Step 2 executable seal and contract",
-    "Step 3 final judge, completion evidence and live read-back",
-    "current task Acceptance, critic, judge, evidence and live read-back",
-    "current mirrors and handover",
-    "historical evidence and legacy runtime",
-    "chat history, reference images and general knowledge"
+    "sealed product canon and executable contracts",
+    "current V2 task plan and tests",
+    "historical evidence"
   ],
-  "projectSources": {
-    "active": [
-      {
-        "path": "CHATGPT_PROJECT_INSTRUCTIONS1.md",
-        "role": "project-wide authority, safety and operating rules"
-      },
-      {
-        "path": "DEVELOPMENT_PLAYBOOK.md",
-        "role": "low-rework production method and downstream-usability contract"
-      },
-      {
-        "path": "PROJECT_SOURCE_MANIFEST.md",
-        "role": "Project-source replacement manifest"
-      }
-    ],
-    "mustNotBeActiveAsProjectSources": [
-      "CHATGPT_PROJECT_BOOTSTRAP.md",
-      "CUSTOM_GPT_CONFIGURATION.md",
-      "CLONE_DESIGN.md",
-      "IDLE_DESIGN.md",
-      "PROTOTYPE_SPEC.md",
-      "BASELINE_V082.md",
-      "any prior downloaded Project-instructions copy"
+  "developmentModel": {
+    "name": "AI_NATIVE_VERIFIED_VERTICAL_SLICE",
+    "principles": [
+      "playable outcome before screen volume",
+      "small task branches and pull requests",
+      "AI-visible browser, console, trace and screenshot feedback",
+      "automated correctness checks",
+      "human final judgment for fun, feel and visual taste",
+      "release-grade controls only when their risk becomes relevant"
     ]
   },
-  "canonicalProduct": {
-    "step1Status": "PASS_CANONICAL",
-    "seal": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
-    "masterSpec": "MASTER_SPEC.md",
-    "floorSlice": "FLOORS_1_10_DESIGN.md",
-    "stableIds": "canonical/STABLE_ID_REGISTRY.json",
-    "screenStates": "canonical/SCREEN_STATE_REGISTRY.json",
-    "stateTransitions": "canonical/STATE_TRANSITION_CONTRACT.json",
-    "releaseGates": "canonical/POLICY_RELEASE_GATES.json"
+  "repositoryWorkflow": {
+    "main": "FROZEN_NO_V2_MERGE_AUTHORIZED",
+    "kimi": "V2_INTEGRATION",
+    "taskBranchPattern": "task/*",
+    "pullRequestBase": "kimi",
+    "directWriteToKimi": false,
+    "branchProtection": "REQUIRED_AFTER_FIRST_V2_CHECK_CONTEXT",
+    "forcePush": false,
+    "transitionBridgeException": "this atomic round-035 commit only"
   },
-  "executableContract": {
-    "step2Status": "PASS_CONTRACT",
-    "seal": "simulation/executable-seal-v3.json",
-    "candidate": "simulation/candidate-v3.json",
-    "schema": "simulation/candidate-v3.schema.json",
-    "candidateValidator": "simulation/validate-candidate-v3.mjs",
-    "executionContract": "simulation/execution-contract-v3.json",
-    "executionContractSchema": "simulation/execution-contract-v3.schema.json",
-    "executionContractValidator": "simulation/validate-execution-contract-v3.mjs",
-    "runPlan": "simulation/run-plan-v3.json",
-    "runPlanSchema": "simulation/run-plan-v3.schema.json",
-    "runPlanValidator": "simulation/validate-run-plan-v3.mjs",
-    "resultSchema": "simulation/result-v3.schema.json",
-    "resultValidator": "simulation/validate-result-v3.mjs",
-    "engine": "simulation/engine-v2/",
-    "projectionVerifier": "tests/governance/verify-step2-screen-projection-round-032.mjs",
-    "continuityVerifier": "tests/governance/verify-step3-continuity-round-032.mjs"
+  "preservedAuthority": {
+    "step1": {
+      "status": "PASS_CANONICAL",
+      "seal": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
+      "masterSpec": "MASTER_SPEC.md",
+      "floorSlice": "FLOORS_1_10_DESIGN.md",
+      "stableIds": "canonical/STABLE_ID_REGISTRY.json",
+      "screenStates": "canonical/SCREEN_STATE_REGISTRY.json",
+      "stateTransitions": "canonical/STATE_TRANSITION_CONTRACT.json",
+      "releaseGates": "canonical/POLICY_RELEASE_GATES.json"
+    },
+    "step2": {
+      "status": "PASS_CONTRACT",
+      "seal": "simulation/executable-seal-v3.json",
+      "candidate": "simulation/candidate-v3.json",
+      "engine": "simulation/engine-v2/"
+    },
+    "step3": {
+      "status": "PASS_MODEL",
+      "gameplayScenarioCount": 15000,
+      "highVolumeSampleCount": 1700000,
+      "limitation": "Model evidence is not browser-runtime or human-playtest evidence."
+    }
   },
-  "modelValidation": {
-    "step3Status": "PASS_MODEL",
-    "finalJudge": "quality-reviews/step-3-large-scale-validation/final-judge.json",
-    "completionEvidence": "quality-reviews/step-3-large-scale-validation/completion-evidence.json",
-    "liveReadback": "quality-reviews/step-3-large-scale-validation/live-readback.json",
-    "gameplayScenarioCount": 15000,
-    "highVolumeSampleCount": 1700000,
-    "limitation": "Step 3 validates the sealed model and transition tests. It is not evidence that the current browser runtime implements the canonical game or that real players completed runtime playtests."
+  "legacy": {
+    "rootRuntime": "LEGACY_RUNTIME_NOT_CANONICAL",
+    "s02GoldenMasters": "REFERENCE_NOT_APPROVED",
+    "historicalQualityEvidence": "IMMUTABLE_KEEP",
+    "pullRequest8": "STALE_CLOSE_WITHOUT_MERGE"
   },
   "currentProductWork": {
-    "step4Status": "IN_PROGRESS",
-    "phase": "S02-P1-GOLDEN-MASTER",
-    "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
-    "acceptance": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-acceptance-matrix-round-001.json",
-    "reviewRoute": "/step4/s02/golden-master-p1/",
-    "deliverablesRequired": 10,
-    "goldenMastersRequired": 8,
-    "goldenMasterRoutePresent": true,
-    "deliverablesClaimedForAudit": 10,
-    "goldenMastersClaimedForAudit": 8,
-    "deliverablesAccepted": 0,
-    "goldenMastersAccepted": 0,
-    "currentState": "READY_FOR_USER_VISUAL_REVIEW",
-    "nextAuthorizedAction": "Present all eight individually viewable Golden Masters on the immutable Preview deployment and await explicit user visual approval.",
-    "step4Pass": false,
-    "step5Allowed": false,
-    "userVisualApproval": false
+    "pipeline": "V2",
+    "stage": "V2-0-BOOTSTRAP",
+    "plannedBranch": "task/v2-bootstrap",
+    "plannedPullRequestBase": "kimi",
+    "runtimeRoot": "apps/game",
+    "firstPlayableGoal": "Four cats defeat enemies, earn coin, level up and continue for three minutes on mobile.",
+    "currentRuntimeConnected": false,
+    "currentServerConnected": false,
+    "userVisualApprovalOfExistingS02": false
   },
-  "legacyRuntime": {
-    "status": "LEGACY_RUNTIME_NOT_CANONICAL",
-    "paths": [
-      "index.html",
-      "app.js",
-      "styles.css",
-      "game-core.js",
-      "game-data.js",
-      "runtime/",
-      "step4/s02/"
+  "qualityGate": {
+    "bootstrap": [
+      "typed build succeeds",
+      "unit smoke tests pass",
+      "Playwright Chromium and WebKit smoke pass",
+      "320x568, 390x844 and 430x932 render",
+      "console errors are zero",
+      "Vercel Preview is bound to the PR"
     ],
-    "allowedUse": "technical history and temporary comparison only",
-    "forbiddenUse": "may not be described as the canonical 1-10F implementation or receive incremental production polish during S02-P1"
-  },
-  "scopedVerdicts": {
-    "PASS_CANONICAL": "product meaning, IDs, state and trust boundaries are sealed",
-    "PASS_CONTRACT": "schema, validator, fixture and model contract are executable",
-    "PASS_MODEL": "the sealed model passed its stated simulations and transition tests",
-    "PASS_VISUAL": "required rendered states and viewports passed independent visual review",
-    "PASS_ASSET": "production assets passed decomposition, animation, budget, provenance and in-engine proof",
-    "PASS_RUNTIME": "canonical product is implemented and passed browser interaction and regression",
-    "PASS_SERVER": "authoritative transactions, ledger, recovery and security passed",
-    "PASS_DEVICE": "physical target-device behavior passed",
-    "PASS_RELEASE": "all release gates passed with unresolved P0 and P1 equal to zero"
-  },
-  "globalGate": {
-    "overallStatus": "IN_PROGRESS",
-    "unresolvedP0": 0,
-    "unresolvedP1": 1,
-    "unresolvedP2": 2,
-    "openFindings": [
-      "S4-RECOVERY-VIS-001",
-      "PHASE0-P2-PR8-STALE-METADATA",
-      "PHASE0-P2-KIMI-UNPROTECTED-EXTERNAL-ENFORCEMENT"
-    ],
-    "productionAliasChanged": false,
-    "physicalIPhoneVerified": false,
-    "productionReady": false
-  },
-  "workflowPolicy": {
-    "current": ".github/workflows/verify-current-governance.yml",
-    "immutableRound7": ".github/workflows/verify-history-round7.yml",
-    "currentProduct": ".github/workflows/verify-step-4-s02-golden-master-p1.yml",
-    "obsoleteOperationalWorkflowsMustBeAbsent": true,
-    "historicalRunsRemainEvidence": true
-  },
-  "immutableHistoryPolicy": {
-    "keep": [
-      "quality-reviews/** acceptance, critic, judge, completion and live-readback artifacts",
-      ".github/baselines/v0.8.2/**"
-    ],
-    "doNotUseAsCurrentAuthority": [
-      "historical Step 4 SVG drafts",
-      "legacy runtime",
-      "superseded addenda",
-      "snapshot status headers"
+    "firstPlayable": [
+      "movement, telegraph, attack, hit, damage, defeat, reward, level-up and next enemy are causally connected",
+      "same seed gives the same event sequence",
+      "three-minute soak passes",
+      "human iPhone review covers comprehension, hit feel, reward clarity and desire to continue"
     ]
-  }
+  },
+  "openFindings": {
+    "P0": 0,
+    "P1": 3,
+    "P2": 0,
+    "items": [
+      "V2-PR8-STALE-001",
+      "V2-KIMI-PROTECTION-001",
+      "V2-BOOTSTRAP-001"
+    ]
+  },
+  "production": {
+    "allowed": false,
+    "aliasChanged": false,
+    "ready": false
+  },
+  "physicalIPhoneVerified": false,
+  "nextAuthorizedAction": "Close PR 8 without merge, create task/v2-bootstrap at the exact transition commit, and establish the buildable V2 scaffold through a pull request to kimi."
 }

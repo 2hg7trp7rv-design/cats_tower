@@ -1,112 +1,96 @@
 {
-  "schemaVersion": 14,
+  "schemaVersion": 15,
   "updatedAt": "2026-09-02",
   "repository": {
     "fullName": "2hg7trp7rv-design/cats_tower",
-    "allowedBranch": "kimi",
-    "writeOtherBranch": false,
-    "createBranch": false,
-    "pullRequestWorkflow": false,
-    "mergeRebaseCherryPickForcePush": false,
+    "releaseBranch": "main",
+    "integrationBranch": "kimi",
+    "taskBranchPattern": "task/*",
+    "createTaskBranch": true,
+    "pullRequestWorkflow": true,
+    "pullRequestBase": "kimi",
+    "directWriteToMain": false,
+    "directWriteToKimiAfterTransitionBridge": false,
+    "forcePush": false,
     "productionAliasChangeWithoutExplicitApproval": false
   },
   "authority": {
     "index": "CURRENT_AUTHORITY_INDEX.json",
-    "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
-    "supersededGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
-    "step2ScreenProjectionCorrection": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
-    "plannedGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
-    "instructions": "CHATGPT_PROJECT_INSTRUCTIONS1.md",
-    "playbook": "DEVELOPMENT_PLAYBOOK.md",
-    "projectSourceManifest": "PROJECT_SOURCE_MANIFEST.md",
-    "governanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json"
+    "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-035.json",
+    "sealedProductCanon": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
+    "step2ExecutableSeal": "simulation/executable-seal-v3.json",
+    "step3FinalJudge": "quality-reviews/step-3-large-scale-validation/final-judge.json"
   },
   "current": {
-    "repositoryStep": 4,
-    "internalPhase": "S02-P1-GOLDEN-MASTER",
+    "pipeline": "AI_NATIVE_V2",
+    "stage": "V2-0-BOOTSTRAP",
     "status": "IN_PROGRESS",
-    "verdict": "READY_FOR_USER_VISUAL_REVIEW",
-    "step4Pass": false,
-    "step5Allowed": false,
+    "verdict": "IN_PROGRESS_AI_NATIVE_V2_BOOTSTRAP",
     "productionAllowed": false,
-    "userVisualApproval": false,
     "physicalIPhoneVerified": false
   },
-  "scopedPassVocabulary": [
-    "PASS_CANONICAL",
-    "PASS_CONTRACT",
-    "PASS_MODEL",
-    "PASS_VISUAL",
-    "PASS_ASSET",
-    "PASS_RUNTIME",
-    "PASS_SERVER",
-    "PASS_DEVICE",
-    "PASS_RELEASE"
+  "agentOperatingRules": [
+    "Work in one small task branch per coherent outcome.",
+    "Open a pull request to kimi and use the PR as the review, Preview and evidence unit.",
+    "Do not merge merely because build or CI is green.",
+    "The agent must inspect browser output, console, trace and screenshots before recommending merge.",
+    "Do not ask the user to make routine technical or code decisions.",
+    "Human approval is required for fun, feel, visual taste, Production, payment and other external-impact decisions.",
+    "Keep instructions short; encode enforceable facts in schemas, tests and CI.",
+    "Preserve immutable historical evidence without using it as the current execution gate."
   ],
-  "forbiddenUnscopedVerdict": "PASS",
-  "completionInsufficientAlone": [
-    "file exists",
-    "code exists",
-    "image exists",
-    "build succeeds",
-    "unit tests pass",
-    "CI is green",
-    "Vercel is READY",
-    "screenshot exists",
-    "sandbox endpoint responds"
-  ],
-  "lowReworkRules": {
-    "downstreamUsabilityContractRequired": true,
-    "representativeProofBeforeVolume": true,
-    "stateFamilyBeforeHappyPathPolish": true,
-    "runtimeAndSimulationShareDomainEngine": true,
-    "oneCurrentAuthorityIndex": true,
-    "contentAndEvidenceCommitsSeparated": true,
-    "independentCriticRequired": true,
-    "P0P1MustBeZero": true,
-    "userDoesNotPerformRoutineQA": true,
-    "auditExistingBeforeRebuilding": true
-  },
-  "verificationPolicy": {
-    "sealedArtifactsImmutable": true,
-    "verifyCurrentSealBindingsAtHead": true,
-    "sourceBoundVerifierUsesHistoricalWorktree": true,
-    "projectInstructionReplacementUsesCompatibilityAudit": true,
-    "legacyOperationalWorkflowsRetired": true
-  },
-  "currentWriteBoundary": {
-    "allowed": "round 034 allowedWrites only",
-    "preWriteRequirement": "Repair only the independently evidenced S02-P1 Golden Master P1 gaps; exact user visual approval is required before P2 asset production.",
+  "v2WriteBoundary": {
+    "allowed": [
+      "apps/game/**",
+      "packages/**",
+      "tests/v2/**",
+      "tests/e2e/**",
+      "tools/v2/**",
+      "docs/v2/**",
+      ".github/workflows/v2-quality-gate.yml",
+      "root build configuration needed by the V2 workspace",
+      "V2 project-source documents",
+      "current status mirrors"
+    ],
     "forbidden": [
-      "actual root replacement",
-      "gameplay runtime mutation",
-      "economy or save mutation",
-      "production asset volume generation",
-      "backend/payment/ad implementation",
-      "sealed Step 1/2/3 mutation",
-      "Production alias change",
-      "PR operation",
-      "physical-iPhone PASS claim"
+      "main branch writes",
+      "Production alias or domain changes",
+      "live payment, ads, wallet or gacha activation",
+      "deletion or mutation of sealed evidence",
+      "claiming existing S02 visual approval",
+      "claiming physical-device PASS without evidence"
     ]
   },
-  "legacy": {
-    "runtimeStatus": "LEGACY_RUNTIME_NOT_CANONICAL",
-    "obsoleteProjectSourcesMustBeAbsent": true,
-    "historicalQualityEvidenceMustBePreserved": true,
-    "historicalSnapshotStatusDoesNotDefineCurrentStatus": true
+  "quality": {
+    "prototypeUsesReleaseGate": false,
+    "bootstrapRequires": [
+      "typecheck",
+      "unit smoke",
+      "production build",
+      "Chromium and WebKit smoke",
+      "mobile viewport renders",
+      "zero uncaught errors",
+      "PR Preview"
+    ],
+    "firstPlayableRequires": [
+      "actual domain-driven combat",
+      "deterministic replay",
+      "three-minute soak",
+      "visible combat-reward-progression causality",
+      "human iPhone feel review"
+    ],
+    "representativeProofBeforeVolume": true,
+    "runtimeAndSimulationMustConvergeOnSharedDomain": true
   },
-  "reportingRequired": [
-    "repository",
-    "branch",
-    "authority",
-    "entry/content/evidence commit and tree",
-    "changed and deleted paths",
-    "workflow run/job/artifact",
-    "deployment identity if relevant",
-    "scoped verdict",
+  "reporting": [
+    "repository and refs",
+    "exact commit and tree",
+    "PR and Preview",
+    "automated checks",
+    "browser evidence",
+    "playable outcome",
     "P0/P1/P2",
-    "Production state",
-    "physical-device state",
-    "next authorized action"
+    "Production and physical-device state",
+    "one next action"
   ]
 }

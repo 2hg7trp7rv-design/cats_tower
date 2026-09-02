@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-active-change-control-addendum-round-035",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "integrationBranch": "kimi",
+  "parentChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "authorization": {
+    "source": "latest explicit user decision in Cat's Tower project conversation",
+    "decision": [
+      "The user fully approves replacing the governance-first process with AI-native verified vertical-slice development.",
+      "The user instructs ChatGPT to continue and execute the migration.",
+      "This approval is not visual approval of the existing S02 Golden Masters and does not approve Production changes."
+    ],
+    "priorityRule": "This latest explicit user decision supersedes the round-034 S02-only write boundary while preserving product canon, immutable evidence and Production safety."
+  },
+  "entry": {
+    "head": "24c87864d94fe716916465009758e50a5fb1e306",
+    "tree": "1408b38e28871461295f24a4e3581e909539d064"
+  },
+  "status": "IN_PROGRESS",
+  "verdict": "IN_PROGRESS_AI_NATIVE_V2_BOOTSTRAP",
+  "developmentModel": "AI_NATIVE_VERIFIED_VERTICAL_SLICE",
+  "legacyRepositoryStep": {
+    "step": 4,
+    "status": "FROZEN_NOT_CURRENT_EXECUTION_GATE",
+    "s02GoldenMasterStatus": "REFERENCE_NOT_APPROVED",
+    "userVisualApproval": false
+  },
+  "preserve": [
+    "MASTER_SPEC.md",
+    "FLOORS_1_10_DESIGN.md",
+    "canonical/**",
+    "simulation executable v3 contract and Step 3 model evidence",
+    "quality-reviews/** immutable history",
+    "useful source assets after provenance and runtime-fit review"
+  ],
+  "archiveOrReferenceOnly": [
+    "legacy root runtime",
+    "step4/s02/golden-master-p1/**",
+    "historical addenda and closure artifacts",
+    "PR 8 description and former Merchant Saga clone framing"
+  ],
+  "repositoryWorkflow": {
+    "main": "frozen release-history branch; no V2 merge is authorized",
+    "kimi": "V2 integration branch",
+    "taskBranchPattern": "task/*",
+    "bootstrapBranch": "task/v2-bootstrap",
+    "pullRequestBase": "kimi",
+    "directWritesToKimiAfterThisBridge": false,
+    "pullRequestRequiredAfterThisBridge": true,
+    "forcePush": false,
+    "mergeToMain": false,
+    "branchProtectionTarget": "kimi",
+    "branchProtectionTiming": "after the first v2-quality-gate check context exists"
+  },
+  "authorizedV2Paths": [
+    "apps/game/**",
+    "packages/**",
+    "tests/v2/**",
+    "tests/e2e/**",
+    "tools/v2/**",
+    "docs/v2/**",
+    ".github/workflows/v2-quality-gate.yml",
+    "package.json",
+    "package-lock.json",
+    "tsconfig*.json",
+    "vite.config.*",
+    "playwright.config.*",
+    "eslint.config.*",
+    "CHATGPT_PROJECT_INSTRUCTIONS2.md",
+    "CATS_TOWER_AI_NATIVE_BUILD_PROTOCOL1.md",
+    "CATS_TOWER_PRODUCT_SNAPSHOT1.md",
+    "CURRENT_AUTHORITY_INDEX.json",
+    "PROJECT_STATUS.json",
+    "AI_PROJECT_POLICY.json",
+    "QUALITY_GATE.md",
+    "PROJECT_HANDOVER.md",
+    "AGENTS.md",
+    "README.md",
+    "simulation/CURRENT_STATUS.json",
+    ".github/workflows/CURRENT_STATUS.md",
+    "quality-reviews/step-1-canonical-design/active-change-control.json",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-035.json"
+  ],
+  "forbidden": [
+    "direct writes to main",
+    "merge of PR 8",
+    "Production alias, domain or release changes",
+    "real-money payment, live ads or production gacha/wallet activation",
+    "deletion or mutation of sealed historical evidence",
+    "claiming existing S02 is visually approved",
+    "claiming physical-iPhone verification without physical evidence",
+    "mass production of final assets before representative in-engine proof"
+  ],
+  "v2Stages": [
+    {
+      "id": "V2-0",
+      "name": "BOOTSTRAP",
+      "exit": "task/v2-bootstrap PR establishes a buildable typed game shell, shared package boundaries, Playwright smoke checks and Vercel Preview without Production changes."
+    },
+    {
+      "id": "V2-1",
+      "name": "FIRST_PLAYABLE",
+      "exit": "Four cats automatically fight one enemy family for three minutes with attack, hit, damage, defeat, coin, level-up and next-enemy causality on mobile."
+    },
+    {
+      "id": "V2-2",
+      "name": "ONE_TO_TEN_VERTICAL_SLICE",
+      "exit": "The player journey from launch through the 10F boss and 11F connection works with recovery, save and representative production assets."
+    }
+  ],
+  "firstPlayableAutoFail": [
+    "battle is a static animation without domain state",
+    "enemy defeat does not cause reward and progression",
+    "uncaught browser error",
+    "same deterministic seed produces a different event sequence",
+    "320x568, 390x844 or 430x932 loses primary combat information",
+    "Production or main is modified"
+  ],
+  "openMigrationFindings": [
+    {
+      "id": "V2-PR8-STALE-001",
+      "severity": "P1",
+      "status": "RESOLVE_BY_CLOSING_WITHOUT_MERGE"
+    },
+    {
+      "id": "V2-KIMI-PROTECTION-001",
+      "severity": "P1",
+      "status": "OPEN_UNTIL_V2_CI_CONTEXT_EXISTS_AND_PROTECTION_IS_ENABLED"
+    },
+    {
+      "id": "V2-BOOTSTRAP-001",
+      "severity": "P1",
+      "status": "OPEN_UNTIL_BOOTSTRAP_PR_PASSES"
+    }
+  ],
+  "production": {
+    "allowed": false,
+    "aliasChanged": false,
+    "ready": false
+  },
+  "physicalIPhoneVerified": false,
+  "nextAuthorizedAction": "Commit this transition bridge on kimi, close PR 8 without merge, create task/v2-bootstrap from the exact bridge commit, and build the V2 scaffold through a pull request to kimi."
+}

@@ -2,17 +2,18 @@
 
 猫と猫人の4体編成を育て、店舗・配送の支援を受けながら上限のない塔を登る、スマートフォン縦画面向け放置インクリメンタルRPG。
 
+## Current development mode
+
 ```text
-STEP4_STATUS: IN_PROGRESS
-STEP5_ALLOWED: false
-PRODUCTION_ALIAS_CHANGED: false
+PIPELINE: AI_NATIVE_V2
+STAGE: V2-0-BOOTSTRAP
+INTEGRATION_BRANCH: kimi
+TASK_BRANCHES: task/*
+PRODUCTION_ALLOWED: false
 PRODUCTION_READY: false
 PHYSICAL_IPHONE_VERIFIED: false
-USER_VISUAL_APPROVAL: false
 ```
 
-CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json | STEP 4 | S02-P1-GOLDEN-MASTER | READY_FOR_USER_VISUAL_REVIEW
+Product canon, the executable model contract and model validation are preserved. The legacy root runtime and existing S02 Golden Masters are references, not the canonical V2 game and not visually approved.
 
-## Current work
-
-Repository Step 4 remains in progress under round 034. The 10 internal Golden Master repair groups are independently resolved and the eight individual states are ready for user visual review on the immutable Preview deployment. User approval is not yet obtained. Runtime, gameplay numbers, economy, save data, backend, Production and physical-device verdicts are unchanged.
+The current goal is not another static screen set. It is a buildable V2 shell followed by a mobile First Playable in which four cats fight, defeat enemies, earn coin, level up and continue for three minutes.
