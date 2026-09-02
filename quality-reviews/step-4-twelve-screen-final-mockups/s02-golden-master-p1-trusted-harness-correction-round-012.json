@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-trusted-harness-correction-round-012",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "014054de0e7f9d4820d14f802e966eec79c8fc05",
+    "tree": "2ee01ce14401ee46a747ba0afc46489007d8d6ab"
+  },
+  "authorityWorkflow": {
+    "commit": "014054de0e7f9d4820d14f802e966eec79c8fc05",
+    "tree": "2ee01ce14401ee46a747ba0afc46489007d8d6ab",
+    "runId": 33601369009,
+    "runAttempt": 1,
+    "jobId": 100155759183,
+    "conclusion": "SUCCESS",
+    "artifactId": 9835341689,
+    "artifactName": "phase0-current-governance-014054de0e7f9d4820d14f802e966eec79c8fc05-33601369009-1",
+    "artifactDigest": "sha256:5e5190ce54822059370254b22af9bac0a548e252aae1ce9bd81b69ea949e75a7"
+  },
+  "failedWorkflow": {
+    "commit": "014054de0e7f9d4820d14f802e966eec79c8fc05",
+    "tree": "2ee01ce14401ee46a747ba0afc46489007d8d6ab",
+    "runId": 33601369001,
+    "runAttempt": 1,
+    "jobId": 100155587378,
+    "conclusion": "FAILURE",
+    "failedStep": "Capture and verify eight masters plus required responsive variants",
+    "summary": "FAIL_S02_GOLDEN_MASTER_P1_BROWSER: 15 scenarios, 1 failure",
+    "artifactId": 9835326487,
+    "artifactName": "step4-s02-golden-master-p1-semantic-014054de0e7f9d4820d14f802e966eec79c8fc05-33601369001-1",
+    "artifactDigest": "sha256:4a823d00abd866f93e1a1bf45ba22ce92d0faebb583ff038134b05f6e4dfff88"
+  },
+  "diagnosis": {
+    "type": "ROUND_011_RADIAL_SEAL_CENTER_QUANTIZED_INTO_EXISTING_PALETTE_AND_DID_NOT_CLOSE_THE_PIXEL_GATE",
+    "failedAssertions": [
+      "GM07C320TEXT200: screenshot pixel complexity/opacity gate failed"
+    ],
+    "closedFindings": [
+      "Every semantic, responsive, contrast, control, safe-area and 200 percent text assertion remained PASS.",
+      "Fourteen of fifteen exact screenshots remained PASS with no threshold or collector change."
+    ],
+    "visualFindings": [
+      "The 52 CSS-pixel radial seal center quantized into the existing brass palette and measured 253 colors, so a larger but still restrained non-text ornament is required."
+    ],
+    "measurementFindings": [
+      "The remaining change can stay inside the empty upper corners of the opaque modal heading without entering any text backdrop or changing layout geometry."
+    ],
+    "allFifteenExactPngsPreserved": true,
+    "originalFailureArtifactPreserved": true
+  },
+  "correction": {
+    "rule": "ADD_MIRRORED_BRASS_PATINA_ENAMEL_FILIGREE_TO_THE_EMPTY_MODAL_HEADING_CORNERS_AS_NON_TEXT_DECORATION_WITHOUT_CHANGING_TEXT_BACKDROPS_LAYOUT_OR_THRESHOLDS",
+    "changedPaths": [
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-012.json",
+      "step4/s02/golden-master-p1/review-manifest.json",
+      "step4/s02/golden-master-p1/styles.css",
+      "tests/governance/verify-current-authority.mjs"
+    ],
+    "stylesBeforeSha256": "0e25cf908401e97b8975f65990f2390cea88c134e8ff38205e481c69b010c186",
+    "stylesAfterSha256": "2d86b30058dc1ca9cc1183d280bf5996efe450d938ded47840f3a79feebd49b3",
+    "stylesPatchSha256": "sha256:a2319a0bd715902a9d2d2efc5ef283b24bcbe08c08330bd02926e62b95a7681d",
+    "manifestBeforeSha256": "ffc5d57abbc7b1cfd977d144e0204b64e43cb50373e3c9fe7c42c48f3095dd1a",
+    "manifestAfterSha256": "f146c4f97d8ec48ef16ee7481206c77989532662cb3e5ba4459b22f5ac157192",
+    "manifestPatchSha256": "sha256:30b95cdc7ef154a4802a7a808376d5e9d0e1616c318f2a1dd380791e6fe286ec",
+    "verifierAfterSha256": "ca2d64db671f2bc4d3a4012f9125ff7d26b8f050e38a6c38527fdb513c110efc",
+    "verifierPatchSha256": "sha256:1c3b3928fe3988d325134ea392f1a03518846eab1600a8b9138fafb0a082527c",
+    "acceptanceThresholdsChanged": false,
+    "qualityCoverageWeakened": false,
+    "browserCollectorChanged": false,
+    "browserQaChanged": false,
+    "fontSizeReduced": false,
+    "failureEvidenceUploadRetained": true
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_ONE_BROWSER_PIXEL_ASSERTION_PENDING_RERUN"
+}

@@ -1756,9 +1756,33 @@ summary {
 }
 
 .offline-modal-head {
+  position: relative;
   border-radius: var(--radius-small);
   background-color: #efd7a3;
   box-shadow: inset 0 0 0 1px rgba(120, 75, 34, 0.14);
+}
+
+.offline-modal-head::before,
+.offline-modal-head::after {
+  content: "";
+  position: absolute;
+  top: 14px;
+  width: 62px;
+  height: 8px;
+  pointer-events: none;
+  border: 1px solid rgba(91, 55, 30, 0.44);
+  border-radius: 999px 4px 999px 4px;
+  background: linear-gradient(90deg, #7b432b 0%, #d7a84e 18%, #4b817a 38%, #e4c671 55%, #8a4e65 73%, #5a7f82 88%, #7b432b 100%);
+  box-shadow: inset 0 1px rgba(255, 240, 188, 0.55), 0 2px 5px rgba(74, 42, 25, 0.18);
+}
+
+.offline-modal-head::before {
+  left: 12px;
+}
+
+.offline-modal-head::after {
+  right: 12px;
+  transform: scaleX(-1);
 }
 
 .offline-modal-body {

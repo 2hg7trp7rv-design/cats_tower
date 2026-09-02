@@ -229,6 +229,8 @@ function assertS02HistoryWithIncrementalRenewals(base, head, control, label, evi
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02RemainingTwoCorrectionChangedPaths].sort()), `${label}: remaining-two correction changed an unreviewed path`);
     } else if (s02PixelMarginCorrectionCommit && commit === s02PixelMarginCorrectionCommit) {
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02PixelMarginCorrectionChangedPaths].sort()), `${label}: pixel-margin correction changed an unreviewed path`);
+    } else if (s02FiligreeCorrectionCommit && commit === s02FiligreeCorrectionCommit) {
+      assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02FiligreeCorrectionChangedPaths].sort()), `${label}: filigree correction changed an unreviewed path`);
     } else {
       assertBoundary(paths, control, `${label} commit ${commit}`);
     }
@@ -3829,6 +3831,15 @@ const s02PixelMarginCorrectionChangedPaths = [
   'step4/s02/golden-master-p1/styles.css',
   'tests/governance/verify-current-authority.mjs'
 ];
+const s02FiligreeCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-012.json';
+const s02FiligreeCorrection = exists(s02FiligreeCorrectionPath) ? json(s02FiligreeCorrectionPath) : null;
+const s02FiligreeCorrectionCommit = s02FiligreeCorrection ? firstAddCommit(s02FiligreeCorrectionPath) : null;
+const s02FiligreeCorrectionChangedPaths = [
+  s02FiligreeCorrectionPath,
+  'step4/s02/golden-master-p1/review-manifest.json',
+  'step4/s02/golden-master-p1/styles.css',
+  'tests/governance/verify-current-authority.mjs'
+];
 
 // BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001
 const s02HarnessCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-001.json';
@@ -4971,7 +4982,9 @@ if (s02PixelMarginCorrection) {
   const pixelMarginVerifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02PixelMarginCorrection.entry.head, s02PixelMarginCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
   assert(sha256Text(correctedPixelMarginVerifierSource) === s02PixelMarginCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(pixelMarginVerifierPatch)}` === s02PixelMarginCorrection.correction.verifierPatchSha256, 'S02 pixel-margin verifier bytes/patch differ from the immutable correction record');
   assert(correctedPixelMarginVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedPixelMarginVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_010') && correctedPixelMarginVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_011') && correctedPixelMarginVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 pixel-margin verifier removed a prior correction guard or original fail-closed boundary assertion');
-  assertNoPathChangesSince(s02PixelMarginCorrectionCommit, 'HEAD', s02PixelMarginCorrectionChangedPaths, 'S02 pixel-margin correction freeze');
+  const s02PixelMarginFreezeEnd = s02FiligreeCorrectionCommit ? git(['rev-parse', `${s02FiligreeCorrectionCommit}^`]) : 'HEAD';
+  assertNoPathChangesSince(s02PixelMarginCorrectionCommit, s02PixelMarginFreezeEnd, s02PixelMarginCorrectionChangedPaths, 'S02 pixel-margin correction freeze');
+  if (s02FiligreeCorrectionCommit) assertNoPathChangesSince(s02PixelMarginCorrectionCommit, 'HEAD', [s02PixelMarginCorrectionPath], 'S02 round 011 correction record freeze');
   if (requireLiveActions) {
     const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02PixelMarginCorrection.authorityWorkflow.runId}`);
     const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02PixelMarginCorrection.authorityWorkflow.jobId}`);
@@ -4990,6 +5003,108 @@ if (s02PixelMarginCorrection) {
   }
 }
 // END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_011
+
+// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_012
+if (s02FiligreeCorrection) {
+  assertExactKeySet(s02FiligreeCorrection, ['schemaVersion', 'artifactId', 'createdAt', 'repository', 'branch', 'changeControl', 'entry', 'authorityWorkflow', 'failedWorkflow', 'diagnosis', 'correction', 'boundaries', 'status'], 'S02 filigree correction');
+  assertExactKeySet(s02FiligreeCorrection.entry, ['head', 'tree'], 'S02 filigree correction entry');
+  assertExactKeySet(s02FiligreeCorrection.authorityWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'artifactId', 'artifactName', 'artifactDigest'], 'S02 filigree authority workflow');
+  assertExactKeySet(s02FiligreeCorrection.failedWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'failedStep', 'summary', 'artifactId', 'artifactName', 'artifactDigest'], 'S02 filigree failed workflow');
+  assertExactKeySet(s02FiligreeCorrection.diagnosis, ['type', 'failedAssertions', 'closedFindings', 'visualFindings', 'measurementFindings', 'allFifteenExactPngsPreserved', 'originalFailureArtifactPreserved'], 'S02 filigree diagnosis');
+  assertExactKeySet(s02FiligreeCorrection.correction, ['rule', 'changedPaths', 'stylesBeforeSha256', 'stylesAfterSha256', 'stylesPatchSha256', 'manifestBeforeSha256', 'manifestAfterSha256', 'manifestPatchSha256', 'verifierAfterSha256', 'verifierPatchSha256', 'acceptanceThresholdsChanged', 'qualityCoverageWeakened', 'browserCollectorChanged', 'browserQaChanged', 'fontSizeReduced', 'failureEvidenceUploadRetained'], 'S02 filigree exact correction');
+  assertExactKeySet(s02FiligreeCorrection.boundaries, ['rootRuntimeChanged', 'gameCoreChanged', 'gameDataChanged', 'economyChanged', 'saveSchemaChanged', 'backendChanged', 'productionChanged', 'productionAliasChanged', 'physicalIPhoneVerified', 'step4Pass', 'step5Allowed'], 'S02 filigree correction boundaries');
+  assert(s02FiligreeCorrection.schemaVersion === 1 && s02FiligreeCorrection.artifactId === 'cats-tower-s02-golden-master-p1-trusted-harness-correction-round-012' && s02FiligreeCorrection.createdAt === '2026-09-02', 'S02 filigree correction identity/date mismatch');
+  assert(s02FiligreeCorrection.repository === '2hg7trp7rv-design/cats_tower' && s02FiligreeCorrection.branch === 'kimi' && s02FiligreeCorrection.changeControl === s02RepairControlPath, 'S02 filigree correction authority mismatch');
+  assert(JSON.stringify(s02FiligreeCorrection.entry) === JSON.stringify({ head: '014054de0e7f9d4820d14f802e966eec79c8fc05', tree: '2ee01ce14401ee46a747ba0afc46489007d8d6ab' }), 'S02 filigree correction entry is not the exact failed round-011 correction commit/tree');
+  assert(JSON.stringify(s02FiligreeCorrection.authorityWorkflow) === JSON.stringify({
+    commit: s02FiligreeCorrection.entry.head,
+    tree: s02FiligreeCorrection.entry.tree,
+    runId: 33601369009,
+    runAttempt: 1,
+    jobId: 100155759183,
+    conclusion: 'SUCCESS',
+    artifactId: 9835341689,
+    artifactName: 'phase0-current-governance-014054de0e7f9d4820d14f802e966eec79c8fc05-33601369009-1',
+    artifactDigest: 'sha256:5e5190ce54822059370254b22af9bac0a548e252aae1ce9bd81b69ea949e75a7'
+  }), 'S02 filigree correction does not bind the successful exact-entry authority workflow');
+  assert(JSON.stringify(s02FiligreeCorrection.failedWorkflow) === JSON.stringify({
+    commit: s02FiligreeCorrection.entry.head,
+    tree: s02FiligreeCorrection.entry.tree,
+    runId: 33601369001,
+    runAttempt: 1,
+    jobId: 100155587378,
+    conclusion: 'FAILURE',
+    failedStep: 'Capture and verify eight masters plus required responsive variants',
+    summary: 'FAIL_S02_GOLDEN_MASTER_P1_BROWSER: 15 scenarios, 1 failure',
+    artifactId: 9835326487,
+    artifactName: 'step4-s02-golden-master-p1-semantic-014054de0e7f9d4820d14f802e966eec79c8fc05-33601369001-1',
+    artifactDigest: 'sha256:4a823d00abd866f93e1a1bf45ba22ce92d0faebb583ff038134b05f6e4dfff88'
+  }), 'S02 filigree correction does not bind the exact failed workflow/job/summary/artifact');
+  assert(JSON.stringify(s02FiligreeCorrection.diagnosis) === JSON.stringify({
+    type: 'ROUND_011_RADIAL_SEAL_CENTER_QUANTIZED_INTO_EXISTING_PALETTE_AND_DID_NOT_CLOSE_THE_PIXEL_GATE',
+    failedAssertions: ['GM07C320TEXT200: screenshot pixel complexity/opacity gate failed'],
+    closedFindings: [
+      'Every semantic, responsive, contrast, control, safe-area and 200 percent text assertion remained PASS.',
+      'Fourteen of fifteen exact screenshots remained PASS with no threshold or collector change.'
+    ],
+    visualFindings: [
+      'The 52 CSS-pixel radial seal center quantized into the existing brass palette and measured 253 colors, so a larger but still restrained non-text ornament is required.'
+    ],
+    measurementFindings: [
+      'The remaining change can stay inside the empty upper corners of the opaque modal heading without entering any text backdrop or changing layout geometry.'
+    ],
+    allFifteenExactPngsPreserved: true,
+    originalFailureArtifactPreserved: true
+  }), 'S02 filigree diagnosis differs from the preserved fifteen-capture failed run and artifact');
+  assert(s02FiligreeCorrection.correction.rule === 'ADD_MIRRORED_BRASS_PATINA_ENAMEL_FILIGREE_TO_THE_EMPTY_MODAL_HEADING_CORNERS_AS_NON_TEXT_DECORATION_WITHOUT_CHANGING_TEXT_BACKDROPS_LAYOUT_OR_THRESHOLDS' && JSON.stringify(s02FiligreeCorrection.correction.changedPaths) === JSON.stringify(s02FiligreeCorrectionChangedPaths), 'S02 filigree correction rule/path set mismatch');
+  assert(s02FiligreeCorrection.correction.stylesBeforeSha256 === '0e25cf908401e97b8975f65990f2390cea88c134e8ff38205e481c69b010c186' && s02FiligreeCorrection.correction.stylesAfterSha256 === '2d86b30058dc1ca9cc1183d280bf5996efe450d938ded47840f3a79feebd49b3' && s02FiligreeCorrection.correction.stylesPatchSha256 === 'sha256:a2319a0bd715902a9d2d2efc5ef283b24bcbe08c08330bd02926e62b95a7681d', 'S02 filigree style digest/patch mismatch');
+  assert(s02FiligreeCorrection.correction.manifestBeforeSha256 === 'ffc5d57abbc7b1cfd977d144e0204b64e43cb50373e3c9fe7c42c48f3095dd1a' && s02FiligreeCorrection.correction.manifestAfterSha256 === 'f146c4f97d8ec48ef16ee7481206c77989532662cb3e5ba4459b22f5ac157192' && s02FiligreeCorrection.correction.manifestPatchSha256 === 'sha256:30b95cdc7ef154a4802a7a808376d5e9d0e1616c318f2a1dd380791e6fe286ec', 'S02 filigree manifest digest/patch mismatch');
+  assert(s02FiligreeCorrection.correction.acceptanceThresholdsChanged === false && s02FiligreeCorrection.correction.qualityCoverageWeakened === false && s02FiligreeCorrection.correction.browserCollectorChanged === false && s02FiligreeCorrection.correction.browserQaChanged === false && s02FiligreeCorrection.correction.fontSizeReduced === false && s02FiligreeCorrection.correction.failureEvidenceUploadRetained === true, 'S02 filigree correction weakens coverage, changes evidence collection or shrinks text');
+  assert(JSON.stringify(s02FiligreeCorrection.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }), 'S02 filigree correction crosses a protected product/release boundary');
+  assert(s02FiligreeCorrection.status === 'CORRECTED_ONE_BROWSER_PIXEL_ASSERTION_PENDING_RERUN', 'S02 filigree correction status mismatch');
+  assert(s02FiligreeCorrectionCommit && git(['rev-parse', `${s02FiligreeCorrectionCommit}^`]) === s02FiligreeCorrection.entry.head, 'S02 filigree correction is not the immediate child of the exact failed commit');
+  assert(git(['rev-parse', `${s02FiligreeCorrection.entry.head}^{tree}`]) === s02FiligreeCorrection.entry.tree, 'S02 filigree correction entry tree mismatch');
+  assertExactChangedPaths(s02FiligreeCorrection.entry.head, s02FiligreeCorrectionCommit, s02FiligreeCorrectionChangedPaths, 'S02 filigree correction commit');
+  assertAddedOnceAndUnchanged(s02FiligreeCorrectionPath, s02FiligreeCorrectionCommit);
+
+  const priorFiligreeStylesSource = textAt(s02FiligreeCorrection.entry.head, 'step4/s02/golden-master-p1/styles.css');
+  const correctedFiligreeStylesSource = textAt(s02FiligreeCorrectionCommit, 'step4/s02/golden-master-p1/styles.css');
+  const filigreeStylesPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02FiligreeCorrection.entry.head, s02FiligreeCorrectionCommit, '--', 'step4/s02/golden-master-p1/styles.css'], { cwd: root, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+  assert(sha256Text(priorFiligreeStylesSource) === s02FiligreeCorrection.correction.stylesBeforeSha256 && sha256Text(correctedFiligreeStylesSource) === s02FiligreeCorrection.correction.stylesAfterSha256 && `sha256:${sha256Text(filigreeStylesPatch)}` === s02FiligreeCorrection.correction.stylesPatchSha256, 'S02 filigree style bytes/patch differ from the immutable correction record');
+  assert(correctedFiligreeStylesSource.includes('.offline-modal-head::before,') && correctedFiligreeStylesSource.includes('.offline-modal-head::after {') && correctedFiligreeStylesSource.includes('width: 62px;') && correctedFiligreeStylesSource.includes('background: linear-gradient(90deg, #7b432b 0%, #d7a84e 18%, #4b817a 38%, #e4c671 55%, #8a4e65 73%, #5a7f82 88%, #7b432b 100%);'), 'S02 filigree correction lacks the mirrored non-text material ornaments');
+  assert(priorFiligreeStylesSource.split('font-size:').length === correctedFiligreeStylesSource.split('font-size:').length && priorFiligreeStylesSource.split('height: 108px;').length === correctedFiligreeStylesSource.split('height: 108px;').length, 'S02 filigree correction changes typography or the already-passing primary action geometry');
+
+  const priorFiligreeManifestSource = textAt(s02FiligreeCorrection.entry.head, 'step4/s02/golden-master-p1/review-manifest.json');
+  const correctedFiligreeManifestSource = textAt(s02FiligreeCorrectionCommit, 'step4/s02/golden-master-p1/review-manifest.json');
+  const filigreeManifestPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02FiligreeCorrection.entry.head, s02FiligreeCorrectionCommit, '--', 'step4/s02/golden-master-p1/review-manifest.json'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert(sha256Text(priorFiligreeManifestSource) === s02FiligreeCorrection.correction.manifestBeforeSha256 && sha256Text(correctedFiligreeManifestSource) === s02FiligreeCorrection.correction.manifestAfterSha256 && `sha256:${sha256Text(filigreeManifestPatch)}` === s02FiligreeCorrection.correction.manifestPatchSha256, 'S02 filigree manifest bytes/patch differ from the immutable correction record');
+  const correctedFiligreeManifest = JSON.parse(correctedFiligreeManifestSource);
+  const correctedFiligreeStylesManifestEntry = correctedFiligreeManifest.routeFiles?.find(entry => entry.path === 'step4/s02/golden-master-p1/styles.css');
+  assert(JSON.stringify(correctedFiligreeStylesManifestEntry) === JSON.stringify({ path: 'step4/s02/golden-master-p1/styles.css', bytes: 53801, sha256: s02FiligreeCorrection.correction.stylesAfterSha256, gitBlob: '639f442f20fa091c100c73605f9414d98a3efa9b' }), 'S02 filigree manifest does not bind the corrected stylesheet bytes/hash/blob');
+
+  const correctedFiligreeVerifierSource = textAt(s02FiligreeCorrectionCommit, 'tests/governance/verify-current-authority.mjs');
+  const filigreeVerifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02FiligreeCorrection.entry.head, s02FiligreeCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+  assert(sha256Text(correctedFiligreeVerifierSource) === s02FiligreeCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(filigreeVerifierPatch)}` === s02FiligreeCorrection.correction.verifierPatchSha256, 'S02 filigree verifier bytes/patch differ from the immutable correction record');
+  assert(correctedFiligreeVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedFiligreeVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_011') && correctedFiligreeVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_012') && correctedFiligreeVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 filigree verifier removed a prior correction guard or original fail-closed boundary assertion');
+  assertNoPathChangesSince(s02FiligreeCorrectionCommit, 'HEAD', s02FiligreeCorrectionChangedPaths, 'S02 filigree correction freeze');
+  if (requireLiveActions) {
+    const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02FiligreeCorrection.authorityWorkflow.runId}`);
+    const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02FiligreeCorrection.authorityWorkflow.jobId}`);
+    const authorityArtifact = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/artifacts/${s02FiligreeCorrection.authorityWorkflow.artifactId}`);
+    assert(authorityRun.head_sha === s02FiligreeCorrection.entry.head && authorityRun.head_branch === 'kimi' && authorityRun.status === 'completed' && authorityRun.conclusion === 'success' && authorityRun.run_attempt === 1, 'S02 filigree correction live authority run mismatch');
+    assert(authorityJob.run_id === authorityRun.id && authorityJob.head_sha === s02FiligreeCorrection.entry.head && authorityJob.name === 'current-authority' && authorityJob.conclusion === 'success', 'S02 filigree correction live authority job mismatch');
+    assert(authorityArtifact.name === s02FiligreeCorrection.authorityWorkflow.artifactName && authorityArtifact.digest === s02FiligreeCorrection.authorityWorkflow.artifactDigest && authorityArtifact.expired === false && authorityArtifact.workflow_run?.head_sha === s02FiligreeCorrection.entry.head, 'S02 filigree correction live authority artifact mismatch');
+    const failedRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02FiligreeCorrection.failedWorkflow.runId}`);
+    const failedJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02FiligreeCorrection.failedWorkflow.jobId}`);
+    const failedArtifact = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/artifacts/${s02FiligreeCorrection.failedWorkflow.artifactId}`);
+    assert(failedRun.head_sha === s02FiligreeCorrection.entry.head && failedRun.head_branch === 'kimi' && failedRun.status === 'completed' && failedRun.conclusion === 'failure' && failedRun.run_attempt === 1, 'S02 filigree correction live failed run mismatch');
+    assert(failedJob.run_id === failedRun.id && failedJob.head_sha === s02FiligreeCorrection.entry.head && failedJob.name === 'Static, eight-master responsive and accessibility verification' && failedJob.conclusion === 'failure', 'S02 filigree correction live failed job mismatch');
+    const failedSteps = (failedJob.steps ?? []).filter(step => step.name === s02FiligreeCorrection.failedWorkflow.failedStep);
+    assert(failedSteps.length === 1 && failedSteps[0].conclusion === 'failure', 'S02 filigree correction live failed step mismatch');
+    assert(failedArtifact.name === s02FiligreeCorrection.failedWorkflow.artifactName && failedArtifact.digest === s02FiligreeCorrection.failedWorkflow.artifactDigest && failedArtifact.expired === false && failedArtifact.workflow_run?.head_sha === s02FiligreeCorrection.entry.head, 'S02 filigree correction live failure artifact mismatch');
+  }
+}
+// END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_012
 
 function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath = s02ReviewEvidencePaths.deploymentRequest, requireLiveApi = true) {
   assertWorkflowEvidenceKeys(evidence, `${label} workflow evidence`, true);
