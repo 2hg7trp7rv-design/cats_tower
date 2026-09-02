@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-preview-readback-request-round-001",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "verifiedContent": {
+    "commit": "0fa6ac052ca303f24b6e0cf859322792491fcdef",
+    "tree": "61866194848cedaf2ffc52b199f122f5fb0daf79"
+  },
+  "completion": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-completion-evidence-round-001.json",
+    "blob": "641ad46524a00fc0ff19a887b252eb4fb3292784"
+  },
+  "review": {
+    "branchAlias": "https://catstower-git-kimi-shinyaaas-projects.vercel.app",
+    "route": "/step4/s02/golden-master-p1/",
+    "manifestPath": "step4/s02/golden-master-p1/review-manifest.json",
+    "manifestBlob": "2115f150fb3db2184020675ccf3dec6313aca3b8",
+    "requiredLabels": [
+      "DESIGN REVIEW",
+      "S02 GOLDEN MASTER",
+      "NOT RUNTIME"
+    ],
+    "goldenMasters": [
+      "GM01",
+      "GM02",
+      "GM03",
+      "GM04",
+      "GM05",
+      "GM06",
+      "GM07",
+      "GM08"
+    ],
+    "temporaryAccess": {
+      "kind": "VERCEL_TEMPORARY_SHARE_23H",
+      "url": "https://catstower-git-kimi-shinyaaas-projects.vercel.app/step4/s02/golden-master-p1/?_vercel_share=MUR4cIo1ECuoMiD4YVR0FTd8GKMlkUkE",
+      "expiresAt": "2026-09-03T07:40:44Z"
+    }
+  },
+  "maximumVerdict": "PENDING_EXTERNAL_PREVIEW_READBACK"
+}
