@@ -197,7 +197,12 @@ jobs:
           ORIGIN_ACCESS_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-origin-access-correction-round-005.json'
           PROTECTED_ALIAS_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-protected-alias-proof-boundary-correction-round-006.json'
           CANONICAL_REDIRECT_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-canonical-path-redirect-correction-round-007.json'
-          if test -f "$CANONICAL_REDIRECT_CORRECTION"; then
+          TREE_INVENTORY_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-route-tree-inventory-correction-round-008.json'
+          if test -f "$TREE_INVENTORY_CORRECTION"; then
+            test "$(git log --diff-filter=A --format=%H -- "$TREE_INVENTORY_CORRECTION" | tail -n 1)" = "$GITHUB_SHA"
+            test "$(git rev-parse HEAD^)" = "$(jq -er '.entry.head' "$TREE_INVENTORY_CORRECTION")"
+            test "$(jq -er '.request.commit' "$TREE_INVENTORY_CORRECTION")" = "$REQUEST_COMMIT"
+          elif test -f "$CANONICAL_REDIRECT_CORRECTION"; then
             test "$(git log --diff-filter=A --format=%H -- "$CANONICAL_REDIRECT_CORRECTION" | tail -n 1)" = "$GITHUB_SHA"
             test "$(git rev-parse HEAD^)" = "$(jq -er '.entry.head' "$CANONICAL_REDIRECT_CORRECTION")"
             test "$(jq -er '.request.commit' "$CANONICAL_REDIRECT_CORRECTION")" = "$REQUEST_COMMIT"
@@ -422,13 +427,21 @@ jobs:
             's02-golden-master-p1-responsive-contract.json',
             's02-golden-master-p1-feasibility-audit.json'
           ].map(value => `${reviewPrefix}${value}`).sort();
-          const treeEntries = execFileSync('git', ['ls-tree', '-r', '-z', request.verifiedContent.commit, '--', prefix], { encoding: 'utf8' })
+          const allRouteTreeEntries = execFileSync('git', ['ls-tree', '-r', '-z', request.verifiedContent.commit, '--', prefix], { encoding: 'utf8' })
             .split('\0').filter(Boolean).map(line => {
               const match = /^(\d{6}) (\w+) ([a-f0-9]{40})\t(.+)$/.exec(line);
               if (!match) throw new Error(`REVIEW_TREE_ENTRY_INVALID:${line}`);
               return { mode: match[1], type: match[2], blob: match[3], path: match[4] };
-            }).filter(entry => entry.path !== request.review.manifestPath).sort((a, b) => a.path.localeCompare(b.path));
-          if (JSON.stringify(treeEntries.map(entry => entry.path)) !== JSON.stringify(routeTargets)) throw new Error('REVIEW_TREE_FILE_SET_INVALID');
+            }).sort((a, b) => a.path.localeCompare(b.path));
+          const nonServedSupportTargets = [
+            request.review.manifestPath,
+            `${prefix}browser-qa/package-lock.json`,
+            `${prefix}browser-qa/package.json`
+          ].sort();
+          const exactRouteTreeTargets = [...routeTargets, ...nonServedSupportTargets].sort();
+          if (JSON.stringify(allRouteTreeEntries.map(entry => entry.path)) !== JSON.stringify(exactRouteTreeTargets)) throw new Error('REVIEW_ROUTE_TREE_INVENTORY_INVALID');
+          if (allRouteTreeEntries.some(entry => entry.mode !== '100644' || entry.type !== 'blob')) throw new Error('REVIEW_ROUTE_TREE_ENTRY_TYPE_INVALID');
+          const treeEntries = allRouteTreeEntries.filter(entry => routeTargets.includes(entry.path));
           const record = target => {
             const entry = treeEntries.find(candidate => candidate.path === target)
               ?? (() => {

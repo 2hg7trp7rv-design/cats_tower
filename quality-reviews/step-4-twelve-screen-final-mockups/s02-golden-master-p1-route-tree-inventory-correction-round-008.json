@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-route-tree-inventory-correction-round-008",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "1d345cf08a955b4fb73c2f2637a07af2ae4cebde",
+    "tree": "76dd0602c03e3f510016450b1bf8eb00c84037fd"
+  },
+  "failedWorkflow": {
+    "commit": "1d345cf08a955b4fb73c2f2637a07af2ae4cebde",
+    "tree": "76dd0602c03e3f510016450b1bf8eb00c84037fd",
+    "runId": 33622412727,
+    "runAttempt": 1,
+    "jobId": 100222465333,
+    "conclusion": "FAILURE",
+    "failedStep": "Generate external S02 Preview proof",
+    "error": "REVIEW_TREE_FILE_SET_INVALID"
+  },
+  "request": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-request-round-001.json",
+    "commit": "e5ba5ed92d0eeb0da67f956637b7ebb1cb6c2a11",
+    "tree": "f706c3146d09f3c30368e0e0d4a92afbfd7850da",
+    "blob": "c034073b7b9beaa34bcffd4a685e36fefc3a0861"
+  },
+  "priorCorrection": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-canonical-path-redirect-correction-round-007.json",
+    "commit": "1d345cf08a955b4fb73c2f2637a07af2ae4cebde",
+    "tree": "76dd0602c03e3f510016450b1bf8eb00c84037fd",
+    "blob": "375d3df432665de302c9d23c33e1661314f062d2"
+  },
+  "diagnosis": {
+    "type": "REVIEW_ROUTE_TREE_INCLUDED_THREE_EXPLICIT_NON_SERVED_SUPPORT_FILES",
+    "routeTreeFileCount": 13,
+    "servedRouteFileCount": 10,
+    "nonServedSupportFiles": [
+      "step4/s02/golden-master-p1/browser-qa/package-lock.json",
+      "step4/s02/golden-master-p1/browser-qa/package.json",
+      "step4/s02/golden-master-p1/review-manifest.json"
+    ],
+    "unexpectedFiles": [],
+    "productQualityAffected": false,
+    "originalFailurePreserved": true
+  },
+  "correction": {
+    "rule": "REQUIRE_EXACT_UNION_OF_SERVED_ROUTE_FILES_AND_THREE_FIXED_NON_SERVED_SUPPORT_FILES",
+    "changedPaths": [
+      ".github/workflows/verify-current-governance.yml",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-route-tree-inventory-correction-round-008.json",
+      "tests/governance/verify-current-authority.mjs"
+    ],
+    "repairedWorkflowBlob": "cc5b0ce3ad644c06c282324743f6c0e0670196f2",
+    "repairedVerifierBlob": "ee18c2056b68bc2a645d793b0ca1d37d391683fd",
+    "servedRouteManifestExact": true,
+    "nonServedSupportAllowlist": [
+      "step4/s02/golden-master-p1/browser-qa/package-lock.json",
+      "step4/s02/golden-master-p1/browser-qa/package.json",
+      "step4/s02/golden-master-p1/review-manifest.json"
+    ],
+    "exactUnionRequired": true,
+    "unexpectedFilesRejected": true,
+    "missingFilesRejected": true,
+    "fileModeAndTypeChecked": true,
+    "byteExactChecksRetained": true,
+    "responseCapsRetained": true,
+    "oidcProofRetained": true,
+    "providerSettingsChanged": false,
+    "productContentChanged": false
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_REVIEW_ROUTE_TREE_INVENTORY_PENDING_RERUN"
+}
