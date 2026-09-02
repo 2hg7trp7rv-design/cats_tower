@@ -11,8 +11,8 @@ PHYSICAL_IPHONE_VERIFIED: false
 USER_VISUAL_APPROVAL: false
 ```
 
-CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json | STEP 4 | STEP2-SCREEN-PROJECTION-CORRECTION | IN_PROGRESS_STEP2_SCREEN_PROJECTION_CORRECTION
+CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json | STEP 4 | S02-P1-GOLDEN-MASTER | IN_PROGRESS_S02_P1_A_J_AUDIT
 
 ## Current work
 
-Repository Step 4 remains in progress. Step 2 is `PASS_CONTRACT` under `simulation/executable-seal-v3.json` with Step 3 continuity verified; the active work is now the numbered corrected-Phase-0 review and exact round 033 closure before S02 audit resumes. Runtime, gameplay numbers, economy, save data, backend, Production and physical-device verdicts are unchanged.
+Repository Step 4 remains in progress. Corrected Phase 0 has returned authority to the S02-P1 Golden Master audit. The preserved design-review route and eight states are inputs, not accepted output; independently evidenced gaps must be repaired before user visual review. Runtime, gameplay numbers, economy, save data, backend, Production and physical-device verdicts are unchanged.

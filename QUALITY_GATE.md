@@ -11,17 +11,17 @@ PHYSICAL_IPHONE_VERIFIED: false
 USER_VISUAL_APPROVAL: false
 ```
 
-CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json | STEP 4 | STEP2-SCREEN-PROJECTION-CORRECTION | IN_PROGRESS_STEP2_SCREEN_PROJECTION_CORRECTION
+CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json | STEP 4 | S02-P1-GOLDEN-MASTER | IN_PROGRESS_S02_P1_A_J_AUDIT
 
 ## Current gate
 
 - Repository Step: `4` / `IN_PROGRESS`
-- Internal phase: `STEP2-SCREEN-PROJECTION-CORRECTION`
-- Step 2: `PASS_CONTRACT` under `simulation/executable-seal-v3.json`; immutable v2 remains historical evidence
-- Phase 0 unresolved P0/P1: `0 / 0` after the numbered round 031 independent re-critic
-- Current global P0/P1: `0 / 1` (S02 visual quality)
+- Step 2: `PASS_CONTRACT` under immutable v3 screen-projection seal
+- Step 3: `PASS_MODEL`; this is not runtime playtest evidence
+- Corrected Phase 0 unresolved P0/P1: `0 / 0`
+- Current S02 visual P1: `1` (`S4-RECOVERY-VIS-001`)
 - Step 4 PASS: `false`; Step 5 allowed: `false`
 
 ## Allowed next work
 
-The versioned S01-S12 screen projection is sealed by `simulation/executable-seal-v3.json` and Step 3 continuity is verified. Bind the numbered corrected Phase 0 review chain, then close through round 033. S02 product content remains read-only.
+Audit the preserved S02 A-J and GM01-GM08 under round 026, reuse conforming material and repair only evidenced gaps. The maximum before explicit user visual approval is `READY_FOR_USER_VISUAL_REVIEW`.

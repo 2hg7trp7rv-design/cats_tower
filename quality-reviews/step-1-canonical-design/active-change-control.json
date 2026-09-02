@@ -6,10 +6,10 @@
   "branch": "kimi",
   "status": "IN_PROGRESS",
   "currentAuthorityIndex": "CURRENT_AUTHORITY_INDEX.json",
-  "currentAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
-  "currentVerdict": "IN_PROGRESS_STEP2_SCREEN_PROJECTION_CORRECTION",
+  "currentAddendum": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
+  "currentVerdict": "IN_PROGRESS_S02_P1_A_J_AUDIT",
   "currentRepositoryStep": 4,
-  "currentInternalPhase": "STEP2-SCREEN-PROJECTION-CORRECTION",
+  "currentInternalPhase": "S02-P1-GOLDEN-MASTER",
   "supersededGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
   "step2ScreenProjectionCorrection": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
   "plannedGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
@@ -56,5 +56,6 @@
     "engine": "simulation/engine-v2/",
     "projectionVerifier": "tests/governance/verify-step2-screen-projection-round-032.mjs",
     "continuityVerifier": "tests/governance/verify-step3-continuity-round-032.mjs"
-  }
+  },
+  "governanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json"
 }

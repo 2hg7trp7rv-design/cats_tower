@@ -12,19 +12,20 @@ PHYSICAL_IPHONE_VERIFIED: false
 USER_VISUAL_APPROVAL: false
 ```
 
-CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json | STEP 4 | STEP2-SCREEN-PROJECTION-CORRECTION | IN_PROGRESS_STEP2_SCREEN_PROJECTION_CORRECTION
+CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json | STEP 4 | S02-P1-GOLDEN-MASTER | IN_PROGRESS_S02_P1_A_J_AUDIT
 
 ## Purpose
 
-Close corrected Phase 0 after `simulation/executable-seal-v3.json` and Step 3 continuity proved the versioned Step 2 repair without changing runtime, economy, save data, Production or device claims.
+Build a production-quality S02 Golden Master and implementation contract before replacing the actual game runtime.
 
 ## Completed so far
 
-The numbered round 031 re-critic passed; Phase 0 P0/P1 `0 / 0`; Step 2 is now `PASS_CONTRACT` under `simulation/executable-seal-v3.json`; Step 3 continuity is verified. Round 032 remains active only for numbered Phase 0 evidence and round 033 closure. The global P1 is the separate S02 visual finding. S02 A-J and GM01-GM08 remain read-only.
+Round 031 closure-integrity repair, the versioned Step 2 v3 screen projection, Step 3 continuity proof and numbered Phase 0 review chain are closed by round 033. Existing S02 A-J and GM01-GM08 are preserved but not visually accepted.
 
 ## Next
 
-1. bind the numbered Phase 0 independent critic
-2. bind final judge, completion and live readback
-3. close corrected Phase 0 under round 033
-4. return to round 026 and audit the preserved S02 Golden Master
+1. inventory the preserved S02 deliverables
+2. repair all independently evidenced visual P1 gaps
+3. verify 320–430 px responsive and accessibility boundaries
+4. publish only a Preview design-review route
+5. request explicit user visual review; do not infer approval

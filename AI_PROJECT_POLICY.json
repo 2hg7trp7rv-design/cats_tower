@@ -12,19 +12,20 @@
   },
   "authority": {
     "index": "CURRENT_AUTHORITY_INDEX.json",
-    "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
+    "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
     "supersededGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
     "step2ScreenProjectionCorrection": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
     "plannedGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
     "instructions": "CHATGPT_PROJECT_INSTRUCTIONS1.md",
     "playbook": "DEVELOPMENT_PLAYBOOK.md",
-    "projectSourceManifest": "PROJECT_SOURCE_MANIFEST.md"
+    "projectSourceManifest": "PROJECT_SOURCE_MANIFEST.md",
+    "governanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json"
   },
   "current": {
     "repositoryStep": 4,
-    "internalPhase": "STEP2-SCREEN-PROJECTION-CORRECTION",
+    "internalPhase": "S02-P1-GOLDEN-MASTER",
     "status": "IN_PROGRESS",
-    "verdict": "IN_PROGRESS_STEP2_SCREEN_PROJECTION_CORRECTION",
+    "verdict": "IN_PROGRESS_S02_P1_A_J_AUDIT",
     "step4Pass": false,
     "step5Allowed": false,
     "productionAllowed": false,
@@ -74,8 +75,8 @@
     "legacyOperationalWorkflowsRetired": true
   },
   "currentWriteBoundary": {
-    "allowed": "round 032 allowedWrites only",
-    "preWriteRequirement": "Complete the versioned Step 2 screen-projection correction, independent re-judgment, and corrected round 033 Phase 0 closure before any S02-P1 product write.",
+    "allowed": "round 026 allowedWrites only",
+    "preWriteRequirement": "S02-P1 product writes require exact round 026 scope; user visual approval is required before P2 asset production.",
     "forbidden": [
       "actual root replacement",
       "gameplay runtime mutation",

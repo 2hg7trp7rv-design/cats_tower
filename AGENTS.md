@@ -11,12 +11,8 @@ PHYSICAL_IPHONE_VERIFIED: false
 USER_VISUAL_APPROVAL: false
 ```
 
-CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json | STEP 4 | STEP2-SCREEN-PROJECTION-CORRECTION | IN_PROGRESS_STEP2_SCREEN_PROJECTION_CORRECTION
+CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json | STEP 4 | S02-P1-GOLDEN-MASTER | IN_PROGRESS_S02_P1_A_J_AUDIT
 
 ## Current authority
 
-Read `CURRENT_AUTHORITY_INDEX.json`, then round 032. Step 2 is `PASS_CONTRACT` under `simulation/executable-seal-v3.json`; write only the numbered corrected-Phase-0 critic, judge, completion, live readback and exact round 033 closure. Do not mutate S02 product content, runtime, economy, save, assets, Vercel Production or provider settings.
-
-## Required sequence
-
-Numbered Phase 0 independent critic, final judge, completion, live readback, then exact round 033 closure and return to the S02 audit.
+Read `CURRENT_AUTHORITY_INDEX.json`, then round 026. Audit the preserved S02 A-J and GM01-GM08 first. Reuse conforming content and repair only independently evidenced gaps. Do not replace the actual root runtime, change gameplay numbers, economy, save schema, backend, payment, ads, Production or physical-device verdicts during S02-P1.

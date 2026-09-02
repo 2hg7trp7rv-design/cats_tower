@@ -5,13 +5,14 @@
   "branch": "kimi",
   "authorityIndex": "CURRENT_AUTHORITY_INDEX.json",
   "currentRepositoryStep": 4,
-  "currentInternalPhase": "STEP2-SCREEN-PROJECTION-CORRECTION",
-  "status": "IN_PROGRESS_STEP2_SCREEN_PROJECTION_CORRECTION",
+  "currentInternalPhase": "S02-P1-GOLDEN-MASTER",
+  "status": "IN_PROGRESS_S02_P1_A_J_AUDIT",
   "governanceRecovery": {
-    "status": "STEP2_SCREEN_PROJECTION_CORRECTION_IN_PROGRESS",
+    "status": "PASS_PHASE0_GOVERNANCE_RECOVERY",
     "supersededClosureAttempt": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
     "step2Correction": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
-    "plannedCorrectedClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json"
+    "plannedCorrectedClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
+    "closure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json"
   },
   "step1": {
     "status": "PASS_CANONICAL",
@@ -66,5 +67,5 @@
   "step5Allowed": false,
   "physicalIPhoneVerified": false,
   "productionAliasChanged": false,
-  "nextAction": "Complete the versioned Step 2 screen-projection correction, independent review, continuity proof, and corrected round 033 closure."
+  "nextAction": "Do not tune or rerun the model during S02-P1. Audit existing S02 visual artifacts first. Resume simulation only when an authorized product change affects the sealed model or after canonical runtime shares the domain engine."
 }
