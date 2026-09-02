@@ -493,7 +493,12 @@ function verifyLiveWorkflowEvidence(evidence, label, requireArtifactArchive) {
     const artifactResult = JSON.parse(execFileSync('unzip', ['-p', zipPath, 'current-governance-result.json'], { encoding: 'utf8', maxBuffer: 1024 * 1024 }));
     const targetAuthority = jsonAt(evidence.commit, 'CURRENT_AUTHORITY_INDEX.json');
     const targetSeal = jsonAt(evidence.commit, targetAuthority.executableContract.seal);
-    const expectedArtifactVerdict = isExactRepairBootstrapCommit(evidence.commit)
+    // The direct bootstrap cannot authorize itself. Its dedicated immutable-OIDC
+    // correction child is independently read back here and emitted PASS by the
+    // reviewed workflow, so keep the two historical cases distinct.
+    const directBootstrapRequiresReadback = isExactRepairBootstrapCommit(evidence.commit)
+      && git(['rev-parse', `${evidence.commit}^`]) === trustedRound031RepairBase.commit;
+    const expectedArtifactVerdict = directBootstrapRequiresReadback
       ? 'PENDING_LIVE_PROVENANCE_READBACK'
       : 'PASS_CURRENT_AUTHORITY_GOVERNANCE';
     const expectedArtifactResult = {
