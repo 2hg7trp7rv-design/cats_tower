@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-final-judge-round-001",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "target": {
+    "commit": "0fa6ac052ca303f24b6e0cf859322792491fcdef",
+    "tree": "61866194848cedaf2ffc52b199f122f5fb0daf79"
+  },
+  "critic": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-independent-critic-round-001.json",
+    "blob": "419feb250c121d6494324ddf836a6b1ed8b94d8a"
+  },
+  "verdict": "PASS_S02_GOLDEN_MASTER_P1_FINAL_JUDGE",
+  "coverage": [
+    "FIRST_FIVE_SECONDS_COMBAT_CAT_FLOOR_THREAT_CAUSALITY",
+    "VISIBLE_ALPHA_BOUNDS_AND_CHARACTER_IDENTITY",
+    "DESIGN_SYSTEM_TOKENS_TYPE_AND_HIT_AREAS",
+    "ALL_REQUIRED_VIEWPORTS_SAFE_AREA_AND_200_PERCENT_TEXT",
+    "COMBAT_REWARD_SUPPORT_OFFLINE_AND_PARTY_STATE_SEMANTICS",
+    "ASSET_ANIMATION_DATA_BINDING_AND_IMPLEMENTATION_FEASIBILITY",
+    "CURRENT_PRIMARY_SOURCE_COMPETITIVE_RESEARCH_AND_COPY_AVOIDANCE"
+  ],
+  "findings": [
+    {
+      "id": "S02-P1-VISIBLE-BOUNDS-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S02-P1-PARTY-ATLAS-ANCHOR-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S02-P1-DESIGN-TOKEN-MINIMUM-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S02-P1-RESPONSIVE-SAFEAREA-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S02-P1-RESOURCE-RANK-BINDING-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S02-P1-COMBAT-REWARD-CAUSALITY-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S02-P1-SUPPORT-CAUSALITY-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S02-P1-OFFLINE-PARTY-SEMANTICS-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S02-P1-ASSET-SEPARATION-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S02-P1-TEST-RESEARCH-COVERAGE-001",
+      "severity": "P1",
+      "resolved": true
+    }
+  ],
+  "unresolved": {
+    "P0": 0,
+    "P1": 0
+  },
+  "maximumVerdict": "READY_FOR_S02_P1_COMPLETION_EVIDENCE"
+}
