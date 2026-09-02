@@ -194,7 +194,12 @@ jobs:
           REDIRECT_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-redirect-correction-round-002.json'
           BROWSER_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-browser-correction-round-003.json'
           UPLOAD_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-upload-transport-correction-round-004.json'
-          if test -f "$UPLOAD_CORRECTION"; then
+          ORIGIN_ACCESS_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-origin-access-correction-round-005.json'
+          if test -f "$ORIGIN_ACCESS_CORRECTION"; then
+            test "$(git log --diff-filter=A --format=%H -- "$ORIGIN_ACCESS_CORRECTION" | tail -n 1)" = "$GITHUB_SHA"
+            test "$(git rev-parse HEAD^)" = "$(jq -er '.entry.head' "$ORIGIN_ACCESS_CORRECTION")"
+            test "$(jq -er '.request.commit' "$ORIGIN_ACCESS_CORRECTION")" = "$REQUEST_COMMIT"
+          elif test -f "$UPLOAD_CORRECTION"; then
             test "$(git log --diff-filter=A --format=%H -- "$UPLOAD_CORRECTION" | tail -n 1)" = "$GITHUB_SHA"
             test "$(git rev-parse HEAD^)" = "$(jq -er '.entry.head' "$UPLOAD_CORRECTION")"
             test "$(jq -er '.request.commit' "$UPLOAD_CORRECTION")" = "$REQUEST_COMMIT"
@@ -244,6 +249,8 @@ jobs:
           const correction = JSON.parse(fs.readFileSync(correctionPath, 'utf8'));
           const browserCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-browser-correction-round-003.json';
           const browserCorrection = fs.existsSync(browserCorrectionPath) ? JSON.parse(fs.readFileSync(browserCorrectionPath, 'utf8')) : null;
+          const originAccessCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-origin-access-correction-round-005.json';
+          const originAccessCorrection = fs.existsSync(originAccessCorrectionPath) ? JSON.parse(fs.readFileSync(originAccessCorrectionPath, 'utf8')) : null;
           const raw = {
             commitStatuses: fs.readFileSync('external/github-commit-statuses-content.json')
           };
@@ -262,11 +269,20 @@ jobs:
           const immutableOrigin = assertUrl(observedDeployment.immutableUrl);
           const aliasOrigin = assertUrl(request.review.branchAlias);
           if (immutableOrigin === aliasOrigin) throw new Error('IMMUTABLE_DEPLOYMENT_EQUALS_BRANCH_ALIAS');
-          const effectiveTemporaryAccess = browserCorrection?.temporaryAccessReplacement ?? request.review.temporaryAccess;
-          const temporaryAccessUrl = new URL(effectiveTemporaryAccess.url);
-          if (effectiveTemporaryAccess.kind !== 'VERCEL_TEMPORARY_SHARE_23H' || temporaryAccessUrl.protocol !== 'https:' || temporaryAccessUrl.username || temporaryAccessUrl.password || temporaryAccessUrl.port || temporaryAccessUrl.origin !== aliasOrigin || temporaryAccessUrl.pathname !== request.review.route || temporaryAccessUrl.hash || [...temporaryAccessUrl.searchParams.keys()].join(',') !== '_vercel_share') throw new Error('TEMPORARY_PREVIEW_ACCESS_INVALID');
-          const shareToken = temporaryAccessUrl.searchParams.get('_vercel_share');
-          if (!/^[A-Za-z0-9_-]{16,512}$/.test(shareToken || '') || Date.parse(effectiveTemporaryAccess.expiresAt) <= Date.now()) throw new Error('TEMPORARY_PREVIEW_ACCESS_EXPIRED_OR_INVALID');
+          const validateTemporaryAccess = (access, expectedOrigin) => {
+            const temporaryAccessUrl = new URL(access?.url);
+            if (access?.kind !== 'VERCEL_TEMPORARY_SHARE_23H' || temporaryAccessUrl.protocol !== 'https:' || temporaryAccessUrl.username || temporaryAccessUrl.password || temporaryAccessUrl.port || temporaryAccessUrl.origin !== expectedOrigin || temporaryAccessUrl.pathname !== request.review.route || temporaryAccessUrl.hash || [...temporaryAccessUrl.searchParams.keys()].join(',') !== '_vercel_share') throw new Error(`TEMPORARY_PREVIEW_ACCESS_INVALID:${expectedOrigin}`);
+            const token = temporaryAccessUrl.searchParams.get('_vercel_share');
+            if (!/^[A-Za-z0-9_-]{16,512}$/.test(token || '') || Date.parse(access.expiresAt) <= Date.now()) throw new Error(`TEMPORARY_PREVIEW_ACCESS_EXPIRED_OR_INVALID:${expectedOrigin}`);
+            return token;
+          };
+          const aliasTemporaryAccess = browserCorrection?.temporaryAccessReplacement ?? request.review.temporaryAccess;
+          const immutableTemporaryAccess = originAccessCorrection?.immutableTemporaryAccess;
+          if (!immutableTemporaryAccess) throw new Error('IMMUTABLE_TEMPORARY_PREVIEW_ACCESS_MISSING');
+          const shareTokens = new Map([
+            [aliasOrigin, validateTemporaryAccess(aliasTemporaryAccess, aliasOrigin)],
+            [immutableOrigin, validateTemporaryAccess(immutableTemporaryAccess, immutableOrigin)]
+          ]);
           const playwrightModule = path.join(process.cwd(), 'step4/s02/golden-master-p1/browser-qa/node_modules/playwright/index.mjs');
           const { chromium } = await import(pathToFileURL(playwrightModule).href);
           const browser = await chromium.launch({ headless: true });
@@ -284,7 +300,7 @@ jobs:
             const context = await browser.newContext({ serviceWorkers: 'block' });
             const page = await context.newPage();
             const accessUrl = new URL(route, origin);
-            accessUrl.searchParams.set('_vercel_share', shareToken);
+            accessUrl.searchParams.set('_vercel_share', shareTokens.get(origin));
             try {
               await page.goto(accessUrl.href, { waitUntil: 'domcontentloaded', timeout: 60_000 });
               await page.waitForFunction(
@@ -296,8 +312,11 @@ jobs:
               if (finalUrl.username || finalUrl.password || finalUrl.port || finalUrl.origin !== origin || !routePaths.includes(finalUrl.pathname) || finalUrl.hash || [...finalUrl.searchParams.keys()].some(key => key !== '_vercel_share')) throw new Error(`UNEXPECTED_BROWSER_FINAL_URL:${finalUrl.href}`);
               contexts.set(origin, context);
             } catch (error) {
+              const observed = new URL(page.url());
+              observed.search = '';
+              observed.hash = '';
               await context.close();
-              throw error;
+              throw new Error(`BROWSER_AUTHENTICATION_FAILED:${origin}:${observed.origin}${observed.pathname}:${error?.name ?? 'Error'}`);
             } finally {
               await page.close();
             }

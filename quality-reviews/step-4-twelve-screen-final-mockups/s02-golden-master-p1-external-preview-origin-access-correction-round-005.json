@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-external-preview-origin-access-correction-round-005",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "954a7a8d68ce74a669d4c023397174358a0e76ec",
+    "tree": "9c58940160372f0805ec5ac652c057189e588411"
+  },
+  "failedWorkflow": {
+    "commit": "954a7a8d68ce74a669d4c023397174358a0e76ec",
+    "tree": "9c58940160372f0805ec5ac652c057189e588411",
+    "runId": 33618563753,
+    "runAttempt": 1,
+    "jobId": 100210250834,
+    "conclusion": "FAILURE",
+    "failedStep": "Generate external S02 Preview proof",
+    "error": "BROWSER_AUTHENTICATION_TIMEOUT:IMMUTABLE_ORIGIN"
+  },
+  "request": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-request-round-001.json",
+    "commit": "e5ba5ed92d0eeb0da67f956637b7ebb1cb6c2a11",
+    "tree": "f706c3146d09f3c30368e0e0d4a92afbfd7850da",
+    "blob": "c034073b7b9beaa34bcffd4a685e36fefc3a0861"
+  },
+  "priorCorrection": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-upload-transport-correction-round-004.json",
+    "commit": "954a7a8d68ce74a669d4c023397174358a0e76ec",
+    "tree": "9c58940160372f0805ec5ac652c057189e588411",
+    "blob": "9d28cf600245dd1a161ff10caedfc412fd72bb8b"
+  },
+  "immutableTemporaryAccess": {
+    "kind": "VERCEL_TEMPORARY_SHARE_23H",
+    "url": "https://catstower-e72ri5svj-shinyaaas-projects.vercel.app/step4/s02/golden-master-p1/?_vercel_share=nm8H7zId9Wu4wTu0vFvqeLkVJ6jvypJl",
+    "expiresAt": "2026-09-03T09:24:34Z"
+  },
+  "diagnosis": {
+    "type": "BRANCH_ALIAS_SHARE_TOKEN_DID_NOT_AUTHENTICATE_THE_DISTINCT_IMMUTABLE_DEPLOYMENT_ORIGIN",
+    "attemptedOrigin": "https://catstower-e72ri5svj-shinyaaas-projects.vercel.app",
+    "credentialOrigin": "https://catstower-git-kimi-shinyaaas-projects.vercel.app",
+    "timeoutMs": 60000,
+    "browserInstalled": true,
+    "productQualityAffected": false,
+    "originalFailurePreserved": true
+  },
+  "correction": {
+    "rule": "USE_ONE_SCOPED_SHARE_TOKEN_PER_EXACT_VERCEL_ORIGIN_AND_RETAIN_FAIL_CLOSED_BYTE_EXACT_READBACK",
+    "changedPaths": [
+      ".github/workflows/verify-current-governance.yml",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-origin-access-correction-round-005.json",
+      "tests/governance/verify-current-authority.mjs"
+    ],
+    "repairedWorkflowBlob": "561778d1f8c7fd819dce941fcbb7a5fbd72ea18c",
+    "repairedVerifierBlob": "90285d20e709c0d571809419b2f94b358a8bc06a",
+    "separateOriginTokens": true,
+    "aliasTokenRestrictedToAlias": true,
+    "immutableTokenRestrictedToImmutable": true,
+    "sanitizedFailureDiagnostics": true,
+    "responseCapsRetained": true,
+    "byteExactChecksRetained": true,
+    "oidcProofRetained": true,
+    "providerSettingsChanged": false,
+    "productContentChanged": false
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_SEPARATE_VERCEL_ORIGIN_ACCESS_PENDING_RERUN"
+}
