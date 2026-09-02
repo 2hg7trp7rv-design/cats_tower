@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step3-continuity-bridge-screen-projection-round-001",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
+  "verdict": "PASS_STEP3_NUMERIC_MODEL_CONTINUITY_NO_EXECUTION_RERUN_REQUIRED",
+  "changedJsonPointers": [
+    "/screens"
+  ],
+  "candidateOutsideScreens": {
+    "beforeSha256": "dc0eb575481b866dab14a904957b582c513ec93fd96445f3985919ea9e217d85",
+    "afterSha256": "dc0eb575481b866dab14a904957b582c513ec93fd96445f3985919ea9e217d85"
+  },
+  "qualification": {
+    "beforeDeterministicPayloadSha256": "a24fa5a4a12cf132ac477c80e77431cd0b97ab070bbbef83c3881c160f42562c",
+    "afterDeterministicPayloadSha256": "a24fa5a4a12cf132ac477c80e77431cd0b97ab070bbbef83c3881c160f42562c",
+    "deepEqual": true
+  },
+  "candidateFiles": {
+    "beforeSha256": "4a908482466236bda39d9d6fbce927cef4b7707c70140a332b656d79ffae877d",
+    "afterSha256": "3a6495feb93cf6c3c6001bd404a9703b207595afd1894a606e77cb82145ef663"
+  },
+  "v3Seal": {
+    "path": "simulation/executable-seal-v3.json",
+    "blob": "f221b938ac64f1dbf2269fb8275d25850a4db68a"
+  },
+  "step3Status": "PASS_MODEL",
+  "runtimeOrS02Changed": false,
+  "unresolved": {
+    "P0": 0,
+    "P1": 0
+  },
+  "maximumVerdict": "READY_FOR_STEP2_PASS_ACTIVATION"
+}
