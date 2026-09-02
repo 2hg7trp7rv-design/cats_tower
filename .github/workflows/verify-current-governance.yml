@@ -440,7 +440,7 @@ jobs:
           const parts = token.split('.');
           if (parts.length !== 3) throw new Error('OIDC_FORMAT_INVALID');
           const claims = JSON.parse(Buffer.from(parts[1], 'base64url').toString('utf8'));
-          const expectedSubject = 'repo:2hg7trp7rv-design/cats_tower:ref:refs/heads/kimi';
+          const expectedSubject = 'repo:2hg7trp7rv-design@245031448/cats_tower@1331488679:ref:refs/heads/kimi';
           const expectedWorkflowRef = '2hg7trp7rv-design/cats_tower/.github/workflows/verify-current-governance.yml@refs/heads/kimi';
           if (!(claims.iss === 'https://token.actions.githubusercontent.com' && claims.aud === 'cats-tower-current-governance' && claims.sub === expectedSubject && claims.repository === '2hg7trp7rv-design/cats_tower' && claims.repository_id === '1331488679' && claims.repository_owner_id === '245031448' && claims.ref === 'refs/heads/kimi' && claims.sha === process.env.GITHUB_SHA && claims.workflow_sha === process.env.GITHUB_SHA && claims.workflow_ref === expectedWorkflowRef && String(claims.run_id) === process.env.GITHUB_RUN_ID && String(claims.run_attempt) === process.env.GITHUB_RUN_ATTEMPT)) throw new Error('OIDC_CLAIMS_INVALID');
           const oidcClaims = {
@@ -531,7 +531,7 @@ jobs:
           const parts = token.split('.');
           if (parts.length !== 3) process.exit(1);
           const claims = JSON.parse(Buffer.from(parts[1], 'base64url').toString('utf8'));
-          const expectedSubject = `repo:${process.env.GITHUB_REPOSITORY}:ref:${process.env.GITHUB_REF}`;
+          const expectedSubject = `repo:2hg7trp7rv-design@245031448/cats_tower@1331488679:ref:${process.env.GITHUB_REF}`;
           const expectedWorkflowRef = `${process.env.GITHUB_REPOSITORY}/.github/workflows/verify-current-governance.yml@${process.env.GITHUB_REF}`;
           const exact = claims.iss === 'https://token.actions.githubusercontent.com' &&
             claims.aud === 'cats-tower-current-governance' &&

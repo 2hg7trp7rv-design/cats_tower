@@ -337,7 +337,7 @@ function verifyDurableActionsOidc(evidence, label, expectedWorkflow = {
     const expectedClaims = {
       issuer: 'https://token.actions.githubusercontent.com',
       audience: expectedWorkflow.audience,
-      subject: 'repo:2hg7trp7rv-design/cats_tower:ref:refs/heads/kimi',
+      subject: 'repo:2hg7trp7rv-design@245031448/cats_tower@1331488679:ref:refs/heads/kimi',
       repository: '2hg7trp7rv-design/cats_tower',
       repositoryId: '1331488679',
       repositoryOwnerId: '245031448',
@@ -1663,12 +1663,26 @@ const exactRepairBootstrapPaths = [
   'README.md',
   'tests/governance/verify-current-authority.mjs'
 ];
+const failedOidcBootstrapAttempt = {
+  commit: '3dd49340c8d4403d742a6cf8cc3d3efca7df0527',
+  tree: 'd57a8c8d628f9919f93ca3d7be25b9777bdbe486'
+};
+const oidcBootstrapCorrectionPaths = [
+  '.github/workflows/verify-current-governance.yml',
+  'tests/governance/verify-current-authority.mjs'
+];
 function isExactRepairBootstrapCommit(commit) {
   try {
-    if (!/^[a-f0-9]{40}$/.test(commit) || git(['rev-parse', `${commit}^`]) !== trustedRound031RepairBase.commit) return false;
-    const actual = changedPaths(trustedRound031RepairBase.commit, commit).sort();
+    if (!/^[a-f0-9]{40}$/.test(commit)) return false;
     const expected = [...exactRepairBootstrapPaths].sort();
-    return JSON.stringify(actual) === JSON.stringify(expected);
+    const directParent = git(['rev-parse', `${commit}^`]);
+    if (directParent === trustedRound031RepairBase.commit) {
+      return JSON.stringify(changedPaths(trustedRound031RepairBase.commit, commit).sort()) === JSON.stringify(expected);
+    }
+    if (directParent !== failedOidcBootstrapAttempt.commit || git(['rev-parse', `${failedOidcBootstrapAttempt.commit}^{tree}`]) !== failedOidcBootstrapAttempt.tree || git(['rev-parse', `${failedOidcBootstrapAttempt.commit}^`]) !== trustedRound031RepairBase.commit) return false;
+    if (JSON.stringify(changedPaths(trustedRound031RepairBase.commit, failedOidcBootstrapAttempt.commit).sort()) !== JSON.stringify(expected)) return false;
+    if (JSON.stringify(changedPaths(failedOidcBootstrapAttempt.commit, commit).sort()) !== JSON.stringify([...oidcBootstrapCorrectionPaths].sort())) return false;
+    return JSON.stringify(changedPaths(trustedRound031RepairBase.commit, commit).sort()) === JSON.stringify(expected);
   } catch {
     return false;
   }
@@ -1733,7 +1747,7 @@ const s02VerificationPaths = [
   'step4/s02/golden-master-p1/browser-qa/package.json',
   'step4/s02/golden-master-p1/browser-qa/package-lock.json'
 ];
-const expectedS02WorkflowSha256 = '386ee68652bceaa644094e13210af9cf31c2e5198377d65486a6cc52ad4ef1f9';
+const expectedS02WorkflowSha256 = 'ae42536a3d30dff057afa189bf15a9ed7caa5fb90d3e375dc4671c8757fbe8dc';
 const s02ContentManifestPatterns = [
   'step4/s02/golden-master-p1/**',
   'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-*.json',
@@ -3386,7 +3400,7 @@ if (closureRepairCritic) {
   assert(JSON.stringify(closureRepairCritic.coverage) === JSON.stringify(['VERIFIER_FALSE_PASS_CLOSED', 'WORKFLOW_LIVE_PROVENANCE_VERIFIED', 'VERSIONED_CORRECTION_PROOF_BOUNDARY', 'FALSE_RELEASE_CLAIM_REJECTION']), 'closure-integrity critic coverage differs from the exact repaired attack set');
   const repairTarget = closureRepairCritic.auditTarget?.commit;
   assert(repairTarget && closureRepairCritic.auditTarget?.tree === git(['rev-parse', `${repairTarget}^{tree}`]), 'closure-integrity critic target commit/tree mismatch');
-  assert(git(['rev-parse', `${repairTarget}^`]) === trustedRound031RepairBase.commit, 'closure-integrity repair target must be the immediate child of the trusted live base');
+  assert(isExactRepairBootstrapCommit(repairTarget), 'closure-integrity repair target must be the exact reviewed bootstrap or its dedicated immutable-OIDC correction child');
   assertExactChangedPaths(trustedRound031RepairBase.commit, repairTarget, exactRepairBootstrapPaths, 'closure-integrity repair target');
   assertExactRepairDocumentTransforms(repairTarget);
   assert(typeof expectedRepairTargetVerifierBlob === 'string' && /^[a-f0-9]{40}$/.test(expectedRepairTargetVerifierBlob) && git(['rev-parse', `${repairTarget}:tests/governance/verify-current-authority.mjs`]) === expectedRepairTargetVerifierBlob, 'closure-integrity critic did not pin the independently reviewed repair-target verifier');
