@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-evidence-transport-correction-round-001",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "cc8c4a78bede734dc61ad46bfb0170cf7606b002",
+    "tree": "ff45cab2100336573b94e936bc516afe218331e0"
+  },
+  "package": {
+    "commit": "054778e2b21bd6c28b91ad9046d1b89a23882df6",
+    "tree": "35277259e6bde8defa28261b3b13b2f12ed4be31",
+    "contentCommit": "0fa6ac052ca303f24b6e0cf859322792491fcdef",
+    "contentTree": "61866194848cedaf2ffc52b199f122f5fb0daf79"
+  },
+  "incident": {
+    "type": "BASE64_INPUT_WAS_AN_ERROR_MESSAGE_AFTER_A_RELATIVE_WORKSPACE_PATH_MISS",
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-workflow-authenticated-admission-round-001.json",
+    "blob": "821f2b5844d1c2e0250c2bcabfa04e7eab7cbfbc",
+    "bytes": 111,
+    "sha256": "sha256:a5447fdca6b6d79188b43cef860e0648be9918bb687cf5104797d7e8aa0929f0",
+    "detectedBy": "LIVE_GITHUB_COMMIT_AND_BLOB_READBACK_BEFORE_ANY_CRITIC_OR_READY_CLAIM",
+    "cause": "The local patch was written outside the repository checkout; the unchecked read command returned an error string that was supplied as base64 input.",
+    "historyPreserved": true
+  },
+  "correction": {
+    "rule": "PRESERVE_THE_INVALID_COMMIT_THEN_REPLACE_ONLY_ITS_ADMISSION_BYTES_AND_ADD_A_FAIL_CLOSED_EXACT_HISTORY_GUARD",
+    "changedPaths": [
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-workflow-authenticated-admission-round-001.json",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-evidence-transport-correction-round-001.json",
+      "tests/governance/verify-current-authority.mjs"
+    ],
+    "recoveredAdmissionBlob": "59f59dbdaac4f9f5b40277aa357af5456b5ed62a",
+    "recoveredAdmissionBytes": 7180,
+    "recoveredAdmissionSha256": "sha256:bde1252572d77b9164ff2aab4e632634c1ee9d9a961b04a5d15a8106e057a3fe",
+    "verifierAfterSha256": "bfb7f64e9c4e926563578e2f45847de455d7ca570003e0bd5b463f3ba41d1c52",
+    "verifierPatchSha256": "sha256:14816903b22fb8b4505c6d53221caf7510b67e3340e5aceaa5f48c255169eb7e",
+    "invalidAttemptPreserved": true,
+    "authenticatedEvidenceReestablished": true,
+    "bearerTokenPersisted": false
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_EVIDENCE_TRANSPORT_PENDING_ADMISSION_READBACK"
+}

@@ -231,6 +231,8 @@ function assertS02HistoryWithIncrementalRenewals(base, head, control, label, evi
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02PixelMarginCorrectionChangedPaths].sort()), `${label}: pixel-margin correction changed an unreviewed path`);
     } else if (s02FiligreeCorrectionCommit && commit === s02FiligreeCorrectionCommit) {
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02FiligreeCorrectionChangedPaths].sort()), `${label}: filigree correction changed an unreviewed path`);
+    } else if (s02EvidenceTransportCorrectionCommit && commit === s02EvidenceTransportCorrectionCommit) {
+      assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02EvidenceTransportCorrectionChangedPaths].sort()), `${label}: evidence-transport correction changed an unreviewed path`);
     } else {
       assertBoundary(paths, control, `${label} commit ${commit}`);
     }
@@ -2060,10 +2062,23 @@ function verifyS02PersistedWorkflowPackage(evidence, evidenceRound, revisionProo
   assert(packageCommit && packageParent && git(['rev-parse', `${packageCommit}^`]) === packageParent, `${label}: durable S02 package is not the exact child of its content/Acceptance predecessor`);
   assertExactChangedPaths(packageParent, packageCommit, expectedPackagePaths, `${label} durable S02 package commit`);
   assert(exists(admissionPaths.admission), `${label}: durable S02 package lacks its required subsequent authenticated-admission record`);
-  const admissionCommit = firstAddCommit(admissionPaths.admission);
-  assertExactSingleParent(admissionCommit, packageCommit, `${label} authenticated S02 package admission`);
-  assertExactChangedPaths(packageCommit, admissionCommit, [admissionPaths.admission], `${label} authenticated S02 package admission`);
-  assertAddedOnceAndUnchanged(admissionPaths.admission, admissionCommit);
+  const firstAdmissionCommit = firstAddCommit(admissionPaths.admission);
+  const recoveredInitialAdmission = evidenceRound === '001' && Boolean(s02EvidenceTransportCorrection);
+  const admissionCommit = recoveredInitialAdmission ? s02EvidenceTransportCorrectionCommit : firstAdmissionCommit;
+  if (recoveredInitialAdmission) {
+    assert(firstAdmissionCommit === s02InvalidAdmissionCommit && git(['rev-parse', `${s02InvalidAdmissionCommit}^`]) === packageCommit, `${label}: transport recovery does not immediately follow the exact durable package through the preserved invalid attempt`);
+    assertExactChangedPaths(packageCommit, s02InvalidAdmissionCommit, [admissionPaths.admission], `${label} preserved invalid admission attempt`);
+    assert(git(['rev-parse', `${s02InvalidAdmissionCommit}:${admissionPaths.admission}`]) === s02InvalidAdmissionBlob, `${label}: preserved invalid admission blob mismatch`);
+    assertExactSingleParent(admissionCommit, s02InvalidAdmissionCommit, `${label} corrected authenticated S02 package admission`);
+    assertExactChangedPaths(s02InvalidAdmissionCommit, admissionCommit, s02EvidenceTransportCorrectionChangedPaths, `${label} corrected authenticated S02 package admission`);
+    assertRegularGitFile(admissionPaths.admission, `${label} recovered admission`);
+    assert(git(['rev-parse', `HEAD:${admissionPaths.admission}`]) !== s02InvalidAdmissionBlob, `${label}: recovered admission still resolves to the invalid transport blob`);
+    assertNoPathChangesSince(admissionCommit, 'HEAD', [admissionPaths.admission, s02EvidenceTransportCorrectionPath, 'tests/governance/verify-current-authority.mjs'], `${label} transport-recovery freeze`);
+  } else {
+    assertExactSingleParent(admissionCommit, packageCommit, `${label} authenticated S02 package admission`);
+    assertExactChangedPaths(packageCommit, admissionCommit, [admissionPaths.admission], `${label} authenticated S02 package admission`);
+    assertAddedOnceAndUnchanged(admissionPaths.admission, admissionCommit);
+  }
   const readbackPresent = exists(admissionPaths.readback);
   assert(!requireAdmissionReadback || readbackPresent, `${label}: critic/feasibility review is blocked until authenticated-admission readback is persisted`);
   const admissionReadbackCommit = readbackPresent ? firstAddCommit(admissionPaths.readback) : null;
@@ -3840,6 +3855,16 @@ const s02FiligreeCorrectionChangedPaths = [
   'step4/s02/golden-master-p1/styles.css',
   'tests/governance/verify-current-authority.mjs'
 ];
+const s02EvidenceTransportCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-evidence-transport-correction-round-001.json';
+const s02EvidenceTransportCorrection = exists(s02EvidenceTransportCorrectionPath) ? json(s02EvidenceTransportCorrectionPath) : null;
+const s02EvidenceTransportCorrectionCommit = s02EvidenceTransportCorrection ? firstAddCommit(s02EvidenceTransportCorrectionPath) : null;
+const s02InvalidAdmissionCommit = 'cc8c4a78bede734dc61ad46bfb0170cf7606b002';
+const s02InvalidAdmissionBlob = '821f2b5844d1c2e0250c2bcabfa04e7eab7cbfbc';
+const s02EvidenceTransportCorrectionChangedPaths = [
+  'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-workflow-authenticated-admission-round-001.json',
+  s02EvidenceTransportCorrectionPath,
+  'tests/governance/verify-current-authority.mjs'
+];
 
 // BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001
 const s02HarnessCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-001.json';
@@ -5086,7 +5111,8 @@ if (s02FiligreeCorrection) {
   const filigreeVerifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02FiligreeCorrection.entry.head, s02FiligreeCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
   assert(sha256Text(correctedFiligreeVerifierSource) === s02FiligreeCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(filigreeVerifierPatch)}` === s02FiligreeCorrection.correction.verifierPatchSha256, 'S02 filigree verifier bytes/patch differ from the immutable correction record');
   assert(correctedFiligreeVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedFiligreeVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_011') && correctedFiligreeVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_012') && correctedFiligreeVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 filigree verifier removed a prior correction guard or original fail-closed boundary assertion');
-  assertNoPathChangesSince(s02FiligreeCorrectionCommit, 'HEAD', s02FiligreeCorrectionChangedPaths, 'S02 filigree correction freeze');
+  const s02FiligreeFreezeEnd = s02EvidenceTransportCorrectionCommit ? git(['rev-parse', `${s02EvidenceTransportCorrectionCommit}^`]) : 'HEAD';
+  assertNoPathChangesSince(s02FiligreeCorrectionCommit, s02FiligreeFreezeEnd, s02FiligreeCorrectionChangedPaths, 'S02 filigree correction freeze');
   if (requireLiveActions) {
     const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02FiligreeCorrection.authorityWorkflow.runId}`);
     const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02FiligreeCorrection.authorityWorkflow.jobId}`);
@@ -5105,6 +5131,65 @@ if (s02FiligreeCorrection) {
   }
 }
 // END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_012
+
+// BEGIN_S02_EVIDENCE_TRANSPORT_CORRECTION_ROUND_001
+if (s02EvidenceTransportCorrection) {
+  assertExactKeySet(s02EvidenceTransportCorrection, ['schemaVersion', 'artifactId', 'createdAt', 'repository', 'branch', 'changeControl', 'entry', 'package', 'incident', 'correction', 'boundaries', 'status'], 'S02 evidence-transport correction');
+  assertExactKeySet(s02EvidenceTransportCorrection.entry, ['head', 'tree'], 'S02 evidence-transport correction entry');
+  assertExactKeySet(s02EvidenceTransportCorrection.package, ['commit', 'tree', 'contentCommit', 'contentTree'], 'S02 evidence-transport package');
+  assertExactKeySet(s02EvidenceTransportCorrection.incident, ['type', 'path', 'blob', 'bytes', 'sha256', 'detectedBy', 'cause', 'historyPreserved'], 'S02 evidence-transport incident');
+  assertExactKeySet(s02EvidenceTransportCorrection.correction, ['rule', 'changedPaths', 'recoveredAdmissionBlob', 'recoveredAdmissionBytes', 'recoveredAdmissionSha256', 'verifierAfterSha256', 'verifierPatchSha256', 'invalidAttemptPreserved', 'authenticatedEvidenceReestablished', 'bearerTokenPersisted'], 'S02 evidence-transport correction detail');
+  assertExactKeySet(s02EvidenceTransportCorrection.boundaries, ['rootRuntimeChanged', 'gameCoreChanged', 'gameDataChanged', 'economyChanged', 'saveSchemaChanged', 'backendChanged', 'productionChanged', 'productionAliasChanged', 'physicalIPhoneVerified', 'step4Pass', 'step5Allowed'], 'S02 evidence-transport correction boundaries');
+  assert(s02EvidenceTransportCorrection.schemaVersion === 1 && s02EvidenceTransportCorrection.artifactId === 'cats-tower-s02-golden-master-p1-evidence-transport-correction-round-001' && s02EvidenceTransportCorrection.createdAt === '2026-09-02', 'S02 evidence-transport correction identity/date mismatch');
+  assert(s02EvidenceTransportCorrection.repository === '2hg7trp7rv-design/cats_tower' && s02EvidenceTransportCorrection.branch === 'kimi' && s02EvidenceTransportCorrection.changeControl === s02RepairControlPath, 'S02 evidence-transport correction authority mismatch');
+  assert(JSON.stringify(s02EvidenceTransportCorrection.entry) === JSON.stringify({ head: s02InvalidAdmissionCommit, tree: 'ff45cab2100336573b94e936bc516afe218331e0' }), 'S02 evidence-transport correction entry mismatch');
+  assert(JSON.stringify(s02EvidenceTransportCorrection.package) === JSON.stringify({ commit: '054778e2b21bd6c28b91ad9046d1b89a23882df6', tree: '35277259e6bde8defa28261b3b13b2f12ed4be31', contentCommit: '0fa6ac052ca303f24b6e0cf859322792491fcdef', contentTree: '61866194848cedaf2ffc52b199f122f5fb0daf79' }), 'S02 evidence-transport correction package binding mismatch');
+  const admissionPath = s02WorkflowAdmissionPaths('001').admission;
+  const invalidAdmissionBytes = bytesAt(s02InvalidAdmissionCommit, admissionPath);
+  assert(JSON.stringify(s02EvidenceTransportCorrection.incident) === JSON.stringify({
+    type: 'BASE64_INPUT_WAS_AN_ERROR_MESSAGE_AFTER_A_RELATIVE_WORKSPACE_PATH_MISS',
+    path: admissionPath,
+    blob: s02InvalidAdmissionBlob,
+    bytes: 111,
+    sha256: 'sha256:a5447fdca6b6d79188b43cef860e0648be9918bb687cf5104797d7e8aa0929f0',
+    detectedBy: 'LIVE_GITHUB_COMMIT_AND_BLOB_READBACK_BEFORE_ANY_CRITIC_OR_READY_CLAIM',
+    cause: 'The local patch was written outside the repository checkout; the unchecked read command returned an error string that was supplied as base64 input.',
+    historyPreserved: true
+  }), 'S02 evidence-transport incident differs from the preserved Git object');
+  assert(git(['rev-parse', `${s02InvalidAdmissionCommit}^`]) === s02EvidenceTransportCorrection.package.commit && git(['rev-parse', `${s02InvalidAdmissionCommit}^{tree}`]) === s02EvidenceTransportCorrection.entry.tree, 'S02 invalid transport attempt is not the exact package child');
+  assert(git(['rev-parse', `${s02InvalidAdmissionCommit}:${admissionPath}`]) === s02InvalidAdmissionBlob && invalidAdmissionBytes.length === 111 && `sha256:${createHash('sha256').update(invalidAdmissionBytes).digest('hex')}` === s02EvidenceTransportCorrection.incident.sha256, 'S02 invalid transport bytes/blob/digest mismatch');
+  let invalidAdmissionRejected = false;
+  try { JSON.parse(invalidAdmissionBytes.toString('utf8')); } catch { invalidAdmissionRejected = true; }
+  assert(invalidAdmissionRejected, 'S02 preserved invalid admission unexpectedly parses as JSON');
+  assert(s02EvidenceTransportCorrectionCommit && git(['rev-parse', `${s02EvidenceTransportCorrectionCommit}^`]) === s02InvalidAdmissionCommit, 'S02 evidence-transport correction is not the exact immediate child of the invalid attempt');
+  assertExactChangedPaths(s02InvalidAdmissionCommit, s02EvidenceTransportCorrectionCommit, s02EvidenceTransportCorrectionChangedPaths, 'S02 evidence-transport correction commit');
+  assertAddedOnceAndUnchanged(s02EvidenceTransportCorrectionPath, s02EvidenceTransportCorrectionCommit);
+  const recoveredAdmissionBytes = bytesAt(s02EvidenceTransportCorrectionCommit, admissionPath);
+  const recoveredAdmissionBlob = git(['rev-parse', `${s02EvidenceTransportCorrectionCommit}:${admissionPath}`]);
+  const verifierAfterSource = textAt(s02EvidenceTransportCorrectionCommit, 'tests/governance/verify-current-authority.mjs');
+  const verifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02InvalidAdmissionCommit, s02EvidenceTransportCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+  assert(JSON.stringify(s02EvidenceTransportCorrection.correction) === JSON.stringify({
+    rule: 'PRESERVE_THE_INVALID_COMMIT_THEN_REPLACE_ONLY_ITS_ADMISSION_BYTES_AND_ADD_A_FAIL_CLOSED_EXACT_HISTORY_GUARD',
+    changedPaths: s02EvidenceTransportCorrectionChangedPaths,
+    recoveredAdmissionBlob,
+    recoveredAdmissionBytes: recoveredAdmissionBytes.length,
+    recoveredAdmissionSha256: `sha256:${createHash('sha256').update(recoveredAdmissionBytes).digest('hex')}`,
+    verifierAfterSha256: sha256Text(verifierAfterSource),
+    verifierPatchSha256: `sha256:${sha256Text(verifierPatch)}`,
+    invalidAttemptPreserved: true,
+    authenticatedEvidenceReestablished: true,
+    bearerTokenPersisted: false
+  }), 'S02 evidence-transport correction bytes, path set or verifier binding mismatch');
+  const recoveredAdmission = JSON.parse(recoveredAdmissionBytes.toString('utf8'));
+  assert(recoveredAdmission.artifactId === 'cats-tower-s02-golden-master-p1-workflow-authenticated-admission-round-001' && recoveredAdmission.verdict === 'PASS_S02_WORKFLOW_PACKAGE_LIVE_AUTHENTICATED_ADMISSION' && recoveredAdmission.verification?.bearerTokenPersisted === false, 'S02 recovered admission identity or safe verdict mismatch');
+  assert(verifierAfterSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_012') && verifierAfterSource.includes('// BEGIN_S02_EVIDENCE_TRANSPORT_CORRECTION_ROUND_001') && verifierAfterSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 transport recovery removed prior fail-closed guards');
+  const admissionHistory = git(['log', '--reverse', '--format=%H', `${s02EvidenceTransportCorrection.package.commit}..HEAD`, '--', admissionPath]).split('\n').filter(Boolean);
+  assert(JSON.stringify(admissionHistory) === JSON.stringify([s02InvalidAdmissionCommit, s02EvidenceTransportCorrectionCommit]), 'S02 admission path has history beyond the one preserved invalid attempt and one exact recovery');
+  assert(JSON.stringify(s02EvidenceTransportCorrection.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }), 'S02 evidence-transport correction crosses a protected boundary');
+  assert(s02EvidenceTransportCorrection.status === 'CORRECTED_EVIDENCE_TRANSPORT_PENDING_ADMISSION_READBACK', 'S02 evidence-transport correction status mismatch');
+  assertNoPathChangesSince(s02EvidenceTransportCorrectionCommit, 'HEAD', s02EvidenceTransportCorrectionChangedPaths, 'S02 evidence-transport correction freeze');
+}
+// END_S02_EVIDENCE_TRANSPORT_CORRECTION_ROUND_001
 
 function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath = s02ReviewEvidencePaths.deploymentRequest, requireLiveApi = true) {
   assertWorkflowEvidenceKeys(evidence, `${label} workflow evidence`, true);
