@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-phase0-governance-recovery-live-readback-round-002",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
+  "readbackTarget": {
+    "commit": "3b5acb5ef73abdf0cb854ca6af1aab29a7203d9d",
+    "tree": "02a52abbf1e11fa03ede552a9e7824f7c35886a4"
+  },
+  "completion": {
+    "path": "quality-reviews/phase-0-governance-recovery/completion-evidence-round-002.json",
+    "blob": "9e5736fc299d33ac4a67ad878b9ad9d0a0f93788"
+  },
+  "workflow": {
+    "commit": "3b5acb5ef73abdf0cb854ca6af1aab29a7203d9d",
+    "tree": "02a52abbf1e11fa03ede552a9e7824f7c35886a4",
+    "runId": 33587170067,
+    "runAttempt": 1,
+    "jobId": 100113733232,
+    "conclusion": "SUCCESS",
+    "artifactId": 9830490978,
+    "artifactName": "phase0-current-governance-3b5acb5ef73abdf0cb854ca6af1aab29a7203d9d-33587170067-1",
+    "artifactDigest": "sha256:e2b39bcf2167fc714a15fa169b262d8c52e971efbc434734142efaca7c093b89",
+    "oidcTokenSha256": "sha256:473ad9960b353433680f52d4b3894759a4e91a3592d3f3cf962b63d26b0a8883",
+    "oidcClaims": {
+      "issuer": "https://token.actions.githubusercontent.com",
+      "audience": "cats-tower-current-governance",
+      "subject": "repo:2hg7trp7rv-design@245031448/cats_tower@1331488679:ref:refs/heads/kimi",
+      "repository": "2hg7trp7rv-design/cats_tower",
+      "repositoryId": "1331488679",
+      "repositoryOwnerId": "245031448",
+      "ref": "refs/heads/kimi",
+      "sha": "3b5acb5ef73abdf0cb854ca6af1aab29a7203d9d",
+      "runId": "33587170067",
+      "runAttempt": "1",
+      "workflowRef": "2hg7trp7rv-design/cats_tower/.github/workflows/verify-current-governance.yml@refs/heads/kimi"
+    },
+    "oidcVerified": true
+  },
+  "verdict": "READY_TO_CLOSE_PHASE0_GOVERNANCE_RECOVERY",
+  "phase0Unresolved": {
+    "P0": 0,
+    "P1": 0
+  },
+  "resolvedFindings": [
+    "PHASE0-POST-CLOSURE-BOUNDARY-001",
+    "PHASE0-ACCEPTANCE-CLOSURE-ID-001",
+    "PHASE0-PREMATURE-EVIDENCE-001",
+    "PHASE0-IMMUTABLE-EVIDENCE-OVERWRITE-001",
+    "S2-P0-SCREEN-PROJECTION-001"
+  ],
+  "retainedP2": [
+    "PHASE0-P2-PR8-STALE-METADATA",
+    "PHASE0-P2-KIMI-UNPROTECTED-EXTERNAL-ENFORCEMENT"
+  ],
+  "maximumVerdict": "READY_TO_CLOSE_PHASE0_GOVERNANCE_RECOVERY"
+}
