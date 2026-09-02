@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-trusted-harness-correction-round-008",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "87fa4235ef2dba4aadc354a4199e9081810e1047",
+    "tree": "8a2c578e9c88372d98967f6af393724044b6037d"
+  },
+  "authorityWorkflow": {
+    "commit": "87fa4235ef2dba4aadc354a4199e9081810e1047",
+    "tree": "8a2c578e9c88372d98967f6af393724044b6037d",
+    "runId": 33597071104,
+    "runAttempt": 1,
+    "jobId": 100142707143,
+    "conclusion": "SUCCESS",
+    "artifactId": 9833782884,
+    "artifactName": "phase0-current-governance-87fa4235ef2dba4aadc354a4199e9081810e1047-33597071104-1",
+    "artifactDigest": "sha256:4fa1e0c90918c419b902d9dca9234ccf7ba98ea6821306836f2244db8ec26053"
+  },
+  "failedWorkflow": {
+    "commit": "87fa4235ef2dba4aadc354a4199e9081810e1047",
+    "tree": "8a2c578e9c88372d98967f6af393724044b6037d",
+    "runId": 33597071095,
+    "runAttempt": 1,
+    "jobId": 100142567416,
+    "conclusion": "FAILURE",
+    "failedStep": "Capture and verify eight masters plus required responsive variants",
+    "summary": "FAIL_S02_GOLDEN_MASTER_P1_BROWSER: 15 scenarios, 4 failures",
+    "artifactId": 9833782832,
+    "artifactName": "step4-s02-golden-master-p1-semantic-87fa4235ef2dba4aadc354a4199e9081810e1047-33597071095-1",
+    "artifactDigest": "sha256:cb41dba2126522234b30d0115887e721a438169dc887b855430480cb38031f8b"
+  },
+  "diagnosis": {
+    "type": "ROUND_007_CLOSED_CONTRAST_AND_HORIZONTAL_REFLOW_BUT_COMPACT_COLOR_RANGE_AND_GLYPH_LINE_BOX_REMAINED",
+    "failedAssertions": [
+      "GM07C320: screenshot pixel complexity/opacity gate failed",
+      "GM07C320TEXT200: screenshot pixel complexity/opacity gate failed",
+      "TEXT_200_PERCENT_NO_LOSS: trusted recomputation failed",
+      "RESPONSIVE_GEOMETRY_CONTRACT: trusted recomputation failed"
+    ],
+    "closedFindings": [
+      "MEANINGFUL_TEXT_CONTRAST_WCAG passed after offline text received opaque parchment surfaces.",
+      "The 200 percent 26-floor label reached a 105 CSS-pixel content box and no longer overflowed horizontally."
+    ],
+    "visualFindings": [
+      "The compact offline variants measured 217 and 226 quantized colors; the revised parchment improved edge density but still lacked a distinct material inlay color range."
+    ],
+    "measurementFindings": [
+      "The 44 CSS-pixel floor label line box retained a 47 CSS-pixel scroll height because of glyph overhang, leaving only a three-pixel vertical deficit.",
+      "TEXT_200_PERCENT_NO_LOSS and RESPONSIVE_GEOMETRY_CONTRACT shared that single line-box root cause in TEXT200 and TEXT200SAFE."
+    ],
+    "allFifteenExactPngsPreserved": true,
+    "originalFailureArtifactPreserved": true
+  },
+  "correction": {
+    "rule": "ADD_A_PRODUCT_MATERIAL_BRASS_PATINA_INLAY_AND_EXPAND_ONLY_THE_200_PERCENT_FLOOR_LINE_BOX_WITHOUT_SHRINKING_TEXT_OR_LOWERING_THRESHOLDS",
+    "changedPaths": [
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-008.json",
+      "step4/s02/golden-master-p1/review-manifest.json",
+      "step4/s02/golden-master-p1/styles.css",
+      "tests/governance/verify-current-authority.mjs"
+    ],
+    "stylesBeforeSha256": "ffd2c0c06cad4e1a7d2908cf9bbeea8f295ebbb8fbd741e12f6621bc77096426",
+    "stylesAfterSha256": "cb933fb01668a789052274ad7be87f075c114d013ee24b7fc7247d01bccd52e5",
+    "stylesPatchSha256": "sha256:b32eaddf76f4ce65e21a58a19b19a8afee97ce704a5c9473e66750ea8129ec05",
+    "manifestBeforeSha256": "aa98518c3849d1a94afe1562024503e19ca4c25dbacb201e12669bdc4ecfc40a",
+    "manifestAfterSha256": "e08b4c46ced3259dfca6c4692d481cfbb6d4cda8e7065784a4763496b72e5335",
+    "manifestPatchSha256": "sha256:1b08d15eaf8eb416075206205d77bcf7cd6588b17e7cbe002e5e8af54f57d7ca",
+    "verifierAfterSha256": "f4b66cb46fca25abd3ac26bd174013a56186c7f2ef4ca662ce8c4ac19a1fd44e",
+    "verifierPatchSha256": "sha256:3bce47310516347f7c12b2ea65817460e448be512c839ab0d8b3497fb336f963",
+    "acceptanceThresholdsChanged": false,
+    "qualityCoverageWeakened": false,
+    "browserCollectorChanged": false,
+    "browserQaChanged": false,
+    "fontSizeReduced": false,
+    "failureEvidenceUploadRetained": true
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_FOUR_BROWSER_FINDINGS_PENDING_RERUN"
+}

@@ -1722,6 +1722,20 @@ summary {
   text-align: center;
 }
 
+.offline-modal::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  right: 22px;
+  left: 22px;
+  height: 4px;
+  pointer-events: none;
+  border: 1px solid rgba(82, 49, 28, 0.42);
+  border-radius: 999px;
+  background: linear-gradient(90deg, #6a3923 0%, #d0a04a 18%, #5e8d82 36%, #ecd17f 50%, #93513f 64%, #5e8d82 82%, #6a3923 100%);
+  box-shadow: 0 1px rgba(255, 245, 199, 0.48), 0 3px 7px rgba(79, 43, 22, 0.18);
+}
+
 .offline-modal-head,
 .offline-modal-footer {
   flex: 0 0 auto;
@@ -2440,6 +2454,7 @@ summary {
 }
 
 .text-scale-200 .floor-marker strong {
+  line-height: 1.1;
   white-space: nowrap;
 }
 

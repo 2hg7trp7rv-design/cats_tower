@@ -221,6 +221,8 @@ function assertS02HistoryWithIncrementalRenewals(base, head, control, label, evi
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02SixFindingCorrectionChangedPaths].sort()), `${label}: six-finding correction changed an unreviewed path`);
     } else if (s02FiveFindingCorrectionCommit && commit === s02FiveFindingCorrectionCommit) {
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02FiveFindingCorrectionChangedPaths].sort()), `${label}: five-finding correction changed an unreviewed path`);
+    } else if (s02FourFindingCorrectionCommit && commit === s02FourFindingCorrectionCommit) {
+      assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02FourFindingCorrectionChangedPaths].sort()), `${label}: four-finding correction changed an unreviewed path`);
     } else {
       assertBoundary(paths, control, `${label} commit ${commit}`);
     }
@@ -3785,6 +3787,15 @@ const s02FiveFindingCorrectionChangedPaths = [
   'step4/s02/golden-master-p1/styles.css',
   'tests/governance/verify-current-authority.mjs'
 ];
+const s02FourFindingCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-008.json';
+const s02FourFindingCorrection = exists(s02FourFindingCorrectionPath) ? json(s02FourFindingCorrectionPath) : null;
+const s02FourFindingCorrectionCommit = s02FourFindingCorrection ? firstAddCommit(s02FourFindingCorrectionPath) : null;
+const s02FourFindingCorrectionChangedPaths = [
+  s02FourFindingCorrectionPath,
+  'step4/s02/golden-master-p1/review-manifest.json',
+  'step4/s02/golden-master-p1/styles.css',
+  'tests/governance/verify-current-authority.mjs'
+];
 
 // BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001
 const s02HarnessCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-001.json';
@@ -4499,7 +4510,9 @@ if (s02FiveFindingCorrection) {
   const fiveFindingVerifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02FiveFindingCorrection.entry.head, s02FiveFindingCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
   assert(sha256Text(correctedFiveFindingVerifierSource) === s02FiveFindingCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(fiveFindingVerifierPatch)}` === s02FiveFindingCorrection.correction.verifierPatchSha256, 'S02 five-finding verifier bytes/patch differ from the immutable correction record');
   assert(correctedFiveFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedFiveFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_002') && correctedFiveFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_003') && correctedFiveFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_004') && correctedFiveFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_005') && correctedFiveFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_006') && correctedFiveFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_007') && correctedFiveFindingVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 five-finding verifier removed a prior correction guard or original fail-closed boundary assertion');
-  assertNoPathChangesSince(s02FiveFindingCorrectionCommit, 'HEAD', s02FiveFindingCorrectionChangedPaths, 'S02 five-finding correction freeze');
+  const seventhCorrectionFreezeEnd = s02FourFindingCorrectionCommit ? git(['rev-parse', `${s02FourFindingCorrectionCommit}^`]) : git(['rev-parse', 'HEAD']);
+  assertNoPathChangesSince(s02FiveFindingCorrectionCommit, seventhCorrectionFreezeEnd, s02FiveFindingCorrectionChangedPaths, 'S02 five-finding correction freeze before four-finding correction');
+  if (s02FourFindingCorrectionCommit) assertNoPathChangesSince(s02FiveFindingCorrectionCommit, 'HEAD', [s02FiveFindingCorrectionPath], 'S02 five-finding round 007 record freeze');
   if (requireLiveActions) {
     const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02FiveFindingCorrection.authorityWorkflow.runId}`);
     const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02FiveFindingCorrection.authorityWorkflow.jobId}`);
@@ -4518,6 +4531,114 @@ if (s02FiveFindingCorrection) {
   }
 }
 // END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_007
+
+// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_008
+if (s02FourFindingCorrection) {
+  assertExactKeySet(s02FourFindingCorrection, ['schemaVersion', 'artifactId', 'createdAt', 'repository', 'branch', 'changeControl', 'entry', 'authorityWorkflow', 'failedWorkflow', 'diagnosis', 'correction', 'boundaries', 'status'], 'S02 four-finding correction');
+  assertExactKeySet(s02FourFindingCorrection.entry, ['head', 'tree'], 'S02 four-finding correction entry');
+  assertExactKeySet(s02FourFindingCorrection.authorityWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'artifactId', 'artifactName', 'artifactDigest'], 'S02 four-finding authority workflow');
+  assertExactKeySet(s02FourFindingCorrection.failedWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'failedStep', 'summary', 'artifactId', 'artifactName', 'artifactDigest'], 'S02 four-finding failed workflow');
+  assertExactKeySet(s02FourFindingCorrection.diagnosis, ['type', 'failedAssertions', 'closedFindings', 'visualFindings', 'measurementFindings', 'allFifteenExactPngsPreserved', 'originalFailureArtifactPreserved'], 'S02 four-finding diagnosis');
+  assertExactKeySet(s02FourFindingCorrection.correction, ['rule', 'changedPaths', 'stylesBeforeSha256', 'stylesAfterSha256', 'stylesPatchSha256', 'manifestBeforeSha256', 'manifestAfterSha256', 'manifestPatchSha256', 'verifierAfterSha256', 'verifierPatchSha256', 'acceptanceThresholdsChanged', 'qualityCoverageWeakened', 'browserCollectorChanged', 'browserQaChanged', 'fontSizeReduced', 'failureEvidenceUploadRetained'], 'S02 four-finding exact correction');
+  assertExactKeySet(s02FourFindingCorrection.boundaries, ['rootRuntimeChanged', 'gameCoreChanged', 'gameDataChanged', 'economyChanged', 'saveSchemaChanged', 'backendChanged', 'productionChanged', 'productionAliasChanged', 'physicalIPhoneVerified', 'step4Pass', 'step5Allowed'], 'S02 four-finding correction boundaries');
+  assert(s02FourFindingCorrection.schemaVersion === 1 && s02FourFindingCorrection.artifactId === 'cats-tower-s02-golden-master-p1-trusted-harness-correction-round-008' && s02FourFindingCorrection.createdAt === '2026-09-02', 'S02 four-finding correction identity/date mismatch');
+  assert(s02FourFindingCorrection.repository === '2hg7trp7rv-design/cats_tower' && s02FourFindingCorrection.branch === 'kimi' && s02FourFindingCorrection.changeControl === s02RepairControlPath, 'S02 four-finding correction authority mismatch');
+  assert(JSON.stringify(s02FourFindingCorrection.entry) === JSON.stringify({ head: '87fa4235ef2dba4aadc354a4199e9081810e1047', tree: '8a2c578e9c88372d98967f6af393724044b6037d' }), 'S02 four-finding correction entry is not the exact failed five-finding correction commit/tree');
+  assert(JSON.stringify(s02FourFindingCorrection.authorityWorkflow) === JSON.stringify({
+    commit: s02FourFindingCorrection.entry.head,
+    tree: s02FourFindingCorrection.entry.tree,
+    runId: 33597071104,
+    runAttempt: 1,
+    jobId: 100142707143,
+    conclusion: 'SUCCESS',
+    artifactId: 9833782884,
+    artifactName: 'phase0-current-governance-87fa4235ef2dba4aadc354a4199e9081810e1047-33597071104-1',
+    artifactDigest: 'sha256:4fa1e0c90918c419b902d9dca9234ccf7ba98ea6821306836f2244db8ec26053'
+  }), 'S02 four-finding correction does not bind the successful exact-entry authority workflow');
+  assert(JSON.stringify(s02FourFindingCorrection.failedWorkflow) === JSON.stringify({
+    commit: s02FourFindingCorrection.entry.head,
+    tree: s02FourFindingCorrection.entry.tree,
+    runId: 33597071095,
+    runAttempt: 1,
+    jobId: 100142567416,
+    conclusion: 'FAILURE',
+    failedStep: 'Capture and verify eight masters plus required responsive variants',
+    summary: 'FAIL_S02_GOLDEN_MASTER_P1_BROWSER: 15 scenarios, 4 failures',
+    artifactId: 9833782832,
+    artifactName: 'step4-s02-golden-master-p1-semantic-87fa4235ef2dba4aadc354a4199e9081810e1047-33597071095-1',
+    artifactDigest: 'sha256:cb41dba2126522234b30d0115887e721a438169dc887b855430480cb38031f8b'
+  }), 'S02 four-finding correction does not bind the exact failed workflow/job/summary/artifact');
+  assert(JSON.stringify(s02FourFindingCorrection.diagnosis) === JSON.stringify({
+    type: 'ROUND_007_CLOSED_CONTRAST_AND_HORIZONTAL_REFLOW_BUT_COMPACT_COLOR_RANGE_AND_GLYPH_LINE_BOX_REMAINED',
+    failedAssertions: [
+      'GM07C320: screenshot pixel complexity/opacity gate failed',
+      'GM07C320TEXT200: screenshot pixel complexity/opacity gate failed',
+      'TEXT_200_PERCENT_NO_LOSS: trusted recomputation failed',
+      'RESPONSIVE_GEOMETRY_CONTRACT: trusted recomputation failed'
+    ],
+    closedFindings: [
+      'MEANINGFUL_TEXT_CONTRAST_WCAG passed after offline text received opaque parchment surfaces.',
+      'The 200 percent 26-floor label reached a 105 CSS-pixel content box and no longer overflowed horizontally.'
+    ],
+    visualFindings: [
+      'The compact offline variants measured 217 and 226 quantized colors; the revised parchment improved edge density but still lacked a distinct material inlay color range.'
+    ],
+    measurementFindings: [
+      'The 44 CSS-pixel floor label line box retained a 47 CSS-pixel scroll height because of glyph overhang, leaving only a three-pixel vertical deficit.',
+      'TEXT_200_PERCENT_NO_LOSS and RESPONSIVE_GEOMETRY_CONTRACT shared that single line-box root cause in TEXT200 and TEXT200SAFE.'
+    ],
+    allFifteenExactPngsPreserved: true,
+    originalFailureArtifactPreserved: true
+  }), 'S02 four-finding diagnosis differs from the preserved fifteen-capture failed run and artifact');
+  assert(s02FourFindingCorrection.correction.rule === 'ADD_A_PRODUCT_MATERIAL_BRASS_PATINA_INLAY_AND_EXPAND_ONLY_THE_200_PERCENT_FLOOR_LINE_BOX_WITHOUT_SHRINKING_TEXT_OR_LOWERING_THRESHOLDS' && JSON.stringify(s02FourFindingCorrection.correction.changedPaths) === JSON.stringify(s02FourFindingCorrectionChangedPaths), 'S02 four-finding correction rule/path set mismatch');
+  assert(s02FourFindingCorrection.correction.stylesBeforeSha256 === 'ffd2c0c06cad4e1a7d2908cf9bbeea8f295ebbb8fbd741e12f6621bc77096426' && s02FourFindingCorrection.correction.stylesAfterSha256 === 'cb933fb01668a789052274ad7be87f075c114d013ee24b7fc7247d01bccd52e5' && s02FourFindingCorrection.correction.stylesPatchSha256 === 'sha256:b32eaddf76f4ce65e21a58a19b19a8afee97ce704a5c9473e66750ea8129ec05', 'S02 four-finding style digest/patch mismatch');
+  assert(s02FourFindingCorrection.correction.manifestBeforeSha256 === 'aa98518c3849d1a94afe1562024503e19ca4c25dbacb201e12669bdc4ecfc40a' && s02FourFindingCorrection.correction.manifestAfterSha256 === 'e08b4c46ced3259dfca6c4692d481cfbb6d4cda8e7065784a4763496b72e5335' && s02FourFindingCorrection.correction.manifestPatchSha256 === 'sha256:1b08d15eaf8eb416075206205d77bcf7cd6588b17e7cbe002e5e8af54f57d7ca', 'S02 four-finding manifest digest/patch mismatch');
+  assert(s02FourFindingCorrection.correction.acceptanceThresholdsChanged === false && s02FourFindingCorrection.correction.qualityCoverageWeakened === false && s02FourFindingCorrection.correction.browserCollectorChanged === false && s02FourFindingCorrection.correction.browserQaChanged === false && s02FourFindingCorrection.correction.fontSizeReduced === false && s02FourFindingCorrection.correction.failureEvidenceUploadRetained === true, 'S02 four-finding correction weakens coverage, changes evidence collection or shrinks text');
+  assert(JSON.stringify(s02FourFindingCorrection.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }), 'S02 four-finding correction crosses a protected product/release boundary');
+  assert(s02FourFindingCorrection.status === 'CORRECTED_FOUR_BROWSER_FINDINGS_PENDING_RERUN', 'S02 four-finding correction status mismatch');
+  assert(s02FourFindingCorrectionCommit && git(['rev-parse', `${s02FourFindingCorrectionCommit}^`]) === s02FourFindingCorrection.entry.head, 'S02 four-finding correction is not the immediate child of the exact failed commit');
+  assert(git(['rev-parse', `${s02FourFindingCorrection.entry.head}^{tree}`]) === s02FourFindingCorrection.entry.tree, 'S02 four-finding correction entry tree mismatch');
+  assertExactChangedPaths(s02FourFindingCorrection.entry.head, s02FourFindingCorrectionCommit, s02FourFindingCorrectionChangedPaths, 'S02 four-finding correction commit');
+  assertAddedOnceAndUnchanged(s02FourFindingCorrectionPath, s02FourFindingCorrectionCommit);
+
+  const priorFourFindingStylesSource = textAt(s02FourFindingCorrection.entry.head, 'step4/s02/golden-master-p1/styles.css');
+  const correctedFourFindingStylesSource = textAt(s02FourFindingCorrectionCommit, 'step4/s02/golden-master-p1/styles.css');
+  const fourFindingStylesPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02FourFindingCorrection.entry.head, s02FourFindingCorrectionCommit, '--', 'step4/s02/golden-master-p1/styles.css'], { cwd: root, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+  assert(sha256Text(priorFourFindingStylesSource) === s02FourFindingCorrection.correction.stylesBeforeSha256 && sha256Text(correctedFourFindingStylesSource) === s02FourFindingCorrection.correction.stylesAfterSha256 && `sha256:${sha256Text(fourFindingStylesPatch)}` === s02FourFindingCorrection.correction.stylesPatchSha256, 'S02 four-finding style bytes/patch differ from the immutable correction record');
+  assert(correctedFourFindingStylesSource.includes('background: linear-gradient(90deg, #6a3923 0%, #d0a04a 18%, #5e8d82 36%, #ecd17f 50%, #93513f 64%, #5e8d82 82%, #6a3923 100%);') && correctedFourFindingStylesSource.includes('.text-scale-200 .floor-marker strong {\n  line-height: 1.1;\n  white-space: nowrap;'), 'S02 four-finding correction lacks the brass-patina material inlay or expanded floor line box');
+  assert(priorFourFindingStylesSource.split('font-size:').length === correctedFourFindingStylesSource.split('font-size:').length, 'S02 four-finding correction shrinks or adds typography instead of reflowing it');
+
+  const priorFourFindingManifestSource = textAt(s02FourFindingCorrection.entry.head, 'step4/s02/golden-master-p1/review-manifest.json');
+  const correctedFourFindingManifestSource = textAt(s02FourFindingCorrectionCommit, 'step4/s02/golden-master-p1/review-manifest.json');
+  const fourFindingManifestPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02FourFindingCorrection.entry.head, s02FourFindingCorrectionCommit, '--', 'step4/s02/golden-master-p1/review-manifest.json'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert(sha256Text(priorFourFindingManifestSource) === s02FourFindingCorrection.correction.manifestBeforeSha256 && sha256Text(correctedFourFindingManifestSource) === s02FourFindingCorrection.correction.manifestAfterSha256 && `sha256:${sha256Text(fourFindingManifestPatch)}` === s02FourFindingCorrection.correction.manifestPatchSha256, 'S02 four-finding manifest bytes/patch differ from the immutable correction record');
+  const correctedFourFindingManifest = JSON.parse(correctedFourFindingManifestSource);
+  const correctedFourStylesManifestEntry = correctedFourFindingManifest.routeFiles?.find(entry => entry.path === 'step4/s02/golden-master-p1/styles.css');
+  assert(JSON.stringify(correctedFourStylesManifestEntry) === JSON.stringify({ path: 'step4/s02/golden-master-p1/styles.css', bytes: 52468, sha256: s02FourFindingCorrection.correction.stylesAfterSha256, gitBlob: '3f6ff4dba1b1cc37b6f0827e49724b4929ac85d9' }), 'S02 four-finding manifest does not bind the corrected stylesheet bytes/hash/blob');
+
+  const correctedFourFindingVerifierSource = textAt(s02FourFindingCorrectionCommit, 'tests/governance/verify-current-authority.mjs');
+  const fourFindingVerifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02FourFindingCorrection.entry.head, s02FourFindingCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+  assert(sha256Text(correctedFourFindingVerifierSource) === s02FourFindingCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(fourFindingVerifierPatch)}` === s02FourFindingCorrection.correction.verifierPatchSha256, 'S02 four-finding verifier bytes/patch differ from the immutable correction record');
+  assert(correctedFourFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedFourFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_002') && correctedFourFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_003') && correctedFourFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_004') && correctedFourFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_005') && correctedFourFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_006') && correctedFourFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_007') && correctedFourFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_008') && correctedFourFindingVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 four-finding verifier removed a prior correction guard or original fail-closed boundary assertion');
+  assertNoPathChangesSince(s02FourFindingCorrectionCommit, 'HEAD', s02FourFindingCorrectionChangedPaths, 'S02 four-finding correction freeze');
+  if (requireLiveActions) {
+    const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02FourFindingCorrection.authorityWorkflow.runId}`);
+    const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02FourFindingCorrection.authorityWorkflow.jobId}`);
+    const authorityArtifact = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/artifacts/${s02FourFindingCorrection.authorityWorkflow.artifactId}`);
+    assert(authorityRun.head_sha === s02FourFindingCorrection.entry.head && authorityRun.head_branch === 'kimi' && authorityRun.status === 'completed' && authorityRun.conclusion === 'success' && authorityRun.run_attempt === 1, 'S02 four-finding correction live authority run mismatch');
+    assert(authorityJob.run_id === authorityRun.id && authorityJob.head_sha === s02FourFindingCorrection.entry.head && authorityJob.name === 'current-authority' && authorityJob.conclusion === 'success', 'S02 four-finding correction live authority job mismatch');
+    assert(authorityArtifact.name === s02FourFindingCorrection.authorityWorkflow.artifactName && authorityArtifact.digest === s02FourFindingCorrection.authorityWorkflow.artifactDigest && authorityArtifact.expired === false && authorityArtifact.workflow_run?.head_sha === s02FourFindingCorrection.entry.head, 'S02 four-finding correction live authority artifact mismatch');
+    const failedRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02FourFindingCorrection.failedWorkflow.runId}`);
+    const failedJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02FourFindingCorrection.failedWorkflow.jobId}`);
+    const failedArtifact = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/artifacts/${s02FourFindingCorrection.failedWorkflow.artifactId}`);
+    assert(failedRun.head_sha === s02FourFindingCorrection.entry.head && failedRun.head_branch === 'kimi' && failedRun.status === 'completed' && failedRun.conclusion === 'failure' && failedRun.run_attempt === 1, 'S02 four-finding correction live failed run mismatch');
+    assert(failedJob.run_id === failedRun.id && failedJob.head_sha === s02FourFindingCorrection.entry.head && failedJob.name === 'Static, eight-master responsive and accessibility verification' && failedJob.conclusion === 'failure', 'S02 four-finding correction live failed job mismatch');
+    const failedSteps = (failedJob.steps ?? []).filter(step => step.name === s02FourFindingCorrection.failedWorkflow.failedStep);
+    assert(failedSteps.length === 1 && failedSteps[0].conclusion === 'failure', 'S02 four-finding correction live failed step mismatch');
+    assert(failedArtifact.name === s02FourFindingCorrection.failedWorkflow.artifactName && failedArtifact.digest === s02FourFindingCorrection.failedWorkflow.artifactDigest && failedArtifact.expired === false && failedArtifact.workflow_run?.head_sha === s02FourFindingCorrection.entry.head, 'S02 four-finding correction live failure artifact mismatch');
+  }
+}
+// END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_008
 
 function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath = s02ReviewEvidencePaths.deploymentRequest, requireLiveApi = true) {
   assertWorkflowEvidenceKeys(evidence, `${label} workflow evidence`, true);
