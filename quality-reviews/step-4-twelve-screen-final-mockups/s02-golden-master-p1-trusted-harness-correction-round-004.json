@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-trusted-harness-correction-round-004",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "fb60201fa4ff90a4135e0ef4877dd59e08d6d2f2",
+    "tree": "9ef14ce205b99d758e94f03abfc1cfbc2ae37ea0"
+  },
+  "authorityWorkflow": {
+    "commit": "fb60201fa4ff90a4135e0ef4877dd59e08d6d2f2",
+    "tree": "9ef14ce205b99d758e94f03abfc1cfbc2ae37ea0",
+    "runId": 33592297124,
+    "runAttempt": 1,
+    "jobId": 100128707650,
+    "conclusion": "SUCCESS",
+    "artifactId": 9832183442,
+    "artifactName": "phase0-current-governance-fb60201fa4ff90a4135e0ef4877dd59e08d6d2f2-33592297124-1",
+    "artifactDigest": "sha256:d3cf6b4f77b2646246ec15f854342703ca8423a59831d3d493baf9042b149199"
+  },
+  "failedWorkflow": {
+    "commit": "fb60201fa4ff90a4135e0ef4877dd59e08d6d2f2",
+    "tree": "9ef14ce205b99d758e94f03abfc1cfbc2ae37ea0",
+    "runId": 33592297125,
+    "runAttempt": 1,
+    "jobId": 100128590666,
+    "conclusion": "FAILURE",
+    "failedStep": "Capture and verify eight masters plus required responsive variants",
+    "error": "Error: GM01: PNG dimensions/format mismatch",
+    "artifactId": 9832180959,
+    "artifactName": "step4-s02-golden-master-p1-semantic-fb60201fa4ff90a4135e0ef4877dd59e08d6d2f2-33592297125-1",
+    "artifactDigest": "sha256:275725ca2bd00b97605958b9e7d33339168a37cf94ac04be202f9250d838415f"
+  },
+  "diagnosis": {
+    "type": "EXACT_SCREENSHOT_ROUNDING_EXPOSED_SEMANTIC_MEASUREMENT_AND_VISUAL_REFLOW_DEFECTS",
+    "screenshotDimensionFinding": "Fourteen of fifteen element screenshots were one physical pixel taller than their declared CSS viewport because the ordinary review stage began at a fractional page coordinate.",
+    "measurementFindings": [
+      "CSS transform-origin lengths retained px units and were parsed as NaN.",
+      "Support state collection ignored data-support-state.",
+      "Reduced-motion computed times used scientific notation rejected by the duration parser.",
+      "Scrollable 200 percent offline content was incorrectly required to remain simultaneously inside the modal viewport."
+    ],
+    "visualFindings": [
+      "The rear-left cat was clipped beyond the visible-bounds contract.",
+      "Compact floor and AUTO labels overflowed their rendered boxes.",
+      "Base bottom-navigation content height rendered at 63px against the 64px contract.",
+      "Two-hundred-percent text reflow clipped the floor label, primary action copy and navigation labels.",
+      "The offline scrim suppressed too much battle context and screenshot color structure."
+    ],
+    "originalFailureArtifactPreserved": true
+  },
+  "correction": {
+    "rule": "CAPTURE_EXACT_DECLARED_VIEWPORTS_AND_REPAIR_MEASUREMENTS_PLUS_OBSERVED_REFLOW_DEFECTS_WITHOUT_LOWERING_ACCEPTANCE_THRESHOLDS",
+    "changedPaths": [
+      ".github/workflows/verify-step-4-s02-golden-master-p1.yml",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-004.json",
+      "step4/s02/golden-master-p1/review-manifest.json",
+      "step4/s02/golden-master-p1/styles.css",
+      "tests/governance/verify-current-authority.mjs",
+      "tests/step4/s02-golden-master-p1-browser-qa.mjs",
+      "tests/step4/s02-golden-master-p1-browser.mjs"
+    ],
+    "workflowBeforeSha256": "79d84163ca190041b814b80c4ef020b758d0c61cac36751c498194680904b9c0",
+    "workflowAfterSha256": "2119936e77a9b1b70e27b30697886519e0c9cb81d26fa585cc32801454ab532b",
+    "workflowPatchSha256": "sha256:845468c1396c380880ea7a5708f0fd71a486781101fa0f35cc5ad180ad32549c",
+    "browserBeforeSha256": "2661c5a75ee756e0baf5a7d5b0470f97d3fc56e02f29bfa641c1e4510ff3fdd3",
+    "browserAfterSha256": "fda690254c7827fedcbca733397bc69654bf1fb9c6a3825c19d4db30d6863a5b",
+    "browserPatchSha256": "sha256:bdfa7bd51f46346725e11a1e7958b69d1e33ba7799ade9137b42d01ab120469f",
+    "qaBeforeSha256": "0778dd5e74031aab8a6db3ff44c0563aa5907c362bdad64779db781422ca5463",
+    "qaAfterSha256": "9661cf489c3329c3119ba3cb16ee3e8ebb61848eb841adcbdd7cc28f8da2bd1e",
+    "qaPatchSha256": "sha256:748584d433e9ae94ebbe618e3d07e3b3cb3bcbbb52eb8af444534674409da062",
+    "stylesBeforeSha256": "acc6367bcc2b672cd32d56e390250ba75a6dbc66f2d4aab354930bc793fd4182",
+    "stylesAfterSha256": "23ea9978b4c0eee15d2dc91dcfbab39db46a00231f2bb991a7b836f1f4071887",
+    "stylesPatchSha256": "sha256:cb0abd4cdb77c7c80aab8c42ab4b641e3234005c998d48ce1953fc505a248ad3",
+    "manifestBeforeSha256": "beef28069adac64e24a933b3dec450dd0dce50991a8193952bea6bc3c67843ca",
+    "manifestAfterSha256": "37189dfcdf536d620425d6e43e195fb7af772b88df5d4c06329a6702a52e138c",
+    "manifestPatchSha256": "sha256:ed2c6151d269b7d753f9fec8eba191454cdbef31951d2452f628096d1c4c35b1",
+    "verifierAfterSha256": "d719c11ce6b51285b18c96c432ec32096a5ff488ef6ea4186fa99a4cfe91789b",
+    "verifierPatchSha256": "sha256:3f5bd27d230919d82e062b26601094484b458cb4f12fbea0d6f23c99292f4ce1",
+    "acceptanceThresholdsChanged": false,
+    "qualityCoverageWeakened": false,
+    "exactScreenshotDimensionsEnforced": true,
+    "failureEvidenceUploadRetained": true
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_BROWSER_EVIDENCE_AND_VISUAL_REFLOW_PENDING_RERUN"
+}

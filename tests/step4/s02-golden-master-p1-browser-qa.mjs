@@ -1052,7 +1052,7 @@ function mappedUnit(scenario, unit) {
   const [a, b, c, d, e, f] = unit.transformMatrix;
   const transformDelta = Math.abs(Math.hypot(a, b) - Math.hypot(c, d)) / Math.max(Math.hypot(a, b), Math.hypot(c, d), 0.000001);
   const contentDelta = Math.abs(scaleX - scaleY) / Math.max(scaleX, scaleY, 0.000001);
-  const originTokens = unit.transformOrigin.split(/\s+/).map(Number);
+  const originTokens = unit.transformOrigin.split(/\s+/).map((token) => Number.parseFloat(token));
   const origin = { x: unit.preTransformRect.left + originTokens[0], y: unit.preTransformRect.top + originTokens[1] };
   const transformPoint = (point) => ({
     x: origin.x + a * (point.x - origin.x) + c * (point.y - origin.y) + e,
@@ -1300,8 +1300,8 @@ const offlineScenarioPass = (scenario, compact = false) => {
   return base && modal.rect.left <= 1 && modal.rect.right >= scenario.viewport.width - 1 && modal.rect.width >= scenario.viewport.width - 2 && modal.rect.bottom >= expectedBottom - 1 && modal.rect.bottom <= expectedBottom + 1 && modal.rect.top >= safeTop
     && scenario.elements.controls.filter((control) => control.visible).length === 1 && controlsFitAndDoNotOverlap(scenario);
 };
-const gm07CompactModalText = gm07Compact.elements.meaningfulText.filter((entry) => entry.visible && intersects(entry.rect, gm07Compact.elements.offlineModal.rect, 0.9));
-const gm07CompactText200ModalText = gm07CompactText200.elements.meaningfulText.filter((entry) => entry.visible && intersects(entry.rect, gm07CompactText200.elements.offlineModal.rect, 0.9));
+const gm07CompactModalText = gm07Compact.elements.meaningfulText.filter((entry) => entry.visible);
+const gm07CompactText200ModalText = gm07CompactText200.elements.meaningfulText.filter((entry) => entry.visible);
 const gm07CompactText200ByKey = new Map(gm07CompactText200ModalText.map((entry) => [textKey(entry), entry]));
 const gm07Text200Probe = gm07CompactText200.elements.offlineModal.fixedScrollProbe;
 const gm07CompactText200Pass = offlineScenarioPass(gm07CompactText200, true)
@@ -1400,7 +1400,7 @@ const uniformFullScreenScaleAbsent = raw.scenarios.every((scenario) => {
     && Math.abs(gameUiSurface.rect.width - scenario.viewport.width) <= 0.01 && gameUiSurface.rect.height >= scenario.viewport.height;
 });
 const parseCssTimeMs = (value) => {
-  const match = /^([0-9.]+)(ms|s)$/.exec(String(value).trim());
+  const match = /^([0-9.]+(?:e[+-]?\d+)?)(ms|s)$/i.exec(String(value).trim());
   if (!match) return Number.POSITIVE_INFINITY;
   return Number(match[1]) * (match[2] === 's' ? 1000 : 1);
 };

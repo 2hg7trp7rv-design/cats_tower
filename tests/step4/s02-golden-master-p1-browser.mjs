@@ -488,8 +488,8 @@ async function collectDomInIsolatedWorld(scanAssets, requestAssertions, requeste
       }); }
     }
     const stateRecord = (element, index) => ({
-      canonicalId: element.getAttribute('data-party-id') || element.getAttribute('data-cat-id') || 'party-slot-' + String(index + 1),
-      state: element.getAttribute('data-party-state') || [...element.classList].find((name) => name.startsWith('state-'))?.slice(6) || '',
+      canonicalId: element.getAttribute('data-support-id') || element.getAttribute('data-party-id') || element.getAttribute('data-cat-id') || 'party-slot-' + String(index + 1),
+      state: (element.getAttribute('data-support-state') || element.getAttribute('data-party-state') || [...element.classList].find((name) => name.startsWith('state-'))?.slice(6) || '').toLowerCase(),
       text: String(element.textContent ?? '').replace(/\s+/g, ' ').trim().slice(0, 240),
       rect: localRect(element),
       visible: visible(element)
@@ -1098,7 +1098,15 @@ try {
     for (const measurement of collected.requestMeasurements) currentRequestMeasurementMap.set(measurement.assertionId, measurement);
     const screenshotName = scenario.id + '-' + String(scenario.width) + 'x' + String(scenario.height) + '.png';
     const screenshotPath = 'semantic-evidence/screenshots/' + screenshotName;
-    const bytes = await page.locator('[data-testid="gm-stage"]').screenshot({ type: 'png', animations: 'disabled', omitBackground: false });
+    const stageBox = await exactStage.boundingBox();
+    if (!stageBox) throw new Error(scenario.id + ': exact GM stage has no screenshot bounds.');
+    const bytes = await page.screenshot({
+      type: 'png',
+      animations: 'disabled',
+      omitBackground: false,
+      captureBeyondViewport: true,
+      clip: { x: Math.round(stageBox.x), y: Math.round(stageBox.y), width: scenario.width, height: scenario.height }
+    });
     await fs.writeFile(path.join(root, screenshotPath), bytes);
     const actualUrl = new URL(page.url());
     results.push({
@@ -1203,7 +1211,15 @@ try {
       for (const measurement of collected.requestMeasurements) baselineRequestMeasurementMap.set(measurement.assertionId, measurement);
       const screenshotName = scenario.id + '-' + String(scenario.width) + 'x' + String(scenario.height) + '.png';
       const screenshotPath = 'semantic-evidence/revision/before/' + screenshotName;
-      const bytes = await page.locator('[data-testid="gm-stage"]').screenshot({ type: 'png', animations: 'disabled', omitBackground: false });
+      const stageBox = await exactStage.boundingBox();
+      if (!stageBox) throw new Error(scenario.id + ': baseline exact GM stage has no screenshot bounds.');
+      const bytes = await page.screenshot({
+        type: 'png',
+        animations: 'disabled',
+        omitBackground: false,
+        captureBeyondViewport: true,
+        clip: { x: Math.round(stageBox.x), y: Math.round(stageBox.y), width: scenario.width, height: scenario.height }
+      });
       await fs.writeFile(path.join(root, screenshotPath), bytes);
       const actualUrl = new URL(page.url());
       baselineResults.push({
