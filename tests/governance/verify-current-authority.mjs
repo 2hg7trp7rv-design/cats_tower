@@ -396,7 +396,9 @@ function registerWorkflowEvidence(evidence, label) {
   assert(/^sha256:[a-f0-9]{64}$/.test(evidence.artifactDigest ?? ''), `${label}: workflow artifact digest is invalid`);
   verifyDurableActionsOidc(evidence, label);
   const key = JSON.stringify(evidence);
-  liveWorkflowEvidenceRecords.push({ key, evidence, label });
+  if (!liveWorkflowEvidenceRecords.some(entry => entry.key === key && entry.label === label)) {
+    liveWorkflowEvidenceRecords.push({ key, evidence, label });
+  }
 }
 
 function ghApi(endpoint, { binary = false, maxBuffer = 10 * 1024 * 1024 } = {}) {
@@ -1440,6 +1442,15 @@ const step2ReviewPaths = {
   completion: 'quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/completion-evidence.json',
   liveReadback: 'quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/live-readback.json'
 };
+function resolveStep2PreSealVerifierCorrectionCommit() {
+  if (!exists(step2ReviewPaths.liveReadback)) return null;
+  const readbackCommit = firstAddCommit(step2ReviewPaths.liveReadback);
+  if (!readbackCommit) return null;
+  const output = git(['log', '--reverse', '--format=%H', `${readbackCommit}..HEAD`, '--', 'tests/governance/verify-current-authority.mjs']);
+  const commits = output ? output.split('\n').filter(Boolean) : [];
+  assert(commits.length <= 1, 'Step 2 verifier changed more than once after the live readback');
+  return commits[0] ?? null;
+}
 const expectedRound032AllowedWrites = [
   'quality-reviews/step-1-canonical-design/active-change-control.json',
   step2CorrectionPath,
@@ -3555,7 +3566,15 @@ if (step2Correction) {
   if (v3SemanticCommit) {
     assert(git(['rev-parse', `${v3SemanticCommit}^`]) === correctionControlCommit, 'round 032 v3 semantic target must immediately follow the opening commit');
     assert(git(['log', '--format=%H', `${correctionControlCommit}..${v3SemanticCommit}`, '--', 'tests/governance/verify-current-authority.mjs']) === v3SemanticCommit, 'round 032 semantic target verifier correction is not one dedicated reviewed change');
-    assertNoPathChangesSince(v3SemanticCommit, governanceFreezeEnd, ['tests/governance/verify-current-authority.mjs'], 'round 032 verifier freeze after the exact semantic-target repair');
+    const preSealVerifierCorrectionCommit = resolveStep2PreSealVerifierCorrectionCommit();
+    if (preSealVerifierCorrectionCommit) {
+      const readbackCommit = firstAddCommit(step2ReviewPaths.liveReadback);
+      assert(git(['rev-parse', `${preSealVerifierCorrectionCommit}^`]) === readbackCommit, 'Step 2 pre-seal verifier correction must immediately follow the live readback');
+      assertExactChangedPaths(readbackCommit, preSealVerifierCorrectionCommit, ['tests/governance/verify-current-authority.mjs'], 'Step 2 pre-seal verifier correction');
+      assertNoPathChangesSince(preSealVerifierCorrectionCommit, governanceFreezeEnd, ['tests/governance/verify-current-authority.mjs'], 'round 032 verifier freeze after the pre-seal correction');
+    } else {
+      assertNoPathChangesSince(v3SemanticCommit, governanceFreezeEnd, ['tests/governance/verify-current-authority.mjs'], 'round 032 verifier freeze after the exact semantic-target repair');
+    }
   } else {
     assertNoPathChangesSince(correctionControlCommit, governanceFreezeEnd, ['tests/governance/verify-current-authority.mjs'], 'round 032 verifier freeze before the semantic target');
   }
@@ -6372,24 +6391,41 @@ function verifyStep2ReviewEvidence(seal) {
   assert(git(['rev-parse', `${commits.finalJudge}^`]) === commits.critic, 'Step 2 final judge must immediately follow the independent critic');
   assert(git(['rev-parse', `${commits.completion}^`]) === commits.finalJudge, 'Step 2 completion must immediately follow the final judge');
   assert(git(['rev-parse', `${commits.liveReadback}^`]) === commits.completion, 'Step 2 live readback must immediately follow completion');
-  assert(git(['rev-parse', `${commits.seal}^`]) === commits.liveReadback, 'v3 seal must immediately follow the Step 2 live readback');
+  const preSealVerifierCorrectionCommit = resolveStep2PreSealVerifierCorrectionCommit();
+  if (preSealVerifierCorrectionCommit) {
+    assert(git(['rev-parse', `${preSealVerifierCorrectionCommit}^`]) === commits.liveReadback, 'Step 2 pre-seal verifier correction must immediately follow live readback');
+    assert(git(['rev-parse', `${commits.seal}^`]) === preSealVerifierCorrectionCommit, 'v3 seal must immediately follow the dedicated pre-seal verifier correction');
+  } else {
+    assert(git(['rev-parse', `${commits.seal}^`]) === commits.liveReadback, 'v3 seal must immediately follow the Step 2 live readback');
+  }
   assertExactChangedPaths(targetCommit, commits.critic, [step2ReviewPaths.critic], 'Step 2 critic commit');
   assertExactChangedPaths(commits.critic, commits.finalJudge, [step2ReviewPaths.finalJudge], 'Step 2 final-judge commit');
   assertExactChangedPaths(commits.finalJudge, commits.completion, [step2ReviewPaths.completion], 'Step 2 completion commit');
   assertExactChangedPaths(commits.completion, commits.liveReadback, [step2ReviewPaths.liveReadback], 'Step 2 live-readback commit');
-  assertExactChangedPaths(commits.liveReadback, commits.seal, [v3SealPath], 'Step 2 v3-seal commit');
+  if (preSealVerifierCorrectionCommit) {
+    assertExactChangedPaths(commits.liveReadback, preSealVerifierCorrectionCommit, ['tests/governance/verify-current-authority.mjs'], 'Step 2 pre-seal verifier-correction commit');
+    assertExactChangedPaths(preSealVerifierCorrectionCommit, commits.seal, [v3SealPath], 'Step 2 v3-seal commit');
+  } else {
+    assertExactChangedPaths(commits.liveReadback, commits.seal, [v3SealPath], 'Step 2 v3-seal commit');
+  }
   const reviewEvidenceSet = new Set(Object.values(step2ReviewPaths));
   for (const binding of seal.bindings) {
     if (!reviewEvidenceSet.has(binding.path)) {
-      assert(git(['rev-parse', `${targetCommit}:${binding.path}`]) === binding.blob, `Step 2 critic target differs from v3 content binding: ${binding.path}`);
+      const bindingCommit = binding.path === 'tests/governance/verify-current-authority.mjs' && preSealVerifierCorrectionCommit
+        ? preSealVerifierCorrectionCommit
+        : targetCommit;
+      assert(git(['rev-parse', `${bindingCommit}:${binding.path}`]) === binding.blob, `Step 2 reviewed source differs from v3 content binding: ${binding.path}`);
     }
   }
   for (const [key, file] of Object.entries(step2ReviewPaths)) {
     const blob = assertAddedOnceAndUnchanged(file, commits[key]);
     assert(seal.reviewEvidence?.[key]?.path === file && seal.reviewEvidence?.[key]?.blob === blob, `v3 seal does not bind immutable Step 2 ${key} evidence`);
   }
-  const frozenFromSemanticTarget = seal.bindings.filter(binding => !reviewEvidenceSet.has(binding.path)).map(binding => binding.path);
+  const frozenFromSemanticTarget = seal.bindings
+    .filter(binding => !reviewEvidenceSet.has(binding.path) && !(preSealVerifierCorrectionCommit && binding.path === 'tests/governance/verify-current-authority.mjs'))
+    .map(binding => binding.path);
   assertNoPathChangesSince(targetCommit, commits.seal, frozenFromSemanticTarget, 'Step 2 semantic target freeze through seal');
+  if (preSealVerifierCorrectionCommit) assertNoPathChangesSince(preSealVerifierCorrectionCommit, commits.seal, ['tests/governance/verify-current-authority.mjs'], 'Step 2 corrected verifier freeze through seal');
 }
 
 function verifyV3AuthorityPointers() {
