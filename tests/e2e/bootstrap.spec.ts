@@ -39,69 +39,111 @@ test('boots a deterministic mobile combat loop without browser errors', async ({
 
   expect(second).toEqual(first);
 
+  const readVisualIntegrity = () =>
+    page.evaluate(() => {
+      const canvas = document.querySelector('canvas');
+      const fill = document.querySelector(
+        '[data-testid="enemy-health-fill"]',
+      );
+      const track = fill?.parentElement;
 
-  const visualIntegrity = await page.evaluate(() => {
-    const canvas = document.querySelector('canvas');
-    const fill = document.querySelector(
-      '[data-testid="enemy-health-fill"]',
-    );
-    const track = fill?.parentElement;
-
-    if (!(canvas instanceof HTMLCanvasElement)) {
-      return null;
-    }
-
-    const context = canvas.getContext('2d', { willReadFrequently: true });
-    if (!context) {
-      return null;
-    }
-
-    const pixels = context.getImageData(
-      0,
-      0,
-      canvas.width,
-      canvas.height,
-    ).data;
-    let samples = 0;
-    let nonBackgroundSamples = 0;
-    let brightSamples = 0;
-
-    for (let index = 0; index + 2 < pixels.length; index += 400) {
-      const red = pixels[index]!;
-      const green = pixels[index + 1]!;
-      const blue = pixels[index + 2]!;
-      samples += 1;
-
-      if (
-        Math.abs(red - 7) +
-          Math.abs(green - 19) +
-          Math.abs(blue - 28) >
-        24
-      ) {
-        nonBackgroundSamples += 1;
+      if (!(canvas instanceof HTMLCanvasElement)) {
+        return null;
       }
 
-      if (red + green + blue > 90) {
-        brightSamples += 1;
+      // Phaser already owns this 2D context. Re-request it without changing
+      // context attributes so WebKit returns the active rendered surface.
+      const context = canvas.getContext('2d');
+      if (!context || canvas.width <= 0 || canvas.height <= 0) {
+        return null;
       }
-    }
 
-    const fillRect = fill?.getBoundingClientRect();
-    const trackRect = track?.getBoundingClientRect();
-    const expectedEnemyRatio =
-      window.__CATS_TOWER_V2__.getSnapshot().enemy.hp /
-      window.__CATS_TOWER_V2__.getSnapshot().enemy.maxHp;
+      const pixels = context.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height,
+      ).data;
+      let samples = 0;
+      let nonBackgroundSamples = 0;
+      let brightSamples = 0;
 
-    return {
-      nonBackgroundRatio: nonBackgroundSamples / samples,
-      brightRatio: brightSamples / samples,
-      renderedEnemyRatio:
-        fillRect && trackRect && trackRect.width > 0
-          ? fillRect.width / trackRect.width
-          : Number.NaN,
-      expectedEnemyRatio,
-    };
-  });
+      for (let index = 0; index + 2 < pixels.length; index += 400) {
+        const red = pixels[index]!;
+        const green = pixels[index + 1]!;
+        const blue = pixels[index + 2]!;
+        samples += 1;
+
+        if (
+          Math.abs(red - 7) +
+            Math.abs(green - 19) +
+            Math.abs(blue - 28) >
+          24
+        ) {
+          nonBackgroundSamples += 1;
+        }
+
+        if (red + green + blue > 90) {
+          brightSamples += 1;
+        }
+      }
+
+      const fillRect = fill?.getBoundingClientRect();
+      const trackRect = track?.getBoundingClientRect();
+      const snapshot = window.__CATS_TOWER_V2__.getSnapshot();
+      const expectedEnemyRatio =
+        snapshot.enemy.maxHp > 0
+          ? snapshot.enemy.hp / snapshot.enemy.maxHp
+          : 0;
+
+      return {
+        nonBackgroundRatio:
+          samples > 0 ? nonBackgroundSamples / samples : 0,
+        brightRatio: samples > 0 ? brightSamples / samples : 0,
+        renderedEnemyRatio:
+          fillRect && trackRect && trackRect.width > 0
+            ? fillRect.width / trackRect.width
+            : Number.NaN,
+        expectedEnemyRatio,
+      };
+    });
+
+  // The deterministic advance runs synchronously. React's commit, the CSS HP
+  // transition and Phaser's next paint are asynchronous, so explicitly wait
+  // for the rendered view to catch up before measuring it.
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+      }),
+  );
+
+  await expect
+    .poll(async () => (await readVisualIntegrity())?.nonBackgroundRatio ?? 0, {
+      timeout: 5_000,
+    })
+    .toBeGreaterThan(0.2);
+  await expect
+    .poll(async () => (await readVisualIntegrity())?.brightRatio ?? 0, {
+      timeout: 5_000,
+    })
+    .toBeGreaterThan(0.08);
+  await expect
+    .poll(
+      async () => {
+        const integrity = await readVisualIntegrity();
+        if (!integrity) {
+          return Number.POSITIVE_INFINITY;
+        }
+        return Math.abs(
+          integrity.renderedEnemyRatio - integrity.expectedEnemyRatio,
+        );
+      },
+      { timeout: 5_000 },
+    )
+    .toBeLessThanOrEqual(0.02);
+
+  const visualIntegrity = await readVisualIntegrity();
 
   expect(visualIntegrity).not.toBeNull();
   expect(visualIntegrity?.nonBackgroundRatio ?? 0).toBeGreaterThan(0.2);
