@@ -3516,7 +3516,15 @@ if (step2Correction) {
   assert(correctionControlCommit, 'cannot resolve round 032 control addition commit');
   assert(step2Correction.entry?.head === git(['rev-parse', `${correctionControlCommit}^`]), 'round 032 entry must be the exact parent of its opening commit');
   assert(step2Correction.entry?.tree === git(['rev-parse', `${step2Correction.entry.head}^{tree}`]), 'round 032 entry commit/tree mismatch');
-  assert(step2Correction.entry.head === closureRepairCriticCommit, 'round 032 must open directly from the closure-integrity critic evidence commit');
+  const reviewedProvenanceCorrection = {
+    commit: 'ba8fbf41883b81750bc3be2619f827582c303aab',
+    tree: 'ff8bc8f6e0b9cae084c76acb27cf817a0d4a9ec5'
+  };
+  assert(git(['rev-parse', `${reviewedProvenanceCorrection.commit}^{tree}`]) === reviewedProvenanceCorrection.tree, 'round 032 reviewed provenance-correction tree mismatch');
+  assert(git(['rev-parse', `${reviewedProvenanceCorrection.commit}^`]) === closureRepairCriticCommit, 'round 032 reviewed provenance correction is not the immediate critic child');
+  assertExactChangedPaths(closureRepairCriticCommit, reviewedProvenanceCorrection.commit, ['tests/governance/verify-current-authority.mjs'], 'round 032 reviewed provenance correction');
+  assert(git(['rev-parse', `${step2Correction.entry.head}^`]) === reviewedProvenanceCorrection.commit, 'round 032 must open after the dedicated entry-boundary correction');
+  assertExactChangedPaths(reviewedProvenanceCorrection.commit, step2Correction.entry.head, ['tests/governance/verify-current-authority.mjs'], 'round 032 entry-boundary correction');
   const verifierBeforeRound032 = textAt(step2Correction.entry.head, 'tests/governance/verify-current-authority.mjs');
   const expectedVerifierAtRound032 = verifierBeforeRound032.replace(
     'const expectedStep2CorrectionControlBlob = null;',
