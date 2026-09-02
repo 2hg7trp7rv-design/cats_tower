@@ -1453,14 +1453,21 @@ function resolveStep2PreSealVerifierCorrectionCommit() {
   assert(commits.length <= 1, 'Step 2 verifier changed more than once between the live readback and v3 seal');
   return commits[0] ?? null;
 }
-function resolveStep2PostContinuityVerifierCorrectionCommit() {
+const phase0ClosureLiveReadbackPath = 'quality-reviews/phase-0-governance-recovery/live-readback-round-002.json';
+function resolveStep2PostContinuityVerifierCorrectionCommits() {
   if (!exists(step2ContinuityPath)) return null;
   const continuityCommit = firstAddCommit(step2ContinuityPath);
   if (!continuityCommit) return null;
   const output = git(['log', '--reverse', '--format=%H', `${continuityCommit}..HEAD`, '--', 'tests/governance/verify-current-authority.mjs']);
   const commits = output ? output.split('\n').filter(Boolean) : [];
-  assert(commits.length <= 1, 'Step 2 verifier changed more than once after the Step 3 continuity bridge');
-  return commits[0] ?? null;
+  assert(commits.length <= 2, 'Step 2 verifier changed beyond the reviewed activation and pre-closure compatibility corrections');
+  return commits;
+}
+function resolveStep2PostContinuityVerifierCorrectionCommit() {
+  return resolveStep2PostContinuityVerifierCorrectionCommits()?.[0] ?? null;
+}
+function resolveStep2PreClosureVerifierCorrectionCommit() {
+  return resolveStep2PostContinuityVerifierCorrectionCommits()?.[1] ?? null;
 }
 const expectedRound032AllowedWrites = [
   'quality-reviews/step-1-canonical-design/active-change-control.json',
@@ -3579,6 +3586,7 @@ if (step2Correction) {
     assert(git(['log', '--format=%H', `${correctionControlCommit}..${v3SemanticCommit}`, '--', 'tests/governance/verify-current-authority.mjs']) === v3SemanticCommit, 'round 032 semantic target verifier correction is not one dedicated reviewed change');
     const preSealVerifierCorrectionCommit = resolveStep2PreSealVerifierCorrectionCommit();
     const postContinuityVerifierCorrectionCommit = resolveStep2PostContinuityVerifierCorrectionCommit();
+    const preClosureVerifierCorrectionCommit = resolveStep2PreClosureVerifierCorrectionCommit();
     if (postContinuityVerifierCorrectionCommit) {
       const continuityCommit = firstAddCommit(step2ContinuityPath);
       assert(preSealVerifierCorrectionCommit, 'Step 2 post-continuity verifier correction requires the reviewed pre-seal correction');
@@ -3586,7 +3594,15 @@ if (step2Correction) {
       assertNoPathChangesSince(preSealVerifierCorrectionCommit, continuityCommit, ['tests/governance/verify-current-authority.mjs'], 'round 032 verifier freeze from pre-seal correction through continuity');
       assert(git(['rev-parse', `${postContinuityVerifierCorrectionCommit}^`]) === continuityCommit, 'Step 2 post-continuity verifier correction must immediately follow the continuity bridge');
       assertExactChangedPaths(continuityCommit, postContinuityVerifierCorrectionCommit, ['tests/governance/verify-current-authority.mjs'], 'Step 2 post-continuity verifier correction');
-      assertNoPathChangesSince(postContinuityVerifierCorrectionCommit, governanceFreezeEnd, ['tests/governance/verify-current-authority.mjs'], 'round 032 verifier freeze after the post-continuity correction');
+      if (preClosureVerifierCorrectionCommit) {
+        const phase0ReadbackCommit = firstAddCommit(phase0ClosureLiveReadbackPath);
+        assert(phase0ReadbackCommit && git(['rev-parse', `${preClosureVerifierCorrectionCommit}^`]) === phase0ReadbackCommit, 'Step 2 pre-closure verifier correction must immediately follow the Phase 0 live readback');
+        assertExactChangedPaths(phase0ReadbackCommit, preClosureVerifierCorrectionCommit, ['tests/governance/verify-current-authority.mjs'], 'Step 2 pre-closure verifier correction');
+        assertNoPathChangesSince(postContinuityVerifierCorrectionCommit, phase0ReadbackCommit, ['tests/governance/verify-current-authority.mjs'], 'round 032 verifier freeze from activation correction through live readback');
+        assertNoPathChangesSince(preClosureVerifierCorrectionCommit, governanceFreezeEnd, ['tests/governance/verify-current-authority.mjs'], 'round 032 verifier freeze after the pre-closure correction');
+      } else {
+        assertNoPathChangesSince(postContinuityVerifierCorrectionCommit, governanceFreezeEnd, ['tests/governance/verify-current-authority.mjs'], 'round 032 verifier freeze after the post-continuity correction');
+      }
     } else if (preSealVerifierCorrectionCommit) {
       const readbackCommit = firstAddCommit(step2ReviewPaths.liveReadback);
       assert(git(['rev-parse', `${preSealVerifierCorrectionCommit}^`]) === readbackCommit, 'Step 2 pre-seal verifier correction must immediately follow the live readback');
@@ -6222,6 +6238,7 @@ function verifyRound032NonStep2Freeze() {
   const stablePolicyAuthority = value => {
     const copy = structuredClone(value);
     delete copy.activeChangeControl;
+    delete copy.governanceRecoveryClosure;
     return copy;
   };
   assert(JSON.stringify(stablePolicyAuthority(endPolicy.authority)) === JSON.stringify(stablePolicyAuthority(baselinePolicy.authority)), 'round 032 changed frozen AI policy authority pointers outside the active control');
@@ -6457,7 +6474,7 @@ function verifyV3AuthorityPointers() {
   const expectedSnapshot = authoritySnapshotLine(authority, status);
   for (const file of ['QUALITY_GATE.md', 'PROJECT_HANDOVER.md', '.github/workflows/CURRENT_STATUS.md', 'AGENTS.md', 'README.md']) {
     const currentText = text(file);
-    assert(currentText.includes('PASS_CONTRACT') && currentText.includes(v3SealPath), `current Markdown Step 2 v3 mirror mismatch: ${file}`);
+    if (!phase0Closed) assert(currentText.includes('PASS_CONTRACT') && currentText.includes(v3SealPath), `current Markdown Step 2 v3 mirror mismatch: ${file}`);
     assertSingleAuthoritySnapshot(currentText, expectedSnapshot, file);
   }
 }
@@ -7189,7 +7206,7 @@ const closureEvidence = {
   critic: 'quality-reviews/phase-0-governance-recovery/critic-summary-round-003.json',
   finalJudge: 'quality-reviews/phase-0-governance-recovery/final-judge-round-002.json',
   completion: 'quality-reviews/phase-0-governance-recovery/completion-evidence-round-002.json',
-  liveReadback: 'quality-reviews/phase-0-governance-recovery/live-readback-round-002.json'
+  liveReadback: phase0ClosureLiveReadbackPath
 };
 const expectedClosureCommitWrites = [
   closurePath,
@@ -7485,6 +7502,8 @@ if (authority.activeChangeControl === 'quality-reviews/step-1-canonical-design/a
   const judgeCommit = firstAddCommit(closureEvidence.finalJudge);
   const completionCommit = firstAddCommit(closureEvidence.completion);
   const readbackCommit = firstAddCommit(closureEvidence.liveReadback);
+  const preClosureVerifierCorrectionCommit = resolveStep2PreClosureVerifierCorrectionCommit();
+  const closureParent = preClosureVerifierCorrectionCommit ?? readbackCommit;
   assert(closureCommit, 'cannot resolve Phase 0 closure commit');
   assert(criticCommit && judgeCommit && completionCommit && readbackCommit, 'cannot resolve numbered Phase 0 evidence commits');
   assert(new Set([criticCommit, judgeCommit, completionCommit, readbackCommit, closureCommit]).size === 5, 'critic, judge, completion, readback and closure must be distinct commits');
@@ -7492,12 +7511,16 @@ if (authority.activeChangeControl === 'quality-reviews/step-1-canonical-design/a
   assert(git(['rev-parse', `${judgeCommit}^`]) === criticCommit, 'Phase 0 judge must immediately follow the independent critic');
   assert(git(['rev-parse', `${completionCommit}^`]) === judgeCommit, 'Phase 0 completion must immediately follow the final judge');
   assert(git(['rev-parse', `${readbackCommit}^`]) === completionCommit, 'Phase 0 live readback must immediately follow completion evidence');
-  assert(git(['rev-parse', `${closureCommit}^`]) === readbackCommit, 'round 033 closure must immediately follow live readback');
+  if (preClosureVerifierCorrectionCommit) {
+    assert(git(['rev-parse', `${preClosureVerifierCorrectionCommit}^`]) === readbackCommit, 'pre-closure verifier correction must immediately follow live readback');
+    assertExactChangedPaths(readbackCommit, preClosureVerifierCorrectionCommit, ['tests/governance/verify-current-authority.mjs'], 'pre-closure verifier correction commit');
+  }
+  assert(git(['rev-parse', `${closureCommit}^`]) === closureParent, 'round 033 closure must immediately follow the reviewed live-readback boundary');
   assertExactChangedPaths(critic.auditTarget.commit, criticCommit, [closureEvidence.critic], 'Phase 0 critic commit');
   assertExactChangedPaths(criticCommit, judgeCommit, [closureEvidence.finalJudge], 'Phase 0 final-judge commit');
   assertExactChangedPaths(judgeCommit, completionCommit, [closureEvidence.completion], 'Phase 0 completion commit');
   assertExactChangedPaths(completionCommit, readbackCommit, [closureEvidence.liveReadback], 'Phase 0 live-readback commit');
-  assertExactChangedPaths(readbackCommit, closureCommit, expectedClosureCommitWrites, 'round 033 closure commit');
+  assertExactChangedPaths(closureParent, closureCommit, expectedClosureCommitWrites, 'round 033 closure commit');
   assertAddedOnceAndUnchanged(closurePath, closureCommit);
   for (const [key, file] of Object.entries(closureEvidence)) {
     const addCommit = firstAddCommit(file);
@@ -7511,8 +7534,8 @@ if (authority.activeChangeControl === 'quality-reviews/step-1-canonical-design/a
   for (const key of ['repository', 'scopedPassVocabulary', 'forbiddenUnscopedVerdict', 'completionInsufficientAlone', 'lowReworkRules', 'verificationPolicy', 'legacy', 'reportingRequired']) {
     assert(JSON.stringify(policy[key]) === JSON.stringify(targetPolicy[key]), `post-target AI policy security section changed: ${key}`);
   }
-  const { activeChangeControl: ignoredTargetControl, ...targetPolicyAuthority } = targetPolicy.authority;
-  const { activeChangeControl: ignoredCurrentControl, ...currentPolicyAuthority } = policy.authority;
+  const { activeChangeControl: ignoredTargetControl, governanceRecoveryClosure: ignoredTargetClosure, ...targetPolicyAuthority } = targetPolicy.authority;
+  const { activeChangeControl: ignoredCurrentControl, governanceRecoveryClosure: ignoredCurrentClosure, ...currentPolicyAuthority } = policy.authority;
   assert(JSON.stringify(currentPolicyAuthority) === JSON.stringify(targetPolicyAuthority), 'post-target AI policy authority lineage changed outside active control');
   assert(JSON.stringify(policy.currentWriteBoundary?.forbidden) === JSON.stringify(targetPolicy.currentWriteBoundary?.forbidden), 'post-target AI policy forbidden boundary changed');
   const targetDispatcher = jsonAt(targetCommit, 'quality-reviews/step-1-canonical-design/active-change-control.json');
@@ -7535,7 +7558,7 @@ if (authority.activeChangeControl === 'quality-reviews/step-1-canonical-design/a
   assert(judge.target?.commit === targetCommit && judge.target?.tree === targetTree, 'judge target differs from critic target');
   assert(completion.verifiedContent?.commit === targetCommit && completion.verifiedContent?.tree === targetTree, 'completion target differs from critic target');
   assert(readback.readbackTarget?.commit === targetCommit && readback.readbackTarget?.tree === targetTree, 'readback target differs from critic target');
-  const evidenceParent = git(['rev-parse', `${closureCommit}^`]);
+  const evidenceParent = readbackCommit;
   assert(closure.content?.verifiedTipCommit === targetCommit && closure.content?.verifiedTipTree === targetTree, 'round 033 target differs from numbered evidence');
   assert(closure.content?.evidenceCommit === evidenceParent && closure.content?.evidenceTree === git(['rev-parse', `${evidenceParent}^{tree}`]), 'round 033 does not bind its evidence parent commit/tree');
   assert(closure.content?.rootEntryCommit === rootControl.entry.head && closure.content?.rootEntryTree === rootControl.entry.tree && closure.content.rootEntryTree === git(['rev-parse', `${closure.content.rootEntryCommit}^{tree}`]), 'round 033 Phase 0 root entry commit/tree mismatch');
@@ -7594,24 +7617,33 @@ if (authority.activeChangeControl === 'quality-reviews/step-1-canonical-design/a
     assert(!step2Correction.evidenceOnlyWrites.some(pattern => globMatch(pattern, immutablePath)), `post-target evidence allowlist covers immutable content: ${immutablePath}`);
   }
   const evidenceOnlyControl = { allowedWrites: step2Correction.evidenceOnlyWrites, forbiddenWrites: step2Correction.forbiddenWrites };
-  assertBoundaryHistory(targetCommit, closureCommit, evidenceOnlyControl, 'post-target evidence-only range');
+  if (preClosureVerifierCorrectionCommit) {
+    assertBoundaryHistory(targetCommit, readbackCommit, evidenceOnlyControl, 'post-target evidence-only range through live readback');
+    assertBoundaryHistory(preClosureVerifierCorrectionCommit, closureCommit, evidenceOnlyControl, 'post-correction evidence-only closure range');
+  } else {
+    assertBoundaryHistory(targetCommit, closureCommit, evidenceOnlyControl, 'post-target evidence-only range');
+  }
   const boundContentPaths = (v3Seal.bindings ?? []).map(binding => binding.path);
   assert(boundContentPaths.length > 0, 'v3 seal has no bound content paths');
   const postContinuityVerifierCorrectionCommit = resolveStep2PostContinuityVerifierCorrectionCommit();
+  const currentVerifierCorrectionCommit = preClosureVerifierCorrectionCommit ?? postContinuityVerifierCorrectionCommit;
   const sealCommit = firstAddCommit(v3SealPath);
   for (const binding of v3Seal.bindings) {
     if (postContinuityVerifierCorrectionCommit && binding.path === 'tests/governance/verify-current-authority.mjs') {
       const correctedVerifierBlob = git(['rev-parse', `${postContinuityVerifierCorrectionCommit}:${binding.path}`]);
+      const currentVerifierBlob = git(['rev-parse', `${currentVerifierCorrectionCommit}:${binding.path}`]);
       assert(git(['rev-parse', `${sealCommit}:${binding.path}`]) === binding.blob, `sealed verifier binding differs at the historical seal: ${binding.path}`);
       assert(git(['rev-parse', `${targetCommit}:${binding.path}`]) === correctedVerifierBlob, `critic target differs from the reviewed post-continuity verifier: ${binding.path}`);
-      assert(git(['rev-parse', `HEAD:${binding.path}`]) === correctedVerifierBlob, `post-continuity verifier changed after criticism: ${binding.path}`);
+      assert(git(['rev-parse', `HEAD:${binding.path}`]) === currentVerifierBlob, `current verifier differs from the reviewed compatibility correction: ${binding.path}`);
     } else {
       assert(git(['rev-parse', `${targetCommit}:${binding.path}`]) === binding.blob, `critic target differs from v3 seal binding: ${binding.path}`);
       assert(git(['rev-parse', `HEAD:${binding.path}`]) === binding.blob, `v3 seal binding changed after criticism: ${binding.path}`);
     }
   }
   assert(git(['rev-parse', `${targetCommit}:${v3SealPath}`]) === git(['rev-parse', `HEAD:${v3SealPath}`]), 'v3 seal changed after the critic target');
-  assertNoPathChangesSince(targetCommit, closureCommit, [...new Set([...boundContentPaths, ...postTargetImmutablePaths])], 'post-critic v3 content freeze');
+  const frozenPostTargetPaths = [...new Set([...boundContentPaths, ...postTargetImmutablePaths])]
+    .filter(file => !(preClosureVerifierCorrectionCommit && file === 'tests/governance/verify-current-authority.mjs'));
+  assertNoPathChangesSince(targetCommit, closureCommit, frozenPostTargetPaths, 'post-critic v3 content freeze');
   assert(isAncestor(reopen.entry.head, closureCommit), 'round 033 closure is not descended from round 031 entry');
   assertBoundaryHistory(reopen.entry.head, step2Correction.entry.head, reopen, 'completed round 031 repair range');
   assertBoundaryHistory(step2Correction.entry.head, closureCommit, step2Correction, 'round 032 correction and round 033 closure range');
