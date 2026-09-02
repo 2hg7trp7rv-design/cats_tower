@@ -1715,7 +1715,8 @@ summary {
   border-radius: var(--radius-modal);
   background:
     radial-gradient(circle at 16% 8%, rgba(255, 251, 226, 0.92), rgba(255, 251, 226, 0) 38%),
-    radial-gradient(circle at 88% 88%, rgba(153, 89, 43, 0.24), rgba(153, 89, 43, 0) 46%),
+    radial-gradient(circle at 88% 88%, rgba(139, 70, 32, 0.38), rgba(139, 70, 32, 0) 52%),
+    repeating-linear-gradient(104deg, rgba(105, 57, 27, 0.1) 0, rgba(105, 57, 27, 0.1) 1px, rgba(255, 249, 218, 0.08) 1px, rgba(255, 249, 218, 0.08) 3px, transparent 3px, transparent 8px),
     linear-gradient(128deg, #f3e4bf 0%, #e6c995 45%, #f2dfb5 72%, #d7b176 100%);
   box-shadow: inset 0 0 0 3px rgba(91, 55, 30, 0.16), 0 22px 58px rgba(17, 8, 5, 0.5);
   text-align: center;
@@ -1724,6 +1725,12 @@ summary {
 .offline-modal-head,
 .offline-modal-footer {
   flex: 0 0 auto;
+}
+
+.offline-modal-head {
+  border-radius: var(--radius-small);
+  background-color: #efd7a3;
+  box-shadow: inset 0 0 0 1px rgba(120, 75, 34, 0.14);
 }
 
 .offline-modal-body {
@@ -1822,6 +1829,8 @@ summary {
 .offline-modal-body > p {
   margin: 11px 0 14px;
   color: #644936;
+  border-radius: var(--radius-small);
+  background-color: #f1dfb8;
   font-size: 0.875rem;
   line-height: 1.55;
 }
@@ -1830,7 +1839,7 @@ summary {
   margin: 0;
   border: 1px solid rgba(113, 78, 40, 0.27);
   border-radius: var(--radius-small);
-  background: rgba(255, 252, 231, 0.5);
+  background: #f6e8c6;
 }
 
 .offline-modal dl div {
@@ -1889,6 +1898,8 @@ summary {
   display: block;
   margin: 8px 0 12px;
   color: #60472e;
+  border-radius: 4px;
+  background-color: #ead3a2;
   font-size: 0.875rem;
 }
 
@@ -2406,7 +2417,7 @@ summary {
   right: 6px;
   left: 6px;
   height: 116px;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr) 84px;
+  grid-template-columns: 120px minmax(0, 1fr) 84px;
   gap: 4px;
 }
 
