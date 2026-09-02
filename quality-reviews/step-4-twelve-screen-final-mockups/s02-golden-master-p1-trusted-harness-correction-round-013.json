@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-trusted-harness-correction-round-013",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "71ac07baa327ebde5bc2785f611384059c79bc47",
+    "tree": "4f04a9af26b19d555bb30fb9571da733f8bab322"
+  },
+  "sourceEvidence": {
+    "contentCommit": "0fa6ac052ca303f24b6e0cf859322792491fcdef",
+    "contentTree": "61866194848cedaf2ffc52b199f122f5fb0daf79",
+    "workflowRun": 33602357267,
+    "workflowArtifactId": 9835736575,
+    "workflowArtifactDigest": "sha256:20f872c43d502d137a3415a55d195f7df7c5408499561ca460b712203c0d1eb7",
+    "browserRawPath": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-workflow-evidence-round-001/semantic-evidence/browser-raw.json",
+    "browserRawSha256": "sha256:cbad5cbe373cb4af78ff57285dcea111eba48e8ee5964a0dcd7bb107a6730f03"
+  },
+  "diagnosis": {
+    "type": "DURABLE_BROWSER_EVIDENCE_CONTAINS_REVIEW_MODE_AND_RESPONSIVE_ASSERTIONS_NOT_LISTED_BY_THE_CONSUMER_CONTRACT",
+    "omittedKeys": [
+      "browserModes",
+      "LAYOUT_AND_VISUAL_VIEWPORT_MATCH",
+      "INITIAL_SCROLL_ORIGIN_ZERO",
+      "UNIFORM_FULL_SCREEN_SCALE_ABSENT",
+      "REDUCED_MOTION_POLICY_NATIVE",
+      "REVIEW_BROWSER_MODES_OPERABLE",
+      "GM05_UI_ANTI_BLOAT",
+      "RESPONSIVE_GEOMETRY_CONTRACT"
+    ],
+    "producerCoverage": "Eight GM switches, fit/actual toggle, reference comparison, closed-resource diagnostics and seven responsive assertions were successfully captured by the trusted browser job.",
+    "consumerCoverage": "The independent-review reader omitted browserModes from the raw key set and omitted seven already-measured responsive assertions from its expected assertion sequence.",
+    "qualityResultUnaffected": true
+  },
+  "correction": {
+    "rule": "ADD_BROWSER_MODES_AND_SEVEN_RESPONSIVE_ASSERTIONS_TO_THE_EXACT_CONSUMER_CONTRACT_AND_FAIL_CLOSED_VERIFY_THEIR_SIGNED_VALUES_BEFORE_CRITIC_ADMISSION",
+    "changedPaths": [
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-013.json",
+      "tests/governance/verify-current-authority.mjs"
+    ],
+    "validatedBrowserModeSections": [
+      "gmSwitches",
+      "fitActual",
+      "referenceCompare",
+      "diagnostics"
+    ],
+    "validatedAdditionalAssertions": [
+      "LAYOUT_AND_VISUAL_VIEWPORT_MATCH",
+      "INITIAL_SCROLL_ORIGIN_ZERO",
+      "UNIFORM_FULL_SCREEN_SCALE_ABSENT",
+      "REDUCED_MOTION_POLICY_NATIVE",
+      "REVIEW_BROWSER_MODES_OPERABLE",
+      "GM05_UI_ANTI_BLOAT",
+      "RESPONSIVE_GEOMETRY_CONTRACT"
+    ],
+    "verifierAfterSha256": "b406250ee91a491bbee00e913a9fe82a19525f09e17caf3b60f1261e9bc3427e",
+    "verifierPatchSha256": "sha256:894b0560cf527e7fa1538dd7fc3a21d083887456ccb2e9e83faffdcbb6f15268",
+    "acceptanceThresholdsChanged": false,
+    "browserCollectorChanged": false,
+    "browserQaChanged": false,
+    "productContentChanged": false,
+    "failureEvidenceWeakened": false
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_REVIEW_VERIFIER_PENDING_INDEPENDENT_CRITIC"
+}

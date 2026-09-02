@@ -233,6 +233,8 @@ function assertS02HistoryWithIncrementalRenewals(base, head, control, label, evi
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02FiligreeCorrectionChangedPaths].sort()), `${label}: filigree correction changed an unreviewed path`);
     } else if (s02EvidenceTransportCorrectionCommit && commit === s02EvidenceTransportCorrectionCommit) {
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02EvidenceTransportCorrectionChangedPaths].sort()), `${label}: evidence-transport correction changed an unreviewed path`);
+    } else if (s02ReviewVerifierCorrectionCommit && commit === s02ReviewVerifierCorrectionCommit) {
+      assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02ReviewVerifierCorrectionChangedPaths].sort()), `${label}: review-verifier correction changed an unreviewed path`);
     } else {
       assertBoundary(paths, control, `${label} commit ${commit}`);
     }
@@ -1041,8 +1043,30 @@ function verifyS02WorkflowEvidence(evidence, label, requireArtifactArchive = tru
     const browserReport = JSON.parse(browserReportBytes.toString('utf8'));
     const browserRaw = JSON.parse(browserRawBytes.toString('utf8'));
     const browserRawBaseKeys = ['schemaVersion', 'artifactId', 'repository', 'branch', 'head', 'tree', 'baseUrl', 'playwrightVersion', 'chromiumVersion', 'scenarios'];
-    assertExactKeySet(browserRaw, [...browserRawBaseKeys, 'offlineVariants', ...(revisionProof ? ['requestMeasurements', 'assetParticipation'] : [])], `${label} browser raw`);
+    assertExactKeySet(browserRaw, [...browserRawBaseKeys, 'offlineVariants', 'browserModes', ...(revisionProof ? ['requestMeasurements', 'assetParticipation'] : [])], `${label} browser raw`);
     assert(browserRaw.repository === '2hg7trp7rv-design/cats_tower' && browserRaw.branch === 'kimi' && browserRaw.head === evidence.commit && browserRaw.tree === evidence.tree, `${label}: browser raw target mismatch`);
+    assertExactKeySet(browserRaw.browserModes, ['viewport', 'gmSwitches', 'fitActual', 'referenceCompare', 'diagnostics'], `${label} browser-mode evidence`);
+    assertExactKeySet(browserRaw.browserModes.viewport, ['width', 'height'], `${label} browser-mode viewport`);
+    assert(JSON.stringify(browserRaw.browserModes.viewport) === JSON.stringify({ width: 390, height: 844 }), `${label}: browser-mode evidence was not captured at the reviewed control viewport`);
+    const modeGoldenMasters = ['GM01', 'GM02', 'GM03', 'GM04', 'GM05', 'GM06', 'GM07', 'GM08'];
+    assert(Array.isArray(browserRaw.browserModes.gmSwitches) && browserRaw.browserModes.gmSwitches.length === modeGoldenMasters.length, `${label}: browser-mode evidence does not cover all eight Golden Master switches`);
+    for (const [index, mode] of browserRaw.browserModes.gmSwitches.entries()) {
+      assertExactKeySet(mode, ['requested', 'routePath', 'routeSearch', 'stageGm', 'fixtureId', 'layoutViewport', 'responsiveEvidenceOverride', 'selectedAriaCurrent', 'reviewId', 'ready', 'stageLayout', 'gameUiLayout', 'battlefieldLayout'], `${label} browser-mode GM switch ${index + 1}`);
+      for (const layoutKey of ['stageLayout', 'gameUiLayout', 'battlefieldLayout']) assertExactKeySet(mode[layoutKey], ['width', 'height', 'scrollWidth', 'scrollHeight'], `${label} browser-mode GM switch ${index + 1} ${layoutKey}`);
+      const id = modeGoldenMasters[index];
+      const expectedViewport = s02ExpectedScreenshots[index].viewport;
+      assert(mode.requested === id && mode.stageGm === id && mode.reviewId === id && mode.fixtureId === `s02.p1.fixture.${id}` && mode.routePath === '/step4/s02/golden-master-p1/' && mode.routeSearch === `?gm=${id}` && mode.layoutViewport === expectedViewport && mode.responsiveEvidenceOverride === '' && mode.selectedAriaCurrent === 'page' && mode.ready === 'true', `${label}: browser-mode switch identity/state mismatch for ${id}`);
+      assert(mode.stageLayout.width === s02ExpectedScreenshots[index].width && mode.stageLayout.height >= s02ExpectedScreenshots[index].height && mode.gameUiLayout.width === s02ExpectedScreenshots[index].width && mode.gameUiLayout.height === mode.stageLayout.scrollHeight && mode.battlefieldLayout.width === s02ExpectedScreenshots[index].width && mode.battlefieldLayout.height >= 300, `${label}: browser-mode switch layout mismatch for ${id}`);
+    }
+    assertExactKeySet(browserRaw.browserModes.fitActual, ['fitBefore', 'actual', 'fitAfter'], `${label} fit/actual mode evidence`);
+    for (const key of ['fitBefore', 'actual', 'fitAfter']) assertExactKeySet(browserRaw.browserModes.fitActual[key], ['actualSizeClass', 'fitAriaPressed', 'actualAriaPressed', 'nominalWidth', 'nominalHeight', 'reviewSizing', 'reviewScale', 'viewportReadout', 'reviewTransform', 'reviewMatrixScaleX', 'stageRect'], `${label} fit/actual mode ${key}`);
+    assert(browserRaw.browserModes.fitActual.fitBefore.fitAriaPressed === 'true' && browserRaw.browserModes.fitActual.actual.actualAriaPressed === 'true' && browserRaw.browserModes.fitActual.actual.reviewSizing === 'ACTUAL_1_TO_1' && browserRaw.browserModes.fitActual.actual.reviewMatrixScaleX === 1 && browserRaw.browserModes.fitActual.fitAfter.fitAriaPressed === 'true', `${label}: fit/actual mode toggle did not complete its reversible state transition`);
+    assertExactKeySet(browserRaw.browserModes.referenceCompare, ['closedBefore', 'open', 'closedAfter'], `${label} reference-compare mode evidence`);
+    for (const key of ['closedBefore', 'open', 'closedAfter']) assertExactKeySet(browserRaw.browserModes.referenceCompare[key], ['comparingClass', 'singleAriaPressed', 'compareAriaPressed', 'referenceHidden', 'referenceRendered', 'referenceViewportVisible', 'referenceOutsideStage', 'referenceDecoded', 'surfaceScrollLeft'], `${label} reference-compare mode ${key}`);
+    assert(browserRaw.browserModes.referenceCompare.closedBefore.referenceHidden === true && browserRaw.browserModes.referenceCompare.open.referenceRendered === true && browserRaw.browserModes.referenceCompare.open.referenceOutsideStage === true && browserRaw.browserModes.referenceCompare.closedAfter.referenceHidden === true, `${label}: reference comparison did not open outside the game stage and close reversibly`);
+    assertExactKeySet(browserRaw.browserModes.diagnostics, ['consoleErrors', 'pageErrors', 'failedRequests', 'externalResources', 'resourcePaths', 'unexpectedResponses'], `${label} browser-mode diagnostics`);
+    assert(['consoleErrors', 'pageErrors', 'failedRequests', 'externalResources', 'unexpectedResponses'].every(key => Array.isArray(browserRaw.browserModes.diagnostics[key]) && browserRaw.browserModes.diagnostics[key].length === 0), `${label}: browser-mode diagnostics contain an error, external resource or unexpected response`);
+    assert(JSON.stringify(browserRaw.browserModes.diagnostics.resourcePaths) === JSON.stringify(['/step4/s02/golden-master-p1/', '/step4/s02/golden-master-p1/app.js', '/step4/s02/golden-master-p1/assets/clockwork-marten.webp', '/step4/s02/golden-master-p1/assets/party-actions.webp', '/step4/s02/golden-master-p1/assets/party-roster.webp', '/step4/s02/golden-master-p1/assets/prior-reference-s02.webp', '/step4/s02/golden-master-p1/assets/tower-corridor.webp', '/step4/s02/golden-master-p1/styles.css']), `${label}: browser-mode resource set differs from the closed local review graph`);
     const expectedOfflineViewStates = ['NO_PROGRESS', 'ELAPSED_UNKNOWN', 'RECONCILING_INDETERMINATE', 'RECONCILING_DETERMINATE', 'PROVISIONAL', 'CONFIRMING', 'CONFIRMED', 'REJECTED', 'RETRYABLE_ERROR', 'UNKNOWN'];
     assert(Array.isArray(browserRaw.offlineVariants) && JSON.stringify(browserRaw.offlineVariants.map(entry => entry?.viewState)) === JSON.stringify(expectedOfflineViewStates), `${label}: browser raw offline-state decision-table coverage mismatch`);
     assertExactKeySet(result, ['schemaVersion', 'artifactId', 'repository', 'repositoryId', 'repositoryOwnerId', 'branch', 'commit', 'tree', 'runId', 'runAttempt', 'oidcTokenSha256', 'oidcClaims', 'oidcVerified', 'staticReportSha256', 'browserRawSha256', 'browserReportSha256', ...(revisionProof ? ['baselineBrowserRawSha256', 'revisionComparisonSha256', 'revision'] : []), 'screenshots', 'verdict', 'unresolved', 'physicalIPhoneVerified', 'productionAliasChanged'], `${label} S02 result`);
@@ -1843,7 +1867,7 @@ const s02FindingClosureDefinitions = [
   {
     findingId: 'S02-P1-RESPONSIVE-SAFEAREA-001',
     changedPaths: ['step4/s02/golden-master-p1/styles.css', 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-responsive-contract.json', 'tests/step4/s02-golden-master-p1-browser.mjs', 'tests/step4/s02-golden-master-p1-browser-qa.mjs'],
-    testAssertions: ['SEVEN_REQUIRED_VIEWPORTS_PASS', 'NONZERO_SAFE_AREA_PASS', 'TEXT_200_PERCENT_NO_LOSS', 'GM04_REFLOW_OR_SCROLL_PASS']
+    testAssertions: ['SEVEN_REQUIRED_VIEWPORTS_PASS', 'NONZERO_SAFE_AREA_PASS', 'TEXT_200_PERCENT_NO_LOSS', 'LAYOUT_AND_VISUAL_VIEWPORT_MATCH', 'INITIAL_SCROLL_ORIGIN_ZERO', 'UNIFORM_FULL_SCREEN_SCALE_ABSENT', 'REDUCED_MOTION_POLICY_NATIVE', 'REVIEW_BROWSER_MODES_OPERABLE', 'GM05_UI_ANTI_BLOAT', 'RESPONSIVE_GEOMETRY_CONTRACT', 'GM04_REFLOW_OR_SCROLL_PASS']
   },
   {
     findingId: 'S02-P1-RESOURCE-RANK-BINDING-001',
@@ -1898,6 +1922,13 @@ const s02AssertionCriteria = {
   SEVEN_REQUIRED_VIEWPORTS_PASS: ['EQUALS', 7, 'count'],
   NONZERO_SAFE_AREA_PASS: ['EQUALS', true, 'boolean'],
   TEXT_200_PERCENT_NO_LOSS: ['EQUALS', true, 'boolean'],
+  LAYOUT_AND_VISUAL_VIEWPORT_MATCH: ['EQUALS', true, 'boolean'],
+  INITIAL_SCROLL_ORIGIN_ZERO: ['EQUALS', true, 'boolean'],
+  UNIFORM_FULL_SCREEN_SCALE_ABSENT: ['EQUALS', true, 'boolean'],
+  REDUCED_MOTION_POLICY_NATIVE: ['EQUALS', true, 'boolean'],
+  REVIEW_BROWSER_MODES_OPERABLE: ['EQUALS', true, 'boolean'],
+  GM05_UI_ANTI_BLOAT: ['EQUALS', true, 'boolean'],
+  RESPONSIVE_GEOMETRY_CONTRACT: ['EQUALS', true, 'boolean'],
   GM04_REFLOW_OR_SCROLL_PASS: ['EQUALS', true, 'boolean'],
   UNBOUND_RUBY_REMOVED: ['EQUALS', true, 'boolean'],
   UNBOUND_RANK_REMOVED_OR_BOUND: ['EQUALS', true, 'boolean'],
@@ -2073,7 +2104,9 @@ function verifyS02PersistedWorkflowPackage(evidence, evidenceRound, revisionProo
     assertExactChangedPaths(s02InvalidAdmissionCommit, admissionCommit, s02EvidenceTransportCorrectionChangedPaths, `${label} corrected authenticated S02 package admission`);
     assertRegularGitFile(admissionPaths.admission, `${label} recovered admission`);
     assert(git(['rev-parse', `HEAD:${admissionPaths.admission}`]) !== s02InvalidAdmissionBlob, `${label}: recovered admission still resolves to the invalid transport blob`);
-    assertNoPathChangesSince(admissionCommit, 'HEAD', [admissionPaths.admission, s02EvidenceTransportCorrectionPath, 'tests/governance/verify-current-authority.mjs'], `${label} transport-recovery freeze`);
+    const transportVerifierFreezeEnd = s02ReviewVerifierCorrectionCommit ? git(['rev-parse', `${s02ReviewVerifierCorrectionCommit}^`]) : 'HEAD';
+    assertNoPathChangesSince(admissionCommit, 'HEAD', [admissionPaths.admission, s02EvidenceTransportCorrectionPath], `${label} transport-recovery evidence freeze`);
+    assertNoPathChangesSince(admissionCommit, transportVerifierFreezeEnd, ['tests/governance/verify-current-authority.mjs'], `${label} transport-recovery verifier freeze`);
   } else {
     assertExactSingleParent(admissionCommit, packageCommit, `${label} authenticated S02 package admission`);
     assertExactChangedPaths(packageCommit, admissionCommit, [admissionPaths.admission], `${label} authenticated S02 package admission`);
@@ -3865,6 +3898,13 @@ const s02EvidenceTransportCorrectionChangedPaths = [
   s02EvidenceTransportCorrectionPath,
   'tests/governance/verify-current-authority.mjs'
 ];
+const s02ReviewVerifierCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-013.json';
+const s02ReviewVerifierCorrection = exists(s02ReviewVerifierCorrectionPath) ? json(s02ReviewVerifierCorrectionPath) : null;
+const s02ReviewVerifierCorrectionCommit = s02ReviewVerifierCorrection ? firstAddCommit(s02ReviewVerifierCorrectionPath) : null;
+const s02ReviewVerifierCorrectionChangedPaths = [
+  s02ReviewVerifierCorrectionPath,
+  'tests/governance/verify-current-authority.mjs'
+];
 
 // BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001
 const s02HarnessCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-001.json';
@@ -5187,9 +5227,44 @@ if (s02EvidenceTransportCorrection) {
   assert(JSON.stringify(admissionHistory) === JSON.stringify([s02InvalidAdmissionCommit, s02EvidenceTransportCorrectionCommit]), 'S02 admission path has history beyond the one preserved invalid attempt and one exact recovery');
   assert(JSON.stringify(s02EvidenceTransportCorrection.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }), 'S02 evidence-transport correction crosses a protected boundary');
   assert(s02EvidenceTransportCorrection.status === 'CORRECTED_EVIDENCE_TRANSPORT_PENDING_ADMISSION_READBACK', 'S02 evidence-transport correction status mismatch');
-  assertNoPathChangesSince(s02EvidenceTransportCorrectionCommit, 'HEAD', s02EvidenceTransportCorrectionChangedPaths, 'S02 evidence-transport correction freeze');
+  const s02TransportVerifierFreezeEnd = s02ReviewVerifierCorrectionCommit ? git(['rev-parse', `${s02ReviewVerifierCorrectionCommit}^`]) : 'HEAD';
+  assertNoPathChangesSince(s02EvidenceTransportCorrectionCommit, 'HEAD', [s02WorkflowAdmissionPaths('001').admission, s02EvidenceTransportCorrectionPath], 'S02 evidence-transport evidence freeze');
+  assertNoPathChangesSince(s02EvidenceTransportCorrectionCommit, s02TransportVerifierFreezeEnd, ['tests/governance/verify-current-authority.mjs'], 'S02 evidence-transport verifier freeze');
 }
 // END_S02_EVIDENCE_TRANSPORT_CORRECTION_ROUND_001
+
+// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_013
+if (s02ReviewVerifierCorrection) {
+  assertExactKeySet(s02ReviewVerifierCorrection, ['schemaVersion', 'artifactId', 'createdAt', 'repository', 'branch', 'changeControl', 'entry', 'sourceEvidence', 'diagnosis', 'correction', 'boundaries', 'status'], 'S02 review-verifier correction');
+  assertExactKeySet(s02ReviewVerifierCorrection.entry, ['head', 'tree'], 'S02 review-verifier correction entry');
+  assertExactKeySet(s02ReviewVerifierCorrection.sourceEvidence, ['contentCommit', 'contentTree', 'workflowRun', 'workflowArtifactId', 'workflowArtifactDigest', 'browserRawPath', 'browserRawSha256'], 'S02 review-verifier source evidence');
+  assertExactKeySet(s02ReviewVerifierCorrection.diagnosis, ['type', 'omittedKeys', 'producerCoverage', 'consumerCoverage', 'qualityResultUnaffected'], 'S02 review-verifier diagnosis');
+  assertExactKeySet(s02ReviewVerifierCorrection.correction, ['rule', 'changedPaths', 'validatedBrowserModeSections', 'validatedAdditionalAssertions', 'verifierAfterSha256', 'verifierPatchSha256', 'acceptanceThresholdsChanged', 'browserCollectorChanged', 'browserQaChanged', 'productContentChanged', 'failureEvidenceWeakened'], 'S02 review-verifier correction detail');
+  assertExactKeySet(s02ReviewVerifierCorrection.boundaries, ['rootRuntimeChanged', 'gameCoreChanged', 'gameDataChanged', 'economyChanged', 'saveSchemaChanged', 'backendChanged', 'productionChanged', 'productionAliasChanged', 'physicalIPhoneVerified', 'step4Pass', 'step5Allowed'], 'S02 review-verifier correction boundaries');
+  assert(s02ReviewVerifierCorrection.schemaVersion === 1 && s02ReviewVerifierCorrection.artifactId === 'cats-tower-s02-golden-master-p1-trusted-harness-correction-round-013' && s02ReviewVerifierCorrection.createdAt === '2026-09-02', 'S02 review-verifier correction identity/date mismatch');
+  assert(s02ReviewVerifierCorrection.repository === '2hg7trp7rv-design/cats_tower' && s02ReviewVerifierCorrection.branch === 'kimi' && s02ReviewVerifierCorrection.changeControl === s02RepairControlPath, 'S02 review-verifier correction authority mismatch');
+  assert(JSON.stringify(s02ReviewVerifierCorrection.entry) === JSON.stringify({ head: '71ac07baa327ebde5bc2785f611384059c79bc47', tree: '4f04a9af26b19d555bb30fb9571da733f8bab322' }), 'S02 review-verifier correction entry mismatch');
+  assert(JSON.stringify(s02ReviewVerifierCorrection.sourceEvidence) === JSON.stringify({ contentCommit: '0fa6ac052ca303f24b6e0cf859322792491fcdef', contentTree: '61866194848cedaf2ffc52b199f122f5fb0daf79', workflowRun: 33602357267, workflowArtifactId: 9835736575, workflowArtifactDigest: 'sha256:20f872c43d502d137a3415a55d195f7df7c5408499561ca460b712203c0d1eb7', browserRawPath: 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-workflow-evidence-round-001/semantic-evidence/browser-raw.json', browserRawSha256: 'sha256:cbad5cbe373cb4af78ff57285dcea111eba48e8ee5964a0dcd7bb107a6730f03' }), 'S02 review-verifier source binding mismatch');
+  const omittedReviewEvidenceKeys = ['browserModes', 'LAYOUT_AND_VISUAL_VIEWPORT_MATCH', 'INITIAL_SCROLL_ORIGIN_ZERO', 'UNIFORM_FULL_SCREEN_SCALE_ABSENT', 'REDUCED_MOTION_POLICY_NATIVE', 'REVIEW_BROWSER_MODES_OPERABLE', 'GM05_UI_ANTI_BLOAT', 'RESPONSIVE_GEOMETRY_CONTRACT'];
+  assert(JSON.stringify(s02ReviewVerifierCorrection.diagnosis) === JSON.stringify({ type: 'DURABLE_BROWSER_EVIDENCE_CONTAINS_REVIEW_MODE_AND_RESPONSIVE_ASSERTIONS_NOT_LISTED_BY_THE_CONSUMER_CONTRACT', omittedKeys: omittedReviewEvidenceKeys, producerCoverage: 'Eight GM switches, fit/actual toggle, reference comparison, closed-resource diagnostics and seven responsive assertions were successfully captured by the trusted browser job.', consumerCoverage: 'The independent-review reader omitted browserModes from the raw key set and omitted seven already-measured responsive assertions from its expected assertion sequence.', qualityResultUnaffected: true }), 'S02 review-verifier diagnosis mismatch');
+  const reviewBrowserRawBytes = bytesAt('HEAD', s02ReviewVerifierCorrection.sourceEvidence.browserRawPath);
+  assert(`sha256:${createHash('sha256').update(reviewBrowserRawBytes).digest('hex')}` === s02ReviewVerifierCorrection.sourceEvidence.browserRawSha256, 'S02 review-verifier correction does not bind the exact signed browser raw bytes');
+  const reviewBrowserRaw = JSON.parse(reviewBrowserRawBytes.toString('utf8'));
+  assert(reviewBrowserRaw.head === s02ReviewVerifierCorrection.sourceEvidence.contentCommit && reviewBrowserRaw.tree === s02ReviewVerifierCorrection.sourceEvidence.contentTree && reviewBrowserRaw.browserModes && typeof reviewBrowserRaw.browserModes === 'object', 'S02 review-verifier correction source lacks the exact target or browserModes payload');
+  const priorReviewVerifierSource = textAt(s02ReviewVerifierCorrection.entry.head, 'tests/governance/verify-current-authority.mjs');
+  assert(priorReviewVerifierSource.includes("[...browserRawBaseKeys, 'offlineVariants', ...(revisionProof ? ['requestMeasurements', 'assetParticipation'] : [])]") && !priorReviewVerifierSource.includes("LAYOUT_AND_VISUAL_VIEWPORT_MATCH: ['EQUALS', true, 'boolean']"), 'S02 review-verifier correction entry does not contain both exact omitted-contract defects');
+  assert(s02ReviewVerifierCorrectionCommit && git(['rev-parse', `${s02ReviewVerifierCorrectionCommit}^`]) === s02ReviewVerifierCorrection.entry.head, 'S02 review-verifier correction is not the exact immediate child of the admitted workflow readback');
+  assertExactChangedPaths(s02ReviewVerifierCorrection.entry.head, s02ReviewVerifierCorrectionCommit, s02ReviewVerifierCorrectionChangedPaths, 'S02 review-verifier correction commit');
+  assertAddedOnceAndUnchanged(s02ReviewVerifierCorrectionPath, s02ReviewVerifierCorrectionCommit);
+  const correctedReviewVerifierSource = textAt(s02ReviewVerifierCorrectionCommit, 'tests/governance/verify-current-authority.mjs');
+  const correctedReviewVerifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02ReviewVerifierCorrection.entry.head, s02ReviewVerifierCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+  assert(JSON.stringify(s02ReviewVerifierCorrection.correction) === JSON.stringify({ rule: 'ADD_BROWSER_MODES_AND_SEVEN_RESPONSIVE_ASSERTIONS_TO_THE_EXACT_CONSUMER_CONTRACT_AND_FAIL_CLOSED_VERIFY_THEIR_SIGNED_VALUES_BEFORE_CRITIC_ADMISSION', changedPaths: s02ReviewVerifierCorrectionChangedPaths, validatedBrowserModeSections: ['gmSwitches', 'fitActual', 'referenceCompare', 'diagnostics'], validatedAdditionalAssertions: omittedReviewEvidenceKeys.slice(1), verifierAfterSha256: sha256Text(correctedReviewVerifierSource), verifierPatchSha256: `sha256:${sha256Text(correctedReviewVerifierPatch)}`, acceptanceThresholdsChanged: false, browserCollectorChanged: false, browserQaChanged: false, productContentChanged: false, failureEvidenceWeakened: false }), 'S02 review-verifier correction path set, hash or fail-closed scope mismatch');
+  assert(correctedReviewVerifierSource.includes("'offlineVariants', 'browserModes'") && correctedReviewVerifierSource.includes('// BEGIN_S02_EVIDENCE_TRANSPORT_CORRECTION_ROUND_001') && correctedReviewVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_013') && correctedReviewVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 review-verifier correction removed earlier guards or omitted browserModes validation');
+  assert(JSON.stringify(s02ReviewVerifierCorrection.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }), 'S02 review-verifier correction crosses a protected boundary');
+  assert(s02ReviewVerifierCorrection.status === 'CORRECTED_REVIEW_VERIFIER_PENDING_INDEPENDENT_CRITIC', 'S02 review-verifier correction status mismatch');
+  assertNoPathChangesSince(s02ReviewVerifierCorrectionCommit, 'HEAD', s02ReviewVerifierCorrectionChangedPaths, 'S02 review-verifier correction freeze');
+}
+// END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_013
 
 function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath = s02ReviewEvidencePaths.deploymentRequest, requireLiveApi = true) {
   assertWorkflowEvidenceKeys(evidence, `${label} workflow evidence`, true);
@@ -5485,7 +5560,7 @@ function verifyS02ReviewEvidencePrefix(options = {}) {
     assertAddedOnceAndUnchanged(paths.feasibilityAudit, feasibilityAuditCommit);
   }
   if (!presence.critic) {
-    const admissionState = persistedAdmission ? { packageCommit: persistedAdmission.packageCommit, admissionCommit: persistedAdmission.admissionCommit, admissionReadbackCommit: persistedAdmission.admissionReadbackCommit } : {};
+    const admissionState = persistedAdmission ? { packageCommit: persistedAdmission.packageCommit, admissionCommit: persistedAdmission.admissionCommit, admissionReadbackCommit: persistedAdmission.admissionReadbackCommit, ...(s02ReviewVerifierCorrectionCommit ? { reviewVerifierCorrectionCommit: s02ReviewVerifierCorrectionCommit } : {}) } : {};
     if (pendingPackageState) return { targetCommit: pendingPackageState.targetCommit, targetTree: pendingPackageState.targetTree, contentManifest: deriveS02ContentManifest(pendingPackageState.targetCommit, contentManifestOptions), ...(revisionChanges ? { acceptanceCommit } : {}), packageCommit: pendingPackageState.packageCommit };
     if (feasibilityAudit) return { targetCommit: feasibilityTarget, targetTree: feasibilityAudit.auditTarget.tree, contentManifest: deriveS02ContentManifest(feasibilityTarget, contentManifestOptions), acceptanceCommit, feasibilityAuditCommit, ...admissionState };
     if (acceptanceMatrix) return { targetCommit: acceptanceTarget, targetTree: acceptanceMatrix.auditTarget.tree, contentManifest: deriveS02ContentManifest(acceptanceTarget, contentManifestOptions), acceptanceCommit, ...admissionState };
@@ -5607,7 +5682,7 @@ function verifyS02ReviewEvidencePrefix(options = {}) {
     assert(workflowSource.split('\n').filter(line => line.trim() === expectedChecksumLine).length === 1, `S02 workflow does not freeze the exact trusted harness dependency: ${harnessPath}`);
   }
   const criticCommit = firstAddCommit(paths.critic);
-  const expectedCriticParent = revisionChanges ? feasibilityAuditCommit : persistedAdmission?.admissionReadbackCommit;
+  const expectedCriticParent = revisionChanges ? feasibilityAuditCommit : (s02ReviewVerifierCorrectionCommit ?? persistedAdmission?.admissionReadbackCommit);
   assert(packageCommit && persistedAdmission?.admissionReadbackCommit, 'S02 critic exists without its exact durable package and authenticated-admission readback');
   assert(criticCommit && git(['rev-parse', `${criticCommit}^`]) === expectedCriticParent, 'S02 critic does not immediately follow its authenticated admission/feasibility predecessor');
   const expectedCriticWrites = [paths.critic];
@@ -7552,7 +7627,7 @@ if (s02AssetVolumeControl) {
 } else if (s02RepairControl) {
   assert(authority.status === 'IN_PROGRESS_S02_P1_VISUAL_REPAIR', 'round 034 has an unsupported non-READY state');
   if (s02ReviewPrefix) {
-    const evidenceTail = s02ReviewPrefix.readbackCommit ?? s02ReviewPrefix.requestCommit ?? s02ReviewPrefix.completionCommit ?? s02ReviewPrefix.judgeCommit ?? s02ReviewPrefix.criticCommit ?? s02ReviewPrefix.admissionReadbackCommit ?? s02ReviewPrefix.admissionCommit ?? s02ReviewPrefix.packageCommit;
+    const evidenceTail = s02ReviewPrefix.readbackCommit ?? s02ReviewPrefix.requestCommit ?? s02ReviewPrefix.completionCommit ?? s02ReviewPrefix.judgeCommit ?? s02ReviewPrefix.criticCommit ?? s02ReviewPrefix.reviewVerifierCorrectionCommit ?? s02ReviewPrefix.admissionReadbackCommit ?? s02ReviewPrefix.admissionCommit ?? s02ReviewPrefix.packageCommit;
     assert(git(['rev-parse', 'HEAD']) === evidenceTail, 'once S02 numbered review starts, each evidence commit must remain the exact current tail until the next dedicated evidence step');
   }
 }
