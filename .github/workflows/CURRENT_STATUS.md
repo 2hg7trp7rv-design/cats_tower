@@ -16,7 +16,7 @@ CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-chang
 ## Enforced state
 
 - every `kimi` push runs current-governance verification
-- Step 2 v2 is immutable historical evidence; semantic status remains open
-- round 032 may write only the reviewed v3 correction and numbered evidence paths
+- Step 2 v2 is immutable historical evidence; corrected v3 is `PASS_CONTRACT` under `simulation/executable-seal-v3.json`
+- round 032 may now write only numbered corrected-Phase-0 evidence paths
 - S02 product, runtime, economy, save, Production and physical-device state are frozen
-- corrected closure is reserved for round 033 after live provenance and continuity succeed
+- live provenance and Step 3 continuity succeeded; corrected closure remains reserved for round 033 after numbered Phase 0 review

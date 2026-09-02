@@ -28,8 +28,8 @@
     "step4Pass": false,
     "step5Allowed": false,
     "productionAllowed": false,
-    "physicalIPhoneVerified": false,
-    "userVisualApproval": false
+    "userVisualApproval": false,
+    "physicalIPhoneVerified": false
   },
   "scopedPassVocabulary": [
     "PASS_CANONICAL",

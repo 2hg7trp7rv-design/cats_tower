@@ -18,13 +18,29 @@
     "seal": "quality-reviews/step-1-reseal-round-008/seal-round-008.json"
   },
   "step2": {
-    "status": "IN_PROGRESS_CONTRACT_CORRECTION_REQUIRED",
-    "seal": "simulation/executable-seal-v2.json",
-    "candidate": "simulation/candidate-v2.json",
-    "executionContract": "simulation/execution-contract-v2.json",
+    "status": "PASS_CONTRACT",
+    "seal": "simulation/executable-seal-v3.json",
+    "candidate": "simulation/candidate-v3.json",
+    "executionContract": "simulation/execution-contract-v3.json",
     "bindingDrift": 0,
-    "verification": "byte bindings reproduce, but screen responsibility/state semantic projection failed independent mutation testing",
-    "openFinding": "S2-P0-SCREEN-PROJECTION-001"
+    "verification": "trusted current v3 seal, lossless canonical screen projection, and Step 3 continuity verification",
+    "authorityPointers": {
+      "seal": "simulation/executable-seal-v3.json",
+      "candidate": "simulation/candidate-v3.json",
+      "schema": "simulation/candidate-v3.schema.json",
+      "candidateValidator": "simulation/validate-candidate-v3.mjs",
+      "executionContract": "simulation/execution-contract-v3.json",
+      "executionContractSchema": "simulation/execution-contract-v3.schema.json",
+      "executionContractValidator": "simulation/validate-execution-contract-v3.mjs",
+      "runPlan": "simulation/run-plan-v3.json",
+      "runPlanSchema": "simulation/run-plan-v3.schema.json",
+      "runPlanValidator": "simulation/validate-run-plan-v3.mjs",
+      "resultSchema": "simulation/result-v3.schema.json",
+      "resultValidator": "simulation/validate-result-v3.mjs",
+      "engine": "simulation/engine-v2/",
+      "projectionVerifier": "tests/governance/verify-step2-screen-projection-round-032.mjs",
+      "continuityVerifier": "tests/governance/verify-step3-continuity-round-032.mjs"
+    }
   },
   "step3": {
     "status": "PASS_MODEL",

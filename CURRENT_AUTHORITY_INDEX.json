@@ -75,14 +75,22 @@
     "releaseGates": "canonical/POLICY_RELEASE_GATES.json"
   },
   "executableContract": {
-    "step2Status": "IN_PROGRESS_CONTRACT_CORRECTION_REQUIRED",
-    "seal": "simulation/executable-seal-v2.json",
-    "candidate": "simulation/candidate-v2.json",
-    "schema": "simulation/candidate-v2.schema.json",
-    "executionContract": "simulation/execution-contract-v2.json",
-    "runPlan": "simulation/run-plan-v2.json",
+    "step2Status": "PASS_CONTRACT",
+    "seal": "simulation/executable-seal-v3.json",
+    "candidate": "simulation/candidate-v3.json",
+    "schema": "simulation/candidate-v3.schema.json",
+    "candidateValidator": "simulation/validate-candidate-v3.mjs",
+    "executionContract": "simulation/execution-contract-v3.json",
+    "executionContractSchema": "simulation/execution-contract-v3.schema.json",
+    "executionContractValidator": "simulation/validate-execution-contract-v3.mjs",
+    "runPlan": "simulation/run-plan-v3.json",
+    "runPlanSchema": "simulation/run-plan-v3.schema.json",
+    "runPlanValidator": "simulation/validate-run-plan-v3.mjs",
+    "resultSchema": "simulation/result-v3.schema.json",
+    "resultValidator": "simulation/validate-result-v3.mjs",
     "engine": "simulation/engine-v2/",
-    "currentVerificationMethod": "Verify every seal binding at current HEAD and run the source-bound verifier in the intact historical worktree; Project-source replacement does not reseal Step 2."
+    "projectionVerifier": "tests/governance/verify-step2-screen-projection-round-032.mjs",
+    "continuityVerifier": "tests/governance/verify-step3-continuity-round-032.mjs"
   },
   "modelValidation": {
     "step3Status": "PASS_MODEL",
@@ -140,11 +148,10 @@
   },
   "globalGate": {
     "overallStatus": "IN_PROGRESS",
-    "unresolvedP0": 1,
+    "unresolvedP0": 0,
     "unresolvedP1": 1,
     "unresolvedP2": 2,
     "openFindings": [
-      "S2-P0-SCREEN-PROJECTION-001",
       "S4-RECOVERY-VIS-001",
       "PHASE0-P2-PR8-STALE-METADATA",
       "PHASE0-P2-KIMI-UNPROTECTED-EXTERNAL-ENFORCEMENT"

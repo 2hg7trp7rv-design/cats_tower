@@ -15,4 +15,4 @@ CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-chang
 
 ## Current work
 
-Repository Step 4 remains in progress. The active work is the narrow, versioned Step 2 S01-S12 screen-projection correction required before the preserved S02 Golden Master can be audited and repaired. Runtime, gameplay numbers, economy, save data, backend, Production and physical-device verdicts are unchanged.
+Repository Step 4 remains in progress. Step 2 is `PASS_CONTRACT` under `simulation/executable-seal-v3.json` with Step 3 continuity verified; the active work is now the numbered corrected-Phase-0 review and exact round 033 closure before S02 audit resumes. Runtime, gameplay numbers, economy, save data, backend, Production and physical-device verdicts are unchanged.

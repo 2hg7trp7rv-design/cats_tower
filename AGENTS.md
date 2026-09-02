@@ -15,8 +15,8 @@ CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-chang
 
 ## Current authority
 
-Read `CURRENT_AUTHORITY_INDEX.json`, then the active round 032 control. Work only on the versioned Step 2 screen-projection correction. Do not rewrite v2 evidence or mutate S02 product content, runtime, economy, save, assets, Vercel Production or provider settings.
+Read `CURRENT_AUTHORITY_INDEX.json`, then round 032. Step 2 is `PASS_CONTRACT` under `simulation/executable-seal-v3.json`; write only the numbered corrected-Phase-0 critic, judge, completion, live readback and exact round 033 closure. Do not mutate S02 product content, runtime, economy, save, assets, Vercel Production or provider settings.
 
 ## Required sequence
 
-Semantic target, independent critic, final judge, completion, live readback, v3 seal, continuity-only commit, PASS activation, numbered Phase 0 evidence, then exact round 033 closure.
+Numbered Phase 0 independent critic, final judge, completion, live readback, then exact round 033 closure and return to the S02 audit.

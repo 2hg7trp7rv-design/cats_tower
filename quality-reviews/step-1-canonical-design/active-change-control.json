@@ -15,13 +15,13 @@
   "plannedGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
   "canonicalSeals": {
     "step1": "quality-reviews/step-1-reseal-round-008/seal-round-008.json",
-    "step2": "simulation/executable-seal-v2.json",
+    "step2": "simulation/executable-seal-v3.json",
     "step3FinalJudge": "quality-reviews/step-3-large-scale-validation/final-judge.json",
     "step3Completion": "quality-reviews/step-3-large-scale-validation/completion-evidence.json"
   },
   "scopeTruth": {
     "step1": "PASS_CANONICAL",
-    "step2": "IN_PROGRESS_CONTRACT_CORRECTION_REQUIRED",
+    "step2": "PASS_CONTRACT",
     "step3": "PASS_MODEL",
     "step4": "IN_PROGRESS",
     "step5Allowed": false,
@@ -39,5 +39,22 @@
     "round033Role": "planned corrected Phase 0 closure",
     "supersededAddendaRemainHistory": true
   },
-  "rule": "Read CURRENT_AUTHORITY_INDEX.json and currentAddendum on live kimi. Round 032 repairs the Step 2 screen projection; only corrected closure round 033 may return authority to round 026. Do not mutate S02-P1 product content before that closure."
+  "rule": "Read CURRENT_AUTHORITY_INDEX.json and currentAddendum on live kimi. Round 032 repairs the Step 2 screen projection; only corrected closure round 033 may return authority to round 026. Do not mutate S02-P1 product content before that closure.",
+  "step2ExecutableContract": {
+    "seal": "simulation/executable-seal-v3.json",
+    "candidate": "simulation/candidate-v3.json",
+    "schema": "simulation/candidate-v3.schema.json",
+    "candidateValidator": "simulation/validate-candidate-v3.mjs",
+    "executionContract": "simulation/execution-contract-v3.json",
+    "executionContractSchema": "simulation/execution-contract-v3.schema.json",
+    "executionContractValidator": "simulation/validate-execution-contract-v3.mjs",
+    "runPlan": "simulation/run-plan-v3.json",
+    "runPlanSchema": "simulation/run-plan-v3.schema.json",
+    "runPlanValidator": "simulation/validate-run-plan-v3.mjs",
+    "resultSchema": "simulation/result-v3.schema.json",
+    "resultValidator": "simulation/validate-result-v3.mjs",
+    "engine": "simulation/engine-v2/",
+    "projectionVerifier": "tests/governance/verify-step2-screen-projection-round-032.mjs",
+    "continuityVerifier": "tests/governance/verify-step3-continuity-round-032.mjs"
+  }
 }
