@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-trusted-harness-correction-round-011",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "dafca0d1226170d19ee8488e6326e682b3bb85fa",
+    "tree": "6c4a47022a6d16a5358e0ce6c3a5788c187607d4"
+  },
+  "authorityWorkflow": {
+    "commit": "dafca0d1226170d19ee8488e6326e682b3bb85fa",
+    "tree": "6c4a47022a6d16a5358e0ce6c3a5788c187607d4",
+    "runId": 33600649625,
+    "runAttempt": 1,
+    "jobId": 100153548419,
+    "conclusion": "SUCCESS",
+    "artifactId": 9835072599,
+    "artifactName": "phase0-current-governance-dafca0d1226170d19ee8488e6326e682b3bb85fa-33600649625-1",
+    "artifactDigest": "sha256:c3690f6576a7c14ba6fb2a4802c6e70f806c2e10cfeb82a74884d9d8baf7254f"
+  },
+  "failedWorkflow": {
+    "commit": "dafca0d1226170d19ee8488e6326e682b3bb85fa",
+    "tree": "6c4a47022a6d16a5358e0ce6c3a5788c187607d4",
+    "runId": 33600649584,
+    "runAttempt": 1,
+    "jobId": 100153371695,
+    "conclusion": "FAILURE",
+    "failedStep": "Capture and verify eight masters plus required responsive variants",
+    "summary": "FAIL_S02_GOLDEN_MASTER_P1_BROWSER: 15 scenarios, 1 failure",
+    "artifactId": 9835057283,
+    "artifactName": "step4-s02-golden-master-p1-semantic-dafca0d1226170d19ee8488e6326e682b3bb85fa-33600649584-1",
+    "artifactDigest": "sha256:6e7cbb7e0fbc34491407eaf5943da8734ca194504130251e0b0e69f20441459c"
+  },
+  "diagnosis": {
+    "type": "ROUND_010_CLOSED_TEXT200_ACTION_FIT_BUT_SEAL_REMAINED_TWO_COLORS_BELOW_PIXEL_GATE",
+    "failedAssertions": [
+      "GM07C320TEXT200: screenshot pixel complexity/opacity gate failed"
+    ],
+    "closedFindings": [
+      "TEXT_200_PERCENT_NO_LOSS passed with the unchanged 200 percent font and control-fit criteria.",
+      "Fourteen of fifteen exact screenshots passed every unchanged pixel and semantic assertion."
+    ],
+    "visualFindings": [
+      "The restrained enamel ring raised GM07C320TEXT200 from 231 to 254 quantized colors, two below the unchanged 256 threshold."
+    ],
+    "measurementFindings": [
+      "All non-pixel assertions passed; the remaining repair is limited to dimensional material shading inside the already-visible 52 CSS-pixel clock seal."
+    ],
+    "allFifteenExactPngsPreserved": true,
+    "originalFailureArtifactPreserved": true
+  },
+  "correction": {
+    "rule": "REPLACE_THE_SEAL_CENTER_FLAT_FILL_WITH_A_RESTRAINED_RADIAL_BRASS_HIGHLIGHT_AND_SHADOW_TO_CREATE_IMPLEMENTABLE_MATERIAL_DEPTH_WITHOUT_CHANGING_TEXT_LAYOUT_OR_THRESHOLDS",
+    "changedPaths": [
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-011.json",
+      "step4/s02/golden-master-p1/review-manifest.json",
+      "step4/s02/golden-master-p1/styles.css",
+      "tests/governance/verify-current-authority.mjs"
+    ],
+    "stylesBeforeSha256": "f57a5d34f3f07a31f72c05ef6c31d698bbda9c5a15deefcea1e8c587a8de3d25",
+    "stylesAfterSha256": "0e25cf908401e97b8975f65990f2390cea88c134e8ff38205e481c69b010c186",
+    "stylesPatchSha256": "sha256:c2e8358d37a12d1d7951232c86a342e668775c4a13bdd9d25005adebed6f9e92",
+    "manifestBeforeSha256": "f308ce486a4ffec981d25423f73cdda2ccb46db64a72f5e51bf8deb9f675a8da",
+    "manifestAfterSha256": "ffc5d57abbc7b1cfd977d144e0204b64e43cb50373e3c9fe7c42c48f3095dd1a",
+    "manifestPatchSha256": "sha256:7554cfd25f334f9f0a6e2381e68ccd9db52c22ecbc54662684d1feee36a0dfc2",
+    "verifierAfterSha256": "d4fab0566a661aac7a133d1ea63665037a0508c073db675b8ed076346de5f8c7",
+    "verifierPatchSha256": "sha256:667404c108eb759a6a259af385f56d33ee0cf1dd4a1b1fabec38088221cafbe4",
+    "acceptanceThresholdsChanged": false,
+    "qualityCoverageWeakened": false,
+    "browserCollectorChanged": false,
+    "browserQaChanged": false,
+    "fontSizeReduced": false,
+    "failureEvidenceUploadRetained": true
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_ONE_BROWSER_PIXEL_ASSERTION_PENDING_RERUN"
+}

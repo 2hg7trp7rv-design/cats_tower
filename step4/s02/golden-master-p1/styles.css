@@ -1778,7 +1778,7 @@ summary {
   border: 2px solid #ad7938;
   border-radius: 50%;
   background:
-    radial-gradient(circle, #ddb15c 0 54%, transparent 56%),
+    radial-gradient(circle at 38% 32%, #f2d586 0 8%, #e5bd66 32%, #c98d3f 53%, transparent 55%),
     conic-gradient(from -12deg, #75402a 0 14%, #b96d51 14% 28%, #527f77 28% 42%, #e5bd64 42% 58%, #6c537d 58% 72%, #4f8278 72% 86%, #75402a 86% 100%);
   box-shadow: inset 0 0 0 3px rgba(255, 246, 205, 0.45), 0 5px 12px rgba(76, 43, 18, 0.22);
 }

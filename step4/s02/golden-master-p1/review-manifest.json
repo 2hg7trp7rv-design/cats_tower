@@ -30,6 +30,6 @@
     {"path":"step4/s02/golden-master-p1/assets/tower-corridor.webp","bytes":152980,"sha256":"7fe1fbfdba1539b067c72781b64b331e5de55474e312a62cb8b9ee0f0fed63eb","gitBlob":"dba580ffd7008786996d69994ac01f7cf68e506d"},
     {"path":"step4/s02/golden-master-p1/golden-master-spec.json","bytes":2232,"sha256":"f0ef16ae3d4b77272dd895956098289e87e37b9080562bec45e41ac401c67cc9","gitBlob":"e796e23cb7a2397892488aa09801cb0fe162ca6d"},
     {"path":"step4/s02/golden-master-p1/index.html","bytes":6611,"sha256":"a3ebfb87d0c74e4db3f9a8b2221fbb2f1c160ce0780fac5c25146fadab602168","gitBlob":"f8be91f43840aed8ea423a06fca380a1152d2f14"},
-    {"path":"step4/s02/golden-master-p1/styles.css","bytes":53161,"sha256":"f57a5d34f3f07a31f72c05ef6c31d698bbda9c5a15deefcea1e8c587a8de3d25","gitBlob":"670d7aa6bc621853994fd7db30db9a17ef238bbf"}
+    {"path":"step4/s02/golden-master-p1/styles.css","bytes":53197,"sha256":"0e25cf908401e97b8975f65990f2390cea88c134e8ff38205e481c69b010c186","gitBlob":"87f6ba3237246d8f9bc8795e3da550e17e296177"}
   ]
 }

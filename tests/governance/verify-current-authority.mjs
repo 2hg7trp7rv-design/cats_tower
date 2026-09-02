@@ -227,6 +227,8 @@ function assertS02HistoryWithIncrementalRenewals(base, head, control, label, evi
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02TwoFindingCorrectionChangedPaths].sort()), `${label}: two-finding correction changed an unreviewed path`);
     } else if (s02RemainingTwoCorrectionCommit && commit === s02RemainingTwoCorrectionCommit) {
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02RemainingTwoCorrectionChangedPaths].sort()), `${label}: remaining-two correction changed an unreviewed path`);
+    } else if (s02PixelMarginCorrectionCommit && commit === s02PixelMarginCorrectionCommit) {
+      assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02PixelMarginCorrectionChangedPaths].sort()), `${label}: pixel-margin correction changed an unreviewed path`);
     } else {
       assertBoundary(paths, control, `${label} commit ${commit}`);
     }
@@ -3818,6 +3820,15 @@ const s02RemainingTwoCorrectionChangedPaths = [
   'step4/s02/golden-master-p1/styles.css',
   'tests/governance/verify-current-authority.mjs'
 ];
+const s02PixelMarginCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-011.json';
+const s02PixelMarginCorrection = exists(s02PixelMarginCorrectionPath) ? json(s02PixelMarginCorrectionPath) : null;
+const s02PixelMarginCorrectionCommit = s02PixelMarginCorrection ? firstAddCommit(s02PixelMarginCorrectionPath) : null;
+const s02PixelMarginCorrectionChangedPaths = [
+  s02PixelMarginCorrectionPath,
+  'step4/s02/golden-master-p1/review-manifest.json',
+  'step4/s02/golden-master-p1/styles.css',
+  'tests/governance/verify-current-authority.mjs'
+];
 
 // BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001
 const s02HarnessCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-001.json';
@@ -4856,7 +4867,9 @@ if (s02RemainingTwoCorrection) {
   const remainingTwoVerifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02RemainingTwoCorrection.entry.head, s02RemainingTwoCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
   assert(sha256Text(correctedRemainingTwoVerifierSource) === s02RemainingTwoCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(remainingTwoVerifierPatch)}` === s02RemainingTwoCorrection.correction.verifierPatchSha256, 'S02 remaining-two verifier bytes/patch differ from the immutable correction record');
   assert(correctedRemainingTwoVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedRemainingTwoVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_009') && correctedRemainingTwoVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_010') && correctedRemainingTwoVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 remaining-two verifier removed a prior correction guard or original fail-closed boundary assertion');
-  assertNoPathChangesSince(s02RemainingTwoCorrectionCommit, 'HEAD', s02RemainingTwoCorrectionChangedPaths, 'S02 remaining-two correction freeze');
+  const s02RemainingTwoFreezeEnd = s02PixelMarginCorrectionCommit ? git(['rev-parse', `${s02PixelMarginCorrectionCommit}^`]) : 'HEAD';
+  assertNoPathChangesSince(s02RemainingTwoCorrectionCommit, s02RemainingTwoFreezeEnd, s02RemainingTwoCorrectionChangedPaths, 'S02 remaining-two correction freeze');
+  if (s02PixelMarginCorrectionCommit) assertNoPathChangesSince(s02RemainingTwoCorrectionCommit, 'HEAD', [s02RemainingTwoCorrectionPath], 'S02 round 010 correction record freeze');
   if (requireLiveActions) {
     const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02RemainingTwoCorrection.authorityWorkflow.runId}`);
     const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02RemainingTwoCorrection.authorityWorkflow.jobId}`);
@@ -4875,6 +4888,108 @@ if (s02RemainingTwoCorrection) {
   }
 }
 // END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_010
+
+// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_011
+if (s02PixelMarginCorrection) {
+  assertExactKeySet(s02PixelMarginCorrection, ['schemaVersion', 'artifactId', 'createdAt', 'repository', 'branch', 'changeControl', 'entry', 'authorityWorkflow', 'failedWorkflow', 'diagnosis', 'correction', 'boundaries', 'status'], 'S02 pixel-margin correction');
+  assertExactKeySet(s02PixelMarginCorrection.entry, ['head', 'tree'], 'S02 pixel-margin correction entry');
+  assertExactKeySet(s02PixelMarginCorrection.authorityWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'artifactId', 'artifactName', 'artifactDigest'], 'S02 pixel-margin authority workflow');
+  assertExactKeySet(s02PixelMarginCorrection.failedWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'failedStep', 'summary', 'artifactId', 'artifactName', 'artifactDigest'], 'S02 pixel-margin failed workflow');
+  assertExactKeySet(s02PixelMarginCorrection.diagnosis, ['type', 'failedAssertions', 'closedFindings', 'visualFindings', 'measurementFindings', 'allFifteenExactPngsPreserved', 'originalFailureArtifactPreserved'], 'S02 pixel-margin diagnosis');
+  assertExactKeySet(s02PixelMarginCorrection.correction, ['rule', 'changedPaths', 'stylesBeforeSha256', 'stylesAfterSha256', 'stylesPatchSha256', 'manifestBeforeSha256', 'manifestAfterSha256', 'manifestPatchSha256', 'verifierAfterSha256', 'verifierPatchSha256', 'acceptanceThresholdsChanged', 'qualityCoverageWeakened', 'browserCollectorChanged', 'browserQaChanged', 'fontSizeReduced', 'failureEvidenceUploadRetained'], 'S02 pixel-margin exact correction');
+  assertExactKeySet(s02PixelMarginCorrection.boundaries, ['rootRuntimeChanged', 'gameCoreChanged', 'gameDataChanged', 'economyChanged', 'saveSchemaChanged', 'backendChanged', 'productionChanged', 'productionAliasChanged', 'physicalIPhoneVerified', 'step4Pass', 'step5Allowed'], 'S02 pixel-margin correction boundaries');
+  assert(s02PixelMarginCorrection.schemaVersion === 1 && s02PixelMarginCorrection.artifactId === 'cats-tower-s02-golden-master-p1-trusted-harness-correction-round-011' && s02PixelMarginCorrection.createdAt === '2026-09-02', 'S02 pixel-margin correction identity/date mismatch');
+  assert(s02PixelMarginCorrection.repository === '2hg7trp7rv-design/cats_tower' && s02PixelMarginCorrection.branch === 'kimi' && s02PixelMarginCorrection.changeControl === s02RepairControlPath, 'S02 pixel-margin correction authority mismatch');
+  assert(JSON.stringify(s02PixelMarginCorrection.entry) === JSON.stringify({ head: 'dafca0d1226170d19ee8488e6326e682b3bb85fa', tree: '6c4a47022a6d16a5358e0ce6c3a5788c187607d4' }), 'S02 pixel-margin correction entry is not the exact failed round-010 correction commit/tree');
+  assert(JSON.stringify(s02PixelMarginCorrection.authorityWorkflow) === JSON.stringify({
+    commit: s02PixelMarginCorrection.entry.head,
+    tree: s02PixelMarginCorrection.entry.tree,
+    runId: 33600649625,
+    runAttempt: 1,
+    jobId: 100153548419,
+    conclusion: 'SUCCESS',
+    artifactId: 9835072599,
+    artifactName: 'phase0-current-governance-dafca0d1226170d19ee8488e6326e682b3bb85fa-33600649625-1',
+    artifactDigest: 'sha256:c3690f6576a7c14ba6fb2a4802c6e70f806c2e10cfeb82a74884d9d8baf7254f'
+  }), 'S02 pixel-margin correction does not bind the successful exact-entry authority workflow');
+  assert(JSON.stringify(s02PixelMarginCorrection.failedWorkflow) === JSON.stringify({
+    commit: s02PixelMarginCorrection.entry.head,
+    tree: s02PixelMarginCorrection.entry.tree,
+    runId: 33600649584,
+    runAttempt: 1,
+    jobId: 100153371695,
+    conclusion: 'FAILURE',
+    failedStep: 'Capture and verify eight masters plus required responsive variants',
+    summary: 'FAIL_S02_GOLDEN_MASTER_P1_BROWSER: 15 scenarios, 1 failure',
+    artifactId: 9835057283,
+    artifactName: 'step4-s02-golden-master-p1-semantic-dafca0d1226170d19ee8488e6326e682b3bb85fa-33600649584-1',
+    artifactDigest: 'sha256:6e7cbb7e0fbc34491407eaf5943da8734ca194504130251e0b0e69f20441459c'
+  }), 'S02 pixel-margin correction does not bind the exact failed workflow/job/summary/artifact');
+  assert(JSON.stringify(s02PixelMarginCorrection.diagnosis) === JSON.stringify({
+    type: 'ROUND_010_CLOSED_TEXT200_ACTION_FIT_BUT_SEAL_REMAINED_TWO_COLORS_BELOW_PIXEL_GATE',
+    failedAssertions: ['GM07C320TEXT200: screenshot pixel complexity/opacity gate failed'],
+    closedFindings: [
+      'TEXT_200_PERCENT_NO_LOSS passed with the unchanged 200 percent font and control-fit criteria.',
+      'Fourteen of fifteen exact screenshots passed every unchanged pixel and semantic assertion.'
+    ],
+    visualFindings: [
+      'The restrained enamel ring raised GM07C320TEXT200 from 231 to 254 quantized colors, two below the unchanged 256 threshold.'
+    ],
+    measurementFindings: [
+      'All non-pixel assertions passed; the remaining repair is limited to dimensional material shading inside the already-visible 52 CSS-pixel clock seal.'
+    ],
+    allFifteenExactPngsPreserved: true,
+    originalFailureArtifactPreserved: true
+  }), 'S02 pixel-margin diagnosis differs from the preserved fifteen-capture failed run and artifact');
+  assert(s02PixelMarginCorrection.correction.rule === 'REPLACE_THE_SEAL_CENTER_FLAT_FILL_WITH_A_RESTRAINED_RADIAL_BRASS_HIGHLIGHT_AND_SHADOW_TO_CREATE_IMPLEMENTABLE_MATERIAL_DEPTH_WITHOUT_CHANGING_TEXT_LAYOUT_OR_THRESHOLDS' && JSON.stringify(s02PixelMarginCorrection.correction.changedPaths) === JSON.stringify(s02PixelMarginCorrectionChangedPaths), 'S02 pixel-margin correction rule/path set mismatch');
+  assert(s02PixelMarginCorrection.correction.stylesBeforeSha256 === 'f57a5d34f3f07a31f72c05ef6c31d698bbda9c5a15deefcea1e8c587a8de3d25' && s02PixelMarginCorrection.correction.stylesAfterSha256 === '0e25cf908401e97b8975f65990f2390cea88c134e8ff38205e481c69b010c186' && s02PixelMarginCorrection.correction.stylesPatchSha256 === 'sha256:c2e8358d37a12d1d7951232c86a342e668775c4a13bdd9d25005adebed6f9e92', 'S02 pixel-margin style digest/patch mismatch');
+  assert(s02PixelMarginCorrection.correction.manifestBeforeSha256 === 'f308ce486a4ffec981d25423f73cdda2ccb46db64a72f5e51bf8deb9f675a8da' && s02PixelMarginCorrection.correction.manifestAfterSha256 === 'ffc5d57abbc7b1cfd977d144e0204b64e43cb50373e3c9fe7c42c48f3095dd1a' && s02PixelMarginCorrection.correction.manifestPatchSha256 === 'sha256:7554cfd25f334f9f0a6e2381e68ccd9db52c22ecbc54662684d1feee36a0dfc2', 'S02 pixel-margin manifest digest/patch mismatch');
+  assert(s02PixelMarginCorrection.correction.acceptanceThresholdsChanged === false && s02PixelMarginCorrection.correction.qualityCoverageWeakened === false && s02PixelMarginCorrection.correction.browserCollectorChanged === false && s02PixelMarginCorrection.correction.browserQaChanged === false && s02PixelMarginCorrection.correction.fontSizeReduced === false && s02PixelMarginCorrection.correction.failureEvidenceUploadRetained === true, 'S02 pixel-margin correction weakens coverage, changes evidence collection or shrinks text');
+  assert(JSON.stringify(s02PixelMarginCorrection.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }), 'S02 pixel-margin correction crosses a protected product/release boundary');
+  assert(s02PixelMarginCorrection.status === 'CORRECTED_ONE_BROWSER_PIXEL_ASSERTION_PENDING_RERUN', 'S02 pixel-margin correction status mismatch');
+  assert(s02PixelMarginCorrectionCommit && git(['rev-parse', `${s02PixelMarginCorrectionCommit}^`]) === s02PixelMarginCorrection.entry.head, 'S02 pixel-margin correction is not the immediate child of the exact failed commit');
+  assert(git(['rev-parse', `${s02PixelMarginCorrection.entry.head}^{tree}`]) === s02PixelMarginCorrection.entry.tree, 'S02 pixel-margin correction entry tree mismatch');
+  assertExactChangedPaths(s02PixelMarginCorrection.entry.head, s02PixelMarginCorrectionCommit, s02PixelMarginCorrectionChangedPaths, 'S02 pixel-margin correction commit');
+  assertAddedOnceAndUnchanged(s02PixelMarginCorrectionPath, s02PixelMarginCorrectionCommit);
+
+  const priorPixelMarginStylesSource = textAt(s02PixelMarginCorrection.entry.head, 'step4/s02/golden-master-p1/styles.css');
+  const correctedPixelMarginStylesSource = textAt(s02PixelMarginCorrectionCommit, 'step4/s02/golden-master-p1/styles.css');
+  const pixelMarginStylesPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02PixelMarginCorrection.entry.head, s02PixelMarginCorrectionCommit, '--', 'step4/s02/golden-master-p1/styles.css'], { cwd: root, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+  assert(sha256Text(priorPixelMarginStylesSource) === s02PixelMarginCorrection.correction.stylesBeforeSha256 && sha256Text(correctedPixelMarginStylesSource) === s02PixelMarginCorrection.correction.stylesAfterSha256 && `sha256:${sha256Text(pixelMarginStylesPatch)}` === s02PixelMarginCorrection.correction.stylesPatchSha256, 'S02 pixel-margin style bytes/patch differ from the immutable correction record');
+  assert(correctedPixelMarginStylesSource.includes('radial-gradient(circle at 38% 32%, #f2d586 0 8%, #e5bd66 32%, #c98d3f 53%, transparent 55%)') && correctedPixelMarginStylesSource.includes('conic-gradient(from -12deg, #75402a 0 14%, #b96d51 14% 28%, #527f77 28% 42%, #e5bd64 42% 58%, #6c537d 58% 72%, #4f8278 72% 86%, #75402a 86% 100%)'), 'S02 pixel-margin correction lacks the restrained radial brass depth and enamel ring');
+  assert(priorPixelMarginStylesSource.split('font-size:').length === correctedPixelMarginStylesSource.split('font-size:').length && priorPixelMarginStylesSource.split('height: 108px;').length === correctedPixelMarginStylesSource.split('height: 108px;').length, 'S02 pixel-margin correction changes typography or the already-passing primary action geometry');
+
+  const priorPixelMarginManifestSource = textAt(s02PixelMarginCorrection.entry.head, 'step4/s02/golden-master-p1/review-manifest.json');
+  const correctedPixelMarginManifestSource = textAt(s02PixelMarginCorrectionCommit, 'step4/s02/golden-master-p1/review-manifest.json');
+  const pixelMarginManifestPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02PixelMarginCorrection.entry.head, s02PixelMarginCorrectionCommit, '--', 'step4/s02/golden-master-p1/review-manifest.json'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert(sha256Text(priorPixelMarginManifestSource) === s02PixelMarginCorrection.correction.manifestBeforeSha256 && sha256Text(correctedPixelMarginManifestSource) === s02PixelMarginCorrection.correction.manifestAfterSha256 && `sha256:${sha256Text(pixelMarginManifestPatch)}` === s02PixelMarginCorrection.correction.manifestPatchSha256, 'S02 pixel-margin manifest bytes/patch differ from the immutable correction record');
+  const correctedPixelMarginManifest = JSON.parse(correctedPixelMarginManifestSource);
+  const correctedPixelMarginStylesManifestEntry = correctedPixelMarginManifest.routeFiles?.find(entry => entry.path === 'step4/s02/golden-master-p1/styles.css');
+  assert(JSON.stringify(correctedPixelMarginStylesManifestEntry) === JSON.stringify({ path: 'step4/s02/golden-master-p1/styles.css', bytes: 53197, sha256: s02PixelMarginCorrection.correction.stylesAfterSha256, gitBlob: '87f6ba3237246d8f9bc8795e3da550e17e296177' }), 'S02 pixel-margin manifest does not bind the corrected stylesheet bytes/hash/blob');
+
+  const correctedPixelMarginVerifierSource = textAt(s02PixelMarginCorrectionCommit, 'tests/governance/verify-current-authority.mjs');
+  const pixelMarginVerifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02PixelMarginCorrection.entry.head, s02PixelMarginCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+  assert(sha256Text(correctedPixelMarginVerifierSource) === s02PixelMarginCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(pixelMarginVerifierPatch)}` === s02PixelMarginCorrection.correction.verifierPatchSha256, 'S02 pixel-margin verifier bytes/patch differ from the immutable correction record');
+  assert(correctedPixelMarginVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedPixelMarginVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_010') && correctedPixelMarginVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_011') && correctedPixelMarginVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 pixel-margin verifier removed a prior correction guard or original fail-closed boundary assertion');
+  assertNoPathChangesSince(s02PixelMarginCorrectionCommit, 'HEAD', s02PixelMarginCorrectionChangedPaths, 'S02 pixel-margin correction freeze');
+  if (requireLiveActions) {
+    const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02PixelMarginCorrection.authorityWorkflow.runId}`);
+    const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02PixelMarginCorrection.authorityWorkflow.jobId}`);
+    const authorityArtifact = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/artifacts/${s02PixelMarginCorrection.authorityWorkflow.artifactId}`);
+    assert(authorityRun.head_sha === s02PixelMarginCorrection.entry.head && authorityRun.head_branch === 'kimi' && authorityRun.status === 'completed' && authorityRun.conclusion === 'success' && authorityRun.run_attempt === 1, 'S02 pixel-margin correction live authority run mismatch');
+    assert(authorityJob.run_id === authorityRun.id && authorityJob.head_sha === s02PixelMarginCorrection.entry.head && authorityJob.name === 'current-authority' && authorityJob.conclusion === 'success', 'S02 pixel-margin correction live authority job mismatch');
+    assert(authorityArtifact.name === s02PixelMarginCorrection.authorityWorkflow.artifactName && authorityArtifact.digest === s02PixelMarginCorrection.authorityWorkflow.artifactDigest && authorityArtifact.expired === false && authorityArtifact.workflow_run?.head_sha === s02PixelMarginCorrection.entry.head, 'S02 pixel-margin correction live authority artifact mismatch');
+    const failedRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02PixelMarginCorrection.failedWorkflow.runId}`);
+    const failedJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02PixelMarginCorrection.failedWorkflow.jobId}`);
+    const failedArtifact = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/artifacts/${s02PixelMarginCorrection.failedWorkflow.artifactId}`);
+    assert(failedRun.head_sha === s02PixelMarginCorrection.entry.head && failedRun.head_branch === 'kimi' && failedRun.status === 'completed' && failedRun.conclusion === 'failure' && failedRun.run_attempt === 1, 'S02 pixel-margin correction live failed run mismatch');
+    assert(failedJob.run_id === failedRun.id && failedJob.head_sha === s02PixelMarginCorrection.entry.head && failedJob.name === 'Static, eight-master responsive and accessibility verification' && failedJob.conclusion === 'failure', 'S02 pixel-margin correction live failed job mismatch');
+    const failedSteps = (failedJob.steps ?? []).filter(step => step.name === s02PixelMarginCorrection.failedWorkflow.failedStep);
+    assert(failedSteps.length === 1 && failedSteps[0].conclusion === 'failure', 'S02 pixel-margin correction live failed step mismatch');
+    assert(failedArtifact.name === s02PixelMarginCorrection.failedWorkflow.artifactName && failedArtifact.digest === s02PixelMarginCorrection.failedWorkflow.artifactDigest && failedArtifact.expired === false && failedArtifact.workflow_run?.head_sha === s02PixelMarginCorrection.entry.head, 'S02 pixel-margin correction live failure artifact mismatch');
+  }
+}
+// END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_011
 
 function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath = s02ReviewEvidencePaths.deploymentRequest, requireLiveApi = true) {
   assertWorkflowEvidenceKeys(evidence, `${label} workflow evidence`, true);
