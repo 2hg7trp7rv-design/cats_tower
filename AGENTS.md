@@ -22,6 +22,15 @@ Updated: **2026-09-02**
 
 Do not infer current status from historical headers, chat history, old workflows or file existence.
 
+```text
+STEP4_STATUS: IN_PROGRESS
+STEP5_ALLOWED: false
+PRODUCTION_ALIAS_CHANGED: false
+PRODUCTION_READY: false
+PHYSICAL_IPHONE_VERIFIED: false
+USER_VISUAL_APPROVAL: false
+```
+
 ## Current boundary
 
 - Repository Step: `4`
@@ -53,7 +62,7 @@ Forbidden during S02-P1:
 
 ## Verification rule
 
-Step 2 is `PASS_CONTRACT`. At current HEAD verify immutable seal bindings; run its source-bound verifier in the intact historical worktree. Do not modify the seal to match current Project instructions.
+Step 2 is `IN_PROGRESS_CONTRACT_CORRECTION_REQUIRED`. The immutable v2 byte bindings still reproduce, but canonical S01-S12 semantics require the versioned round 032 correction. Run the source-bound verifier in the intact historical worktree and do not modify the old seal.
 
 ## Truth labels
 

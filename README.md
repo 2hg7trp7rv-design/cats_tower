@@ -2,6 +2,15 @@
 
 猫と猫人の4体編成を育て、店舗・配送の支援を受けながら上限のない塔を登り、一つの`reset.tower_return`で1Fから前回より速く再攻略する、スマートフォン縦画面向け放置インクリメンタルRPG。
 
+```text
+STEP4_STATUS: IN_PROGRESS
+STEP5_ALLOWED: false
+PRODUCTION_ALIAS_CHANGED: false
+PRODUCTION_READY: false
+PHYSICAL_IPHONE_VERIFIED: false
+USER_VISUAL_APPROVAL: false
+```
+
 ## Current truth
 
 | Scope | Status |

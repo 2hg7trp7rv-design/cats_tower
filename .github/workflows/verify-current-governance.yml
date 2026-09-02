@@ -5,40 +5,62 @@ on:
     branches: [kimi]
   workflow_dispatch:
 
-permissions:
-  contents: read
+permissions: {}
 
 concurrency:
   group: cats-current-governance-${{ github.sha }}
   cancel-in-progress: false
 
 jobs:
-  current-authority:
-    name: current-authority
+  semantic-verification:
+    name: semantic-verification-no-credentials
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
+          persist-credentials: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
 
-      - name: Confirm exact source commit
+      - name: Confirm exact source commit without credentials
         run: |
           set -euo pipefail
+          test "$GITHUB_REPOSITORY" = '2hg7trp7rv-design/cats_tower'
+          test "$GITHUB_REF" = 'refs/heads/kimi'
+          case "$GITHUB_EVENT_NAME" in push|workflow_dispatch) ;; *) exit 1 ;; esac
           test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
           test "$(git rev-parse --is-shallow-repository)" = 'false'
           test -z "$(git replace -l)"
+          test -z "$(git config --local --get-regexp '^http\..*\.extraheader$' || true)"
+          test "$(git ls-tree HEAD -- simulation/lib-v2/schema-validator.mjs)" = $'100644 blob 5e2694e8c2c9eb3677fd132382b5f595706f0801\tsimulation/lib-v2/schema-validator.mjs'
+          test -z "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}"
+          test -z "${ACTIONS_ID_TOKEN_REQUEST_URL:-}"
 
-      - name: Verify current authority, mirrors, source replacement and deletion boundary
-        run: node tests/governance/verify-current-authority.mjs
+      - name: Verify current authority semantics without live credentials
+        run: node tests/governance/verify-current-authority.mjs --semantic-only
 
       - name: Validate the immutable Step 2 seal at current HEAD
         run: node simulation/validate-executable-seal-v2.mjs simulation/executable-seal-v2.json
+
+      - name: Validate the versioned Step 2 v3 correction when present
+        run: |
+          set -euo pipefail
+          if test -f simulation/candidate-v3.json; then
+            node simulation/validate-candidate-v3.mjs simulation/candidate-v3.json
+            node simulation/validate-execution-contract-v3.mjs simulation/execution-contract-v3.json
+            node simulation/validate-run-plan-v3.mjs simulation/run-plan-v3.json
+            node simulation/fixtures/v3/validate-fixtures.mjs
+            node simulation/validate-result-v3.mjs quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/qualification-result-v3.json
+            node simulation/verify-step2-v3.mjs
+            node tests/governance/verify-step2-screen-projection-round-032.mjs
+          fi
 
       - name: Re-run the source-bound Step 2 verifier in an intact historical worktree
         run: |
@@ -52,6 +74,46 @@ jobs:
             cd "$DIR"
             node simulation/verify-step2-v2.mjs
           )
+
+  current-authority:
+    name: current-authority
+    needs: semantic-verification
+    permissions:
+      contents: read
+      actions: read
+      attestations: read
+      deployments: read
+      statuses: read
+      id-token: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+
+      - name: Confirm exact source commit
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = '2hg7trp7rv-design/cats_tower'
+          test "$GITHUB_REF" = 'refs/heads/kimi'
+          case "$GITHUB_EVENT_NAME" in push|workflow_dispatch) ;; *) exit 1 ;; esac
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          test "$(git rev-parse --is-shallow-repository)" = 'false'
+          test -z "$(git replace -l)"
+          test -z "$(git config --local --get-regexp '^http\..*\.extraheader$' || true)"
+          test "$(git ls-tree HEAD -- simulation/lib-v2/schema-validator.mjs)" = $'100644 blob 5e2694e8c2c9eb3677fd132382b5f595706f0801\tsimulation/lib-v2/schema-validator.mjs'
+
+      - name: Verify current authority, mirrors, source replacement and deletion boundary
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node tests/governance/verify-current-authority.mjs --require-live-actions --skip-candidate-execution
 
       - name: Parse current JSON documents
         run: |
@@ -70,6 +132,19 @@ jobs:
           jq -e . quality-reviews/phase-0-governance-recovery/acceptance-addendum-round-001.json >/dev/null
           jq -e . quality-reviews/phase-0-governance-recovery/critic-summary-round-002.json >/dev/null
           jq -e . quality-reviews/phase-0-governance-recovery/evidence-supersession-register.json >/dev/null
+          OPTIONAL_JSON=()
+          for round in 034 035 036 037 038 039 040 041 042 043 044; do
+            OPTIONAL_JSON+=("quality-reviews/step-1-canonical-design/active-change-control-addendum-round-${round}.json")
+          done
+          for round in 006 007 008 009 010 011 012; do
+            OPTIONAL_JSON+=("quality-reviews/step-1-hero-merchant-large-idle-integration/user-decision-lock-round-${round}.json")
+          done
+          for round in 013 014; do
+            OPTIONAL_JSON+=("quality-reviews/step-1-canonical-design/governance-activation-record-round-${round}.json")
+          done
+          for optional_json in "${OPTIONAL_JSON[@]}"; do
+            if test -f "$optional_json"; then jq -e . "$optional_json" >/dev/null; fi
+          done
           if test -f quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json; then
             jq -e . quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json >/dev/null
             jq -e . quality-reviews/phase-0-governance-recovery/step2-source-compatibility.json >/dev/null
@@ -85,19 +160,424 @@ jobs:
           ROOT_ENTRY=$(jq -r '.entry.head' quality-reviews/step-1-canonical-design/active-change-control-addendum-round-028.json)
           git diff --check "$ROOT_ENTRY"..HEAD -- . ':(exclude)*.md'
 
+      - name: Generate external S02 Preview proof
+        if: >-
+          ${{
+            (hashFiles('quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-request-round-001.json') != '' && hashFiles('quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-round-001.json') == '') ||
+            (hashFiles('quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-request-round-002.json') != '' && hashFiles('quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-round-002.json') == '') ||
+            (hashFiles('quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-request-round-003.json') != '' && hashFiles('quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-round-003.json') == '') ||
+            (hashFiles('quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-request-round-004.json') != '' && hashFiles('quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-round-004.json') == '') ||
+            hashFiles('quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-access-renewal-round-*-*-request.json') != ''
+          }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          PENDING=()
+          for round in 001 002 003 004; do
+            request="quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-request-round-${round}.json"
+            readback="quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-round-${round}.json"
+            if test -f "$request" && test ! -f "$readback"; then PENDING+=("$request"); fi
+          done
+          shopt -s nullglob
+          for request in quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-access-renewal-round-???-???-request.json; do
+            readback="${request%-request.json}-readback.json"
+            if test ! -f "$readback"; then PENDING+=("$request"); fi
+          done
+          shopt -u nullglob
+          if test "${#PENDING[@]}" -eq 0; then exit 0; fi
+          test "${#PENDING[@]}" -eq 1
+          S02_PREVIEW_REQUEST="${PENDING[0]}"
+          export S02_PREVIEW_REQUEST
+          test "$(git log --diff-filter=A --format=%H -- "$S02_PREVIEW_REQUEST" | tail -n 1)" = "$GITHUB_SHA"
+          CONTENT_SHA=$(jq -er '.verifiedContent.commit' "$S02_PREVIEW_REQUEST")
+          test "$(jq -er '.branch' "$S02_PREVIEW_REQUEST")" = 'kimi'
+          mkdir -p external
+          gh api --method GET \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "/repos/2hg7trp7rv-design/cats_tower/deployments?sha=${CONTENT_SHA}&ref=kimi&per_page=100" \
+            > external/github-deployments-content.json
+          DEPLOYMENT_ID=$(node --input-type=module - <<'NODE'
+          import fs from 'node:fs';
+          const request = JSON.parse(fs.readFileSync(process.env.S02_PREVIEW_REQUEST, 'utf8'));
+          const rows = JSON.parse(fs.readFileSync('external/github-deployments-content.json', 'utf8'));
+          const exact = rows.find(row => row.sha === request.verifiedContent.commit && row.ref === 'kimi' && row.task === 'deploy' && /^preview$/i.test(row.environment || '') && row.transient_environment === true && row.production_environment === false && row.creator?.login === 'vercel[bot]' && row.creator?.id === 35613825 && row.creator?.type === 'Bot');
+          if (!exact || !Number.isSafeInteger(exact.id)) process.exit(1);
+          process.stdout.write(String(exact.id));
+          NODE
+          )
+          gh api --method GET \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "/repos/2hg7trp7rv-design/cats_tower/deployments/${DEPLOYMENT_ID}/statuses?per_page=100" \
+            > external/github-deployment-statuses-content.json
+          gh api --method GET \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "/repos/2hg7trp7rv-design/cats_tower/statuses/${CONTENT_SHA}?per_page=100" \
+            > external/github-commit-statuses-content.json
+          OIDC_RESPONSE=$(curl --fail --silent --show-error \
+            -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=cats-tower-current-governance")
+          OIDC_TOKEN=$(jq -er '.value' <<<"$OIDC_RESPONSE")
+          export OIDC_TOKEN
+          node --input-type=module - <<'NODE'
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+
+          const requestPath = process.env.S02_PREVIEW_REQUEST;
+          const request = JSON.parse(fs.readFileSync(requestPath, 'utf8'));
+          const raw = {
+            deployments: fs.readFileSync('external/github-deployments-content.json'),
+            deploymentStatuses: fs.readFileSync('external/github-deployment-statuses-content.json'),
+            commitStatuses: fs.readFileSync('external/github-commit-statuses-content.json')
+          };
+          const deployments = JSON.parse(raw.deployments.toString('utf8'));
+          const deploymentStatuses = JSON.parse(raw.deploymentStatuses.toString('utf8'));
+          const commitStatuses = JSON.parse(raw.commitStatuses.toString('utf8'));
+          const deployment = deployments.find(row => row.sha === request.verifiedContent.commit && row.ref === 'kimi' && row.task === 'deploy' && /^preview$/i.test(row.environment || '') && row.transient_environment === true && row.production_environment === false && row.creator?.login === 'vercel[bot]' && row.creator?.id === 35613825 && row.creator?.type === 'Bot');
+          const deploymentStatus = deploymentStatuses.find(row => row.creator?.login === 'vercel[bot]' && row.creator?.id === 35613825 && row.creator?.type === 'Bot');
+          const commitStatus = commitStatuses.find(row => row.context === 'Vercel' && row.creator?.login === 'vercel[bot]' && row.creator?.id === 35613825 && row.creator?.type === 'Bot');
+          if (!deployment || deploymentStatus?.state !== 'success' || commitStatus?.state !== 'success') throw new Error('LATEST_VERCEL_PREVIEW_NOT_SUCCESS');
+          const targetMatch = /^https:\/\/vercel\.com\/shinyaaas-projects\/cats_tower\/([A-Za-z0-9]+)$/.exec(commitStatus.target_url || '');
+          if (!targetMatch) throw new Error('VERCEL_STATUS_TARGET_URL_INVALID');
+          if (![deploymentStatus.target_url, deploymentStatus.log_url].includes(commitStatus.target_url)) throw new Error('VERCEL_DEPLOYMENT_AND_COMMIT_STATUS_NOT_CORRELATED');
+          const assertUrl = value => {
+            const url = new URL(value);
+            if (url.protocol !== 'https:' || url.username || url.password || url.port || !/^[a-z0-9-]+\.vercel\.app$/.test(url.hostname)) throw new Error(`UNTRUSTED_VERCEL_URL:${value}`);
+            return url.origin;
+          };
+          const immutableOrigin = assertUrl(deploymentStatus.environment_url);
+          const aliasOrigin = assertUrl(request.review.branchAlias);
+          if (immutableOrigin === aliasOrigin) throw new Error('IMMUTABLE_DEPLOYMENT_EQUALS_BRANCH_ALIAS');
+          const temporaryAccessUrl = new URL(request.review.temporaryAccess.url);
+          if (request.review.temporaryAccess.kind !== 'VERCEL_TEMPORARY_SHARE_23H' || temporaryAccessUrl.protocol !== 'https:' || temporaryAccessUrl.username || temporaryAccessUrl.password || temporaryAccessUrl.port || temporaryAccessUrl.origin !== aliasOrigin || temporaryAccessUrl.pathname !== request.review.route || temporaryAccessUrl.hash || [...temporaryAccessUrl.searchParams.keys()].join(',') !== '_vercel_share') throw new Error('TEMPORARY_PREVIEW_ACCESS_INVALID');
+          const shareToken = temporaryAccessUrl.searchParams.get('_vercel_share');
+          if (!/^[A-Za-z0-9_-]{16,512}$/.test(shareToken || '') || Date.parse(request.review.temporaryAccess.expiresAt) <= Date.now()) throw new Error('TEMPORARY_PREVIEW_ACCESS_EXPIRED_OR_INVALID');
+          let aggregateResponseBytes = 0;
+          const withAccess = value => {
+            const url = new URL(value);
+            if (url.protocol !== 'https:' || url.username || url.password || url.port || ![immutableOrigin, aliasOrigin].includes(url.origin)) throw new Error(`UNTRUSTED_FETCH_URL:${url.href}`);
+            url.searchParams.set('_vercel_share', shareToken);
+            return url;
+          };
+          const readBounded = async (response, cap, source) => {
+            const chunks = [];
+            let length = 0;
+            const reader = response.body?.getReader();
+            if (!reader) return Buffer.alloc(0);
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              length += value.length;
+              aggregateResponseBytes += value.length;
+              if (length > cap || aggregateResponseBytes > 60 * 1024 * 1024) {
+                await reader.cancel();
+                throw new Error(`HTTP_BODY_TOO_LARGE:${source}`);
+              }
+              chunks.push(Buffer.from(value));
+            }
+            return Buffer.concat(chunks, length);
+          };
+          const fetchBounded = async (value, cap, allowedPaths) => {
+            let url = withAccess(value);
+            let response = await fetch(url, { redirect: 'manual', signal: AbortSignal.timeout(20000), headers: { 'user-agent': 'cats-tower-s02-preview-proof/1' } });
+            if ([301, 302, 307, 308].includes(response.status)) {
+              const redirected = new URL(response.headers.get('location'), url);
+              if (redirected.protocol !== 'https:' || redirected.username || redirected.password || redirected.port || redirected.origin !== url.origin || !allowedPaths.includes(redirected.pathname)) throw new Error(`UNTRUSTED_REDIRECT:${url}`);
+              url = withAccess(redirected);
+              response = await fetch(url, { redirect: 'error', signal: AbortSignal.timeout(20000), headers: { 'user-agent': 'cats-tower-s02-preview-proof/1' } });
+            }
+            const finalUrl = new URL(response.url || url);
+            if (finalUrl.protocol !== 'https:' || finalUrl.username || finalUrl.password || finalUrl.port || finalUrl.origin !== url.origin || !allowedPaths.includes(finalUrl.pathname)) throw new Error(`UNEXPECTED_FINAL_PATH:${url}`);
+            const bytes = await readBounded(response, cap, url.href);
+            return { response, bytes, finalPath: finalUrl.pathname };
+          };
+          const route = request.review.route;
+          const routePaths = [route, route.replace(/\/$/, '')];
+          const indexPath = 'step4/s02/golden-master-p1/index.html';
+          const indexBytes = execFileSync('git', ['show', `${request.verifiedContent.commit}:${indexPath}`], { encoding: null, maxBuffer: 2 * 1024 * 1024 });
+          const indexBlob = execFileSync('git', ['rev-parse', `${request.verifiedContent.commit}:${indexPath}`], { encoding: 'utf8' }).trim();
+          const indexSha256 = `sha256:${createHash('sha256').update(indexBytes).digest('hex')}`;
+          const pageResults = [];
+          for (const origin of [immutableOrigin, aliasOrigin]) {
+            const { response, bytes, finalPath } = await fetchBounded(new URL(route, origin).href, 2 * 1024 * 1024, routePaths);
+            const contentType = response.headers.get('content-type') || '';
+            const text = bytes.toString('utf8');
+            if (response.status !== 200 || !/^text\/html(?:;|$)/i.test(contentType)) throw new Error(`REVIEW_HTML_UNAVAILABLE:${origin}`);
+            if (!bytes.equals(indexBytes)) throw new Error(`REVIEW_ROUTE_DOES_NOT_EQUAL_TARGET_INDEX:${origin}`);
+            for (const label of request.review.requiredLabels) if (!text.includes(label)) throw new Error(`REVIEW_LABEL_MISSING:${label}`);
+            for (const gm of request.review.goldenMasters) if (!text.includes(gm)) throw new Error(`GOLDEN_MASTER_MISSING:${gm}`);
+            pageResults.push({ status: response.status, contentType, finalPath, sha256: `sha256:${createHash('sha256').update(bytes).digest('hex')}` });
+          }
+          const manifestText = execFileSync('git', ['show', `${request.verifiedContent.commit}:${request.review.manifestPath}`], { encoding: 'utf8' });
+          const manifestBlob = execFileSync('git', ['rev-parse', `${request.verifiedContent.commit}:${request.review.manifestPath}`], { encoding: 'utf8' }).trim();
+          if (manifestBlob !== request.review.manifestBlob) throw new Error('REVIEW_MANIFEST_BLOB_MISMATCH');
+          const manifest = JSON.parse(manifestText);
+          const prefix = 'step4/s02/golden-master-p1/';
+          const reviewPrefix = 'quality-reviews/step-4-twelve-screen-final-mockups/';
+          const exactKeys = (value, keys) => value && typeof value === 'object' && !Array.isArray(value) && JSON.stringify(Object.keys(value).sort()) === JSON.stringify([...keys].sort());
+          if (!exactKeys(manifest, ['schemaVersion', 'artifactId', 'purpose', 'repository', 'branch', 'route', 'goldenMasters', 'requiredViewports', 'documents', 'routeFiles'])) throw new Error('REVIEW_MANIFEST_V2_SCHEMA_INVALID');
+          const assetManifestPath = `${prefix}asset-manifest.json`;
+          const assetManifest = JSON.parse(execFileSync('git', ['show', `${request.verifiedContent.commit}:${assetManifestPath}`], { encoding: 'utf8' }));
+          const assetPaths = assetManifest.assets?.map(asset => asset?.path) ?? [];
+          if (assetPaths.length < 1 || assetPaths.length > 80 || assetPaths.some(value => !/^assets\/[a-z0-9][a-z0-9._/-]*\.(?:webp|png|svg)$/i.test(value ?? '') || value.includes('..')) || new Set(assetPaths).size !== assetPaths.length) throw new Error('REVIEW_ASSET_GRAPH_INVALID');
+          const routeTargets = [
+            `${prefix}index.html`,
+            `${prefix}styles.css`,
+            `${prefix}app.js`,
+            `${prefix}golden-master-spec.json`,
+            assetManifestPath,
+            ...assetPaths.map(value => `${prefix}${value}`)
+          ].sort();
+          const documentTargets = [
+            's02-golden-master-p1-acceptance-matrix-round-001.json',
+            's02-golden-master-p1-competitive-research.md',
+            's02-golden-master-p1-player-experience.json',
+            's02-golden-master-p1-information-priority.json',
+            's02-golden-master-p1-art-direction.json',
+            's02-golden-master-p1-ui-design-system.json',
+            's02-golden-master-p1-asset-decomposition.json',
+            's02-golden-master-p1-animation-contract.json',
+            's02-golden-master-p1-data-binding-matrix.json',
+            's02-golden-master-p1-responsive-contract.json',
+            's02-golden-master-p1-feasibility-audit.json'
+          ].map(value => `${reviewPrefix}${value}`).sort();
+          const treeEntries = execFileSync('git', ['ls-tree', '-r', '-z', request.verifiedContent.commit, '--', prefix], { encoding: 'utf8' })
+            .split('\0').filter(Boolean).map(line => {
+              const match = /^(\d{6}) (\w+) ([a-f0-9]{40})\t(.+)$/.exec(line);
+              if (!match) throw new Error(`REVIEW_TREE_ENTRY_INVALID:${line}`);
+              return { mode: match[1], type: match[2], blob: match[3], path: match[4] };
+            }).filter(entry => entry.path !== request.review.manifestPath).sort((a, b) => a.path.localeCompare(b.path));
+          if (JSON.stringify(treeEntries.map(entry => entry.path)) !== JSON.stringify(routeTargets)) throw new Error('REVIEW_TREE_FILE_SET_INVALID');
+          const record = target => {
+            const entry = treeEntries.find(candidate => candidate.path === target)
+              ?? (() => {
+                const line = execFileSync('git', ['ls-tree', request.verifiedContent.commit, '--', target], { encoding: 'utf8' }).trim();
+                const match = /^(\d{6}) (\w+) ([a-f0-9]{40})\t(.+)$/.exec(line);
+                if (!match) throw new Error(`REVIEW_RECORD_MISSING:${target}`);
+                return { mode: match[1], type: match[2], blob: match[3], path: match[4] };
+              })();
+            if (entry.mode !== '100644' || entry.type !== 'blob' || entry.path !== target) throw new Error(`REVIEW_RECORD_INVALID:${target}`);
+            const bytes = Number(execFileSync('git', ['cat-file', '-s', `${request.verifiedContent.commit}:${target}`], { encoding: 'utf8' }).trim());
+            const content = execFileSync('git', ['show', `${request.verifiedContent.commit}:${target}`], { encoding: null, maxBuffer: bytes + 1024 });
+            if (!Number.isSafeInteger(bytes) || bytes <= 0 || bytes > 10 * 1024 * 1024 || content.length !== bytes) throw new Error(`REVIEW_RECORD_SIZE_INVALID:${target}`);
+            return { path: target, bytes, sha256: createHash('sha256').update(content).digest('hex'), gitBlob: entry.blob };
+          };
+          const exactManifest = {
+            schemaVersion: 2,
+            artifactId: 'cats-tower-s02-golden-master-p1-review-manifest',
+            purpose: 'DESIGN_REVIEW_ONLY_NOT_RUNTIME',
+            repository: '2hg7trp7rv-design/cats_tower',
+            branch: 'kimi',
+            route: request.review.route,
+            goldenMasters: ['GM01', 'GM02', 'GM03', 'GM04', 'GM05', 'GM06', 'GM07', 'GM08'],
+            requiredViewports: ['320x568', '320x667', '375x667', '360x800', '390x844', '412x915', '430x932'],
+            documents: documentTargets.map(record),
+            routeFiles: routeTargets.map(record)
+          };
+          if (JSON.stringify(manifest) !== JSON.stringify(exactManifest)) throw new Error('REVIEW_MANIFEST_NOT_EXACT_ROUTE_ENUMERATION');
+          const manifestSha256 = `sha256:${createHash('sha256').update(manifestText).digest('hex')}`;
+          const servedManifestHashes = [];
+          for (const origin of [immutableOrigin, aliasOrigin]) {
+            const manifestUrl = new URL(request.review.manifestPath.replace(/^step4\/s02\/golden-master-p1\//, ''), new URL(route, origin));
+            const { response, bytes } = await fetchBounded(manifestUrl.href, 512 * 1024, [manifestUrl.pathname]);
+            if (response.status !== 200 || !bytes.equals(Buffer.from(manifestText, 'utf8'))) throw new Error(`SERVED_MANIFEST_MISMATCH:${origin}`);
+            servedManifestHashes.push(`sha256:${createHash('sha256').update(bytes).digest('hex')}`);
+          }
+          if (!Array.isArray(manifest.routeFiles) || manifest.routeFiles.length !== routeTargets.length) throw new Error('REVIEW_MANIFEST_FILE_SET_INVALID');
+          const assetChecks = [];
+          for (const asset of manifest.routeFiles) {
+            if (!asset.path.startsWith(prefix) || !/^[A-Za-z0-9._/-]+$/.test(asset.path) || asset.path.includes('..') || !/^[a-f0-9]{40}$/.test(asset.gitBlob || '') || !Number.isSafeInteger(asset.bytes) || asset.bytes <= 0 || asset.bytes > 10 * 1024 * 1024 || !/^[a-f0-9]{64}$/.test(asset.sha256 || '')) throw new Error(`REVIEW_FILE_CONTRACT_INVALID:${asset.path}`);
+            const relativePath = asset.path.slice(prefix.length);
+            const statuses = [];
+            if (relativePath === 'index.html') {
+              if (asset.gitBlob !== indexBlob || asset.bytes !== indexBytes.length || asset.sha256 !== indexSha256.slice('sha256:'.length)) throw new Error('REVIEW_INDEX_MANIFEST_MISMATCH');
+              statuses.push(pageResults[0].status, pageResults[1].status);
+            } else {
+              for (const origin of [immutableOrigin, aliasOrigin]) {
+                const assetUrl = new URL(relativePath, new URL(route, origin));
+                const { response, bytes } = await fetchBounded(assetUrl.href, 10 * 1024 * 1024, [assetUrl.pathname]);
+                const digest = createHash('sha256').update(bytes).digest('hex');
+                if (response.status !== 200 || bytes.length !== asset.bytes || digest !== asset.sha256) throw new Error(`REVIEW_ASSET_MISMATCH:${origin}:${asset.path}`);
+                statuses.push(response.status);
+              }
+            }
+            assetChecks.push({ path: asset.path, gitBlob: asset.gitBlob, bytes: asset.bytes, sha256: asset.sha256, immutableStatus: statuses[0], branchAliasStatus: statuses[1] });
+          }
+          const verifiedAt = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
+          const httpReport = {
+            schemaVersion: 1,
+            artifactId: 'cats-tower-s02-external-preview-http-report',
+            verifiedAt,
+            route,
+            immutableUrl: immutableOrigin,
+            branchAlias: aliasOrigin,
+            immutableStatus: pageResults[0].status,
+            branchAliasStatus: pageResults[1].status,
+            immutableContentType: pageResults[0].contentType,
+            branchAliasContentType: pageResults[1].contentType,
+            immutableFinalPath: pageResults[0].finalPath,
+            branchAliasFinalPath: pageResults[1].finalPath,
+            indexBlob,
+            indexSha256,
+            immutablePageSha256: pageResults[0].sha256,
+            branchAliasPageSha256: pageResults[1].sha256,
+            manifestPath: request.review.manifestPath,
+            manifestBlob,
+            manifestSha256: servedManifestHashes[0],
+            branchAliasManifestSha256: servedManifestHashes[1],
+            requiredLabelsVisible: request.review.requiredLabels,
+            goldenMastersAvailable: request.review.goldenMasters,
+            assetChecks,
+            assetFailures: 0,
+            aliasServesReviewedContent: true
+          };
+          fs.writeFileSync('external/http-report.json', `${JSON.stringify(httpReport, null, 2)}\n`);
+          const token = process.env.OIDC_TOKEN;
+          const parts = token.split('.');
+          if (parts.length !== 3) throw new Error('OIDC_FORMAT_INVALID');
+          const claims = JSON.parse(Buffer.from(parts[1], 'base64url').toString('utf8'));
+          const expectedSubject = 'repo:2hg7trp7rv-design/cats_tower:ref:refs/heads/kimi';
+          const expectedWorkflowRef = '2hg7trp7rv-design/cats_tower/.github/workflows/verify-current-governance.yml@refs/heads/kimi';
+          if (!(claims.iss === 'https://token.actions.githubusercontent.com' && claims.aud === 'cats-tower-current-governance' && claims.sub === expectedSubject && claims.repository === '2hg7trp7rv-design/cats_tower' && claims.repository_id === '1331488679' && claims.repository_owner_id === '245031448' && claims.ref === 'refs/heads/kimi' && claims.sha === process.env.GITHUB_SHA && claims.workflow_sha === process.env.GITHUB_SHA && claims.workflow_ref === expectedWorkflowRef && String(claims.run_id) === process.env.GITHUB_RUN_ID && String(claims.run_attempt) === process.env.GITHUB_RUN_ATTEMPT)) throw new Error('OIDC_CLAIMS_INVALID');
+          const oidcClaims = {
+            issuer: claims.iss,
+            audience: claims.aud,
+            subject: claims.sub,
+            repository: claims.repository,
+            repositoryId: claims.repository_id,
+            repositoryOwnerId: claims.repository_owner_id,
+            ref: claims.ref,
+            sha: claims.sha,
+            runId: String(claims.run_id),
+            runAttempt: String(claims.run_attempt),
+            workflowRef: claims.workflow_ref
+          };
+          const result = {
+            schemaVersion: 1,
+            artifactId: 'cats-tower-s02-external-preview-proof',
+            repository: '2hg7trp7rv-design/cats_tower',
+            repositoryId: 1331488679,
+            repositoryOwnerId: 245031448,
+            branch: 'kimi',
+            requestCommit: process.env.GITHUB_SHA,
+            requestTree: execFileSync('git', ['rev-parse', 'HEAD^{tree}'], { encoding: 'utf8' }).trim(),
+            runId: Number(process.env.GITHUB_RUN_ID),
+            runAttempt: Number(process.env.GITHUB_RUN_ATTEMPT),
+            oidcTokenSha256: `sha256:${createHash('sha256').update(token).digest('hex')}`,
+            oidcClaims,
+            oidcVerified: true,
+            verifiedContent: request.verifiedContent,
+            contentDeployment: {
+              githubDeploymentId: deployment.id,
+              githubDeploymentStatusId: deploymentStatus.id,
+              githubCommitStatusId: commitStatus.id,
+              vercelDeploymentId: `dpl_${targetMatch[1]}`,
+              immutableUrl: immutableOrigin,
+              githubSha: request.verifiedContent.commit,
+              githubRef: 'kimi',
+              environment: 'Preview',
+              transientEnvironment: true,
+              productionEnvironment: false,
+              state: 'success',
+              creator: { login: 'vercel[bot]', id: 35613825, type: 'Bot' }
+            },
+            rawSha256: Object.fromEntries(Object.entries(raw).map(([key, value]) => [key, `sha256:${createHash('sha256').update(value).digest('hex')}`])),
+            httpReportSha256: `sha256:${createHash('sha256').update(fs.readFileSync('external/http-report.json')).digest('hex')}`,
+            productionBoundary: { reviewDeploymentTarget: 'preview', productionTargeted: false, globalProductionAliasUnchanged: 'NOT_PROVEN_BY_PUBLIC_PREVIEW_EVIDENCE' },
+            verdict: 'PASS_EXTERNAL_S02_PREVIEW_READBACK'
+          };
+          fs.writeFileSync('external/s02-preview-proof-result.json', `${JSON.stringify(result, null, 2)}\n`);
+          fs.copyFileSync('external/s02-preview-proof-result.json', 's02-external-preview-envelope.json');
+          NODE
+          jq -e '.verdict == "PASS_EXTERNAL_S02_PREVIEW_READBACK" and .productionBoundary.productionTargeted == false' external/s02-preview-proof-result.json >/dev/null
+
+      - name: Upload external S02 Preview proof
+        if: ${{ hashFiles('external/s02-preview-proof-result.json') != '' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: s02-external-preview-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            s02-external-preview-envelope.json
+            external/**
+          if-no-files-found: error
+          retention-days: 90
+
       - name: Write machine-readable governance evidence
         run: |
           set -euo pipefail
           TREE=$(git rev-parse 'HEAD^{tree}')
           ACTIVE=$(jq -r '.activeChangeControl' CURRENT_AUTHORITY_INDEX.json)
           STEP2=$(jq -r '.executableContract.step2Status' CURRENT_AUTHORITY_INDEX.json)
+          ACTIVE_SEAL=$(jq -r '.executableContract.seal' CURRENT_AUTHORITY_INDEX.json)
+          ACTIVE_BINDING_COUNT=$(jq -r '.bindings | length' "$ACTIVE_SEAL")
+          VERDICT='PASS_CURRENT_AUTHORITY_GOVERNANCE'
+          if test "$(git rev-parse 'HEAD^')" = '250ea65f38af7dd0e4dcd9a342bdef464e4b1516' && \
+             test "$(git diff --name-only '250ea65f38af7dd0e4dcd9a342bdef464e4b1516'..HEAD)" = $'.github/workflows/CURRENT_STATUS.md\n.github/workflows/verify-current-governance.yml\nAGENTS.md\nPROJECT_HANDOVER.md\nQUALITY_GATE.md\nREADME.md\ntests/governance/verify-current-authority.mjs'; then
+            VERDICT='PENDING_LIVE_PROVENANCE_READBACK'
+          fi
+          OIDC_RESPONSE=$(curl --fail --silent --show-error \
+            -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=cats-tower-current-governance")
+          OIDC_TOKEN=$(jq -er '.value' <<<"$OIDC_RESPONSE")
+          export OIDC_TOKEN
+          node --input-type=module - <<'NODE'
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const token = process.env.OIDC_TOKEN;
+          const parts = token.split('.');
+          if (parts.length !== 3) process.exit(1);
+          const claims = JSON.parse(Buffer.from(parts[1], 'base64url').toString('utf8'));
+          const expectedSubject = `repo:${process.env.GITHUB_REPOSITORY}:ref:${process.env.GITHUB_REF}`;
+          const expectedWorkflowRef = `${process.env.GITHUB_REPOSITORY}/.github/workflows/verify-current-governance.yml@${process.env.GITHUB_REF}`;
+          const exact = claims.iss === 'https://token.actions.githubusercontent.com' &&
+            claims.aud === 'cats-tower-current-governance' &&
+            claims.sub === expectedSubject &&
+            claims.repository === process.env.GITHUB_REPOSITORY &&
+            claims.repository_id === '1331488679' &&
+            claims.repository_owner_id === '245031448' &&
+            claims.ref === process.env.GITHUB_REF &&
+            claims.sha === process.env.GITHUB_SHA &&
+            claims.workflow_sha === process.env.GITHUB_SHA &&
+            claims.workflow_ref === expectedWorkflowRef &&
+            String(claims.run_id) === process.env.GITHUB_RUN_ID &&
+            String(claims.run_attempt) === process.env.GITHUB_RUN_ATTEMPT;
+          if (!exact) process.exit(1);
+          const normalized = {
+            issuer: claims.iss,
+            audience: claims.aud,
+            subject: claims.sub,
+            repository: claims.repository,
+            repositoryId: claims.repository_id,
+            repositoryOwnerId: claims.repository_owner_id,
+            ref: claims.ref,
+            sha: claims.sha,
+            runId: String(claims.run_id),
+            runAttempt: String(claims.run_attempt),
+            workflowRef: claims.workflow_ref
+          };
+          fs.writeFileSync('oidc-claims.json', `${JSON.stringify(normalized)}\n`);
+          fs.writeFileSync('oidc-token-sha256.txt', `sha256:${createHash('sha256').update(token).digest('hex')}\n`);
+          NODE
+          OIDC_TOKEN_SHA256=$(tr -d '\n' < oidc-token-sha256.txt)
+          OIDC_CLAIMS=$(jq -c . oidc-claims.json)
           jq -n \
             --arg repository '2hg7trp7rv-design/cats_tower' \
             --arg branch 'kimi' \
             --arg commit "$GITHUB_SHA" \
             --arg tree "$TREE" \
+            --argjson runId "$GITHUB_RUN_ID" \
+            --argjson runAttempt "$GITHUB_RUN_ATTEMPT" \
+            --arg oidcTokenSha256 "$OIDC_TOKEN_SHA256" \
+            --argjson oidcClaims "$OIDC_CLAIMS" \
             --arg activeChangeControl "$ACTIVE" \
             --arg step2 "$STEP2" \
+            --arg activeSeal "$ACTIVE_SEAL" \
+            --arg verdict "$VERDICT" \
+            --argjson activeBindingCount "$ACTIVE_BINDING_COUNT" \
             '{
               schemaVersion: 1,
               artifactId: "cats-tower-current-governance-result",
@@ -105,11 +585,18 @@ jobs:
               branch: $branch,
               commit: $commit,
               tree: $tree,
+              runId: $runId,
+              runAttempt: $runAttempt,
+              oidcTokenSha256: $oidcTokenSha256,
+              oidcClaims: $oidcClaims,
+              oidcVerified: true,
               activeChangeControl: $activeChangeControl,
-              verdict: "PASS_CURRENT_AUTHORITY_GOVERNANCE",
+              verdict: $verdict,
               step1: "PASS_CANONICAL",
               step2: $step2,
-              step2BindingCount: 16,
+              step2ActiveSeal: $activeSeal,
+              step2BindingCount: $activeBindingCount,
+              historicalStep2V2BindingCount: 16,
               step2SourceBoundHistoricalWorktree: "PASS_CONTRACT_SOURCE_REPRODUCTION",
               step3: "PASS_MODEL",
               step4: "IN_PROGRESS",
@@ -120,9 +607,9 @@ jobs:
           jq -e . current-governance-result.json >/dev/null
 
       - name: Upload governance evidence artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: phase0-current-governance-${{ github.sha }}
+          name: phase0-current-governance-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
           path: current-governance-result.json
           if-no-files-found: error
           retention-days: 90

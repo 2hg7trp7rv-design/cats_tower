@@ -5,6 +5,15 @@ Repository: `2hg7trp7rv-design/cats_tower`
 Branch: existing `kimi` only
 Authority: `CURRENT_AUTHORITY_INDEX.json`
 
+```text
+STEP4_STATUS: IN_PROGRESS
+STEP5_ALLOWED: false
+PRODUCTION_ALIAS_CHANGED: false
+PRODUCTION_READY: false
+PHYSICAL_IPHONE_VERIFIED: false
+USER_VISUAL_APPROVAL: false
+```
+
 ## Current verdict
 
 `IN_PROGRESS_PHASE0_CLOSURE_INTEGRITY_RECOVERY`

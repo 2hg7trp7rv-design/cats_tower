@@ -4,6 +4,15 @@
 Repository: `2hg7trp7rv-design/cats_tower`
 Branch: existing `kimi` only
 
+```text
+STEP4_STATUS: IN_PROGRESS
+STEP5_ALLOWED: false
+PRODUCTION_ALIAS_CHANGED: false
+PRODUCTION_READY: false
+PHYSICAL_IPHONE_VERIFIED: false
+USER_VISUAL_APPROVAL: false
+```
+
 ## Current conclusion
 
 Phase 0 governance closure was reopened after independent criticism found four closure-integrity P1 defects. Round 031 implements the repairs, but the four findings remain open until this repair commit passes independent re-criticism. Step 2 correction and corrected closure evidence remain pending.
