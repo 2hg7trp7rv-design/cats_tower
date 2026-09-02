@@ -99,9 +99,9 @@ jobs:
           mkdir -p .handoff-export
           if test -n "${GITHUB_HEAD_REF:-}"; then
             git fetch --no-tags origin "${GITHUB_HEAD_REF}"
-            git archive --format=zip --prefix=cats_tower/ FETCH_HEAD -o .handoff-export/cats2.zip
+            git archive --format=zip FETCH_HEAD -o .handoff-export/cats2.zip
           else
-            git archive --format=zip --prefix=cats_tower/ HEAD -o .handoff-export/cats2.zip
+            git archive --format=zip HEAD -o .handoff-export/cats2.zip
           fi
           test -s .handoff-export/cats2.zip
 

@@ -119,4 +119,4 @@ Physical iPhone, production readiness and user visual approval remain separate a
 
 ## 10. Delivery packaging
 
-The V2 quality workflow creates `cats2.zip` from the tracked head of `task/v2-bootstrap`. The archive contains a top-level `cats_tower/` directory and excludes `.git`, dependency caches and untracked build residue.
+The V2 quality workflow creates `cats2.zip` from the tracked head of `task/v2-bootstrap`. The archive places the complete tracked repository contents directly at the ZIP root, matching the established `cats1.zip` delivery convention. It excludes `.git`, dependency caches and untracked build residue.
