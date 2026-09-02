@@ -193,7 +193,12 @@ jobs:
           CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-verifier-correction-round-001.json'
           REDIRECT_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-redirect-correction-round-002.json'
           BROWSER_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-browser-correction-round-003.json'
-          if test -f "$BROWSER_CORRECTION"; then
+          UPLOAD_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-upload-transport-correction-round-004.json'
+          if test -f "$UPLOAD_CORRECTION"; then
+            test "$(git log --diff-filter=A --format=%H -- "$UPLOAD_CORRECTION" | tail -n 1)" = "$GITHUB_SHA"
+            test "$(git rev-parse HEAD^)" = "$(jq -er '.entry.head' "$UPLOAD_CORRECTION")"
+            test "$(jq -er '.request.commit' "$UPLOAD_CORRECTION")" = "$REQUEST_COMMIT"
+          elif test -f "$BROWSER_CORRECTION"; then
             test "$(git log --diff-filter=A --format=%H -- "$BROWSER_CORRECTION" | tail -n 1)" = "$GITHUB_SHA"
             test "$(git rev-parse HEAD^)" = "$(jq -er '.entry.head' "$BROWSER_CORRECTION")"
             test "$(jq -er '.request.commit' "$BROWSER_CORRECTION")" = "$REQUEST_COMMIT"

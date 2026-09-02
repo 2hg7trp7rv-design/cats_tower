@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-external-preview-upload-transport-correction-round-004",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "2a527e45d9718b903b2aca9d59af3a2c2e828766",
+    "tree": "09cb59184b6b5a76dbaaf0dfaae9f94bb0c96c4e"
+  },
+  "failedTransport": {
+    "expectedVerifierBlob": "ddab7c773da87cc397e13d75c134711946391f61",
+    "observedVerifierBlob": "86b93a83f9cc28e83b7f0c02947f926d97b1d34c",
+    "expectedUtf8": true,
+    "observedUtf8": false,
+    "cause": "EXEC_COMMAND_OUTPUT_LIMIT_REMOVED_MIDDLE_BYTES"
+  },
+  "request": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-request-round-001.json",
+    "commit": "e5ba5ed92d0eeb0da67f956637b7ebb1cb6c2a11",
+    "tree": "f706c3146d09f3c30368e0e0d4a92afbfd7850da",
+    "blob": "c034073b7b9beaa34bcffd4a685e36fefc3a0861"
+  },
+  "priorCorrection": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-browser-correction-round-003.json",
+    "commit": "2a527e45d9718b903b2aca9d59af3a2c2e828766",
+    "tree": "09cb59184b6b5a76dbaaf0dfaae9f94bb0c96c4e",
+    "blob": "d968300d60c74bc97b50b2969f31094515dac826"
+  },
+  "repair": {
+    "rule": "REPLACE_ONLY_THE_TRUNCATED_VERIFIER_AND_ADVANCE_THE_EXISTING_BROWSER_PROOF_WITH_EXACT_GIT_BLOBS",
+    "changedPaths": [
+      ".github/workflows/verify-current-governance.yml",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-upload-transport-correction-round-004.json",
+      "tests/governance/verify-current-authority.mjs"
+    ],
+    "parentVerifierBlob": "4e58e9f5c29f3d749487572b4c871ac9b48afb22",
+    "browserWorkflowBlob": "d1f28777e4a939819c60fd7b57af6a0b23b0af4c",
+    "browserCorrectionBlob": "d968300d60c74bc97b50b2969f31094515dac826",
+    "repairedWorkflowBlob": "7252ec2a4eeb0ff4a2ed3f9e97dcbffea7712512",
+    "repairedVerifierBlob": "65a51493a35b01a03e8e92bf0c64eb63f0359680",
+    "transferEncoding": "UTF8_DIRECT_GITHUB_BLOB",
+    "connectorOutputBypassed": true,
+    "treeVerifiedBeforeRefUpdate": true,
+    "productContentChanged": false
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "REPAIRED_EXTERNAL_PREVIEW_UPLOAD_PENDING_RERUN"
+}
