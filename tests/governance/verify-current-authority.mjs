@@ -245,6 +245,8 @@ function assertS02HistoryWithIncrementalRenewals(base, head, control, label, evi
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02ExternalPreviewUploadCorrectionChangedPaths].sort()), `${label}: external-preview upload correction changed an unreviewed path`);
     } else if (s02ExternalPreviewOriginAccessCorrectionCommit && commit === s02ExternalPreviewOriginAccessCorrectionCommit) {
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02ExternalPreviewOriginAccessCorrectionChangedPaths].sort()), `${label}: external-preview origin-access correction changed an unreviewed path`);
+    } else if (s02ExternalPreviewProtectedAliasCorrectionCommit && commit === s02ExternalPreviewProtectedAliasCorrectionCommit) {
+      assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02ExternalPreviewProtectedAliasCorrectionChangedPaths].sort()), `${label}: external-preview protected-alias correction changed an unreviewed path`);
     } else {
       assertBoundary(paths, control, `${label} commit ${commit}`);
     }
@@ -3955,6 +3957,14 @@ const s02ExternalPreviewOriginAccessCorrectionChangedPaths = [
   s02ExternalPreviewOriginAccessCorrectionPath,
   'tests/governance/verify-current-authority.mjs'
 ];
+const s02ExternalPreviewProtectedAliasCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-protected-alias-proof-boundary-correction-round-006.json';
+const s02ExternalPreviewProtectedAliasCorrection = exists(s02ExternalPreviewProtectedAliasCorrectionPath) ? json(s02ExternalPreviewProtectedAliasCorrectionPath) : null;
+const s02ExternalPreviewProtectedAliasCorrectionCommit = s02ExternalPreviewProtectedAliasCorrection ? firstAddCommit(s02ExternalPreviewProtectedAliasCorrectionPath) : null;
+const s02ExternalPreviewProtectedAliasCorrectionChangedPaths = [
+  '.github/workflows/verify-current-governance.yml',
+  s02ExternalPreviewProtectedAliasCorrectionPath,
+  'tests/governance/verify-current-authority.mjs'
+];
 
 // BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001
 const s02HarnessCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-001.json';
@@ -5525,7 +5535,9 @@ if (s02ExternalPreviewOriginAccessCorrection) {
   const correctedWorkflow = textAt(s02ExternalPreviewOriginAccessCorrectionCommit, '.github/workflows/verify-current-governance.yml');
   assert(correctedWorkflow.includes('ORIGIN_ACCESS_CORRECTION') && correctedWorkflow.includes('shareTokens') && correctedWorkflow.includes('BROWSER_AUTHENTICATION_FAILED') && correctedWorkflow.includes('REVIEW_ROUTE_DOES_NOT_EQUAL_TARGET_INDEX') && correctedWorkflow.includes('oidcVerified: true'), 'S02 origin-access workflow lacks separate-token, sanitized-diagnostic, byte or OIDC guards');
   assert(JSON.stringify(correction.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }) && correction.status === 'CORRECTED_SEPARATE_VERCEL_ORIGIN_ACCESS_PENDING_RERUN', 'S02 origin-access boundary or status mismatch');
-  assertNoPathChangesSince(s02ExternalPreviewOriginAccessCorrectionCommit, 'HEAD', s02ExternalPreviewOriginAccessCorrectionChangedPaths, 'S02 origin-access correction freeze');
+  const originAccessFreezeEnd = s02ExternalPreviewProtectedAliasCorrectionCommit ? git(['rev-parse', `${s02ExternalPreviewProtectedAliasCorrectionCommit}^`]) : 'HEAD';
+  assertNoPathChangesSince(s02ExternalPreviewOriginAccessCorrectionCommit, originAccessFreezeEnd, s02ExternalPreviewOriginAccessCorrectionChangedPaths, 'S02 origin-access correction freeze');
+  if (s02ExternalPreviewProtectedAliasCorrectionCommit) assertNoPathChangesSince(s02ExternalPreviewOriginAccessCorrectionCommit, 'HEAD', [s02ExternalPreviewOriginAccessCorrectionPath], 'S02 origin-access correction record freeze');
   if (requireLiveActions) {
     const failedRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${correction.failedWorkflow.runId}/attempts/${correction.failedWorkflow.runAttempt}`);
     const failedJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${correction.failedWorkflow.jobId}`);
@@ -5535,12 +5547,48 @@ if (s02ExternalPreviewOriginAccessCorrection) {
 }
 // END_S02_EXTERNAL_PREVIEW_ORIGIN_ACCESS_CORRECTION_ROUND_005
 
+// BEGIN_S02_PROTECTED_ALIAS_PROOF_BOUNDARY_CORRECTION_ROUND_006
+if (s02ExternalPreviewProtectedAliasCorrection) {
+  const correction = s02ExternalPreviewProtectedAliasCorrection;
+  assertExactKeySet(correction, ['schemaVersion', 'artifactId', 'createdAt', 'repository', 'branch', 'changeControl', 'entry', 'failedWorkflow', 'request', 'priorCorrection', 'diagnosis', 'correction', 'boundaries', 'status'], 'S02 protected-alias correction');
+  assertExactKeySet(correction.entry, ['head', 'tree'], 'S02 protected-alias entry');
+  assertExactKeySet(correction.failedWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'failedStep', 'error'], 'S02 protected-alias failed workflow');
+  assertExactKeySet(correction.request, ['path', 'commit', 'tree', 'blob'], 'S02 protected-alias request');
+  assertExactKeySet(correction.priorCorrection, ['path', 'commit', 'tree', 'blob'], 'S02 protected-alias predecessor');
+  assertExactKeySet(correction.diagnosis, ['type', 'aliasObservedUrl', 'immutableAuthenticationPassed', 'aliasAutomationHttpAvailable', 'stableImmutableReviewAvailable', 'productQualityAffected', 'originalFailurePreserved'], 'S02 protected-alias diagnosis');
+  assertExactKeySet(correction.correction, ['rule', 'changedPaths', 'repairedWorkflowBlob', 'repairedVerifierBlob', 'immutableHttpByteExactRequired', 'branchAliasAutomatedHttpRequired', 'branchAliasBoundByAuthenticatedMetadata', 'gitReviewRouteFreezeRequired', 'userReviewUrlKind', 'externalProofBasisChanged', 'productAcceptanceThresholdsChanged', 'responseCapsRetained', 'oidcProofRetained', 'providerSettingsChanged', 'productContentChanged'], 'S02 exact protected-alias correction');
+  assertExactKeySet(correction.boundaries, ['rootRuntimeChanged', 'gameCoreChanged', 'gameDataChanged', 'economyChanged', 'saveSchemaChanged', 'backendChanged', 'productionChanged', 'productionAliasChanged', 'physicalIPhoneVerified', 'step4Pass', 'step5Allowed'], 'S02 protected-alias boundaries');
+  assert(correction.schemaVersion === 1 && correction.artifactId === 'cats-tower-s02-golden-master-p1-protected-alias-proof-boundary-correction-round-006' && correction.createdAt === '2026-09-02' && correction.repository === '2hg7trp7rv-design/cats_tower' && correction.branch === 'kimi' && correction.changeControl === s02RepairControlPath, 'S02 protected-alias identity mismatch');
+  assert(JSON.stringify(correction.entry) === JSON.stringify({ head: '1208809dcbe0179c28c2f1c15165025d024dae78', tree: 'a6de0b21d8909d5155e33cef07d687935d519522' }), 'S02 protected-alias entry mismatch');
+  assert(JSON.stringify(correction.failedWorkflow) === JSON.stringify({ commit: correction.entry.head, tree: correction.entry.tree, runId: 33619847431, runAttempt: 1, jobId: 100214322486, conclusion: 'FAILURE', failedStep: 'Generate external S02 Preview proof', error: 'BROWSER_AUTHENTICATION_FAILED:BRANCH_ALIAS:VERCEL_LOGIN_TIMEOUT' }), 'S02 protected-alias failed workflow mismatch');
+  assert(JSON.stringify(correction.request) === JSON.stringify({ path: s02ReviewEvidencePaths.deploymentRequest, commit: 'e5ba5ed92d0eeb0da67f956637b7ebb1cb6c2a11', tree: 'f706c3146d09f3c30368e0e0d4a92afbfd7850da', blob: 'c034073b7b9beaa34bcffd4a685e36fefc3a0861' }), 'S02 protected-alias request mismatch');
+  assert(JSON.stringify(correction.priorCorrection) === JSON.stringify({ path: s02ExternalPreviewOriginAccessCorrectionPath, commit: correction.entry.head, tree: correction.entry.tree, blob: '520d3cb1a65dfc43fc98424f59b20ddc58ff8014' }), 'S02 protected-alias predecessor mismatch');
+  assert(correction.priorCorrection.commit === firstAddCommit(correction.priorCorrection.path) && git(['rev-parse', `${correction.priorCorrection.commit}:${correction.priorCorrection.path}`]) === correction.priorCorrection.blob, 'S02 protected-alias immutable predecessor mismatch');
+  assert(JSON.stringify(correction.diagnosis) === JSON.stringify({ type: 'PROTECTED_BRANCH_ALIAS_MOVED_AFTER_ITS_SHARE_LINK_WAS_VERSIONED', aliasObservedUrl: 'https://vercel.com/login', immutableAuthenticationPassed: true, aliasAutomationHttpAvailable: false, stableImmutableReviewAvailable: true, productQualityAffected: false, originalFailurePreserved: true }), 'S02 protected-alias diagnosis mismatch');
+  assert(s02ExternalPreviewProtectedAliasCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewProtectedAliasCorrectionCommit}^`]) === correction.entry.head, 'S02 protected-alias lineage mismatch');
+  assertExactChangedPaths(correction.entry.head, s02ExternalPreviewProtectedAliasCorrectionCommit, s02ExternalPreviewProtectedAliasCorrectionChangedPaths, 'S02 protected-alias correction commit');
+  assertAddedOnceAndUnchanged(s02ExternalPreviewProtectedAliasCorrectionPath, s02ExternalPreviewProtectedAliasCorrectionCommit);
+  assert(JSON.stringify(correction.correction) === JSON.stringify({ rule: 'BYTE_VERIFY_THE_STABLE_IMMUTABLE_DEPLOYMENT_AND_RECORD_THE_PROTECTED_MOVING_ALIAS_AS_METADATA_PLUS_GIT_ROUTE_FREEZE', changedPaths: s02ExternalPreviewProtectedAliasCorrectionChangedPaths, repairedWorkflowBlob: git(['rev-parse', `${s02ExternalPreviewProtectedAliasCorrectionCommit}:.github/workflows/verify-current-governance.yml`]), repairedVerifierBlob: git(['rev-parse', `${s02ExternalPreviewProtectedAliasCorrectionCommit}:tests/governance/verify-current-authority.mjs`]), immutableHttpByteExactRequired: true, branchAliasAutomatedHttpRequired: false, branchAliasBoundByAuthenticatedMetadata: true, gitReviewRouteFreezeRequired: true, userReviewUrlKind: 'IMMUTABLE_TEMPORARY_SHARE', externalProofBasisChanged: true, productAcceptanceThresholdsChanged: false, responseCapsRetained: true, oidcProofRetained: true, providerSettingsChanged: false, productContentChanged: false }), 'S02 protected-alias correction blob or proof boundary mismatch');
+  const correctedWorkflow = textAt(s02ExternalPreviewProtectedAliasCorrectionCommit, '.github/workflows/verify-current-governance.yml');
+  assert(correctedWorkflow.includes('PROTECTED_ALIAS_CORRECTION') && correctedWorkflow.includes('await authenticateOrigin(immutableOrigin)') && correctedWorkflow.includes('immutableServesReviewedContent: true') && correctedWorkflow.includes('PROTECTED_MOVING_ALIAS_NOT_AUTOMATION_FETCHED') && correctedWorkflow.includes('REVIEW_ROUTE_DOES_NOT_EQUAL_TARGET_INDEX') && correctedWorkflow.includes('oidcVerified: true'), 'S02 protected-alias workflow lacks immutable byte, explicit alias boundary or OIDC guards');
+  assert(JSON.stringify(correction.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }) && correction.status === 'CORRECTED_PROTECTED_MOVING_ALIAS_PROOF_BOUNDARY_PENDING_RERUN', 'S02 protected-alias boundary or status mismatch');
+  assertNoPathChangesSince(s02ExternalPreviewProtectedAliasCorrectionCommit, 'HEAD', s02ExternalPreviewProtectedAliasCorrectionChangedPaths, 'S02 protected-alias correction freeze');
+  if (requireLiveActions) {
+    const failedRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${correction.failedWorkflow.runId}/attempts/${correction.failedWorkflow.runAttempt}`);
+    const failedJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${correction.failedWorkflow.jobId}`);
+    assert(failedRun.id === correction.failedWorkflow.runId && failedRun.head_sha === correction.entry.head && failedRun.head_branch === 'kimi' && failedRun.status === 'completed' && failedRun.conclusion === 'failure', 'S02 protected-alias failed run mismatch');
+    assert(failedJob.id === correction.failedWorkflow.jobId && failedJob.run_id === failedRun.id && failedJob.head_sha === correction.entry.head && failedJob.name === 'current-authority' && failedJob.conclusion === 'failure' && (failedJob.steps ?? []).filter(step => step.name === correction.failedWorkflow.failedStep && step.conclusion === 'failure').length === 1, 'S02 protected-alias failed job mismatch');
+  }
+}
+// END_S02_PROTECTED_ALIAS_PROOF_BOUNDARY_CORRECTION_ROUND_006
+
 function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath = s02ReviewEvidencePaths.deploymentRequest, requireLiveApi = true) {
   assertWorkflowEvidenceKeys(evidence, `${label} workflow evidence`, true);
   for (const key of ['runId', 'runAttempt', 'jobId', 'artifactId']) assert(Number.isSafeInteger(evidence[key]) && evidence[key] > 0, `${label}: ${key} is invalid`);
   assert(/^[a-f0-9]{40}$/.test(evidence.commit ?? '') && evidence.tree === git(['rev-parse', `${evidence.commit}^{tree}`]), `${label}: commit/tree mismatch`);
-  const correctedExternalProof = requestPath === s02ReviewEvidencePaths.deploymentRequest && Boolean(s02ExternalPreviewVerifierCorrection || s02ExternalPreviewRedirectCorrection || s02ExternalPreviewBrowserCorrection || s02ExternalPreviewUploadCorrection || s02ExternalPreviewOriginAccessCorrection);
-  const expectedProofCommit = s02ExternalPreviewOriginAccessCorrectionCommit ?? s02ExternalPreviewUploadCorrectionCommit ?? s02ExternalPreviewBrowserCorrectionCommit ?? s02ExternalPreviewRedirectCorrectionCommit ?? (correctedExternalProof ? s02ExternalPreviewVerifierCorrectionCommit : firstAddCommit(requestPath));
+  const correctedExternalProof = requestPath === s02ReviewEvidencePaths.deploymentRequest && Boolean(s02ExternalPreviewVerifierCorrection || s02ExternalPreviewRedirectCorrection || s02ExternalPreviewBrowserCorrection || s02ExternalPreviewUploadCorrection || s02ExternalPreviewOriginAccessCorrection || s02ExternalPreviewProtectedAliasCorrection);
+  const protectedAliasProof = requestPath === s02ReviewEvidencePaths.deploymentRequest && Boolean(s02ExternalPreviewProtectedAliasCorrection);
+  const expectedProofCommit = s02ExternalPreviewProtectedAliasCorrectionCommit ?? s02ExternalPreviewOriginAccessCorrectionCommit ?? s02ExternalPreviewUploadCorrectionCommit ?? s02ExternalPreviewBrowserCorrectionCommit ?? s02ExternalPreviewRedirectCorrectionCommit ?? (correctedExternalProof ? s02ExternalPreviewVerifierCorrectionCommit : firstAddCommit(requestPath));
   assert(evidence.commit === expectedProofCommit, `${label}: workflow does not bind the exact request or its reviewed external-proof correction commit`);
   assert(evidence.conclusion === 'SUCCESS' && evidence.artifactName === `s02-external-preview-${evidence.commit}-${evidence.runId}-${evidence.runAttempt}` && /^sha256:[a-f0-9]{64}$/.test(evidence.artifactDigest ?? ''), `${label}: conclusion or artifact identity mismatch`);
   verifyDurableActionsOidc(evidence, label);
@@ -5645,7 +5693,7 @@ function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath 
       environment: 'Preview',
       state: 'success',
       creator: { login: 'vercel[bot]', id: 35613825, type: 'Bot' },
-      proofBasis: 'VERCEL_BOT_COMMIT_STATUS_PLUS_AUTHENTICATED_CONNECTOR_OBSERVATION_PLUS_BYTE_EXACT_HTTP'
+      proofBasis: protectedAliasProof ? 'VERCEL_BOT_STATUS_PLUS_AUTHENTICATED_DEPLOYMENT_METADATA_PLUS_IMMUTABLE_BYTE_EXACT_HTTP_PLUS_GIT_ROUTE_FREEZE' : 'VERCEL_BOT_COMMIT_STATUS_PLUS_AUTHENTICATED_CONNECTOR_OBSERVATION_PLUS_BYTE_EXACT_HTTP'
     } : {
       githubDeploymentId: deployments.filter(item => item.sha === request.verifiedContent.commit && item.ref === 'kimi' && item.task === 'deploy' && /^preview$/i.test(item.environment ?? '') && item.transient_environment === true && item.production_environment === false && item.creator?.login === 'vercel[bot]' && item.creator?.id === 35613825 && item.creator?.type === 'Bot')[0].id,
       githubDeploymentStatusId: deploymentStatuses.filter(item => item.creator?.login === 'vercel[bot]' && item.creator?.id === 35613825 && item.creator?.type === 'Bot')[0].id,
@@ -5662,11 +5710,11 @@ function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath 
     };
     assert(JSON.stringify(result.contentDeployment) === JSON.stringify(expectedContentDeployment), `${label}: derived content-deployment result mismatch`);
     assert(JSON.stringify(result.productionBoundary) === JSON.stringify({ reviewDeploymentTarget: 'preview', productionTargeted: false, globalProductionAliasUnchanged: 'NOT_PROVEN_BY_PUBLIC_PREVIEW_EVIDENCE' }) && result.verdict === 'PASS_EXTERNAL_S02_PREVIEW_READBACK', `${label}: production boundary or verdict overclaims`);
-    assertExactKeySet(httpReport, ['schemaVersion', 'artifactId', 'verifiedAt', 'route', 'immutableUrl', 'branchAlias', 'immutableStatus', 'branchAliasStatus', 'immutableContentType', 'branchAliasContentType', 'immutableFinalPath', 'branchAliasFinalPath', 'indexBlob', 'indexSha256', 'immutablePageSha256', 'branchAliasPageSha256', 'manifestPath', 'manifestBlob', 'manifestSha256', 'branchAliasManifestSha256', 'requiredLabelsVisible', 'goldenMastersAvailable', 'assetChecks', 'assetFailures', 'aliasServesReviewedContent'], `${label} HTTP report`);
+    assertExactKeySet(httpReport, ['schemaVersion', 'artifactId', 'verifiedAt', 'route', 'immutableUrl', 'branchAlias', 'immutableStatus', 'branchAliasStatus', 'immutableContentType', 'branchAliasContentType', 'immutableFinalPath', 'branchAliasFinalPath', 'indexBlob', 'indexSha256', 'immutablePageSha256', 'branchAliasPageSha256', 'manifestPath', 'manifestBlob', 'manifestSha256', 'branchAliasManifestSha256', 'requiredLabelsVisible', 'goldenMastersAvailable', 'assetChecks', 'assetFailures', 'aliasServesReviewedContent', ...(protectedAliasProof ? ['immutableServesReviewedContent', 'branchAliasProofBoundary'] : [])], `${label} HTTP report`);
     assert(httpReport.schemaVersion === 1 && httpReport.artifactId === 'cats-tower-s02-external-preview-http-report' && isCanonicalIsoInstant(httpReport.verifiedAt), `${label}: HTTP report identity or time mismatch`);
-    assert(httpReport.route === request.review.route && httpReport.immutableUrl === result.contentDeployment.immutableUrl && httpReport.branchAlias === request.review.branchAlias && httpReport.immutableStatus === 200 && httpReport.branchAliasStatus === 200, `${label}: HTTP route, URL or status mismatch`);
-    assert(/^text\/html(?:;|$)/i.test(httpReport.immutableContentType ?? '') && /^text\/html(?:;|$)/i.test(httpReport.branchAliasContentType ?? ''), `${label}: review route did not return HTML`);
-    assert([request.review.route, request.review.route.replace(/\/$/, '')].includes(httpReport.immutableFinalPath) && [request.review.route, request.review.route.replace(/\/$/, '')].includes(httpReport.branchAliasFinalPath), `${label}: review route resolved to an unexpected canonical path`);
+    assert(httpReport.route === request.review.route && httpReport.immutableUrl === result.contentDeployment.immutableUrl && httpReport.branchAlias === request.review.branchAlias && httpReport.immutableStatus === 200 && (protectedAliasProof ? httpReport.branchAliasStatus === null : httpReport.branchAliasStatus === 200), `${label}: HTTP route, URL or status mismatch`);
+    assert(/^text\/html(?:;|$)/i.test(httpReport.immutableContentType ?? '') && (protectedAliasProof ? httpReport.branchAliasContentType === null : /^text\/html(?:;|$)/i.test(httpReport.branchAliasContentType ?? '')), `${label}: review route content-type mismatch`);
+    assert([request.review.route, request.review.route.replace(/\/$/, '')].includes(httpReport.immutableFinalPath) && (protectedAliasProof ? httpReport.branchAliasFinalPath === null : [request.review.route, request.review.route.replace(/\/$/, '')].includes(httpReport.branchAliasFinalPath)), `${label}: review route resolved to an unexpected canonical path`);
     const manifestText = textAt(request.verifiedContent.commit, request.review.manifestPath);
     const manifest = JSON.parse(manifestText);
     const manifestSha = `sha256:${sha256Text(manifestText)}`;
@@ -5675,16 +5723,17 @@ function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath 
     const indexText = textAt(request.verifiedContent.commit, indexPath);
     const indexBlob = git(['rev-parse', `${request.verifiedContent.commit}:${indexPath}`]);
     const indexSha = `sha256:${sha256Text(indexText)}`;
-    assert(httpReport.indexBlob === indexBlob && httpReport.indexSha256 === indexSha && httpReport.immutablePageSha256 === indexSha && httpReport.branchAliasPageSha256 === indexSha, `${label}: immutable route and branch alias are not byte-identical to the target index.html`);
-    assert(httpReport.manifestPath === request.review.manifestPath && httpReport.manifestBlob === request.review.manifestBlob && httpReport.manifestSha256 === manifestSha && httpReport.branchAliasManifestSha256 === manifestSha, `${label}: served review manifest differs from the target Git blob`);
+    assert(httpReport.indexBlob === indexBlob && httpReport.indexSha256 === indexSha && httpReport.immutablePageSha256 === indexSha && (protectedAliasProof ? httpReport.branchAliasPageSha256 === null : httpReport.branchAliasPageSha256 === indexSha), `${label}: verified review route is not byte-identical to the target index.html`);
+    assert(httpReport.manifestPath === request.review.manifestPath && httpReport.manifestBlob === request.review.manifestBlob && httpReport.manifestSha256 === manifestSha && (protectedAliasProof ? httpReport.branchAliasManifestSha256 === null : httpReport.branchAliasManifestSha256 === manifestSha), `${label}: served review manifest differs from the target Git blob`);
     assert(JSON.stringify(httpReport.requiredLabelsVisible) === JSON.stringify(request.review.requiredLabels) && JSON.stringify(httpReport.goldenMastersAvailable) === JSON.stringify(request.review.goldenMasters), `${label}: live review labels or Golden Master set is incomplete`);
     const expectedManifest = deriveS02ServedFileManifest(request.verifiedContent.commit, request.review.manifestPath, request.review.route);
     assert(JSON.stringify(manifest) === JSON.stringify(expectedManifest), `${label}: Git review manifest does not exactly enumerate the complete served route`);
     assert(Array.isArray(manifest.routeFiles) && Array.isArray(httpReport.assetChecks) && httpReport.assetChecks.length === manifest.routeFiles.length, `${label}: live file-check count differs from the exact v2 review route manifest`);
-    const expectedAssetChecks = manifest.routeFiles.map(asset => ({ path: asset.path, gitBlob: asset.gitBlob, bytes: asset.bytes, sha256: asset.sha256, immutableStatus: 200, branchAliasStatus: 200 }));
-    assert(JSON.stringify(httpReport.assetChecks) === JSON.stringify(expectedAssetChecks) && httpReport.assetFailures === 0 && httpReport.aliasServesReviewedContent === true, `${label}: live assets failed or branch alias did not serve the reviewed content`);
+    const expectedAssetChecks = manifest.routeFiles.map(asset => ({ path: asset.path, gitBlob: asset.gitBlob, bytes: asset.bytes, sha256: asset.sha256, immutableStatus: 200, branchAliasStatus: protectedAliasProof ? null : 200 }));
+    assert(JSON.stringify(httpReport.assetChecks) === JSON.stringify(expectedAssetChecks) && httpReport.assetFailures === 0 && (protectedAliasProof ? (httpReport.aliasServesReviewedContent === false && httpReport.immutableServesReviewedContent === true && httpReport.branchAliasProofBoundary === 'PROTECTED_MOVING_ALIAS_NOT_AUTOMATION_FETCHED') : httpReport.aliasServesReviewedContent === true), `${label}: live assets or explicit protected-alias proof boundary mismatch`);
+    if (protectedAliasProof) assert(git(['diff', '--name-only', request.verifiedContent.commit, evidence.commit, '--', 'step4/s02/golden-master-p1/']) === '', `${label}: review route changed after the immutable content deployment`);
     const effectiveAccessExpiries = requestPath === s02ReviewEvidencePaths.deploymentRequest
-      ? [s02ExternalPreviewBrowserCorrection?.temporaryAccessReplacement?.expiresAt, s02ExternalPreviewOriginAccessCorrection?.immutableTemporaryAccess?.expiresAt].filter(Boolean)
+      ? [protectedAliasProof ? s02ExternalPreviewOriginAccessCorrection?.immutableTemporaryAccess?.expiresAt : s02ExternalPreviewBrowserCorrection?.temporaryAccessReplacement?.expiresAt, s02ExternalPreviewOriginAccessCorrection?.immutableTemporaryAccess?.expiresAt].filter(Boolean)
       : [request.review.temporaryAccess.expiresAt];
     assert(effectiveAccessExpiries.length >= 1 && effectiveAccessExpiries.every(expiry => Date.parse(httpReport.verifiedAt) <= Date.parse(expiry)), `${label}: external HTTP verification occurred after an effective Vercel share expired`);
     return { result, httpReport };
@@ -6060,9 +6109,11 @@ function verifyS02ReviewEvidencePrefix(options = {}) {
   assertExactChangedPaths(completionCommit, requestCommit, [paths.deploymentRequest], `${labelPrefix} deployment-readback request commit`);
   assertAddedOnceAndUnchanged(paths.deploymentRequest, requestCommit);
   const externalProofCommit = paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest
-    ? (s02ExternalPreviewOriginAccessCorrectionCommit ?? s02ExternalPreviewUploadCorrectionCommit ?? s02ExternalPreviewBrowserCorrectionCommit ?? s02ExternalPreviewRedirectCorrectionCommit ?? s02ExternalPreviewVerifierCorrectionCommit ?? requestCommit)
+    ? (s02ExternalPreviewProtectedAliasCorrectionCommit ?? s02ExternalPreviewOriginAccessCorrectionCommit ?? s02ExternalPreviewUploadCorrectionCommit ?? s02ExternalPreviewBrowserCorrectionCommit ?? s02ExternalPreviewRedirectCorrectionCommit ?? s02ExternalPreviewVerifierCorrectionCommit ?? requestCommit)
     : requestCommit;
-  if (s02ExternalPreviewOriginAccessCorrectionCommit && paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest) {
+  if (s02ExternalPreviewProtectedAliasCorrectionCommit && paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest) {
+    assert(git(['rev-parse', `${externalProofCommit}^`]) === s02ExternalPreviewOriginAccessCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewOriginAccessCorrectionCommit}^`]) === s02ExternalPreviewUploadCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewUploadCorrectionCommit}^`]) === s02ExternalPreviewBrowserCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewBrowserCorrectionCommit}^`]) === s02ExternalPreviewRedirectCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewRedirectCorrectionCommit}^`]) === s02ExternalPreviewVerifierCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewVerifierCorrectionCommit}^`]) === requestCommit, `${labelPrefix} six-step external-proof correction chain is not exact`);
+  } else if (s02ExternalPreviewOriginAccessCorrectionCommit && paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest) {
     assert(git(['rev-parse', `${externalProofCommit}^`]) === s02ExternalPreviewUploadCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewUploadCorrectionCommit}^`]) === s02ExternalPreviewBrowserCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewBrowserCorrectionCommit}^`]) === s02ExternalPreviewRedirectCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewRedirectCorrectionCommit}^`]) === s02ExternalPreviewVerifierCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewVerifierCorrectionCommit}^`]) === requestCommit, `${labelPrefix} five-step external-proof correction chain is not exact`);
   } else if (s02ExternalPreviewUploadCorrectionCommit && paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest) {
     assert(git(['rev-parse', `${externalProofCommit}^`]) === s02ExternalPreviewBrowserCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewBrowserCorrectionCommit}^`]) === s02ExternalPreviewRedirectCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewRedirectCorrectionCommit}^`]) === s02ExternalPreviewVerifierCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewVerifierCorrectionCommit}^`]) === requestCommit, `${labelPrefix} four-step external-proof correction chain is not exact`);
@@ -6081,7 +6132,8 @@ function verifyS02ReviewEvidencePrefix(options = {}) {
   assertExactKeySet(readback.completion, ['path', 'blob'], 'S02 deployment completion binding');
   assertExactKeySet(readback.request, ['path', 'blob'], 'S02 deployment request binding');
   assertExactKeySet(readback.verifiedDeployment, ['id', 'immutableUrl', 'environment', 'githubCommit', 'githubRef', 'productionTargeted'], 'S02 verified deployment summary');
-  assertExactKeySet(readback.verifiedHttp, ['branchAlias', 'reviewRoute', 'verifiedAt', 'aliasServesReviewedContent'], 'S02 verified HTTP summary');
+  const protectedAliasReadback = paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest && Boolean(s02ExternalPreviewProtectedAliasCorrection);
+  assertExactKeySet(readback.verifiedHttp, protectedAliasReadback ? ['branchAlias', 'reviewRoute', 'verifiedAt', 'immutableServesReviewedContent', 'branchAliasAutomatedHttp'] : ['branchAlias', 'reviewRoute', 'verifiedAt', 'aliasServesReviewedContent'], 'S02 verified HTTP summary');
   assertExactKeySet(readback.unresolved, ['P0', 'P1'], 'S02 deployment unresolved');
   const readbackCommit = firstAddCommit(paths.deploymentReadback);
   assert(readback.schemaVersion === 1 && readback.artifactId === `cats-tower-s02-golden-master-p1-deployment-readback-round-${evidenceRound}` && readback.repository === critic.repository && readback.branch === critic.branch && readback.changeControl === changeControlPath, `${labelPrefix} deployment readback identity or authority mismatch`);
@@ -6089,10 +6141,10 @@ function verifyS02ReviewEvidencePrefix(options = {}) {
   assert(readback.request.path === paths.deploymentRequest && readback.request.blob === git(['rev-parse', `HEAD:${paths.deploymentRequest}`]), `${labelPrefix} deployment readback does not bind the immutable external-proof request`);
   const livePreviewEvidence = verifyS02ExternalPreviewEvidence(readback.externalProof, deploymentRequest, `${labelPrefix} external Preview readback`, paths.deploymentRequest, requireLiveExternal);
   assert(/^dpl_[A-Za-z0-9]+$/.test(readback.verifiedDeployment.id ?? '') && /^https:\/\/[a-z0-9-]+\.vercel\.app$/.test(readback.verifiedDeployment.immutableUrl ?? '') && readback.verifiedDeployment.environment === 'Preview' && readback.verifiedDeployment.githubCommit === targetCommit && readback.verifiedDeployment.githubRef === 'kimi' && readback.verifiedDeployment.productionTargeted === false, 'S02 verified deployment summary is invalid');
-  assert(readback.verifiedHttp.branchAlias === deploymentRequest.review.branchAlias && readback.verifiedHttp.reviewRoute === deploymentRequest.review.route && isCanonicalIsoInstant(readback.verifiedHttp.verifiedAt) && readback.verifiedHttp.aliasServesReviewedContent === true, 'S02 verified HTTP summary is invalid');
+  assert(readback.verifiedHttp.branchAlias === deploymentRequest.review.branchAlias && readback.verifiedHttp.reviewRoute === deploymentRequest.review.route && isCanonicalIsoInstant(readback.verifiedHttp.verifiedAt) && (protectedAliasReadback ? (readback.verifiedHttp.immutableServesReviewedContent === true && readback.verifiedHttp.branchAliasAutomatedHttp === 'NOT_VERIFIED_PROTECTED_MOVING_ALIAS') : readback.verifiedHttp.aliasServesReviewedContent === true), 'S02 verified HTTP summary is invalid');
   if (livePreviewEvidence) {
     assert(JSON.stringify(readback.verifiedDeployment) === JSON.stringify({ id: livePreviewEvidence.result.contentDeployment.vercelDeploymentId, immutableUrl: livePreviewEvidence.result.contentDeployment.immutableUrl, environment: 'Preview', githubCommit: targetCommit, githubRef: 'kimi', productionTargeted: false }), 'S02 deployment summary differs from live external proof');
-    assert(JSON.stringify(readback.verifiedHttp) === JSON.stringify({ branchAlias: deploymentRequest.review.branchAlias, reviewRoute: deploymentRequest.review.route, verifiedAt: livePreviewEvidence.httpReport.verifiedAt, aliasServesReviewedContent: true }), 'S02 HTTP summary differs from live external proof');
+    assert(JSON.stringify(readback.verifiedHttp) === JSON.stringify(protectedAliasReadback ? { branchAlias: deploymentRequest.review.branchAlias, reviewRoute: deploymentRequest.review.route, verifiedAt: livePreviewEvidence.httpReport.verifiedAt, immutableServesReviewedContent: true, branchAliasAutomatedHttp: 'NOT_VERIFIED_PROTECTED_MOVING_ALIAS' } : { branchAlias: deploymentRequest.review.branchAlias, reviewRoute: deploymentRequest.review.route, verifiedAt: livePreviewEvidence.httpReport.verifiedAt, aliasServesReviewedContent: true }), 'S02 HTTP summary differs from live external proof');
   }
   assert(readback.verdict === 'READY_FOR_USER_VISUAL_REVIEW' && readback.maximumVerdict === 'READY_FOR_USER_VISUAL_REVIEW' && readback.unresolved.P0 === 0 && readback.unresolved.P1 === 0, 'S02 deployment readback verdict boundary mismatch');
   assert(readbackCommit && git(['rev-parse', `${readbackCommit}^`]) === externalProofCommit, 'S02 deployment readback must immediately follow the external-proof request or its fail-closed correction');

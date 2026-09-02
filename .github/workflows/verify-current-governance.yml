@@ -195,7 +195,12 @@ jobs:
           BROWSER_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-browser-correction-round-003.json'
           UPLOAD_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-upload-transport-correction-round-004.json'
           ORIGIN_ACCESS_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-origin-access-correction-round-005.json'
-          if test -f "$ORIGIN_ACCESS_CORRECTION"; then
+          PROTECTED_ALIAS_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-protected-alias-proof-boundary-correction-round-006.json'
+          if test -f "$PROTECTED_ALIAS_CORRECTION"; then
+            test "$(git log --diff-filter=A --format=%H -- "$PROTECTED_ALIAS_CORRECTION" | tail -n 1)" = "$GITHUB_SHA"
+            test "$(git rev-parse HEAD^)" = "$(jq -er '.entry.head' "$PROTECTED_ALIAS_CORRECTION")"
+            test "$(jq -er '.request.commit' "$PROTECTED_ALIAS_CORRECTION")" = "$REQUEST_COMMIT"
+          elif test -f "$ORIGIN_ACCESS_CORRECTION"; then
             test "$(git log --diff-filter=A --format=%H -- "$ORIGIN_ACCESS_CORRECTION" | tail -n 1)" = "$GITHUB_SHA"
             test "$(git rev-parse HEAD^)" = "$(jq -er '.entry.head' "$ORIGIN_ACCESS_CORRECTION")"
             test "$(jq -er '.request.commit' "$ORIGIN_ACCESS_CORRECTION")" = "$REQUEST_COMMIT"
@@ -276,11 +281,9 @@ jobs:
             if (!/^[A-Za-z0-9_-]{16,512}$/.test(token || '') || Date.parse(access.expiresAt) <= Date.now()) throw new Error(`TEMPORARY_PREVIEW_ACCESS_EXPIRED_OR_INVALID:${expectedOrigin}`);
             return token;
           };
-          const aliasTemporaryAccess = browserCorrection?.temporaryAccessReplacement ?? request.review.temporaryAccess;
           const immutableTemporaryAccess = originAccessCorrection?.immutableTemporaryAccess;
           if (!immutableTemporaryAccess) throw new Error('IMMUTABLE_TEMPORARY_PREVIEW_ACCESS_MISSING');
           const shareTokens = new Map([
-            [aliasOrigin, validateTemporaryAccess(aliasTemporaryAccess, aliasOrigin)],
             [immutableOrigin, validateTemporaryAccess(immutableTemporaryAccess, immutableOrigin)]
           ]);
           const playwrightModule = path.join(process.cwd(), 'step4/s02/golden-master-p1/browser-qa/node_modules/playwright/index.mjs');
@@ -321,7 +324,7 @@ jobs:
               await page.close();
             }
           };
-          for (const origin of [immutableOrigin, aliasOrigin]) await authenticateOrigin(origin);
+          await authenticateOrigin(immutableOrigin);
           const fetchBounded = async (value, cap, allowedPaths) => {
             const url = validateFetchUrl(value);
             if (!allowedPaths.includes(url.pathname) || url.search || url.hash) throw new Error(`UNEXPECTED_FETCH_PATH:${url.href}`);
@@ -359,7 +362,7 @@ jobs:
           const indexBlob = execFileSync('git', ['rev-parse', `${request.verifiedContent.commit}:${indexPath}`], { encoding: 'utf8' }).trim();
           const indexSha256 = `sha256:${createHash('sha256').update(indexBytes).digest('hex')}`;
           const pageResults = [];
-          for (const origin of [immutableOrigin, aliasOrigin]) {
+          for (const origin of [immutableOrigin]) {
             const { response, bytes, finalPath } = await fetchBounded(new URL(route, origin).href, 2 * 1024 * 1024, routePaths);
             const contentType = response.headers.get('content-type') || '';
             const text = bytes.toString('utf8');
@@ -438,7 +441,7 @@ jobs:
           if (JSON.stringify(manifest) !== JSON.stringify(exactManifest)) throw new Error('REVIEW_MANIFEST_NOT_EXACT_ROUTE_ENUMERATION');
           const manifestSha256 = `sha256:${createHash('sha256').update(manifestText).digest('hex')}`;
           const servedManifestHashes = [];
-          for (const origin of [immutableOrigin, aliasOrigin]) {
+          for (const origin of [immutableOrigin]) {
             const manifestUrl = new URL(request.review.manifestPath.replace(/^step4\/s02\/golden-master-p1\//, ''), new URL(route, origin));
             const { response, bytes } = await fetchBounded(manifestUrl.href, 512 * 1024, [manifestUrl.pathname]);
             if (response.status !== 200 || !bytes.equals(Buffer.from(manifestText, 'utf8'))) throw new Error(`SERVED_MANIFEST_MISMATCH:${origin}`);
@@ -452,9 +455,9 @@ jobs:
             const statuses = [];
             if (relativePath === 'index.html') {
               if (asset.gitBlob !== indexBlob || asset.bytes !== indexBytes.length || asset.sha256 !== indexSha256.slice('sha256:'.length)) throw new Error('REVIEW_INDEX_MANIFEST_MISMATCH');
-              statuses.push(pageResults[0].status, pageResults[1].status);
+              statuses.push(pageResults[0].status);
             } else {
-              for (const origin of [immutableOrigin, aliasOrigin]) {
+              for (const origin of [immutableOrigin]) {
                 const assetUrl = new URL(relativePath, new URL(route, origin));
                 const { response, bytes } = await fetchBounded(assetUrl.href, 10 * 1024 * 1024, [assetUrl.pathname]);
                 const digest = createHash('sha256').update(bytes).digest('hex');
@@ -462,7 +465,7 @@ jobs:
                 statuses.push(response.status);
               }
             }
-            assetChecks.push({ path: asset.path, gitBlob: asset.gitBlob, bytes: asset.bytes, sha256: asset.sha256, immutableStatus: statuses[0], branchAliasStatus: statuses[1] });
+            assetChecks.push({ path: asset.path, gitBlob: asset.gitBlob, bytes: asset.bytes, sha256: asset.sha256, immutableStatus: statuses[0], branchAliasStatus: null });
           }
           const verifiedAt = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
           const httpReport = {
@@ -473,24 +476,26 @@ jobs:
             immutableUrl: immutableOrigin,
             branchAlias: aliasOrigin,
             immutableStatus: pageResults[0].status,
-            branchAliasStatus: pageResults[1].status,
+            branchAliasStatus: null,
             immutableContentType: pageResults[0].contentType,
-            branchAliasContentType: pageResults[1].contentType,
+            branchAliasContentType: null,
             immutableFinalPath: pageResults[0].finalPath,
-            branchAliasFinalPath: pageResults[1].finalPath,
+            branchAliasFinalPath: null,
             indexBlob,
             indexSha256,
             immutablePageSha256: pageResults[0].sha256,
-            branchAliasPageSha256: pageResults[1].sha256,
+            branchAliasPageSha256: null,
             manifestPath: request.review.manifestPath,
             manifestBlob,
             manifestSha256: servedManifestHashes[0],
-            branchAliasManifestSha256: servedManifestHashes[1],
+            branchAliasManifestSha256: null,
             requiredLabelsVisible: request.review.requiredLabels,
             goldenMastersAvailable: request.review.goldenMasters,
             assetChecks,
             assetFailures: 0,
-            aliasServesReviewedContent: true
+            aliasServesReviewedContent: false,
+            immutableServesReviewedContent: true,
+            branchAliasProofBoundary: 'PROTECTED_MOVING_ALIAS_NOT_AUTOMATION_FETCHED'
           };
           fs.writeFileSync('external/http-report.json', `${JSON.stringify(httpReport, null, 2)}\n`);
           const token = process.env.OIDC_TOKEN;
@@ -538,7 +543,7 @@ jobs:
               environment: 'Preview',
               state: 'success',
               creator: { login: 'vercel[bot]', id: 35613825, type: 'Bot' },
-              proofBasis: 'VERCEL_BOT_COMMIT_STATUS_PLUS_AUTHENTICATED_CONNECTOR_OBSERVATION_PLUS_BYTE_EXACT_HTTP'
+              proofBasis: 'VERCEL_BOT_STATUS_PLUS_AUTHENTICATED_DEPLOYMENT_METADATA_PLUS_IMMUTABLE_BYTE_EXACT_HTTP_PLUS_GIT_ROUTE_FREEZE'
             },
             rawSha256: Object.fromEntries(Object.entries(raw).map(([key, value]) => [key, `sha256:${createHash('sha256').update(value).digest('hex')}`])),
             httpReportSha256: `sha256:${createHash('sha256').update(fs.readFileSync('external/http-report.json')).digest('hex')}`,

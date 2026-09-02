@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-protected-alias-proof-boundary-correction-round-006",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "1208809dcbe0179c28c2f1c15165025d024dae78",
+    "tree": "a6de0b21d8909d5155e33cef07d687935d519522"
+  },
+  "failedWorkflow": {
+    "commit": "1208809dcbe0179c28c2f1c15165025d024dae78",
+    "tree": "a6de0b21d8909d5155e33cef07d687935d519522",
+    "runId": 33619847431,
+    "runAttempt": 1,
+    "jobId": 100214322486,
+    "conclusion": "FAILURE",
+    "failedStep": "Generate external S02 Preview proof",
+    "error": "BROWSER_AUTHENTICATION_FAILED:BRANCH_ALIAS:VERCEL_LOGIN_TIMEOUT"
+  },
+  "request": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-request-round-001.json",
+    "commit": "e5ba5ed92d0eeb0da67f956637b7ebb1cb6c2a11",
+    "tree": "f706c3146d09f3c30368e0e0d4a92afbfd7850da",
+    "blob": "c034073b7b9beaa34bcffd4a685e36fefc3a0861"
+  },
+  "priorCorrection": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-origin-access-correction-round-005.json",
+    "commit": "1208809dcbe0179c28c2f1c15165025d024dae78",
+    "tree": "a6de0b21d8909d5155e33cef07d687935d519522",
+    "blob": "520d3cb1a65dfc43fc98424f59b20ddc58ff8014"
+  },
+  "diagnosis": {
+    "type": "PROTECTED_BRANCH_ALIAS_MOVED_AFTER_ITS_SHARE_LINK_WAS_VERSIONED",
+    "aliasObservedUrl": "https://vercel.com/login",
+    "immutableAuthenticationPassed": true,
+    "aliasAutomationHttpAvailable": false,
+    "stableImmutableReviewAvailable": true,
+    "productQualityAffected": false,
+    "originalFailurePreserved": true
+  },
+  "correction": {
+    "rule": "BYTE_VERIFY_THE_STABLE_IMMUTABLE_DEPLOYMENT_AND_RECORD_THE_PROTECTED_MOVING_ALIAS_AS_METADATA_PLUS_GIT_ROUTE_FREEZE",
+    "changedPaths": [
+      ".github/workflows/verify-current-governance.yml",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-protected-alias-proof-boundary-correction-round-006.json",
+      "tests/governance/verify-current-authority.mjs"
+    ],
+    "repairedWorkflowBlob": "4384bbec2eb084ddfb945f892eb56d4da33816a3",
+    "repairedVerifierBlob": "fca50e04670955aacdd1d1b249cdc6536aae7333",
+    "immutableHttpByteExactRequired": true,
+    "branchAliasAutomatedHttpRequired": false,
+    "branchAliasBoundByAuthenticatedMetadata": true,
+    "gitReviewRouteFreezeRequired": true,
+    "userReviewUrlKind": "IMMUTABLE_TEMPORARY_SHARE",
+    "externalProofBasisChanged": true,
+    "productAcceptanceThresholdsChanged": false,
+    "responseCapsRetained": true,
+    "oidcProofRetained": true,
+    "providerSettingsChanged": false,
+    "productContentChanged": false
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_PROTECTED_MOVING_ALIAS_PROOF_BOUNDARY_PENDING_RERUN"
+}
