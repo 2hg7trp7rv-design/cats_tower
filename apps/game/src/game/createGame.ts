@@ -3,7 +3,7 @@ import { BattleScene } from './BattleScene';
 
 export const createGame = (parent: string): Phaser.Game =>
   new Phaser.Game({
-    type: Phaser.AUTO,
+    type: Phaser.CANVAS,
     parent,
     width: 390,
     height: 360,

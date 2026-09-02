@@ -39,6 +39,80 @@ test('boots a deterministic mobile combat loop without browser errors', async ({
 
   expect(second).toEqual(first);
 
+
+  const visualIntegrity = await page.evaluate(() => {
+    const canvas = document.querySelector('canvas');
+    const fill = document.querySelector(
+      '[data-testid="enemy-health-fill"]',
+    );
+    const track = fill?.parentElement;
+
+    if (!(canvas instanceof HTMLCanvasElement)) {
+      return null;
+    }
+
+    const context = canvas.getContext('2d', { willReadFrequently: true });
+    if (!context) {
+      return null;
+    }
+
+    const pixels = context.getImageData(
+      0,
+      0,
+      canvas.width,
+      canvas.height,
+    ).data;
+    let samples = 0;
+    let nonBackgroundSamples = 0;
+    let brightSamples = 0;
+
+    for (let index = 0; index + 2 < pixels.length; index += 400) {
+      const red = pixels[index]!;
+      const green = pixels[index + 1]!;
+      const blue = pixels[index + 2]!;
+      samples += 1;
+
+      if (
+        Math.abs(red - 7) +
+          Math.abs(green - 19) +
+          Math.abs(blue - 28) >
+        24
+      ) {
+        nonBackgroundSamples += 1;
+      }
+
+      if (red + green + blue > 90) {
+        brightSamples += 1;
+      }
+    }
+
+    const fillRect = fill?.getBoundingClientRect();
+    const trackRect = track?.getBoundingClientRect();
+    const expectedEnemyRatio =
+      window.__CATS_TOWER_V2__.getSnapshot().enemy.hp /
+      window.__CATS_TOWER_V2__.getSnapshot().enemy.maxHp;
+
+    return {
+      nonBackgroundRatio: nonBackgroundSamples / samples,
+      brightRatio: brightSamples / samples,
+      renderedEnemyRatio:
+        fillRect && trackRect && trackRect.width > 0
+          ? fillRect.width / trackRect.width
+          : Number.NaN,
+      expectedEnemyRatio,
+    };
+  });
+
+  expect(visualIntegrity).not.toBeNull();
+  expect(visualIntegrity?.nonBackgroundRatio ?? 0).toBeGreaterThan(0.2);
+  expect(visualIntegrity?.brightRatio ?? 0).toBeGreaterThan(0.08);
+  expect(
+    Math.abs(
+      (visualIntegrity?.renderedEnemyRatio ?? Number.NaN) -
+        (visualIntegrity?.expectedEnemyRatio ?? Number.NaN),
+    ),
+  ).toBeLessThanOrEqual(0.02);
+
   const layout = await page.evaluate(() => {
     const canvas = document.querySelector('canvas');
     const topHud = document.querySelector('[data-testid="top-hud"]');

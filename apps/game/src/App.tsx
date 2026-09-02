@@ -36,7 +36,10 @@ export const App = () => {
             <strong>灰ネズミ</strong>
           </div>
           <div className="enemy-health" aria-label={`敵HP ${snapshot.enemy.hp}/${snapshot.enemy.maxHp}`}>
-            <span style={{ transform: `scaleX(${enemyRatio})` }} />
+            <span
+              data-testid="enemy-health-fill"
+              style={{ width: `${Math.max(0, Math.min(1, enemyRatio)) * 100}%` }}
+            />
           </div>
           <b>{snapshot.enemy.hp}/{snapshot.enemy.maxHp}</b>
         </div>

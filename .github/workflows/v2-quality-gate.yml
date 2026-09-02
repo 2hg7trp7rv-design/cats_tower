@@ -1,6 +1,9 @@
 name: V2 quality gate
 
 on:
+  push:
+    branches:
+      - kimi
   pull_request:
     branches:
       - kimi
