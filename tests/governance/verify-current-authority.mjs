@@ -1446,9 +1446,20 @@ function resolveStep2PreSealVerifierCorrectionCommit() {
   if (!exists(step2ReviewPaths.liveReadback)) return null;
   const readbackCommit = firstAddCommit(step2ReviewPaths.liveReadback);
   if (!readbackCommit) return null;
-  const output = git(['log', '--reverse', '--format=%H', `${readbackCommit}..HEAD`, '--', 'tests/governance/verify-current-authority.mjs']);
+  const sealCommit = exists(v3SealPath) ? firstAddCommit(v3SealPath) : null;
+  const rangeEnd = sealCommit ? git(['rev-parse', `${sealCommit}^`]) : git(['rev-parse', 'HEAD']);
+  const output = git(['log', '--reverse', '--format=%H', `${readbackCommit}..${rangeEnd}`, '--', 'tests/governance/verify-current-authority.mjs']);
   const commits = output ? output.split('\n').filter(Boolean) : [];
-  assert(commits.length <= 1, 'Step 2 verifier changed more than once after the live readback');
+  assert(commits.length <= 1, 'Step 2 verifier changed more than once between the live readback and v3 seal');
+  return commits[0] ?? null;
+}
+function resolveStep2PostContinuityVerifierCorrectionCommit() {
+  if (!exists(step2ContinuityPath)) return null;
+  const continuityCommit = firstAddCommit(step2ContinuityPath);
+  if (!continuityCommit) return null;
+  const output = git(['log', '--reverse', '--format=%H', `${continuityCommit}..HEAD`, '--', 'tests/governance/verify-current-authority.mjs']);
+  const commits = output ? output.split('\n').filter(Boolean) : [];
+  assert(commits.length <= 1, 'Step 2 verifier changed more than once after the Step 3 continuity bridge');
   return commits[0] ?? null;
 }
 const expectedRound032AllowedWrites = [
@@ -3087,7 +3098,7 @@ function expectedRound032PassDocumentText(file) {
     source = replaceOnce(source, 'Correct only the versioned S01-S12 screen projection under round 032, bind v3 review and Step 3 continuity evidence, then close Phase 0 through round 033. S02 product content remains read-only.', `The versioned S01-S12 screen projection is sealed by \`${v3SealPath}\` and Step 3 continuity is verified. Bind the numbered corrected Phase 0 review chain, then close through round 033. S02 product content remains read-only.`, 'round 032 PASS quality next');
   } else if (file === 'PROJECT_HANDOVER.md') {
     source = replaceOnce(source, 'Repair the canonical Step 2 S01-S12 screen projection without changing immutable v2 history, runtime, economy, save data, Production or device claims.', `Close corrected Phase 0 after \`${v3SealPath}\` and Step 3 continuity proved the versioned Step 2 repair without changing runtime, economy, save data, Production or device claims.`, 'round 032 PASS handover purpose');
-    source = replaceOnce(source, 'The numbered round 031 independent re-critic verified the closure-integrity repair at Phase 0 P0/P1 `0 / 0`. Round 032 is active; S02 A-J and GM01-GM08 remain preserved and read-only.', `The numbered round 031 re-critic passed; Step 2 is now \`PASS_CONTRACT\` under \`${v3SealPath}\`; Step 3 continuity is verified. Round 032 remains active only for numbered Phase 0 evidence and round 033 closure. S02 A-J and GM01-GM08 remain read-only.`, 'round 032 PASS handover progress');
+    source = replaceOnce(source, 'The numbered round 031 independent re-critic verified the closure-integrity repair at Phase 0 P0/P1 `0 / 0`. Round 032 is active; S02 A-J and GM01-GM08 remain preserved and read-only.', `The numbered round 031 re-critic passed; Phase 0 P0/P1 \`0 / 0\`; Step 2 is now \`PASS_CONTRACT\` under \`${v3SealPath}\`; Step 3 continuity is verified. Round 032 remains active only for numbered Phase 0 evidence and round 033 closure. The global P1 is the separate S02 visual finding. S02 A-J and GM01-GM08 remain read-only.`, 'round 032 PASS handover progress');
     source = replaceOnce(source, '1. create and validate the versioned v3 semantic contract\n2. bind independent critic, judge, completion and live readback\n3. prove Step 3 numeric continuity\n4. close corrected Phase 0 under round 033\n5. return to round 026 and audit the preserved S02 Golden Master', '1. bind the numbered Phase 0 independent critic\n2. bind final judge, completion and live readback\n3. close corrected Phase 0 under round 033\n4. return to round 026 and audit the preserved S02 Golden Master', 'round 032 PASS handover next');
   } else if (file === '.github/workflows/CURRENT_STATUS.md') {
     source = replaceOnce(source, '- Step 2 v2 is immutable historical evidence; semantic status remains open', `- Step 2 v2 is immutable historical evidence; corrected v3 is \`PASS_CONTRACT\` under \`${v3SealPath}\``, 'round 032 PASS workflow Step 2');
@@ -3567,7 +3578,16 @@ if (step2Correction) {
     assert(git(['rev-parse', `${v3SemanticCommit}^`]) === correctionControlCommit, 'round 032 v3 semantic target must immediately follow the opening commit');
     assert(git(['log', '--format=%H', `${correctionControlCommit}..${v3SemanticCommit}`, '--', 'tests/governance/verify-current-authority.mjs']) === v3SemanticCommit, 'round 032 semantic target verifier correction is not one dedicated reviewed change');
     const preSealVerifierCorrectionCommit = resolveStep2PreSealVerifierCorrectionCommit();
-    if (preSealVerifierCorrectionCommit) {
+    const postContinuityVerifierCorrectionCommit = resolveStep2PostContinuityVerifierCorrectionCommit();
+    if (postContinuityVerifierCorrectionCommit) {
+      const continuityCommit = firstAddCommit(step2ContinuityPath);
+      assert(preSealVerifierCorrectionCommit, 'Step 2 post-continuity verifier correction requires the reviewed pre-seal correction');
+      assert(git(['rev-parse', `${preSealVerifierCorrectionCommit}^`]) === firstAddCommit(step2ReviewPaths.liveReadback), 'Step 2 pre-seal verifier correction must immediately follow the live readback');
+      assertNoPathChangesSince(preSealVerifierCorrectionCommit, continuityCommit, ['tests/governance/verify-current-authority.mjs'], 'round 032 verifier freeze from pre-seal correction through continuity');
+      assert(git(['rev-parse', `${postContinuityVerifierCorrectionCommit}^`]) === continuityCommit, 'Step 2 post-continuity verifier correction must immediately follow the continuity bridge');
+      assertExactChangedPaths(continuityCommit, postContinuityVerifierCorrectionCommit, ['tests/governance/verify-current-authority.mjs'], 'Step 2 post-continuity verifier correction');
+      assertNoPathChangesSince(postContinuityVerifierCorrectionCommit, governanceFreezeEnd, ['tests/governance/verify-current-authority.mjs'], 'round 032 verifier freeze after the post-continuity correction');
+    } else if (preSealVerifierCorrectionCommit) {
       const readbackCommit = firstAddCommit(step2ReviewPaths.liveReadback);
       assert(git(['rev-parse', `${preSealVerifierCorrectionCommit}^`]) === readbackCommit, 'Step 2 pre-seal verifier correction must immediately follow the live readback');
       assertExactChangedPaths(readbackCommit, preSealVerifierCorrectionCommit, ['tests/governance/verify-current-authority.mjs'], 'Step 2 pre-seal verifier correction');
@@ -6195,7 +6215,7 @@ function verifyRound032NonStep2Freeze() {
     assert(JSON.stringify(currentCopy) === JSON.stringify(baselineCopy), `round 032 changed frozen ${label} top-level content`);
   };
   freezeTopLevelExcept(endAuthority, baselineAuthority, ['updatedAt', 'status', 'currentInternalPhase', 'activeChangeControl', 'governanceRecovery', 'executableContract', 'globalGate', 'currentProductWork'], 'authority');
-  freezeTopLevelExcept(endStatus, baselineStatus, ['updatedAt', 'activeChangeControl', 'status', 'currentInternalPhase', 'currentVerdict', 'governanceRecovery', 'scopedPasses', 'currentProductWork', 'openFindings', 'nextAuthorizedAction'], 'PROJECT_STATUS');
+  freezeTopLevelExcept(endStatus, baselineStatus, ['updatedAt', 'activeChangeControl', 'status', 'currentInternalPhase', 'currentVerdict', 'governanceRecovery', 'scopedPasses', 'executableContract', 'currentProductWork', 'openFindings', 'nextAuthorizedAction'], 'PROJECT_STATUS');
   freezeTopLevelExcept(endPolicy, baselinePolicy, ['updatedAt', 'authority', 'current', 'currentWriteBoundary'], 'AI policy');
   freezeTopLevelExcept(endSimulation, baselineSimulation, ['updatedAt', 'currentInternalPhase', 'status', 'governanceRecovery', 'step2', 'currentMutationAllowed', 'nextAction'], 'simulation mirror');
   freezeTopLevelExcept(endDispatcher, baselineDispatcher, ['updatedAt', 'status', 'currentAddendum', 'currentVerdict', 'currentInternalPhase', 'governanceRecoveryClosure', 'canonicalSeals', 'step2ExecutableContract', 'scopeTruth'], 'dispatcher');
@@ -6869,11 +6889,16 @@ function verifyV3SealArtifact() {
   assert(Array.isArray(seal.bindings) && seal.bindings.length > 0, 'Step 2 PASS v3 seal has no bindings');
   const bindingPaths = seal.bindings.map(binding => binding.path);
   assert(JSON.stringify(bindingPaths) === JSON.stringify(requiredV3BindingPaths), 'Step 2 PASS v3 seal binding paths/order differ from the exact reviewed dependency closure');
+  const sealCommit = firstAddCommit(v3SealPath);
+  const postContinuityVerifierCorrectionCommit = resolveStep2PostContinuityVerifierCorrectionCommit();
   for (const binding of seal.bindings) {
     assert(typeof binding.path === 'string' && /^[a-f0-9]{40}$/.test(binding.blob ?? ''), 'Step 2 PASS v3 seal contains an invalid binding');
     assert(exists(binding.path), `Step 2 PASS v3 binding missing: ${binding.path}`);
     assertRegularGitFile(binding.path, 'Step 2 PASS v3 binding');
-    assert(git(['rev-parse', `HEAD:${binding.path}`]) === binding.blob, `Step 2 PASS v3 binding changed: ${binding.path}`);
+    const bindingCommit = postContinuityVerifierCorrectionCommit && binding.path === 'tests/governance/verify-current-authority.mjs'
+      ? sealCommit
+      : 'HEAD';
+    assert(git(['rev-parse', `${bindingCommit}:${binding.path}`]) === binding.blob, `Step 2 PASS v3 binding changed: ${binding.path}`);
   }
   const bindingSchema = {
     type: 'object',
@@ -6908,11 +6933,25 @@ function verifyV3SealArtifact() {
   const sealSchema = json('simulation/executable-seal-v3.schema.json');
   assert(JSON.stringify(sealSchema) === JSON.stringify(expectedSealSchema), 'Step 2 v3 seal schema differs from the exact reviewed closed schema');
   assertSchema(seal, sealSchema);
-  const sealCommit = firstAddCommit(v3SealPath);
   assert(sealCommit && assertAddedOnceAndUnchanged(v3SealPath, sealCommit) === git(['rev-parse', `HEAD:${v3SealPath}`]), 'v3 seal changed after first addition');
   assert(preSealV3Verified, 'Step 2 v3 seal cannot pass before the trusted pre-seal semantic and mutation gates pass');
   verifyStep2ReviewEvidence(seal);
-  runNodeVerifier(v3SealValidatorPath, 'Step 2 v3 seal');
+  if (postContinuityVerifierCorrectionCommit) {
+    const temporaryWorktree = fs.mkdtempSync(path.join(os.tmpdir(), 'cats-step2-v3-seal-'));
+    let worktreeAdded = false;
+    try {
+      execFileSync('git', ['worktree', 'add', '--detach', temporaryWorktree, sealCommit], { cwd: root, encoding: 'utf8', stdio: 'pipe' });
+      worktreeAdded = true;
+      execFileSync(process.execPath, [path.join(temporaryWorktree, v3SealValidatorPath)], { cwd: temporaryWorktree, encoding: 'utf8', stdio: 'pipe' });
+    } catch (error) {
+      throw new Error(`Step 2 v3 seal historical verifier failed: ${error.stderr?.toString() || error.stdout?.toString() || error.message}`);
+    } finally {
+      if (worktreeAdded) execFileSync('git', ['worktree', 'remove', '--force', temporaryWorktree], { cwd: root, encoding: 'utf8', stdio: 'pipe' });
+      else fs.rmSync(temporaryWorktree, { recursive: true, force: true });
+    }
+  } else {
+    runNodeVerifier(v3SealValidatorPath, 'Step 2 v3 seal');
+  }
   return seal;
 }
 
@@ -7058,8 +7097,10 @@ if (!step2ProjectionOpen) {
     }
   });
   assert(step2PassActivationCommit, 'Step 2 PASS activation commit is missing');
-  assert(git(['rev-parse', `${step2PassActivationCommit}^`]) === continuityCommit, 'Step 2 PASS activation must immediately follow the continuity-only commit');
-  assertExactChangedPaths(continuityCommit, step2PassActivationCommit, expectedStep2PassActivationWrites, 'Step 2 PASS activation commit');
+  const postContinuityVerifierCorrectionCommit = resolveStep2PostContinuityVerifierCorrectionCommit();
+  const activationParent = postContinuityVerifierCorrectionCommit ?? continuityCommit;
+  assert(git(['rev-parse', `${step2PassActivationCommit}^`]) === activationParent, 'Step 2 PASS activation must immediately follow the reviewed continuity boundary');
+  assertExactChangedPaths(activationParent, step2PassActivationCommit, expectedStep2PassActivationWrites, 'Step 2 PASS activation commit');
   const phase0CriticPath = 'quality-reviews/phase-0-governance-recovery/critic-summary-round-003.json';
   const phase0CriticTarget = exists(phase0CriticPath)
     ? git(['rev-parse', `${firstAddCommit(phase0CriticPath)}^`])
@@ -7556,9 +7597,18 @@ if (authority.activeChangeControl === 'quality-reviews/step-1-canonical-design/a
   assertBoundaryHistory(targetCommit, closureCommit, evidenceOnlyControl, 'post-target evidence-only range');
   const boundContentPaths = (v3Seal.bindings ?? []).map(binding => binding.path);
   assert(boundContentPaths.length > 0, 'v3 seal has no bound content paths');
+  const postContinuityVerifierCorrectionCommit = resolveStep2PostContinuityVerifierCorrectionCommit();
+  const sealCommit = firstAddCommit(v3SealPath);
   for (const binding of v3Seal.bindings) {
-    assert(git(['rev-parse', `${targetCommit}:${binding.path}`]) === binding.blob, `critic target differs from v3 seal binding: ${binding.path}`);
-    assert(git(['rev-parse', `HEAD:${binding.path}`]) === binding.blob, `v3 seal binding changed after criticism: ${binding.path}`);
+    if (postContinuityVerifierCorrectionCommit && binding.path === 'tests/governance/verify-current-authority.mjs') {
+      const correctedVerifierBlob = git(['rev-parse', `${postContinuityVerifierCorrectionCommit}:${binding.path}`]);
+      assert(git(['rev-parse', `${sealCommit}:${binding.path}`]) === binding.blob, `sealed verifier binding differs at the historical seal: ${binding.path}`);
+      assert(git(['rev-parse', `${targetCommit}:${binding.path}`]) === correctedVerifierBlob, `critic target differs from the reviewed post-continuity verifier: ${binding.path}`);
+      assert(git(['rev-parse', `HEAD:${binding.path}`]) === correctedVerifierBlob, `post-continuity verifier changed after criticism: ${binding.path}`);
+    } else {
+      assert(git(['rev-parse', `${targetCommit}:${binding.path}`]) === binding.blob, `critic target differs from v3 seal binding: ${binding.path}`);
+      assert(git(['rev-parse', `HEAD:${binding.path}`]) === binding.blob, `v3 seal binding changed after criticism: ${binding.path}`);
+    }
   }
   assert(git(['rev-parse', `${targetCommit}:${v3SealPath}`]) === git(['rev-parse', `HEAD:${v3SealPath}`]), 'v3 seal changed after the critic target');
   assertNoPathChangesSince(targetCommit, closureCommit, [...new Set([...boundContentPaths, ...postTargetImmutablePaths])], 'post-critic v3 content freeze');
