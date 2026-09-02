@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 2,
+  "artifactId": "cats-tower-s02-golden-master-p1-static-evidence-round-002",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "head": "0fa6ac052ca303f24b6e0cf859322792491fcdef",
+  "tree": "61866194848cedaf2ffc52b199f122f5fb0daf79",
+  "checks": [
+    {
+      "id": "DESIGN_TOKEN_DRIFT_ZERO",
+      "value": 0,
+      "evidence": {
+        "declaredTokenCount": 59,
+        "undefinedTokens": []
+      }
+    },
+    {
+      "id": "CANONICAL_A_J_DOCUMENT_BLOBS_BOUND",
+      "value": 11,
+      "evidence": {
+        "documents": {
+          "s02-golden-master-p1-acceptance-matrix-round-001.json": "sha256:1416099a3131774a633145a3b1cb22ef2cba6a0cb3f90bbb67f51cefeb81be14",
+          "s02-golden-master-p1-player-experience.json": "sha256:c7d51ea7281d2b337ecfb857e26cdb9f06ab35b621e09603bbe10fd0598eb58e",
+          "s02-golden-master-p1-information-priority.json": "sha256:ecc86cf18a69084a2fe33e0fa03e54f94e80066296831da0dd04072da9078faf",
+          "s02-golden-master-p1-art-direction.json": "sha256:81a7fa3aada3744e2902c5b8225cfd8352e047d756db03fb278315d66d7d84bd",
+          "s02-golden-master-p1-ui-design-system.json": "sha256:6377f586089edc20973aff8e7dcb58ff3fafb2b2253c99ab7f45dc2b8dc35b38",
+          "s02-golden-master-p1-asset-decomposition.json": "sha256:5cac4502a53fb99f3827545c450c7e3e20d2cf5863624a5cc422109f54180ca8",
+          "s02-golden-master-p1-animation-contract.json": "sha256:36d0061ca265ceedb11520efd48dc184f8fed8bf733f0906fd425ba4d9e69721",
+          "s02-golden-master-p1-data-binding-matrix.json": "sha256:921a0f7e4a11fb7654a94dffd3257dc835adc80b02a2e276641a9fd059c34b41",
+          "s02-golden-master-p1-responsive-contract.json": "sha256:eab14d61a582b28c2f01883ec77a34ebdefb5774601a94079cfc00e99a5867b8",
+          "s02-golden-master-p1-feasibility-audit.json": "sha256:ef8a670ec29a00850cf1b61afba41d93414b44fe58e7fbb9a15b31d73ff03cf8",
+          "s02-golden-master-p1-competitive-research.md": "sha256:0bba0d03d7f669d9a798e5087afa08dee862c7468268d03a3547d02766b1abb2"
+        }
+      }
+    },
+    {
+      "id": "EFFECTS_SEPARATED_FROM_CHARACTER_FRAMES",
+      "value": true,
+      "evidence": {
+        "assetCount": 5
+      }
+    },
+    {
+      "id": "ANIMATION_ANCHORS_COMPLETE",
+      "value": true,
+      "evidence": {
+        "frameCount": 11
+      }
+    },
+    {
+      "id": "NINE_SLICE_CAPS_AND_MINIMUMS_VALID",
+      "value": true,
+      "evidence": {
+        "source": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-ui-design-system.json"
+      }
+    },
+    {
+      "id": "PRIMARY_SOURCE_COMPETITORS_6_TO_10",
+      "value": 10,
+      "evidence": {
+        "competitorSections": [
+          "商人サーガ「魔王城でお店開けって言われた」",
+          "魔王「世界の半分あげるって言っちゃった」",
+          "キノコ伝説：勇者と魔法のランプ",
+          "Cats & Soup",
+          "AFK Journey",
+          "Shop Titans",
+          "Legend of Slime: Idle RPG War",
+          "Fortress Saga: AFK RPG",
+          "Seven Knights Idle Adventure",
+          "Cat Snack Bar"
+        ],
+        "officialUrlCount": 10
+      }
+    },
+    {
+      "id": "OFFICIAL_SOURCE_CURRENT_LISTING_CHECKED",
+      "value": true,
+      "evidence": {
+        "researchDate": "2026-09-02",
+        "officialUrlCount": 10,
+        "officialSourceCheck": "2026-09-02",
+        "handsOnLiveUiVerification": "NOT PERFORMED"
+      }
+    },
+    {
+      "id": "ALL_TEN_FINDING_GROUPS_AUTOMATED",
+      "value": 10,
+      "evidence": {
+        "findingGroups": [
+          "VISIBLE_BOUNDS",
+          "PARTY_ATLAS_ANCHOR",
+          "DESIGN_TOKEN_MINIMUM",
+          "RESPONSIVE_SAFEAREA",
+          "RESOURCE_RANK_BINDING",
+          "COMBAT_REWARD_CAUSALITY",
+          "SUPPORT_CAUSALITY",
+          "OFFLINE_PARTY_SEMANTICS",
+          "ASSET_SEPARATION",
+          "TEST_RESEARCH_COVERAGE"
+        ],
+        "qaAssertionCounts": {
+          "VISIBLE_CAT_ALPHA_HEIGHT_MIN_60": 1,
+          "VISIBLE_ENEMY_ALPHA_HEIGHT_MIN_80": 1,
+          "STANDARD_CAT_ALPHA_HEIGHT_MIN_68": 1,
+          "STANDARD_ENEMY_ALPHA_HEIGHT_MIN_96": 1,
+          "TRANSPARENT_WRAPPER_EXCLUDED": 1,
+          "NON_UNIFORM_CHARACTER_SCALE_ABSENT": 1,
+          "FOOT_AND_HIT_ANCHORS_BOUND": 1,
+          "DEFEAT_POSE_VISUALLY_DISTINCT": 1,
+          "MEANINGFUL_TEXT_MIN_14": 1,
+          "METADATA_TEXT_MIN_12": 1,
+          "PRIMARY_LABEL_MIN_14": 1,
+          "PRIMARY_CONTROL_HIT_AREA_MIN_48": 1,
+          "IMPORTANT_CONTROL_HIT_AREA_MIN_44": 1,
+          "CONTROL_HIT_BOUNDS_NONOVERLAP": 1,
+          "CONTROL_HIT_BOUNDS_MIN_GAP_8": 1,
+          "MEANINGFUL_TEXT_CONTRAST_WCAG": 1,
+          "STATE_SEMANTICS_NOT_COLOR_ONLY": 1,
+          "DESIGN_TOKEN_DRIFT_ZERO": 1,
+          "SEVEN_REQUIRED_VIEWPORTS_PASS": 1,
+          "NONZERO_SAFE_AREA_PASS": 1,
+          "TEXT_200_PERCENT_NO_LOSS": 1,
+          "LAYOUT_AND_VISUAL_VIEWPORT_MATCH": 1,
+          "INITIAL_SCROLL_ORIGIN_ZERO": 1,
+          "UNIFORM_FULL_SCREEN_SCALE_ABSENT": 1,
+          "REDUCED_MOTION_POLICY_NATIVE": 1,
+          "REVIEW_BROWSER_MODES_OPERABLE": 1,
+          "GM05_UI_ANTI_BLOAT": 1,
+          "RESPONSIVE_GEOMETRY_CONTRACT": 1,
+          "GM04_REFLOW_OR_SCROLL_PASS": 1,
+          "UNBOUND_RUBY_REMOVED": 1,
+          "UNBOUND_RANK_REMOVED_OR_BOUND": 1,
+          "KILL_COUNTER_AND_OBJECTIVE_CONSISTENT": 1,
+          "REWARD_PROVISIONAL_NOT_CONFIRMED": 1,
+          "ATTACK_HIT_DEFEAT_REWARD_CAUSALITY_VISIBLE": 1,
+          "SUPPORT_NEXT_BATTLE_CAUSALITY_VISIBLE": 1,
+          "GM04_SUPPORT_REMAINS_AVAILABLE": 1,
+          "OFFLINE_RECONCILIATION_ACCESSIBLE": 1,
+          "PARTY_STATE_LABELS_CANONICAL": 1,
+          "REVIEW_COPY_EXCLUDED_FROM_GAME_UI": 1,
+          "EFFECTS_SEPARATED_FROM_CHARACTER_FRAMES": 1,
+          "ANIMATION_ANCHORS_COMPLETE": 1,
+          "NINE_SLICE_CAPS_AND_MINIMUMS_VALID": 1,
+          "PRIMARY_SOURCE_COMPETITORS_6_TO_10": 1,
+          "OFFICIAL_SOURCE_CURRENT_LISTING_CHECKED": 1,
+          "ALL_TEN_FINDING_GROUPS_AUTOMATED": 1
+        }
+      }
+    }
+  ],
+  "failures": [],
+  "verdict": "PASS_S02_GOLDEN_MASTER_P1_STATIC",
+  "physicalIPhoneVerified": false,
+  "productionMutationPerformed": false
+}

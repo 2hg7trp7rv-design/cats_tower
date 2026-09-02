@@ -1,0 +1,820 @@
+{
+  "schemaVersion": 2,
+  "artifactId": "cats-tower-s02-golden-master-p1-browser-evidence-round-002",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "head": "0fa6ac052ca303f24b6e0cf859322792491fcdef",
+  "tree": "61866194848cedaf2ffc52b199f122f5fb0daf79",
+  "rawEvidenceSha256": "sha256:cbad5cbe373cb4af78ff57285dcea111eba48e8ee5964a0dcd7bb107a6730f03",
+  "viewports": [
+    "320x568",
+    "320x667",
+    "375x667",
+    "360x800",
+    "390x844",
+    "412x915",
+    "430x932"
+  ],
+  "goldenMasters": [
+    "GM01",
+    "GM02",
+    "GM03",
+    "GM04",
+    "GM05",
+    "GM06",
+    "GM07",
+    "GM08"
+  ],
+  "findingAssertions": [
+    {
+      "id": "VISIBLE_CAT_ALPHA_HEIGHT_MIN_60",
+      "status": "PASS",
+      "measurement": {
+        "value": 68.5,
+        "operator": "GTE",
+        "threshold": 60,
+        "unit": "css-px"
+      }
+    },
+    {
+      "id": "VISIBLE_ENEMY_ALPHA_HEIGHT_MIN_80",
+      "status": "PASS",
+      "measurement": {
+        "value": 81.325444,
+        "operator": "GTE",
+        "threshold": 80,
+        "unit": "css-px"
+      }
+    },
+    {
+      "id": "STANDARD_CAT_ALPHA_HEIGHT_MIN_68",
+      "status": "PASS",
+      "measurement": {
+        "value": 69.46875,
+        "operator": "GTE",
+        "threshold": 68,
+        "unit": "css-px"
+      }
+    },
+    {
+      "id": "STANDARD_ENEMY_ALPHA_HEIGHT_MIN_96",
+      "status": "PASS",
+      "measurement": {
+        "value": 96.952596,
+        "operator": "GTE",
+        "threshold": 96,
+        "unit": "css-px"
+      }
+    },
+    {
+      "id": "TRANSPARENT_WRAPPER_EXCLUDED",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "NON_UNIFORM_CHARACTER_SCALE_ABSENT",
+      "status": "PASS",
+      "measurement": {
+        "value": 0.00177,
+        "operator": "LTE",
+        "threshold": 0.01,
+        "unit": "ratio-delta"
+      }
+    },
+    {
+      "id": "FOOT_AND_HIT_ANCHORS_BOUND",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "DEFEAT_POSE_VISUALLY_DISTINCT",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "MEANINGFUL_TEXT_MIN_14",
+      "status": "PASS",
+      "measurement": {
+        "value": 14,
+        "operator": "GTE",
+        "threshold": 14,
+        "unit": "css-px"
+      }
+    },
+    {
+      "id": "METADATA_TEXT_MIN_12",
+      "status": "PASS",
+      "measurement": {
+        "value": 12,
+        "operator": "GTE",
+        "threshold": 12,
+        "unit": "css-px"
+      }
+    },
+    {
+      "id": "PRIMARY_LABEL_MIN_14",
+      "status": "PASS",
+      "measurement": {
+        "value": 16,
+        "operator": "GTE",
+        "threshold": 14,
+        "unit": "css-px"
+      }
+    },
+    {
+      "id": "PRIMARY_CONTROL_HIT_AREA_MIN_48",
+      "status": "PASS",
+      "measurement": {
+        "value": 48,
+        "operator": "GTE",
+        "threshold": 48,
+        "unit": "css-px"
+      }
+    },
+    {
+      "id": "IMPORTANT_CONTROL_HIT_AREA_MIN_44",
+      "status": "PASS",
+      "measurement": {
+        "value": 55.59,
+        "operator": "GTE",
+        "threshold": 44,
+        "unit": "css-px"
+      }
+    },
+    {
+      "id": "CONTROL_HIT_BOUNDS_NONOVERLAP",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "CONTROL_HIT_BOUNDS_MIN_GAP_8",
+      "status": "PASS",
+      "measurement": {
+        "value": 8,
+        "operator": "GTE",
+        "threshold": 8,
+        "unit": "css-px"
+      }
+    },
+    {
+      "id": "MEANINGFUL_TEXT_CONTRAST_WCAG",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "STATE_SEMANTICS_NOT_COLOR_ONLY",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "DESIGN_TOKEN_DRIFT_ZERO",
+      "status": "PASS",
+      "measurement": {
+        "value": 0,
+        "operator": "EQUALS",
+        "threshold": 0,
+        "unit": "count"
+      }
+    },
+    {
+      "id": "SEVEN_REQUIRED_VIEWPORTS_PASS",
+      "status": "PASS",
+      "measurement": {
+        "value": 7,
+        "operator": "EQUALS",
+        "threshold": 7,
+        "unit": "count"
+      }
+    },
+    {
+      "id": "NONZERO_SAFE_AREA_PASS",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "TEXT_200_PERCENT_NO_LOSS",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "LAYOUT_AND_VISUAL_VIEWPORT_MATCH",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "INITIAL_SCROLL_ORIGIN_ZERO",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "UNIFORM_FULL_SCREEN_SCALE_ABSENT",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "REDUCED_MOTION_POLICY_NATIVE",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "REVIEW_BROWSER_MODES_OPERABLE",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "GM05_UI_ANTI_BLOAT",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "RESPONSIVE_GEOMETRY_CONTRACT",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "GM04_REFLOW_OR_SCROLL_PASS",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "UNBOUND_RUBY_REMOVED",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "UNBOUND_RANK_REMOVED_OR_BOUND",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "KILL_COUNTER_AND_OBJECTIVE_CONSISTENT",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "REWARD_PROVISIONAL_NOT_CONFIRMED",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "ATTACK_HIT_DEFEAT_REWARD_CAUSALITY_VISIBLE",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "SUPPORT_NEXT_BATTLE_CAUSALITY_VISIBLE",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "GM04_SUPPORT_REMAINS_AVAILABLE",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "OFFLINE_RECONCILIATION_ACCESSIBLE",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "PARTY_STATE_LABELS_CANONICAL",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "REVIEW_COPY_EXCLUDED_FROM_GAME_UI",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "EFFECTS_SEPARATED_FROM_CHARACTER_FRAMES",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "ANIMATION_ANCHORS_COMPLETE",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "NINE_SLICE_CAPS_AND_MINIMUMS_VALID",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "PRIMARY_SOURCE_COMPETITORS_6_TO_10",
+      "status": "PASS",
+      "measurement": {
+        "value": 10,
+        "operator": "BETWEEN",
+        "threshold": [
+          6,
+          10
+        ],
+        "unit": "count"
+      }
+    },
+    {
+      "id": "OFFICIAL_SOURCE_CURRENT_LISTING_CHECKED",
+      "status": "PASS",
+      "measurement": {
+        "value": true,
+        "operator": "EQUALS",
+        "threshold": true,
+        "unit": "boolean"
+      }
+    },
+    {
+      "id": "ALL_TEN_FINDING_GROUPS_AUTOMATED",
+      "status": "PASS",
+      "measurement": {
+        "value": 10,
+        "operator": "EQUALS",
+        "threshold": 10,
+        "unit": "count"
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "id": "GM01",
+      "viewport": "390x844",
+      "path": "semantic-evidence/screenshots/GM01-390x844.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "sha256:32abc35370f20079d68f718770f1f78e1d1480bdd573c48da8f61da5c18306d2"
+    },
+    {
+      "id": "GM02",
+      "viewport": "320x667",
+      "path": "semantic-evidence/screenshots/GM02-320x667.png",
+      "width": 320,
+      "height": 667,
+      "sha256": "sha256:8720aba2c51f0361e6ef52bfab3af2e1d660795566c5f6bb9f770b374ebfddb8"
+    },
+    {
+      "id": "GM03",
+      "viewport": "375x667",
+      "path": "semantic-evidence/screenshots/GM03-375x667.png",
+      "width": 375,
+      "height": 667,
+      "sha256": "sha256:0aa475a50817df21e0875fdb68cb6a5962801ae294a2840b8b01c309fefad9e5"
+    },
+    {
+      "id": "GM04",
+      "viewport": "320x568",
+      "path": "semantic-evidence/screenshots/GM04-320x568.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "sha256:27f21e344e2ef2d3c0f8765acb73496c1d7e4219c89a85c5c1360c2617958704"
+    },
+    {
+      "id": "GM05",
+      "viewport": "430x932",
+      "path": "semantic-evidence/screenshots/GM05-430x932.png",
+      "width": 430,
+      "height": 932,
+      "sha256": "sha256:a95ed068bd0184236cb9268e3b947624f9ae7dc37c3fc0a93e72e38cad911246"
+    },
+    {
+      "id": "GM06",
+      "viewport": "390x844",
+      "path": "semantic-evidence/screenshots/GM06-390x844.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "sha256:f65eef64261bdf7e03c1bd48794a8a5a6b9858e6cc602c8c4cd4b5db5c13952b"
+    },
+    {
+      "id": "GM07",
+      "viewport": "390x844",
+      "path": "semantic-evidence/screenshots/GM07-390x844.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "sha256:1ea0382d95f2e2c9a1bb9f2bd04b695ff3746723d4c45da63b6761149e4936dd"
+    },
+    {
+      "id": "GM08",
+      "viewport": "390x844",
+      "path": "semantic-evidence/screenshots/GM08-390x844.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "sha256:a47e208cee88106239b0597f20b30ba1af9ae031deaf9224d84a059c382af85e"
+    },
+    {
+      "id": "RV360",
+      "viewport": "360x800",
+      "path": "semantic-evidence/screenshots/RV360-360x800.png",
+      "width": 360,
+      "height": 800,
+      "sha256": "sha256:9523805b2639e84ad9c9247b5a924b084d3801805a7bf29a0b69df19f66bc8f7"
+    },
+    {
+      "id": "RV412",
+      "viewport": "412x915",
+      "path": "semantic-evidence/screenshots/RV412-412x915.png",
+      "width": 412,
+      "height": 915,
+      "sha256": "sha256:f7d5d9b3bbfca8d34f1bd5ee6d1fd03a58327c2c97beb0724ec43328948bac2e"
+    },
+    {
+      "id": "SAFE390",
+      "viewport": "390x844-safe-area",
+      "path": "semantic-evidence/screenshots/SAFE390-390x844.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "sha256:50d1a9b4bb34ca8d57ec888a6288e140647fed97a1885e848626618294507386"
+    },
+    {
+      "id": "TEXT200",
+      "viewport": "320x568-text-200",
+      "path": "semantic-evidence/screenshots/TEXT200-320x568.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "sha256:a433432af852250d4c3d3ff50515ce6258bcf9e45a2be5bb43717e4f3422fb41"
+    },
+    {
+      "id": "GM07C320",
+      "viewport": "320x568-offline-compact",
+      "path": "semantic-evidence/screenshots/GM07C320-320x568.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "sha256:da0e340872968ef9660e40631295e68190905c47205689ab6838194ad0af61c8"
+    },
+    {
+      "id": "GM07C320TEXT200",
+      "viewport": "320x568-offline-compact-text-200-safe-area",
+      "path": "semantic-evidence/screenshots/GM07C320TEXT200-320x568.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "sha256:71478f1aa6c8dcdcbea13ea9cf6a4ebe13bac5c6dfaa542e11b0922167447645"
+    },
+    {
+      "id": "TEXT200SAFE",
+      "viewport": "320x568-text-200-safe-area",
+      "path": "semantic-evidence/screenshots/TEXT200SAFE-320x568.png",
+      "width": 320,
+      "height": 568,
+      "sha256": "sha256:46438e65a782c1080541fc979334198c1249bd43f8f4bd97c4d3d5a87d0e4819"
+    }
+  ],
+  "pixelStats": [
+    {
+      "id": "GM01",
+      "path": "semantic-evidence/screenshots/GM01-390x844.png",
+      "sha256": "sha256:32abc35370f20079d68f718770f1f78e1d1480bdd573c48da8f61da5c18306d2",
+      "pixelCount": 329160,
+      "nonTransparentRatio": 1,
+      "nearOpaqueRatio": 1,
+      "quantizedColorCount": 943,
+      "dominantColorRatio": 0.14199477457771298,
+      "lumaStdDev": 44.314255646198134,
+      "horizontalEdgeRatio": 0.13577772633682184
+    },
+    {
+      "id": "GM02",
+      "path": "semantic-evidence/screenshots/GM02-320x667.png",
+      "sha256": "sha256:8720aba2c51f0361e6ef52bfab3af2e1d660795566c5f6bb9f770b374ebfddb8",
+      "pixelCount": 213440,
+      "nonTransparentRatio": 1,
+      "nearOpaqueRatio": 1,
+      "quantizedColorCount": 833,
+      "dominantColorRatio": 0.1571308095952024,
+      "lumaStdDev": 43.41618021794576,
+      "horizontalEdgeRatio": 0.1458079737560687
+    },
+    {
+      "id": "GM03",
+      "path": "semantic-evidence/screenshots/GM03-375x667.png",
+      "sha256": "sha256:0aa475a50817df21e0875fdb68cb6a5962801ae294a2840b8b01c309fefad9e5",
+      "pixelCount": 250125,
+      "nonTransparentRatio": 1,
+      "nearOpaqueRatio": 1,
+      "quantizedColorCount": 896,
+      "dominantColorRatio": 0.15138830584707647,
+      "lumaStdDev": 42.46042749543206,
+      "horizontalEdgeRatio": 0.14627312012442975
+    },
+    {
+      "id": "GM04",
+      "path": "semantic-evidence/screenshots/GM04-320x568.png",
+      "sha256": "sha256:27f21e344e2ef2d3c0f8765acb73496c1d7e4219c89a85c5c1360c2617958704",
+      "pixelCount": 181760,
+      "nonTransparentRatio": 1,
+      "nearOpaqueRatio": 1,
+      "quantizedColorCount": 808,
+      "dominantColorRatio": 0.16622469190140846,
+      "lumaStdDev": 46.04532724478418,
+      "horizontalEdgeRatio": 0.14821294538390217
+    },
+    {
+      "id": "GM05",
+      "path": "semantic-evidence/screenshots/GM05-430x932.png",
+      "sha256": "sha256:a95ed068bd0184236cb9268e3b947624f9ae7dc37c3fc0a93e72e38cad911246",
+      "pixelCount": 400760,
+      "nonTransparentRatio": 1,
+      "nearOpaqueRatio": 1,
+      "quantizedColorCount": 1052,
+      "dominantColorRatio": 0.13483880626809064,
+      "lumaStdDev": 43.56554372013893,
+      "horizontalEdgeRatio": 0.12522634732935162
+    },
+    {
+      "id": "GM06",
+      "path": "semantic-evidence/screenshots/GM06-390x844.png",
+      "sha256": "sha256:f65eef64261bdf7e03c1bd48794a8a5a6b9858e6cc602c8c4cd4b5db5c13952b",
+      "pixelCount": 329160,
+      "nonTransparentRatio": 1,
+      "nearOpaqueRatio": 1,
+      "quantizedColorCount": 859,
+      "dominantColorRatio": 0.17284299428849192,
+      "lumaStdDev": 44.98860452473469,
+      "horizontalEdgeRatio": 0.12688994748961366
+    },
+    {
+      "id": "GM07",
+      "path": "semantic-evidence/screenshots/GM07-390x844.png",
+      "sha256": "sha256:1ea0382d95f2e2c9a1bb9f2bd04b695ff3746723d4c45da63b6761149e4936dd",
+      "pixelCount": 329160,
+      "nonTransparentRatio": 1,
+      "nearOpaqueRatio": 1,
+      "quantizedColorCount": 350,
+      "dominantColorRatio": 0.2557115080811763,
+      "lumaStdDev": 82.04547956457677,
+      "horizontalEdgeRatio": 0.12402685217899828
+    },
+    {
+      "id": "GM08",
+      "path": "semantic-evidence/screenshots/GM08-390x844.png",
+      "sha256": "sha256:a47e208cee88106239b0597f20b30ba1af9ae031deaf9224d84a059c382af85e",
+      "pixelCount": 329160,
+      "nonTransparentRatio": 1,
+      "nearOpaqueRatio": 1,
+      "quantizedColorCount": 784,
+      "dominantColorRatio": 0.1327652205614291,
+      "lumaStdDev": 42.96517091950737,
+      "horizontalEdgeRatio": 0.11266889216486556
+    },
+    {
+      "id": "RV360",
+      "path": "semantic-evidence/screenshots/RV360-360x800.png",
+      "sha256": "sha256:9523805b2639e84ad9c9247b5a924b084d3801805a7bf29a0b69df19f66bc8f7",
+      "pixelCount": 288000,
+      "nonTransparentRatio": 1,
+      "nearOpaqueRatio": 1,
+      "quantizedColorCount": 936,
+      "dominantColorRatio": 0.14871875,
+      "lumaStdDev": 45.03989455232319,
+      "horizontalEdgeRatio": 0.14667130919220056
+    },
+    {
+      "id": "RV412",
+      "path": "semantic-evidence/screenshots/RV412-412x915.png",
+      "sha256": "sha256:f7d5d9b3bbfca8d34f1bd5ee6d1fd03a58327c2c97beb0724ec43328948bac2e",
+      "pixelCount": 376980,
+      "nonTransparentRatio": 1,
+      "nearOpaqueRatio": 1,
+      "quantizedColorCount": 1011,
+      "dominantColorRatio": 0.13786673033052152,
+      "lumaStdDev": 43.76476729427783,
+      "horizontalEdgeRatio": 0.13244784811136373
+    },
+    {
+      "id": "SAFE390",
+      "path": "semantic-evidence/screenshots/SAFE390-390x844.png",
+      "sha256": "sha256:50d1a9b4bb34ca8d57ec888a6288e140647fed97a1885e848626618294507386",
+      "pixelCount": 329160,
+      "nonTransparentRatio": 1,
+      "nearOpaqueRatio": 1,
+      "quantizedColorCount": 927,
+      "dominantColorRatio": 0.2001488637744562,
+      "lumaStdDev": 43.224484641291305,
+      "horizontalEdgeRatio": 0.12869613421216144
+    },
+    {
+      "id": "TEXT200",
+      "path": "semantic-evidence/screenshots/TEXT200-320x568.png",
+      "sha256": "sha256:a433432af852250d4c3d3ff50515ce6258bcf9e45a2be5bb43717e4f3422fb41",
+      "pixelCount": 181760,
+      "nonTransparentRatio": 1,
+      "nearOpaqueRatio": 1,
+      "quantizedColorCount": 404,
+      "dominantColorRatio": 0.2311619718309859,
+      "lumaStdDev": 49.556502340017374,
+      "horizontalEdgeRatio": 0.10618570356307122
+    },
+    {
+      "id": "GM07C320",
+      "path": "semantic-evidence/screenshots/GM07C320-320x568.png",
+      "sha256": "sha256:da0e340872968ef9660e40631295e68190905c47205689ab6838194ad0af61c8",
+      "pixelCount": 181760,
+      "nonTransparentRatio": 1,
+      "nearOpaqueRatio": 1,
+      "quantizedColorCount": 299,
+      "dominantColorRatio": 0.20877530809859154,
+      "lumaStdDev": 77.59697152019446,
+      "horizontalEdgeRatio": 0.12752218640999602
+    },
+    {
+      "id": "GM07C320TEXT200",
+      "path": "semantic-evidence/screenshots/GM07C320TEXT200-320x568.png",
+      "sha256": "sha256:71478f1aa6c8dcdcbea13ea9cf6a4ebe13bac5c6dfaa542e11b0922167447645",
+      "pixelCount": 181760,
+      "nonTransparentRatio": 1,
+      "nearOpaqueRatio": 1,
+      "quantizedColorCount": 270,
+      "dominantColorRatio": 0.34275968309859156,
+      "lumaStdDev": 69.41958082924404,
+      "horizontalEdgeRatio": 0.1088624221819948
+    },
+    {
+      "id": "TEXT200SAFE",
+      "path": "semantic-evidence/screenshots/TEXT200SAFE-320x568.png",
+      "sha256": "sha256:46438e65a782c1080541fc979334198c1249bd43f8f4bd97c4d3d5a87d0e4819",
+      "pixelCount": 181760,
+      "nonTransparentRatio": 1,
+      "nearOpaqueRatio": 1,
+      "quantizedColorCount": 402,
+      "dominantColorRatio": 0.23512323943661972,
+      "lumaStdDev": 49.35545308318406,
+      "horizontalEdgeRatio": 0.10485562276480198
+    }
+  ],
+  "stateComparisons": [
+    {
+      "left": "GM01",
+      "right": "GM06",
+      "changedPixelRatio": 0.13456677603597034,
+      "minimumChangedPixelRatio": 0.03,
+      "meanAbsoluteChannelDelta": 5.850901537246324,
+      "minimumMeanAbsoluteChannelDelta": 2,
+      "status": "PASS"
+    },
+    {
+      "left": "GM01",
+      "right": "GM07",
+      "changedPixelRatio": 0.797618179608701,
+      "minimumChangedPixelRatio": 0.08,
+      "meanAbsoluteChannelDelta": 40.04247782233564,
+      "minimumMeanAbsoluteChannelDelta": 4,
+      "status": "PASS"
+    },
+    {
+      "left": "GM01",
+      "right": "GM08",
+      "changedPixelRatio": 0.11213999270871308,
+      "minimumChangedPixelRatio": 0.08,
+      "meanAbsoluteChannelDelta": 4.622886286304532,
+      "minimumMeanAbsoluteChannelDelta": 4,
+      "status": "PASS"
+    }
+  ],
+  "failures": [],
+  "verdict": "PASS_S02_GOLDEN_MASTER_P1_BROWSER",
+  "physicalIPhoneVerified": false,
+  "productionMutationPerformed": false
+}

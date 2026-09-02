@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-workflow-result",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "repositoryId": 1331488679,
+  "repositoryOwnerId": 245031448,
+  "branch": "kimi",
+  "commit": "0fa6ac052ca303f24b6e0cf859322792491fcdef",
+  "tree": "61866194848cedaf2ffc52b199f122f5fb0daf79",
+  "runId": 33602357267,
+  "runAttempt": 1,
+  "oidcTokenSha256": "sha256:02db63adcdd7eab5d3461f64714e77b7bd8e35f6c84b353f317e9a829d8678bf",
+  "oidcClaims": {
+    "issuer": "https://token.actions.githubusercontent.com",
+    "audience": "cats-tower-s02-golden-master-p1",
+    "subject": "repo:2hg7trp7rv-design@245031448/cats_tower@1331488679:ref:refs/heads/kimi",
+    "repository": "2hg7trp7rv-design/cats_tower",
+    "repositoryId": "1331488679",
+    "repositoryOwnerId": "245031448",
+    "ref": "refs/heads/kimi",
+    "sha": "0fa6ac052ca303f24b6e0cf859322792491fcdef",
+    "runId": "33602357267",
+    "runAttempt": "1",
+    "workflowRef": "2hg7trp7rv-design/cats_tower/.github/workflows/verify-step-4-s02-golden-master-p1.yml@refs/heads/kimi"
+  },
+  "oidcVerified": true,
+  "staticReportSha256": "sha256:9ffee2deae2b8d863bc6e3719612ec2d09d7b5c2f80f0f285be9172c38c2048c",
+  "browserRawSha256": "sha256:cbad5cbe373cb4af78ff57285dcea111eba48e8ee5964a0dcd7bb107a6730f03",
+  "browserReportSha256": "sha256:b0c2e0d71bc4079f1ce79bbe26a717887a8284a2eb5af610c6d78b4b421f178e",
+  "screenshots": [
+    {
+      "path": "semantic-evidence/screenshots/GM01-390x844.png",
+      "sha256": "sha256:32abc35370f20079d68f718770f1f78e1d1480bdd573c48da8f61da5c18306d2"
+    },
+    {
+      "path": "semantic-evidence/screenshots/GM02-320x667.png",
+      "sha256": "sha256:8720aba2c51f0361e6ef52bfab3af2e1d660795566c5f6bb9f770b374ebfddb8"
+    },
+    {
+      "path": "semantic-evidence/screenshots/GM03-375x667.png",
+      "sha256": "sha256:0aa475a50817df21e0875fdb68cb6a5962801ae294a2840b8b01c309fefad9e5"
+    },
+    {
+      "path": "semantic-evidence/screenshots/GM04-320x568.png",
+      "sha256": "sha256:27f21e344e2ef2d3c0f8765acb73496c1d7e4219c89a85c5c1360c2617958704"
+    },
+    {
+      "path": "semantic-evidence/screenshots/GM05-430x932.png",
+      "sha256": "sha256:a95ed068bd0184236cb9268e3b947624f9ae7dc37c3fc0a93e72e38cad911246"
+    },
+    {
+      "path": "semantic-evidence/screenshots/GM06-390x844.png",
+      "sha256": "sha256:f65eef64261bdf7e03c1bd48794a8a5a6b9858e6cc602c8c4cd4b5db5c13952b"
+    },
+    {
+      "path": "semantic-evidence/screenshots/GM07-390x844.png",
+      "sha256": "sha256:1ea0382d95f2e2c9a1bb9f2bd04b695ff3746723d4c45da63b6761149e4936dd"
+    },
+    {
+      "path": "semantic-evidence/screenshots/GM08-390x844.png",
+      "sha256": "sha256:a47e208cee88106239b0597f20b30ba1af9ae031deaf9224d84a059c382af85e"
+    },
+    {
+      "path": "semantic-evidence/screenshots/RV360-360x800.png",
+      "sha256": "sha256:9523805b2639e84ad9c9247b5a924b084d3801805a7bf29a0b69df19f66bc8f7"
+    },
+    {
+      "path": "semantic-evidence/screenshots/RV412-412x915.png",
+      "sha256": "sha256:f7d5d9b3bbfca8d34f1bd5ee6d1fd03a58327c2c97beb0724ec43328948bac2e"
+    },
+    {
+      "path": "semantic-evidence/screenshots/SAFE390-390x844.png",
+      "sha256": "sha256:50d1a9b4bb34ca8d57ec888a6288e140647fed97a1885e848626618294507386"
+    },
+    {
+      "path": "semantic-evidence/screenshots/TEXT200-320x568.png",
+      "sha256": "sha256:a433432af852250d4c3d3ff50515ce6258bcf9e45a2be5bb43717e4f3422fb41"
+    },
+    {
+      "path": "semantic-evidence/screenshots/GM07C320-320x568.png",
+      "sha256": "sha256:da0e340872968ef9660e40631295e68190905c47205689ab6838194ad0af61c8"
+    },
+    {
+      "path": "semantic-evidence/screenshots/GM07C320TEXT200-320x568.png",
+      "sha256": "sha256:71478f1aa6c8dcdcbea13ea9cf6a4ebe13bac5c6dfaa542e11b0922167447645"
+    },
+    {
+      "path": "semantic-evidence/screenshots/TEXT200SAFE-320x568.png",
+      "sha256": "sha256:46438e65a782c1080541fc979334198c1249bd43f8f4bd97c4d3d5a87d0e4819"
+    }
+  ],
+  "verdict": "PASS_S02_GOLDEN_MASTER_P1_WORKFLOW",
+  "unresolved": {
+    "P0": 0,
+    "P1": 0
+  },
+  "physicalIPhoneVerified": false,
+  "productionAliasChanged": false
+}
