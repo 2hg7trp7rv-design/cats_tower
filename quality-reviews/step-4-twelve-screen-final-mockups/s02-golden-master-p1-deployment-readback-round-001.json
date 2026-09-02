@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-deployment-readback-round-001",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "verifiedContent": {
+    "commit": "0fa6ac052ca303f24b6e0cf859322792491fcdef",
+    "tree": "61866194848cedaf2ffc52b199f122f5fb0daf79"
+  },
+  "completion": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-completion-evidence-round-001.json",
+    "blob": "641ad46524a00fc0ff19a887b252eb4fb3292784"
+  },
+  "request": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-request-round-001.json",
+    "blob": "c034073b7b9beaa34bcffd4a685e36fefc3a0861"
+  },
+  "externalProof": {
+    "commit": "2529f122d3ecc187c5ba3b9e6ba178db60a7a959",
+    "tree": "a3cf4c661f9b6886df9d17332b8f359cc4e4c889",
+    "runId": 33624170015,
+    "runAttempt": 1,
+    "jobId": 100228145343,
+    "conclusion": "SUCCESS",
+    "artifactId": 9844241586,
+    "artifactName": "s02-external-preview-2529f122d3ecc187c5ba3b9e6ba178db60a7a959-33624170015-1",
+    "artifactDigest": "sha256:18b2778d0fe6c92419e8b42ac5fac94f6d31c6c1d3a9b7c583eeea83f401722c",
+    "oidcTokenSha256": "sha256:b0950e4e743a129024b4eebb61670f0ec2394bf7fccba23d3769de5303286fb9",
+    "oidcClaims": {
+      "issuer": "https://token.actions.githubusercontent.com",
+      "audience": "cats-tower-current-governance",
+      "subject": "repo:2hg7trp7rv-design@245031448/cats_tower@1331488679:ref:refs/heads/kimi",
+      "repository": "2hg7trp7rv-design/cats_tower",
+      "repositoryId": "1331488679",
+      "repositoryOwnerId": "245031448",
+      "ref": "refs/heads/kimi",
+      "sha": "2529f122d3ecc187c5ba3b9e6ba178db60a7a959",
+      "runId": "33624170015",
+      "runAttempt": "1",
+      "workflowRef": "2hg7trp7rv-design/cats_tower/.github/workflows/verify-current-governance.yml@refs/heads/kimi"
+    },
+    "oidcVerified": true
+  },
+  "verifiedDeployment": {
+    "id": "dpl_3Gazm7bakV5doczCp17r97tvu9SR",
+    "immutableUrl": "https://catstower-e72ri5svj-shinyaaas-projects.vercel.app",
+    "environment": "Preview",
+    "githubCommit": "0fa6ac052ca303f24b6e0cf859322792491fcdef",
+    "githubRef": "kimi",
+    "productionTargeted": false
+  },
+  "verifiedHttp": {
+    "branchAlias": "https://catstower-git-kimi-shinyaaas-projects.vercel.app",
+    "reviewRoute": "/step4/s02/golden-master-p1/",
+    "verifiedAt": "2026-09-02T11:26:00Z",
+    "immutableServesReviewedContent": true,
+    "branchAliasAutomatedHttp": "NOT_VERIFIED_PROTECTED_MOVING_ALIAS"
+  },
+  "verdict": "READY_FOR_USER_VISUAL_REVIEW",
+  "unresolved": {
+    "P0": 0,
+    "P1": 0
+  },
+  "maximumVerdict": "READY_FOR_USER_VISUAL_REVIEW"
+}
