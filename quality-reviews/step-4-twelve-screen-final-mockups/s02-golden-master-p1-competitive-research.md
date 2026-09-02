@@ -1,214 +1,248 @@
-# S02 Golden Master P1 競合・公式ガイド調査
+# S02 Golden Master P1 競合・公式資料調査
 
-## 1. 調査条件
+## 調査条件
 
-- 調査日時: 2026-09-02 JST
-- 対象: S02 通常戦闘画面の Golden Master と実装仕様
-- 証拠方針: 公式サイト、公式 App Store / Google Play 掲載、公式ゲーム紹介を優先した。転載記事、攻略まとめ、ランキング記事は独立証拠として数えていない。
-- 調査目的: 個別作品の見た目を再現することではなく、初見理解、戦闘の主役性、猫の識別性、報酬因果、商業支援の従属関係、狭幅での優先順位を抽象原則へ変換すること。
-- 証拠限界: 実機上の最新チュートリアル手順、全端末での文字実寸、320 CSS px 幅での各作品の挙動、地域・アカウント別 UI は本調査だけでは確認していない。以下の比較は公式掲載文、公式スクリーンショット、公式映像から確認できる範囲に限定する。
+- 調査日: 2026-09-02 UTC
+- Research date: 2026-09-02
+- 対象: Cat's Tower S02 通常戦闘画面の本番品質 Golden Master と、その後の資産制作・runtime 再構築に必要な設計判断
+- 調査作品: 10作品。2026-09-02 時点で公式サイトまたは公式ストア掲載を確認できる作品に限定した。
+- 優先証拠: 公式ゲームサイト、Apple App Store、Google Play。転載、ランキング、攻略まとめは独立証拠として数えていない。
+- 調査限界: 地域・アカウント・A/B test で異なる live UI、全チュートリアル、全 viewport の実挙動は、公式掲載だけでは保証できない。採用判断は公式説明・掲載画像・公式映像から確認できる抽象原則に限定する。
+- コピー境界: キャラクター、敵、背景、exact UI 配置、固有名称、アイコン、演出、商品、価格、確率、数式、画像素材は一切コピーしない。
 
-## 2. 結論
+## 結論
 
-S02 は「高密度な放置ゲーム画面」を目標にするのではなく、次の順序を崩さない。
+S02 の第一印象は「放置ゲームの機能一覧」ではなく「四体の猫が無制限塔で今まさに戦っている」でなければならない。競合から採用するのは、戦闘中心の焦点、個体を識別できる大きさ、撃破と報酬の近接、上方進行、商業詳細の画面分離、猫らしい仕草、素材と光の統一である。
 
-1. 四体の猫と敵の接敵・攻撃を、画面中央の最大面積で読む。
-2. 現在階、敵 HP、現在目標を戦場の視界内で読む。
-3. 攻撃予備動作から撃破・報酬までを、同じ位置関係と短い時間軸で結ぶ。
-4. 四枠編成の所属状態を常時確認できるようにする。
-5. 商会・店舗・配送は「次回を強くする支援」として戦場の後に置く。
+固定する優先順は次の通り。
 
-抽象原則の主な供給元は、戦闘の主役性と商用品質が AFK Journey / Fortress Saga、猫の魅力と世界統一が Cats & Soup / Cat Snack Bar、上昇ループと商人の意味付けが魔王「世界の半分あげるって言っちゃった」/ 商人サーガ、撃破から報酬への短い因果が Legend of Slime / Cat Hero / キノコ伝説、店舗詳細を戦場外へ分ける判断が Shop Titans である。固有レイアウト、キャラクター、アイコン、名称、価格、確率、数式は採用しない。
+1. 猫4体と通常敵の接敵・攻撃
+2. 現在階
+3. 現在目標または敵脅威
+4. 予備動作、攻撃、着弾、被弾、撃破、報酬の因果
+5. 次の主要操作「編成を整える」
+6. 恒常4枠の状態
+7. 商会・店舗・配送の戦闘支援
+8. 二次イベント・商業導線
 
-## 3. 公式資料による10作品比較
+### 横断比較: 戦闘と情報読解
 
-### 3.1 商人サーガ「魔王城でお店開けって言われた」
+| 作品 | 公式掲載資料から想定する3〜5秒の第一印象 | 戦闘・character占有 | threat / HP / progress | reward / AUTO / 編成 |
+|---|---|---|---|---|
+| 商人サーガ | 塔攻略と商売 | 多数進行が先、個体は小さめ | 階進行が主、個体threatは弱い | 商業支援が強く、S02では要約化が必要 |
+| 魔王「世界の半分…」 | 上へ登り続ける | 群衆の進行が主 | 階更新が強い | 放置進行は明快、4体identityには変換が必要 |
+| キノコ伝説 | 戦闘と成長reward | 主characterと強化導線が強い | 短い戦闘feedbackは強い | rewardは近いが通知・召喚密度を削る必要 |
+| Cats & Soup | 猫の暮らしと仕草 | 猫の魅力が最優先 | combat threatは対象外 | ownership/役割の愛着形成を採用 |
+| AFK Journey | 商用品質のparty戦闘 | characterとeffectが高品質 | 敵味方・threatを光で分離 | 手動skill/人型heroは不採用 |
+| Shop Titans | 店舗・製作・支援 | 戦闘より管理責務が明瞭 | battle HPは主題外 | 商業を別画面へ分ける原則を採用 |
+| Legend of Slime | 中央の短い戦闘 | 単独hero中心 | HP・damage・rewardが近い | 常設skill列は4体AUTOに不適合 |
+| Fortress Saga | 移動と奥行き | 巨大fortressが中心 | 距離・敵・effectが読みやすい | UI/world統合を採用、巨大主役は不採用 |
+| Seven Knights Idle Adventure | 多character auto battle | 複数体を常時表示 | progressとcombat feedbackが強い | 4体lane設計を採用、多人数/skill密度は削る |
+| Cat Snack Bar | 猫と店舗作業 | 猫と設備を同時に見せる | combat threatは対象外 | 商業も猫世界へ統合する原則を採用 |
 
-- 公式証拠: [App Store](https://apps.apple.com/jp/app/id1198096385)
-- 公式掲載から確認できる強み: 商人・店舗と塔攻略を同一テーマにまとめ、買い物や強化が上方進行を支える意味を短く伝えている。
-- S02 で避ける弱点: 店舗情報と戦闘を同じ重さで並べると、戦況より管理 UI が先に読まれる。個体戦闘の読みやすさより大量進行が前へ出る構成は、四体の猫を見せる S02 に合わない。
-- 採用する抽象原則: 商業を別ジャンルの寄り道にせず、「戦闘を一段先へ進める支援」として因果付けする。
-- Cat’s Tower への変換: 戦場下部には商会・配送の短い支援状態だけを置き、商品棚、価格比較、購入管理は別画面へ送る。
-- 採用しない点: 戦闘中の店詳細、広告主導の割り込み、タップ連打を直接ダメージへ変換する操作。
-- コピー禁止: 商人、魔王城、商品表現、画面配置、固有名称、アイコン、価格、進行式。
+### 横断比較: モバイルUXと継続動機
 
-### 3.2 魔王「世界の半分あげるって言っちゃった」
+| 作品 | UI密度・階層 | primary / bottom navigation | 商業導線 | 狭幅・縦長での示唆 | tutorial・魅力・継続 |
+|---|---|---|---|---|---|
+| 商人サーガ | 店と進行が近く高密度 | 強化・進行が前に出る | 主loop | S02では店舗説明を折畳む | 上方進行と商売の相互強化 |
+| 魔王「世界の半分…」 | 階進行が最上位 | 進行操作が明快 | 従属 | 狭幅でも階を残す | 階更新を継続報酬にする |
+| キノコ伝説 | 導線・通知が多い | 強化/召喚が強い | 強い | S02では二次導線を先に消す | 高頻度reward、ただし過密化注意 |
+| Cats & Soup | 観察対象を中心に整理 | 施設/猫の選択 | 世界内へ統合 | 縦長は空間と猫の仕草に使う | 猫の個体愛着が継続動機 |
+| AFK Journey | 焦点と余白の完成度が高い | 戦闘操作は明瞭 | 別層 | 高さをscene depthへ使う | character presentationの高級感 |
+| Shop Titans | 責務別navigationが明瞭 | 店舗操作が主 | 主loop | 詳細を別screenへ分離 | 制作→販売→支援の循環 |
+| Legend of Slime | 中央戦闘+下部能力が高密度 | skill/成長が近い | 別層 | S02では常設skillを削る | 短い撃破と数値成長 |
+| Fortress Saga | sceneとUIの素材統一 | 進行/強化導線が明瞭 | 従属 | 縦長はparallax/depthへ | 世界が動き続ける期待 |
+| Seven Knights Idle Adventure | 多人数・能力で高密度 | 編成/成長へ接続 | 別層 | 4体を縮めずlane再配置 | roster収集は採用せず個体識別だけ採用 |
+| Cat Snack Bar | 明るい統一shape | 店舗作業が主 | 主loop | 補助設備を省き猫を残す | 猫の仕草と作業成果 |
 
-- 公式証拠: [App Store](https://apps.apple.com/jp/app/id1160690385)
-- 公式掲載から確認できる強み: 上へ登り続ける目標と放置進行が明快で、階層の更新が継続動機になる。
-- S02 で避ける弱点: 多数ユニットを小さく並べる方式では、四体それぞれの猫らしさ、構え、被弾が読めない。
-- 採用する抽象原則: 現在階と次の到達を一目で分け、上方への継続を常時感じさせる。
-- Cat’s Tower への変換: `現在階` を戦場上端の塔標識へ統合し、撃破後の階更新は画面遷移ではなく短い上昇フィードバックで示す。
-- 採用しない点: 人数の多さを強さとして見せる群衆構成、個体を識別できない縮小、有限ゴールに見える表現。
-- コピー禁止: 魔王、勇者、階段構図、ユニット列、固有文言、数値、数式。
+公式掲載では全作品の320 CSS px、430×932、TEXT200、初回tutorial全手順を同条件で再生できない。そのため、上表を端末互換の証明には使わず、S02独自の7 viewport browser evidenceで検証する。
 
-### 3.3 キノコ伝説：勇者と魔法のランプ
+## 10作品比較
 
-- 公式証拠: [App Store](https://apps.apple.com/jp/app/id6473767344)
-- 公式掲載から確認できる強み: 短い戦闘、成長、報酬の更新を連続させ、数値変化を強いフィードバックへ変えている。
-- S02 で避ける弱点: 通知、召喚、期間導線、強化導線が同時に強いと、初見の視線が戦闘から分散する。
-- 採用する抽象原則: 撃破の直後に報酬を同じ空間へ返し、原因と結果を離さない。
-- Cat’s Tower への変換: ダメージ、敵の倒れ、コイン移動、所持値加算を一つの短い連鎖として設計し、常設の報酬ポップを増やさない。
-- 採用しない点: 通知バッジの多用、大量召喚を主操作にすること、戦闘下部を強化ボタンで埋めること。
-- コピー禁止: キノコ主人公、ランプ、召喚演出、赤点、固有アイコン、確率、価格、報酬式。
+### 1. 商人サーガ「魔王城でお店開けって言われた」
 
-### 3.4 Cats & Soup
+- Source type: GOOGLE_PLAY
+- Official URL: https://play.google.com/store/apps/details?hl=ja&id=com.cyberxgames.akindosaga
+- Official source checked: 2026-09-02
+- Hands-on/live UI verification: NOT PERFORMED
+- 公式資料: [Google Play](https://play.google.com/store/apps/details?hl=ja&id=com.cyberxgames.akindosaga)
+- 公式掲載資料から想定する3〜5秒の強み: 商人、店舗、塔攻略が同じループに属し、商業が進行を助ける意味を短く伝える。
+- 弱点として扱う点: 戦闘と店舗情報を同格にすると、敵・HP・個体行動より管理 UI が先に読まれる。
+- 採用する抽象原則: 商業を寄り道でなく「次の戦闘を強くする支援」として因果付ける。
+- Cat's Tower への変換: 戦場下には「配送到着」「前衛防具支援中」等の実状態を一行だけ置き、商品、価格、購入は S05 等の専用責務へ送る。
+- 採用しない点: 店舗詳細の常設、広告割込み、タップを直接 damage に変える操作。
+- コピー禁止: 商人、魔王城、商品、画面配置、固有名称、価格、数式、画像。
 
-- 公式証拠: [App Store](https://apps.apple.com/us/app/id1581431235)
-- 公式掲載から確認できる強み: 猫の仕草、職務、環境、小物を同じ穏やかな世界観でまとめ、遠目でも猫を主役として認識できる。
-- S02 で避ける弱点: 観察主体の低緊張構成をそのまま戦闘へ持ち込むと、敵脅威と攻撃因果が弱くなる。
-- 採用する抽象原則: 猫は能力アイコンではなく、輪郭、装備、色、動作で個性を伝える。
-- Cat’s Tower への変換: 前衛制御・遠隔対空・回復支援・後衛撹乱の四体を、頭部、尻尾、装備、構えの差で 54 CSS px 以上でも識別可能にする。
-- 採用しない点: 戦況を曖昧にする過度な静けさ、敵の不在、施設群を同じ視覚強度で並べること。
-- コピー禁止: 猫の容姿、調理施設、アニメーション、背景、小物、色配置、UI。
+### 2. 魔王「世界の半分あげるって言っちゃった」
 
-### 3.5 Cat Snack Bar
+- Source type: GOOGLE_PLAY
+- Official URL: https://play.google.com/store/apps/details?hl=ja&id=com.cyberxgames.herotower2
+- Official source checked: 2026-09-02
+- Hands-on/live UI verification: NOT PERFORMED
+- 公式資料: [App Store](https://apps.apple.com/jp/app/id1160690385)、[Google Play](https://play.google.com/store/apps/details?hl=ja&id=com.cyberxgames.herotower2)
+- 公式掲載資料から想定する3〜5秒の強み: 上へ進み続ける塔と放置進行が明快で、階更新そのものが継続動機になる。
+- 弱点として扱う点: 多数の小ユニットを並べる方式は、四体それぞれの顔・装備・被弾を読ませる S02 に合わない。
+- 採用する抽象原則: 現在階と上方への継続を常に同じ視界へ置く。
+- Cat's Tower への変換: 階数を戦場上端の塔標識へ統合し、撃破後は床・遠景・階表示を同期して上へ進める。
+- 採用しない点: 群衆密度、識別不能な縮小、有限の終点に見える進捗率。
+- コピー禁止: 魔王・勇者、階段構図、ユニット列、固有文言、数値、数式。
 
-- 公式証拠: [App Store](https://apps.apple.com/us/app/id6443895159)
-- 公式掲載から確認できる強み: 猫、店舗、報酬を明るい統一形状でまとめ、各猫の役割と作業を短時間で読ませる。
-- S02 で避ける弱点: 店舗設備を戦場と同じ面積・密度で見せると、通常戦闘の主役性が失われる。
-- 採用する抽象原則: 商業支援も猫の世界の出来事として見せ、別製品のダッシュボードにしない。
-- Cat’s Tower への変換: 配送箱、商会印、支援の到着を背景の小物と短い支援帯へ統合し、管理詳細は画面外へ送る。
-- 採用しない点: 店舗レイアウトそのもの、作業席の大量表示、全操作を経営へ寄せること。
-- コピー禁止: 制服、店舗設備、料理、看板、固有アイコン、UI配置、価格。
+### 3. キノコ伝説：勇者と魔法のランプ
 
-### 3.6 Cat Hero: Idle RPG
+- Source type: OFFICIAL_SITE
+- Official URL: https://kinoden.acenetgamejp.com/
+- Official source checked: 2026-09-02
+- Hands-on/live UI verification: NOT PERFORMED
+- 公式資料: [公式サイト](https://kinoden.acenetgamejp.com/)、[Google Play](https://play.google.com/store/apps/details?hl=ja&id=com.mxdzz.jp.and)
+- 公式掲載資料から想定する3〜5秒の強み: 戦闘、強化、報酬の更新が連続し、成果を大きく認識できる。
+- 弱点として扱う点: 召喚、期間導線、通知、強化を同時に強調すると、初見の視線が戦闘から分散する。
+- 採用する抽象原則: 撃破位置と報酬の発生・移動を近接させる。
+- Cat's Tower への変換: damage、enemy reaction、HP低下、defeat、statusを明示したcoin feedbackを一つの短い連鎖にする。P1のGM06 captureは確定ではなく『見込み』を表示する。
+- 採用しない点: 通知バッジの多用、大量召喚を主操作にすること、戦場下を強化ボタンで埋めること。
+- コピー禁止: キノコ、ランプ、召喚、赤点、固有アイコン、価格、確率、報酬式。
 
-- 公式証拠: [公式サイト](https://www.gameduo.net/en/game/cat-hero)、[Google Play](https://play.google.com/store/apps/details?id=net.gameduo.gv&hl=en)
-- 公式掲載から確認できる強み: 猫を中心に敵、攻撃、成長を近距離で見せ、攻撃の着弾点を読みやすくしている。
-- S02 で避ける弱点: 直接タップや盤面合成を主要戦闘操作へすると、Cat’s Tower の auto battle と四体編成の責務が変わる。
-- 採用する抽象原則: 攻撃元、軌道または接触、着弾、敵反応を同じ視界へ置く。
-- Cat’s Tower への変換: 前衛の接触と後衛の射程を左右方向に整理し、予備動作・攻撃・着弾・被弾をレーン上で追えるようにする。
-- 採用しない点: 魚や合成盤面、タップによる直接ダメージ、単独主人公中心の編成。
-- コピー禁止: 猫、魚、盤面、攻撃素材、背景、能力名、数式、商品。
+### 4. Cats & Soup
 
-### 3.7 Legend of Slime: Idle RPG War
+- Source type: GOOGLE_PLAY
+- Official URL: https://play.google.com/store/apps/details?hl=en&id=com.hidea.cat
+- Official source checked: 2026-09-02
+- Hands-on/live UI verification: NOT PERFORMED
+- 公式資料: [Google Play](https://play.google.com/store/apps/details?hl=en&id=com.hidea.cat)
+- 公式掲載資料から想定する3〜5秒の強み: 猫の仕草、職務、環境、小物が同じ世界観に属し、遠目でも猫が主役だと分かる。
+- 弱点として扱う点: 観察主体の穏やかさをそのまま戦闘へ移すと、敵脅威と着弾因果が弱くなる。
+- 採用する抽象原則: 猫の個性を能力アイコンではなく、輪郭、毛色、装備、姿勢、動作で伝える。
+- Cat's Tower への変換: 前衛制御、遠隔対空、回復支援、後衛撹乱を、全必須viewportでvisible-alpha高60 CSS px以上、390×844では68 CSS px以上でも見分けられるsilhouetteにする。
+- 採用しない点: 低緊張のままの戦闘、施設群の同格表示、敵の不在。
+- コピー禁止: 猫の容姿、調理施設、背景、小物、アニメーション、UI。
 
-- 公式証拠: [App Store](https://apps.apple.com/us/app/id1618701110)
-- 公式掲載から確認できる強み: 敵との距離、HP、攻撃数値、撃破報酬を中央の短い導線へ集めている。
-- S02 で避ける弱点: 単独主人公と常設スキル列を採ると、四体の猫の役割が薄れ、存在しない active skill を示す危険がある。
-- 採用する抽象原則: 戦闘の読解に必要な数値だけを着弾点へ一時表示し、終われば消す。
-- Cat’s Tower への変換: 通常時は敵 HP と目標だけを残し、ダメージ・クリティカル・回復はイベント時だけ表示する。
-- 採用しない点: 単独ヒーロー、常設スキルボタン列、戦場を覆う能力アイコン、偽の手動スキル。
-- コピー禁止: スライム、スキル、アイコン、敵、背景、効果、固有数値、価格。
+### 5. AFK Journey
 
-### 3.8 Fortress Saga: AFK RPG
+- Source type: OFFICIAL_SITE
+- Official URL: https://afkjourney.farlightgames.com/official/
+- Official source checked: 2026-09-02
+- Hands-on/live UI verification: NOT PERFORMED
+- 公式資料: [公式サイト](https://afkjourney.farlightgames.com/official/)、[Google Play](https://play.google.com/store/apps/details?hl=en&id=com.farlightgames.igame.gp)
+- 公式掲載資料から想定する3〜5秒の強み: キャラクター仕上げ、敵味方分離、光と色による焦点、世界と戦闘の統合が高い。
+- 弱点として扱う点: 人型英雄、盤面、手動 ultimate、カットインを採ると Cat's Tower の猫4体 auto battle が変質する。
+- 採用する抽象原則: 味方と敵を向き・色温度・輪郭光で分け、重要な着弾だけ一時的に明度を上げる。
+- Cat's Tower への変換: 味方側は琥珀、敵側は低彩度青紫、中央接触点は中立光。猫の毛色は状態色で塗り替えない。
+- 採用しない点: 一般的人間主人公、手動 skill、盤面配置、通常戦闘を止める映画的カットイン。
+- コピー禁止: 英雄、衣装、UI、スキル、背景、演出、名称、数式。
 
-- 公式証拠: [公式サイト](https://fortress.cookapps.com/)、[App Store](https://apps.apple.com/us/app/id6446308106)
-- 公式掲載から確認できる強み: 背景の奥行き、移動方向、敵との距離、エフェクト、UI の質感を一つの商用画面として統合している。
-- S02 で避ける弱点: 巨大な移動要塞を主役にすると、猫四体の輪郭と個体差が相対的に小さくなる。
-- 採用する抽象原則: 戦場に前景・地面・中景・遠景を持たせ、戦闘キャラクターは最も強いコントラスト帯へ置く。
-- Cat’s Tower への変換: 塔内部の床レーンを主軸に、遠景の縦構造と側面の配送設備で上昇・支援を示す。巨大兵器は置かない。
-- 採用しない点: 移動要塞、極小ヒーロー、兵器操作、横長構図の単純移植。
-- コピー禁止: 要塞、英雄、背景構造、UI、エフェクト、数値、商品。
+### 6. Shop Titans
 
-### 3.9 AFK Journey
+- Source type: OFFICIAL_SITE
+- Official URL: https://playshoptitans.com/
+- Official source checked: 2026-09-02
+- Hands-on/live UI verification: NOT PERFORMED
+- 公式資料: [公式サイト](https://playshoptitans.com/)、[Google Play](https://play.google.com/store/apps/details?id=com.ripostegames.shopr)
+- 公式掲載資料から想定する3〜5秒の強み: 店舗、製作、販売、英雄支援を別の画面責務として理解しやすく整理する。
+- 弱点として扱う点: 店舗管理の密度を通常戦闘へ持ち込むと S02 の責務が崩れる。
+- 採用する抽象原則: 商業の価値は戦場で短く再確認できるが、操作詳細は専用画面に分ける。
+- Cat's Tower への変換: S02 は「適用中」「到着予定」「次回強化可能」の実状態と一つの導線だけを表示する。
+- 採用しない点: 店舗フロア、顧客操作、製作 slot、価格・在庫の常設。
+- コピー禁止: 店舗、商品、キャラクター、UI、アイコン、価格、数式。
 
-- 公式証拠: [公式サイト](https://afkjourney.farlightgames.com/official/)、[App Store](https://apps.apple.com/us/app/id1628970855)
-- 公式掲載から確認できる強み: キャラクターの仕上げ、敵味方の分離、光と色による焦点、戦闘と世界観の一体感が高い。
-- S02 で避ける弱点: 人型英雄、究極技のカットイン、手動スキル、盤面配置を採ると、猫四体の auto battle という正本が変わる。
-- 採用する抽象原則: 味方と敵を色温度、向き、輪郭光で分け、重要な攻撃だけ一時的に明度を上げる。
-- Cat’s Tower への変換: 味方側は温かい琥珀、敵側は低彩度の青紫を環境光に使い、猫の毛色そのものを警告色へ塗り替えない。
-- 採用しない点: 一般的な人間主人公、手動 ultimate、六角盤面、映画的カットインで通常戦闘を止めること。
-- コピー禁止: キャラクター、衣装、画面構成、UI、スキル、背景、演出、名称、数式。
+### 7. Legend of Slime: Idle RPG War
 
-### 3.10 Shop Titans
+- Source type: GOOGLE_PLAY
+- Official URL: https://play.google.com/store/apps/details?hl=en&id=com.loadcomplete.slimeidle
+- Official source checked: 2026-09-02
+- Hands-on/live UI verification: NOT PERFORMED
+- 公式資料: [Google Play](https://play.google.com/store/apps/details?hl=en&id=com.loadcomplete.slimeidle)
+- 公式掲載資料から想定する3〜5秒の強み: 敵との距離、HP、攻撃数値、撃破報酬が中央の短い視線導線に集まる。
+- 弱点として扱う点: 単独主人公と常設 skill 列は、四体の猫を脇役にし、存在しない active skill を暗示する。
+- 採用する抽象原則: 一時数値は着弾点へ出し、必要な時間だけ残す。
+- Cat's Tower への変換: 通常時は敵HPと目標を残し、damage、critical、heal、reward は実 event 時だけ表示する。
+- 採用しない点: 単独 hero、常設 skill button、画面を覆う能力 icon、直接 tap damage。
+- コピー禁止: slime、skill、敵、背景、effect、固有数値、商品。
 
-- 公式証拠: [公式サイト](https://playshoptitans.com/)、[App Store](https://apps.apple.com/us/app/id1361253233)
-- 公式掲載から確認できる強み: 店舗、製作、販売、英雄支援を明確な画面責務へ分け、商業ループの深さを伝えている。
-- S02 で避ける弱点: 店舗管理の詳細を通常戦闘へ常設すると、画面責務が混ざる。
-- 採用する抽象原則: 商会や店舗の価値は戦場で短く再確認できるが、詳細操作は専用画面で行う。
-- Cat’s Tower への変換: S02 では「配送中」「支援適用中」「次回強化可能」の状態だけを表示し、商品一覧、価格、在庫は P3 の別画面へ送る。
-- 採用しない点: 店舗フロア、顧客操作、製作スロット、商品価格を戦闘 UI へ持ち込むこと。
-- コピー禁止: 店舗、キャラクター、商品、UI、アイコン、名称、価格、数式。
+### 8. Fortress Saga: AFK RPG
 
-## 4. 公式UI・レスポンシブ資料
+- Source type: OFFICIAL_SITE
+- Official URL: https://fortress.cookapps.com/
+- Official source checked: 2026-09-02
+- Hands-on/live UI verification: NOT PERFORMED
+- 公式資料: [公式サイト](https://fortress.cookapps.com/)、[Google Play](https://play.google.com/store/apps/details?hl=en&id=com.cookapps.bm.fortresssaga)
+- 公式掲載資料から想定する3〜5秒の強み: 背景の奥行き、移動方向、敵との距離、effect、UI 質感が一つの商用画面として統合される。
+- 弱点として扱う点: 巨大要塞を主役にすると、猫四体の輪郭と個体差が小さくなる。
+- 採用する抽象原則: 前景、地面、中景、遠景を分け、戦闘体を最も強い contrast 帯へ置く。
+- Cat's Tower への変換: 塔内部の床 lane、上方の昇降路、側面の配送機構で進行と支援を示す。巨大兵器は置かない。
+- 採用しない点: 移動要塞、極小 hero、兵器操作、横長構図の単純移植。
+- コピー禁止: 要塞、英雄、背景構造、UI、effect、数値、商品。
 
-| 公式資料 | 確認対象 | S02-P1 への拘束 |
+### 9. Seven Knights Idle Adventure
+
+- Source type: OFFICIAL_SITE
+- Official URL: https://skidle.netmarble.com/en
+- Official source checked: 2026-09-02
+- Hands-on/live UI verification: NOT PERFORMED
+- 公式資料: [公式サイト](https://skidle.netmarble.com/en)、[Google Play](https://play.google.com/store/apps/details?hl=en&id=com.netmarble.skiagb)
+- 公式掲載資料から想定する3〜5秒の強み: 複数キャラクターを常時見せながら、敵側・進行・戦闘 feedback を商用品質でまとめる。
+- 弱点として扱う点: 多人数 roster、常設能力列、通知密度をそのまま使うと、四体の identity と通常戦闘の因果が薄まる。
+- 採用する抽象原則: 4体前後の常時表示では、役割別の silhouette、前後 lane、選択状態を一貫させる。
+- Cat's Tower への変換: 四体を同じ一列へ縮小せず、前衛・後衛・撹乱 lane へ分け、party card と battlefield の衣装・毛色を一致させる。
+- 採用しない点: 多人数化、手動能力の常設、通知・成長導線の過密化。
+- コピー禁止: キャラクター、陣形、UI、skill、icon、背景、商品、数値。
+
+### 10. Cat Snack Bar
+
+- Source type: GOOGLE_PLAY
+- Official URL: https://play.google.com/store/apps/details?hl=en&id=com.tree.idle.catsnackbar
+- Official source checked: 2026-09-02
+- Hands-on/live UI verification: NOT PERFORMED
+- 公式資料: [Google Play](https://play.google.com/store/apps/details?hl=en&id=com.tree.idle.catsnackbar)
+- 公式掲載資料から想定する3〜5秒の強み: 猫、店舗、報酬を統一形状でまとめ、猫の役割と作業を短時間で読ませる。
+- 弱点として扱う点: 店舗設備を戦場と同じ面積・密度で示すと通常戦闘が脇役になる。
+- 採用する抽象原則: 商会・配送も猫の世界の出来事に見せ、別製品の dashboard にしない。
+- Cat's Tower への変換: 配送箱、商会印、到着 cue を背景小物と従属支援帯へ統合し、管理詳細を分離する。
+- 採用しない点: 店舗 layout、作業席の大量表示、全操作の経営化。
+- コピー禁止: 制服、店舗設備、料理、看板、固有 UI、価格。
+
+## 公式UI・Web資料から固定する数値
+
+| 公式資料 | S02への拘束 |
+|---|---|
+| [Apple: Designing for games](https://developer.apple.com/design/human-interface-guidelines/designing-for-games) | 装飾量より、ゲームの主役、入力の明瞭さ、継続的 feedback を優先する。 |
+| [Apple: Typography](https://developer.apple.com/design/human-interface-guidelines/typography) | 実寸と hierarchy を明示し、文字を装飾として極小化しない。 |
+| [Apple: Layout](https://developer.apple.com/design/human-interface-guidelines/layout) | safe area、利用可能領域、content hierarchy を端末名でなく viewport で扱う。 |
+| [Android: Accessibility in apps](https://developer.android.com/guide/topics/ui/accessibility/apps) | label、focus、十分な target、色だけに依存しない状態を実装 contract に含める。 |
+| [Android: Window insets](https://developer.android.com/develop/ui/views/layout/insets) | system bar、cutout、gesture area を inset として扱い、下部 nav を重ねない。 |
+| [WCAG 2.2: Target Size Minimum](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html) | AAの最低条件を完成目標にせず、S02内部基準はprimary 48 CSS px以上、その他の重要操作44 CSS px以上とする。 |
+| [WCAG 2.2: Contrast Minimum](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html) | 通常文字4.5:1。3:1は最終computed sizeが通常weightで24px以上、またはweight 700以上で18.667px以上の文字だけに許し、他は4.5:1とする。 |
+| [WCAG 2.2 Quick Reference](https://www.w3.org/WAI/WCAG22/quickref/) | 200% text、focus、reflow、非色依存の検査を browser acceptance に含める。 |
+| [CSS Values and Units Level 4](https://www.w3.org/TR/css-values-4/) | `dvh` / `svh` を使い、browser bar 変化で戦場・nav・modal が隠れないようにする。 |
+
+P1内部規格は次の通り。
+
+- 意味のある本文、button、状態名、navigation label: 14 CSS px 以上。
+- 補足 metadata、時刻、補助 badge: 12 CSS px 以上。metadata に重要な操作・状態を入れない。
+- Primary操作: 48×48 CSS px 以上。その他の重要操作: 44×44 CSS px 以上。
+- 320px幅でも文字・target・猫を縮小せず、短文化、reflow、collapse、scroll continuation で対応。
+- 猫visible-alpha高は全必須viewportで60 CSS px以上、390×844で68以上。敵は全必須で80以上、390×844で96以上。
+- 通常文字 contrast 4.5:1 以上。3:1は最終computed sizeが通常weightで24px以上、またはweight 700以上で18.667px以上の文字だけに許し、他は4.5:1。木目や金属 highlight を contrast の代用にしない。
+- TEXT200はcomputed font-sizeを基準値の厳密2.0倍にし、transformやscreenshot zoomで代用しない。現在階、敵HP、目標、AUTO、四枠状態、主要操作、navigationを欠落させない。
+
+## 調査をS02の設計へ接続する決定表
+
+| 根拠 | 採用決定 | 検証 |
 |---|---|---|
-| [Apple: Designing for games](https://developer.apple.com/design/human-interface-guidelines/designing-for-games) | ゲーム内 UI の可読性、入力、プラットフォームとの整合 | 見た目の密度より、戦闘・主要操作・可読性を優先する。Apple の point と CSS px を同一値とは扱わず、ブラウザ実測で検証する。 |
-| [Apple: Buttons](https://developer.apple.com/design/human-interface-guidelines/buttons) | 44×44 pt を基準にした押しやすい領域 | S02 の重要操作は 44 CSS px 未満にせず、48 CSS px を目標にする。これは Web Golden Master の内部規格であり、pt との物理同値を主張しない。 |
-| [Material Design 3: Structure](https://m3.material.io/foundations/designing/structure) / [Icon buttons accessibility](https://m3.material.io/components/icon-buttons/accessibility) | 48 dp 級のタッチ領域、構造と余白 | 小さい見た目のアイコンにも 48 CSS px 目標の hit area を与え、見た目と入力領域を分離する。dp と CSS px の物理同値は主張しない。 |
-| [W3C WCAG 2.2: Target Size Minimum](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html) | 24×24 CSS px または十分な間隔という AA 基準 | S02 は最低適合値を完成目標にせず、例外に依存しない 44 CSS px 内部基準を採用する。 |
-| [W3C WCAG 2.2: Target Size Enhanced](https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html) | 44×44 CSS px の強化基準 | 重要操作 44 CSS px 最低値の直接根拠とし、片手操作と誤操作防止を検証する。 |
-| [Unity: Canvas Scaler](https://docs.unity3d.com/Packages/com.unity.ugui%401.0/manual/script-CanvasScaler.html) | 参照解像度、画面一致、非均一拡縮の問題 | 390×844 を一枚で作って全体縮小しない。背景・キャラは縦横比を維持し、UI は breakpoint ごとに再配置する。Unity 採用を意味しない。 |
-| [W3C: CSS Environment Variables](https://www.w3.org/TR/css-env-1/) | `safe-area-inset-*` 等の環境変数 | 上下左右の safe area を UI コンテナに加算し、装飾背景だけを端まで延ばす。 |
-| [WebKit: Designing Websites for iPhone X](https://webkit.org/blog/7929/designing-websites-for-iphone-x/) | viewport と safe area の扱い | ノッチ、角丸、ホームインジケータを、固定値の端末名ではなく inset で避ける。 |
-| [MDN: CSS length values](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/length) | `dvh` / `svh` / `lvh` などの動的 viewport 単位 | ブラウザバー変化を前提に、戦場とモーダルは `dvh` 系と実測 height を使って検証する。 |
-| [Android: Display content edge-to-edge](https://developer.android.com/develop/ui/views/layout/edge-to-edge) | edge-to-edge と system bar inset | 背景は edge-to-edge、意味のある UI と bottom navigation は inset 内へ置く。Android ネイティブ実装を意味しない。 |
+| 戦闘と商業を同格にすると主役が曖昧 | 戦場を最大領域、商会・配送は戦場可視面積の18%以下 | 5秒理解、面積計測 |
+| 四体は個体差を読める大きさが必要 | 猫visible-alpha高は全必須viewportで60px以上、390×844で68px以上。顔・装備の65%以上可視 | 全7 viewport |
+| 報酬導線は増えやすい | reward は実 event 時だけ、defeat anchor から一度だけ表示 | GM01/GM06比較、data binding |
+| 上昇は階数だけでは弱い | 遠景・床・floor marker を一つの上昇文法にする | GM01/GM05/floor transition |
+| 高級感は装飾量でなく一貫性 | 木、真鍮、鉄、石、布の役割・光源・角丸・線幅を token 化 | component audit |
+| 狭幅で一律縮小すると破綻 | P2説明と装飾を先に削り、戦場・14/12px文字・primary 48px/重要44px targetを維持 | GM02/GM04/TEXT200 |
+| 存在しない skill は虚偽 | AUTOは状態表示、主要tapは編成遷移、直接damage操作を置かない | action inventory |
+| 猫ゲームは個体の愛着が継続動機 | battlefield と card の毛色・衣装・装備を同一 model sheet へ結ぶ | identity diff |
 
-### 4.1 P1で固定する内部数値
+## 参考画像の扱い
 
-- 意味のある本文: 14 CSS px を標準目標とする。
-- 重要な状態・資源・敵情報: 12 CSS px 未満にしない。
-- 補助ラベル: 11 CSS px 未満にしない。装飾文字は情報として数えない。
-- 重要操作: 44×44 CSS px 未満にしない。48×48 CSS px を目標とする。
-- 小型アイコン: 視覚サイズを小さくしても hit area は上記を維持する。
-- 320 px 幅: 文字や hit area を縮めず、説明の短文化、二次情報の折りたたみ、戦場レーン再配置で対応する。
+- ユーザー提示の01〜10は構造・質感・密度・世界観の設計入力。11〜16は表示画面のスクリーンショットで、独立したデザイン証拠として数えない。
+- 採用候補: 温かい木、真鍮、鉄、石、暗赤布、猫を中心にした高密度、中央戦闘、cardとbattleの一体感、奥行き。
+- 不採用: 参考09の小さい戦場と大きい店舗領域、戦闘中の「出撃」、右側の任務列、参考02のboss scale・skill row、画像内に焼かれた日本語・数字。
+- 参考画像、競合画像、Golden Master完成画像をそのまま runtime background に使わない。透明button重ね、単純crop、競合traceを禁止する。
 
-## 5. 参考画像監査
+## 本番品質基準
 
-### 5.1 証拠の独立性
-
-- 参考画像 01〜10 は同じ 864×1536 系列の完成画面コンセプトである。
-- 参考画像 11〜16 は 01〜10 を表示したチャット画面のスクリーンショットであり、独立した追加デザイン証拠として数えない。
-- 参考画像は構造、質感、密度、世界観の設計入力であり、最終 runtime に貼る画像でも、切り抜き素材でもない。
-
-### 5.2 採用する抽象要素
-
-- 温かい木材、真鍮、鉄、石、暗赤色の布を同じ世界の素材として統合する。
-- 味方側は琥珀、中央は中立、敵側は青紫の縁光にし、戦場の向きを光で読む。
-- 中央戦場を最大面積にし、猫カードと戦場キャラクターの衣装・色・輪郭を一致させる。
-- 参考 05 / 07 のように猫の輪郭と職能差を強くする。
-- 参考 03 の店舗表現から、商業が戦闘を支援する因果だけを抽出する。
-- 参考 10 の上方進行から、塔を登り続ける方向感だけを抽出する。
-- 参考 08 の放置報酬から、経過時間、暫定結果、確定結果を分ける必要性だけを抽出する。
-
-### 5.3 基礎画像として不採用にする点
-
-- 参考 09 は S02 に近いが、戦場が画面高の約四分の一程度に留まり、下半分の商業支援が戦闘より強い。常設四枠、四体の戦場参加、攻撃から報酬までの因果も不足するため、構図のベースにはしない。
-- 参考 09 の戦闘中に「出撃」を置く矛盾、右側の任務・贈物・日次導線が戦場を奪う構成を継承しない。
-- 参考 02 は戦闘の強さがある一方、巨大敵と skill 列による S08 ボス責務である。通常敵の S02 へ縮小転用しない。
-- 画像内へ焼き込まれた日本語、HP、階数、資源値、ボタン名を使用しない。
-- フルスクリーン一枚絵、透明ボタン重ね、単純切り抜き、画面ごとの別パネル、崩れた文字を使用しない。
-- AI コンセプト間で変わる猫の体形・装備・顔を、アニメーション資産の基礎にしない。
-
-### 5.4 S02への変換
-
-- 390×844 の標準状態では、戦場におおむね 45〜52% の高さを確保する。
-- 通常敵は猫の約 1.2〜1.5 倍、elite は約 1.5〜1.9 倍を目安とする。2.5 倍超の巨大敵は原則 S08 の責務とする。
-- 四体は前衛・後衛の二層へ分け、最小表示高 54 CSS px でも装備と輪郭で識別できるようにする。
-- 金は主要操作、現在、報酬、選択へ限定する。青は情報・味方、紫は魔法・成長、緑は健康・受領可能、赤は脅威・error、暗褐色は通常 UI とする。色だけで状態を伝えない。
-- 9-slice 化できない枠、隠れた背景を持たない一枚絵、同一キャラがフレームごとに変形する素材は P2 へ渡さない。
-
-## 6. 調査結果からS02へ固定する設計判断
-
-| 調査結果 | S02-P1 の決定 | 検証対象 |
-|---|---|---|
-| 戦闘と商業を同格にすると主役が曖昧になる | 戦場を最大面積、商会・配送は一段下の支援帯 | 5秒理解テスト、戦場占有率 |
-| 四体前後は個体差を読める大きさが必要 | 四体を前衛・後衛の二層へ配置し、54 CSS px 未満にしない | 320×568、320×667 |
-| 放置 RPG は報酬導線を増やしやすい | 通常時は常設通知を減らし、撃破時だけ因果フィードバック | GM01 と GM06 比較 |
-| 塔攻略は階数だけでは方向感が弱い | 遠景の縦構造、床レーン、階更新を一つの上昇文法にする | GM01、GM05、floor transition |
-| 高級感は装飾量ではなく統一素材と焦点で生まれる | 木・真鍮・鉄・石・布の役割、光源、角丸、線幅を token 化 | UI Design System 監査 |
-| 320幅で全体縮小すると文字と猫が壊れる | 二次説明を先に省略し、戦場・文字・hit area を維持 | GM02、GM04、large text |
-| 手動 skill がないのに skill 列を置くと虚偽になる | AUTO は状態表示、主要 tap は編成調整。直接 damage と偽 skill は削除 | データ接続表、truthfulness 監査 |
-
-## 7. 競合コピー回避境界
-
-採用できるのは、情報優先順位、因果の近接、輪郭による識別、素材統一、画面責務の分離、safe area と入力領域などの抽象原則だけである。次を制作入力として複製しない。
-
-- 競合作品のキャラクター、衣装、敵、背景、店舗、武器、ポーズ
-- exact UI 配置、パネル比率、ボタン数、ナビ構成、アイコン
-- 固有名称、コピー、価格、確率、資源体系、数式、進行速度
-- 攻撃、召喚、撃破、課金、広告の固有演出
-- 公式スクリーンショットまたは映像の画像素材
-
-Cat’s Tower は、猫四体、無制限塔、auto battle、店舗・配送支援、木・真鍮・鉄・石・布の塔内工房という独自の組み合わせから構図を再設計する。
-
-## 8. 判定境界
-
-- 本調査は Golden Master の設計根拠であり、視覚品質の PASS 証拠ではない。
-- build、CI、Vercel READY、公式資料の件数を品質判定の代用にしない。
-- `S4-RECOVERY-VIS-001` は P1 で閉じない。
-- ユーザー視覚承認前の最大判定は `READY_FOR_USER_VISUAL_REVIEW` である。
-- `S02完成`、`Step 4 PASS`、`Step 5開始可能`、`Production Ready`、`Physical iPhone確認済み` を本資料から宣言しない。
+調査件数、資料量、build、CI、Vercel READYは視覚品質の代用にならない。合格候補となるには、独立したGM01〜GM08、全7 viewport、文字・target・safe area、戦闘因果、四状態、asset分解、実data接続、独立批評を同じexact commitへ結び、未解決P0/P1を0にする必要がある。ユーザー視覚承認前の最大判定は `READY_FOR_USER_VISUAL_REVIEW` であり、S02完成、Step 4 PASS、Step 5開始、Production Ready、physical iPhone確認済みを宣言しない。

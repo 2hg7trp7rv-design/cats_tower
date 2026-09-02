@@ -1,297 +1,284 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "artifactId": "cats-tower-s02-golden-master-p1-acceptance-matrix-round-001",
   "createdAt": "2026-09-01",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
-  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
-  "entry": {
-    "head": "65b4811e8dc9059fa4d5b6ea7bb081341450968a",
-    "tree": "77011dd54dde97c55ae54f77b85f4e25a3674702"
-  },
-  "status": "ACTIVE_BEFORE_P1_CONTENT_WRITE",
+  "changeControl": "TO_BE_BOUND_TO_CURRENT_AUTHORITY_BEFORE_REPOSITORY_WRITE",
+  "entry": {"head": null, "tree": null, "rule": "candidateはlive commitを推測しない。採用時にexact head/treeへbindする。"},
+  "status": "CANDIDATE_NOT_ACTIVE_NOT_RUNTIME",
   "screen": "S02 normal battle",
   "route": "/step4/s02/golden-master-p1/",
-  "purpose": "Freeze the production-quality visual target and implementation contract for S02 before production asset work or actual-root runtime replacement.",
-  "experiencePromise": "Within five seconds, a first-time player understands that four cats are auto-battling an enemy, the party is climbing an unbounded tower, defeat produces rewards, and shops plus delivery support make the next attempt stronger.",
-  "informationOrder": [
-    "cats and enemy in active combat",
-    "current floor",
-    "objective or threat",
-    "contact, attack, hit, defeat and reward causality",
-    "next primary action",
-    "persistent four-slot party state",
-    "shop and delivery support",
-    "secondary event and commercial routes"
-  ],
+  "purpose": "S02の本番品質visual targetと実装contractを、production asset制作・runtime差替えより前に固定する。",
+  "experiencePromise": "初見5秒で、猫4体が敵とauto battleし、現在階と脅威を読み、撃破と報酬を理解し、商会・配送支援で次回より強く登ることが分かる。",
+  "informationOrder": ["猫4体と敵の戦闘", "現在階", "objective/threat", "combat-reward causality", "次の主要操作", "4枠状態", "商会/配送支援", "secondary routes"],
   "deliverables": [
-    {
-      "id": "A",
-      "name": "competitive-research",
-      "required": true,
-      "acceptance": [
-        "research date and at least six to ten current games",
-        "official game, store listing, official video or developer source preferred",
-        "strength, weakness, adopt, reject, Cat's Tower transformation and copy boundary recorded per game",
-        "research findings explicitly mapped to S02 decisions"
-      ]
-    },
-    {
-      "id": "B",
-      "name": "player-experience-definition",
-      "required": true,
-      "acceptance": [
-        "purpose, five-second comprehension, protagonist, primary and secondary action fixed",
-        "required versus removable information fixed",
-        "shop support placement and failure conditions fixed"
-      ]
-    },
-    {
-      "id": "C",
-      "name": "information-priority-map",
-      "required": true,
-      "acceptance": [
-        "every visible S02 datum classified P0 always, P1 always, P2 conditional, P3 separate screen or delete",
-        "no monetization or event item may outrank combat"
-      ]
-    },
-    {
-      "id": "D",
-      "name": "art-direction",
-      "required": true,
-      "acceptance": [
-        "world, palette, wood, brass, metal, cloth, stone, light, shadow and depth fixed",
-        "cat and enemy proportions, render density, UI integration and effect density fixed",
-        "explicit reject criteria fixed"
-      ]
-    },
-    {
-      "id": "E",
-      "name": "golden-masters",
-      "required": true,
-      "acceptance": [
-        "GM01 through GM08 each independently viewable on a phone",
-        "no collage-only delivery",
-        "all Japanese copy and numbers remain exact text layers",
-        "generated artwork contains no UI labels, HP, floor, currency or numeric state",
-        "every battlefield character, enemy and effect is layerable for later implementation"
-      ]
-    },
-    {
-      "id": "F",
-      "name": "ui-design-system",
-      "required": true,
-      "acceptance": [
-        "grid, spacing, typography, numeric typography and reusable components fixed",
-        "normal, pressed, selected, disabled, locked, loading, error and cooldown states fixed",
-        "emoji and Unicode symbol icons forbidden"
-      ]
-    },
-    {
-      "id": "G",
-      "name": "asset-decomposition-and-animation",
-      "required": true,
-      "acceptance": [
-        "background, character, enemy, UI and effect layers listed",
-        "model sheet, anchors, visible and collision bounds listed",
-        "idle, walk, anticipation, attack, impact, hit, defeat and reward reaction listed"
-      ]
-    },
-    {
-      "id": "H",
-      "name": "data-binding-matrix",
-      "required": true,
-      "acceptance": [
-        "every runtime value has an explicit future state source",
-        "ownership, field, available and locked states are distinct",
-        "no fake active skill, reward, wallet or server result"
-      ]
-    },
-    {
-      "id": "I",
-      "name": "responsive-contract",
-      "required": true,
-      "acceptance": [
-        "seven required viewports specified",
-        "preserve, shrink, reflow, collapse, hide and expand rules specified",
-        "battlefield minimum height, character minimum identification size, text minimum and target size specified",
-        "safe area, bottom navigation, large text and modal behavior specified"
-      ]
-    },
-    {
-      "id": "J",
-      "name": "implementation-feasibility-audit",
-      "required": true,
-      "acceptance": [
-        "hidden background, animation consistency, scalable frames, text separation and width failure audited",
-        "asset size budgets and state coverage audited",
-        "P0 and P1 defects repaired before user presentation"
-      ]
-    }
+    {"id": "A", "name": "competitive-research", "path": "s02-golden-master-p1-competitive-research.md", "acceptance": ["2026-09-01調査日", "10作品", "primary official sources", "各作品のstrength/weakness/adopt/reject/transform/copy boundary", "decisionsへ接続"]},
+    {"id": "B", "name": "player-experience", "path": "s02-golden-master-p1-player-experience.json", "acceptance": ["purpose/5秒/主役/primary/secondary", "required/removable", "support placement", "failure conditions", "no fake state"]},
+    {"id": "C", "name": "information-priority", "path": "s02-golden-master-p1-information-priority.json", "acceptance": ["全情報をP0/P1/P2/P3/DELETE", "combat outranks commerce", "4 state integrity"]},
+    {"id": "D", "name": "art-direction", "path": "s02-golden-master-p1-art-direction.json", "acceptance": ["world/palette/material/light/shadow/depth", "cat/enemy/density/UI integration/effects", "reject criteria"]},
+    {"id": "E", "name": "golden-masters", "path": "review route GM01-GM08", "acceptance": ["8 independent views", "not collage-only", "exact text layers", "art contains no labels/numbers", "layerable assets", "all measurable thresholds"]},
+    {"id": "F", "name": "ui-design-system", "path": "s02-golden-master-p1-ui-design-system.json", "acceptance": ["4px grid/tokens/type/numbers", "all reusable components", "normal/pressed/selected/disabled/locked/loading/error/cooldown", "no emoji/Unicode-symbol/font-icon/OS-glyph placeholders; Japanese remains exact text layer"]},
+    {"id": "G", "name": "asset-and-animation", "paths": ["s02-golden-master-p1-asset-decomposition.json", "s02-golden-master-p1-animation-contract.json"], "acceptance": ["8 background layers", "model sheets/anchors/bounds", "animation causality", "formats/budgets"]},
+    {"id": "H", "name": "data-binding", "path": "s02-golden-master-p1-data-binding-matrix.json", "acceptance": ["every displayed state maps to authority", "4 state decision table", "unknown fails closed", "no fake skill/reward/wallet/server"]},
+    {"id": "I", "name": "responsive-contract", "path": "s02-golden-master-p1-responsive-contract.json", "acceptance": ["7 viewports", "maintain/shrink/reflow/collapse/hide/expand", "minimums", "safe area/nav/modal/TEXT200"]},
+    {"id": "J", "name": "feasibility-audit", "path": "s02-golden-master-p1-feasibility-audit.json", "acceptance": ["background/model/9-slice/text/state/width/size/data risks", "route and asset evidence", "P0/P1 repaired before review"]}
   ],
+  "screenAnatomy": {
+    "top": "safe inset、floor/resource、objective/AUTO",
+    "center": "largest battlefield with 4 cats、normal enemy、contact/attack path",
+    "belowBattle": "persistent 4-slot party dock and primary action",
+    "support": "subordinate shop/delivery support summary; review fixture is exact SCHEDULED next-battle state, runtime requires authoritative binding",
+    "bottom": "5-destination navigation above safe bottom",
+    "reviewChrome": "DESIGN REVIEW / S02 GOLDEN MASTER / NOT RUNTIME outside gameplay hierarchy"
+  },
   "goldenMasters": [
     {
       "id": "GM01",
+      "fixtureId": "s02.p1.fixture.GM01",
       "viewport": "390x844",
       "state": "normal-battle-standard",
-      "requiredStory": "four persistent party identities, actual battlefield subset, normal enemy, floor, objective, auto state and subordinate support"
+      "story": "4 cats auto-battle a normal enemy while floor, objective, HP, AUTO, party and support are readable.",
+      "mustShow": ["4 field cats", "normal enemy", "floor", "objective", "enemy HP", "AUTO", "primary action", "4 field-state cards", "schema-valid synthetic support fixture, unmistakably NOT RUNTIME", "bottom nav"],
+      "mustNotShow": ["damage/reward without event", "boss phase", "active skill row", "shop detail"],
+      "minimums": {"battlefieldCssPx": 372, "catVisibleAlphaCssPx": 68, "enemyVisibleAlphaCssPx": 96}
     },
     {
       "id": "GM02",
+      "fixtureId": "s02.p1.fixture.GM02",
       "viewport": "320x667",
       "state": "normal-battle-compact",
-      "requiredStory": "same priority without uniform scaling; secondary explanation reduced before combat or targets"
+      "story": "same priority without uniform scaling; secondary content collapses first.",
+      "mustShow": ["4 cats", "enemy", "floor/objective/exact HP/AUTO", "4 slot state labels/cards, all field in this normal fixture", "primary action", "nav"],
+      "mustNotShow": ["uniform scale", "meaningful text below14px", "shrunk target"],
+      "minimums": {"battlefieldCssPx": 312, "catVisibleAlphaCssPx": 60, "enemyVisibleAlphaCssPx": 80}
     },
     {
       "id": "GM03",
+      "fixtureId": "s02.p1.fixture.GM03",
       "viewport": "375x667",
       "state": "normal-battle-short-standard",
-      "requiredStory": "short-height reflow with combat still dominant"
+      "story": "short-height reflow with combat dominant and names/states readable.",
+      "mustShow": ["standard-width combat hierarchy", "4 names/states", "support one-line"],
+      "mustNotShow": ["battle compressed by commerce"],
+      "minimums": {"battlefieldCssPx": 320, "catVisibleAlphaCssPx": 60, "enemyVisibleAlphaCssPx": 80}
     },
     {
       "id": "GM04",
+      "fixtureId": "s02.p1.fixture.GM04",
       "viewport": "320x568",
       "state": "short-screen-stress",
-      "requiredStory": "minimum supported information with scroll continuation and no clipped critical action"
+      "story": "minimum supported information, scroll continuation and no clipped critical action.",
+      "mustShow": ["floor+battle initial view", "4 cats/enemy", "primary/nav targets"],
+      "mustMoveBelowFold": ["support detail", "secondary explanation"],
+      "minimums": {"battlefieldCssPx": 300, "catVisibleAlphaCssPx": 60, "enemyVisibleAlphaCssPx": 80}
     },
     {
       "id": "GM05",
+      "fixtureId": "s02.p1.fixture.GM05",
       "viewport": "430x932",
       "state": "large-tall",
-      "requiredStory": "additional height expands battlefield and atmosphere instead of bloating UI"
+      "story": "additional size expands tower depth, battle spacing and atmosphere rather than UI.",
+      "mustShow": ["expanded battlefield", "same UI token sizes", "all P0/P1"],
+      "mustNotShow": ["proportionally enlarged chrome", "new P3 detail"],
+      "minimums": {"battlefieldCssPx": 404, "catVisibleAlphaCssPx": 60, "enemyVisibleAlphaCssPx": 80}
     },
     {
       "id": "GM06",
+      "fixtureId": "s02.p1.fixture.GM06",
       "viewport": "390x844",
       "state": "attack-hit-defeat-reward-causality",
-      "requiredStory": "anticipation, strike or projectile, impact, damage, defeat and coin reward are simultaneously understandable without implying every frame occurs at one time"
+      "story": "attack source, path/contact, impact, damage, hit, defeat and event-bound reward form one readable sequence without claiming simultaneity.",
+      "mustShow": ["attacker follow-through", "path/contact", "impact at hitTarget", "HP change", "enemy defeat start", "labeled reward linked to source"],
+      "mustNotShow": ["reward before defeat", "fake wallet update", "critical treatment because this fixture has critical=false", "all events presented as simultaneous"],
+      "minimums": {"battlefieldCssPx": 372, "catVisibleAlphaCssPx": 68, "enemyVisibleAlphaCssPx": 96}
     },
     {
       "id": "GM07",
+      "fixtureId": "s02.p1.fixture.GM07",
       "viewport": "390x844",
       "state": "offline-reconciliation",
-      "requiredStory": "offline progress is pending reconciliation, shows elapsed time and provisional versus confirmed outcome honestly"
+      "story": "elapsed, reconciling, provisional, confirmed and error semantics are honest while battle remains identifiable.",
+      "defaultCapture": "CONFIRMING with clearly labeled provisional rows",
+      "mustShow": ["four field cats and normal enemy identifiable under scrim", "elapsed source state", "default CONFIRMING label", "provisional rows labeled 見込み", "action disabled or enabled only by current state"],
+      "mustCoverThroughStateSwitch": ["NO_PROGRESS", "ELAPSED_UNKNOWN", "RECONCILING_INDETERMINATE", "RECONCILING_DETERMINATE", "PROVISIONAL", "CONFIRMING", "CONFIRMED", "REJECTED", "RETRYABLE_ERROR", "UNKNOWN"],
+      "mustNotShow": ["fake server complete", "provisional coin burst", "confirmed wallet before settlement"],
+      "minimums": {"battlefieldCssPx": 372, "catVisibleAlphaCssPx": 68, "enemyVisibleAlphaCssPx": 96}
     },
     {
       "id": "GM08",
+      "fixtureId": "s02.p1.fixture.GM08",
       "viewport": "390x844",
       "state": "party-state-differences",
-      "requiredStory": "on-field, owned-reserve, joinable and locked are distinguishable by label, shape and treatment, not color alone"
+      "story": "field, owned, available and locked are unmistakable by exact label, shape and edge/icon.",
+      "exactLabels": ["戦場参加中", "所有済み", "加入可能", "未解放"],
+      "mustShow": ["one example of each state", "one field cat and a normal enemy in battle", "non-color distinction", "only field state appears fighting"],
+      "mustNotShow": ["available/locked as owned or field", "state hidden by ellipsis"],
+      "minimums": {"battlefieldCssPx": 372, "catVisibleAlphaCssPx": 68, "enemyVisibleAlphaCssPx": 96}
     }
   ],
-  "responsiveMatrix": [
-    "320x568",
-    "320x667",
-    "375x667",
-    "360x800",
-    "390x844",
-    "412x915",
-    "430x932"
-  ],
-  "responsiveAcceptance": {
-    "referenceViewport": "390x844",
-    "uniformFullScreenScalingAllowed": false,
-    "artDistortionAllowed": false,
-    "battlefieldMinimumCssPx": {
-      "short": 300,
-      "standard": 352,
-      "tall": 404
-    },
-    "criticalTextMinimumCssPx": 12,
-    "supportingTextMinimumCssPx": 11,
-    "primaryBodyTargetCssPx": 14,
-    "criticalTargetMinimumCssPx": 44,
-    "targetPreferredCssPx": 48,
-    "characterMinimumVisibleHeightCssPx": 54,
-    "enemyMinimumVisibleHeightCssPx": 68,
-    "bottomNavigation": "five destinations, safe-area padded and thumb reachable",
-    "largeText": "critical content reflows and secondary copy collapses; amounts and primary action never clip",
-    "reducedMotion": "state, danger and reward remain visible through shape, label and progress"
+  "reviewFixturePolicy": {
+    "schema": "S02P1ReviewFixture/v1",
+    "syntheticOnly": true,
+    "requiredFlags": {"synthetic": true, "notRuntime": true},
+    "requiredWatermark": ["DESIGN REVIEW", "S02 GOLDEN MASTER", "NOT RUNTIME"],
+    "interactionRule": "gameplay-looking controls inside the captured fixture are visual-only; review-route controls are separate. A fixture never proves player ownership, server status, wallet mutation, reward payout, route availability or runtime implementation.",
+    "runtimeImportForbidden": true,
+    "numericRule": "all gameplay integers are normalized decimal strings; display strings are declared separately and never parsed back into state",
+    "partyHpJoinRule": "Every party slot with battlefield=true resolves raw and exact display HP by its characterId in that same fixture's partyHpByCharacter. Missing or mismatched entry is P1 failure; non-field cards omit combat HP rather than fabricating it.",
+    "supportTargetRule": "fixture.s02.floor26.next.001 is a synthetic authoritative ID only inside these watermarked review fixtures. It MUST NOT be resolved, exported, imported, queried or treated as a canonical/runtime encounter ID. Runtime SCHEDULED state requires its own authoritative targetEncounterId."
   },
-  "uiComponentsRequired": [
-    "primary button",
-    "secondary button",
-    "icon button",
-    "tab",
-    "bottom navigation",
-    "resource chip",
-    "HP bar",
-    "progress meter",
-    "character card",
-    "enemy threat panel",
-    "reward feedback",
-    "modal",
-    "toast",
-    "tooltip",
-    "notification badge",
-    "locked state",
-    "disabled state",
-    "loading state",
-    "error state",
-    "pressed state",
-    "selected state",
-    "cooldown state"
+  "reviewFixtures": [
+    {
+      "fixtureId": "s02.p1.fixture.GM01", "goldenMasterId": "GM01", "viewport": "390x844", "synthetic": true, "notRuntime": true, "watermark": ["DESIGN REVIEW", "S02 GOLDEN MASTER", "NOT RUNTIME"], "partyHpByCharacter": {"character.launch.001": {"currentDecimal": "840", "maxDecimal": "1000", "display": "840 / 1,000"}, "character.launch.002": {"currentDecimal": "620", "maxDecimal": "800", "display": "620 / 800"}, "character.launch.003": {"currentDecimal": "710", "maxDecimal": "760", "display": "710 / 760"}, "character.launch.004": {"currentDecimal": "540", "maxDecimal": "700", "display": "540 / 700"}},
+      "header": {"floorDecimal": "26", "floorDisplay": "26階", "areaDisplay": "無限塔・月影回廊", "objectiveCurrentDecimal": "57", "objectiveRequiredDecimal": "60", "objectiveDisplay": "階層制圧 57 / 60", "autoStatus": "RUNNING", "autoDisplay": "AUTO 稼働中", "runCoinAmountDecimal": "12480", "runCoinDisplay": "12,480", "excluded": ["ruby", "rank"]},
+      "enemy": {"entityId": "enemy.normal.002", "displayName": "ススイタチ", "kind": "NORMAL", "hpCurrentDecimal": "6200", "hpMaxDecimal": "10000", "hpDisplay": "6,200 / 10,000", "hpBand": "NORMAL"},
+      "party": [
+        {"slotIndex": 0, "characterId": "character.launch.001", "name": "ムギ", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true, "hpCurrentDecimal": "840", "hpMaxDecimal": "1000"},
+        {"slotIndex": 1, "characterId": "character.launch.002", "name": "ルナ", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true, "hpCurrentDecimal": "620", "hpMaxDecimal": "800"},
+        {"slotIndex": 2, "characterId": "character.launch.003", "name": "トト", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true, "hpCurrentDecimal": "710", "hpMaxDecimal": "760"},
+        {"slotIndex": 3, "characterId": "character.launch.004", "name": "コハク", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true, "hpCurrentDecimal": "540", "hpMaxDecimal": "700"}
+      ],
+      "support": {"summaryState": "SCHEDULED", "display": "次戦支援 / 商会配送・適用予定", "applicationScope": "NEXT_ENCOUNTER", "targetEncounterId": "fixture.s02.floor26.next.001", "fixtureClaimOnly": true, "causality": "next battle only; not applied to current encounter"}, "primaryAction": {"label": "編成を整える", "expectedScreenId": "S06", "reviewInteraction": "visual-only"},
+      "navigation": [{"label": "戦闘", "screenId": "S02", "state": "selected"}, {"label": "編成", "screenId": "S06", "state": "fixture-available"}, {"label": "商会", "screenId": "S05", "state": "fixture-available"}, {"label": "塔記録", "screenId": "S03", "state": "fixture-available"}, {"label": "その他", "screenId": null, "state": "disabled", "stateDisplay": "利用不可"}]
+    },
+    {
+      "fixtureId": "s02.p1.fixture.GM02", "goldenMasterId": "GM02", "viewport": "320x667", "synthetic": true, "notRuntime": true, "watermark": ["DESIGN REVIEW", "S02 GOLDEN MASTER", "NOT RUNTIME"], "partyHpByCharacter": {"character.launch.001": {"currentDecimal": "840", "maxDecimal": "1000", "display": "840 / 1,000"}, "character.launch.002": {"currentDecimal": "620", "maxDecimal": "800", "display": "620 / 800"}, "character.launch.003": {"currentDecimal": "710", "maxDecimal": "760", "display": "710 / 760"}, "character.launch.004": {"currentDecimal": "540", "maxDecimal": "700", "display": "540 / 700"}},
+      "header": {"floorDecimal": "26", "floorDisplay": "26階", "areaDisplay": "無限塔・月影回廊", "objectiveCurrentDecimal": "57", "objectiveRequiredDecimal": "60", "objectiveDisplay": "階層制圧 57 / 60", "autoStatus": "RUNNING", "autoDisplay": "AUTO 稼働中", "runCoinAmountDecimal": "12480", "runCoinDisplay": "12,480", "excluded": ["ruby", "rank"]},
+      "enemy": {"entityId": "enemy.normal.002", "displayName": "ススイタチ", "kind": "NORMAL", "hpCurrentDecimal": "6200", "hpMaxDecimal": "10000", "hpDisplay": "6,200 / 10,000", "hpBand": "NORMAL"},
+      "party": [{"slotIndex": 0, "characterId": "character.launch.001", "name": "ムギ", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}, {"slotIndex": 1, "characterId": "character.launch.002", "name": "ルナ", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}, {"slotIndex": 2, "characterId": "character.launch.003", "name": "トト", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}, {"slotIndex": 3, "characterId": "character.launch.004", "name": "コハク", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}],
+      "support": {"summaryState": "SCHEDULED", "display": "次戦支援 / 商会配送・適用予定", "applicationScope": "NEXT_ENCOUNTER", "targetEncounterId": "fixture.s02.floor26.next.001", "fixtureClaimOnly": true, "causality": "next battle only; not applied to current encounter"}, "primaryAction": {"label": "編成を整える", "expectedScreenId": "S06", "reviewInteraction": "visual-only"},
+      "navigation": [{"label": "戦闘", "screenId": "S02", "state": "selected"}, {"label": "編成", "screenId": "S06", "state": "fixture-available"}, {"label": "商会", "screenId": "S05", "state": "fixture-available"}, {"label": "塔記録", "screenId": "S03", "state": "fixture-available"}, {"label": "その他", "screenId": null, "state": "disabled", "stateDisplay": "利用不可"}]
+    },
+    {
+      "fixtureId": "s02.p1.fixture.GM03", "goldenMasterId": "GM03", "viewport": "375x667", "synthetic": true, "notRuntime": true, "watermark": ["DESIGN REVIEW", "S02 GOLDEN MASTER", "NOT RUNTIME"], "partyHpByCharacter": {"character.launch.001": {"currentDecimal": "840", "maxDecimal": "1000", "display": "840 / 1,000"}, "character.launch.002": {"currentDecimal": "620", "maxDecimal": "800", "display": "620 / 800"}, "character.launch.003": {"currentDecimal": "710", "maxDecimal": "760", "display": "710 / 760"}, "character.launch.004": {"currentDecimal": "540", "maxDecimal": "700", "display": "540 / 700"}},
+      "header": {"floorDecimal": "26", "floorDisplay": "26階", "areaDisplay": "無限塔・月影回廊", "objectiveCurrentDecimal": "57", "objectiveRequiredDecimal": "60", "objectiveDisplay": "階層制圧 57 / 60", "autoStatus": "RUNNING", "autoDisplay": "AUTO 稼働中", "runCoinAmountDecimal": "12480", "runCoinDisplay": "12,480", "excluded": ["ruby", "rank"]},
+      "enemy": {"entityId": "enemy.normal.002", "displayName": "ススイタチ", "kind": "NORMAL", "hpCurrentDecimal": "6200", "hpMaxDecimal": "10000", "hpDisplay": "6,200 / 10,000", "hpBand": "NORMAL"},
+      "party": [{"slotIndex": 0, "characterId": "character.launch.001", "name": "ムギ", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}, {"slotIndex": 1, "characterId": "character.launch.002", "name": "ルナ", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}, {"slotIndex": 2, "characterId": "character.launch.003", "name": "トト", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}, {"slotIndex": 3, "characterId": "character.launch.004", "name": "コハク", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}],
+      "support": {"summaryState": "SCHEDULED", "display": "次戦支援 / 商会配送・適用予定", "applicationScope": "NEXT_ENCOUNTER", "targetEncounterId": "fixture.s02.floor26.next.001", "fixtureClaimOnly": true, "causality": "next battle only; not applied to current encounter"}, "primaryAction": {"label": "編成を整える", "expectedScreenId": "S06", "reviewInteraction": "visual-only"},
+      "navigation": [{"label": "戦闘", "screenId": "S02", "state": "selected"}, {"label": "編成", "screenId": "S06", "state": "fixture-available"}, {"label": "商会", "screenId": "S05", "state": "fixture-available"}, {"label": "塔記録", "screenId": "S03", "state": "fixture-available"}, {"label": "その他", "screenId": null, "state": "disabled", "stateDisplay": "利用不可"}]
+    },
+    {
+      "fixtureId": "s02.p1.fixture.GM04", "goldenMasterId": "GM04", "viewport": "320x568", "synthetic": true, "notRuntime": true, "watermark": ["DESIGN REVIEW", "S02 GOLDEN MASTER", "NOT RUNTIME"], "partyHpByCharacter": {"character.launch.001": {"currentDecimal": "840", "maxDecimal": "1000", "display": "840 / 1,000"}, "character.launch.002": {"currentDecimal": "620", "maxDecimal": "800", "display": "620 / 800"}, "character.launch.003": {"currentDecimal": "710", "maxDecimal": "760", "display": "710 / 760"}, "character.launch.004": {"currentDecimal": "540", "maxDecimal": "700", "display": "540 / 700"}},
+      "header": {"floorDecimal": "26", "floorDisplay": "26階", "areaDisplay": "無限塔・月影回廊", "objectiveCurrentDecimal": "57", "objectiveRequiredDecimal": "60", "objectiveDisplay": "階層制圧 57 / 60", "autoStatus": "RUNNING", "autoDisplay": "AUTO 稼働中", "runCoinAmountDecimal": "12480", "runCoinDisplay": "12,480", "excluded": ["ruby", "rank"]},
+      "enemy": {"entityId": "enemy.normal.002", "displayName": "ススイタチ", "kind": "NORMAL", "hpCurrentDecimal": "6200", "hpMaxDecimal": "10000", "hpDisplay": "6,200 / 10,000", "hpBand": "NORMAL"},
+      "party": [{"slotIndex": 0, "characterId": "character.launch.001", "name": "ムギ", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}, {"slotIndex": 1, "characterId": "character.launch.002", "name": "ルナ", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}, {"slotIndex": 2, "characterId": "character.launch.003", "name": "トト", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}, {"slotIndex": 3, "characterId": "character.launch.004", "name": "コハク", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}],
+      "support": {"summaryState": "SCHEDULED", "display": "次戦支援 / 商会配送・適用予定", "applicationScope": "NEXT_ENCOUNTER", "targetEncounterId": "fixture.s02.floor26.next.001", "fixtureClaimOnly": true, "causality": "next battle only; not applied to current encounter", "layout": "below initial fold"}, "primaryAction": {"label": "編成を整える", "expectedScreenId": "S06", "reviewInteraction": "visual-only"},
+      "navigation": [{"label": "戦闘", "screenId": "S02", "state": "selected"}, {"label": "編成", "screenId": "S06", "state": "fixture-available"}, {"label": "商会", "screenId": "S05", "state": "fixture-available"}, {"label": "塔記録", "screenId": "S03", "state": "fixture-available"}, {"label": "その他", "screenId": null, "state": "disabled", "stateDisplay": "利用不可"}]
+    },
+    {
+      "fixtureId": "s02.p1.fixture.GM05", "goldenMasterId": "GM05", "viewport": "430x932", "synthetic": true, "notRuntime": true, "watermark": ["DESIGN REVIEW", "S02 GOLDEN MASTER", "NOT RUNTIME"], "partyHpByCharacter": {"character.launch.001": {"currentDecimal": "840", "maxDecimal": "1000", "display": "840 / 1,000"}, "character.launch.002": {"currentDecimal": "620", "maxDecimal": "800", "display": "620 / 800"}, "character.launch.003": {"currentDecimal": "710", "maxDecimal": "760", "display": "710 / 760"}, "character.launch.004": {"currentDecimal": "540", "maxDecimal": "700", "display": "540 / 700"}},
+      "header": {"floorDecimal": "26", "floorDisplay": "26階", "areaDisplay": "無限塔・月影回廊", "objectiveCurrentDecimal": "57", "objectiveRequiredDecimal": "60", "objectiveDisplay": "階層制圧 57 / 60", "autoStatus": "RUNNING", "autoDisplay": "AUTO 稼働中", "runCoinAmountDecimal": "12480", "runCoinDisplay": "12,480", "excluded": ["ruby", "rank"]},
+      "enemy": {"entityId": "enemy.normal.002", "displayName": "ススイタチ", "kind": "NORMAL", "hpCurrentDecimal": "6200", "hpMaxDecimal": "10000", "hpDisplay": "6,200 / 10,000", "hpBand": "NORMAL"},
+      "party": [{"slotIndex": 0, "characterId": "character.launch.001", "name": "ムギ", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}, {"slotIndex": 1, "characterId": "character.launch.002", "name": "ルナ", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}, {"slotIndex": 2, "characterId": "character.launch.003", "name": "トト", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}, {"slotIndex": 3, "characterId": "character.launch.004", "name": "コハク", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}],
+      "support": {"summaryState": "SCHEDULED", "display": "次戦支援 / 商会配送・適用予定", "applicationScope": "NEXT_ENCOUNTER", "targetEncounterId": "fixture.s02.floor26.next.001", "fixtureClaimOnly": true, "causality": "next battle only; not applied to current encounter"}, "primaryAction": {"label": "編成を整える", "expectedScreenId": "S06", "reviewInteraction": "visual-only"},
+      "navigation": [{"label": "戦闘", "screenId": "S02", "state": "selected"}, {"label": "編成", "screenId": "S06", "state": "fixture-available"}, {"label": "商会", "screenId": "S05", "state": "fixture-available"}, {"label": "塔記録", "screenId": "S03", "state": "fixture-available"}, {"label": "その他", "screenId": null, "state": "disabled", "stateDisplay": "利用不可"}]
+    },
+    {
+      "fixtureId": "s02.p1.fixture.GM06", "goldenMasterId": "GM06", "viewport": "390x844", "synthetic": true, "notRuntime": true, "watermark": ["DESIGN REVIEW", "S02 GOLDEN MASTER", "NOT RUNTIME"], "partyHpByCharacter": {"character.launch.001": {"currentDecimal": "840", "maxDecimal": "1000", "display": "840 / 1,000"}, "character.launch.002": {"currentDecimal": "620", "maxDecimal": "800", "display": "620 / 800"}, "character.launch.003": {"currentDecimal": "710", "maxDecimal": "760", "display": "710 / 760"}, "character.launch.004": {"currentDecimal": "540", "maxDecimal": "700", "display": "540 / 700"}},
+      "header": {"floorDecimal": "26", "floorDisplay": "26階", "areaDisplay": "無限塔・月影回廊", "objectiveCurrentDecimal": "60", "objectiveRequiredDecimal": "60", "objectiveDisplay": "階層制圧 60 / 60", "autoStatus": "RUNNING", "autoDisplay": "AUTO 稼働中", "runCoinAmountDecimal": "12480", "runCoinDisplay": "12,480", "excluded": ["ruby", "rank"]},
+      "enemy": {"entityId": "enemy.normal.002", "displayName": "ススイタチ", "kind": "NORMAL", "hpBeforeDecimal": "1284", "hpAfterDecimal": "0", "hpMaxDecimal": "10000", "hpDisplayAtCapture": "0 / 10,000", "hpBand": "UNKNOWN", "defeatState": "STARTED"},
+      "party": [{"slotIndex": 0, "characterId": "character.launch.001", "name": "ムギ", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}, {"slotIndex": 1, "characterId": "character.launch.002", "name": "ルナ", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true, "attackRole": "exact ranged attacker"}, {"slotIndex": 2, "characterId": "character.launch.003", "name": "トト", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}, {"slotIndex": 3, "characterId": "character.launch.004", "name": "コハク", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}],
+      "events": [
+        {"eventId": "gm06.attack.001", "type": "combat.attack_started", "simulationTick": "0", "stateVersion": "1", "sourceEntityId": "character.launch.002", "targetEntityId": "enemy.normal.002"},
+        {"eventId": "gm06.release.001", "type": "combat.attack_released", "simulationTick": "220", "stateVersion": "2", "sourceEntityId": "character.launch.002"},
+        {"eventId": "gm06.spawn.001", "type": "combat.projectile_spawned", "simulationTick": "220", "stateVersion": "3", "projectileEntityId": "gm06.projectile.entity.001", "sourceEntityId": "character.launch.002", "targetEntityId": "enemy.normal.002", "attackEventId": "gm06.attack.001"},
+        {"eventId": "gm06.projectile.001", "type": "combat.projectile_arrived", "simulationTick": "390", "stateVersion": "4", "projectileEntityId": "gm06.projectile.entity.001", "sourceEntityId": "character.launch.002", "targetEntityId": "enemy.normal.002", "attackEventId": "gm06.attack.001"},
+        {"eventId": "gm06.damage.001", "type": "combat.damage_applied", "simulationTick": "390", "stateVersion": "5", "sourceEntityId": "character.launch.002", "targetEntityId": "enemy.normal.002", "amountDecimal": "1284", "display": "1,284", "critical": false},
+        {"eventId": "gm06.hit.001", "type": "combat.entity_hit", "simulationTick": "440", "stateVersion": "6", "entityId": "enemy.normal.002", "causeEventId": "gm06.damage.001"},
+        {"eventId": "gm06.defeat.001", "type": "combat.entity_defeated", "simulationTick": "520", "stateVersion": "7", "entityId": "enemy.normal.002", "causeEventId": "gm06.damage.001"},
+        {"eventId": "gm06.reward.001", "type": "reward.provisional", "simulationTick": "680", "stateVersion": "8", "rewardEventId": "gm06.reward.001", "settlementId": "gm06.settlement.001", "status": "provisional", "statusVersion": "1", "currencyCanonicalId": "coin.run", "amountDecimal": "9", "sourceEntityId": "enemy.normal.002", "defeatEventId": "gm06.defeat.001", "display": "見込み +9"}
+      ],
+      "walletRule": {"beforeDecimal": "12480", "atCaptureDecimal": "12480", "pendingDeltaDecimal": "9", "uiMutation": false}, "simulationTickDurationMs": "1", "captureMomentMs": "700", "impactEventClip": "impact.normal", "impactClip": "impact.residue", "activeImpactFlashAtCapture": false, "criticalTreatment": false, "nextFloor": "pending; no floor 27 claim",
+      "support": {"summaryState": "SCHEDULED", "display": "次戦支援 / 商会配送・適用予定", "applicationScope": "NEXT_ENCOUNTER", "targetEncounterId": "fixture.s02.floor26.next.001", "fixtureClaimOnly": true, "causality": "next battle only; not applied to current encounter"}, "primaryAction": {"label": "編成を整える", "expectedScreenId": "S06", "reviewInteraction": "visual-only"},
+      "navigation": [{"label": "戦闘", "screenId": "S02", "state": "selected"}, {"label": "編成", "screenId": "S06", "state": "fixture-available"}, {"label": "商会", "screenId": "S05", "state": "fixture-available"}, {"label": "塔記録", "screenId": "S03", "state": "fixture-available"}, {"label": "その他", "screenId": null, "state": "disabled", "stateDisplay": "利用不可"}]
+    },
+    {
+      "fixtureId": "s02.p1.fixture.GM07", "goldenMasterId": "GM07", "viewport": "390x844", "synthetic": true, "notRuntime": true, "watermark": ["DESIGN REVIEW", "S02 GOLDEN MASTER", "NOT RUNTIME"], "partyHpByCharacter": {"character.launch.001": {"currentDecimal": "840", "maxDecimal": "1000", "display": "840 / 1,000"}, "character.launch.002": {"currentDecimal": "620", "maxDecimal": "800", "display": "620 / 800"}, "character.launch.003": {"currentDecimal": "710", "maxDecimal": "760", "display": "710 / 760"}, "character.launch.004": {"currentDecimal": "540", "maxDecimal": "700", "display": "540 / 700"}},
+      "header": {"floorDecimal": "26", "floorDisplay": "26階", "areaDisplay": "無限塔・月影回廊", "objectiveCurrentDecimal": "57", "objectiveRequiredDecimal": "60", "objectiveDisplay": "階層制圧 57 / 60", "autoStatus": "RUNNING", "autoDisplay": "AUTO 稼働中", "runCoinAmountDecimal": "12480", "runCoinDisplay": "12,480", "excluded": ["ruby", "rank"]},
+      "enemy": {"entityId": "enemy.normal.002", "displayName": "ススイタチ", "kind": "NORMAL", "hpCurrentDecimal": "6200", "hpMaxDecimal": "10000", "hpDisplay": "6,200 / 10,000", "hpBand": "NORMAL"},
+      "party": [{"slotIndex": 0, "characterId": "character.launch.001", "name": "ムギ", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}, {"slotIndex": 1, "characterId": "character.launch.002", "name": "ルナ", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}, {"slotIndex": 2, "characterId": "character.launch.003", "name": "トト", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}, {"slotIndex": 3, "characterId": "character.launch.004", "name": "コハク", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true}],
+      "offline": {"titleDisplay": "放置結果の確認", "accessibleCloseName": "閉じる", "actionCopy": {"close": "閉じる", "retry": "再確認する", "continue": "塔へ戻る"}, "elapsedSecondsDecimal": "16320", "elapsedDisplay": "4時間32分", "capSecondsDecimal": "43200", "capDisplay": "上限12時間", "defaultViewState": "CONFIRMING", "defaultLabel": "照合中", "outcomeCurrencyCanonicalId": "coin.run", "outcomeAmountDecimal": "1840", "outcomeDisplay": "見込み 1,840", "settlementId": "gm07.settlement.001", "statusVersion": "1", "walletBeforeDecimal": "12480", "walletAtDefaultDecimal": "12480", "uiMutation": false,
+        "stateVariants": [
+          {"viewState": "NO_PROGRESS", "label": "放置収益なし", "amount": "hidden", "progress": "none", "actions": "close"},
+          {"viewState": "ELAPSED_UNKNOWN", "label": "経過時間確認中", "amount": "hidden", "progress": "indeterminate", "actions": "close"},
+          {"viewState": "RECONCILING_INDETERMINATE", "label": "照合中", "amount": "hidden", "progress": "indeterminate", "actions": "close"},
+          {"viewState": "RECONCILING_DETERMINATE", "label": "照合中", "amount": "hidden", "progress": "trusted determinate", "progressRatioDecimal": "0.64", "fixtureClaimOnly": true, "notRuntimeAuthority": true, "actions": "close"},
+          {"viewState": "PROVISIONAL", "label": "見込み", "amount": "見込み 1,840", "progress": "none", "actions": "close"},
+          {"viewState": "CONFIRMING", "label": "照合中", "amount": "見込み 1,840", "progress": "indeterminate", "actions": "close"},
+          {"viewState": "CONFIRMED", "label": "確定", "amount": "確定 1,840", "progress": "none", "actions": "close,continue"},
+          {"viewState": "REJECTED", "label": "付与なし", "amount": "hidden", "progress": "none", "actions": "close,continue"},
+          {"viewState": "RETRYABLE_ERROR", "label": "再確認が必要", "amount": "見込み 1,840", "progress": "none", "actions": "close,retry"},
+          {"viewState": "UNKNOWN", "label": "状態確認中", "amount": "hidden", "progress": "indeterminate", "actions": "close"}
+        ]
+      },
+      "support": {"summaryState": "SCHEDULED", "display": "次戦支援 / 商会配送・適用予定", "applicationScope": "NEXT_ENCOUNTER", "targetEncounterId": "fixture.s02.floor26.next.001", "fixtureClaimOnly": true, "causality": "next battle only; not applied to current encounter"}, "primaryAction": {"label": "編成を整える", "expectedScreenId": "S06", "reviewInteraction": "visual-only"},
+      "navigation": [{"label": "戦闘", "screenId": "S02", "state": "selected"}, {"label": "編成", "screenId": "S06", "state": "fixture-available"}, {"label": "商会", "screenId": "S05", "state": "fixture-available"}, {"label": "塔記録", "screenId": "S03", "state": "fixture-available"}, {"label": "その他", "screenId": null, "state": "disabled", "stateDisplay": "利用不可"}]
+    },
+    {
+      "fixtureId": "s02.p1.fixture.GM08", "goldenMasterId": "GM08", "viewport": "390x844", "synthetic": true, "notRuntime": true, "watermark": ["DESIGN REVIEW", "S02 GOLDEN MASTER", "NOT RUNTIME"], "partyHpByCharacter": {"character.launch.001": {"currentDecimal": "840", "maxDecimal": "1000", "display": "840 / 1,000"}}, "nonFieldHpOmittedFor": ["character.launch.002", "character.launch.003", "character.launch.004"],
+      "header": {"floorDecimal": "26", "floorDisplay": "26階", "areaDisplay": "無限塔・月影回廊", "objectiveCurrentDecimal": "57", "objectiveRequiredDecimal": "60", "objectiveDisplay": "階層制圧 57 / 60", "autoStatus": "RUNNING", "autoDisplay": "AUTO 稼働中", "runCoinAmountDecimal": "12480", "runCoinDisplay": "12,480", "excluded": ["ruby", "rank"]},
+      "enemy": {"entityId": "enemy.normal.002", "displayName": "ススイタチ", "kind": "NORMAL", "hpCurrentDecimal": "10000", "hpMaxDecimal": "10000", "hpDisplay": "10,000 / 10,000", "hpBand": "NORMAL"},
+      "party": [
+        {"slotIndex": 0, "characterId": "character.launch.001", "name": "ムギ", "state": "field", "stateDisplay": "戦場参加中", "battlefield": true},
+        {"slotIndex": 1, "characterId": "character.launch.002", "name": "ルナ", "state": "owned", "stateDisplay": "所有済み", "battlefield": false},
+        {"slotIndex": 2, "characterId": "character.launch.003", "name": "トト", "state": "available", "stateDisplay": "加入可能", "battlefield": false},
+        {"slotIndex": 3, "characterId": "character.launch.004", "name": "コハク", "state": "locked", "stateDisplay": "未解放", "battlefield": false}
+      ],
+      "battlefieldEntityIds": ["character.launch.001", "enemy.normal.002"], "support": {"summaryState": "SCHEDULED", "display": "次戦支援 / 商会配送・適用予定", "applicationScope": "NEXT_ENCOUNTER", "targetEncounterId": "fixture.s02.floor26.next.001", "fixtureClaimOnly": true, "causality": "next battle only; not applied to current encounter"}, "primaryAction": {"label": "編成を整える", "expectedScreenId": "S06", "reviewInteraction": "visual-only"},
+      "navigation": [{"label": "戦闘", "screenId": "S02", "state": "selected"}, {"label": "編成", "screenId": "S06", "state": "fixture-available"}, {"label": "商会", "screenId": "S05", "state": "fixture-available"}, {"label": "塔記録", "screenId": "S03", "state": "fixture-available"}, {"label": "その他", "screenId": null, "state": "disabled", "stateDisplay": "利用不可"}]
+    }
   ],
-  "browserModes": [
-    "normal",
-    "GM state switching",
-    "one-screen isolated viewing",
-    "fit width",
-    "one-to-one scale",
-    "reference comparison",
-    "large text",
-    "reduced motion"
-  ],
-  "reviewRouteRequirements": [
-    "mobile direct access",
-    "DESIGN REVIEW, S02 GOLDEN MASTER and NOT RUNTIME labels",
-    "independent screen cards rather than collage-only presentation",
-    "viewport and state label on every screen",
-    "normal, causality and offline state switches",
-    "reference image comparison",
-    "no replacement of the actual root runtime",
-    "no Production alias change"
-  ],
-  "criticPerspectives": [
-    "first-time player",
-    "idle-game player",
-    "cat-game player",
-    "mobile UI specialist",
-    "game art director",
-    "responsive designer",
-    "implementation engineer",
-    "accessibility reviewer",
-    "competitive comparison",
-    "320px width",
-    "short screen",
-    "large text",
-    "one-handed use"
-  ],
+  "requiredViewports": ["320x568", "320x667", "375x667", "360x800", "390x844", "412x915", "430x932"],
+  "quantitativeAcceptance": {
+    "catVisibleAlphaHeightCssPx": {"allRequiredMinimum": 60, "reference390x844Minimum": 68},
+    "enemyVisibleAlphaHeightCssPx": {"allRequiredMinimum": 80, "reference390x844Minimum": 96},
+    "meaningfulTextMinimumCssPx": 14,
+    "metadataOnlyMinimumCssPx": 12,
+    "primaryTargetMinimumCssPx": 48,
+    "importantTargetMinimumCssPx": 44,
+    "targetBoxRule": "min(rendered width, rendered height) must meet the applicable threshold",
+    "text200Scale": 2.0,
+    "text200Rule": "computed font-size exact2.0x; no transform/zoom proxy",
+    "contrast": {"normalTextMinimum": "4.5:1", "largeTextMinimum": "3:1", "largeTextEligibility": ">=24px normal or >=18.667px with weight>=700; otherwise4.5:1"},
+    "uniformScalingAllowed": false,
+    "horizontalUiOverflowAllowed": false
+  },
+  "browserModes": ["normal", "GM switch", "isolated", "fit width", "1:1", "reference compare", "TEXT200", "reduced motion"],
+  "reviewRouteRequirements": ["mobile direct access", "all three required watermark labels", "one-screen independent view", "viewport/state label", "GM01-GM08 selector (normal/causality/offline/party-state)", "reference compare", "root unchanged", "Production alias unchanged"],
+  "evidenceBinding": {
+    "rule": "document self-claims are insufficient. Static verifier binds exact doc blobs, route files, asset manifest, browser raw measurements, decoded screenshots and QA result to one commit/tree/workflow run.",
+    "requiredCrossChecks": ["GM IDs and viewport labels match DOM", "asset manifest enumerates every served file", "no full-screen GM used as runtime asset", "DOM computed sizes satisfy thresholds", "visible-alpha bounds derive from decoded pixels or explicit transparent asset bounds", "TEXT200 exact ratio", "contrast from rendered colors", "4 labels exact", "fixture watermark present"]
+  },
+  "criticPerspectives": ["first-time", "idle player", "cat-game player", "mobile UI", "art director", "responsive", "implementation", "accessibility", "competitive", "320 width", "short", "large text", "one-handed"],
   "automaticFailConditions": [
-    "current runtime receives only minor CSS polish",
-    "build, CI or Vercel READY is used as the quality verdict",
-    "competitive research is absent or disconnected from decisions",
-    "Golden Masters are available only in one collage",
-    "generated Japanese text is malformed or baked into artwork",
-    "emoji, Unicode or placeholder icon remains",
-    "placeholder character, enemy, background, panel or button remains",
-    "cats are too small to identify",
-    "commerce or events overpower combat",
-    "battle state is not understood within five seconds",
-    "party states can be misread",
-    "fake active skill, reward or server state is shown",
-    "flattened full-screen art is planned as runtime",
-    "responsive variants are simple resizes",
-    "critical text or target is reduced below its minimum",
-    "safe area, decomposition, animation, binding or feasibility evidence is missing",
-    "P0 or P1 remains unresolved",
-    "user approval, Step 4 PASS, Step 5, Production Ready or physical-iPhone verification is inferred"
+    "minor runtime CSS polish only",
+    "build/CI/Vercel READY used as quality verdict",
+    "research absent/disconnected",
+    "collage-only GM",
+    "baked/broken Japanese or numbers",
+    "emoji/Unicode-symbol/font-icon/OS-glyph placeholder asset",
+    "cats/enemy below minimum",
+    "commerce outranks combat",
+    "5-second story fails",
+    "4 states misread",
+    "fake skill/reward/server state",
+    "unbound resource or fixed player-rank fixture is shown as real state",
+    "flattened full-screen runtime plan",
+    "responsive simple resize",
+    "meaningful<14 or metadata<12",
+    "primary<48 or important<44",
+    "TEXT200 not exact2.0",
+    "contrast below4.5/3",
+    "safe area/decomposition/animation/binding/feasibility missing",
+    "unresolved P0/P1",
+    "approval/Step4/Step5/Production/physical-iPhone inferred"
   ],
   "finalJudge": {
-    "maximumVerdictWithoutUserApproval": "READY_FOR_USER_VISUAL_REVIEW",
-    "maximumVerdictAfterApprovalAndBoundEvidence": "READY_FOR_S02_P2_ASSET_PRODUCTION",
-    "requiredUnresolvedP0": 0,
-    "requiredUnresolvedP1": 0,
+    "maximumWithoutUserApproval": "READY_FOR_USER_VISUAL_REVIEW",
+    "maximumAfterApprovalAndBoundEvidence": "READY_FOR_S02_P2_ASSET_PRODUCTION",
+    "requiredP0": 0,
+    "requiredP1": 0,
     "step4Pass": false,
     "step5Allowed": false,
     "productionAllowed": false,

@@ -1,569 +1,105 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "artifactId": "cats-tower-s02-golden-master-p1-information-priority",
-  "researchedAt": "2026-09-02T00:00:00+09:00",
+  "createdAt": "2026-09-01",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "screen": "S02 normal battle",
-  "status": "IN_PROGRESS",
+  "status": "DESIGN_CANDIDATE_NOT_RUNTIME",
   "classificationDefinitions": {
-    "P0_ALWAYS_REQUIRED": "初見5秒理解と状態の正直さに不可欠。通常画面で欠落、隠蔽、縮小による判読不能を許さない。",
-    "P1_ALWAYS_VISIBLE": "戦闘判断、継続、主要遷移に必要。P0を圧迫せず常時表示する。",
-    "P2_CONDITIONAL": "対応する実 event または state が存在する時だけ、一時または条件表示する。",
-    "P3_SEPARATE_SCREEN": "価値はあるが S02 の責務外。短い導線だけ許可し、内容は別画面へ移す。",
-    "DELETE": "S02 の正本と矛盾、虚偽、重複、または視線競合になるため表示しない。"
+    "P0_ALWAYS_REQUIRED": "5秒理解と状態の正直さに不可欠。通常時に欠落・隠蔽・判読不能を許さない。",
+    "P1_ALWAYS_VISIBLE": "継続判断と主要遷移に必要。event条件なしで常にdocument flowへ存在し、P0を圧迫せず読める。320x568だけは初期viewport外のscroll continuationを許すが、折畳み操作や別画面を要求しない。",
+    "P2_CONDITIONAL": "対応する実eventまたはstateがある時だけ表示する。",
+    "P3_SEPARATE_SCREEN": "S02では短い導線または要約だけを許し、詳細は別画面へ移す。",
+    "DELETE": "S02正本と矛盾、虚偽、重複、または視線競合になるため表示しない。"
   },
   "globalOrder": [
-    "四体の猫と敵の戦闘",
+    "猫4体と敵の戦闘",
     "現在階",
     "現在目標または敵脅威",
     "接敵・攻撃・被弾・撃破・報酬の因果",
-    "次に押せる主要操作",
-    "四枠編成状態",
+    "次の主要操作",
+    "4枠編成状態",
     "商会・店舗・配送支援",
-    "二次イベント・商業導線"
+    "二次event・商業導線"
   ],
   "items": [
-    {
-      "id": "S02-INFO-001",
-      "classification": "P0_ALWAYS_REQUIRED",
-      "name": "戦場にいる味方キャラクター",
-      "content": "実際に field state のムギ、ルナ、トト、コハクだけ",
-      "placement": "中央戦場の味方側。前衛と後衛の二層",
-      "displayRule": "通常完成状態では四体を識別可能に見せる。field でない猫は戦場に出さない。",
-      "responsiveRule": "最小表示高 54 CSS px を守り、320幅では間隔と奥行きを組み替える。"
-    },
-    {
-      "id": "S02-INFO-002",
-      "classification": "P0_ALWAYS_REQUIRED",
-      "name": "通常敵",
-      "content": "current encounter の実 enemy identity と threat state",
-      "placement": "中央戦場の敵側",
-      "displayRule": "通常敵は猫の約1.2〜1.5倍を目安にし、S08ボス相当の巨大化をしない。",
-      "responsiveRule": "最小表示高 68 CSS px。猫との接触点または射線を同一視界に保つ。"
-    },
-    {
-      "id": "S02-INFO-003",
-      "classification": "P0_ALWAYS_REQUIRED",
-      "name": "現在階",
-      "content": "無制限塔の current floor",
-      "placement": "戦場上端の塔標識",
-      "displayRule": "最上階を示唆せず、現在値を一つだけ強く表示する。",
-      "responsiveRule": "12 CSS px未満にせず、数値は tabular figures を使う。"
-    },
-    {
-      "id": "S02-INFO-004",
-      "classification": "P0_ALWAYS_REQUIRED",
-      "name": "current encounter",
-      "content": "現在交戦している敵群または通常敵の短い識別",
-      "placement": "現在階と enemy threat panel の間",
-      "displayRule": "名前または種別を一行で表示し、詳細 lore は置かない。",
-      "responsiveRule": "320幅では補足を省き、敵種別を維持する。"
-    },
-    {
-      "id": "S02-INFO-005",
-      "classification": "P0_ALWAYS_REQUIRED",
-      "name": "敵HP",
-      "content": "current enemy HP / maximum HP",
-      "placement": "敵の近傍か threat panel",
-      "displayRule": "bar と数値を併用し、色だけで残量を示さない。",
-      "responsiveRule": "bar の長さを縮めても高さ、残量差、数値可読性を保つ。"
-    },
-    {
-      "id": "S02-INFO-006",
-      "classification": "P0_ALWAYS_REQUIRED",
-      "name": "現在目標または敵脅威",
-      "content": "例: 残敵、撃破目標、危険攻撃の予告のうち現在有効な一つ",
-      "placement": "戦場上部の threat strip",
-      "displayRule": "同時に一つの主文だけを示し、長文攻略を置かない。",
-      "responsiveRule": "重要語を残して短文化し、12 CSS px未満にしない。"
-    },
-    {
-      "id": "S02-INFO-007",
-      "classification": "P0_ALWAYS_REQUIRED",
-      "name": "AUTO状態",
-      "content": "auto battle が稼働、停止、保留、error のどれか",
-      "placement": "現在階または encounter header の反対側",
-      "displayRule": "状態表示であり、存在しない手動skillの代わりにしない。ラベルと形で示す。",
-      "responsiveRule": "短縮しても `AUTO` と状態 indicator を残す。"
-    },
-    {
-      "id": "S02-INFO-008",
-      "classification": "P0_ALWAYS_REQUIRED",
-      "name": "次の主要操作",
-      "content": "編成を整える",
-      "placement": "四枠編成と隣接する親指到達域",
-      "displayRule": "通常時に最も強い一つの操作。敵への直接damageを与えない。",
-      "responsiveRule": "44 CSS px未満にせず、48 CSS pxを目標。320×568でもclippingしない。"
-    },
-    {
-      "id": "S02-INFO-009",
-      "classification": "P0_ALWAYS_REQUIRED",
-      "name": "味方と敵の方向関係",
-      "content": "味方の前進方向、敵対方向、接敵点または射線",
-      "placement": "戦場レーンそのもの",
-      "displayRule": "全員が同じ向き、重なり、静止で何をしているか分からない状態を禁止する。",
-      "responsiveRule": "短幅では前後の奥行き差を増やし、横距離だけを潰さない。"
-    },
-    {
-      "id": "S02-INFO-010",
-      "classification": "P0_ALWAYS_REQUIRED",
-      "name": "正しいfield参加状態",
-      "content": "戦場表示と四枠の `出撃中` が一致すること",
-      "placement": "戦場と四枠カードの対応関係",
-      "displayRule": "未所有、加入可能、未解放を戦場参加中に見せない。",
-      "responsiveRule": "色に加えてラベル、枠形、badge位置で差を維持する。"
-    },
-    {
-      "id": "S02-INFO-011",
-      "classification": "P1_ALWAYS_VISIBLE",
-      "name": "四枠の恒常party dock",
-      "content": "ムギ、ルナ、トト、コハクの identity と各状態",
-      "placement": "戦場直下",
-      "displayRule": "名前、役割を示す輪郭、field / owned / available / locked の状態を一枠ごとに持つ。",
-      "responsiveRule": "320幅では二段または省略名ではなく、カード幅・間隔・補助文を再構成する。"
-    },
-    {
-      "id": "S02-INFO-012",
-      "classification": "P1_ALWAYS_VISIBLE",
-      "name": "味方HP",
-      "content": "各 field member の current HP state",
-      "placement": "各party cardまたは戦場の簡潔なbar",
-      "displayRule": "barを基本とし、危険時だけ数値または警告を強める。回復役と混同する装飾を置かない。",
-      "responsiveRule": "barを消さず、補助数値を条件省略してよい。"
-    },
-    {
-      "id": "S02-INFO-013",
-      "classification": "P1_ALWAYS_VISIBLE",
-      "name": "encounter / kill progress",
-      "content": "現在encounterの残敵または進行",
-      "placement": "敵HPまたは現在目標の近傍",
-      "displayRule": "現在階と混同しない。一つのmeterに目的を明記する。",
-      "responsiveRule": "短幅では短い比率表示にし、meterの意味を残す。"
-    },
-    {
-      "id": "S02-INFO-014",
-      "classification": "P1_ALWAYS_VISIBLE",
-      "name": "主要所持資源",
-      "content": "戦闘報酬が加算される主要通貨の実値",
-      "placement": "safe-area下のresource chip",
-      "displayRule": "GMのscenario dataはreview dataと明示し、runtimeでは実walletにbindingする。",
-      "responsiveRule": "数値を極小化せず、二次資源を先に折りたたむ。"
-    },
-    {
-      "id": "S02-INFO-015",
-      "classification": "P1_ALWAYS_VISIBLE",
-      "name": "商会・配送支援の存在",
-      "content": "戦闘に作用している支援または支援がない状態",
-      "placement": "四枠編成より下の従属支援帯",
-      "displayRule": "詳細管理ではなく、戦闘への作用を一行で示す。無効時も虚偽の適用中にしない。",
-      "responsiveRule": "短画面ではscroll継続領域へ送り、戦場を押し上げない。"
-    },
-    {
-      "id": "S02-INFO-016",
-      "classification": "P1_ALWAYS_VISIBLE",
-      "name": "下部navigation",
-      "content": "canonicalの五つの主要destination",
-      "placement": "safe-areaを含む画面下端",
-      "displayRule": "S02選択状態を色、形、ラベルで示す。通知量で戦闘を奪わない。",
-      "responsiveRule": "各target 44 CSS px以上、48 CSS px目標。ホームインジケータを避ける。"
-    },
-    {
-      "id": "S02-INFO-017",
-      "classification": "P1_ALWAYS_VISIBLE",
-      "name": "現在画面責務",
-      "content": "通常戦闘であること",
-      "placement": "encounter header内",
-      "displayRule": "大きな重複見出しを置かず、現在階・敵情報と一体で読む。",
-      "responsiveRule": "320幅では補助見出しを省いてよい。"
-    },
-    {
-      "id": "S02-INFO-018",
-      "classification": "P1_ALWAYS_VISIBLE",
-      "name": "戦場の上方継続",
-      "content": "塔が無制限に続く方向感",
-      "placement": "背景の遠景とfloor marker",
-      "displayRule": "有限最上階、完走率、終点を示さない。",
-      "responsiveRule": "縦長画面では遠景を広げ、UIを巨大化しない。"
-    },
-    {
-      "id": "S02-INFO-019",
-      "classification": "P2_CONDITIONAL",
-      "name": "attack anticipation",
-      "content": "攻撃前の構え、予告、溜め",
-      "condition": "実attack eventのanticipation区間",
-      "placement": "攻撃元の猫と対象方向",
-      "displayRule": "静止ラベルではなくanimationと控えめなeffect。reduced motionでは形と短いindicatorを併用する。"
-    },
-    {
-      "id": "S02-INFO-020",
-      "classification": "P2_CONDITIONAL",
-      "name": "projectile / contact",
-      "content": "遠隔弾道または近接接触",
-      "condition": "実attack eventのtravel / contact区間",
-      "placement": "攻撃元と着弾点の間",
-      "displayRule": "装飾particleと区別し、誤った対象へ飛ばさない。"
-    },
-    {
-      "id": "S02-INFO-021",
-      "classification": "P2_CONDITIONAL",
-      "name": "damage number",
-      "content": "実damage eventの値",
-      "condition": "着弾とdamage確定時",
-      "placement": "着弾点近傍",
-      "displayRule": "短時間表示。敵HP変化と同じ原因へ結ぶ。常時装飾にしない。"
-    },
-    {
-      "id": "S02-INFO-022",
-      "classification": "P2_CONDITIONAL",
-      "name": "hit reaction",
-      "content": "実被弾に対応する姿勢、flash、hit stop",
-      "condition": "damage確定時",
-      "placement": "被弾対象",
-      "displayRule": "攻撃と無関係に発生させない。reduced motionでは輪郭と状態変化を残す。"
-    },
-    {
-      "id": "S02-INFO-023",
-      "classification": "P2_CONDITIONAL",
-      "name": "critical feedback",
-      "content": "実critical event",
-      "condition": "criticalが実データで確定した時",
-      "placement": "damage numberと同一anchor",
-      "displayRule": "大きさ、線、短いラベルで区別し、色だけにしない。"
-    },
-    {
-      "id": "S02-INFO-024",
-      "classification": "P2_CONDITIONAL",
-      "name": "heal feedback",
-      "content": "実heal eventと対象",
-      "condition": "トト等のhealが実際に成立した時",
-      "placement": "回復対象とHP barの近傍",
-      "displayRule": "敵damageやcoinと混同しない形・移動方向にする。"
-    },
-    {
-      "id": "S02-INFO-025",
-      "classification": "P2_CONDITIONAL",
-      "name": "defeat feedback",
-      "content": "enemy HP zeroに対応するdefeat",
-      "condition": "実defeat event",
-      "placement": "敵の位置",
-      "displayRule": "rewardより先に読み、敵が立ったまま報酬だけ出る状態を禁止する。"
-    },
-    {
-      "id": "S02-INFO-026",
-      "classification": "P2_CONDITIONAL",
-      "name": "coin reward",
-      "content": "実reward eventのcurrencyとamount",
-      "condition": "撃破報酬が実際に確定した時",
-      "placement": "撃破位置からresource chipへ向かう短い導線",
-      "displayRule": "provisionalとconfirmedを分離し、walletへ加算されない偽報酬を見せない。"
-    },
-    {
-      "id": "S02-INFO-027",
-      "classification": "P2_CONDITIONAL",
-      "name": "floor transition",
-      "content": "次階への移動とfloor値更新",
-      "condition": "現在floorのclearが確定した時",
-      "placement": "戦場遠景とfloor marker",
-      "displayRule": "上方向の移動と数値更新を結び、全画面広告のような割り込みにしない。"
-    },
-    {
-      "id": "S02-INFO-028",
-      "classification": "P2_CONDITIONAL",
-      "name": "temporary support",
-      "content": "常設4体とは別の一時増援またはbuff",
-      "condition": "実temporary support stateが存在する時",
-      "placement": "party dock外の独立support slot",
-      "displayRule": "四枠の五体目に見せず、残存条件と一時性を文字・形で示す。"
-    },
-    {
-      "id": "S02-INFO-029",
-      "classification": "P2_CONDITIONAL",
-      "name": "offline reconciliation modal",
-      "content": "経過時間、照合状態、暫定値、確定値、error",
-      "condition": "復帰時にoffline progressの照合が必要",
-      "placement": "戦場を背景として残すmodal",
-      "displayRule": "暫定と確定を文字・形で分け、偽server状態を示さない。"
-    },
-    {
-      "id": "S02-INFO-030",
-      "classification": "P2_CONDITIONAL",
-      "name": "threat warning",
-      "content": "敵の危険攻撃または敗北が近い状態",
-      "condition": "実threat thresholdまたはtelegraph event",
-      "placement": "敵とthreat panel",
-      "displayRule": "赤だけで示さず、形、方向、短いラベルを併用する。"
-    },
-    {
-      "id": "S02-INFO-031",
-      "classification": "P2_CONDITIONAL",
-      "name": "initial tutorial cue",
-      "content": "初回に必要な一つの操作案内",
-      "condition": "対応tutorial stepが未完了",
-      "placement": "対象操作の近傍",
-      "displayRule": "一度に一手だけ。戦場、敵、floorを覆わない。"
-    },
-    {
-      "id": "S02-INFO-032",
-      "classification": "P2_CONDITIONAL",
-      "name": "loading state",
-      "content": "画面、資産、stateの読み込み",
-      "condition": "実loading中",
-      "placement": "影響を受けるcomponent内",
-      "displayRule": "screen全体を偽progressで覆わず、既知の情報を維持する。"
-    },
-    {
-      "id": "S02-INFO-033",
-      "classification": "P2_CONDITIONAL",
-      "name": "error and retry",
-      "content": "実error、影響範囲、retry",
-      "condition": "取得または照合が失敗した時",
-      "placement": "影響を受けるcomponentまたはmodal",
-      "displayRule": "戦闘全体が停止していないなら局所表示。retryは44 CSS px以上。"
-    },
-    {
-      "id": "S02-INFO-034",
-      "classification": "P2_CONDITIONAL",
-      "name": "toast",
-      "content": "短い完了・失敗・状態変化",
-      "condition": "ユーザー操作または実eventへの一度の応答",
-      "placement": "戦場の接触点と主要操作を避ける",
-      "displayRule": "重要な恒常状態をtoastだけにしない。"
-    },
-    {
-      "id": "S02-INFO-035",
-      "classification": "P2_CONDITIONAL",
-      "name": "notification badge",
-      "content": "対応destinationに未確認の実状態があること",
-      "condition": "未確認件数またはbinary stateが実際に存在",
-      "placement": "該当navまたは支援導線",
-      "displayRule": "戦闘中は最大一段低い強度。全項目への赤点付与を禁止する。"
-    },
-    {
-      "id": "S02-INFO-036",
-      "classification": "P2_CONDITIONAL",
-      "name": "tooltip",
-      "content": "曖昧なiconまたは状態の補足",
-      "condition": "focus、long press、明示的help操作",
-      "placement": "対象の近傍でsafe area内",
-      "displayRule": "常設説明の代替にせず、閉じる操作を確保する。"
-    },
-    {
-      "id": "S02-INFO-037",
-      "classification": "P2_CONDITIONAL",
-      "name": "cooldown state",
-      "content": "実装済みの自動行動または支援の再使用待ち",
-      "condition": "実cooldown dataが存在する時だけ",
-      "placement": "該当する自動行動または支援indicator",
-      "displayRule": "押せるactive skillに見せず、時間、形、disabled treatmentを併用する。"
-    },
-    {
-      "id": "S02-INFO-038",
-      "classification": "P3_SEPARATE_SCREEN",
-      "name": "編成詳細",
-      "content": "ステータス、装備、role、配置、入替",
-      "allowedS02Representation": "四枠状態と『編成を整える』導線のみ"
-    },
-    {
-      "id": "S02-INFO-039",
-      "classification": "P3_SEPARATE_SCREEN",
-      "name": "character詳細",
-      "content": "プロフィール、成長、装備、能力説明",
-      "allowedS02Representation": "名前、portrait、HP、状態、role silhouetteのみ"
-    },
-    {
-      "id": "S02-INFO-040",
-      "classification": "P3_SEPARATE_SCREEN",
-      "name": "商会・店舗管理",
-      "content": "商品、価格、在庫、購入、強化",
-      "allowedS02Representation": "戦闘へ作用する実支援状態と一つの導線のみ"
-    },
-    {
-      "id": "S02-INFO-041",
-      "classification": "P3_SEPARATE_SCREEN",
-      "name": "配送管理",
-      "content": "配送先、到着時間、積荷、受取",
-      "allowedS02Representation": "実到着状態または適用中支援のみ"
-    },
-    {
-      "id": "S02-INFO-042",
-      "classification": "P3_SEPARATE_SCREEN",
-      "name": "ガチャ",
-      "content": "召集、提供割合、結果、履歴",
-      "allowedS02Representation": "常設しない。必要なcanonical nav destinationだけ"
-    },
-    {
-      "id": "S02-INFO-043",
-      "classification": "P3_SEPARATE_SCREEN",
-      "name": "課金商品",
-      "content": "商品、価格、購入、規約",
-      "allowedS02Representation": "常設しない"
-    },
-    {
-      "id": "S02-INFO-044",
-      "classification": "P3_SEPARATE_SCREEN",
-      "name": "イベント・日次・任務",
-      "content": "一覧、期間、報酬、進捗",
-      "allowedS02Representation": "戦闘を圧迫しないcanonical nav destinationのみ"
-    },
-    {
-      "id": "S02-INFO-045",
-      "classification": "P3_SEPARATE_SCREEN",
-      "name": "inventory",
-      "content": "所持品一覧、sorting、detail",
-      "allowedS02Representation": "戦闘支援へ実際に作用した状態のみ"
-    },
-    {
-      "id": "S02-INFO-046",
-      "classification": "P3_SEPARATE_SCREEN",
-      "name": "settings and help",
-      "content": "音量、言語、accessibility、help",
-      "allowedS02Representation": "top-level menuへの一つのicon buttonのみ"
-    },
-    {
-      "id": "S02-INFO-047",
-      "classification": "P3_SEPARATE_SCREEN",
-      "name": "S08 boss detail",
-      "content": "boss phase、特殊threat、専用演出",
-      "allowedS02Representation": "boss encounterへの到達予告まで。S02通常敵UIへ混ぜない"
-    },
-    {
-      "id": "S02-INFO-048",
-      "classification": "DELETE",
-      "name": "tap damage button or hit zone",
-      "reason": "auto battleの正本と直接矛盾する"
-    },
-    {
-      "id": "S02-INFO-049",
-      "classification": "DELETE",
-      "name": "fake active skill row",
-      "reason": "実装されていない操作を押せるように見せる虚偽になる"
-    },
-    {
-      "id": "S02-INFO-050",
-      "classification": "DELETE",
-      "name": "fake reward and fake wallet",
-      "reason": "実eventとdata bindingのない値を本番機能として見せられない"
-    },
-    {
-      "id": "S02-INFO-051",
-      "classification": "DELETE",
-      "name": "fake server or sync state",
-      "reason": "実stateを確認せずonline、saved、confirmedと表示してはならない"
-    },
-    {
-      "id": "S02-INFO-052",
-      "classification": "DELETE",
-      "name": "unowned character shown on battlefield",
-      "reason": "ownershipとfield stateを誤認させる"
-    },
-    {
-      "id": "S02-INFO-053",
-      "classification": "DELETE",
-      "name": "常設の戦闘log feed",
-      "reason": "小さい補助文字が戦場を圧迫し、因果は画面内のeventで示せる"
-    },
-    {
-      "id": "S02-INFO-054",
-      "classification": "DELETE",
-      "name": "大量のnotification red dot",
-      "reason": "戦闘より二次導線を強くし、色だけの状態表現になる"
-    },
-    {
-      "id": "S02-INFO-055",
-      "classification": "DELETE",
-      "name": "戦闘中の課金・広告banner",
-      "reason": "S02の主役性と画面責務を破壊する"
-    },
-    {
-      "id": "S02-INFO-056",
-      "classification": "DELETE",
-      "name": "戦闘中の店舗価格表",
-      "reason": "商会支援を戦闘より強くし、別画面責務と重複する"
-    },
-    {
-      "id": "S02-INFO-057",
-      "classification": "DELETE",
-      "name": "Unicodeまたはemojiの本番icon",
-      "reason": "端末・fontで見た目が変わり、製品内の形状規格を固定できない"
-    },
-    {
-      "id": "S02-INFO-058",
-      "classification": "DELETE",
-      "name": "装飾目的の極小文字",
-      "reason": "情報として読めず、可読性と視線階層を偽装する"
-    },
-    {
-      "id": "S02-INFO-059",
-      "classification": "DELETE",
-      "name": "finite tower completion percent",
-      "reason": "無制限塔の正本と矛盾する"
-    },
-    {
-      "id": "S02-INFO-060",
-      "classification": "DELETE",
-      "name": "戦闘中の『出撃』操作",
-      "reason": "既に戦闘している状態との意味矛盾を起こす。主要操作は『編成を整える』にする"
-    }
+    {"id": "S02-INFO-001", "classification": "P0_ALWAYS_REQUIRED", "name": "通常状態の戦場の猫4体", "content": "active fieldEntityを持つムギ、ルナ、トト、コハク", "placement": "中央戦場の前衛・後衛・撹乱lane", "rule": "GM01〜GM07では4体を表示する。GM08の状態分類fixtureでは戦場参加中の一体だけを戦場に出し、owned/available/lockedは出さない。visible-alpha高は全必須viewportで60px以上、390x844では68px以上。顔と主装備65%以上可視。"},
+    {"id": "S02-INFO-002", "classification": "P0_ALWAYS_REQUIRED", "name": "current normal enemy", "content": "実encounterのenemy identity", "placement": "中央戦場の敵側", "rule": "visible-alpha高は全必須viewportで80px以上、390x844では96px以上。猫の1.2〜1.5倍でS08 boss scaleにしない。"},
+    {"id": "S02-INFO-003", "classification": "P0_ALWAYS_REQUIRED", "name": "敵味方の方向関係", "content": "移動方向、接触点、射線", "placement": "battle lane", "rule": "全員を同じ一列へ詰めず、攻撃元と対象を同一視界に置く。"},
+    {"id": "S02-INFO-004", "classification": "P0_ALWAYS_REQUIRED", "name": "現在階", "content": "unbounded floorのcurrent value", "placement": "戦場上端の塔標識", "rule": "有限上限や完走率を示さない。意味のある文字は14px以上。"},
+    {"id": "S02-INFO-005", "classification": "P0_ALWAYS_REQUIRED", "name": "current encounter", "content": "現在交戦中の敵名または種別", "placement": "floorとthreatの近傍", "rule": "一行、詳細loreなし。"},
+    {"id": "S02-INFO-006", "classification": "P0_ALWAYS_REQUIRED", "name": "enemy HP", "content": "current/max", "placement": "enemy threat panel", "rule": "barとtextを併用し、unknownを満タン表示しない。"},
+    {"id": "S02-INFO-007", "classification": "P0_ALWAYS_REQUIRED", "name": "objectiveまたはthreat", "content": "撃破目標、残敵、実telegraphのうち現在有効な主文一つ", "placement": "戦場上部", "rule": "色だけに依存せず、14px以上のlabelとshapeを使う。"},
+    {"id": "S02-INFO-008", "classification": "P0_ALWAYS_REQUIRED", "name": "AUTO状態", "content": "稼働、停止、保留、error", "placement": "encounter header", "rule": "状態表示でありactive skillではない。"},
+    {"id": "S02-INFO-009", "classification": "P0_ALWAYS_REQUIRED", "name": "主要操作", "content": "編成を整える", "placement": "party dockに隣接した親指到達域", "rule": "一状態一つ、48px以上。直接damageを与えない。"},
+    {"id": "S02-INFO-010", "classification": "P0_ALWAYS_REQUIRED", "name": "field参加整合", "content": "battlefieldとparty cardの戦場参加中状態", "placement": "戦場と4枠の対応", "rule": "未所有、加入可能、未解放を戦場参加中にしない。"},
+    {"id": "S02-INFO-011", "classification": "P1_ALWAYS_VISIBLE", "name": "恒常4枠party dock", "content": "4 identityと各状態", "placement": "戦場直下", "rule": "横carouselにせず4枠を常時見せる。"},
+    {"id": "S02-INFO-012", "classification": "P1_ALWAYS_VISIBLE", "name": "party state labels", "content": "戦場参加中、所有済み、加入可能、未解放", "placement": "各card", "rule": "14px以上、label・shape・edgeの三重表現。"},
+    {"id": "S02-INFO-013", "classification": "P1_ALWAYS_VISIBLE", "name": "ally HP", "content": "field memberのHP状態", "placement": "battle label", "rule": "visual barを常時維持する。exact current/maxは全幅でdata/ariaへ保持し、視覚数値は猫・戦闘因果と重ならない状態だけに条件表示する。"},
+    {"id": "S02-INFO-014", "classification": "P1_ALWAYS_VISIBLE", "name": "encounter progress", "content": "残敵またはcurrent/required", "placement": "objective近傍", "rule": "floorと混同しない一つのmeter。"},
+    {"id": "S02-INFO-015", "classification": "P1_ALWAYS_VISIBLE", "name": "主要資源", "content": "実bindingされたrun coin等", "placement": "safe top resource chip", "rule": "unknownを0にせず、GM fixtureをruntime値と見せない。"},
+    {"id": "S02-INFO-016", "classification": "P1_ALWAYS_VISIBLE", "name": "商会・配送支援summary", "content": "実適用中、対象が明示された次戦適用予定、到着予定、支援なし、または確認中", "placement": "party dock下の従属帯", "rule": "battle impactを一行。SCHEDULEDはexact prefix『次戦支援』を持ち、current encounterへ適用済みに見せない。戦場可視面積の18%以下。"},
+    {"id": "S02-INFO-017", "classification": "P1_ALWAYS_VISIBLE", "name": "bottom navigation", "content": "five review slots; only destinations joined to the canonical route registry are enabled, and unbound その他 is visibly disabled", "placement": "safe bottom内", "rule": "各item 48px以上、label 14px以上。review labelだけでrouteを生成しない。"},
+    {"id": "S02-INFO-018", "classification": "P1_ALWAYS_VISIBLE", "name": "上方継続", "content": "塔が続く方向感", "placement": "far backgroundとfloor marker", "rule": "有限の最上階を示さず、tall viewportで広げる。"},
+    {"id": "S02-INFO-019", "classification": "P2_CONDITIONAL", "name": "attack anticipation", "condition": "実attack_started event", "placement": "attackerと対象方向", "rule": "poseとshape。damageを先出ししない。"},
+    {"id": "S02-INFO-020", "classification": "P2_CONDITIONAL", "name": "projectileまたはcontact", "condition": "実release/travel/contact", "placement": "attack originからhit target", "rule": "装飾particleと区別し、targetを捏造しない。"},
+    {"id": "S02-INFO-021", "classification": "P2_CONDITIONAL", "name": "damage number", "condition": "実damage_applied event", "placement": "hit target近傍", "rule": "text layer、event量、HP変化と同期。"},
+    {"id": "S02-INFO-022", "classification": "P2_CONDITIONAL", "name": "hit reaction", "condition": "実entity_hit event", "placement": "被弾entity", "rule": "impact後に開始し、偽被弾を作らない。"},
+    {"id": "S02-INFO-023", "classification": "P2_CONDITIONAL", "name": "critical", "condition": "damage eventのcritical=true", "placement": "damage anchor", "rule": "shapeと短い14px labelで区別。"},
+    {"id": "S02-INFO-024", "classification": "P2_CONDITIONAL", "name": "heal", "condition": "実heal event", "placement": "targetとally HP近傍", "rule": "coinと異なるshape・方向。"},
+    {"id": "S02-INFO-025", "classification": "P2_CONDITIONAL", "name": "defeat", "condition": "authoritative entity_defeated", "placement": "enemy position", "rule": "rewardより先に読む。"},
+    {"id": "S02-INFO-026", "classification": "P2_CONDITIONAL", "name": "reward feedback", "condition": "reward eventまたはsettlement state", "placement": "defeat sourceからresource方向", "rule": "見込み・照合中・確定を文字と形で分け、一event一回。"},
+    {"id": "S02-INFO-027", "classification": "P2_CONDITIONAL", "name": "floor transition", "condition": "settlementがadvanceを許可", "placement": "floor marker、ground、far tower", "rule": "upward motionとexact floor updateを同期。"},
+    {"id": "S02-INFO-028", "classification": "P2_CONDITIONAL", "name": "temporary support", "condition": "実temporarySupport state", "placement": "party4外のsupport slot", "rule": "5体目に見せず一時性を明記。"},
+    {"id": "S02-INFO-029", "classification": "P2_CONDITIONAL", "name": "offline reconciliation", "condition": "復帰照合が必要", "placement": "battleを残すmodal/sheet", "rule": "elapsed、照合、見込み、確定、errorを区別。"},
+    {"id": "S02-INFO-030", "classification": "P2_CONDITIONAL", "name": "tutorial cue", "condition": "実tutorial step未完了", "placement": "対象操作近傍", "rule": "一度に一手、戦場を覆わない。"},
+    {"id": "S02-INFO-031", "classification": "P2_CONDITIONAL", "name": "loading", "condition": "実loading", "placement": "影響component", "rule": "stable geometry、進捗不明時に偽percentなし。"},
+    {"id": "S02-INFO-032", "classification": "P2_CONDITIONAL", "name": "error and retry", "condition": "実error", "placement": "影響componentまたはmodal", "rule": "last confirmed値とstale labelを保ち、retry 44px以上。"},
+    {"id": "S02-INFO-033", "classification": "P2_CONDITIONAL", "name": "toast", "condition": "一度の実応答", "placement": "contact、primary、navを避ける", "rule": "重要状態の唯一の証拠にしない。"},
+    {"id": "S02-INFO-034", "classification": "P2_CONDITIONAL", "name": "notification badge", "condition": "実未確認状態", "placement": "該当destination", "rule": "metadata 12px以上。全navへの赤点は禁止。"},
+    {"id": "S02-INFO-035", "classification": "P2_CONDITIONAL", "name": "tooltip", "condition": "focus、long press、help", "placement": "safe area内", "rule": "重要情報をtooltipだけへ置かない。"},
+    {"id": "S02-INFO-036", "classification": "P2_CONDITIONAL", "name": "cooldown", "condition": "実cooldown data", "placement": "自動行動またはsupport indicator", "rule": "押せるactive skillに見せない。"},
+    {"id": "S02-INFO-037", "classification": "P3_SEPARATE_SCREEN", "name": "formation/character詳細", "s02Allowance": "4枠summaryと編成を整える導線"},
+    {"id": "S02-INFO-038", "classification": "P3_SEPARATE_SCREEN", "name": "shop管理", "s02Allowance": "実battle support summaryと一導線"},
+    {"id": "S02-INFO-039", "classification": "P3_SEPARATE_SCREEN", "name": "delivery管理", "s02Allowance": "実到着・適用状態のsummary"},
+    {"id": "S02-INFO-040", "classification": "P3_SEPARATE_SCREEN", "name": "gacha・課金・広告", "s02Allowance": "詳細常設なし"},
+    {"id": "S02-INFO-041", "classification": "P3_SEPARATE_SCREEN", "name": "event・日次・任務", "s02Allowance": "戦闘を圧迫しないcanonical destinationのみ"},
+    {"id": "S02-INFO-042", "classification": "P3_SEPARATE_SCREEN", "name": "inventory・settings・help", "s02Allowance": "既存canonical menuへの導線のみ"},
+    {"id": "S02-INFO-043", "classification": "P3_SEPARATE_SCREEN", "name": "S08 boss detail", "s02Allowance": "到達予告のみ"},
+    {"id": "S02-INFO-044", "classification": "P3_SEPARATE_SCREEN", "name": "player profile / rank", "s02Allowance": "S02の5秒理解に不要。canonical sourceと戦闘判断上の必要性が確定するまで非表示。固定fixtureのRANK値を常設しない。"},
+    {"id": "S02-INFO-045", "classification": "DELETE", "name": "tap damage zone", "reason": "auto battle正本と矛盾"},
+    {"id": "S02-INFO-046", "classification": "DELETE", "name": "fake active skill row", "reason": "存在しない操作を暗示"},
+    {"id": "S02-INFO-047", "classification": "DELETE", "name": "fake reward/wallet/server status", "reason": "実event・bindingなしの虚偽"},
+    {"id": "S02-INFO-048", "classification": "DELETE", "name": "unowned character on battlefield", "reason": "ownershipとfieldの誤認"},
+    {"id": "S02-INFO-049", "classification": "DELETE", "name": "常設battle log", "reason": "極小文字と重複情報が戦場を圧迫"},
+    {"id": "S02-INFO-050", "classification": "DELETE", "name": "大量のnotification red dot", "reason": "二次導線が戦闘を奪う"},
+    {"id": "S02-INFO-051", "classification": "DELETE", "name": "戦闘中の課金・広告・価格表", "reason": "S02責務を破壊"},
+    {"id": "S02-INFO-052", "classification": "DELETE", "name": "emoji・Unicode symbol・font icon・OS glyph・仮icon", "reason": "製品の形状規格とaccessibilityを固定できない。正確な日本語DOM textは対象外。"},
+    {"id": "S02-INFO-053", "classification": "DELETE", "name": "装飾用極小文字", "reason": "meaningful 14px、metadata 12px規格に反する"},
+    {"id": "S02-INFO-054", "classification": "DELETE", "name": "finite tower completion percent", "reason": "unbounded towerと矛盾"},
+    {"id": "S02-INFO-055", "classification": "DELETE", "name": "戦闘中の出撃button", "reason": "既に戦闘中の状態と矛盾"},
+    {"id": "S02-INFO-056", "classification": "DELETE", "name": "unbound resourceまたは固定RANK値", "reason": "実wallet/profile authorityへ接続されず、review fixtureをplayer stateに見せる"}
   ],
   "viewportBudgets": {
-    "320x568": {
-      "battlefieldMinimumCssPx": 300,
-      "preserve": ["P0すべて", "主要操作", "四枠のidentityとstate", "下部navigation"],
-      "collapseFirst": ["支援の説明文", "二次資源", "補助見出し", "tooltip"],
-      "moveBelowFold": ["商会・配送支援の詳細導線", "二次説明"],
-      "neverShrink": ["44 CSS px target", "12 CSS px重要文字", "54 CSS px猫", "68 CSS px敵"]
-    },
-    "320x667": {
-      "battlefieldMinimumCssPx": 352,
-      "preserve": ["P0すべて", "四枠party dock", "短い支援状態", "下部navigation"],
-      "collapseFirst": ["補助説明", "二次資源", "背景particle"],
-      "neverShrink": ["44 CSS px target", "12 CSS px重要文字", "54 CSS px猫", "68 CSS px敵"]
-    },
-    "375x667": {
-      "battlefieldMinimumCssPx": 352,
-      "preserve": ["P0すべて", "P1すべて"],
-      "collapseFirst": ["支援の補足", "履歴的feedback"],
-      "neverShrink": ["44 CSS px target", "12 CSS px重要文字"]
-    },
-    "360x800": {
-      "battlefieldMinimumCssPx": 352,
-      "preserve": ["P0すべて", "P1すべて", "条件発生中のP2"],
-      "expand": ["戦場の垂直余白", "塔の遠景"]
-    },
-    "390x844": {
-      "battlefieldMinimumCssPx": 352,
-      "preserve": ["P0すべて", "P1すべて", "条件発生中のP2"],
-      "role": "標準Golden Master"
-    },
-    "412x915": {
-      "battlefieldMinimumCssPx": 404,
-      "preserve": ["P0すべて", "P1すべて", "条件発生中のP2"],
-      "expand": ["戦場", "前景と遠景の奥行き"],
-      "doNotExpand": ["top resource chips", "button文字", "bottom navigation"]
-    },
-    "430x932": {
-      "battlefieldMinimumCssPx": 404,
-      "preserve": ["P0すべて", "P1すべて", "条件発生中のP2"],
-      "expand": ["戦場", "移動距離", "塔の垂直構造", "環境光"],
-      "doNotExpand": ["UI全体", "notification", "商業支援"]
-    }
+    "320x568": {"battlefieldMinimumCssPx": 300, "preserve": ["P0", "4状態", "主要操作", "nav"], "collapseFirst": ["support説明", "二次資源", "装飾"], "moveBelowFold": ["support summary"], "minimums": "meaningful 14px, metadata-only 12px, primary target 48px, important target 44px, cat visible-alpha 60px, enemy visible-alpha 80px"},
+    "320x667": {"battlefieldMinimumCssPx": 312, "preserve": ["P0", "P1 identity/state", "nav"], "collapseFirst": ["補助説明", "粒子"]},
+    "375x667": {"battlefieldMinimumCssPx": 320, "preserve": ["P0", "P1"], "collapseFirst": ["support補足"]},
+    "360x800": {"battlefieldMinimumCssPx": 352, "preserve": ["P0", "P1", "active P2"], "expand": ["battle spacing"]},
+    "390x844": {"battlefieldMinimumCssPx": 372, "preserve": ["P0", "P1", "active P2"], "role": "reference"},
+    "412x915": {"battlefieldMinimumCssPx": 404, "preserve": ["P0", "P1", "active P2"], "expand": ["tower depth", "battlefield"], "doNotExpand": ["UI chrome", "commerce"]},
+    "430x932": {"battlefieldMinimumCssPx": 404, "battlefieldTargetCssPx": 424, "preserve": ["P0", "P1", "active P2"], "expand": ["tower depth", "movement distance", "atmosphere"], "doNotExpand": ["UI scale", "notification"]}
   },
   "conflictRules": [
-    "P0とP1が競合する場合はP0を維持し、P1の補助文を短くする。",
-    "P0またはP1とP2が競合する場合はP2のduration、粒子、数値数を減らす。",
-    "P0〜P2とP3が競合する場合はP3を別画面へ送る。",
-    "P0の猫、敵、floor、threat、主要操作を小さくして商会・イベント・装飾を残してはならない。",
-    "色、animation、音だけに依存せず、重要stateを形、位置、ラベル、progressで併記する。",
-    "表示できる領域が不足しても、未所有、加入可能、未解放を出撃中へ統合しない。"
+    "P0を維持し、P1の補助文、P2のduration/粒子、P3の導線の順に弱める。",
+    "猫、敵、floor、threat、主要操作を縮めてcommerceや装飾を残さない。",
+    "表示不足でも4状態を統合しない。",
+    "重要stateは色だけで伝えない。",
+    "320x568のP1はalways present/readable in document flowであり、party/supportを初期viewport外へ送ってもconditional/hiddenにはしない。"
   ],
   "reviewBoundary": {
-    "openFinding": "S4-RECOVERY-VIS-001",
-    "openFindingMayCloseInP1": false,
-    "unresolvedP0": "判定前",
-    "unresolvedP1": "判定前",
-    "maximumVerdictBeforeUserApproval": "READY_FOR_USER_VISUAL_REVIEW",
     "userVisualApproval": false,
+    "maximumBeforeApproval": "READY_FOR_USER_VISUAL_REVIEW",
     "productionAliasChanged": false,
     "physicalIPhoneVerified": false
   }

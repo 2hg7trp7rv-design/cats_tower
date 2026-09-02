@@ -1,328 +1,70 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "artifactId": "cats-tower-s02-golden-master-p1-feasibility-audit",
   "createdAt": "2026-09-01",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "screen": "S02 normal battle",
-  "auditStage": "PRE_GOLDEN_MASTER_EXECUTION_EVIDENCE",
-  "status": "SPEC_FEASIBLE_EXECUTION_EVIDENCE_PENDING",
-  "scope": "S02 P1 Golden MasterをP2 asset productionとP3実runtimeへ分解・再構築できるかを仕様段階で監査する。actual root runtimeの変更、gameplay数値、economy、save schema、Productionは監査対象外かつ変更しない。",
-  "inputs": [
-    "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-acceptance-matrix-round-001.json",
-    "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-ui-design-system.json",
-    "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-asset-decomposition.json",
-    "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-animation-contract.json",
-    "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-data-binding-matrix.json",
-    "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-responsive-contract.json",
-    "canonical/SCREEN_STATE_REGISTRY.json",
-    "canonical/STABLE_ID_REGISTRY.json",
-    "canonical/STATE_TRANSITION_CONTRACT.json"
-  ],
-  "method": [
-    "Golden Masterをflattened runtime artへせずlayerへ分けられるか確認",
-    "全表示値をfuture canonical stateへ結び付け、fake stateの逃げ道を探す",
-    "320x568から430x932のlayout変形とminimumを数値確認",
-    "animationの接敵から報酬までのevent順序を確認",
-    "asset format、anchor、bounds、9-slice、budget、decode QAを確認",
-    "P2でしか確定できない制作物とP1のdesign defectを分離"
-  ],
+  "auditStage": "DESIGN_CANDIDATE_PRE_EXECUTION",
+  "status": "SPECIFICATION_FEASIBLE_ROUTE_AND_ASSET_EVIDENCE_PENDING",
+  "scope": "S02 P1 targetをP2 asset productionとP3 runtimeへ分解・再構築できるかを監査する。actual root、gameplay/economy/save、Productionは変更しない。",
+  "method": ["flattened image依存を探す", "全表示をfuture stateへmap", "7 viewportのminimum/reflowを比較", "combat event順を確認", "anchor/bounds/9-slice/format/budgetを確認", "document self-claimとroute evidenceを分離"],
   "auditItems": [
-    {
-      "id": "FEAS-001",
-      "area": "flattened full-screen art",
-      "risk": "Golden Master一枚をruntimeへ貼り、文字と操作を透明領域で重ねる",
-      "status": "PASS_SPEC",
-      "evidence": [
-        "asset decomposition separates eight background/effect layers, character/enemy atlases, UI and text",
-        "Golden Master screenshot is explicitly excluded from runtime budget and package",
-        "UI text and numeric state are text layers"
-      ],
-      "p2Verification": "runtime bundle inspection rejects any GM screenshot used as full-screen gameplay background"
-    },
-    {
-      "id": "FEAS-002",
-      "area": "hidden background extent",
-      "risk": "390x844にだけ描かれた背景が320または430で欠ける",
-      "status": "PASS_SPEC_WITH_P2_ASSET_CHECK",
-      "evidence": [
-        "background requires horizontal hidden extent of at least 12% per side",
-        "background requires vertical hidden extent of at least 10% per side",
-        "responsive crop preserves doorway, ground path and light direction"
-      ],
-      "p2Verification": "approved background sourceを320x568、390x844、430x932 cropで重ねて確認"
-    },
-    {
-      "id": "FEAS-003",
-      "area": "character model consistency",
-      "risk": "AI生成frameごとに猫の模様、頭身、装備、手足が変わりanimation不能",
-      "status": "PASS_SPEC_WITH_P2_MODEL_SHEET_GATE",
-      "evidence": [
-        "four canonical characters each have fixed silhouette, differentiator, equipment and anchors",
-        "front, side, back, expressions and detached equipment are required before animation",
-        "frame inconsistency and baked checkerboard are explicit reject conditions"
-      ],
-      "p2Verification": "各catのmodel sheet approvalと全frame identity diff。未承認sheetからatlasを作らない。"
-    },
-    {
-      "id": "FEAS-004",
-      "area": "character and enemy movement",
-      "risk": "foot anchor、collision bounds、projectile originがなく、接敵や射程が見た目とずれる",
-      "status": "PASS_SPEC",
-      "evidence": [
-        "each cat and enemy defines normalized foot, collision, visible and attack/projectile anchors",
-        "depth sorting uses foot anchor instead of image bounds",
-        "animation contract separates simulation position from root-motion clip"
-      ],
-      "p2Verification": "atlas manifest read-back and overlay debug view"
-    },
-    {
-      "id": "FEAS-005",
-      "area": "combat causality",
-      "risk": "予備動作、弾着、damage、hit、defeat、rewardが同時または逆順に見える",
-      "status": "PASS_SPEC",
-      "evidence": [
-        "required event order and recognition windows are fixed",
-        "projectile arrival, not release, controls impact",
-        "damage, defeat and reward require authoritative events",
-        "GM06 700ms capture moment retains residual cues without claiming simultaneity"
-      ],
-      "p1Verification": "GM06 screenshot and independent five-second critic remain gate-pending"
-    },
-    {
-      "id": "FEAS-006",
-      "area": "scalable UI frames",
-      "risk": "buttonとpanelが固定bitmapで文字量や幅に追従しない",
-      "status": "PASS_SPEC_WITH_P2_STRETCH_TEST",
-      "evidence": [
-        "wood, parchment, button, card, bar, nav and modal use 9-slice or vector",
-        "cap insets and minimum rendered sizes are specified",
-        "all components share 4px grid, radius, stroke and material tokens"
-      ],
-      "p2Verification": "minimum、reference、maximum幅でcorner/stroke distortion test"
-    },
-    {
-      "id": "FEAS-007",
-      "area": "text and number separation",
-      "risk": "日本語、HP、floor、currency、button名が画像へ焼き込まれる",
-      "status": "PASS_SPEC",
-      "evidence": [
-        "textAsImage and numberAsImage are false",
-        "generated art contract forbids labels, HP, floor, currency and amount",
-        "damage number and reward amount are exact text layers"
-      ],
-      "p1Verification": "GM DOM/layer inspection and screenshot text comparison remain gate-pending"
-    },
-    {
-      "id": "FEAS-008",
-      "area": "UI state completeness",
-      "risk": "normalだけ制作され、pressed、selected、disabled、locked、loading、error、cooldownが欠ける",
-      "status": "PASS_SPEC",
-      "evidence": [
-        "global component states define all required treatments and behavior",
-        "each reusable component declares applicable states",
-        "party state differences use label, shape and edge rather than color only"
-      ],
-      "p2Verification": "component state stories and visual regression captures"
-    },
-    {
-      "id": "FEAS-009",
-      "area": "fake skill, reward and server state",
-      "risk": "review用の見栄えをruntime機能または確定値と誤認させる",
-      "status": "PASS_SPEC",
-      "evidence": [
-        "AUTO is state, not active skill",
-        "tap damage is forbidden",
-        "attack/damage/defeat/reward each require events",
-        "offline rows explicitly separate provisional, confirming and confirmed",
-        "all GM data uses a review-only fixture namespace and NOT RUNTIME label"
-      ],
-      "p2Verification": "fixture namespace absence in runtime bundle and event-gated UI tests"
-    },
-    {
-      "id": "FEAS-010",
-      "area": "ownership and field-state integrity",
-      "risk": "未所有または未解放catを戦場参加中に見せる",
-      "status": "PASS_SPEC",
-      "evidence": [
-        "field, owned reserve, available, locked and unknown decision table is explicit",
-        "field requires ownership, slot assignment and active field entity",
-        "conflicting state fails closed to 状態確認中"
-      ],
-      "p1Verification": "GM08 screenshot and state-label accessibility inspection remain gate-pending"
-    },
-    {
-      "id": "FEAS-011",
-      "area": "responsive widths and heights",
-      "risk": "390x844を一律縮小し、320幅の文字、target、cat、battleがminimumを下回る",
-      "status": "PASS_SPEC_WITH_P1_BROWSER_EVIDENCE_PENDING",
-      "evidence": [
-        "all seven required viewports have separate maintain/shrink/reflow/collapse/hide/expand rules",
-        "battle minimums are 300/352/404 by height band",
-        "cat54px、enemy68px、text12/11px、target44px minimums are fixed",
-        "320x568 allows document scroll instead of violating minimums",
-        "430x932 expands battle and atmosphere, not UI scale"
-      ],
-      "p1Verification": "seven exact viewport measurements and independent screenshots"
-    },
-    {
-      "id": "FEAS-012",
-      "area": "safe area and dynamic browser chrome",
-      "risk": "notch、Dynamic Island、browser bar、home indicatorがheader/nav/actionを隠す",
-      "status": "PASS_SPEC_WITH_P1_BROWSER_EVIDENCE_PENDING",
-      "evidence": [
-        "svh provides stable minimum and dvh follows active viewport",
-        "env safe-area insets are applied on four sides",
-        "bottom nav background extends through inset while targets stay above it",
-        "Dynamic Island center region is excluded from required top targets"
-      ],
-      "p1Verification": "browser CSS evidence; physical iPhone remains explicitly NOT_VERIFIED"
-    },
-    {
-      "id": "FEAS-013",
-      "area": "large text and one-handed use",
-      "risk": "大きな文字で金額とstateがclipし、片手でnext actionへ届かない",
-      "status": "PASS_SPEC_WITH_P1_BROWSER_EVIDENCE_PENDING",
-      "evidence": [
-        "critical content preservation and secondary collapse order are fixed",
-        "header and modal reflow rather than shrink",
-        "five bottom destinations retain 48px target and 11px label",
-        "combat itself does not require tap damage"
-      ],
-      "p1Verification": "200% text and keyboard focus captures"
-    },
-    {
-      "id": "FEAS-014",
-      "area": "asset size and decode",
-      "risk": "高解像度AI artが初期loadを肥大化し、拡張子だけ変えた破損assetがfallbackされる",
-      "status": "PASS_SPEC_WITH_P2_MEASUREMENT",
-      "evidence": [
-        "initial compressed budget is 2860KiB with explicit breakdown",
-        "deferred assets and preload boundary are listed",
-        "runtime formats, dimensions, alpha and decode tests are required",
-        "review sources are excluded from runtime"
-      ],
-      "p2Verification": "file signature, actual decode, network transfer, texture memory and transparent fringe measurements"
-    },
-    {
-      "id": "FEAS-015",
-      "area": "S08 extension boundary",
-      "risk": "S02 normal enemy presentation becomes a boss screen or blocks later S08 extension",
-      "status": "PASS_SPEC",
-      "evidence": [
-        "S02 normal enemy scale is 1.2 to 1.5 cat and >2.5 is reserved away from S02",
-        "enemy threat panel, bars, telegraph and effect tokens are reusable",
-        "boss phases, break gauge and boss-specific layout remain excluded"
-      ],
-      "p2Verification": "S08 extension review later; no S08 full-screen production in this phase"
-    },
-    {
-      "id": "FEAS-016",
-      "area": "runtime state connection",
-      "risk": "Golden Master表示をactual game stateへ接続できない",
-      "status": "PASS_SPEC_WITH_P2_ADAPTER_DETAIL",
-      "evidence": [
-        "every visible state family maps to S02 canonical required state or an explicitly named future event adapter",
-        "unknown and conflicting values fail closed",
-        "unbounded floor and amount remain decimal strings",
-        "four exact P2 schema questions have safe defaults and do not alter the visual target"
-      ],
-      "p2Verification": "exact adapter field names, version contract and integration tests"
-    }
+    {"id": "FEAS-001", "area": "full-screen flattening", "risk": "GM一枚をruntimeへ貼り透明buttonを重ねる", "specStatus": "PASS_SPEC", "evidence": ["background/entity/effect/UI/text分離", "GM excluded from runtime", "textAsImage=false"], "executionGate": "bundle inspection and asset manifest"},
+    {"id": "FEAS-002", "area": "hidden background", "risk": "390だけ成立し320/430で欠ける", "specStatus": "PASS_SPEC_PENDING_ASSET", "evidence": ["左右各12%、上下各10% hidden extent", "anchor crop rules"], "executionGate": "320x568/390x844/430x932 crop overlay"},
+    {"id": "FEAS-003", "area": "model consistency", "risk": "AI frameごとに模様、体格、装備、手足が変わる", "specStatus": "PASS_SPEC_PENDING_MODEL_SHEET", "evidence": ["5 views、expressions、equipment、body measurements", "identity reject rules"], "executionGate": "model sheet approval and frame identity diff"},
+    {"id": "FEAS-004", "area": "movement anchors", "risk": "foot/collision/projectileがずれ接敵不能", "specStatus": "PASS_SPEC", "evidence": ["normalized anchors/bounds per cat/enemy", "simulation position separated from clip"], "executionGate": "atlas manifest overlay debug"},
+    {"id": "FEAS-005", "area": "combat causality", "risk": "anticipation、impact、damage、defeat、rewardが逆順/同時", "specStatus": "PASS_SPEC_PENDING_GM06", "evidence": ["required order/windows", "arrival controls impact", "event-gated reward", "700ms storyboard"], "executionGate": "GM06 screenshot+event trace+independent 5-second review"},
+    {"id": "FEAS-006", "area": "scalable UI", "risk": "bitmap panelが文字量と幅に追従しない", "specStatus": "PASS_SPEC_PENDING_STRETCH", "evidence": ["9-slice/vector families", "cap insets and minimum sizes", "shared tokens"], "executionGate": "minimum/reference/maximum stretch captures"},
+    {"id": "FEAS-007", "area": "text separation", "risk": "Japanese/HP/floor/currency/buttonが画像焼込み", "specStatus": "PASS_SPEC", "evidence": ["textAsImage=false", "generated-art prohibition", "damage/reward are text layers"], "executionGate": "DOM/layer inspection+OCR mismatch rejection"},
+    {"id": "FEAS-008", "area": "state coverage", "risk": "normalだけでpressed/selected/disabled/locked/loading/error/cooldownがない", "specStatus": "PASS_SPEC", "evidence": ["global state definitions", "component applicability", "4 party states non-color"], "executionGate": "component state fixtures and regression captures"},
+    {"id": "FEAS-009", "area": "truthfulness", "risk": "fixture skill/reward/server/resource/RANK状態を実機能に見せる", "specStatus": "PASS_SPEC", "evidence": ["AUTO not skill", "tap damage forbidden", "events required", "unbound resource/rank absent", "fixture namespace+watermark"], "executionGate": "runtime bundle excludes fixture; event-gated tests; no fixed RANK chip"},
+    {"id": "FEAS-010", "area": "party semantics", "risk": "unowned/available/locked猫をfield表示", "specStatus": "PASS_SPEC_PENDING_GM08", "evidence": ["closed decision table", "field requires ownership+slot+entity", "unknown fails closed"], "executionGate": "GM08 exact labels and battlefield cross-check"},
+    {"id": "FEAS-011", "area": "responsive geometry", "risk": "390を一律縮小し320で破綻", "specStatus": "PASS_SPEC_PENDING_BROWSER", "evidence": ["7 viewport contracts", "battle300/312/320/352/372/404", "cat60/enemy80 all;68/96 reference", "flow continuation"], "executionGate": "exact viewport raw measurements and decoded screenshots"},
+    {"id": "FEAS-012", "area": "safe area/browser chrome", "risk": "notch/Dynamic Island/browser bar/home indicatorが隠す", "specStatus": "PASS_SPEC_PENDING_BROWSER_AND_DEVICE", "evidence": ["svh/dvh", "four safe insets", "nav targets above inset", "top center exclusion"], "executionGate": "browser evidence; physical iPhone stays NOT_VERIFIED"},
+    {"id": "FEAS-013", "area": "type/target/contrast", "risk": "小文字、押しにくさ、low contrast、fake TEXT200", "specStatus": "PASS_SPEC_PENDING_BROWSER", "evidence": ["meaningful14/metadata12", "primary48/important44", "TEXT200 exact2.0", "contrast4.5/3"], "executionGate": "computed style、bounding boxes、rendered contrast、TEXT200 ratio"},
+    {"id": "FEAS-014", "area": "asset size/decode", "risk": "AI artが初期loadを肥大化、extensionだけの偽format", "specStatus": "PASS_SPEC_PENDING_MEASUREMENT", "evidence": ["2860KiB initial budget", "deferred list", "signature/decode/alpha gates", "max2048"], "executionGate": "network、signature、decode、texture memory"},
+    {"id": "FEAS-015", "area": "S08 extension", "risk": "S02がboss画面化またはS08拡張不能", "specStatus": "PASS_SPEC", "evidence": ["normal scale1.2-1.5", "2.5+ reserved", "reusable threat/bar/anchor", "boss phases excluded"], "executionGate": "later S08 design review"},
+    {"id": "FEAS-016", "area": "runtime data", "risk": "visual targetをactual stateへ接続不能", "specStatus": "PASS_SPEC_PENDING_ADAPTER", "evidence": ["bindings map every family", "unknown fails closed", "decimal strings", "safe defaults"], "executionGate": "exact adapter fields/version contract/integration tests"},
+    {"id": "FEAS-017", "area": "evidence integrity", "risk": "documentのPASS自己申告だけで合格", "specStatus": "PASS_SPEC_PENDING_HARNESS", "evidence": ["acceptance requires cross-binding", "raw browser measurements", "decoded PNG and asset manifest"], "executionGate": "trusted harness binds exact blobs+route+assets+raw+QA+workflow run"}
   ],
-  "knownNonBlockingP2Risks": [
-    {
-      "id": "P2-RISK-001",
-      "risk": "AI-created character frames may drift despite model sheet",
-      "mitigation": "approve model sheet first, use rig/manual correction, identity diff every frame",
-      "blocksP1VisualDesign": false
-    },
-    {
-      "id": "P2-RISK-002",
-      "risk": "WebP alpha atlas can create fringe or decode cost on target browser",
-      "mitigation": "compare WebP lossless and PNG with measured decode/memory before export lock",
-      "blocksP1VisualDesign": false
-    },
-    {
-      "id": "P2-RISK-003",
-      "risk": "exact enemyWave and combat-event adapter fields are not fixed in P1",
-      "mitigation": "data matrix defines fail-closed interface; exact schema is a P2 adapter task without changing displayed meaning",
-      "blocksP1VisualDesign": false
-    },
-    {
-      "id": "P2-RISK-004",
-      "risk": "physical iPhone can reveal tap feel, heat, battery or PWA restore issues",
-      "mitigation": "keep NOT_VERIFIED and require user-only physical-device review in a later authorized phase",
-      "blocksP1VisualDesign": false
-    }
+  "knownP2Risks": [
+    {"id": "P2-RISK-001", "risk": "AI character drift", "mitigation": "model sheet first、rig/manual correction、frame diff"},
+    {"id": "P2-RISK-002", "risk": "WebP alpha fringe/decode cost", "mitigation": "WebP lossless vs PNG measured comparison"},
+    {"id": "P2-RISK-003", "risk": "canonical raw fieldsからfixed S02BattleViewModelへのjoinがruntime実装で逸脱する", "mitigation": "fixed read-only fail-closed adapter contract、version fields、decision tablesをintegration testでcross-bind"},
+    {"id": "P2-RISK-004", "risk": "physical iPhone tap/heat/battery/PWA", "mitigation": "remain NOT_VERIFIED until user-only device review"}
   ],
-  "gatePendingNotDefects": [
-    {
-      "id": "P1-GATE-001",
-      "task": "GM01 through GM08 independent rendered screenshots",
-      "status": "PENDING_EXECUTION_EVIDENCE",
-      "classification": "completion gate, not a known design P0/P1 defect"
-    },
-    {
-      "id": "P1-GATE-002",
-      "task": "seven exact viewport browser measurements plus large text and reduced motion",
-      "status": "PENDING_EXECUTION_EVIDENCE",
-      "classification": "completion gate, not a known design P0/P1 defect"
-    },
-    {
-      "id": "P1-GATE-003",
-      "task": "independent critic across first-time, cat-game, idle-game, mobile UI, art, responsive, implementation and accessibility perspectives",
-      "status": "PENDING_INDEPENDENT_REVIEW",
-      "classification": "completion gate; any discovered P0/P1 must be repaired before presentation"
-    },
-    {
-      "id": "P1-GATE-004",
-      "task": "final judge after critic fixes",
-      "status": "PENDING",
-      "classification": "completion gate"
-    },
-    {
-      "id": "P1-GATE-005",
-      "task": "Vercel review route HTTP, asset completeness, exact commit and deployment binding",
-      "status": "PENDING_DEPLOYMENT_EVIDENCE",
-      "classification": "delivery gate, not a visual-quality verdict by itself"
-    }
+  "pendingGates": [
+    {"id": "P1-GATE-001", "task": "GM01-GM08 independent rendered screens", "status": "PENDING_EXECUTION_EVIDENCE"},
+    {"id": "P1-GATE-002", "task": "7 viewport + TEXT200 + reduced motion browser evidence", "status": "PENDING_EXECUTION_EVIDENCE"},
+    {"id": "P1-GATE-003", "task": "contrast、visible-alpha、target raw checks", "status": "PENDING_EXECUTION_EVIDENCE"},
+    {"id": "P1-GATE-004", "task": "rendered GM01-GM08 independent visual critic and fixes", "status": "PENDING_RENDERED_VISUAL_REVIEW"},
+    {"id": "P1-GATE-005", "task": "final judge", "status": "PENDING"},
+    {"id": "P1-GATE-006", "task": "Vercel route+assets+commit binding", "status": "PENDING_DEPLOYMENT_EVIDENCE"}
   ],
   "defectSummary": {
-    "knownDesignBlockingP0": 0,
-    "knownDesignBlockingP1": 0,
-    "knownP2ImplementationRisks": 4,
-    "pendingCompletionGates": 5,
-    "rule": "criticまたはbrowser evidenceがP0/P1を発見した場合、この0件は失効し、修正と再監査までuser reviewへ進まない。"
+    "documentContractKnownP0": 0,
+    "documentContractKnownP1": 0,
+    "routeOrVisualP0": "NOT_ASSESSED_BY_THIS_CANDIDATE",
+    "routeOrVisualP1": "NOT_ASSESSED_BY_THIS_CANDIDATE",
+    "readyForUserReview": false,
+    "rule": "documentの0件はroute/visualの0件ではない。browser/criticでP0/P1が出れば修正まで進行禁止。"
   },
   "selfDenial": [
-    {
-      "challenge": "この仕様はcurrent runtimeの小修正に過ぎないか",
-      "answer": "No. runtimeは変更せず、Golden Masterを新規layer、model sheet、event causality、view model、seven viewport contractへ分解している。"
-    },
-    {
-      "challenge": "390x844だけ成立する見た目ではないか",
-      "answer": "Spec levelではNo. seven viewportごとのcrop/reflow/collapseとminimumがある。ただしbrowser evidenceはpending。"
-    },
-    {
-      "challenge": "動かすと一枚絵が破綻しないか",
-      "answer": "Spec levelでは対応済み。anchors、bounds、model sheets、state machine、event orderがある。実asset consistencyはP2 gate。"
-    },
-    {
-      "challenge": "fake rewardやserver stateを見栄えのために作っていないか",
-      "answer": "No. GM fixtureはNOT RUNTIMEで隔離し、runtimeはevent/settlementがなければ非表示またはunknownへfail closedする。"
-    },
-    {
-      "challenge": "仕様量を完成品質と取り違えていないか",
-      "answer": "No. screenshots、browser measurements、critic、judge、deploymentは明示的にpendingであり、Vercel READYやspec量だけでは合格にしない。"
-    }
+    {"challenge": "current runtimeの軽いCSS修正か", "answer": "No. runtimeを対象外にし、layer/model/event/view-model/7 viewport contractへ分解。ただしroute完成は別証拠。"},
+    {"challenge": "390だけ成立するか", "answer": "Specは7 viewportを持つが、browser evidenceまでは未証明。"},
+    {"challenge": "動くと一枚絵が壊れるか", "answer": "anchors、bounds、model/state machineは定義済み。実asset consistencyはP2 gate。"},
+    {"challenge": "fake reward/server stateを見栄えに使うか", "answer": "No. fixturesはNOT RUNTIME、runtimeはeventなしでhidden/unknown。"},
+    {"challenge": "仕様量を品質と混同するか", "answer": "No. route measurements、critic、judge、deploymentはpending。"},
+    {"challenge": "猫と戦闘が本当に主役か", "answer": "spec上はbattle最大、support18%以下。5秒testとimage reviewが必要。"},
+    {"challenge": "accessibilityを自己申告で通すか", "answer": "No. type/target/contrast/TEXT200をcomputed/raw evidenceで再計測する。"}
   ],
   "verdict": {
-    "specificationFeasibility": "PASS",
-    "goldenMasterVisualQuality": "NOT_YET_JUDGED_IN_THIS_AUDIT",
-    "p1Completion": "IN_PROGRESS",
+    "specificationFeasibility": "PASS_CANDIDATE",
+    "visualQuality": "NOT_YET_JUDGED",
+    "p1": "IN_PROGRESS",
     "readyForUserVisualReview": false,
-    "readyForS02P2AssetProduction": false,
+    "readyForP2": false,
     "s02Complete": false,
     "step4Pass": false,
     "step5Allowed": false,

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 2,
+  "artifactId": "cats-tower-s02-golden-master-p1-review-manifest",
+  "purpose": "DESIGN_REVIEW_ONLY_NOT_RUNTIME",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "route": "/step4/s02/golden-master-p1/",
+  "goldenMasters": ["GM01", "GM02", "GM03", "GM04", "GM05", "GM06", "GM07", "GM08"],
+  "requiredViewports": ["320x568", "320x667", "375x667", "360x800", "390x844", "412x915", "430x932"],
+  "documents": [
+    {"path":"quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-acceptance-matrix-round-001.json","bytes":39638,"sha256":"1416099a3131774a633145a3b1cb22ef2cba6a0cb3f90bbb67f51cefeb81be14","gitBlob":"9ddc4605a4f171c6882cd1b6af896e407d94af53"},
+    {"path":"quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-animation-contract.json","bytes":16057,"sha256":"36d0061ca265ceedb11520efd48dc184f8fed8bf733f0906fd425ba4d9e69721","gitBlob":"33adb0b889364afd7daed20fadc3737a34efc4f2"},
+    {"path":"quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-art-direction.json","bytes":15301,"sha256":"81a7fa3aada3744e2902c5b8225cfd8352e047d756db03fb278315d66d7d84bd","gitBlob":"002d5251908d0877e0025cf4fd6edfb0bc0a5591"},
+    {"path":"quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-asset-decomposition.json","bytes":18660,"sha256":"5cac4502a53fb99f3827545c450c7e3e20d2cf5863624a5cc422109f54180ca8","gitBlob":"45cfb737dead4ab013b39777628bd12fb3e91ce6"},
+    {"path":"quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-competitive-research.md","bytes":22800,"sha256":"0bba0d03d7f669d9a798e5087afa08dee862c7468268d03a3547d02766b1abb2","gitBlob":"97be0a6127fe9d6cfb7813d7df42baa0e0b142c5"},
+    {"path":"quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-data-binding-matrix.json","bytes":27480,"sha256":"921a0f7e4a11fb7654a94dffd3257dc835adc80b02a2e276641a9fd059c34b41","gitBlob":"de93eedcc3ed76a4ecaebba491baf76b4b9a4834"},
+    {"path":"quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-feasibility-audit.json","bytes":9609,"sha256":"ef8a670ec29a00850cf1b61afba41d93414b44fe58e7fbb9a15b31d73ff03cf8","gitBlob":"18f7cf6b880642a1e72b0da152be2ea1857c13c4"},
+    {"path":"quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-information-priority.json","bytes":15796,"sha256":"ecc86cf18a69084a2fe33e0fa03e54f94e80066296831da0dd04072da9078faf","gitBlob":"9b9bc5421d8c5cfdca9f6d4bf0b543ae84307442"},
+    {"path":"quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-player-experience.json","bytes":13523,"sha256":"c7d51ea7281d2b337ecfb857e26cdb9f06ab35b621e09603bbe10fd0598eb58e","gitBlob":"34563a2b3fe009447d5ae1b8fbbef1ca0ee36093"},
+    {"path":"quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-responsive-contract.json","bytes":14354,"sha256":"eab14d61a582b28c2f01883ec77a34ebdefb5774601a94079cfc00e99a5867b8","gitBlob":"3224b7de51effa12726619bd956b98600e86c7ad"},
+    {"path":"quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-ui-design-system.json","bytes":18107,"sha256":"6377f586089edc20973aff8e7dcb58ff3fafb2b2253c99ab7f45dc2b8dc35b38","gitBlob":"2fe1b651bbe1bc12794e985f6d2a8104578d4fcb"}
+  ],
+  "routeFiles": [
+    {"path":"step4/s02/golden-master-p1/app.js","bytes":33407,"sha256":"6009d0ecf9d0dd28981caca45ba7710d71ae3d3b26e94a322008c147a1119b69","gitBlob":"2d4e834a8c3d0313336ae3bc096ba4d96a9da00b"},
+    {"path":"step4/s02/golden-master-p1/asset-manifest.json","bytes":6283,"sha256":"d4ac5b349e4812b4e67d4e7b22b676b50b1a0849688bde9b286c01aeceb540c9","gitBlob":"31376281c83db0c7ce121a8daeca01b4ec2a7a0d"},
+    {"path":"step4/s02/golden-master-p1/assets/clockwork-marten.webp","bytes":106552,"sha256":"11b34debc68231a9a2434e4643bc42ecc000c46f6db47970032d9d806bf92cfa","gitBlob":"75e7c7d9547165847d6f73d4df70fecc9c7d354a"},
+    {"path":"step4/s02/golden-master-p1/assets/party-actions.webp","bytes":136258,"sha256":"49d7b818ec96663b7faa7ddf97f8421027ab9fed6a38d26e0e700d6d36a9f197","gitBlob":"d41598578bbbb45143040b56cf6900c7565ae456"},
+    {"path":"step4/s02/golden-master-p1/assets/party-roster.webp","bytes":215632,"sha256":"9f6bfa33f80c85037153ec4b9798319a48b91d49611f6b0fd6a0471909156b80","gitBlob":"ecd16b1747577dd16d295f9b916a25772a356029"},
+    {"path":"step4/s02/golden-master-p1/assets/prior-reference-s02.webp","bytes":137032,"sha256":"0b65a7d38446e7b432f56b7b4b5ad4b7761fcbf4ecb5b52312c1f8507e0fea2b","gitBlob":"171de13f77df95780a7b7961b4a1a70b6d6382bb"},
+    {"path":"step4/s02/golden-master-p1/assets/tower-corridor.webp","bytes":152980,"sha256":"7fe1fbfdba1539b067c72781b64b331e5de55474e312a62cb8b9ee0f0fed63eb","gitBlob":"dba580ffd7008786996d69994ac01f7cf68e506d"},
+    {"path":"step4/s02/golden-master-p1/golden-master-spec.json","bytes":2232,"sha256":"f0ef16ae3d4b77272dd895956098289e87e37b9080562bec45e41ac401c67cc9","gitBlob":"e796e23cb7a2397892488aa09801cb0fe162ca6d"},
+    {"path":"step4/s02/golden-master-p1/index.html","bytes":6603,"sha256":"16edc68a36daba23f608febf15604d57550d3f1ab7e52cf94b5c7147c90b4089","gitBlob":"e326853e419e81bbe007c6ba0856a71c2edb40ef"},
+    {"path":"step4/s02/golden-master-p1/styles.css","bytes":51160,"sha256":"acc6367bcc2b672cd32d56e390250ba75a6dbc66f2d4aab354930bc793fd4182","gitBlob":"29154bd544e1af63fc8070883e5f541e5039f6f8"}
+  ]
+}

@@ -1,73 +1,170 @@
 {
-  "schemaVersion": 1,
-  "artifactId": "s02-golden-master-p1-review-asset-manifest-round-001",
+  "schemaVersion": 2,
   "purpose": "DESIGN_REVIEW_ONLY_NOT_RUNTIME",
-  "createdAt": "2026-09-02",
-  "repository": "2hg7trp7rv-design/cats_tower",
-  "branch": "kimi",
+  "visibleBoundsContract": {
+    "alphaThresholdInclusive": 32,
+    "connectivity": 8,
+    "discardComponentAreaBelowFractionOfOpaquePixels": 0.0025,
+    "bounds": "union of retained components in sourceRect-local integer pixels"
+  },
   "assets": [
     {
-      "path": "assets/tower-corridor.webp",
-      "role": "layered-composition background target for the Golden Master",
-      "dimensions": "941x1672",
-      "channels": "RGB",
-      "alpha": false,
-      "sha256": "7fe1fbfdba1539b067c72781b64b331e5de55474e312a62cb8b9ee0f0fed63eb",
+      "path": "assets/clockwork-marten.webp",
+      "kind": "enemy",
+      "width": 1329,
+      "height": 1183,
+      "sha256": "11b34debc68231a9a2434e4643bc42ecc000c46f6db47970032d9d806bf92cfa",
       "textBakedIn": false,
-      "runtimeUseAuthorized": false
-    },
-    {
-      "path": "assets/party-roster.webp",
-      "role": "four-character neutral key-pose sheet",
-      "dimensions": "1824x862",
-      "channels": "RGBA",
-      "alpha": true,
-      "sha256": "da90dd79a97306538c765f3f570a10e437ab8dd5b0c17c72f619c29eb48b4247",
-      "textBakedIn": false,
-      "characters": [
-        {"stableId": "character.launch.001", "displayName": "ムギ", "role": "frontline-control", "cell": 0},
-        {"stableId": "character.launch.002", "displayName": "ルナ", "role": "ranged-anti-air", "cell": 1},
-        {"stableId": "character.launch.003", "displayName": "トト", "role": "healing-support", "cell": 2},
-        {"stableId": "character.launch.004", "displayName": "コハク", "role": "runner-backline-disruption", "cell": 3}
-      ],
-      "artLanguage": "PREMIUM_PIXEL_ART_CHIBI",
-      "runtimeUseAuthorized": false
+      "runtimeUseAuthorized": false,
+      "includesEffects": false,
+      "includesCharacterPixels": true,
+      "reviewOnly": false,
+      "frames": [
+        {
+          "id": "enemy.clockwork-marten.idle",
+          "sourceRect": { "x": 0, "y": 0, "width": 1329, "height": 1183 },
+          "visibleBounds": { "x": 93, "y": 164, "width": 1128, "height": 859 },
+          "footAnchor": { "x": 657, "y": 1023 },
+          "hitBounds": { "x": 188, "y": 226, "width": 938, "height": 797 },
+          "containsEffects": false
+        }
+      ]
     },
     {
       "path": "assets/party-actions.webp",
-      "role": "four-character basic-combat action key-pose sheet for GM06",
-      "dimensions": "1823x863",
-      "channels": "RGBA",
-      "alpha": true,
-      "sha256": "a8dd8ca25654da7725965a969cf48a4d10227889c3e8d66f1dadf8517d93bd84",
+      "kind": "character",
+      "width": 2560,
+      "height": 768,
+      "sha256": "49d7b818ec96663b7faa7ddf97f8421027ab9fed6a38d26e0e700d6d36a9f197",
       "textBakedIn": false,
-      "isActiveSkillRepresentation": false,
-      "canonicalRoleOrderMatchesRoster": true,
-      "artLanguage": "PREMIUM_PIXEL_ART_CHIBI",
-      "runtimeUseAuthorized": false
+      "runtimeUseAuthorized": false,
+      "includesEffects": false,
+      "includesCharacterPixels": true,
+      "reviewOnly": false,
+      "frames": [
+        {
+          "id": "party.action.mugi",
+          "sourceRect": { "x": 0, "y": 0, "width": 640, "height": 768 },
+          "visibleBounds": { "x": 38, "y": 256, "width": 562, "height": 463 },
+          "footAnchor": { "x": 320, "y": 720 },
+          "hitBounds": { "x": 54, "y": 284, "width": 416, "height": 436 },
+          "containsEffects": false
+        },
+        {
+          "id": "party.action.luna",
+          "sourceRect": { "x": 640, "y": 0, "width": 640, "height": 768 },
+          "visibleBounds": { "x": 85, "y": 225, "width": 470, "height": 494 },
+          "footAnchor": { "x": 320, "y": 720 },
+          "hitBounds": { "x": 75, "y": 246, "width": 382, "height": 474 },
+          "containsEffects": false
+        },
+        {
+          "id": "party.action.toto",
+          "sourceRect": { "x": 1280, "y": 0, "width": 640, "height": 768 },
+          "visibleBounds": { "x": 80, "y": 260, "width": 479, "height": 459 },
+          "footAnchor": { "x": 320, "y": 720 },
+          "hitBounds": { "x": 69, "y": 282, "width": 382, "height": 438 },
+          "containsEffects": false
+        },
+        {
+          "id": "party.action.kohaku",
+          "sourceRect": { "x": 1920, "y": 0, "width": 640, "height": 768 },
+          "visibleBounds": { "x": 14, "y": 357, "width": 611, "height": 362 },
+          "footAnchor": { "x": 320, "y": 720 },
+          "hitBounds": { "x": 176, "y": 378, "width": 352, "height": 342 },
+          "containsEffects": false
+        }
+      ]
     },
     {
-      "path": "assets/clockwork-marten.webp",
-      "role": "original normal-floor enemy Golden Master key pose",
-      "dimensions": "1329x1183",
-      "channels": "RGBA",
-      "alpha": true,
-      "sha256": "11b34debc68231a9a2434e4643bc42ecc000c46f6db47970032d9d806bf92cfa",
+      "path": "assets/party-roster.webp",
+      "kind": "character",
+      "width": 2560,
+      "height": 768,
+      "sha256": "9f6bfa33f80c85037153ec4b9798319a48b91d49611f6b0fd6a0471909156b80",
       "textBakedIn": false,
-      "bossRepresentation": false,
-      "artLanguage": "PREMIUM_PIXEL_ART_CHIBI",
-      "runtimeUseAuthorized": false
+      "runtimeUseAuthorized": false,
+      "includesEffects": false,
+      "includesCharacterPixels": true,
+      "reviewOnly": false,
+      "frames": [
+        {
+          "id": "party.roster.mugi",
+          "sourceRect": { "x": 0, "y": 0, "width": 640, "height": 768 },
+          "visibleBounds": { "x": 10, "y": 111, "width": 620, "height": 609 },
+          "footAnchor": { "x": 320, "y": 720 },
+          "hitBounds": { "x": 69, "y": 167, "width": 470, "height": 553 },
+          "containsEffects": false
+        },
+        {
+          "id": "party.roster.luna",
+          "sourceRect": { "x": 640, "y": 0, "width": 640, "height": 768 },
+          "visibleBounds": { "x": 10, "y": 86, "width": 620, "height": 634 },
+          "footAnchor": { "x": 320, "y": 720 },
+          "hitBounds": { "x": 74, "y": 142, "width": 452, "height": 578 },
+          "containsEffects": false
+        },
+        {
+          "id": "party.roster.toto",
+          "sourceRect": { "x": 1280, "y": 0, "width": 640, "height": 768 },
+          "visibleBounds": { "x": 44, "y": 80, "width": 551, "height": 630 },
+          "footAnchor": { "x": 320, "y": 720 },
+          "hitBounds": { "x": 91, "y": 137, "width": 443, "height": 583 },
+          "containsEffects": false
+        },
+        {
+          "id": "party.roster.kohaku",
+          "sourceRect": { "x": 1920, "y": 0, "width": 640, "height": 768 },
+          "visibleBounds": { "x": 10, "y": 172, "width": 620, "height": 548 },
+          "footAnchor": { "x": 320, "y": 720 },
+          "hitBounds": { "x": 81, "y": 224, "width": 477, "height": 496 },
+          "containsEffects": false
+        }
+      ]
     },
     {
       "path": "assets/prior-reference-s02.webp",
-      "role": "user-supplied prior concept shown only in the rejected-reference comparison",
-      "dimensions": "864x1536",
-      "channels": "RGB",
-      "alpha": false,
+      "kind": "reference",
+      "width": 864,
+      "height": 1536,
       "sha256": "0b65a7d38446e7b432f56b7b4b5ad4b7761fcbf4ecb5b52312c1f8507e0fea2b",
-      "isGoldenMaster": false,
-      "runtimeUseAuthorized": false
+      "textBakedIn": true,
+      "runtimeUseAuthorized": false,
+      "includesEffects": false,
+      "includesCharacterPixels": true,
+      "reviewOnly": true,
+      "frames": [
+        {
+          "id": "reference.s02.prior",
+          "sourceRect": { "x": 0, "y": 0, "width": 864, "height": 1536 },
+          "visibleBounds": { "x": 0, "y": 0, "width": 864, "height": 1536 },
+          "footAnchor": null,
+          "hitBounds": null,
+          "containsEffects": false
+        }
+      ]
+    },
+    {
+      "path": "assets/tower-corridor.webp",
+      "kind": "background",
+      "width": 941,
+      "height": 1672,
+      "sha256": "7fe1fbfdba1539b067c72781b64b331e5de55474e312a62cb8b9ee0f0fed63eb",
+      "textBakedIn": false,
+      "runtimeUseAuthorized": false,
+      "includesEffects": false,
+      "includesCharacterPixels": false,
+      "reviewOnly": false,
+      "frames": [
+        {
+          "id": "background.tower-corridor.full",
+          "sourceRect": { "x": 0, "y": 0, "width": 941, "height": 1672 },
+          "visibleBounds": { "x": 0, "y": 0, "width": 941, "height": 1672 },
+          "footAnchor": null,
+          "hitBounds": null,
+          "containsEffects": false
+        }
+      ]
     }
-  ],
-  "hardBoundary": "These files are P1 design targets. P2 must create animation-consistent production assets; the final runtime may not paste a complete Golden Master screenshot or use the prior reference image."
+  ]
 }

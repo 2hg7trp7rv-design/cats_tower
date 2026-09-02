@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-screen-spec-round-001",
+  "purpose": "DESIGN_REVIEW_ONLY_NOT_RUNTIME",
+  "route": "/step4/s02/golden-master-p1/",
+  "selectionContract": "ordinary query only: ?gm=GM01 through ?gm=GM08; GM07 additionally accepts ?offline=<closed view state>; responsive acceptance accepts ?rv=<one exact responsiveEvidence token> and never changes the selected GM identity",
+  "goldenMasters": [
+    {"id":"GM01","viewport":"390x844","state":"normal","intent":"standard combat hierarchy"},
+    {"id":"GM02","viewport":"320x667","state":"normal","intent":"narrow-width recomposition"},
+    {"id":"GM03","viewport":"375x667","state":"normal","intent":"standard-width low-height recomposition"},
+    {"id":"GM04","viewport":"320x568","state":"normal","intent":"short-screen stress state; support begins below the initial fold while battle, primary, party and nav remain visible"},
+    {"id":"GM05","viewport":"430x932","state":"normal","intent":"tall battlefield expansion"},
+    {"id":"GM06","viewport":"390x844","state":"reward","intent":"attack-hit-defeat-reward causality"},
+    {"id":"GM07","viewport":"390x844","state":"offline","intent":"offline reconciliation; default CONFIRMING with review-only independent state switch","defaultOfflineViewState":"CONFIRMING","offlineViewStates":["NO_PROGRESS","ELAPSED_UNKNOWN","RECONCILING_INDETERMINATE","RECONCILING_DETERMINATE","PROVISIONAL","CONFIRMING","CONFIRMED","REJECTED","RETRYABLE_ERROR","UNKNOWN"]},
+    {"id":"GM08","viewport":"390x844","state":"roster","intent":"field-owned-available-locked semantics"}
+  ],
+  "responsiveEvidence": ["320x568","320x667","375x667","360x800","390x844","412x915","430x932"],
+  "boundaries": {
+    "namedPermanentPartySlots": 4,
+    "directTapDamage": false,
+    "activeSkillShown": false,
+    "runtimeUseAuthorized": false,
+    "completeScreenRasterAllowed": false,
+    "textBakedIntoImages": false
+  },
+  "depthContract": {
+    "sortBasis": "computed world-space footAnchorY; slot index never controls depth",
+    "catFootAnchorSourcePx": {"x":320,"y":720,"sourceWidth":640,"sourceHeight":768},
+    "enemyFootAnchorSourcePx": {"x":657,"y":1023,"sourceWidth":1329,"sourceHeight":1183}
+  }
+}

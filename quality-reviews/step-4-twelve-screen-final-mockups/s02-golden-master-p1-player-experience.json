@@ -1,327 +1,268 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "artifactId": "cats-tower-s02-golden-master-p1-player-experience",
-  "researchedAt": "2026-09-02T00:00:00+09:00",
+  "createdAt": "2026-09-01",
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "screen": "S02 normal battle",
-  "phase": "S02-P1 Golden Master design",
-  "status": "IN_PROGRESS",
-  "purpose": "本番 runtime へ実装する前に、通常戦闘の5秒理解、操作責務、戦闘と商業支援の階層、正直な状態表現を固定する。",
-  "experiencePromise": "初見5秒以内に、ムギ・ルナ・トト・コハクの猫4体が自動戦闘で敵へ接敵または射程へ入り、攻撃し、敵を倒して報酬を得ながら無制限塔を登り、商会と配送の支援によって前回より強く進めることが理解できる。",
+  "phase": "S02 production-quality Vertical Slice Phase 1",
+  "status": "DESIGN_CANDIDATE_NOT_RUNTIME",
+  "purpose": "本番runtimeへ実装する前に、通常戦闘の5秒理解、操作責務、戦闘と商業支援の階層、正直な状態表現を固定する。",
+  "experiencePromise": "初見5秒以内に、猫4体が自動戦闘で敵へ接敵または射程へ入り、攻撃し、敵を倒して報酬を得ながら無制限塔を登り、商会と配送の支援によって前回より強く進めることが理解できる。",
+  "screenBoundary": {
+    "includes": [
+      "通常encounter",
+      "常設4体の戦場参加とparty dock",
+      "AUTO状態",
+      "通常敵HPとthreat",
+      "接敵からrewardまでの因果",
+      "現在階と上方進行",
+      "商会・店舗・配送の従属支援",
+      "offline reconciliation"
+    ],
+    "excludes": [
+      "S08完全boss画面",
+      "編成・character詳細",
+      "店舗・配送・gacha・課金・eventの詳細管理",
+      "backend、payment、ad network",
+      "actual root runtime差替え",
+      "game-core.js、game-data.js、economy、save schema変更"
+    ],
+    "s08Extension": "enemy threat panel、HP bar、battle layer、effect anchorはS08へ拡張可能にするが、boss scale、phase meter、手動skillをS02へ常設しない。"
+  },
+  "protagonists": {
+    "primary": "ムギ、ルナ、トト、コハクの猫4体と、そのauto battle",
+    "secondary": "無制限塔の現在階とcurrent normal enemy",
+    "supporting": "商会・店舗・配送による戦闘支援",
+    "neverPrimary": [
+      "一般的な人間主人公",
+      "店舗管理UI",
+      "gacha・課金・広告",
+      "event notification",
+      "S08相当の巨大boss"
+    ]
+  },
   "canonicalParty": [
     {
       "stableId": "character.launch.001",
       "displayName": "ムギ",
       "role": "frontline-control",
-      "battleRead": "前衛で敵を止め、味方と敵の接触点を作る",
-      "silhouetteKeys": ["低い重心", "防御装備", "前向きの構え"]
+      "fiveSecondRead": "低い重心、丸盾、短剣、敵との接触点を作る前衛"
     },
     {
       "stableId": "character.launch.002",
       "displayName": "ルナ",
       "role": "ranged-anti-air",
-      "battleRead": "後衛から射程を取り、空中または後方の脅威へ攻撃する",
-      "silhouetteKeys": ["上向きの射線", "遠隔武器", "軽い装備"]
+      "fiveSecondRead": "上向きにも構えられる弓、後衛から射程を取る"
     },
     {
       "stableId": "character.launch.003",
       "displayName": "トト",
       "role": "healing-support",
-      "battleRead": "味方側の後方で回復・支援の発生源になる",
-      "silhouetteKeys": ["支援道具", "開いた手", "味方向きの光"]
+      "fiveSecondRead": "薬鞄とbell、味方へ向く支援姿勢"
     },
     {
       "stableId": "character.launch.004",
       "displayName": "コハク",
       "role": "runner-backline-disruption",
-      "battleRead": "素早く敵の後方へ入り、戦線の奥へ圧力をかける",
-      "silhouetteKeys": ["前傾姿勢", "軽量装備", "長い移動軌跡"]
+      "fiveSecondRead": "前傾姿勢、軽装、敵後方へ入る短いdash"
     }
   ],
   "canonicalConflictReadback": {
-    "sourceOfTruth": "canonical/STABLE_ID_REGISTRY.json",
-    "currentDecision": "S02-P1 は canonical の常設4体と現在の role を採用し、ムギを frontline-control として戦場へ出す。",
-    "staleLegacyContradiction": "game-data.js の旧 intro 文には『ムギは戦いません』とあるが、canonical stable ID registry と現在の Vertical Slice 方針に反するため、Golden Master の製品仕様として継承しない。",
-    "handling": "P1 では legacy runtime を変更しない。矛盾は data binding / implementation handover で P2 以降の明示的修正対象にし、黙って併存させない。"
+    "binding": "canonical/STABLE_ID_REGISTRY.jsonの常設4体とroleを採用し、ムギをfrontline-controlとして戦場へ出す。",
+    "staleLegacy": "game-data.jsの旧introにある『ムギは戦いません』は現在のcanonical roleと矛盾する。",
+    "handling": "P1ではlegacy runtimeを変更しない。P2/P3の明示的adapter/runtime修正対象とし、Golden Masterへ継承しない。"
   },
   "fiveSecondComprehension": [
     {
       "order": 1,
-      "mustUnderstand": "四体の猫と敵が戦っている",
-      "visualEvidence": "四体の名前・輪郭・役割が一致した戦場キャラクター、敵対方向、接触点または射線",
-      "mustNotCompete": ["店舗詳細", "イベント告知", "ガチャ", "課金商品"]
+      "mustUnderstand": "猫4体と敵が戦っている",
+      "evidence": "4体の固有silhouette・装備・名前と、敵対方向、接触点または射線",
+      "mustNotCompete": ["店舗詳細", "event", "gacha", "課金"]
     },
     {
       "order": 2,
       "mustUnderstand": "現在どの階にいる",
-      "visualEvidence": "戦場上端の現在階表示と上方へ続く塔の遠景",
-      "mustNotCompete": ["有限の最上階", "ボス画面の巨大演出"]
+      "evidence": "戦場上端の現在階と上方へ続く塔構造",
+      "mustNotCompete": ["有限の最上階", "完走率"]
     },
     {
       "order": 3,
       "mustUnderstand": "現在の目標または敵脅威",
-      "visualEvidence": "敵名または種別、敵HP、短い目標、危険状態",
-      "mustNotCompete": ["詳細ステータス表", "攻略説明の長文"]
+      "evidence": "enemy identity、HP、1行のobjectiveまたはtelegraph",
+      "mustNotCompete": ["詳細stat表", "長文攻略"]
     },
     {
       "order": 4,
-      "mustUnderstand": "接敵、攻撃、被弾、撃破、報酬の因果",
-      "visualEvidence": "攻撃予備動作、軌道または接触、着弾点、敵の hit reaction、撃破位置から所持値へ向かう報酬",
-      "mustNotCompete": ["原因から離れた報酬ポップ", "常時表示の大量ダメージ数値"]
+      "mustUnderstand": "接敵、攻撃、被弾、撃破、報酬の順序",
+      "evidence": "予備動作、攻撃方向、着弾anchor、hit reaction、defeat source、event-bound reward",
+      "mustNotCompete": ["原因から離れたreward", "常時damage数字"]
     },
     {
       "order": 5,
-      "mustUnderstand": "必要なら次に編成を整えられる",
-      "visualEvidence": "現在の四枠状態に隣接した主要操作『編成を整える』",
-      "mustNotCompete": ["偽 active skill", "敵への直接 tap damage"]
+      "mustUnderstand": "次に押す主要操作は編成の調整",
+      "evidence": "4枠の近くにある一つの48px目標『編成を整える』",
+      "mustNotCompete": ["直接tap damage", "偽active skill"]
     },
     {
       "order": 6,
-      "mustUnderstand": "商会と配送は戦闘を支援する",
-      "visualEvidence": "戦場より一段低い支援帯に、適用中または到着予定の正しい状態だけを表示",
-      "mustNotCompete": ["商品一覧", "価格比較", "購入確認", "広告 network"]
+      "mustUnderstand": "4枠の参加・所有・加入・lock状態",
+      "evidence": "戦場参加中、所有済み、加入可能、未解放をlabel・shape・edgeで分離",
+      "mustNotCompete": ["色だけの状態", "未所有の戦場表示"]
+    },
+    {
+      "order": 7,
+      "mustUnderstand": "商会・配送は戦闘支援",
+      "evidence": "戦場より弱い支援帯に、authoritativeな現在適用・次戦適用予定・到着・支援なし・確認中のいずれかだけを因果対象付きで表示。review fixtureは『次戦支援 / 商会配送・適用予定』",
+      "mustNotCompete": ["商品一覧", "価格", "購入", "広告"]
     }
   ],
-  "protagonists": {
-    "primary": "ムギ、ルナ、トト、コハクの猫4体と、その自動戦闘",
-    "secondary": "無制限塔の現在階と通常敵",
-    "supporting": "商会・店舗・配送による次回強化",
-    "notProtagonists": [
-      "一般的な人間主人公",
-      "商会管理UI",
-      "ガチャ",
-      "課金商品",
-      "イベント通知",
-      "S08の巨大ボス"
+  "playerVerbs": {
+    "continuousPrimary": "四体の自動戦闘、敵脅威、上方進行を読み、詰まりを判断する",
+    "primaryTap": {
+      "label": "編成を整える",
+      "purpose": "auto battleを守ったまま、戦況に対する次の意味ある介入へ移る",
+      "destination": "四枠編成のcanonical詳細責務",
+      "availability": "通常時。modal、loading、transition中は理由付きdisabled"
+    },
+    "secondary": [
+      "4枠を選択して正しいcharacter/formation責務へ移る",
+      "実supportがある時だけ『支援を確認』で専用画面へ移る",
+      "下部navigationでcanonical destinationへ移る"
+    ],
+    "forbidden": [
+      "tapで敵へ直接damage",
+      "存在しないactive skill操作",
+      "未所有・加入可能・未解放characterを出撃扱い",
+      "未確定offline rewardの受領済み表示"
     ]
   },
-  "playerVerbs": {
-    "continuousPrimaryExperience": "四体の自動戦闘と上方進行を読み、詰まりまたは脅威を判断する",
-    "primaryTapAction": {
-      "label": "編成を整える",
-      "destinationResponsibility": "四枠編成の詳細画面",
-      "availability": "常時。モーダル中、loading、遷移中は状態を明示して一時無効化できる",
-      "why": "auto battle の正本を守りながら、戦況に対する次の意味ある介入を一つに絞る"
-    },
-    "secondaryActions": [
-      {
-        "label": "支援を確認",
-        "condition": "実データ上で商会支援、配送到着、次回強化のいずれかが存在する",
-        "destinationResponsibility": "支援または店舗の専用画面",
-        "priority": "戦闘と編成より下"
-      },
-      {
-        "label": "四枠の個別状態を見る",
-        "condition": "四枠カードの選択",
-        "destinationResponsibility": "キャラクター詳細または編成詳細",
-        "priority": "主要操作の補助"
-      },
-      {
-        "label": "下部ナビで別責務へ移動",
-        "condition": "戦闘中でも許可される正本の画面遷移",
-        "destinationResponsibility": "各 canonical 画面",
-        "priority": "画面末尾"
-      }
+  "informationRequirements": {
+    "requiredAlways": [
+      "実際にfield参加中の猫だけの戦場表現",
+      "猫と敵の向き・距離・接触点または射線",
+      "現在階",
+      "current encounter",
+      "enemy HP",
+      "objectiveまたはthreat",
+      "AUTO状態",
+      "次の主要操作",
+      "4枠identityと状態",
+      "safe-area内の下部navigation"
     ],
-    "forbiddenActions": [
-      "tap で敵へ直接 damage を与える",
-      "存在しない active skill を押す",
-      "未所有または未解放キャラを出撃中として扱う",
-      "確定していない offline reward を受領済みにする"
+    "p1AlwaysVisible": [
+      "encounterまたはkill progress",
+      "実bindingされた主要資源",
+      "field memberの味方HP",
+      "商会・店舗・配送の短いauthoritative支援状態。次戦予定は現在戦へ適用済みに見せず、支援なしは支援なし、authority不明は支援状態確認中"
+    ],
+    "conditionalOnly": [
+      "attack、hit、critical、heal",
+      "defeatとcoin reward",
+      "floor transition",
+      "temporary support",
+      "offline reconciliation",
+      "tutorial、loading、error、toast、tooltip、notification"
+    ],
+    "removeBeforeCritical": [
+      "支援説明文",
+      "二次資源",
+      "背景小物・粒子",
+      "event shortcut",
+      "補助tooltip・履歴feed"
+    ],
+    "separateScreen": [
+      "character/formation stat詳細",
+      "商品・価格・在庫・購入",
+      "配送管理",
+      "gacha・課金・event・広告",
+      "S08 boss専用UI"
     ]
   },
   "battleCausality": {
     "sequence": [
       "猫が移動する",
       "前衛が接敵し、後衛が射程へ入る",
-      "攻撃予備動作を行う",
-      "攻撃または projectile が発生する",
-      "接触または弾着する",
-      "damage と hit reaction が同じ原因へ結び付く",
-      "enemy HP が減る",
-      "enemy HP がゼロなら defeat が発生する",
-      "確定した reward event だけが撃破位置から所持値へ移る",
-      "次 encounter または floor transition へ進む"
+      "攻撃予備動作",
+      "releaseまたはcontact",
+      "projectile到着または近接impact",
+      "damage event、HP低下、hit reaction",
+      "authoritative defeat",
+      "eventまたはsettlementに対応するreward feedback",
+      "許可されたnext encounterまたはfloor transition"
     ],
-    "timeReadRule": "GM06 は一つの静止画内で時間軸を読める残像・軌跡・ラベルを使ってよいが、予備動作、着弾、撃破が同一フレームに同時発生したとは表現しない。",
-    "truthRule": "damage、reward、floor、HP は設計用 scenario 値としてレビュー画面で明示し、将来 runtime では対応する実 event なしに表示しない。"
+    "truthRule": "animation、CSS timer、fixtureはdamage、defeat、wallet、server stateを生成しない。",
+    "stillImageRule": "GM06は残像・軌跡・順序markerで時間軸を表せるが、全eventが同時に起きたとは表現しない。"
   },
-  "informationRequirements": {
-    "alwaysRequired": [
-      "四体の恒常 identity と各枠の field / owned / available / locked 状態",
-      "実際に戦場参加中の猫だけの戦場表現",
-      "通常敵と味方の向き・距離・接触点または射線",
-      "現在階",
-      "現在目標または敵脅威",
-      "enemy HP",
-      "AUTO が基礎であること",
-      "次の主要操作",
-      "safe-area 内の下部 navigation"
-    ],
-    "normallyRequired": [
-      "kill または encounter progress",
-      "現在所持している主要資源の正しい値",
-      "商会・店舗・配送が戦闘支援である短い状態",
-      "戦場と一致する四枠編成カード"
-    ],
-    "conditional": [
-      "attack / hit / critical / heal の一時 feedback",
-      "defeat と coin reward",
-      "floor transition",
-      "offline reconciliation",
-      "temporary support",
-      "threat warning",
-      "初回 tutorial の一手だけの案内",
-      "loading / error / reconnect 状態"
-    ],
-    "removableBeforeCritical": [
-      "支援の説明文",
-      "二次資源",
-      "背景の小物",
-      "装飾 particle",
-      "イベント shortcut",
-      "補助 tooltip",
-      "履歴 feed"
-    ],
-    "mustMoveToSeparateScreen": [
-      "編成ステータス詳細",
-      "商会の商品一覧",
-      "店舗の価格・在庫・購入管理",
-      "配送の詳細管理",
-      "ガチャ詳細",
-      "課金商品",
-      "イベント一覧",
-      "広告",
-      "S08 ボス戦の専用 UI"
-    ]
+  "partyStateSemantics": {
+    "field": "ownedかつslot割当かつactive fieldEntity参照あり。表示名は戦場参加中。",
+    "owned": "ownedだがactive fieldEntityなし。表示名は所有済み。",
+    "available": "未所有だがcanonical eligibilityが明示的にtrue。表示名は加入可能。",
+    "locked": "未所有かつcanonical requirementでlocked。表示名は未解放。",
+    "unknown": "source欠落・矛盾。表示名は状態確認中、操作無効。",
+    "nonColorRule": "全状態はlabel、frame shape、edge/iconの最低二つを色と併用する。",
+    "gm08FixtureRule": "4枠へ4状態を一つずつ示す時、戦場に出せるのは戦場参加中の枠だけ。通常戦闘GM01〜GM06およびGM07のunderlying battleにある4体field構成と混同しない。"
   },
-  "commerceSupportPlacement": {
-    "position": "四枠編成より下、下部 navigation より上の一段低い支援帯。320×568 では戦場直下のスクロール継続領域へ送る。",
-    "allowedContent": [
-      "実際に適用中の支援名と残存条件",
-      "実際の配送到着状態",
-      "次回強化が可能であるという状態",
+  "commerceSupport": {
+    "placement": "party dockより下、bottom navigationより上。320x568ではscroll continuationへ送る。",
+    "allowed": [
+      "実際に適用中の支援名と作用、または対象encounterを持つ次戦適用予定",
+      "実配送の到着状態",
+      "実際に可能な次回強化",
       "専用画面への一つの導線"
     ],
-    "forbiddenContent": [
-      "商品価格",
-      "購入確認",
-      "ガチャ確率",
-      "課金バナー",
-      "広告視聴ボタン",
-      "期間イベント詳細",
-      "戦闘より大きい支援イラスト"
+    "forbidden": [
+      "価格・商品一覧・購入確認",
+      "gacha確率・課金banner・広告",
+      "偽timer・偽buff",
+      "戦場より大きい支援illustration"
     ],
-    "causalCopyRule": "『商会が強い』ではなく、『配送の防具支援が前衛へ適用中』のように戦闘への作用を短く示す。実データがない場合は表示しない。"
+    "areaBudget": "visible battlefield areaの18%以下"
   },
   "offlineReconciliation": {
-    "purpose": "offline progress が基礎であることを正直に伝え、暫定計算と確定結果を混同しない。",
-    "requiredStates": [
-      "elapsed time known / unknown",
-      "reconciling",
-      "provisional result",
-      "confirmed result",
-      "error with retry",
-      "no offline progress"
-    ],
-    "displayRule": "reconciling 中は確定コインへ加算せず、暫定値には『暫定』、確定値には『確定』を文字と形で付ける。偽 server state を表示しない。",
-    "interactionRule": "主要操作、閉じる、retry の有効・無効を状態に合わせ、loading 中の連打を防ぐ。"
+    "viewStates": ["NO_PROGRESS", "ELAPSED_UNKNOWN", "RECONCILING_INDETERMINATE", "RECONCILING_DETERMINATE", "PROVISIONAL", "CONFIRMING", "CONFIRMED", "REJECTED", "RETRYABLE_ERROR", "UNKNOWN"],
+    "gm07Default": "CONFIRMING with a clearly labeled provisional result; state switch must expose every viewState independently",
+    "displayRule": "暫定は見込み、確定は確定と文字・形で示す。reconciling中はconfirmed walletへ加算しない。",
+    "interactionRule": "実stateに応じてclose、retry、continueを有効化し、loading中の重複操作を防ぐ。",
+    "forbidden": ["架空の高速戦闘再生", "未接続で同期完了", "暫定値のcoin burst"]
   },
   "responsiveExperience": {
-    "principle": "画面全体を一律縮小せず、意味の弱い説明と装飾から減らし、戦場・猫・敵・重要文字・hit area を保つ。",
-    "shortScreen": "戦場と主要操作を同一 viewport で読み、商会支援と二次説明は下方向のスクロール継続へ送る。",
-    "tallScreen": "UI を巨大化せず、塔の奥行き、移動距離、空間呼吸を増やす。",
-    "largeText": "重要ラベルと値を reflow し、補助説明を折りたたむ。階、敵HP、四枠状態、主要操作を clipping しない。",
-    "reducedMotion": "接敵、danger、reward、selected を位置、形、ラベル、progress でも理解できるようにする。"
+    "principle": "画面全体を一律縮小せず、背景とcombatantはaspect ratioを維持し、UIをreflowし、補助説明と装飾を先に減らす。",
+    "compact": "戦場、14pxの意味ある文字、12px metadata、primary 48px/重要44px target、4枠を維持する。",
+    "short": "floorと戦場を初期viewportに残し、支援・二次説明は下へ続ける。",
+    "tall": "UIを巨大化せず、塔の奥行き、移動距離、空気を広げる。",
+    "largeText": "200%でfloor、敵HP、objective、AUTO、4状態、主要操作、navigationをclipしない。",
+    "reducedMotion": "position、shape、label、bar、static impact markで因果を残す。"
+  },
+  "displayMinimums": {
+    "catVisibleAlphaHeightAllRequiredCssPx": 60,
+    "catVisibleAlphaHeightReference390x844CssPx": 68,
+    "enemyVisibleAlphaHeightAllRequiredCssPx": 80,
+    "enemyVisibleAlphaHeightReference390x844CssPx": 96,
+    "meaningfulTextCssPx": 14,
+    "metadataOnlyCssPx": 12,
+    "primaryTargetCssPx": 48,
+    "importantTargetMinimumCssPx": 44,
+    "text200": "computed font-size exact 2.0x",
+    "contrast": {"normalText": "4.5:1", "largeText": "3:1 only when final computed size is >=24px normal or >=18.667px at weight>=700; otherwise 4.5:1"}
   },
   "failureConditions": [
-    {
-      "id": "EXP-FAIL-001",
-      "severity": "P0",
-      "condition": "初見5秒で戦闘より商会、店舗、イベント、課金が先に読まれる"
-    },
-    {
-      "id": "EXP-FAIL-002",
-      "severity": "P0",
-      "condition": "四体の猫、敵、現在階のいずれかが通常状態で認識できない"
-    },
-    {
-      "id": "EXP-FAIL-003",
-      "severity": "P0",
-      "condition": "未所有、加入可能、未解放の猫を出撃中として見せる"
-    },
-    {
-      "id": "EXP-FAIL-004",
-      "severity": "P0",
-      "condition": "実 event のない active skill、damage、reward、wallet、server state を本番機能のように表示する"
-    },
-    {
-      "id": "EXP-FAIL-005",
-      "severity": "P1",
-      "condition": "攻撃元、着弾、enemy reaction、HP、reward の因果が離れている"
-    },
-    {
-      "id": "EXP-FAIL-006",
-      "severity": "P1",
-      "condition": "ムギを戦わない legacy 設定として扱い、canonical frontline-control と矛盾する"
-    },
-    {
-      "id": "EXP-FAIL-007",
-      "severity": "P1",
-      "condition": "320 px 幅で文字、猫、hit area を一律縮小する"
-    },
-    {
-      "id": "EXP-FAIL-008",
-      "severity": "P1",
-      "condition": "通常敵を S08 ボス相当へ巨大化し、四体の猫を脇役にする"
-    },
-    {
-      "id": "EXP-FAIL-009",
-      "severity": "P1",
-      "condition": "装飾量は多いが、同一製品の素材、角丸、金属色、光源規則に見えない"
-    },
-    {
-      "id": "EXP-FAIL-010",
-      "severity": "P1",
-      "condition": "offline reconciliation の暫定値を確定報酬として見せる"
-    }
+    {"id": "EXP-FAIL-001", "severity": "P0", "condition": "初見5秒で戦闘より商会・event・課金が先に読まれる"},
+    {"id": "EXP-FAIL-002", "severity": "P0", "condition": "猫4体、敵、現在階のいずれかが通常状態で認識できない"},
+    {"id": "EXP-FAIL-003", "severity": "P0", "condition": "未所有、加入可能、未解放を戦場参加中に見せる"},
+    {"id": "EXP-FAIL-004", "severity": "P0", "condition": "実eventのないdamage、defeat、reward、wallet、server stateを表示する"},
+    {"id": "EXP-FAIL-005", "severity": "P1", "condition": "攻撃元、着弾、hit、HP、defeat、rewardの因果が離れる"},
+    {"id": "EXP-FAIL-006", "severity": "P1", "condition": "猫、文字、targetを320px幅で一律縮小する"},
+    {"id": "EXP-FAIL-007", "severity": "P1", "condition": "通常敵をS08 boss相当へ巨大化する"},
+    {"id": "EXP-FAIL-008", "severity": "P1", "condition": "UI部品の素材、角丸、metal色、光源規則が一致しない"},
+    {"id": "EXP-FAIL-009", "severity": "P1", "condition": "offline暫定値を確定報酬として見せる"},
+    {"id": "EXP-FAIL-010", "severity": "P1", "condition": "意味のある文字が14px未満、metadata限定文字が12px未満、primary targetが48px未満、または重要targetが44px未満"}
   ],
-  "screenBoundary": {
-    "includes": [
-      "通常 encounter",
-      "四体の常設編成",
-      "AUTO 状態",
-      "通常敵HP・脅威",
-      "攻撃から報酬までの因果",
-      "現在階と上方進行",
-      "商会・店舗・配送の従属支援",
-      "offline reconciliation"
-    ],
-    "excludes": [
-      "S08 完全ボス画面",
-      "編成詳細",
-      "店舗詳細",
-      "ガチャ詳細",
-      "課金詳細",
-      "backend 実装",
-      "payment 実装",
-      "ad network 実装"
-    ],
-    "s08ExtensionCheck": "敵 threat panel、HP bar、戦場レイヤー、effect anchor は S08 へ拡張できる設計にするが、S02 Golden Master に boss size、phase meter、手動 skill を常設しない。"
-  },
   "reviewBoundary": {
     "openFinding": "S4-RECOVERY-VIS-001",
-    "openFindingMayCloseInP1": false,
+    "mayCloseOpenFinding": false,
     "userVisualApproval": false,
-    "maximumVerdictBeforeUserApproval": "READY_FOR_USER_VISUAL_REVIEW",
-    "mayNotDeclare": [
-      "S02 complete",
-      "Step 4 PASS",
-      "Step 5 allowed",
-      "production quality confirmed",
-      "Production Ready",
-      "physical iPhone verified"
-    ]
+    "maximumBeforeApproval": "READY_FOR_USER_VISUAL_REVIEW",
+    "forbiddenClaims": ["S02 complete", "Step 4 PASS", "Step 5 allowed", "Production Ready", "physical iPhone verified"]
   }
 }

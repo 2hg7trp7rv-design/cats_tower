@@ -1,0 +1,10 @@
+{
+  "name": "cats-tower-s02-golden-master-p1-browser-qa",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pinned browser dependency for the S02 P1 design-review verifier",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "playwright": "1.62.0"
+  }
+}
