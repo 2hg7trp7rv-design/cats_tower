@@ -12,7 +12,7 @@ PHYSICAL_IPHONE_VERIFIED: false
 USER_VISUAL_APPROVAL: false
 ```
 
-CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json | STEP 4 | S02-P1-GOLDEN-MASTER | IN_PROGRESS_S02_P1_A_J_AUDIT
+CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json | STEP 4 | S02-P1-GOLDEN-MASTER | IN_PROGRESS_S02_P1_VISUAL_REPAIR
 
 ## Purpose
 
@@ -20,12 +20,12 @@ Build a production-quality S02 Golden Master and implementation contract before 
 
 ## Completed so far
 
-Round 031 closure-integrity repair, the versioned Step 2 v3 screen projection, Step 3 continuity proof and numbered Phase 0 review chain are closed by round 033. Existing S02 A-J and GM01-GM08 are preserved but not visually accepted.
+Round 033 closed the governance repair and Round 034 records the latest user decision. Independent audit found 10 S02 Golden Master P1 repair groups; A-J and GM01-GM08 remain unaccepted until all are repaired and re-judged.
 
 ## Next
 
-1. inventory the preserved S02 deliverables
-2. repair all independently evidenced visual P1 gaps
-3. verify 320–430 px responsive and accessibility boundaries
-4. publish only a Preview design-review route
+1. repair all 10 independently evidenced S02 P1 groups
+2. verify all required 320–430 px viewports, Safe Area, 200% text and 44/48 px targets
+3. bind static, browser, independent critic, final judge and Preview deployment evidence
+4. publish only the design-review Preview route
 5. request explicit user visual review; do not infer approval

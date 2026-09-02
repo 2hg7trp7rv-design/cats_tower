@@ -12,7 +12,7 @@
   },
   "authority": {
     "index": "CURRENT_AUTHORITY_INDEX.json",
-    "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json",
+    "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
     "supersededGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
     "step2ScreenProjectionCorrection": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
     "plannedGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
@@ -25,7 +25,7 @@
     "repositoryStep": 4,
     "internalPhase": "S02-P1-GOLDEN-MASTER",
     "status": "IN_PROGRESS",
-    "verdict": "IN_PROGRESS_S02_P1_A_J_AUDIT",
+    "verdict": "IN_PROGRESS_S02_P1_VISUAL_REPAIR",
     "step4Pass": false,
     "step5Allowed": false,
     "productionAllowed": false,
@@ -75,8 +75,8 @@
     "legacyOperationalWorkflowsRetired": true
   },
   "currentWriteBoundary": {
-    "allowed": "round 026 allowedWrites only",
-    "preWriteRequirement": "S02-P1 product writes require exact round 026 scope; user visual approval is required before P2 asset production.",
+    "allowed": "round 034 allowedWrites only",
+    "preWriteRequirement": "Repair only the independently evidenced S02-P1 Golden Master P1 gaps; exact user visual approval is required before P2 asset production.",
     "forbidden": [
       "actual root replacement",
       "gameplay runtime mutation",

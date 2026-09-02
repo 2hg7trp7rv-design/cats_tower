@@ -1458,7 +1458,8 @@ function resolveStep2PostContinuityVerifierCorrectionCommits() {
   if (!exists(step2ContinuityPath)) return null;
   const continuityCommit = firstAddCommit(step2ContinuityPath);
   if (!continuityCommit) return null;
-  const output = git(['log', '--reverse', '--format=%H', `${continuityCommit}..HEAD`, '--', 'tests/governance/verify-current-authority.mjs']);
+  const compatibilityRangeEnd = s02RepairOpeningCommit ? git(['rev-parse', `${s02RepairOpeningCommit}^`]) : git(['rev-parse', 'HEAD']);
+  const output = git(['log', '--reverse', '--format=%H', `${continuityCommit}..${compatibilityRangeEnd}`, '--', 'tests/governance/verify-current-authority.mjs']);
   const commits = output ? output.split('\n').filter(Boolean) : [];
   assert(commits.length <= 2, 'Step 2 verifier changed beyond the reviewed activation and pre-closure compatibility corrections');
   return commits;
@@ -1734,7 +1735,7 @@ const expectedPostCriticCurrentDocBlobs = {"QUALITY_GATE.md":"5253b1f5e503efa3de
 const expectedRound032CurrentDocBlobs = {"QUALITY_GATE.md":"adeffd52454921bcbc2a9bb155a353b3e247ba6f","PROJECT_HANDOVER.md":"246bd861145a2f6722aa223379c23d8d1b8a919c",".github/workflows/CURRENT_STATUS.md":"871e1002843556fa90504993f69b587808be0fbf","AGENTS.md":"918f29fcd24965842362f77493fa602cd60d7982","README.md":"3fc4241b0f7c3637c1f79603a28a0bbabe69aed5"};
 const expectedRound033CurrentDocBlobs = {"QUALITY_GATE.md":"4897a35857957de9786dca3d16072a26a73eb6c7","PROJECT_HANDOVER.md":"0366189ffd64fae0f58a2e754138aba3b3471eef",".github/workflows/CURRENT_STATUS.md":"40bcd64b1c1b8e7f2c896e2fb65a5e1eebbf040b","AGENTS.md":"f9bf76ada0a98db96f32909ef33abd5247d887b0","README.md":"b368abd8414abaa284eecb5649e0fa0cf64f9bf6"};
 // Round 034 opening replaces this null with the immutable reviewed S02 repair-control blob.
-const expectedS02RepairControlBlob = null;
+const expectedS02RepairControlBlob = '286daad09d0f25c5c1898615c75907d26b1096b7';
 const productControl = json('quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json');
 const s02RepairFindingIds = [
   'S02-P1-VISIBLE-BOUNDS-001',
@@ -3671,11 +3672,16 @@ if (s02RepairControl) {
   assert(openingCommit && git(['rev-parse', `${openingCommit}^`]) === closureCommit, 'round 034 must open as the immediate child of round 033 closure');
   assert(s02RepairControl.entry.head === closureCommit && s02RepairControl.entry.tree === git(['rev-parse', `${closureCommit}^{tree}`]), 'round 034 entry commit/tree mismatch');
   const verifierBeforeOpening = textAt(closureCommit, 'tests/governance/verify-current-authority.mjs');
-  const expectedVerifierAtOpening = verifierBeforeOpening.replace(
-    'const expectedS02RepairControlBlob = null;',
-    `const expectedS02RepairControlBlob = '${expectedS02RepairControlBlob}';`
+  const oldCompatibilityResolver = "  const output = git(['log', '--reverse', '--format=%H', `${continuityCommit}..HEAD`, '--', 'tests/governance/verify-current-authority.mjs']);";
+  const newCompatibilityResolver = "  const compatibilityRangeEnd = s02RepairOpeningCommit ? git(['rev-parse', `${s02RepairOpeningCommit}^`]) : git(['rev-parse', 'HEAD']);\n  const output = git(['log', '--reverse', '--format=%H', `${continuityCommit}..${compatibilityRangeEnd}`, '--', 'tests/governance/verify-current-authority.mjs']);";
+  const expectedVerifierAtOpening = verifierBeforeOpening
+    .replace(oldCompatibilityResolver, newCompatibilityResolver)
+    .replace('const expectedS02RepairControlBlob = null;', `const expectedS02RepairControlBlob = '${expectedS02RepairControlBlob}';`);
+  const normalizeOpeningSelfCheck = source => source.replace(
+    /  const verifierBeforeOpening = textAt\(closureCommit, 'tests\/governance\/verify-current-authority\.mjs'\);[\s\S]*?assert\(expectedVerifierAtOpening !== verifierBeforeOpening && [\s\S]*?'round 034 opening changed the verifier beyond the reviewed control-blob pin'\);\n/,
+    '  <ROUND_034_OPENING_SELF_CHECK>\n'
   );
-  assert(expectedVerifierAtOpening !== verifierBeforeOpening && textAt(openingCommit, 'tests/governance/verify-current-authority.mjs') === expectedVerifierAtOpening, 'round 034 opening changed the verifier beyond the reviewed control-blob pin');
+  assert(expectedVerifierAtOpening !== verifierBeforeOpening && normalizeOpeningSelfCheck(textAt(openingCommit, 'tests/governance/verify-current-authority.mjs')) === normalizeOpeningSelfCheck(expectedVerifierAtOpening), 'round 034 opening changed the verifier beyond the reviewed control-blob pin');
   assertExactChangedPaths(closureCommit, openingCommit, expectedS02RepairOpeningCommitWrites, 'round 034 opening commit');
   assert(assertAddedOnceAndUnchanged(s02RepairControlPath, openingCommit) === expectedS02RepairControlBlob, 'round 034 immutable control blob mismatch');
   assertExactPhaseDocumentTransforms(openingCommit, expectedRound034RepairDocumentText, 'round 034 opening documents');

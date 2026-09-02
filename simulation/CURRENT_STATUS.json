@@ -6,7 +6,7 @@
   "authorityIndex": "CURRENT_AUTHORITY_INDEX.json",
   "currentRepositoryStep": 4,
   "currentInternalPhase": "S02-P1-GOLDEN-MASTER",
-  "status": "IN_PROGRESS_S02_P1_A_J_AUDIT",
+  "status": "IN_PROGRESS_S02_P1_VISUAL_REPAIR",
   "governanceRecovery": {
     "status": "PASS_PHASE0_GOVERNANCE_RECOVERY",
     "supersededClosureAttempt": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
@@ -67,5 +67,5 @@
   "step5Allowed": false,
   "physicalIPhoneVerified": false,
   "productionAliasChanged": false,
-  "nextAction": "Do not tune or rerun the model during S02-P1. Audit existing S02 visual artifacts first. Resume simulation only when an authorized product change affects the sealed model or after canonical runtime shares the domain engine."
+  "nextAction": "Do not tune or rerun the model during S02-P1. Resume simulation only when an authorized product change affects the sealed model or after canonical runtime shares the domain engine."
 }
