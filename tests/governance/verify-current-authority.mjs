@@ -251,6 +251,8 @@ function assertS02HistoryWithIncrementalRenewals(base, head, control, label, evi
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02ExternalPreviewCanonicalRedirectCorrectionChangedPaths].sort()), `${label}: external-preview canonical-redirect correction changed an unreviewed path`);
     } else if (s02ExternalPreviewRouteTreeCorrectionCommit && commit === s02ExternalPreviewRouteTreeCorrectionCommit) {
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02ExternalPreviewRouteTreeCorrectionChangedPaths].sort()), `${label}: external-preview route-tree correction changed an unreviewed path`);
+    } else if (s02ExternalPreviewLogReadbackCorrectionCommit && commit === s02ExternalPreviewLogReadbackCorrectionCommit) {
+      assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02ExternalPreviewLogReadbackCorrectionChangedPaths].sort()), `${label}: external-preview log-readback correction changed an unreviewed path`);
     } else {
       assertBoundary(paths, control, `${label} commit ${commit}`);
     }
@@ -3985,6 +3987,14 @@ const s02ExternalPreviewRouteTreeCorrectionChangedPaths = [
   s02ExternalPreviewRouteTreeCorrectionPath,
   'tests/governance/verify-current-authority.mjs'
 ];
+const s02ExternalPreviewLogReadbackCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-proof-log-readback-correction-round-009.json';
+const s02ExternalPreviewLogReadbackCorrection = exists(s02ExternalPreviewLogReadbackCorrectionPath) ? json(s02ExternalPreviewLogReadbackCorrectionPath) : null;
+const s02ExternalPreviewLogReadbackCorrectionCommit = s02ExternalPreviewLogReadbackCorrection ? firstAddCommit(s02ExternalPreviewLogReadbackCorrectionPath) : null;
+const s02ExternalPreviewLogReadbackCorrectionChangedPaths = [
+  '.github/workflows/verify-current-governance.yml',
+  s02ExternalPreviewLogReadbackCorrectionPath,
+  'tests/governance/verify-current-authority.mjs'
+];
 
 // BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001
 const s02HarnessCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-001.json';
@@ -5667,7 +5677,9 @@ if (s02ExternalPreviewRouteTreeCorrection) {
   const correctedWorkflow = textAt(s02ExternalPreviewRouteTreeCorrectionCommit, '.github/workflows/verify-current-governance.yml');
   assert(correctedWorkflow.includes('TREE_INVENTORY_CORRECTION') && correctedWorkflow.includes('const nonServedSupportTargets =') && correctedWorkflow.includes('const exactRouteTreeTargets =') && correctedWorkflow.includes('REVIEW_ROUTE_TREE_INVENTORY_INVALID') && correctedWorkflow.includes('const exactRoutePair =') && correctedWorkflow.includes('REVIEW_ROUTE_DOES_NOT_EQUAL_TARGET_INDEX') && correctedWorkflow.includes('oidcVerified: true'), 'S02 route-tree workflow lacks exact served/support inventory, canonical route, byte or OIDC guards');
   assert(JSON.stringify(correction.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }) && correction.status === 'CORRECTED_REVIEW_ROUTE_TREE_INVENTORY_PENDING_RERUN', 'S02 route-tree boundary or status mismatch');
-  assertNoPathChangesSince(s02ExternalPreviewRouteTreeCorrectionCommit, 'HEAD', s02ExternalPreviewRouteTreeCorrectionChangedPaths, 'S02 route-tree correction freeze');
+  const routeTreeFreezeEnd = s02ExternalPreviewLogReadbackCorrectionCommit ? git(['rev-parse', `${s02ExternalPreviewLogReadbackCorrectionCommit}^`]) : 'HEAD';
+  assertNoPathChangesSince(s02ExternalPreviewRouteTreeCorrectionCommit, routeTreeFreezeEnd, s02ExternalPreviewRouteTreeCorrectionChangedPaths, 'S02 route-tree correction freeze');
+  if (s02ExternalPreviewLogReadbackCorrectionCommit) assertNoPathChangesSince(s02ExternalPreviewRouteTreeCorrectionCommit, 'HEAD', [s02ExternalPreviewRouteTreeCorrectionPath], 'S02 route-tree correction record freeze');
   if (requireLiveActions) {
     const failedRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${correction.failedWorkflow.runId}/attempts/${correction.failedWorkflow.runAttempt}`);
     const failedJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${correction.failedWorkflow.jobId}`);
@@ -5677,13 +5689,52 @@ if (s02ExternalPreviewRouteTreeCorrection) {
 }
 // END_S02_ROUTE_TREE_INVENTORY_CORRECTION_ROUND_008
 
+// BEGIN_S02_EXTERNAL_PROOF_LOG_READBACK_CORRECTION_ROUND_009
+if (s02ExternalPreviewLogReadbackCorrection) {
+  const correction = s02ExternalPreviewLogReadbackCorrection;
+  const emittedFiles = ['s02-external-preview-envelope.json', 'external/http-report.json', 'external/s02-preview-proof-result.json'];
+  assertExactKeySet(correction, ['schemaVersion', 'artifactId', 'createdAt', 'repository', 'branch', 'changeControl', 'entry', 'sourceWorkflow', 'request', 'priorCorrection', 'diagnosis', 'correction', 'boundaries', 'status'], 'S02 log-readback correction');
+  assertExactKeySet(correction.entry, ['head', 'tree'], 'S02 log-readback entry');
+  assertExactKeySet(correction.sourceWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'artifactId', 'artifactName', 'artifactDigest'], 'S02 log-readback source workflow');
+  assertExactKeySet(correction.request, ['path', 'commit', 'tree', 'blob'], 'S02 log-readback request');
+  assertExactKeySet(correction.priorCorrection, ['path', 'commit', 'tree', 'blob'], 'S02 log-readback predecessor');
+  assertExactKeySet(correction.diagnosis, ['type', 'artifactDownloadApiSucceeded', 'localWorkspaceState', 'localMaterializationSucceeded', 'artifactPreserved', 'productQualityAffected'], 'S02 log-readback diagnosis');
+  assertExactKeySet(correction.correction, ['rule', 'changedPaths', 'repairedWorkflowBlob', 'repairedVerifierBlob', 'emittedFiles', 'maxFileBytes', 'encoding', 'sizePrefixBound', 'digestPrefixBound', 'rawOidcTokenEmitted', 'temporaryShareTokenEmitted', 'artifactUploadRetained', 'providerSettingsChanged', 'productContentChanged'], 'S02 exact log-readback correction');
+  assertExactKeySet(correction.boundaries, ['rootRuntimeChanged', 'gameCoreChanged', 'gameDataChanged', 'economyChanged', 'saveSchemaChanged', 'backendChanged', 'productionChanged', 'productionAliasChanged', 'physicalIPhoneVerified', 'step4Pass', 'step5Allowed'], 'S02 log-readback boundaries');
+  assert(correction.schemaVersion === 1 && correction.artifactId === 'cats-tower-s02-golden-master-p1-external-proof-log-readback-correction-round-009' && correction.createdAt === '2026-09-02' && correction.repository === '2hg7trp7rv-design/cats_tower' && correction.branch === 'kimi' && correction.changeControl === s02RepairControlPath, 'S02 log-readback identity mismatch');
+  assert(JSON.stringify(correction.entry) === JSON.stringify({ head: '224dd63fdcebf5919127cd5d3b299ddf3fa93ce1', tree: '0f442f253db2a8d8fa20f0f8b35fd67dbe71f46a' }), 'S02 log-readback entry mismatch');
+  assert(JSON.stringify(correction.sourceWorkflow) === JSON.stringify({ commit: correction.entry.head, tree: correction.entry.tree, runId: 33623212829, runAttempt: 1, jobId: 100225038039, conclusion: 'SUCCESS', artifactId: 9843867009, artifactName: 's02-external-preview-224dd63fdcebf5919127cd5d3b299ddf3fa93ce1-33623212829-1', artifactDigest: 'sha256:ba1ff928955da47409a097838849830250acc1b3291130e148acd2e7b00f5190' }), 'S02 log-readback source workflow mismatch');
+  assert(JSON.stringify(correction.request) === JSON.stringify({ path: s02ReviewEvidencePaths.deploymentRequest, commit: 'e5ba5ed92d0eeb0da67f956637b7ebb1cb6c2a11', tree: 'f706c3146d09f3c30368e0e0d4a92afbfd7850da', blob: 'c034073b7b9beaa34bcffd4a685e36fefc3a0861' }), 'S02 log-readback request mismatch');
+  assert(JSON.stringify(correction.priorCorrection) === JSON.stringify({ path: s02ExternalPreviewRouteTreeCorrectionPath, commit: correction.entry.head, tree: correction.entry.tree, blob: '89fb281a9b50ecddea8fd955a6b7e13fb5417c4c' }), 'S02 log-readback predecessor mismatch');
+  assert(correction.priorCorrection.commit === firstAddCommit(correction.priorCorrection.path) && git(['rev-parse', `${correction.priorCorrection.commit}:${correction.priorCorrection.path}`]) === correction.priorCorrection.blob, 'S02 log-readback immutable predecessor mismatch');
+  assert(JSON.stringify(correction.diagnosis) === JSON.stringify({ type: 'CODEX_EPHEMERAL_WORKSPACE_GC_PREVENTED_LOCAL_ARTIFACT_MATERIALIZATION', artifactDownloadApiSucceeded: true, localWorkspaceState: 'GC_EXPIRED', localMaterializationSucceeded: false, artifactPreserved: true, productQualityAffected: false }), 'S02 log-readback diagnosis mismatch');
+  assert(s02ExternalPreviewLogReadbackCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewLogReadbackCorrectionCommit}^`]) === correction.entry.head, 'S02 log-readback lineage mismatch');
+  assertExactChangedPaths(correction.entry.head, s02ExternalPreviewLogReadbackCorrectionCommit, s02ExternalPreviewLogReadbackCorrectionChangedPaths, 'S02 log-readback correction commit');
+  assertAddedOnceAndUnchanged(s02ExternalPreviewLogReadbackCorrectionPath, s02ExternalPreviewLogReadbackCorrectionCommit);
+  assert(JSON.stringify(correction.correction) === JSON.stringify({ rule: 'EMIT_ONLY_THREE_SANITIZED_SIZE_AND_SHA_BOUND_PROOF_JSON_FILES_AS_BASE64_LOG_RECORDS', changedPaths: s02ExternalPreviewLogReadbackCorrectionChangedPaths, repairedWorkflowBlob: git(['rev-parse', `${s02ExternalPreviewLogReadbackCorrectionCommit}:.github/workflows/verify-current-governance.yml`]), repairedVerifierBlob: git(['rev-parse', `${s02ExternalPreviewLogReadbackCorrectionCommit}:tests/governance/verify-current-authority.mjs`]), emittedFiles, maxFileBytes: 2097152, encoding: 'BASE64_SINGLE_LINE', sizePrefixBound: true, digestPrefixBound: true, rawOidcTokenEmitted: false, temporaryShareTokenEmitted: false, artifactUploadRetained: true, providerSettingsChanged: false, productContentChanged: false }), 'S02 log-readback correction blob or disclosure boundary mismatch');
+  const correctedWorkflow = textAt(s02ExternalPreviewLogReadbackCorrectionCommit, '.github/workflows/verify-current-governance.yml');
+  assert(correctedWorkflow.includes('LOG_READBACK_CORRECTION') && correctedWorkflow.includes('Emit sanitized external S02 Preview proof readback') && correctedWorkflow.includes('S02_PROOF_READBACK_BEGIN:') && correctedWorkflow.includes('base64 -w0') && correctedWorkflow.includes('S02_PROOF_READBACK_END:') && correctedWorkflow.includes('Upload external S02 Preview proof'), 'S02 log-readback workflow lacks bounded sanitized log records or retained artifact upload');
+  assert(JSON.stringify(correction.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }) && correction.status === 'EXTERNAL_PROOF_LOG_READBACK_ENABLED_PENDING_RERUN', 'S02 log-readback boundary or status mismatch');
+  assertNoPathChangesSince(s02ExternalPreviewLogReadbackCorrectionCommit, 'HEAD', s02ExternalPreviewLogReadbackCorrectionChangedPaths, 'S02 log-readback correction freeze');
+  if (requireLiveActions) {
+    const base = '/repos/2hg7trp7rv-design/cats_tower/actions';
+    const sourceRun = ghJson(`${base}/runs/${correction.sourceWorkflow.runId}/attempts/${correction.sourceWorkflow.runAttempt}`);
+    const sourceJob = ghJson(`${base}/jobs/${correction.sourceWorkflow.jobId}`);
+    const sourceArtifact = ghJson(`${base}/artifacts/${correction.sourceWorkflow.artifactId}`);
+    assert(sourceRun.id === correction.sourceWorkflow.runId && sourceRun.head_sha === correction.entry.head && sourceRun.head_branch === 'kimi' && sourceRun.status === 'completed' && sourceRun.conclusion === 'success', 'S02 log-readback source run mismatch');
+    assert(sourceJob.id === correction.sourceWorkflow.jobId && sourceJob.run_id === sourceRun.id && sourceJob.head_sha === correction.entry.head && sourceJob.name === 'current-authority' && sourceJob.conclusion === 'success', 'S02 log-readback source job mismatch');
+    assert(sourceArtifact.id === correction.sourceWorkflow.artifactId && sourceArtifact.name === correction.sourceWorkflow.artifactName && sourceArtifact.digest === correction.sourceWorkflow.artifactDigest && sourceArtifact.expired === false && sourceArtifact.workflow_run?.id === sourceRun.id && sourceArtifact.workflow_run?.head_sha === correction.entry.head, 'S02 log-readback source artifact mismatch');
+  }
+}
+// END_S02_EXTERNAL_PROOF_LOG_READBACK_CORRECTION_ROUND_009
+
 function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath = s02ReviewEvidencePaths.deploymentRequest, requireLiveApi = true) {
   assertWorkflowEvidenceKeys(evidence, `${label} workflow evidence`, true);
   for (const key of ['runId', 'runAttempt', 'jobId', 'artifactId']) assert(Number.isSafeInteger(evidence[key]) && evidence[key] > 0, `${label}: ${key} is invalid`);
   assert(/^[a-f0-9]{40}$/.test(evidence.commit ?? '') && evidence.tree === git(['rev-parse', `${evidence.commit}^{tree}`]), `${label}: commit/tree mismatch`);
-  const correctedExternalProof = requestPath === s02ReviewEvidencePaths.deploymentRequest && Boolean(s02ExternalPreviewVerifierCorrection || s02ExternalPreviewRedirectCorrection || s02ExternalPreviewBrowserCorrection || s02ExternalPreviewUploadCorrection || s02ExternalPreviewOriginAccessCorrection || s02ExternalPreviewProtectedAliasCorrection || s02ExternalPreviewCanonicalRedirectCorrection || s02ExternalPreviewRouteTreeCorrection);
+  const correctedExternalProof = requestPath === s02ReviewEvidencePaths.deploymentRequest && Boolean(s02ExternalPreviewVerifierCorrection || s02ExternalPreviewRedirectCorrection || s02ExternalPreviewBrowserCorrection || s02ExternalPreviewUploadCorrection || s02ExternalPreviewOriginAccessCorrection || s02ExternalPreviewProtectedAliasCorrection || s02ExternalPreviewCanonicalRedirectCorrection || s02ExternalPreviewRouteTreeCorrection || s02ExternalPreviewLogReadbackCorrection);
   const protectedAliasProof = requestPath === s02ReviewEvidencePaths.deploymentRequest && Boolean(s02ExternalPreviewProtectedAliasCorrection);
-  const expectedProofCommit = s02ExternalPreviewRouteTreeCorrectionCommit ?? s02ExternalPreviewCanonicalRedirectCorrectionCommit ?? s02ExternalPreviewProtectedAliasCorrectionCommit ?? s02ExternalPreviewOriginAccessCorrectionCommit ?? s02ExternalPreviewUploadCorrectionCommit ?? s02ExternalPreviewBrowserCorrectionCommit ?? s02ExternalPreviewRedirectCorrectionCommit ?? (correctedExternalProof ? s02ExternalPreviewVerifierCorrectionCommit : firstAddCommit(requestPath));
+  const expectedProofCommit = s02ExternalPreviewLogReadbackCorrectionCommit ?? s02ExternalPreviewRouteTreeCorrectionCommit ?? s02ExternalPreviewCanonicalRedirectCorrectionCommit ?? s02ExternalPreviewProtectedAliasCorrectionCommit ?? s02ExternalPreviewOriginAccessCorrectionCommit ?? s02ExternalPreviewUploadCorrectionCommit ?? s02ExternalPreviewBrowserCorrectionCommit ?? s02ExternalPreviewRedirectCorrectionCommit ?? (correctedExternalProof ? s02ExternalPreviewVerifierCorrectionCommit : firstAddCommit(requestPath));
   assert(evidence.commit === expectedProofCommit, `${label}: workflow does not bind the exact request or its reviewed external-proof correction commit`);
   assert(evidence.conclusion === 'SUCCESS' && evidence.artifactName === `s02-external-preview-${evidence.commit}-${evidence.runId}-${evidence.runAttempt}` && /^sha256:[a-f0-9]{64}$/.test(evidence.artifactDigest ?? ''), `${label}: conclusion or artifact identity mismatch`);
   verifyDurableActionsOidc(evidence, label);
@@ -5695,13 +5746,16 @@ function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath 
   assert((run.path ?? '').split('@')[0] === '.github/workflows/verify-current-governance.yml', `${label}: workflow path mismatch`);
   const job = ghJson(`${base}/jobs/${evidence.jobId}`);
   assert(job.run_id === evidence.runId && job.run_attempt === evidence.runAttempt && job.head_sha === evidence.commit && job.head_branch === 'kimi' && job.name === 'current-authority' && job.status === 'completed' && job.conclusion === 'success', `${label}: job target or result mismatch`);
-  const externalSteps = ['Generate external S02 Preview proof', 'Upload external S02 Preview proof'];
+  const logReadableProof = requestPath === s02ReviewEvidencePaths.deploymentRequest && Boolean(s02ExternalPreviewLogReadbackCorrection);
+  const externalSteps = logReadableProof
+    ? ['Generate external S02 Preview proof', 'Emit sanitized external S02 Preview proof readback', 'Upload external S02 Preview proof']
+    : ['Generate external S02 Preview proof', 'Upload external S02 Preview proof'];
   const stepIndexes = externalSteps.map(name => {
     const matches = job.steps?.filter(step => step.name === name) ?? [];
     assert(matches.length === 1 && matches[0].status === 'completed' && matches[0].conclusion === 'success', `${label}: required external-proof step missing or failed: ${name}`);
     return job.steps.indexOf(matches[0]);
   });
-  assert(stepIndexes[1] > stepIndexes[0], `${label}: external-proof steps ran out of order`);
+  assert(stepIndexes.every((value, index) => index === 0 || value > stepIndexes[index - 1]), `${label}: external-proof steps ran out of order`);
   const artifact = ghJson(`${base}/artifacts/${evidence.artifactId}`);
   assert(artifact.id === evidence.artifactId && artifact.name === evidence.artifactName && artifact.digest === evidence.artifactDigest && artifact.expired === false, `${label}: artifact identity, digest or expiry mismatch`);
   assert(artifact.workflow_run?.id === evidence.runId && artifact.workflow_run?.head_sha === evidence.commit && artifact.workflow_run?.head_branch === 'kimi', `${label}: artifact workflow binding mismatch`);
@@ -6204,9 +6258,11 @@ function verifyS02ReviewEvidencePrefix(options = {}) {
   assertExactChangedPaths(completionCommit, requestCommit, [paths.deploymentRequest], `${labelPrefix} deployment-readback request commit`);
   assertAddedOnceAndUnchanged(paths.deploymentRequest, requestCommit);
   const externalProofCommit = paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest
-    ? (s02ExternalPreviewRouteTreeCorrectionCommit ?? s02ExternalPreviewCanonicalRedirectCorrectionCommit ?? s02ExternalPreviewProtectedAliasCorrectionCommit ?? s02ExternalPreviewOriginAccessCorrectionCommit ?? s02ExternalPreviewUploadCorrectionCommit ?? s02ExternalPreviewBrowserCorrectionCommit ?? s02ExternalPreviewRedirectCorrectionCommit ?? s02ExternalPreviewVerifierCorrectionCommit ?? requestCommit)
+    ? (s02ExternalPreviewLogReadbackCorrectionCommit ?? s02ExternalPreviewRouteTreeCorrectionCommit ?? s02ExternalPreviewCanonicalRedirectCorrectionCommit ?? s02ExternalPreviewProtectedAliasCorrectionCommit ?? s02ExternalPreviewOriginAccessCorrectionCommit ?? s02ExternalPreviewUploadCorrectionCommit ?? s02ExternalPreviewBrowserCorrectionCommit ?? s02ExternalPreviewRedirectCorrectionCommit ?? s02ExternalPreviewVerifierCorrectionCommit ?? requestCommit)
     : requestCommit;
-  if (s02ExternalPreviewRouteTreeCorrectionCommit && paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest) {
+  if (s02ExternalPreviewLogReadbackCorrectionCommit && paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest) {
+    assert(git(['rev-parse', `${externalProofCommit}^`]) === s02ExternalPreviewRouteTreeCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewRouteTreeCorrectionCommit}^`]) === s02ExternalPreviewCanonicalRedirectCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewCanonicalRedirectCorrectionCommit}^`]) === s02ExternalPreviewProtectedAliasCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewProtectedAliasCorrectionCommit}^`]) === s02ExternalPreviewOriginAccessCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewOriginAccessCorrectionCommit}^`]) === s02ExternalPreviewUploadCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewUploadCorrectionCommit}^`]) === s02ExternalPreviewBrowserCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewBrowserCorrectionCommit}^`]) === s02ExternalPreviewRedirectCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewRedirectCorrectionCommit}^`]) === s02ExternalPreviewVerifierCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewVerifierCorrectionCommit}^`]) === requestCommit, `${labelPrefix} nine-step external-proof correction chain is not exact`);
+  } else if (s02ExternalPreviewRouteTreeCorrectionCommit && paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest) {
     assert(git(['rev-parse', `${externalProofCommit}^`]) === s02ExternalPreviewCanonicalRedirectCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewCanonicalRedirectCorrectionCommit}^`]) === s02ExternalPreviewProtectedAliasCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewProtectedAliasCorrectionCommit}^`]) === s02ExternalPreviewOriginAccessCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewOriginAccessCorrectionCommit}^`]) === s02ExternalPreviewUploadCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewUploadCorrectionCommit}^`]) === s02ExternalPreviewBrowserCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewBrowserCorrectionCommit}^`]) === s02ExternalPreviewRedirectCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewRedirectCorrectionCommit}^`]) === s02ExternalPreviewVerifierCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewVerifierCorrectionCommit}^`]) === requestCommit, `${labelPrefix} eight-step external-proof correction chain is not exact`);
   } else if (s02ExternalPreviewCanonicalRedirectCorrectionCommit && paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest) {
     assert(git(['rev-parse', `${externalProofCommit}^`]) === s02ExternalPreviewProtectedAliasCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewProtectedAliasCorrectionCommit}^`]) === s02ExternalPreviewOriginAccessCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewOriginAccessCorrectionCommit}^`]) === s02ExternalPreviewUploadCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewUploadCorrectionCommit}^`]) === s02ExternalPreviewBrowserCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewBrowserCorrectionCommit}^`]) === s02ExternalPreviewRedirectCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewRedirectCorrectionCommit}^`]) === s02ExternalPreviewVerifierCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewVerifierCorrectionCommit}^`]) === requestCommit, `${labelPrefix} seven-step external-proof correction chain is not exact`);

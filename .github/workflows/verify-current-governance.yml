@@ -198,7 +198,12 @@ jobs:
           PROTECTED_ALIAS_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-protected-alias-proof-boundary-correction-round-006.json'
           CANONICAL_REDIRECT_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-canonical-path-redirect-correction-round-007.json'
           TREE_INVENTORY_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-route-tree-inventory-correction-round-008.json'
-          if test -f "$TREE_INVENTORY_CORRECTION"; then
+          LOG_READBACK_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-proof-log-readback-correction-round-009.json'
+          if test -f "$LOG_READBACK_CORRECTION"; then
+            test "$(git log --diff-filter=A --format=%H -- "$LOG_READBACK_CORRECTION" | tail -n 1)" = "$GITHUB_SHA"
+            test "$(git rev-parse HEAD^)" = "$(jq -er '.entry.head' "$LOG_READBACK_CORRECTION")"
+            test "$(jq -er '.request.commit' "$LOG_READBACK_CORRECTION")" = "$REQUEST_COMMIT"
+          elif test -f "$TREE_INVENTORY_CORRECTION"; then
             test "$(git log --diff-filter=A --format=%H -- "$TREE_INVENTORY_CORRECTION" | tail -n 1)" = "$GITHUB_SHA"
             test "$(git rev-parse HEAD^)" = "$(jq -er '.entry.head' "$TREE_INVENTORY_CORRECTION")"
             test "$(jq -er '.request.commit' "$TREE_INVENTORY_CORRECTION")" = "$REQUEST_COMMIT"
@@ -588,6 +593,21 @@ jobs:
           }
           NODE
           jq -e '.verdict == "PASS_EXTERNAL_S02_PREVIEW_READBACK" and .productionBoundary.productionTargeted == false' external/s02-preview-proof-result.json >/dev/null
+
+      - name: Emit sanitized external S02 Preview proof readback
+        if: ${{ hashFiles('external/s02-preview-proof-result.json') != '' }}
+        run: |
+          set -euo pipefail
+          for file in s02-external-preview-envelope.json external/http-report.json external/s02-preview-proof-result.json; do
+            test -f "$file"
+            BYTES=$(wc -c < "$file" | tr -d ' ')
+            test "$BYTES" -gt 0
+            test "$BYTES" -le 2097152
+            SHA256=$(sha256sum "$file" | cut -d' ' -f1)
+            printf 'S02_PROOF_READBACK_BEGIN:%s:%s:%s\n' "$file" "$BYTES" "$SHA256"
+            base64 -w0 "$file"
+            printf '\nS02_PROOF_READBACK_END:%s\n' "$file"
+          done
 
       - name: Upload external S02 Preview proof
         if: ${{ hashFiles('external/s02-preview-proof-result.json') != '' }}

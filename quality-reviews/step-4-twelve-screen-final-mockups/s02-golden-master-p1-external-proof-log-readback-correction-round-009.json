@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-external-proof-log-readback-correction-round-009",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "224dd63fdcebf5919127cd5d3b299ddf3fa93ce1",
+    "tree": "0f442f253db2a8d8fa20f0f8b35fd67dbe71f46a"
+  },
+  "sourceWorkflow": {
+    "commit": "224dd63fdcebf5919127cd5d3b299ddf3fa93ce1",
+    "tree": "0f442f253db2a8d8fa20f0f8b35fd67dbe71f46a",
+    "runId": 33623212829,
+    "runAttempt": 1,
+    "jobId": 100225038039,
+    "conclusion": "SUCCESS",
+    "artifactId": 9843867009,
+    "artifactName": "s02-external-preview-224dd63fdcebf5919127cd5d3b299ddf3fa93ce1-33623212829-1",
+    "artifactDigest": "sha256:ba1ff928955da47409a097838849830250acc1b3291130e148acd2e7b00f5190"
+  },
+  "request": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-request-round-001.json",
+    "commit": "e5ba5ed92d0eeb0da67f956637b7ebb1cb6c2a11",
+    "tree": "f706c3146d09f3c30368e0e0d4a92afbfd7850da",
+    "blob": "c034073b7b9beaa34bcffd4a685e36fefc3a0861"
+  },
+  "priorCorrection": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-route-tree-inventory-correction-round-008.json",
+    "commit": "224dd63fdcebf5919127cd5d3b299ddf3fa93ce1",
+    "tree": "0f442f253db2a8d8fa20f0f8b35fd67dbe71f46a",
+    "blob": "89fb281a9b50ecddea8fd955a6b7e13fb5417c4c"
+  },
+  "diagnosis": {
+    "type": "CODEX_EPHEMERAL_WORKSPACE_GC_PREVENTED_LOCAL_ARTIFACT_MATERIALIZATION",
+    "artifactDownloadApiSucceeded": true,
+    "localWorkspaceState": "GC_EXPIRED",
+    "localMaterializationSucceeded": false,
+    "artifactPreserved": true,
+    "productQualityAffected": false
+  },
+  "correction": {
+    "rule": "EMIT_ONLY_THREE_SANITIZED_SIZE_AND_SHA_BOUND_PROOF_JSON_FILES_AS_BASE64_LOG_RECORDS",
+    "changedPaths": [
+      ".github/workflows/verify-current-governance.yml",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-proof-log-readback-correction-round-009.json",
+      "tests/governance/verify-current-authority.mjs"
+    ],
+    "repairedWorkflowBlob": "a6a2f2e9893bcc264e9d9e101cb1d1753121a519",
+    "repairedVerifierBlob": "bdd8bc6993dac9c72ec751f5d77fc6322f74f0b2",
+    "emittedFiles": [
+      "s02-external-preview-envelope.json",
+      "external/http-report.json",
+      "external/s02-preview-proof-result.json"
+    ],
+    "maxFileBytes": 2097152,
+    "encoding": "BASE64_SINGLE_LINE",
+    "sizePrefixBound": true,
+    "digestPrefixBound": true,
+    "rawOidcTokenEmitted": false,
+    "temporaryShareTokenEmitted": false,
+    "artifactUploadRetained": true,
+    "providerSettingsChanged": false,
+    "productContentChanged": false
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "EXTERNAL_PROOF_LOG_READBACK_ENABLED_PENDING_RERUN"
+}
