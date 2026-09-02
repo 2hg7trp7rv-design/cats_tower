@@ -30,6 +30,7 @@ const expectedPath = '/step4/s02/golden-master-p1/';
 const allowedResourcePaths = [...new Set([expectedPath, expectedPath + 'review-manifest.json', ...(routeReviewManifest.routeFiles ?? []).map((entry) => '/' + entry.path)])].sort();
 const screenshotStabilizationCss = '*,*::before,*::after{animation-play-state:paused!important;caret-color:transparent!important;transition:none!important}';
 const screenshotStabilizationSha256 = 'sha256:' + createHash('sha256').update(screenshotStabilizationCss, 'utf8').digest('hex');
+const exactStageCaptureCss = 'html,body{width:100%!important;height:100%!important;margin:0!important;overflow:hidden!important}body>*:not(#review-surface){display:none!important}#review-surface{position:fixed!important;inset:0!important;width:100%!important;height:100%!important;margin:0!important;padding:0!important;overflow:hidden!important}#review-stage-frame{position:absolute!important;inset:0 auto auto 0!important;width:var(--nominal-width)!important;height:var(--nominal-height)!important;margin:0!important;overflow:hidden!important}#review-stage{position:absolute!important;inset:0 auto auto 0!important;width:var(--nominal-width)!important;height:var(--nominal-height)!important;transform:none!important}';
 const scenarios = [
   { id: 'GM01', gm: 'GM01', state: 'normal', label: '390x844', width: 390, height: 844 },
   { id: 'GM02', gm: 'GM02', state: 'normal', label: '320x667', width: 320, height: 667 },
@@ -79,6 +80,24 @@ function canonicalJson(value) {
   return '{' + Object.keys(value).sort().map((key) => JSON.stringify(key) + ':' + canonicalJson(value[key])).join(',') + '}';
 }
 function canonicalSha256(value) { return 'sha256:' + createHash('sha256').update(canonicalJson(value), 'utf8').digest('hex'); }
+async function captureExactStage(page, exactStage, scenario) {
+  await page.addStyleTag({ content: exactStageCaptureCss });
+  await page.waitForFunction(({ gm, width, height }) => {
+    const stage = document.querySelector(`[data-testid="gm-stage"][data-gm="${gm}"]`);
+    if (!stage) return false;
+    const rect = stage.getBoundingClientRect();
+    return Math.abs(rect.x) < 0.01 && Math.abs(rect.y) < 0.01 && Math.abs(rect.width - width) < 0.01 && Math.abs(rect.height - height) < 0.01;
+  }, { gm: scenario.gm, width: scenario.width, height: scenario.height });
+  const stageBox = await exactStage.boundingBox();
+  if (!stageBox || Math.abs(stageBox.x) >= 0.01 || Math.abs(stageBox.y) >= 0.01 || Math.abs(stageBox.width - scenario.width) >= 0.01 || Math.abs(stageBox.height - scenario.height) >= 0.01) throw new Error(scenario.id + ': exact GM stage was not normalized to the screenshot origin.');
+  return page.screenshot({
+    type: 'png',
+    animations: 'disabled',
+    omitBackground: false,
+    captureBeyondViewport: false,
+    clip: { x: 0, y: 0, width: scenario.width, height: scenario.height }
+  });
+}
 function safelyScopedSelector(selector) {
   if (typeof selector !== 'string' || selector.length > 240 || selector !== selector.trim() || !selector.startsWith(':scope') || /[,~+]|:has\s*\(|[\r\n]/.test(selector)) return false;
   const atom = String.raw`(?:\*|[a-zA-Z][a-zA-Z0-9_-]*|[.#][a-zA-Z_][a-zA-Z0-9_-]*|\[(?:data-[a-z0-9-]+|aria-[a-z0-9-]+|role|id|class)(?:=(?:"[a-zA-Z0-9_.:/-]{1,120}"|'[a-zA-Z0-9_.:/-]{1,120}'|[a-zA-Z_][a-zA-Z0-9_-]*))?\])`;
@@ -1098,15 +1117,7 @@ try {
     for (const measurement of collected.requestMeasurements) currentRequestMeasurementMap.set(measurement.assertionId, measurement);
     const screenshotName = scenario.id + '-' + String(scenario.width) + 'x' + String(scenario.height) + '.png';
     const screenshotPath = 'semantic-evidence/screenshots/' + screenshotName;
-    const stageBox = await exactStage.boundingBox();
-    if (!stageBox) throw new Error(scenario.id + ': exact GM stage has no screenshot bounds.');
-    const bytes = await page.screenshot({
-      type: 'png',
-      animations: 'disabled',
-      omitBackground: false,
-      captureBeyondViewport: true,
-      clip: { x: Math.round(stageBox.x), y: Math.round(stageBox.y), width: scenario.width, height: scenario.height }
-    });
+    const bytes = await captureExactStage(page, exactStage, scenario);
     await fs.writeFile(path.join(root, screenshotPath), bytes);
     const actualUrl = new URL(page.url());
     results.push({
@@ -1211,15 +1222,7 @@ try {
       for (const measurement of collected.requestMeasurements) baselineRequestMeasurementMap.set(measurement.assertionId, measurement);
       const screenshotName = scenario.id + '-' + String(scenario.width) + 'x' + String(scenario.height) + '.png';
       const screenshotPath = 'semantic-evidence/revision/before/' + screenshotName;
-      const stageBox = await exactStage.boundingBox();
-      if (!stageBox) throw new Error(scenario.id + ': baseline exact GM stage has no screenshot bounds.');
-      const bytes = await page.screenshot({
-        type: 'png',
-        animations: 'disabled',
-        omitBackground: false,
-        captureBeyondViewport: true,
-        clip: { x: Math.round(stageBox.x), y: Math.round(stageBox.y), width: scenario.width, height: scenario.height }
-      });
+      const bytes = await captureExactStage(page, exactStage, scenario);
       await fs.writeFile(path.join(root, screenshotPath), bytes);
       const actualUrl = new URL(page.url());
       baselineResults.push({

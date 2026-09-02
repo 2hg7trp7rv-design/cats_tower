@@ -42,7 +42,7 @@ jobs:
           set -euo pipefail
           sha256sum -c <<'SHA256'
           b712ba261f1fc66db97e54c15e833729199e17785b149b7459d0e95ddb13d011  tests/step4/verify-s02-golden-master-p1.mjs
-          fda690254c7827fedcbca733397bc69654bf1fb9c6a3825c19d4db30d6863a5b  tests/step4/s02-golden-master-p1-browser.mjs
+          ec1011fb7101a420cfbc68af1dc43c4d30c659d41715d25aa0dc915d1f4b99bb  tests/step4/s02-golden-master-p1-browser.mjs
           9661cf489c3329c3119ba3cb16ee3e8ebb61848eb841adcbdd7cc28f8da2bd1e  tests/step4/s02-golden-master-p1-browser-qa.mjs
           4e7d2ae6e3da801a6ed14835a1cceebc252e369234bbb56f64fa2af34510a531  step4/s02/golden-master-p1/browser-qa/package.json
           7fcf276c46e3e02735f8ad4befe6b90c4d96736a7a94e49023333cf4ef26a8c3  step4/s02/golden-master-p1/browser-qa/package-lock.json

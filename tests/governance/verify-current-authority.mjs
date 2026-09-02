@@ -215,6 +215,8 @@ function assertS02HistoryWithIncrementalRenewals(base, head, control, label, evi
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02ReferenceQaCorrectionChangedPaths].sort()), `${label}: review-reference QA correction changed an unreviewed path`);
     } else if (s02BrowserEvidenceCorrectionCommit && commit === s02BrowserEvidenceCorrectionCommit) {
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02BrowserEvidenceCorrectionChangedPaths].sort()), `${label}: browser-evidence correction changed an unreviewed path`);
+    } else if (s02ExactCaptureCorrectionCommit && commit === s02ExactCaptureCorrectionCommit) {
+      assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02ExactCaptureCorrectionChangedPaths].sort()), `${label}: exact-capture correction changed an unreviewed path`);
     } else {
       assertBoundary(paths, control, `${label} commit ${commit}`);
     }
@@ -1795,7 +1797,8 @@ const s02VerificationPaths = [
 const expectedS02WorkflowCorrectionRound001Sha256 = '7219aba5d01f68105339a9815ce61f2d5c265a1c0b9e544f30f50056a7242225';
 const expectedS02WorkflowCorrectionRound002Sha256 = '32e82c7b97cab50f6d51622f316fe11f33ed259d4c0372d1925af58bf4e2592d';
 const expectedS02WorkflowCorrectionRound003Sha256 = '79d84163ca190041b814b80c4ef020b758d0c61cac36751c498194680904b9c0';
-const expectedS02WorkflowSha256 = '2119936e77a9b1b70e27b30697886519e0c9cb81d26fa585cc32801454ab532b';
+const expectedS02WorkflowCorrectionRound004Sha256 = '2119936e77a9b1b70e27b30697886519e0c9cb81d26fa585cc32801454ab532b';
+const expectedS02WorkflowSha256 = '4fa345932c2ba70a09e5726190cfef10690ca81b5b030612fc96fab7976f384c';
 const s02ContentManifestPatterns = [
   'step4/s02/golden-master-p1/**',
   'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-*.json',
@@ -3747,6 +3750,15 @@ const s02BrowserEvidenceCorrectionChangedPaths = [
   'tests/step4/s02-golden-master-p1-browser-qa.mjs',
   'tests/step4/s02-golden-master-p1-browser.mjs'
 ];
+const s02ExactCaptureCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-005.json';
+const s02ExactCaptureCorrection = exists(s02ExactCaptureCorrectionPath) ? json(s02ExactCaptureCorrectionPath) : null;
+const s02ExactCaptureCorrectionCommit = s02ExactCaptureCorrection ? firstAddCommit(s02ExactCaptureCorrectionPath) : null;
+const s02ExactCaptureCorrectionChangedPaths = [
+  '.github/workflows/verify-step-4-s02-golden-master-p1.yml',
+  s02ExactCaptureCorrectionPath,
+  'tests/governance/verify-current-authority.mjs',
+  'tests/step4/s02-golden-master-p1-browser.mjs'
+];
 
 // BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001
 const s02HarnessCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-001.json';
@@ -4077,7 +4089,7 @@ if (s02BrowserEvidenceCorrection) {
   ]), 'S02 browser-evidence diagnosis does not preserve the measured semantic and visual defect set');
   assert(s02BrowserEvidenceCorrection.diagnosis.type === 'EXACT_SCREENSHOT_ROUNDING_EXPOSED_SEMANTIC_MEASUREMENT_AND_VISUAL_REFLOW_DEFECTS' && s02BrowserEvidenceCorrection.diagnosis.originalFailureArtifactPreserved === true, 'S02 browser-evidence diagnosis type or preservation claim mismatch');
   assert(s02BrowserEvidenceCorrection.correction.rule === 'CAPTURE_EXACT_DECLARED_VIEWPORTS_AND_REPAIR_MEASUREMENTS_PLUS_OBSERVED_REFLOW_DEFECTS_WITHOUT_LOWERING_ACCEPTANCE_THRESHOLDS' && JSON.stringify(s02BrowserEvidenceCorrection.correction.changedPaths) === JSON.stringify(s02BrowserEvidenceCorrectionChangedPaths), 'S02 browser-evidence correction rule/path set mismatch');
-  assert(s02BrowserEvidenceCorrection.correction.workflowBeforeSha256 === expectedS02WorkflowCorrectionRound003Sha256 && s02BrowserEvidenceCorrection.correction.workflowAfterSha256 === expectedS02WorkflowSha256 && s02BrowserEvidenceCorrection.correction.workflowPatchSha256 === 'sha256:845468c1396c380880ea7a5708f0fd71a486781101fa0f35cc5ad180ad32549c', 'S02 browser-evidence workflow digest/patch mismatch');
+  assert(s02BrowserEvidenceCorrection.correction.workflowBeforeSha256 === expectedS02WorkflowCorrectionRound003Sha256 && s02BrowserEvidenceCorrection.correction.workflowAfterSha256 === expectedS02WorkflowCorrectionRound004Sha256 && s02BrowserEvidenceCorrection.correction.workflowPatchSha256 === 'sha256:845468c1396c380880ea7a5708f0fd71a486781101fa0f35cc5ad180ad32549c', 'S02 browser-evidence workflow digest/patch mismatch');
   assert(s02BrowserEvidenceCorrection.correction.browserBeforeSha256 === '2661c5a75ee756e0baf5a7d5b0470f97d3fc56e02f29bfa641c1e4510ff3fdd3' && s02BrowserEvidenceCorrection.correction.browserAfterSha256 === 'fda690254c7827fedcbca733397bc69654bf1fb9c6a3825c19d4db30d6863a5b' && s02BrowserEvidenceCorrection.correction.browserPatchSha256 === 'sha256:bdfa7bd51f46346725e11a1e7958b69d1e33ba7799ade9137b42d01ab120469f', 'S02 browser-evidence collector digest/patch mismatch');
   assert(s02BrowserEvidenceCorrection.correction.qaBeforeSha256 === '0778dd5e74031aab8a6db3ff44c0563aa5907c362bdad64779db781422ca5463' && s02BrowserEvidenceCorrection.correction.qaAfterSha256 === '9661cf489c3329c3119ba3cb16ee3e8ebb61848eb841adcbdd7cc28f8da2bd1e' && s02BrowserEvidenceCorrection.correction.qaPatchSha256 === 'sha256:748584d433e9ae94ebbe618e3d07e3b3cb3bcbbb52eb8af444534674409da062', 'S02 browser-evidence QA digest/patch mismatch');
   assert(s02BrowserEvidenceCorrection.correction.stylesBeforeSha256 === 'acc6367bcc2b672cd32d56e390250ba75a6dbc66f2d4aab354930bc793fd4182' && s02BrowserEvidenceCorrection.correction.stylesAfterSha256 === '23ea9978b4c0eee15d2dc91dcfbab39db46a00231f2bb991a7b836f1f4071887' && s02BrowserEvidenceCorrection.correction.stylesPatchSha256 === 'sha256:cb0abd4cdb77c7c80aab8c42ab4b641e3234005c998d48ce1953fc505a248ad3', 'S02 browser-evidence visual correction digest/patch mismatch');
@@ -4107,14 +4119,16 @@ if (s02BrowserEvidenceCorrection) {
   const priorWorkflowSource = textAt(s02BrowserEvidenceCorrection.entry.head, '.github/workflows/verify-step-4-s02-golden-master-p1.yml');
   const correctedWorkflowSource = textAt(s02BrowserEvidenceCorrectionCommit, '.github/workflows/verify-step-4-s02-golden-master-p1.yml');
   const expectedWorkflowSource = priorWorkflowSource.replace(priorBrowserPin, correctedBrowserPin).replace(priorQaPin, correctedQaPin);
-  assert(priorWorkflowSource.split(priorBrowserPin).length === 2 && priorWorkflowSource.split(priorQaPin).length === 2 && correctedWorkflowSource === expectedWorkflowSource && sha256Text(correctedWorkflowSource) === expectedS02WorkflowSha256, 'S02 browser-evidence workflow changed beyond the exact collector and QA pins');
+  assert(priorWorkflowSource.split(priorBrowserPin).length === 2 && priorWorkflowSource.split(priorQaPin).length === 2 && correctedWorkflowSource === expectedWorkflowSource && sha256Text(correctedWorkflowSource) === expectedS02WorkflowCorrectionRound004Sha256, 'S02 browser-evidence workflow changed beyond the exact collector and QA pins');
   const correctedWorkflowPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02BrowserEvidenceCorrection.entry.head, s02BrowserEvidenceCorrectionCommit, '--', '.github/workflows/verify-step-4-s02-golden-master-p1.yml'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   assert(`sha256:${sha256Text(correctedWorkflowPatch)}` === s02BrowserEvidenceCorrection.correction.workflowPatchSha256, 'S02 browser-evidence workflow patch differs from the immutable correction record');
   const correctedVerifierSource = textAt(s02BrowserEvidenceCorrectionCommit, 'tests/governance/verify-current-authority.mjs');
   const verifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02BrowserEvidenceCorrection.entry.head, s02BrowserEvidenceCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
   assert(sha256Text(correctedVerifierSource) === s02BrowserEvidenceCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(verifierPatch)}` === s02BrowserEvidenceCorrection.correction.verifierPatchSha256, 'S02 browser-evidence verifier bytes/patch differ from the immutable correction record');
   assert(correctedVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_002') && correctedVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_003') && correctedVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_004') && correctedVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 browser-evidence verifier removed a prior correction guard or original fail-closed boundary assertion');
-  assertNoPathChangesSince(s02BrowserEvidenceCorrectionCommit, 'HEAD', s02BrowserEvidenceCorrectionChangedPaths, 'S02 browser-evidence correction freeze');
+  const fourthCorrectionFreezeEnd = s02ExactCaptureCorrectionCommit ? git(['rev-parse', `${s02ExactCaptureCorrectionCommit}^`]) : git(['rev-parse', 'HEAD']);
+  assertNoPathChangesSince(s02BrowserEvidenceCorrectionCommit, fourthCorrectionFreezeEnd, s02BrowserEvidenceCorrectionChangedPaths, 'S02 browser-evidence correction freeze before exact-capture correction');
+  if (s02ExactCaptureCorrectionCommit) assertNoPathChangesSince(s02BrowserEvidenceCorrectionCommit, 'HEAD', [s02BrowserEvidenceCorrectionPath], 'S02 browser-evidence round 004 record freeze');
   if (requireLiveActions) {
     const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02BrowserEvidenceCorrection.authorityWorkflow.runId}`);
     const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02BrowserEvidenceCorrection.authorityWorkflow.jobId}`);
@@ -4133,6 +4147,99 @@ if (s02BrowserEvidenceCorrection) {
   }
 }
 // END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_004
+
+// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_005
+if (s02ExactCaptureCorrection) {
+  assertExactKeySet(s02ExactCaptureCorrection, ['schemaVersion', 'artifactId', 'createdAt', 'repository', 'branch', 'changeControl', 'entry', 'authorityWorkflow', 'failedWorkflow', 'diagnosis', 'correction', 'boundaries', 'status'], 'S02 exact-capture correction');
+  assertExactKeySet(s02ExactCaptureCorrection.entry, ['head', 'tree'], 'S02 exact-capture correction entry');
+  assertExactKeySet(s02ExactCaptureCorrection.authorityWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'artifactId', 'artifactName', 'artifactDigest'], 'S02 exact-capture authority workflow');
+  assertExactKeySet(s02ExactCaptureCorrection.failedWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'failedStep', 'error', 'artifactId', 'artifactName', 'artifactDigest'], 'S02 exact-capture failed workflow');
+  assertExactKeySet(s02ExactCaptureCorrection.diagnosis, ['type', 'firstExactCaptureSucceeded', 'failedCapturePosition', 'rootCause', 'originalFailureArtifactPreserved'], 'S02 exact-capture diagnosis');
+  assertExactKeySet(s02ExactCaptureCorrection.correction, ['rule', 'changedPaths', 'workflowBeforeSha256', 'workflowAfterSha256', 'workflowPatchSha256', 'browserBeforeSha256', 'browserAfterSha256', 'browserPatchSha256', 'verifierAfterSha256', 'verifierPatchSha256', 'acceptanceThresholdsChanged', 'qualityCoverageWeakened', 'goldenMasterLayoutChanged', 'captureOriginAsserted', 'failureEvidenceUploadRetained'], 'S02 exact-capture exact correction');
+  assertExactKeySet(s02ExactCaptureCorrection.boundaries, ['rootRuntimeChanged', 'gameCoreChanged', 'gameDataChanged', 'economyChanged', 'saveSchemaChanged', 'backendChanged', 'productionChanged', 'productionAliasChanged', 'physicalIPhoneVerified', 'step4Pass', 'step5Allowed'], 'S02 exact-capture correction boundaries');
+  assert(s02ExactCaptureCorrection.schemaVersion === 1 && s02ExactCaptureCorrection.artifactId === 'cats-tower-s02-golden-master-p1-trusted-harness-correction-round-005' && s02ExactCaptureCorrection.createdAt === '2026-09-02', 'S02 exact-capture correction identity/date mismatch');
+  assert(s02ExactCaptureCorrection.repository === '2hg7trp7rv-design/cats_tower' && s02ExactCaptureCorrection.branch === 'kimi' && s02ExactCaptureCorrection.changeControl === s02RepairControlPath, 'S02 exact-capture correction authority mismatch');
+  assert(JSON.stringify(s02ExactCaptureCorrection.entry) === JSON.stringify({ head: 'f54514be7ddd1b0d46b70773ed3a9b7b121b8688', tree: '612edc4b149e51ff66cd05a3c573af5685e7ae91' }), 'S02 exact-capture correction entry is not the exact failed browser-evidence correction commit/tree');
+  assert(JSON.stringify(s02ExactCaptureCorrection.authorityWorkflow) === JSON.stringify({
+    commit: s02ExactCaptureCorrection.entry.head,
+    tree: s02ExactCaptureCorrection.entry.tree,
+    runId: 33594278913,
+    runAttempt: 1,
+    jobId: 100134589312,
+    conclusion: 'SUCCESS',
+    artifactId: 9832852102,
+    artifactName: 'phase0-current-governance-f54514be7ddd1b0d46b70773ed3a9b7b121b8688-33594278913-1',
+    artifactDigest: 'sha256:96b2e3e4d717391257efaa52ca9fea478e09d0be943cc4b56962618b2b48cc8c'
+  }), 'S02 exact-capture correction does not bind the successful exact-entry authority workflow');
+  assert(JSON.stringify(s02ExactCaptureCorrection.failedWorkflow) === JSON.stringify({
+    commit: s02ExactCaptureCorrection.entry.head,
+    tree: s02ExactCaptureCorrection.entry.tree,
+    runId: 33594278948,
+    runAttempt: 1,
+    jobId: 100134443618,
+    conclusion: 'FAILURE',
+    failedStep: 'Capture and verify eight masters plus required responsive variants',
+    error: 'page.screenshot: Clipped area is either empty or outside the resulting image',
+    artifactId: 9832840162,
+    artifactName: 'step4-s02-golden-master-p1-semantic-f54514be7ddd1b0d46b70773ed3a9b7b121b8688-33594278948-1',
+    artifactDigest: 'sha256:4af8242aeab6aeee266e98e4d2e01e2c742661b983c338efe123a1271f2fed48'
+  }), 'S02 exact-capture correction does not bind the exact failed workflow/job/error/artifact');
+  assert(JSON.stringify(s02ExactCaptureCorrection.diagnosis) === JSON.stringify({
+    type: 'PAGE_SCREENSHOT_CLIP_COORDINATE_SPACE_OUTSIDE_VIEWPORT',
+    firstExactCaptureSucceeded: 'GM01-390x844.png',
+    failedCapturePosition: 'The next 320x667 stage retained review-page offset while the page clip was bounded by the 320x667 viewport.',
+    rootCause: 'The exact-dimension repair used ordinary review-page element coordinates for a viewport-sized page screenshot without first normalizing the Golden Master stage to the screenshot origin.',
+    originalFailureArtifactPreserved: true
+  }), 'S02 exact-capture diagnosis differs from the preserved failed run and artifact');
+  assert(s02ExactCaptureCorrection.correction.rule === 'NORMALIZE_ONLY_THE_POST_MEASUREMENT_CAPTURE_SURFACE_TO_ORIGIN_AND_CAPTURE_THE_EXACT_DECLARED_VIEWPORT_WITHOUT_CHANGING_GOLDEN_MASTER_LAYOUT_OR_ACCEPTANCE_THRESHOLDS' && JSON.stringify(s02ExactCaptureCorrection.correction.changedPaths) === JSON.stringify(s02ExactCaptureCorrectionChangedPaths), 'S02 exact-capture correction rule/path set mismatch');
+  assert(s02ExactCaptureCorrection.correction.workflowBeforeSha256 === expectedS02WorkflowCorrectionRound004Sha256 && s02ExactCaptureCorrection.correction.workflowAfterSha256 === expectedS02WorkflowSha256 && s02ExactCaptureCorrection.correction.workflowPatchSha256 === 'sha256:ced8bb05180e513d6f0742b9cac96f60a5c91ebe793ec6da282ba7246c4342f2', 'S02 exact-capture workflow digest/patch mismatch');
+  assert(s02ExactCaptureCorrection.correction.browserBeforeSha256 === 'fda690254c7827fedcbca733397bc69654bf1fb9c6a3825c19d4db30d6863a5b' && s02ExactCaptureCorrection.correction.browserAfterSha256 === 'ec1011fb7101a420cfbc68af1dc43c4d30c659d41715d25aa0dc915d1f4b99bb' && s02ExactCaptureCorrection.correction.browserPatchSha256 === 'sha256:0947e404eb5694159ef9ed42ab3e0405da91678112567c399913fb3656b42fa4', 'S02 exact-capture collector digest/patch mismatch');
+  assert(s02ExactCaptureCorrection.correction.acceptanceThresholdsChanged === false && s02ExactCaptureCorrection.correction.qualityCoverageWeakened === false && s02ExactCaptureCorrection.correction.goldenMasterLayoutChanged === false && s02ExactCaptureCorrection.correction.captureOriginAsserted === true && s02ExactCaptureCorrection.correction.failureEvidenceUploadRetained === true, 'S02 exact-capture correction weakens coverage, changes the Golden Master or misstates capture guarantees');
+  assert(JSON.stringify(s02ExactCaptureCorrection.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }), 'S02 exact-capture correction crosses a protected product/release boundary');
+  assert(s02ExactCaptureCorrection.status === 'CORRECTED_EXACT_CAPTURE_ORIGIN_PENDING_RERUN', 'S02 exact-capture correction status mismatch');
+  assert(s02ExactCaptureCorrectionCommit && git(['rev-parse', `${s02ExactCaptureCorrectionCommit}^`]) === s02ExactCaptureCorrection.entry.head, 'S02 exact-capture correction is not the immediate child of the exact failed commit');
+  assert(git(['rev-parse', `${s02ExactCaptureCorrection.entry.head}^{tree}`]) === s02ExactCaptureCorrection.entry.tree, 'S02 exact-capture correction entry tree mismatch');
+  assertExactChangedPaths(s02ExactCaptureCorrection.entry.head, s02ExactCaptureCorrectionCommit, s02ExactCaptureCorrectionChangedPaths, 'S02 exact-capture correction commit');
+  assertAddedOnceAndUnchanged(s02ExactCaptureCorrectionPath, s02ExactCaptureCorrectionCommit);
+
+  const priorExactCaptureBrowserSource = textAt(s02ExactCaptureCorrection.entry.head, 'tests/step4/s02-golden-master-p1-browser.mjs');
+  const correctedExactCaptureBrowserSource = textAt(s02ExactCaptureCorrectionCommit, 'tests/step4/s02-golden-master-p1-browser.mjs');
+  const exactCaptureBrowserPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02ExactCaptureCorrection.entry.head, s02ExactCaptureCorrectionCommit, '--', 'tests/step4/s02-golden-master-p1-browser.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert(sha256Text(priorExactCaptureBrowserSource) === s02ExactCaptureCorrection.correction.browserBeforeSha256 && sha256Text(correctedExactCaptureBrowserSource) === s02ExactCaptureCorrection.correction.browserAfterSha256 && `sha256:${sha256Text(exactCaptureBrowserPatch)}` === s02ExactCaptureCorrection.correction.browserPatchSha256, 'S02 exact-capture collector bytes/patch differ from the immutable correction record');
+  assert(correctedExactCaptureBrowserSource.split('const exactStageCaptureCss = ').length === 2 && correctedExactCaptureBrowserSource.split('async function captureExactStage(page, exactStage, scenario)').length === 2 && correctedExactCaptureBrowserSource.split('const bytes = await captureExactStage(page, exactStage, scenario);').length === 3, 'S02 exact-capture helper is absent, duplicated or not used for both current and baseline captures');
+  assert(correctedExactCaptureBrowserSource.includes("clip: { x: 0, y: 0, width: scenario.width, height: scenario.height }") && correctedExactCaptureBrowserSource.includes('captureBeyondViewport: false') && !correctedExactCaptureBrowserSource.includes('Math.round(stageBox.x)') && !correctedExactCaptureBrowserSource.includes('Math.round(stageBox.y)'), 'S02 exact-capture collector retains the failed coordinate-space capture path');
+  assert(correctedExactCaptureBrowserSource.indexOf('const collected = await collectDom(') < correctedExactCaptureBrowserSource.indexOf('const bytes = await captureExactStage(page, exactStage, scenario);'), 'S02 exact-capture normalization occurs before semantic layout measurement');
+
+  const priorExactCaptureWorkflowSource = textAt(s02ExactCaptureCorrection.entry.head, '.github/workflows/verify-step-4-s02-golden-master-p1.yml');
+  const correctedExactCaptureWorkflowSource = textAt(s02ExactCaptureCorrectionCommit, '.github/workflows/verify-step-4-s02-golden-master-p1.yml');
+  const priorExactCapturePin = 'fda690254c7827fedcbca733397bc69654bf1fb9c6a3825c19d4db30d6863a5b  tests/step4/s02-golden-master-p1-browser.mjs';
+  const correctedExactCapturePin = 'ec1011fb7101a420cfbc68af1dc43c4d30c659d41715d25aa0dc915d1f4b99bb  tests/step4/s02-golden-master-p1-browser.mjs';
+  assert(priorExactCaptureWorkflowSource.split(priorExactCapturePin).length === 2 && correctedExactCaptureWorkflowSource === priorExactCaptureWorkflowSource.replace(priorExactCapturePin, correctedExactCapturePin) && sha256Text(correctedExactCaptureWorkflowSource) === expectedS02WorkflowSha256, 'S02 exact-capture workflow changed beyond the exact collector pin');
+  const exactCaptureWorkflowPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02ExactCaptureCorrection.entry.head, s02ExactCaptureCorrectionCommit, '--', '.github/workflows/verify-step-4-s02-golden-master-p1.yml'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert(`sha256:${sha256Text(exactCaptureWorkflowPatch)}` === s02ExactCaptureCorrection.correction.workflowPatchSha256, 'S02 exact-capture workflow patch differs from the immutable correction record');
+  const correctedExactCaptureVerifierSource = textAt(s02ExactCaptureCorrectionCommit, 'tests/governance/verify-current-authority.mjs');
+  const exactCaptureVerifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02ExactCaptureCorrection.entry.head, s02ExactCaptureCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+  assert(sha256Text(correctedExactCaptureVerifierSource) === s02ExactCaptureCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(exactCaptureVerifierPatch)}` === s02ExactCaptureCorrection.correction.verifierPatchSha256, 'S02 exact-capture verifier bytes/patch differ from the immutable correction record');
+  assert(correctedExactCaptureVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedExactCaptureVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_002') && correctedExactCaptureVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_003') && correctedExactCaptureVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_004') && correctedExactCaptureVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_005') && correctedExactCaptureVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 exact-capture verifier removed a prior correction guard or original fail-closed boundary assertion');
+  assertNoPathChangesSince(s02ExactCaptureCorrectionCommit, 'HEAD', s02ExactCaptureCorrectionChangedPaths, 'S02 exact-capture correction freeze');
+  if (requireLiveActions) {
+    const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02ExactCaptureCorrection.authorityWorkflow.runId}`);
+    const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02ExactCaptureCorrection.authorityWorkflow.jobId}`);
+    const authorityArtifact = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/artifacts/${s02ExactCaptureCorrection.authorityWorkflow.artifactId}`);
+    assert(authorityRun.head_sha === s02ExactCaptureCorrection.entry.head && authorityRun.head_branch === 'kimi' && authorityRun.status === 'completed' && authorityRun.conclusion === 'success' && authorityRun.run_attempt === 1, 'S02 exact-capture correction live authority run mismatch');
+    assert(authorityJob.run_id === authorityRun.id && authorityJob.head_sha === s02ExactCaptureCorrection.entry.head && authorityJob.name === 'current-authority' && authorityJob.conclusion === 'success', 'S02 exact-capture correction live authority job mismatch');
+    assert(authorityArtifact.name === s02ExactCaptureCorrection.authorityWorkflow.artifactName && authorityArtifact.digest === s02ExactCaptureCorrection.authorityWorkflow.artifactDigest && authorityArtifact.expired === false && authorityArtifact.workflow_run?.head_sha === s02ExactCaptureCorrection.entry.head, 'S02 exact-capture correction live authority artifact mismatch');
+    const failedRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02ExactCaptureCorrection.failedWorkflow.runId}`);
+    const failedJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02ExactCaptureCorrection.failedWorkflow.jobId}`);
+    const failedArtifact = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/artifacts/${s02ExactCaptureCorrection.failedWorkflow.artifactId}`);
+    assert(failedRun.head_sha === s02ExactCaptureCorrection.entry.head && failedRun.head_branch === 'kimi' && failedRun.status === 'completed' && failedRun.conclusion === 'failure' && failedRun.run_attempt === 1, 'S02 exact-capture correction live failed run mismatch');
+    assert(failedJob.run_id === failedRun.id && failedJob.head_sha === s02ExactCaptureCorrection.entry.head && failedJob.name === 'Static, eight-master responsive and accessibility verification' && failedJob.conclusion === 'failure', 'S02 exact-capture correction live failed job mismatch');
+    const failedSteps = (failedJob.steps ?? []).filter(step => step.name === s02ExactCaptureCorrection.failedWorkflow.failedStep);
+    assert(failedSteps.length === 1 && failedSteps[0].conclusion === 'failure', 'S02 exact-capture correction live failed step mismatch');
+    assert(failedArtifact.name === s02ExactCaptureCorrection.failedWorkflow.artifactName && failedArtifact.digest === s02ExactCaptureCorrection.failedWorkflow.artifactDigest && failedArtifact.expired === false && failedArtifact.workflow_run?.head_sha === s02ExactCaptureCorrection.entry.head, 'S02 exact-capture correction live failure artifact mismatch');
+  }
+}
+// END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_005
 
 function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath = s02ReviewEvidencePaths.deploymentRequest, requireLiveApi = true) {
   assertWorkflowEvidenceKeys(evidence, `${label} workflow evidence`, true);

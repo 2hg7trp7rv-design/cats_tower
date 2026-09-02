@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-trusted-harness-correction-round-005",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "f54514be7ddd1b0d46b70773ed3a9b7b121b8688",
+    "tree": "612edc4b149e51ff66cd05a3c573af5685e7ae91"
+  },
+  "authorityWorkflow": {
+    "commit": "f54514be7ddd1b0d46b70773ed3a9b7b121b8688",
+    "tree": "612edc4b149e51ff66cd05a3c573af5685e7ae91",
+    "runId": 33594278913,
+    "runAttempt": 1,
+    "jobId": 100134589312,
+    "conclusion": "SUCCESS",
+    "artifactId": 9832852102,
+    "artifactName": "phase0-current-governance-f54514be7ddd1b0d46b70773ed3a9b7b121b8688-33594278913-1",
+    "artifactDigest": "sha256:96b2e3e4d717391257efaa52ca9fea478e09d0be943cc4b56962618b2b48cc8c"
+  },
+  "failedWorkflow": {
+    "commit": "f54514be7ddd1b0d46b70773ed3a9b7b121b8688",
+    "tree": "612edc4b149e51ff66cd05a3c573af5685e7ae91",
+    "runId": 33594278948,
+    "runAttempt": 1,
+    "jobId": 100134443618,
+    "conclusion": "FAILURE",
+    "failedStep": "Capture and verify eight masters plus required responsive variants",
+    "error": "page.screenshot: Clipped area is either empty or outside the resulting image",
+    "artifactId": 9832840162,
+    "artifactName": "step4-s02-golden-master-p1-semantic-f54514be7ddd1b0d46b70773ed3a9b7b121b8688-33594278948-1",
+    "artifactDigest": "sha256:4af8242aeab6aeee266e98e4d2e01e2c742661b983c338efe123a1271f2fed48"
+  },
+  "diagnosis": {
+    "type": "PAGE_SCREENSHOT_CLIP_COORDINATE_SPACE_OUTSIDE_VIEWPORT",
+    "firstExactCaptureSucceeded": "GM01-390x844.png",
+    "failedCapturePosition": "The next 320x667 stage retained review-page offset while the page clip was bounded by the 320x667 viewport.",
+    "rootCause": "The exact-dimension repair used ordinary review-page element coordinates for a viewport-sized page screenshot without first normalizing the Golden Master stage to the screenshot origin.",
+    "originalFailureArtifactPreserved": true
+  },
+  "correction": {
+    "rule": "NORMALIZE_ONLY_THE_POST_MEASUREMENT_CAPTURE_SURFACE_TO_ORIGIN_AND_CAPTURE_THE_EXACT_DECLARED_VIEWPORT_WITHOUT_CHANGING_GOLDEN_MASTER_LAYOUT_OR_ACCEPTANCE_THRESHOLDS",
+    "changedPaths": [
+      ".github/workflows/verify-step-4-s02-golden-master-p1.yml",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-005.json",
+      "tests/governance/verify-current-authority.mjs",
+      "tests/step4/s02-golden-master-p1-browser.mjs"
+    ],
+    "workflowBeforeSha256": "2119936e77a9b1b70e27b30697886519e0c9cb81d26fa585cc32801454ab532b",
+    "workflowAfterSha256": "4fa345932c2ba70a09e5726190cfef10690ca81b5b030612fc96fab7976f384c",
+    "workflowPatchSha256": "sha256:ced8bb05180e513d6f0742b9cac96f60a5c91ebe793ec6da282ba7246c4342f2",
+    "browserBeforeSha256": "fda690254c7827fedcbca733397bc69654bf1fb9c6a3825c19d4db30d6863a5b",
+    "browserAfterSha256": "ec1011fb7101a420cfbc68af1dc43c4d30c659d41715d25aa0dc915d1f4b99bb",
+    "browserPatchSha256": "sha256:0947e404eb5694159ef9ed42ab3e0405da91678112567c399913fb3656b42fa4",
+    "verifierAfterSha256": "7a837116e9c1a4098daa2433101a60749e3b79781132b21273c38a5012e28497",
+    "verifierPatchSha256": "sha256:65aec38f608b836fcdbd7df5b72ca7ad5169e4ec53719586858a06ea21371036",
+    "acceptanceThresholdsChanged": false,
+    "qualityCoverageWeakened": false,
+    "goldenMasterLayoutChanged": false,
+    "captureOriginAsserted": true,
+    "failureEvidenceUploadRetained": true
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_EXACT_CAPTURE_ORIGIN_PENDING_RERUN"
+}
