@@ -1018,9 +1018,10 @@ function mappedUnit(scenario, unit) {
   let scaleY;
   let frameLeft = unit.preTransformRect.left;
   let frameTop = unit.preTransformRect.top;
+  const renderBounds = { left: 0, top: 0, right: scenario.viewport.width, bottom: Math.max(scenario.viewport.height, scenario.document.stageScroll.scrollHeight), width: scenario.viewport.width, height: Math.max(scenario.viewport.height, scenario.document.stageScroll.scrollHeight) };
   let sourceMatchesRendering = unit.sourceAsset.length > 0 && unit.sourceFrameId.length > 0 && unit.visible === true && unit.opacity >= 0.5
     && intersects(unit.rect, scenario.elements.battlefield.rect, 0.65) && intersects(unit.artRect, scenario.elements.battlefield.rect, 0.65)
-    && intersects(unit.rect, { left: 0, top: 0, right: scenario.viewport.width, bottom: scenario.viewport.height, width: scenario.viewport.width, height: scenario.viewport.height }, 0.9);
+    && intersects(unit.rect, renderBounds, 0.9);
   if (unit.objectFit === 'contain') {
     scaleX = Math.min(unit.preTransformRect.width / frame.sourceRect.width, unit.preTransformRect.height / frame.sourceRect.height);
     scaleY = scaleX;

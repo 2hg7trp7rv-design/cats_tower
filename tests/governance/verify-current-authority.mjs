@@ -217,6 +217,8 @@ function assertS02HistoryWithIncrementalRenewals(base, head, control, label, evi
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02BrowserEvidenceCorrectionChangedPaths].sort()), `${label}: browser-evidence correction changed an unreviewed path`);
     } else if (s02ExactCaptureCorrectionCommit && commit === s02ExactCaptureCorrectionCommit) {
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02ExactCaptureCorrectionChangedPaths].sort()), `${label}: exact-capture correction changed an unreviewed path`);
+    } else if (s02SixFindingCorrectionCommit && commit === s02SixFindingCorrectionCommit) {
+      assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02SixFindingCorrectionChangedPaths].sort()), `${label}: six-finding correction changed an unreviewed path`);
     } else {
       assertBoundary(paths, control, `${label} commit ${commit}`);
     }
@@ -1798,7 +1800,8 @@ const expectedS02WorkflowCorrectionRound001Sha256 = '7219aba5d01f68105339a9815ce
 const expectedS02WorkflowCorrectionRound002Sha256 = '32e82c7b97cab50f6d51622f316fe11f33ed259d4c0372d1925af58bf4e2592d';
 const expectedS02WorkflowCorrectionRound003Sha256 = '79d84163ca190041b814b80c4ef020b758d0c61cac36751c498194680904b9c0';
 const expectedS02WorkflowCorrectionRound004Sha256 = '2119936e77a9b1b70e27b30697886519e0c9cb81d26fa585cc32801454ab532b';
-const expectedS02WorkflowSha256 = '4fa345932c2ba70a09e5726190cfef10690ca81b5b030612fc96fab7976f384c';
+const expectedS02WorkflowCorrectionRound005Sha256 = '4fa345932c2ba70a09e5726190cfef10690ca81b5b030612fc96fab7976f384c';
+const expectedS02WorkflowSha256 = 'ebd5732f09d76d997c1642ea3b861f9e8373b6d18ea2781768e7e31e2cbef12e';
 const s02ContentManifestPatterns = [
   'step4/s02/golden-master-p1/**',
   'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-*.json',
@@ -3759,6 +3762,18 @@ const s02ExactCaptureCorrectionChangedPaths = [
   'tests/governance/verify-current-authority.mjs',
   'tests/step4/s02-golden-master-p1-browser.mjs'
 ];
+const s02SixFindingCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-006.json';
+const s02SixFindingCorrection = exists(s02SixFindingCorrectionPath) ? json(s02SixFindingCorrectionPath) : null;
+const s02SixFindingCorrectionCommit = s02SixFindingCorrection ? firstAddCommit(s02SixFindingCorrectionPath) : null;
+const s02SixFindingCorrectionChangedPaths = [
+  '.github/workflows/verify-step-4-s02-golden-master-p1.yml',
+  s02SixFindingCorrectionPath,
+  'step4/s02/golden-master-p1/review-manifest.json',
+  'step4/s02/golden-master-p1/styles.css',
+  'tests/governance/verify-current-authority.mjs',
+  'tests/step4/s02-golden-master-p1-browser-qa.mjs',
+  'tests/step4/s02-golden-master-p1-browser.mjs'
+];
 
 // BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001
 const s02HarnessCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-001.json';
@@ -4192,7 +4207,7 @@ if (s02ExactCaptureCorrection) {
     originalFailureArtifactPreserved: true
   }), 'S02 exact-capture diagnosis differs from the preserved failed run and artifact');
   assert(s02ExactCaptureCorrection.correction.rule === 'NORMALIZE_ONLY_THE_POST_MEASUREMENT_CAPTURE_SURFACE_TO_ORIGIN_AND_CAPTURE_THE_EXACT_DECLARED_VIEWPORT_WITHOUT_CHANGING_GOLDEN_MASTER_LAYOUT_OR_ACCEPTANCE_THRESHOLDS' && JSON.stringify(s02ExactCaptureCorrection.correction.changedPaths) === JSON.stringify(s02ExactCaptureCorrectionChangedPaths), 'S02 exact-capture correction rule/path set mismatch');
-  assert(s02ExactCaptureCorrection.correction.workflowBeforeSha256 === expectedS02WorkflowCorrectionRound004Sha256 && s02ExactCaptureCorrection.correction.workflowAfterSha256 === expectedS02WorkflowSha256 && s02ExactCaptureCorrection.correction.workflowPatchSha256 === 'sha256:ced8bb05180e513d6f0742b9cac96f60a5c91ebe793ec6da282ba7246c4342f2', 'S02 exact-capture workflow digest/patch mismatch');
+  assert(s02ExactCaptureCorrection.correction.workflowBeforeSha256 === expectedS02WorkflowCorrectionRound004Sha256 && s02ExactCaptureCorrection.correction.workflowAfterSha256 === expectedS02WorkflowCorrectionRound005Sha256 && s02ExactCaptureCorrection.correction.workflowPatchSha256 === 'sha256:ced8bb05180e513d6f0742b9cac96f60a5c91ebe793ec6da282ba7246c4342f2', 'S02 exact-capture workflow digest/patch mismatch');
   assert(s02ExactCaptureCorrection.correction.browserBeforeSha256 === 'fda690254c7827fedcbca733397bc69654bf1fb9c6a3825c19d4db30d6863a5b' && s02ExactCaptureCorrection.correction.browserAfterSha256 === 'ec1011fb7101a420cfbc68af1dc43c4d30c659d41715d25aa0dc915d1f4b99bb' && s02ExactCaptureCorrection.correction.browserPatchSha256 === 'sha256:0947e404eb5694159ef9ed42ab3e0405da91678112567c399913fb3656b42fa4', 'S02 exact-capture collector digest/patch mismatch');
   assert(s02ExactCaptureCorrection.correction.acceptanceThresholdsChanged === false && s02ExactCaptureCorrection.correction.qualityCoverageWeakened === false && s02ExactCaptureCorrection.correction.goldenMasterLayoutChanged === false && s02ExactCaptureCorrection.correction.captureOriginAsserted === true && s02ExactCaptureCorrection.correction.failureEvidenceUploadRetained === true, 'S02 exact-capture correction weakens coverage, changes the Golden Master or misstates capture guarantees');
   assert(JSON.stringify(s02ExactCaptureCorrection.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }), 'S02 exact-capture correction crosses a protected product/release boundary');
@@ -4214,14 +4229,16 @@ if (s02ExactCaptureCorrection) {
   const correctedExactCaptureWorkflowSource = textAt(s02ExactCaptureCorrectionCommit, '.github/workflows/verify-step-4-s02-golden-master-p1.yml');
   const priorExactCapturePin = 'fda690254c7827fedcbca733397bc69654bf1fb9c6a3825c19d4db30d6863a5b  tests/step4/s02-golden-master-p1-browser.mjs';
   const correctedExactCapturePin = 'ec1011fb7101a420cfbc68af1dc43c4d30c659d41715d25aa0dc915d1f4b99bb  tests/step4/s02-golden-master-p1-browser.mjs';
-  assert(priorExactCaptureWorkflowSource.split(priorExactCapturePin).length === 2 && correctedExactCaptureWorkflowSource === priorExactCaptureWorkflowSource.replace(priorExactCapturePin, correctedExactCapturePin) && sha256Text(correctedExactCaptureWorkflowSource) === expectedS02WorkflowSha256, 'S02 exact-capture workflow changed beyond the exact collector pin');
+  assert(priorExactCaptureWorkflowSource.split(priorExactCapturePin).length === 2 && correctedExactCaptureWorkflowSource === priorExactCaptureWorkflowSource.replace(priorExactCapturePin, correctedExactCapturePin) && sha256Text(correctedExactCaptureWorkflowSource) === expectedS02WorkflowCorrectionRound005Sha256, 'S02 exact-capture workflow changed beyond the exact collector pin');
   const exactCaptureWorkflowPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02ExactCaptureCorrection.entry.head, s02ExactCaptureCorrectionCommit, '--', '.github/workflows/verify-step-4-s02-golden-master-p1.yml'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   assert(`sha256:${sha256Text(exactCaptureWorkflowPatch)}` === s02ExactCaptureCorrection.correction.workflowPatchSha256, 'S02 exact-capture workflow patch differs from the immutable correction record');
   const correctedExactCaptureVerifierSource = textAt(s02ExactCaptureCorrectionCommit, 'tests/governance/verify-current-authority.mjs');
   const exactCaptureVerifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02ExactCaptureCorrection.entry.head, s02ExactCaptureCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
   assert(sha256Text(correctedExactCaptureVerifierSource) === s02ExactCaptureCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(exactCaptureVerifierPatch)}` === s02ExactCaptureCorrection.correction.verifierPatchSha256, 'S02 exact-capture verifier bytes/patch differ from the immutable correction record');
   assert(correctedExactCaptureVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedExactCaptureVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_002') && correctedExactCaptureVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_003') && correctedExactCaptureVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_004') && correctedExactCaptureVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_005') && correctedExactCaptureVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 exact-capture verifier removed a prior correction guard or original fail-closed boundary assertion');
-  assertNoPathChangesSince(s02ExactCaptureCorrectionCommit, 'HEAD', s02ExactCaptureCorrectionChangedPaths, 'S02 exact-capture correction freeze');
+  const fifthCorrectionFreezeEnd = s02SixFindingCorrectionCommit ? git(['rev-parse', `${s02SixFindingCorrectionCommit}^`]) : git(['rev-parse', 'HEAD']);
+  assertNoPathChangesSince(s02ExactCaptureCorrectionCommit, fifthCorrectionFreezeEnd, s02ExactCaptureCorrectionChangedPaths, 'S02 exact-capture correction freeze before six-finding correction');
+  if (s02SixFindingCorrectionCommit) assertNoPathChangesSince(s02ExactCaptureCorrectionCommit, 'HEAD', [s02ExactCaptureCorrectionPath], 'S02 exact-capture round 005 record freeze');
   if (requireLiveActions) {
     const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02ExactCaptureCorrection.authorityWorkflow.runId}`);
     const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02ExactCaptureCorrection.authorityWorkflow.jobId}`);
@@ -4240,6 +4257,144 @@ if (s02ExactCaptureCorrection) {
   }
 }
 // END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_005
+
+// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_006
+if (s02SixFindingCorrection) {
+  assertExactKeySet(s02SixFindingCorrection, ['schemaVersion', 'artifactId', 'createdAt', 'repository', 'branch', 'changeControl', 'entry', 'authorityWorkflow', 'failedWorkflow', 'diagnosis', 'correction', 'boundaries', 'status'], 'S02 six-finding correction');
+  assertExactKeySet(s02SixFindingCorrection.entry, ['head', 'tree'], 'S02 six-finding correction entry');
+  assertExactKeySet(s02SixFindingCorrection.authorityWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'artifactId', 'artifactName', 'artifactDigest'], 'S02 six-finding authority workflow');
+  assertExactKeySet(s02SixFindingCorrection.failedWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'failedStep', 'summary', 'artifactId', 'artifactName', 'artifactDigest'], 'S02 six-finding failed workflow');
+  assertExactKeySet(s02SixFindingCorrection.diagnosis, ['type', 'failedAssertions', 'visualFindings', 'measurementFindings', 'allFifteenExactPngsPreserved', 'originalFailureArtifactPreserved'], 'S02 six-finding diagnosis');
+  assertExactKeySet(s02SixFindingCorrection.correction, ['rule', 'changedPaths', 'workflowBeforeSha256', 'workflowAfterSha256', 'workflowPatchSha256', 'browserBeforeSha256', 'browserAfterSha256', 'browserPatchSha256', 'qaBeforeSha256', 'qaAfterSha256', 'qaPatchSha256', 'stylesBeforeSha256', 'stylesAfterSha256', 'stylesPatchSha256', 'manifestBeforeSha256', 'manifestAfterSha256', 'manifestPatchSha256', 'verifierAfterSha256', 'verifierPatchSha256', 'acceptanceThresholdsChanged', 'qualityCoverageWeakened', 'exactScreenshotDimensionsEnforced', 'postProbeScrollRestored', 'failureEvidenceUploadRetained'], 'S02 six-finding exact correction');
+  assertExactKeySet(s02SixFindingCorrection.boundaries, ['rootRuntimeChanged', 'gameCoreChanged', 'gameDataChanged', 'economyChanged', 'saveSchemaChanged', 'backendChanged', 'productionChanged', 'productionAliasChanged', 'physicalIPhoneVerified', 'step4Pass', 'step5Allowed'], 'S02 six-finding correction boundaries');
+  assert(s02SixFindingCorrection.schemaVersion === 1 && s02SixFindingCorrection.artifactId === 'cats-tower-s02-golden-master-p1-trusted-harness-correction-round-006' && s02SixFindingCorrection.createdAt === '2026-09-02', 'S02 six-finding correction identity/date mismatch');
+  assert(s02SixFindingCorrection.repository === '2hg7trp7rv-design/cats_tower' && s02SixFindingCorrection.branch === 'kimi' && s02SixFindingCorrection.changeControl === s02RepairControlPath, 'S02 six-finding correction authority mismatch');
+  assert(JSON.stringify(s02SixFindingCorrection.entry) === JSON.stringify({ head: 'd3079744ba497a8861c8195017ae314a71f08a97', tree: '63d38c392bcaec0d6c64bacdd974912b1eb055b6' }), 'S02 six-finding correction entry is not the exact failed exact-capture correction commit/tree');
+  assert(JSON.stringify(s02SixFindingCorrection.authorityWorkflow) === JSON.stringify({
+    commit: s02SixFindingCorrection.entry.head,
+    tree: s02SixFindingCorrection.entry.tree,
+    runId: 33594917634,
+    runAttempt: 1,
+    jobId: 100136471271,
+    conclusion: 'SUCCESS',
+    artifactId: 9833069734,
+    artifactName: 'phase0-current-governance-d3079744ba497a8861c8195017ae314a71f08a97-33594917634-1',
+    artifactDigest: 'sha256:8e2d6fea23dce7a183e8dbd5f4efefef90e05aa695673ad94e90df2bfa79ec94'
+  }), 'S02 six-finding correction does not bind the successful exact-entry authority workflow');
+  assert(JSON.stringify(s02SixFindingCorrection.failedWorkflow) === JSON.stringify({
+    commit: s02SixFindingCorrection.entry.head,
+    tree: s02SixFindingCorrection.entry.tree,
+    runId: 33594917474,
+    runAttempt: 1,
+    jobId: 100136324346,
+    conclusion: 'FAILURE',
+    failedStep: 'Capture and verify eight masters plus required responsive variants',
+    summary: 'FAIL_S02_GOLDEN_MASTER_P1_BROWSER: 15 scenarios, 6 failures',
+    artifactId: 9833067336,
+    artifactName: 'step4-s02-golden-master-p1-semantic-d3079744ba497a8861c8195017ae314a71f08a97-33594917474-1',
+    artifactDigest: 'sha256:4f45e22edd840e81ee00af3bbd44387afef26a86dc130b400446222dfcbe34f2'
+  }), 'S02 six-finding correction does not bind the exact failed workflow/job/summary/artifact');
+  assert(JSON.stringify(s02SixFindingCorrection.diagnosis) === JSON.stringify({
+    type: 'EXACT_FIFTEEN_CAPTURE_REVEALED_OFFLINE_MATERIAL_TEXT_REFLOW_AND_SCROLL_SCOPE_DEFECTS',
+    failedAssertions: [
+      'GM07: screenshot pixel complexity/opacity gate failed',
+      'GM07C320: screenshot pixel complexity/opacity gate failed',
+      'GM07C320TEXT200: screenshot pixel complexity/opacity gate failed',
+      'FOOT_AND_HIT_ANCHORS_BOUND: trusted recomputation failed',
+      'TEXT_200_PERCENT_NO_LOSS: trusted recomputation failed',
+      'RESPONSIVE_GEOMETRY_CONTRACT: trusted recomputation failed'
+    ],
+    visualFindings: [
+      'The offline surface flattened the parchment and suppressed too much identifiable battle context.',
+      'The 200 percent 26-floor label wrapped at a fractional boundary and clipped three CSS pixels vertically.',
+      'The 200 percent offline scroll probe was not restored before the Golden Master screenshot.'
+    ],
+    measurementFindings: [
+      'Anchor mapping incorrectly treated valid scrollable battle content below the initial viewport as disconnected rendering.',
+      'The responsive failure shared the same clipped 26-floor label root cause as the text-200 failure.'
+    ],
+    allFifteenExactPngsPreserved: true,
+    originalFailureArtifactPreserved: true
+  }), 'S02 six-finding diagnosis differs from the preserved fifteen-capture failed run and artifact');
+  assert(s02SixFindingCorrection.correction.rule === 'REPAIR_THE_OBSERVED_OFFLINE_MATERIAL_AND_TEXT_REFLOW_WHILE_RESTORING_PROBE_STATE_AND_MEASURING_ANCHORS_AGAINST_THE_SCROLLABLE_STAGE_WITHOUT_LOWERING_THRESHOLDS' && JSON.stringify(s02SixFindingCorrection.correction.changedPaths) === JSON.stringify(s02SixFindingCorrectionChangedPaths), 'S02 six-finding correction rule/path set mismatch');
+  assert(s02SixFindingCorrection.correction.workflowBeforeSha256 === expectedS02WorkflowCorrectionRound005Sha256 && s02SixFindingCorrection.correction.workflowAfterSha256 === expectedS02WorkflowSha256 && s02SixFindingCorrection.correction.workflowPatchSha256 === 'sha256:2b3170bcc671f3b367716145b9da8089a29c87f805e82200c79dec36ae4bfd6a', 'S02 six-finding workflow digest/patch mismatch');
+  assert(s02SixFindingCorrection.correction.browserBeforeSha256 === 'ec1011fb7101a420cfbc68af1dc43c4d30c659d41715d25aa0dc915d1f4b99bb' && s02SixFindingCorrection.correction.browserAfterSha256 === '4c42ea958be68f6b55464c0e7f1567c937eb06a5ce5f9e6f043b6db66e2b1b12' && s02SixFindingCorrection.correction.browserPatchSha256 === 'sha256:fa9668d3955e8456eea5213211cd619faf4f6fe69b554c2b8b4f0f4677e7f6ab', 'S02 six-finding collector digest/patch mismatch');
+  assert(s02SixFindingCorrection.correction.qaBeforeSha256 === '9661cf489c3329c3119ba3cb16ee3e8ebb61848eb841adcbdd7cc28f8da2bd1e' && s02SixFindingCorrection.correction.qaAfterSha256 === '8aed7521d33f5a610b705dfeb07faa5873ac1f18ec8715498f4064000bd50b12' && s02SixFindingCorrection.correction.qaPatchSha256 === 'sha256:f28bf3201ed557f75bb3d103ee92765c3fae61b8df22d35de3f9e48ca12ebf49', 'S02 six-finding QA digest/patch mismatch');
+  assert(s02SixFindingCorrection.correction.stylesBeforeSha256 === '23ea9978b4c0eee15d2dc91dcfbab39db46a00231f2bb991a7b836f1f4071887' && s02SixFindingCorrection.correction.stylesAfterSha256 === '3ce4d0bc9ff39e083e8a3ac25806707a28c479620c38922d11e05dbc498898ee' && s02SixFindingCorrection.correction.stylesPatchSha256 === 'sha256:7c85d42112036bcc1266c15a9e9e864561f544d256afcf70bafe244e7c81a12d', 'S02 six-finding style digest/patch mismatch');
+  assert(s02SixFindingCorrection.correction.manifestBeforeSha256 === '37189dfcdf536d620425d6e43e195fb7af772b88df5d4c06329a6702a52e138c' && s02SixFindingCorrection.correction.manifestAfterSha256 === 'c0aaad7d126165c0acaa8e9281263bf3fe3a409449bacafeb4630a3c24959e0d' && s02SixFindingCorrection.correction.manifestPatchSha256 === 'sha256:2cc6864097ca83d2a1eac2864b34ba7a214d8e6293ebfa5014f172777ec3fd3b', 'S02 six-finding manifest digest/patch mismatch');
+  assert(s02SixFindingCorrection.correction.acceptanceThresholdsChanged === false && s02SixFindingCorrection.correction.qualityCoverageWeakened === false && s02SixFindingCorrection.correction.exactScreenshotDimensionsEnforced === true && s02SixFindingCorrection.correction.postProbeScrollRestored === true && s02SixFindingCorrection.correction.failureEvidenceUploadRetained === true, 'S02 six-finding correction weakens coverage or misstates capture/probe guarantees');
+  assert(JSON.stringify(s02SixFindingCorrection.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }), 'S02 six-finding correction crosses a protected product/release boundary');
+  assert(s02SixFindingCorrection.status === 'CORRECTED_SIX_BROWSER_FINDINGS_PENDING_RERUN', 'S02 six-finding correction status mismatch');
+  assert(s02SixFindingCorrectionCommit && git(['rev-parse', `${s02SixFindingCorrectionCommit}^`]) === s02SixFindingCorrection.entry.head, 'S02 six-finding correction is not the immediate child of the exact failed commit');
+  assert(git(['rev-parse', `${s02SixFindingCorrection.entry.head}^{tree}`]) === s02SixFindingCorrection.entry.tree, 'S02 six-finding correction entry tree mismatch');
+  assertExactChangedPaths(s02SixFindingCorrection.entry.head, s02SixFindingCorrectionCommit, s02SixFindingCorrectionChangedPaths, 'S02 six-finding correction commit');
+  assertAddedOnceAndUnchanged(s02SixFindingCorrectionPath, s02SixFindingCorrectionCommit);
+
+  const priorSixFindingWorkflowSource = textAt(s02SixFindingCorrection.entry.head, '.github/workflows/verify-step-4-s02-golden-master-p1.yml');
+  const correctedSixFindingWorkflowSource = textAt(s02SixFindingCorrectionCommit, '.github/workflows/verify-step-4-s02-golden-master-p1.yml');
+  const priorSixFindingBrowserPin = 'ec1011fb7101a420cfbc68af1dc43c4d30c659d41715d25aa0dc915d1f4b99bb  tests/step4/s02-golden-master-p1-browser.mjs';
+  const correctedSixFindingBrowserPin = '4c42ea958be68f6b55464c0e7f1567c937eb06a5ce5f9e6f043b6db66e2b1b12  tests/step4/s02-golden-master-p1-browser.mjs';
+  const priorSixFindingQaPin = '9661cf489c3329c3119ba3cb16ee3e8ebb61848eb841adcbdd7cc28f8da2bd1e  tests/step4/s02-golden-master-p1-browser-qa.mjs';
+  const correctedSixFindingQaPin = '8aed7521d33f5a610b705dfeb07faa5873ac1f18ec8715498f4064000bd50b12  tests/step4/s02-golden-master-p1-browser-qa.mjs';
+  const expectedSixFindingWorkflowSource = priorSixFindingWorkflowSource.replace(priorSixFindingBrowserPin, correctedSixFindingBrowserPin).replace(priorSixFindingQaPin, correctedSixFindingQaPin);
+  assert(priorSixFindingWorkflowSource.split(priorSixFindingBrowserPin).length === 2 && priorSixFindingWorkflowSource.split(priorSixFindingQaPin).length === 2 && correctedSixFindingWorkflowSource === expectedSixFindingWorkflowSource && sha256Text(correctedSixFindingWorkflowSource) === expectedS02WorkflowSha256, 'S02 six-finding workflow changed beyond the exact collector and QA pins');
+  const sixFindingWorkflowPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02SixFindingCorrection.entry.head, s02SixFindingCorrectionCommit, '--', '.github/workflows/verify-step-4-s02-golden-master-p1.yml'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert(`sha256:${sha256Text(sixFindingWorkflowPatch)}` === s02SixFindingCorrection.correction.workflowPatchSha256, 'S02 six-finding workflow patch differs from the immutable correction record');
+
+  const priorSixFindingBrowserSource = textAt(s02SixFindingCorrection.entry.head, 'tests/step4/s02-golden-master-p1-browser.mjs');
+  const correctedSixFindingBrowserSource = textAt(s02SixFindingCorrectionCommit, 'tests/step4/s02-golden-master-p1-browser.mjs');
+  const sixFindingBrowserPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02SixFindingCorrection.entry.head, s02SixFindingCorrectionCommit, '--', 'tests/step4/s02-golden-master-p1-browser.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+  assert(sha256Text(priorSixFindingBrowserSource) === s02SixFindingCorrection.correction.browserBeforeSha256 && sha256Text(correctedSixFindingBrowserSource) === s02SixFindingCorrection.correction.browserAfterSha256 && `sha256:${sha256Text(sixFindingBrowserPatch)}` === s02SixFindingCorrection.correction.browserPatchSha256, 'S02 six-finding collector bytes/patch differ from the immutable correction record');
+  assert(correctedSixFindingBrowserSource.includes('const offlineHeadRectAfter = localRect(offlineHead);') && correctedSixFindingBrowserSource.includes('const offlineBodyRectAfter = localRect(offlineBody);') && correctedSixFindingBrowserSource.includes('const offlineFooterRectAfter = localRect(offlineFooter);') && correctedSixFindingBrowserSource.includes('if (offlineBody) offlineBody.scrollTop = offlineScrollInitial;'), 'S02 six-finding collector does not preserve after-scroll evidence and restore the modal probe');
+  assert(correctedSixFindingBrowserSource.includes('headAfter: offlineHeadRectAfter, body: offlineBodyRectAfter') && correctedSixFindingBrowserSource.includes('footerAfter: offlineFooterRectAfter') && correctedSixFindingBrowserSource.indexOf('if (offlineBody) offlineBody.scrollTop = offlineScrollInitial;') < correctedSixFindingBrowserSource.indexOf("const stageImages = [...stage.querySelectorAll('img')].map((image) => ({"), 'S02 six-finding collector restores scroll too late or loses the measured after-scroll rectangles');
+  assert(correctedSixFindingBrowserSource.includes("clip: { x: 0, y: 0, width: scenario.width, height: scenario.height }") && correctedSixFindingBrowserSource.includes('captureBeyondViewport: false'), 'S02 six-finding collector removed exact screenshot dimensions');
+
+  const priorSixFindingQaSource = textAt(s02SixFindingCorrection.entry.head, 'tests/step4/s02-golden-master-p1-browser-qa.mjs');
+  const correctedSixFindingQaSource = textAt(s02SixFindingCorrectionCommit, 'tests/step4/s02-golden-master-p1-browser-qa.mjs');
+  const sixFindingQaPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02SixFindingCorrection.entry.head, s02SixFindingCorrectionCommit, '--', 'tests/step4/s02-golden-master-p1-browser-qa.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+  assert(sha256Text(priorSixFindingQaSource) === s02SixFindingCorrection.correction.qaBeforeSha256 && sha256Text(correctedSixFindingQaSource) === s02SixFindingCorrection.correction.qaAfterSha256 && `sha256:${sha256Text(sixFindingQaPatch)}` === s02SixFindingCorrection.correction.qaPatchSha256, 'S02 six-finding QA bytes/patch differ from the immutable correction record');
+  assert(correctedSixFindingQaSource.includes('bottom: Math.max(scenario.viewport.height, scenario.document.stageScroll.scrollHeight)') && correctedSixFindingQaSource.includes('&& intersects(unit.rect, renderBounds, 0.9);') && !correctedSixFindingQaSource.includes('&& intersects(unit.rect, { left: 0, top: 0, right: scenario.viewport.width, bottom: scenario.viewport.height, width: scenario.viewport.width, height: scenario.viewport.height }, 0.9);'), 'S02 six-finding QA does not measure anchor rendering against the full scrollable stage');
+  const pixelGate = 'stats.quantizedColorCount < 256';
+  assert(priorSixFindingQaSource.split(pixelGate).length === 2 && correctedSixFindingQaSource.split(pixelGate).length === 2, 'S02 six-finding QA lowered or duplicated the pixel-complexity threshold');
+
+  const priorSixFindingStylesSource = textAt(s02SixFindingCorrection.entry.head, 'step4/s02/golden-master-p1/styles.css');
+  const correctedSixFindingStylesSource = textAt(s02SixFindingCorrectionCommit, 'step4/s02/golden-master-p1/styles.css');
+  const sixFindingStylesPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02SixFindingCorrection.entry.head, s02SixFindingCorrectionCommit, '--', 'step4/s02/golden-master-p1/styles.css'], { cwd: root, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+  assert(sha256Text(priorSixFindingStylesSource) === s02SixFindingCorrection.correction.stylesBeforeSha256 && sha256Text(correctedSixFindingStylesSource) === s02SixFindingCorrection.correction.stylesAfterSha256 && `sha256:${sha256Text(sixFindingStylesPatch)}` === s02SixFindingCorrection.correction.stylesPatchSha256, 'S02 six-finding style bytes/patch differ from the immutable correction record');
+  assert(correctedSixFindingStylesSource.includes('--scrim: rgba(24, 14, 11, 0.38);') && correctedSixFindingStylesSource.includes('backdrop-filter: none;') && correctedSixFindingStylesSource.includes('radial-gradient(circle at 16% 8%, rgba(255, 251, 226, 0.92)') && correctedSixFindingStylesSource.includes('linear-gradient(128deg, #f3e4bf 0%, #e6c995 45%, #f2dfb5 72%, #d7b176 100%);'), 'S02 six-finding offline material repair is incomplete');
+  assert(correctedSixFindingStylesSource.includes('.text-scale-200 .floor-marker strong {\n  white-space: nowrap;\n}') && priorSixFindingStylesSource.split('font-size:').length === correctedSixFindingStylesSource.split('font-size:').length, 'S02 six-finding text repair shrinks typography or does not prevent the floor-label wrap');
+
+  const priorSixFindingManifestSource = textAt(s02SixFindingCorrection.entry.head, 'step4/s02/golden-master-p1/review-manifest.json');
+  const correctedSixFindingManifestSource = textAt(s02SixFindingCorrectionCommit, 'step4/s02/golden-master-p1/review-manifest.json');
+  const sixFindingManifestPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02SixFindingCorrection.entry.head, s02SixFindingCorrectionCommit, '--', 'step4/s02/golden-master-p1/review-manifest.json'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert(sha256Text(priorSixFindingManifestSource) === s02SixFindingCorrection.correction.manifestBeforeSha256 && sha256Text(correctedSixFindingManifestSource) === s02SixFindingCorrection.correction.manifestAfterSha256 && `sha256:${sha256Text(sixFindingManifestPatch)}` === s02SixFindingCorrection.correction.manifestPatchSha256, 'S02 six-finding manifest bytes/patch differ from the immutable correction record');
+  const correctedSixFindingManifest = JSON.parse(correctedSixFindingManifestSource);
+  const correctedStylesManifestEntry = correctedSixFindingManifest.routeFiles?.find(entry => entry.path === 'step4/s02/golden-master-p1/styles.css');
+  assert(JSON.stringify(correctedStylesManifestEntry) === JSON.stringify({ path: 'step4/s02/golden-master-p1/styles.css', bytes: 51600, sha256: s02SixFindingCorrection.correction.stylesAfterSha256, gitBlob: '28f70068ac9480a40bc95f62922b035aeb9c0cc5' }), 'S02 six-finding manifest does not bind the corrected stylesheet bytes/hash/blob');
+
+  const correctedSixFindingVerifierSource = textAt(s02SixFindingCorrectionCommit, 'tests/governance/verify-current-authority.mjs');
+  const sixFindingVerifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02SixFindingCorrection.entry.head, s02SixFindingCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+  assert(sha256Text(correctedSixFindingVerifierSource) === s02SixFindingCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(sixFindingVerifierPatch)}` === s02SixFindingCorrection.correction.verifierPatchSha256, 'S02 six-finding verifier bytes/patch differ from the immutable correction record');
+  assert(correctedSixFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedSixFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_002') && correctedSixFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_003') && correctedSixFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_004') && correctedSixFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_005') && correctedSixFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_006') && correctedSixFindingVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 six-finding verifier removed a prior correction guard or original fail-closed boundary assertion');
+  assertNoPathChangesSince(s02SixFindingCorrectionCommit, 'HEAD', s02SixFindingCorrectionChangedPaths, 'S02 six-finding correction freeze');
+  if (requireLiveActions) {
+    const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02SixFindingCorrection.authorityWorkflow.runId}`);
+    const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02SixFindingCorrection.authorityWorkflow.jobId}`);
+    const authorityArtifact = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/artifacts/${s02SixFindingCorrection.authorityWorkflow.artifactId}`);
+    assert(authorityRun.head_sha === s02SixFindingCorrection.entry.head && authorityRun.head_branch === 'kimi' && authorityRun.status === 'completed' && authorityRun.conclusion === 'success' && authorityRun.run_attempt === 1, 'S02 six-finding correction live authority run mismatch');
+    assert(authorityJob.run_id === authorityRun.id && authorityJob.head_sha === s02SixFindingCorrection.entry.head && authorityJob.name === 'current-authority' && authorityJob.conclusion === 'success', 'S02 six-finding correction live authority job mismatch');
+    assert(authorityArtifact.name === s02SixFindingCorrection.authorityWorkflow.artifactName && authorityArtifact.digest === s02SixFindingCorrection.authorityWorkflow.artifactDigest && authorityArtifact.expired === false && authorityArtifact.workflow_run?.head_sha === s02SixFindingCorrection.entry.head, 'S02 six-finding correction live authority artifact mismatch');
+    const failedRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02SixFindingCorrection.failedWorkflow.runId}`);
+    const failedJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02SixFindingCorrection.failedWorkflow.jobId}`);
+    const failedArtifact = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/artifacts/${s02SixFindingCorrection.failedWorkflow.artifactId}`);
+    assert(failedRun.head_sha === s02SixFindingCorrection.entry.head && failedRun.head_branch === 'kimi' && failedRun.status === 'completed' && failedRun.conclusion === 'failure' && failedRun.run_attempt === 1, 'S02 six-finding correction live failed run mismatch');
+    assert(failedJob.run_id === failedRun.id && failedJob.head_sha === s02SixFindingCorrection.entry.head && failedJob.name === 'Static, eight-master responsive and accessibility verification' && failedJob.conclusion === 'failure', 'S02 six-finding correction live failed job mismatch');
+    const failedSteps = (failedJob.steps ?? []).filter(step => step.name === s02SixFindingCorrection.failedWorkflow.failedStep);
+    assert(failedSteps.length === 1 && failedSteps[0].conclusion === 'failure', 'S02 six-finding correction live failed step mismatch');
+    assert(failedArtifact.name === s02SixFindingCorrection.failedWorkflow.artifactName && failedArtifact.digest === s02SixFindingCorrection.failedWorkflow.artifactDigest && failedArtifact.expired === false && failedArtifact.workflow_run?.head_sha === s02SixFindingCorrection.entry.head, 'S02 six-finding correction live failure artifact mismatch');
+  }
+}
+// END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_006
 
 function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath = s02ReviewEvidencePaths.deploymentRequest, requireLiveApi = true) {
   assertWorkflowEvidenceKeys(evidence, `${label} workflow evidence`, true);

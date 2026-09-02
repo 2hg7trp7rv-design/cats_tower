@@ -29,7 +29,7 @@
   --reward: #ddae43;
   --disabled-surface: #716b63;
   --focus: #f7e49c;
-  --scrim: rgba(24, 14, 11, 0.54);
+  --scrim: rgba(24, 14, 11, 0.38);
   --radius-small: 8px;
   --radius-chip: 12px;
   --radius-control: 12px;
@@ -1699,7 +1699,7 @@ summary {
     max(20px, env(safe-area-inset-bottom))
     max(18px, env(safe-area-inset-left));
   background: var(--scrim);
-  backdrop-filter: blur(2px) saturate(0.82);
+  backdrop-filter: none;
 }
 
 .offline-modal {
@@ -1713,7 +1713,10 @@ summary {
   color: #3c281b;
   border: 2px solid #c28d42;
   border-radius: var(--radius-modal);
-  background: #eee0be;
+  background:
+    radial-gradient(circle at 16% 8%, rgba(255, 251, 226, 0.92), rgba(255, 251, 226, 0) 38%),
+    radial-gradient(circle at 88% 88%, rgba(153, 89, 43, 0.24), rgba(153, 89, 43, 0) 46%),
+    linear-gradient(128deg, #f3e4bf 0%, #e6c995 45%, #f2dfb5 72%, #d7b176 100%);
   box-shadow: inset 0 0 0 3px rgba(91, 55, 30, 0.16), 0 22px 58px rgba(17, 8, 5, 0.5);
   text-align: center;
 }
@@ -2423,6 +2426,10 @@ summary {
   margin-top: 4px;
   text-align: center;
   white-space: normal;
+}
+
+.text-scale-200 .floor-marker strong {
+  white-space: nowrap;
 }
 
 .text-scale-200 .auto-chip {

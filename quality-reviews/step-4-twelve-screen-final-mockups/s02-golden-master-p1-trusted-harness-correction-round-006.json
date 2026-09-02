@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-trusted-harness-correction-round-006",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "d3079744ba497a8861c8195017ae314a71f08a97",
+    "tree": "63d38c392bcaec0d6c64bacdd974912b1eb055b6"
+  },
+  "authorityWorkflow": {
+    "commit": "d3079744ba497a8861c8195017ae314a71f08a97",
+    "tree": "63d38c392bcaec0d6c64bacdd974912b1eb055b6",
+    "runId": 33594917634,
+    "runAttempt": 1,
+    "jobId": 100136471271,
+    "conclusion": "SUCCESS",
+    "artifactId": 9833069734,
+    "artifactName": "phase0-current-governance-d3079744ba497a8861c8195017ae314a71f08a97-33594917634-1",
+    "artifactDigest": "sha256:8e2d6fea23dce7a183e8dbd5f4efefef90e05aa695673ad94e90df2bfa79ec94"
+  },
+  "failedWorkflow": {
+    "commit": "d3079744ba497a8861c8195017ae314a71f08a97",
+    "tree": "63d38c392bcaec0d6c64bacdd974912b1eb055b6",
+    "runId": 33594917474,
+    "runAttempt": 1,
+    "jobId": 100136324346,
+    "conclusion": "FAILURE",
+    "failedStep": "Capture and verify eight masters plus required responsive variants",
+    "summary": "FAIL_S02_GOLDEN_MASTER_P1_BROWSER: 15 scenarios, 6 failures",
+    "artifactId": 9833067336,
+    "artifactName": "step4-s02-golden-master-p1-semantic-d3079744ba497a8861c8195017ae314a71f08a97-33594917474-1",
+    "artifactDigest": "sha256:4f45e22edd840e81ee00af3bbd44387afef26a86dc130b400446222dfcbe34f2"
+  },
+  "diagnosis": {
+    "type": "EXACT_FIFTEEN_CAPTURE_REVEALED_OFFLINE_MATERIAL_TEXT_REFLOW_AND_SCROLL_SCOPE_DEFECTS",
+    "failedAssertions": [
+      "GM07: screenshot pixel complexity/opacity gate failed",
+      "GM07C320: screenshot pixel complexity/opacity gate failed",
+      "GM07C320TEXT200: screenshot pixel complexity/opacity gate failed",
+      "FOOT_AND_HIT_ANCHORS_BOUND: trusted recomputation failed",
+      "TEXT_200_PERCENT_NO_LOSS: trusted recomputation failed",
+      "RESPONSIVE_GEOMETRY_CONTRACT: trusted recomputation failed"
+    ],
+    "visualFindings": [
+      "The offline surface flattened the parchment and suppressed too much identifiable battle context.",
+      "The 200 percent 26-floor label wrapped at a fractional boundary and clipped three CSS pixels vertically.",
+      "The 200 percent offline scroll probe was not restored before the Golden Master screenshot."
+    ],
+    "measurementFindings": [
+      "Anchor mapping incorrectly treated valid scrollable battle content below the initial viewport as disconnected rendering.",
+      "The responsive failure shared the same clipped 26-floor label root cause as the text-200 failure."
+    ],
+    "allFifteenExactPngsPreserved": true,
+    "originalFailureArtifactPreserved": true
+  },
+  "correction": {
+    "rule": "REPAIR_THE_OBSERVED_OFFLINE_MATERIAL_AND_TEXT_REFLOW_WHILE_RESTORING_PROBE_STATE_AND_MEASURING_ANCHORS_AGAINST_THE_SCROLLABLE_STAGE_WITHOUT_LOWERING_THRESHOLDS",
+    "changedPaths": [
+      ".github/workflows/verify-step-4-s02-golden-master-p1.yml",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-006.json",
+      "step4/s02/golden-master-p1/review-manifest.json",
+      "step4/s02/golden-master-p1/styles.css",
+      "tests/governance/verify-current-authority.mjs",
+      "tests/step4/s02-golden-master-p1-browser-qa.mjs",
+      "tests/step4/s02-golden-master-p1-browser.mjs"
+    ],
+    "workflowBeforeSha256": "4fa345932c2ba70a09e5726190cfef10690ca81b5b030612fc96fab7976f384c",
+    "workflowAfterSha256": "ebd5732f09d76d997c1642ea3b861f9e8373b6d18ea2781768e7e31e2cbef12e",
+    "workflowPatchSha256": "sha256:2b3170bcc671f3b367716145b9da8089a29c87f805e82200c79dec36ae4bfd6a",
+    "browserBeforeSha256": "ec1011fb7101a420cfbc68af1dc43c4d30c659d41715d25aa0dc915d1f4b99bb",
+    "browserAfterSha256": "4c42ea958be68f6b55464c0e7f1567c937eb06a5ce5f9e6f043b6db66e2b1b12",
+    "browserPatchSha256": "sha256:fa9668d3955e8456eea5213211cd619faf4f6fe69b554c2b8b4f0f4677e7f6ab",
+    "qaBeforeSha256": "9661cf489c3329c3119ba3cb16ee3e8ebb61848eb841adcbdd7cc28f8da2bd1e",
+    "qaAfterSha256": "8aed7521d33f5a610b705dfeb07faa5873ac1f18ec8715498f4064000bd50b12",
+    "qaPatchSha256": "sha256:f28bf3201ed557f75bb3d103ee92765c3fae61b8df22d35de3f9e48ca12ebf49",
+    "stylesBeforeSha256": "23ea9978b4c0eee15d2dc91dcfbab39db46a00231f2bb991a7b836f1f4071887",
+    "stylesAfterSha256": "3ce4d0bc9ff39e083e8a3ac25806707a28c479620c38922d11e05dbc498898ee",
+    "stylesPatchSha256": "sha256:7c85d42112036bcc1266c15a9e9e864561f544d256afcf70bafe244e7c81a12d",
+    "manifestBeforeSha256": "37189dfcdf536d620425d6e43e195fb7af772b88df5d4c06329a6702a52e138c",
+    "manifestAfterSha256": "c0aaad7d126165c0acaa8e9281263bf3fe3a409449bacafeb4630a3c24959e0d",
+    "manifestPatchSha256": "sha256:2cc6864097ca83d2a1eac2864b34ba7a214d8e6293ebfa5014f172777ec3fd3b",
+    "verifierAfterSha256": "e494cbb93db0ecc076d77cd5334b97df341ce9d75dd028f3054eed9d54ceefa1",
+    "verifierPatchSha256": "sha256:dfc008033d5a9d28e52272d5f2458a97e4d2523ffdd85a2e69055d3d28aee7c7",
+    "acceptanceThresholdsChanged": false,
+    "qualityCoverageWeakened": false,
+    "exactScreenshotDimensionsEnforced": true,
+    "postProbeScrollRestored": true,
+    "failureEvidenceUploadRetained": true
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_SIX_BROWSER_FINDINGS_PENDING_RERUN"
+}
