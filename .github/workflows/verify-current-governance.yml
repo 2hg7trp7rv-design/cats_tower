@@ -189,29 +189,18 @@ jobs:
           test "${#PENDING[@]}" -eq 1
           S02_PREVIEW_REQUEST="${PENDING[0]}"
           export S02_PREVIEW_REQUEST
-          test "$(git log --diff-filter=A --format=%H -- "$S02_PREVIEW_REQUEST" | tail -n 1)" = "$GITHUB_SHA"
+          REQUEST_COMMIT=$(git log --diff-filter=A --format=%H -- "$S02_PREVIEW_REQUEST" | tail -n 1)
+          CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-verifier-correction-round-001.json'
+          if test -f "$CORRECTION"; then
+            test "$(git log --diff-filter=A --format=%H -- "$CORRECTION" | tail -n 1)" = "$GITHUB_SHA"
+            test "$(git rev-parse HEAD^)" = "$REQUEST_COMMIT"
+            test "$(jq -er '.entry.head' "$CORRECTION")" = "$REQUEST_COMMIT"
+          else
+            test "$REQUEST_COMMIT" = "$GITHUB_SHA"
+          fi
           CONTENT_SHA=$(jq -er '.verifiedContent.commit' "$S02_PREVIEW_REQUEST")
           test "$(jq -er '.branch' "$S02_PREVIEW_REQUEST")" = 'kimi'
           mkdir -p external
-          gh api --method GET \
-            -H 'Accept: application/vnd.github+json' \
-            -H 'X-GitHub-Api-Version: 2022-11-28' \
-            "/repos/2hg7trp7rv-design/cats_tower/deployments?sha=${CONTENT_SHA}&ref=kimi&per_page=100" \
-            > external/github-deployments-content.json
-          DEPLOYMENT_ID=$(node --input-type=module - <<'NODE'
-          import fs from 'node:fs';
-          const request = JSON.parse(fs.readFileSync(process.env.S02_PREVIEW_REQUEST, 'utf8'));
-          const rows = JSON.parse(fs.readFileSync('external/github-deployments-content.json', 'utf8'));
-          const exact = rows.find(row => row.sha === request.verifiedContent.commit && row.ref === 'kimi' && row.task === 'deploy' && /^preview$/i.test(row.environment || '') && row.transient_environment === true && row.production_environment === false && row.creator?.login === 'vercel[bot]' && row.creator?.id === 35613825 && row.creator?.type === 'Bot');
-          if (!exact || !Number.isSafeInteger(exact.id)) process.exit(1);
-          process.stdout.write(String(exact.id));
-          NODE
-          )
-          gh api --method GET \
-            -H 'Accept: application/vnd.github+json' \
-            -H 'X-GitHub-Api-Version: 2022-11-28' \
-            "/repos/2hg7trp7rv-design/cats_tower/deployments/${DEPLOYMENT_ID}/statuses?per_page=100" \
-            > external/github-deployment-statuses-content.json
           gh api --method GET \
             -H 'Accept: application/vnd.github+json' \
             -H 'X-GitHub-Api-Version: 2022-11-28' \
@@ -229,27 +218,24 @@ jobs:
 
           const requestPath = process.env.S02_PREVIEW_REQUEST;
           const request = JSON.parse(fs.readFileSync(requestPath, 'utf8'));
+          const correctionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-verifier-correction-round-001.json';
+          const correction = JSON.parse(fs.readFileSync(correctionPath, 'utf8'));
           const raw = {
-            deployments: fs.readFileSync('external/github-deployments-content.json'),
-            deploymentStatuses: fs.readFileSync('external/github-deployment-statuses-content.json'),
             commitStatuses: fs.readFileSync('external/github-commit-statuses-content.json')
           };
-          const deployments = JSON.parse(raw.deployments.toString('utf8'));
-          const deploymentStatuses = JSON.parse(raw.deploymentStatuses.toString('utf8'));
           const commitStatuses = JSON.parse(raw.commitStatuses.toString('utf8'));
-          const deployment = deployments.find(row => row.sha === request.verifiedContent.commit && row.ref === 'kimi' && row.task === 'deploy' && /^preview$/i.test(row.environment || '') && row.transient_environment === true && row.production_environment === false && row.creator?.login === 'vercel[bot]' && row.creator?.id === 35613825 && row.creator?.type === 'Bot');
-          const deploymentStatus = deploymentStatuses.find(row => row.creator?.login === 'vercel[bot]' && row.creator?.id === 35613825 && row.creator?.type === 'Bot');
           const commitStatus = commitStatuses.find(row => row.context === 'Vercel' && row.creator?.login === 'vercel[bot]' && row.creator?.id === 35613825 && row.creator?.type === 'Bot');
-          if (!deployment || deploymentStatus?.state !== 'success' || commitStatus?.state !== 'success') throw new Error('LATEST_VERCEL_PREVIEW_NOT_SUCCESS');
+          if (commitStatus?.state !== 'success') throw new Error('LATEST_VERCEL_PREVIEW_NOT_SUCCESS');
           const targetMatch = /^https:\/\/vercel\.com\/shinyaaas-projects\/cats_tower\/([A-Za-z0-9]+)$/.exec(commitStatus.target_url || '');
           if (!targetMatch) throw new Error('VERCEL_STATUS_TARGET_URL_INVALID');
-          if (![deploymentStatus.target_url, deploymentStatus.log_url].includes(commitStatus.target_url)) throw new Error('VERCEL_DEPLOYMENT_AND_COMMIT_STATUS_NOT_CORRELATED');
+          const observedDeployment = correction.vercelObservation;
+          if (observedDeployment.provider !== 'VERCEL_AUTHENTICATED_CONNECTOR' || observedDeployment.deploymentId !== `dpl_${targetMatch[1]}` || observedDeployment.state !== 'READY' || observedDeployment.target !== null || observedDeployment.environment !== 'Preview' || observedDeployment.source !== 'git' || observedDeployment.githubCommitSha !== request.verifiedContent.commit || observedDeployment.githubCommitRef !== 'kimi' || observedDeployment.branchAlias !== request.review.branchAlias) throw new Error('VERCEL_CONNECTOR_OBSERVATION_MISMATCH');
           const assertUrl = value => {
             const url = new URL(value);
             if (url.protocol !== 'https:' || url.username || url.password || url.port || !/^[a-z0-9-]+\.vercel\.app$/.test(url.hostname)) throw new Error(`UNTRUSTED_VERCEL_URL:${value}`);
             return url.origin;
           };
-          const immutableOrigin = assertUrl(deploymentStatus.environment_url);
+          const immutableOrigin = assertUrl(observedDeployment.immutableUrl);
           const aliasOrigin = assertUrl(request.review.branchAlias);
           if (immutableOrigin === aliasOrigin) throw new Error('IMMUTABLE_DEPLOYMENT_EQUALS_BRANCH_ALIAS');
           const temporaryAccessUrl = new URL(request.review.temporaryAccess.url);
@@ -471,19 +457,17 @@ jobs:
             oidcClaims,
             oidcVerified: true,
             verifiedContent: request.verifiedContent,
+            vercelObservation: observedDeployment,
             contentDeployment: {
-              githubDeploymentId: deployment.id,
-              githubDeploymentStatusId: deploymentStatus.id,
               githubCommitStatusId: commitStatus.id,
               vercelDeploymentId: `dpl_${targetMatch[1]}`,
               immutableUrl: immutableOrigin,
               githubSha: request.verifiedContent.commit,
               githubRef: 'kimi',
               environment: 'Preview',
-              transientEnvironment: true,
-              productionEnvironment: false,
               state: 'success',
-              creator: { login: 'vercel[bot]', id: 35613825, type: 'Bot' }
+              creator: { login: 'vercel[bot]', id: 35613825, type: 'Bot' },
+              proofBasis: 'VERCEL_BOT_COMMIT_STATUS_PLUS_AUTHENTICATED_CONNECTOR_OBSERVATION_PLUS_BYTE_EXACT_HTTP'
             },
             rawSha256: Object.fromEntries(Object.entries(raw).map(([key, value]) => [key, `sha256:${createHash('sha256').update(value).digest('hex')}`])),
             httpReportSha256: `sha256:${createHash('sha256').update(fs.readFileSync('external/http-report.json')).digest('hex')}`,

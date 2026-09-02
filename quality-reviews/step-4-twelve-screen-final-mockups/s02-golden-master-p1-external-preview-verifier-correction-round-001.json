@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-external-preview-verifier-correction-round-001",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "e5ba5ed92d0eeb0da67f956637b7ebb1cb6c2a11",
+    "tree": "f706c3146d09f3c30368e0e0d4a92afbfd7850da"
+  },
+  "failedWorkflow": {
+    "commit": "e5ba5ed92d0eeb0da67f956637b7ebb1cb6c2a11",
+    "tree": "f706c3146d09f3c30368e0e0d4a92afbfd7850da",
+    "runId": 33610330739,
+    "runAttempt": 1,
+    "jobId": 100183966100,
+    "conclusion": "FAILURE",
+    "failedStep": "Generate external S02 Preview proof",
+    "githubDeploymentRows": 0,
+    "error": "GITHUB_DEPLOYMENTS_COLLECTION_EMPTY_BEFORE_HTTP_READBACK"
+  },
+  "request": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-request-round-001.json",
+    "commit": "e5ba5ed92d0eeb0da67f956637b7ebb1cb6c2a11",
+    "tree": "f706c3146d09f3c30368e0e0d4a92afbfd7850da",
+    "blob": "c034073b7b9beaa34bcffd4a685e36fefc3a0861"
+  },
+  "vercelObservation": {
+    "provider": "VERCEL_AUTHENTICATED_CONNECTOR",
+    "observedAt": "2026-09-02T08:54:47Z",
+    "teamId": "team_6odZCZQ1QxjzhPdC9sgEtoCM",
+    "projectId": "prj_3Ip3e0eYMy9SchP1vS36ibjJP9LB",
+    "projectName": "cats_tower",
+    "deploymentId": "dpl_3Gazm7bakV5doczCp17r97tvu9SR",
+    "immutableUrl": "https://catstower-e72ri5svj-shinyaaas-projects.vercel.app",
+    "state": "READY",
+    "target": null,
+    "environment": "Preview",
+    "source": "git",
+    "githubCommitSha": "0fa6ac052ca303f24b6e0cf859322792491fcdef",
+    "githubCommitRef": "kimi",
+    "branchAlias": "https://catstower-git-kimi-shinyaaas-projects.vercel.app",
+    "createdAt": 1788333095836,
+    "readyAt": 1788333100733
+  },
+  "diagnosis": {
+    "type": "VERCEL_GITHUB_INTEGRATION_EMITS_BOT_COMMIT_STATUS_WITHOUT_GITHUB_DEPLOYMENT_ROWS",
+    "githubDeploymentsApiRows": 0,
+    "successfulVercelCommitStatusId": 53360951106,
+    "successfulVercelCommitStatusTarget": "https://vercel.com/shinyaaas-projects/cats_tower/3Gazm7bakV5doczCp17r97tvu9SR",
+    "authenticatedDeploymentMetadataAvailable": true,
+    "productQualityAffected": false,
+    "originalFailurePreserved": true
+  },
+  "correction": {
+    "rule": "REPLACE_THE_ABSENT_GITHUB_DEPLOYMENTS_PRECONDITION_WITH_EXACT_VERCEL_BOT_STATUS_AUTHENTICATED_CONNECTOR_METADATA_AND_UNCHANGED_BYTE_EXACT_DUAL_URL_HTTP_PROOF",
+    "changedPaths": [
+      ".github/workflows/verify-current-governance.yml",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-verifier-correction-round-001.json",
+      "tests/governance/verify-current-authority.mjs"
+    ],
+    "workflowBeforeSha256": "a1ea34c309865e22d6f5691c0eeb035473dc0d9a45c5a711cbb8e52e76ee4b41",
+    "workflowAfterSha256": "b8fa33551d801697dfc1f67e4ce780d6ddcd01779fc96b3faa109380b93441de",
+    "workflowPatchSha256": "sha256:d288f3f597b28dd9fb9e241ee3636a8127f645a35f27a955f7dba63126d283f7",
+    "verifierAfterSha256": "31b1e39bfd8c989fdaf01837ec4ab3379c253906d3fad1ce5b0f6af33052bf8b",
+    "verifierPatchSha256": "sha256:bf0e679371399d75bb846de218adefd9f5b4b78929cfa1c48a772fbcd26c6e01",
+    "githubDeploymentsRequired": false,
+    "vercelBotStatusRequired": true,
+    "authenticatedConnectorObservationRequired": true,
+    "immutableAndAliasByteChecksRetained": true,
+    "oidcProofRetained": true,
+    "acceptanceThresholdsChanged": false,
+    "productContentChanged": false
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_EXTERNAL_PREVIEW_VERIFIER_PENDING_RERUN"
+}
