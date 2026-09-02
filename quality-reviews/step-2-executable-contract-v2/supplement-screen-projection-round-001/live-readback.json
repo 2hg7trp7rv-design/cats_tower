@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-screen-projection-live-readback-round-001",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
+  "readbackTarget": {
+    "commit": "6adcec2485890129587a276d202dbfe6ba88a994",
+    "tree": "1ded247d243995a31a85e2c392a2cc70fc2a7b60"
+  },
+  "completion": {
+    "path": "quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/completion-evidence.json",
+    "blob": "f0e1d611d993ad632cab11f607cb74b7f6449678"
+  },
+  "workflow": {
+    "commit": "6adcec2485890129587a276d202dbfe6ba88a994",
+    "tree": "1ded247d243995a31a85e2c392a2cc70fc2a7b60",
+    "runId": 33585420822,
+    "runAttempt": 1,
+    "jobId": 100108565055,
+    "conclusion": "SUCCESS",
+    "artifactId": 9829907665,
+    "artifactName": "phase0-current-governance-6adcec2485890129587a276d202dbfe6ba88a994-33585420822-1",
+    "artifactDigest": "sha256:9530f25f30230b3eedae4aea6bddedc9f80f5a470d6f1a3dd3c9c511913c78e4",
+    "oidcTokenSha256": "sha256:6aa6114fac46ede255ee87588ba85b578a2aecfbf913f503da8450638851d809",
+    "oidcClaims": {
+      "issuer": "https://token.actions.githubusercontent.com",
+      "audience": "cats-tower-current-governance",
+      "subject": "repo:2hg7trp7rv-design@245031448/cats_tower@1331488679:ref:refs/heads/kimi",
+      "repository": "2hg7trp7rv-design/cats_tower",
+      "repositoryId": "1331488679",
+      "repositoryOwnerId": "245031448",
+      "ref": "refs/heads/kimi",
+      "sha": "6adcec2485890129587a276d202dbfe6ba88a994",
+      "runId": "33585420822",
+      "runAttempt": "1",
+      "workflowRef": "2hg7trp7rv-design/cats_tower/.github/workflows/verify-current-governance.yml@refs/heads/kimi"
+    },
+    "oidcVerified": true
+  },
+  "verdict": "READY_TO_SEAL_STEP2_V3_SCREEN_PROJECTION",
+  "unresolved": {
+    "P0": 0,
+    "P1": 0
+  },
+  "resolvedFindings": [
+    "S2-P0-SCREEN-PROJECTION-001"
+  ],
+  "maximumVerdict": "READY_TO_SEAL_STEP2_V3_SCREEN_PROJECTION"
+}
