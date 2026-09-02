@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-step2-screen-projection-completion-round-001",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
+  "verifiedContent": {
+    "commit": "6adcec2485890129587a276d202dbfe6ba88a994",
+    "tree": "1ded247d243995a31a85e2c392a2cc70fc2a7b60"
+  },
+  "finalJudge": {
+    "path": "quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/final-judge.json",
+    "blob": "ca6f3aed87e143bd6e36881ffbe6fd152441cb11"
+  },
+  "verdict": "READY_FOR_STEP2_LIVE_READBACK",
+  "unresolved": {
+    "P0": 0,
+    "P1": 0
+  },
+  "resolvedFindings": [
+    "S2-P0-SCREEN-PROJECTION-001"
+  ],
+  "maximumVerdict": "READY_FOR_STEP2_LIVE_READBACK"
+}
