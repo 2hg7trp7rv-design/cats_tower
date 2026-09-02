@@ -1777,7 +1777,9 @@ summary {
   color: #59391f;
   border: 2px solid #ad7938;
   border-radius: 50%;
-  background: #d8a754;
+  background:
+    radial-gradient(circle, #ddb15c 0 54%, transparent 56%),
+    conic-gradient(from -12deg, #75402a 0 14%, #b96d51 14% 28%, #527f77 28% 42%, #e5bd64 42% 58%, #6c537d 58% 72%, #4f8278 72% 86%, #75402a 86% 100%);
   box-shadow: inset 0 0 0 3px rgba(255, 246, 205, 0.45), 0 5px 12px rgba(76, 43, 18, 0.22);
 }
 
@@ -2581,7 +2583,7 @@ summary {
 }
 
 .text-scale-200 .primary-action {
-  height: 100px;
+  height: 108px;
   padding-inline: 12px;
 }
 

@@ -225,6 +225,8 @@ function assertS02HistoryWithIncrementalRenewals(base, head, control, label, evi
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02FourFindingCorrectionChangedPaths].sort()), `${label}: four-finding correction changed an unreviewed path`);
     } else if (s02TwoFindingCorrectionCommit && commit === s02TwoFindingCorrectionCommit) {
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02TwoFindingCorrectionChangedPaths].sort()), `${label}: two-finding correction changed an unreviewed path`);
+    } else if (s02RemainingTwoCorrectionCommit && commit === s02RemainingTwoCorrectionCommit) {
+      assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02RemainingTwoCorrectionChangedPaths].sort()), `${label}: remaining-two correction changed an unreviewed path`);
     } else {
       assertBoundary(paths, control, `${label} commit ${commit}`);
     }
@@ -3807,6 +3809,15 @@ const s02TwoFindingCorrectionChangedPaths = [
   'step4/s02/golden-master-p1/styles.css',
   'tests/governance/verify-current-authority.mjs'
 ];
+const s02RemainingTwoCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-010.json';
+const s02RemainingTwoCorrection = exists(s02RemainingTwoCorrectionPath) ? json(s02RemainingTwoCorrectionPath) : null;
+const s02RemainingTwoCorrectionCommit = s02RemainingTwoCorrection ? firstAddCommit(s02RemainingTwoCorrectionPath) : null;
+const s02RemainingTwoCorrectionChangedPaths = [
+  s02RemainingTwoCorrectionPath,
+  'step4/s02/golden-master-p1/review-manifest.json',
+  'step4/s02/golden-master-p1/styles.css',
+  'tests/governance/verify-current-authority.mjs'
+];
 
 // BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001
 const s02HarnessCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-001.json';
@@ -4739,7 +4750,8 @@ if (s02TwoFindingCorrection) {
   const twoFindingVerifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02TwoFindingCorrection.entry.head, s02TwoFindingCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
   assert(sha256Text(correctedTwoFindingVerifierSource) === s02TwoFindingCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(twoFindingVerifierPatch)}` === s02TwoFindingCorrection.correction.verifierPatchSha256, 'S02 two-finding verifier bytes/patch differ from the immutable correction record');
   assert(correctedTwoFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedTwoFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_002') && correctedTwoFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_003') && correctedTwoFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_004') && correctedTwoFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_005') && correctedTwoFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_006') && correctedTwoFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_007') && correctedTwoFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_008') && correctedTwoFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_009') && correctedTwoFindingVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 two-finding verifier removed a prior correction guard or original fail-closed boundary assertion');
-  assertNoPathChangesSince(s02TwoFindingCorrectionCommit, 'HEAD', s02TwoFindingCorrectionChangedPaths, 'S02 two-finding correction freeze');
+  const s02TwoFindingFreezeEnd = s02RemainingTwoCorrectionCommit ? git(['rev-parse', `${s02RemainingTwoCorrectionCommit}^`]) : 'HEAD';
+  assertNoPathChangesSince(s02TwoFindingCorrectionCommit, s02TwoFindingFreezeEnd, s02TwoFindingCorrectionChangedPaths, 'S02 two-finding correction freeze');
   if (requireLiveActions) {
     const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02TwoFindingCorrection.authorityWorkflow.runId}`);
     const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02TwoFindingCorrection.authorityWorkflow.jobId}`);
@@ -4758,6 +4770,111 @@ if (s02TwoFindingCorrection) {
   }
 }
 // END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_009
+
+// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_010
+if (s02RemainingTwoCorrection) {
+  assertExactKeySet(s02RemainingTwoCorrection, ['schemaVersion', 'artifactId', 'createdAt', 'repository', 'branch', 'changeControl', 'entry', 'authorityWorkflow', 'failedWorkflow', 'diagnosis', 'correction', 'boundaries', 'status'], 'S02 remaining-two correction');
+  assertExactKeySet(s02RemainingTwoCorrection.entry, ['head', 'tree'], 'S02 remaining-two correction entry');
+  assertExactKeySet(s02RemainingTwoCorrection.authorityWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'artifactId', 'artifactName', 'artifactDigest'], 'S02 remaining-two authority workflow');
+  assertExactKeySet(s02RemainingTwoCorrection.failedWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'failedStep', 'summary', 'artifactId', 'artifactName', 'artifactDigest'], 'S02 remaining-two failed workflow');
+  assertExactKeySet(s02RemainingTwoCorrection.diagnosis, ['type', 'failedAssertions', 'closedFindings', 'visualFindings', 'measurementFindings', 'allFifteenExactPngsPreserved', 'originalFailureArtifactPreserved'], 'S02 remaining-two diagnosis');
+  assertExactKeySet(s02RemainingTwoCorrection.correction, ['rule', 'changedPaths', 'stylesBeforeSha256', 'stylesAfterSha256', 'stylesPatchSha256', 'manifestBeforeSha256', 'manifestAfterSha256', 'manifestPatchSha256', 'verifierAfterSha256', 'verifierPatchSha256', 'acceptanceThresholdsChanged', 'qualityCoverageWeakened', 'browserCollectorChanged', 'browserQaChanged', 'fontSizeReduced', 'failureEvidenceUploadRetained'], 'S02 remaining-two exact correction');
+  assertExactKeySet(s02RemainingTwoCorrection.boundaries, ['rootRuntimeChanged', 'gameCoreChanged', 'gameDataChanged', 'economyChanged', 'saveSchemaChanged', 'backendChanged', 'productionChanged', 'productionAliasChanged', 'physicalIPhoneVerified', 'step4Pass', 'step5Allowed'], 'S02 remaining-two correction boundaries');
+  assert(s02RemainingTwoCorrection.schemaVersion === 1 && s02RemainingTwoCorrection.artifactId === 'cats-tower-s02-golden-master-p1-trusted-harness-correction-round-010' && s02RemainingTwoCorrection.createdAt === '2026-09-02', 'S02 remaining-two correction identity/date mismatch');
+  assert(s02RemainingTwoCorrection.repository === '2hg7trp7rv-design/cats_tower' && s02RemainingTwoCorrection.branch === 'kimi' && s02RemainingTwoCorrection.changeControl === s02RepairControlPath, 'S02 remaining-two correction authority mismatch');
+  assert(JSON.stringify(s02RemainingTwoCorrection.entry) === JSON.stringify({ head: 'c988585130aba9872cbe61bde97d5abca1baa176', tree: '3f85a54f8a3ae50930d3348d38df2bf31deb4239' }), 'S02 remaining-two correction entry is not the exact failed round-009 correction commit/tree');
+  assert(JSON.stringify(s02RemainingTwoCorrection.authorityWorkflow) === JSON.stringify({
+    commit: s02RemainingTwoCorrection.entry.head,
+    tree: s02RemainingTwoCorrection.entry.tree,
+    runId: 33599003346,
+    runAttempt: 1,
+    jobId: 100148484561,
+    conclusion: 'SUCCESS',
+    artifactId: 9834462333,
+    artifactName: 'phase0-current-governance-c988585130aba9872cbe61bde97d5abca1baa176-33599003346-1',
+    artifactDigest: 'sha256:acdbe55afb633a44c7a7950a896de753e5452c40840b7f7a95ca9a6eaa494ade'
+  }), 'S02 remaining-two correction does not bind the successful exact-entry authority workflow');
+  assert(JSON.stringify(s02RemainingTwoCorrection.failedWorkflow) === JSON.stringify({
+    commit: s02RemainingTwoCorrection.entry.head,
+    tree: s02RemainingTwoCorrection.entry.tree,
+    runId: 33599003348,
+    runAttempt: 1,
+    jobId: 100148330912,
+    conclusion: 'FAILURE',
+    failedStep: 'Capture and verify eight masters plus required responsive variants',
+    summary: 'FAIL_S02_GOLDEN_MASTER_P1_BROWSER: 15 scenarios, 2 failures',
+    artifactId: 9834454926,
+    artifactName: 'step4-s02-golden-master-p1-semantic-c988585130aba9872cbe61bde97d5abca1baa176-33599003348-1',
+    artifactDigest: 'sha256:83f96fe808db637bcf96d85f9c6bdf78c69717f89ad8823ca5702598057e7f27'
+  }), 'S02 remaining-two correction does not bind the exact failed workflow/job/summary/artifact');
+  assert(JSON.stringify(s02RemainingTwoCorrection.diagnosis) === JSON.stringify({
+    type: 'ROUND_009_CLOSED_COMPACT_OFFLINE_COLOR_AND_HEADER_OVERLAP_BUT_EXPOSED_TEXT200_ACTION_FIT_AND_MODAL_PALETTE_REGRESSION',
+    failedAssertions: [
+      'GM07C320TEXT200: screenshot pixel complexity/opacity gate failed',
+      'TEXT_200_PERCENT_NO_LOSS: trusted recomputation failed'
+    ],
+    closedFindings: [
+      'GM07C320 reached 262 quantized colors and passed the unchanged 256 threshold.',
+      'All nine critical labels retained exact 200 percent font scaling, fit their scroll boxes and no longer overlapped.'
+    ],
+    visualFindings: [
+      'GM07C320TEXT200 reached 231 quantized colors because the enlarged parchment content hid most of the lower material inlay; the visible clock seal needed its own restrained enamel palette.'
+    ],
+    measurementFindings: [
+      'The 200 percent primary action reported scrollHeight 102 CSS pixels against clientHeight 98 CSS pixels in both zero-safe-area and nonzero-safe-area captures; every other recomputed text-scale predicate passed.'
+    ],
+    allFifteenExactPngsPreserved: true,
+    originalFailureArtifactPreserved: true
+  }), 'S02 remaining-two diagnosis differs from the preserved fifteen-capture failed run and artifact');
+  assert(s02RemainingTwoCorrection.correction.rule === 'ADD_A_RESTRAINED_BRASS_PATINA_ENAMEL_RING_TO_THE_VISIBLE_OFFLINE_SEAL_AND_EXPAND_THE_200_PERCENT_PRIMARY_ACTION_BY_EIGHT_PIXELS_WITHOUT_SHRINKING_TEXT_OR_LOWERING_THRESHOLDS' && JSON.stringify(s02RemainingTwoCorrection.correction.changedPaths) === JSON.stringify(s02RemainingTwoCorrectionChangedPaths), 'S02 remaining-two correction rule/path set mismatch');
+  assert(s02RemainingTwoCorrection.correction.stylesBeforeSha256 === '666c48708f67d6e2b24d1861bae8bbf1778a4d5a34b3fd5d81a74bc429c8699b' && s02RemainingTwoCorrection.correction.stylesAfterSha256 === 'f57a5d34f3f07a31f72c05ef6c31d698bbda9c5a15deefcea1e8c587a8de3d25' && s02RemainingTwoCorrection.correction.stylesPatchSha256 === 'sha256:dabc4c04d8ac67c7c37af6fdd75e69bcbb260f36162905374e3ae364857da0a6', 'S02 remaining-two style digest/patch mismatch');
+  assert(s02RemainingTwoCorrection.correction.manifestBeforeSha256 === '2307d9c35cfcff06d239bcbc3b3870b78ad1feff7d6afcf30c816001a46e3625' && s02RemainingTwoCorrection.correction.manifestAfterSha256 === 'f308ce486a4ffec981d25423f73cdda2ccb46db64a72f5e51bf8deb9f675a8da' && s02RemainingTwoCorrection.correction.manifestPatchSha256 === 'sha256:01cff4464a23fc597a3aa985591094a324b0a9d2c047ae5e3af2fe60727da085', 'S02 remaining-two manifest digest/patch mismatch');
+  assert(s02RemainingTwoCorrection.correction.acceptanceThresholdsChanged === false && s02RemainingTwoCorrection.correction.qualityCoverageWeakened === false && s02RemainingTwoCorrection.correction.browserCollectorChanged === false && s02RemainingTwoCorrection.correction.browserQaChanged === false && s02RemainingTwoCorrection.correction.fontSizeReduced === false && s02RemainingTwoCorrection.correction.failureEvidenceUploadRetained === true, 'S02 remaining-two correction weakens coverage, changes evidence collection or shrinks text');
+  assert(JSON.stringify(s02RemainingTwoCorrection.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }), 'S02 remaining-two correction crosses a protected product/release boundary');
+  assert(s02RemainingTwoCorrection.status === 'CORRECTED_REMAINING_TWO_BROWSER_ASSERTIONS_PENDING_RERUN', 'S02 remaining-two correction status mismatch');
+  assert(s02RemainingTwoCorrectionCommit && git(['rev-parse', `${s02RemainingTwoCorrectionCommit}^`]) === s02RemainingTwoCorrection.entry.head, 'S02 remaining-two correction is not the immediate child of the exact failed commit');
+  assert(git(['rev-parse', `${s02RemainingTwoCorrection.entry.head}^{tree}`]) === s02RemainingTwoCorrection.entry.tree, 'S02 remaining-two correction entry tree mismatch');
+  assertExactChangedPaths(s02RemainingTwoCorrection.entry.head, s02RemainingTwoCorrectionCommit, s02RemainingTwoCorrectionChangedPaths, 'S02 remaining-two correction commit');
+  assertAddedOnceAndUnchanged(s02RemainingTwoCorrectionPath, s02RemainingTwoCorrectionCommit);
+
+  const priorRemainingTwoStylesSource = textAt(s02RemainingTwoCorrection.entry.head, 'step4/s02/golden-master-p1/styles.css');
+  const correctedRemainingTwoStylesSource = textAt(s02RemainingTwoCorrectionCommit, 'step4/s02/golden-master-p1/styles.css');
+  const remainingTwoStylesPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02RemainingTwoCorrection.entry.head, s02RemainingTwoCorrectionCommit, '--', 'step4/s02/golden-master-p1/styles.css'], { cwd: root, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+  assert(sha256Text(priorRemainingTwoStylesSource) === s02RemainingTwoCorrection.correction.stylesBeforeSha256 && sha256Text(correctedRemainingTwoStylesSource) === s02RemainingTwoCorrection.correction.stylesAfterSha256 && `sha256:${sha256Text(remainingTwoStylesPatch)}` === s02RemainingTwoCorrection.correction.stylesPatchSha256, 'S02 remaining-two style bytes/patch differ from the immutable correction record');
+  assert(correctedRemainingTwoStylesSource.includes('radial-gradient(circle, #ddb15c 0 54%, transparent 56%)') && correctedRemainingTwoStylesSource.includes('conic-gradient(from -12deg, #75402a 0 14%, #b96d51 14% 28%, #527f77 28% 42%, #e5bd64 42% 58%, #6c537d 58% 72%, #4f8278 72% 86%, #75402a 86% 100%)') && correctedRemainingTwoStylesSource.includes('height: 108px;'), 'S02 remaining-two correction lacks the restrained seal material or 200-percent action expansion');
+  assert(priorRemainingTwoStylesSource.split('font-size:').length === correctedRemainingTwoStylesSource.split('font-size:').length, 'S02 remaining-two correction shrinks or adds typography instead of repairing material and bounds');
+
+  const priorRemainingTwoManifestSource = textAt(s02RemainingTwoCorrection.entry.head, 'step4/s02/golden-master-p1/review-manifest.json');
+  const correctedRemainingTwoManifestSource = textAt(s02RemainingTwoCorrectionCommit, 'step4/s02/golden-master-p1/review-manifest.json');
+  const remainingTwoManifestPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02RemainingTwoCorrection.entry.head, s02RemainingTwoCorrectionCommit, '--', 'step4/s02/golden-master-p1/review-manifest.json'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert(sha256Text(priorRemainingTwoManifestSource) === s02RemainingTwoCorrection.correction.manifestBeforeSha256 && sha256Text(correctedRemainingTwoManifestSource) === s02RemainingTwoCorrection.correction.manifestAfterSha256 && `sha256:${sha256Text(remainingTwoManifestPatch)}` === s02RemainingTwoCorrection.correction.manifestPatchSha256, 'S02 remaining-two manifest bytes/patch differ from the immutable correction record');
+  const correctedRemainingTwoManifest = JSON.parse(correctedRemainingTwoManifestSource);
+  const correctedRemainingTwoStylesManifestEntry = correctedRemainingTwoManifest.routeFiles?.find(entry => entry.path === 'step4/s02/golden-master-p1/styles.css');
+  assert(JSON.stringify(correctedRemainingTwoStylesManifestEntry) === JSON.stringify({ path: 'step4/s02/golden-master-p1/styles.css', bytes: 53161, sha256: s02RemainingTwoCorrection.correction.stylesAfterSha256, gitBlob: '670d7aa6bc621853994fd7db30db9a17ef238bbf' }), 'S02 remaining-two manifest does not bind the corrected stylesheet bytes/hash/blob');
+
+  const correctedRemainingTwoVerifierSource = textAt(s02RemainingTwoCorrectionCommit, 'tests/governance/verify-current-authority.mjs');
+  const remainingTwoVerifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02RemainingTwoCorrection.entry.head, s02RemainingTwoCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+  assert(sha256Text(correctedRemainingTwoVerifierSource) === s02RemainingTwoCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(remainingTwoVerifierPatch)}` === s02RemainingTwoCorrection.correction.verifierPatchSha256, 'S02 remaining-two verifier bytes/patch differ from the immutable correction record');
+  assert(correctedRemainingTwoVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedRemainingTwoVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_009') && correctedRemainingTwoVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_010') && correctedRemainingTwoVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 remaining-two verifier removed a prior correction guard or original fail-closed boundary assertion');
+  assertNoPathChangesSince(s02RemainingTwoCorrectionCommit, 'HEAD', s02RemainingTwoCorrectionChangedPaths, 'S02 remaining-two correction freeze');
+  if (requireLiveActions) {
+    const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02RemainingTwoCorrection.authorityWorkflow.runId}`);
+    const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02RemainingTwoCorrection.authorityWorkflow.jobId}`);
+    const authorityArtifact = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/artifacts/${s02RemainingTwoCorrection.authorityWorkflow.artifactId}`);
+    assert(authorityRun.head_sha === s02RemainingTwoCorrection.entry.head && authorityRun.head_branch === 'kimi' && authorityRun.status === 'completed' && authorityRun.conclusion === 'success' && authorityRun.run_attempt === 1, 'S02 remaining-two correction live authority run mismatch');
+    assert(authorityJob.run_id === authorityRun.id && authorityJob.head_sha === s02RemainingTwoCorrection.entry.head && authorityJob.name === 'current-authority' && authorityJob.conclusion === 'success', 'S02 remaining-two correction live authority job mismatch');
+    assert(authorityArtifact.name === s02RemainingTwoCorrection.authorityWorkflow.artifactName && authorityArtifact.digest === s02RemainingTwoCorrection.authorityWorkflow.artifactDigest && authorityArtifact.expired === false && authorityArtifact.workflow_run?.head_sha === s02RemainingTwoCorrection.entry.head, 'S02 remaining-two correction live authority artifact mismatch');
+    const failedRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02RemainingTwoCorrection.failedWorkflow.runId}`);
+    const failedJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02RemainingTwoCorrection.failedWorkflow.jobId}`);
+    const failedArtifact = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/artifacts/${s02RemainingTwoCorrection.failedWorkflow.artifactId}`);
+    assert(failedRun.head_sha === s02RemainingTwoCorrection.entry.head && failedRun.head_branch === 'kimi' && failedRun.status === 'completed' && failedRun.conclusion === 'failure' && failedRun.run_attempt === 1, 'S02 remaining-two correction live failed run mismatch');
+    assert(failedJob.run_id === failedRun.id && failedJob.head_sha === s02RemainingTwoCorrection.entry.head && failedJob.name === 'Static, eight-master responsive and accessibility verification' && failedJob.conclusion === 'failure', 'S02 remaining-two correction live failed job mismatch');
+    const failedSteps = (failedJob.steps ?? []).filter(step => step.name === s02RemainingTwoCorrection.failedWorkflow.failedStep);
+    assert(failedSteps.length === 1 && failedSteps[0].conclusion === 'failure', 'S02 remaining-two correction live failed step mismatch');
+    assert(failedArtifact.name === s02RemainingTwoCorrection.failedWorkflow.artifactName && failedArtifact.digest === s02RemainingTwoCorrection.failedWorkflow.artifactDigest && failedArtifact.expired === false && failedArtifact.workflow_run?.head_sha === s02RemainingTwoCorrection.entry.head, 'S02 remaining-two correction live failure artifact mismatch');
+  }
+}
+// END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_010
 
 function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath = s02ReviewEvidencePaths.deploymentRequest, requireLiveApi = true) {
   assertWorkflowEvidenceKeys(evidence, `${label} workflow evidence`, true);
