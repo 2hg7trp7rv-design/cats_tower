@@ -1,0 +1,353 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  color: #f5efe0;
+  background: #050c12;
+  font-family:
+    Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 50% -10%, #183a4b 0, transparent 42%),
+    #050c12;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  min-height: 48px;
+  border: 1px solid #8e7955;
+  border-radius: 14px;
+  color: #f4e7c8;
+  background: linear-gradient(180deg, #263d48, #132832);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 8%);
+  font-weight: 800;
+  touch-action: manipulation;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button:focus-visible {
+  outline: 3px solid #f0c468;
+  outline-offset: 2px;
+}
+
+.app-shell {
+  width: min(100%, 430px);
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding:
+    max(12px, env(safe-area-inset-top))
+    12px
+    max(14px, env(safe-area-inset-bottom));
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  background:
+    linear-gradient(180deg, rgb(10 29 39 / 96%), rgb(5 12 18 / 98%));
+  border-inline: 1px solid rgb(255 255 255 / 5%);
+}
+
+.top-hud {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.eyebrow,
+.top-hud h1,
+.enemy-strip strong,
+.enemy-strip b,
+.party-chip strong,
+.party-chip b,
+footer b {
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.eyebrow {
+  margin-bottom: 3px;
+  color: #a9c0ca;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.top-hud h1 {
+  font-size: clamp(24px, 8vw, 32px);
+}
+
+.resource-stack {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(72px, 1fr));
+  gap: 6px;
+}
+
+.resource-stack span {
+  min-height: 52px;
+  padding: 7px 9px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(213 189 130 / 36%);
+  border-radius: 13px;
+  background: rgb(2 12 18 / 58%);
+}
+
+.resource-stack b {
+  color: #f0ce84;
+  font-size: 17px;
+}
+
+.resource-stack small {
+  color: #91a8b1;
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.combat-card {
+  overflow: hidden;
+  border: 1px solid rgb(213 189 130 / 42%);
+  border-radius: 20px;
+  background: #07131c;
+  box-shadow: 0 14px 40px rgb(0 0 0 / 34%);
+}
+
+.enemy-strip {
+  min-height: 61px;
+  padding: 8px 12px;
+  display: grid;
+  grid-template-columns: auto minmax(72px, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  border-bottom: 1px solid rgb(255 255 255 / 8%);
+  background: linear-gradient(90deg, #182d38, #0d1e28);
+}
+
+.enemy-strip > div:first-child {
+  display: grid;
+}
+
+.enemy-kicker {
+  color: #d4a9a1;
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.enemy-strip strong {
+  font-size: 15px;
+}
+
+.enemy-strip b {
+  min-width: 66px;
+  color: #e8d8c2;
+  font-size: 11px;
+  text-align: right;
+}
+
+.enemy-health {
+  height: 9px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #02080d;
+}
+
+.enemy-health span {
+  width: 100%;
+  height: 100%;
+  display: block;
+  transform-origin: left;
+  background: linear-gradient(90deg, #9d4c58, #d37672);
+  transition: transform 100ms linear;
+}
+
+#game-container {
+  width: 100%;
+  height: clamp(260px, 42dvh, 360px);
+  min-height: 260px;
+  display: grid;
+  place-items: center;
+  background: #07131c;
+}
+
+#game-container canvas {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+}
+
+.event-strip {
+  min-height: 48px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-top: 1px solid rgb(255 255 255 / 8%);
+  background: #0a1921;
+}
+
+.event-strip span {
+  overflow: hidden;
+  color: #f0cf88;
+  font-size: 13px;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.event-strip small {
+  flex: 0 0 auto;
+  color: #9eb0b7;
+  font-size: 10px;
+}
+
+.party-panel {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.party-chip {
+  min-width: 0;
+  min-height: 60px;
+  padding: 7px 6px;
+  display: grid;
+  grid-template-columns: 8px 1fr;
+  grid-template-rows: 1fr auto;
+  column-gap: 5px;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 13px;
+  background: rgb(16 34 43 / 92%);
+}
+
+.role-mark {
+  grid-row: 1 / span 2;
+  width: 6px;
+  height: 100%;
+  border-radius: 99px;
+}
+
+.role-guardian { background: #78a8c8; }
+.role-striker { background: #e4a267; }
+.role-ranger { background: #a890d6; }
+.role-support { background: #83b89b; }
+
+.party-chip div {
+  min-width: 0;
+  display: grid;
+}
+
+.party-chip strong {
+  overflow: hidden;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.party-chip small {
+  overflow: hidden;
+  color: #95a9b2;
+  font-size: 8px;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+}
+
+.party-chip b {
+  grid-column: 2;
+  color: #c9ded2;
+  font-size: 9px;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+footer {
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: #83959d;
+  font-size: 9px;
+}
+
+footer b {
+  color: #c4ad79;
+}
+
+@media (max-height: 650px) {
+  .app-shell {
+    gap: 6px;
+    padding-top: max(6px, env(safe-area-inset-top));
+  }
+
+  .top-hud {
+    min-height: 46px;
+  }
+
+  .eyebrow {
+    display: none;
+  }
+
+  .top-hud h1 {
+    font-size: 22px;
+  }
+
+  .resource-stack span {
+    min-height: 38px;
+    padding-block: 4px;
+  }
+
+  .enemy-strip {
+    min-height: 46px;
+    padding-block: 5px;
+  }
+
+  #game-container {
+    height: 250px;
+    min-height: 250px;
+  }
+
+  .event-strip {
+    min-height: 42px;
+    padding-block: 5px;
+  }
+
+  .party-chip {
+    min-height: 46px;
+    padding-block: 4px;
+  }
+
+  .controls button {
+    min-height: 44px;
+  }
+
+  footer {
+    display: none;
+  }
+}
