@@ -3523,8 +3523,15 @@ if (step2Correction) {
   assert(git(['rev-parse', `${reviewedProvenanceCorrection.commit}^{tree}`]) === reviewedProvenanceCorrection.tree, 'round 032 reviewed provenance-correction tree mismatch');
   assert(git(['rev-parse', `${reviewedProvenanceCorrection.commit}^`]) === closureRepairCriticCommit, 'round 032 reviewed provenance correction is not the immediate critic child');
   assertExactChangedPaths(closureRepairCriticCommit, reviewedProvenanceCorrection.commit, ['tests/governance/verify-current-authority.mjs'], 'round 032 reviewed provenance correction');
-  assert(git(['rev-parse', `${step2Correction.entry.head}^`]) === reviewedProvenanceCorrection.commit, 'round 032 must open after the dedicated entry-boundary correction');
-  assertExactChangedPaths(reviewedProvenanceCorrection.commit, step2Correction.entry.head, ['tests/governance/verify-current-authority.mjs'], 'round 032 entry-boundary correction');
+  const reviewedEntryBoundaryCorrection = {
+    commit: '1cce16ceab1c42f1a4796afbb597566430ebb123',
+    tree: '93adafd475be9fc71574964ebd65ddd68fea3764'
+  };
+  assert(git(['rev-parse', `${reviewedEntryBoundaryCorrection.commit}^{tree}`]) === reviewedEntryBoundaryCorrection.tree, 'round 032 reviewed entry-boundary tree mismatch');
+  assert(git(['rev-parse', `${reviewedEntryBoundaryCorrection.commit}^`]) === reviewedProvenanceCorrection.commit, 'round 032 reviewed entry-boundary correction is not the immediate provenance child');
+  assertExactChangedPaths(reviewedProvenanceCorrection.commit, reviewedEntryBoundaryCorrection.commit, ['tests/governance/verify-current-authority.mjs'], 'round 032 reviewed entry-boundary correction');
+  assert(git(['rev-parse', `${step2Correction.entry.head}^`]) === reviewedEntryBoundaryCorrection.commit, 'round 032 must open after the dedicated document-boundary correction');
+  assertExactChangedPaths(reviewedEntryBoundaryCorrection.commit, step2Correction.entry.head, ['tests/governance/verify-current-authority.mjs'], 'round 032 document-boundary correction');
   const verifierBeforeRound032 = textAt(step2Correction.entry.head, 'tests/governance/verify-current-authority.mjs');
   const expectedVerifierAtRound032 = verifierBeforeRound032.replace(
     'const expectedStep2CorrectionControlBlob = null;',
@@ -7062,12 +7069,17 @@ assert(status.scopedPasses.step2 === authority.executableContract.step2Status, '
 assert(sim.step2.status === authority.executableContract.step2Status, 'Step 2 status differs between authority and simulation mirror');
 const gateText = text('QUALITY_GATE.md');
 const handoverText = text('PROJECT_HANDOVER.md');
-if (closureRepairCriticComplete) {
-  assert(gateText.includes('Current Phase 0 P0/P1: `0 / 0`'), 'QUALITY_GATE does not show resolved Phase 0 P0/P1');
-  assert(handoverText.includes('Current Phase 0 unresolved') && handoverText.includes('`0 / 0`'), 'handover does not show resolved Phase 0 P0/P1');
-} else {
+if (!closureRepairCriticComplete) {
   assert(gateText.includes('Current Phase 0 P0/P1: `0 / 4`'), 'QUALITY_GATE does not show pending Phase 0 P0/P1');
   assert(handoverText.includes('`0 / 4`'), 'handover does not show pending Phase 0 P0/P1');
+} else if (authority.activeChangeControl === 'quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json') {
+  assert(gateText.includes('Current Phase 0 P0/P1: `0 / 0`'), 'round 031 QUALITY_GATE does not show resolved Phase 0 P0/P1');
+  assert(handoverText.includes('Current Phase 0 unresolved') && handoverText.includes('`0 / 0`'), 'round 031 handover does not show resolved Phase 0 P0/P1');
+} else if (authority.activeChangeControl === step2CorrectionPath) {
+  assert(gateText.includes('Phase 0 unresolved P0/P1: `0 / 0`'), 'round 032 QUALITY_GATE does not show resolved Phase 0 P0/P1');
+  assert(handoverText.includes('Phase 0 P0/P1 `0 / 0`'), 'round 032 handover does not show resolved Phase 0 P0/P1');
+} else {
+  assert(phase0Closed && gateText.includes('Corrected Phase 0 unresolved P0/P1: `0 / 0`'), 'post-closure QUALITY_GATE does not show corrected Phase 0 P0/P1');
 }
 
 assertBoundaryHistory(rootControl.entry.head, correction.entry.head, rootControl, 'round 028 content');
