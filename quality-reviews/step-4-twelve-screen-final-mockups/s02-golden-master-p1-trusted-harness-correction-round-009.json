@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-trusted-harness-correction-round-009",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "29136e44d56842ab74f9d7660b4144d81e0eda41",
+    "tree": "fd01bb2f3ee98ca50ff0a598e3996f36578a61a2"
+  },
+  "authorityWorkflow": {
+    "commit": "29136e44d56842ab74f9d7660b4144d81e0eda41",
+    "tree": "fd01bb2f3ee98ca50ff0a598e3996f36578a61a2",
+    "runId": 33597789006,
+    "runAttempt": 1,
+    "jobId": 100144808622,
+    "conclusion": "SUCCESS",
+    "artifactId": 9834026832,
+    "artifactName": "phase0-current-governance-29136e44d56842ab74f9d7660b4144d81e0eda41-33597789006-1",
+    "artifactDigest": "sha256:b4ee4b22aca6a153be5f6fc53919977fe91cbffe9e0619ca1421fbb0c17cddab"
+  },
+  "failedWorkflow": {
+    "commit": "29136e44d56842ab74f9d7660b4144d81e0eda41",
+    "tree": "fd01bb2f3ee98ca50ff0a598e3996f36578a61a2",
+    "runId": 33597789020,
+    "runAttempt": 1,
+    "jobId": 100144672069,
+    "conclusion": "FAILURE",
+    "failedStep": "Capture and verify eight masters plus required responsive variants",
+    "summary": "FAIL_S02_GOLDEN_MASTER_P1_BROWSER: 15 scenarios, 2 failures",
+    "artifactId": 9834021016,
+    "artifactName": "step4-s02-golden-master-p1-semantic-29136e44d56842ab74f9d7660b4144d81e0eda41-33597789020-1",
+    "artifactDigest": "sha256:4f39120582ddc3a0864df6de91d520e830798fca9ec5cd5e600df1d906390119"
+  },
+  "diagnosis": {
+    "type": "ROUND_008_CLOSED_FLOOR_GEOMETRY_AND_TEXT200_OFFLINE_COLOR_BUT_EXPOSED_HEADER_AND_PRIMARY_REFLOW",
+    "failedAssertions": [
+      "GM07C320: screenshot pixel complexity/opacity gate failed",
+      "TEXT_200_PERCENT_NO_LOSS: trusted recomputation failed"
+    ],
+    "closedFindings": [
+      "RESPONSIVE_GEOMETRY_CONTRACT passed after the 200 percent floor line box reached its glyph scroll height.",
+      "GM07C320TEXT200 reached 258 quantized colors and passed the unchanged 256 threshold."
+    ],
+    "visualFindings": [
+      "GM07C320 reached 243 quantized colors and needed a second complementary material inlay rather than a threshold reduction."
+    ],
+    "measurementFindings": [
+      "The three-column 200 percent header gave the objective only 82 CSS pixels, causing the objective and AUTO labels to overlap the enemy HP panel.",
+      "The 28 CSS-pixel primary action label needed 98 CSS pixels of content height while the button exposed only 90 CSS pixels."
+    ],
+    "allFifteenExactPngsPreserved": true,
+    "originalFailureArtifactPreserved": true
+  },
+  "correction": {
+    "rule": "ADD_A_COMPLEMENTARY_BOTTOM_MATERIAL_INLAY_AND_REFLOW_THE_200_PERCENT_HEADER_TO_TWO_ROWS_WHILE_EXPANDING_THE_BATTLE_AND_PRIMARY_ROWS_WITHOUT_SHRINKING_TEXT_OR_LOWERING_THRESHOLDS",
+    "changedPaths": [
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-009.json",
+      "step4/s02/golden-master-p1/review-manifest.json",
+      "step4/s02/golden-master-p1/styles.css",
+      "tests/governance/verify-current-authority.mjs"
+    ],
+    "stylesBeforeSha256": "cb933fb01668a789052274ad7be87f075c114d013ee24b7fc7247d01bccd52e5",
+    "stylesAfterSha256": "666c48708f67d6e2b24d1861bae8bbf1778a4d5a34b3fd5d81a74bc429c8699b",
+    "stylesPatchSha256": "sha256:1694b2bf31236928ddf5b6aa1d54fa1b80e49c33eaa165c95a48eede4b2f2102",
+    "manifestBeforeSha256": "e08b4c46ced3259dfca6c4692d481cfbb6d4cda8e7065784a4763496b72e5335",
+    "manifestAfterSha256": "2307d9c35cfcff06d239bcbc3b3870b78ad1feff7d6afcf30c816001a46e3625",
+    "manifestPatchSha256": "sha256:57054bad21d4d2dc4785e9f2ccd0865fb5ee5d41c66a774a0e519368c16b32b4",
+    "verifierAfterSha256": "c9e53ac90854421d0d43737461877b8047f1d281ac43d072e315c733239ddd1f",
+    "verifierPatchSha256": "sha256:1817072ac133afb2d513e4bb65d5e7265f8c385900026a037670f69837bddd72",
+    "acceptanceThresholdsChanged": false,
+    "qualityCoverageWeakened": false,
+    "browserCollectorChanged": false,
+    "browserQaChanged": false,
+    "fontSizeReduced": false,
+    "failureEvidenceUploadRetained": true
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_TWO_BROWSER_FINDINGS_PENDING_RERUN"
+}

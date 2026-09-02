@@ -1736,6 +1736,20 @@ summary {
   box-shadow: 0 1px rgba(255, 245, 199, 0.48), 0 3px 7px rgba(79, 43, 22, 0.18);
 }
 
+.offline-modal::after {
+  content: "";
+  position: absolute;
+  right: 22px;
+  bottom: 7px;
+  left: 22px;
+  height: 4px;
+  pointer-events: none;
+  border: 1px solid rgba(82, 49, 28, 0.38);
+  border-radius: 999px;
+  background: linear-gradient(90deg, #75402a 0%, #b96d51 17%, #527f77 35%, #e5bd64 52%, #6c537d 69%, #4f8278 84%, #75402a 100%);
+  box-shadow: 0 -1px rgba(255, 245, 199, 0.42), 0 -3px 7px rgba(79, 43, 22, 0.16);
+}
+
 .offline-modal-head,
 .offline-modal-footer {
   flex: 0 0 auto;
@@ -2404,8 +2418,8 @@ summary {
 .text-scale-200 .game-ui {
   position: relative;
   inset: auto;
-  min-height: calc(1396px + env(safe-area-inset-top) + env(safe-area-inset-bottom));
-  grid-template-rows: 160px 520px 108px 380px 96px 132px;
+  min-height: calc(1468px + env(safe-area-inset-top) + env(safe-area-inset-bottom));
+  grid-template-rows: 160px 584px 116px 380px 96px 132px;
   padding:
     env(safe-area-inset-top)
     env(safe-area-inset-right)
@@ -2430,8 +2444,9 @@ summary {
   top: 6px;
   right: 6px;
   left: 6px;
-  height: 116px;
-  grid-template-columns: 120px minmax(0, 1fr) 84px;
+  height: 180px;
+  grid-template-columns: 120px minmax(0, 1fr);
+  grid-template-rows: 120px 56px;
   gap: 4px;
 }
 
@@ -2459,20 +2474,22 @@ summary {
 }
 
 .text-scale-200 .auto-chip {
+  grid-column: 1 / -1;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
+  gap: 12px;
 }
 
 .text-scale-200 .auto-chip span,
 .text-scale-200 .auto-chip b {
   margin: 0;
-  white-space: normal;
+  white-space: nowrap;
 }
 
 .text-scale-200 .threat-card {
-  top: 128px;
+  top: 192px;
   right: 6px;
   left: 6px;
   min-height: 142px;
@@ -2493,7 +2510,7 @@ summary {
 }
 
 .text-scale-200 .battlefield-body {
-  top: 276px;
+  top: 340px;
   bottom: 38px;
 }
 
@@ -2502,7 +2519,7 @@ summary {
 }
 
 .text-scale-200 .combat-event {
-  top: 278px;
+  top: 342px;
   left: 6px;
   width: calc(100% - 12px);
   min-height: 72px;
@@ -2564,7 +2581,7 @@ summary {
 }
 
 .text-scale-200 .primary-action {
-  height: 92px;
+  height: 100px;
   padding-inline: 12px;
 }
 

@@ -223,6 +223,8 @@ function assertS02HistoryWithIncrementalRenewals(base, head, control, label, evi
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02FiveFindingCorrectionChangedPaths].sort()), `${label}: five-finding correction changed an unreviewed path`);
     } else if (s02FourFindingCorrectionCommit && commit === s02FourFindingCorrectionCommit) {
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02FourFindingCorrectionChangedPaths].sort()), `${label}: four-finding correction changed an unreviewed path`);
+    } else if (s02TwoFindingCorrectionCommit && commit === s02TwoFindingCorrectionCommit) {
+      assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02TwoFindingCorrectionChangedPaths].sort()), `${label}: two-finding correction changed an unreviewed path`);
     } else {
       assertBoundary(paths, control, `${label} commit ${commit}`);
     }
@@ -3796,6 +3798,15 @@ const s02FourFindingCorrectionChangedPaths = [
   'step4/s02/golden-master-p1/styles.css',
   'tests/governance/verify-current-authority.mjs'
 ];
+const s02TwoFindingCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-009.json';
+const s02TwoFindingCorrection = exists(s02TwoFindingCorrectionPath) ? json(s02TwoFindingCorrectionPath) : null;
+const s02TwoFindingCorrectionCommit = s02TwoFindingCorrection ? firstAddCommit(s02TwoFindingCorrectionPath) : null;
+const s02TwoFindingCorrectionChangedPaths = [
+  s02TwoFindingCorrectionPath,
+  'step4/s02/golden-master-p1/review-manifest.json',
+  'step4/s02/golden-master-p1/styles.css',
+  'tests/governance/verify-current-authority.mjs'
+];
 
 // BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001
 const s02HarnessCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-001.json';
@@ -4620,7 +4631,9 @@ if (s02FourFindingCorrection) {
   const fourFindingVerifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02FourFindingCorrection.entry.head, s02FourFindingCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
   assert(sha256Text(correctedFourFindingVerifierSource) === s02FourFindingCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(fourFindingVerifierPatch)}` === s02FourFindingCorrection.correction.verifierPatchSha256, 'S02 four-finding verifier bytes/patch differ from the immutable correction record');
   assert(correctedFourFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedFourFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_002') && correctedFourFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_003') && correctedFourFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_004') && correctedFourFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_005') && correctedFourFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_006') && correctedFourFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_007') && correctedFourFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_008') && correctedFourFindingVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 four-finding verifier removed a prior correction guard or original fail-closed boundary assertion');
-  assertNoPathChangesSince(s02FourFindingCorrectionCommit, 'HEAD', s02FourFindingCorrectionChangedPaths, 'S02 four-finding correction freeze');
+  const eighthCorrectionFreezeEnd = s02TwoFindingCorrectionCommit ? git(['rev-parse', `${s02TwoFindingCorrectionCommit}^`]) : git(['rev-parse', 'HEAD']);
+  assertNoPathChangesSince(s02FourFindingCorrectionCommit, eighthCorrectionFreezeEnd, s02FourFindingCorrectionChangedPaths, 'S02 four-finding correction freeze before two-finding correction');
+  if (s02TwoFindingCorrectionCommit) assertNoPathChangesSince(s02FourFindingCorrectionCommit, 'HEAD', [s02FourFindingCorrectionPath], 'S02 four-finding round 008 record freeze');
   if (requireLiveActions) {
     const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02FourFindingCorrection.authorityWorkflow.runId}`);
     const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02FourFindingCorrection.authorityWorkflow.jobId}`);
@@ -4639,6 +4652,112 @@ if (s02FourFindingCorrection) {
   }
 }
 // END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_008
+
+// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_009
+if (s02TwoFindingCorrection) {
+  assertExactKeySet(s02TwoFindingCorrection, ['schemaVersion', 'artifactId', 'createdAt', 'repository', 'branch', 'changeControl', 'entry', 'authorityWorkflow', 'failedWorkflow', 'diagnosis', 'correction', 'boundaries', 'status'], 'S02 two-finding correction');
+  assertExactKeySet(s02TwoFindingCorrection.entry, ['head', 'tree'], 'S02 two-finding correction entry');
+  assertExactKeySet(s02TwoFindingCorrection.authorityWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'artifactId', 'artifactName', 'artifactDigest'], 'S02 two-finding authority workflow');
+  assertExactKeySet(s02TwoFindingCorrection.failedWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'failedStep', 'summary', 'artifactId', 'artifactName', 'artifactDigest'], 'S02 two-finding failed workflow');
+  assertExactKeySet(s02TwoFindingCorrection.diagnosis, ['type', 'failedAssertions', 'closedFindings', 'visualFindings', 'measurementFindings', 'allFifteenExactPngsPreserved', 'originalFailureArtifactPreserved'], 'S02 two-finding diagnosis');
+  assertExactKeySet(s02TwoFindingCorrection.correction, ['rule', 'changedPaths', 'stylesBeforeSha256', 'stylesAfterSha256', 'stylesPatchSha256', 'manifestBeforeSha256', 'manifestAfterSha256', 'manifestPatchSha256', 'verifierAfterSha256', 'verifierPatchSha256', 'acceptanceThresholdsChanged', 'qualityCoverageWeakened', 'browserCollectorChanged', 'browserQaChanged', 'fontSizeReduced', 'failureEvidenceUploadRetained'], 'S02 two-finding exact correction');
+  assertExactKeySet(s02TwoFindingCorrection.boundaries, ['rootRuntimeChanged', 'gameCoreChanged', 'gameDataChanged', 'economyChanged', 'saveSchemaChanged', 'backendChanged', 'productionChanged', 'productionAliasChanged', 'physicalIPhoneVerified', 'step4Pass', 'step5Allowed'], 'S02 two-finding correction boundaries');
+  assert(s02TwoFindingCorrection.schemaVersion === 1 && s02TwoFindingCorrection.artifactId === 'cats-tower-s02-golden-master-p1-trusted-harness-correction-round-009' && s02TwoFindingCorrection.createdAt === '2026-09-02', 'S02 two-finding correction identity/date mismatch');
+  assert(s02TwoFindingCorrection.repository === '2hg7trp7rv-design/cats_tower' && s02TwoFindingCorrection.branch === 'kimi' && s02TwoFindingCorrection.changeControl === s02RepairControlPath, 'S02 two-finding correction authority mismatch');
+  assert(JSON.stringify(s02TwoFindingCorrection.entry) === JSON.stringify({ head: '29136e44d56842ab74f9d7660b4144d81e0eda41', tree: 'fd01bb2f3ee98ca50ff0a598e3996f36578a61a2' }), 'S02 two-finding correction entry is not the exact failed four-finding correction commit/tree');
+  assert(JSON.stringify(s02TwoFindingCorrection.authorityWorkflow) === JSON.stringify({
+    commit: s02TwoFindingCorrection.entry.head,
+    tree: s02TwoFindingCorrection.entry.tree,
+    runId: 33597789006,
+    runAttempt: 1,
+    jobId: 100144808622,
+    conclusion: 'SUCCESS',
+    artifactId: 9834026832,
+    artifactName: 'phase0-current-governance-29136e44d56842ab74f9d7660b4144d81e0eda41-33597789006-1',
+    artifactDigest: 'sha256:b4ee4b22aca6a153be5f6fc53919977fe91cbffe9e0619ca1421fbb0c17cddab'
+  }), 'S02 two-finding correction does not bind the successful exact-entry authority workflow');
+  assert(JSON.stringify(s02TwoFindingCorrection.failedWorkflow) === JSON.stringify({
+    commit: s02TwoFindingCorrection.entry.head,
+    tree: s02TwoFindingCorrection.entry.tree,
+    runId: 33597789020,
+    runAttempt: 1,
+    jobId: 100144672069,
+    conclusion: 'FAILURE',
+    failedStep: 'Capture and verify eight masters plus required responsive variants',
+    summary: 'FAIL_S02_GOLDEN_MASTER_P1_BROWSER: 15 scenarios, 2 failures',
+    artifactId: 9834021016,
+    artifactName: 'step4-s02-golden-master-p1-semantic-29136e44d56842ab74f9d7660b4144d81e0eda41-33597789020-1',
+    artifactDigest: 'sha256:4f39120582ddc3a0864df6de91d520e830798fca9ec5cd5e600df1d906390119'
+  }), 'S02 two-finding correction does not bind the exact failed workflow/job/summary/artifact');
+  assert(JSON.stringify(s02TwoFindingCorrection.diagnosis) === JSON.stringify({
+    type: 'ROUND_008_CLOSED_FLOOR_GEOMETRY_AND_TEXT200_OFFLINE_COLOR_BUT_EXPOSED_HEADER_AND_PRIMARY_REFLOW',
+    failedAssertions: [
+      'GM07C320: screenshot pixel complexity/opacity gate failed',
+      'TEXT_200_PERCENT_NO_LOSS: trusted recomputation failed'
+    ],
+    closedFindings: [
+      'RESPONSIVE_GEOMETRY_CONTRACT passed after the 200 percent floor line box reached its glyph scroll height.',
+      'GM07C320TEXT200 reached 258 quantized colors and passed the unchanged 256 threshold.'
+    ],
+    visualFindings: [
+      'GM07C320 reached 243 quantized colors and needed a second complementary material inlay rather than a threshold reduction.'
+    ],
+    measurementFindings: [
+      'The three-column 200 percent header gave the objective only 82 CSS pixels, causing the objective and AUTO labels to overlap the enemy HP panel.',
+      'The 28 CSS-pixel primary action label needed 98 CSS pixels of content height while the button exposed only 90 CSS pixels.'
+    ],
+    allFifteenExactPngsPreserved: true,
+    originalFailureArtifactPreserved: true
+  }), 'S02 two-finding diagnosis differs from the preserved fifteen-capture failed run and artifact');
+  assert(s02TwoFindingCorrection.correction.rule === 'ADD_A_COMPLEMENTARY_BOTTOM_MATERIAL_INLAY_AND_REFLOW_THE_200_PERCENT_HEADER_TO_TWO_ROWS_WHILE_EXPANDING_THE_BATTLE_AND_PRIMARY_ROWS_WITHOUT_SHRINKING_TEXT_OR_LOWERING_THRESHOLDS' && JSON.stringify(s02TwoFindingCorrection.correction.changedPaths) === JSON.stringify(s02TwoFindingCorrectionChangedPaths), 'S02 two-finding correction rule/path set mismatch');
+  assert(s02TwoFindingCorrection.correction.stylesBeforeSha256 === 'cb933fb01668a789052274ad7be87f075c114d013ee24b7fc7247d01bccd52e5' && s02TwoFindingCorrection.correction.stylesAfterSha256 === '666c48708f67d6e2b24d1861bae8bbf1778a4d5a34b3fd5d81a74bc429c8699b' && s02TwoFindingCorrection.correction.stylesPatchSha256 === 'sha256:1694b2bf31236928ddf5b6aa1d54fa1b80e49c33eaa165c95a48eede4b2f2102', 'S02 two-finding style digest/patch mismatch');
+  assert(s02TwoFindingCorrection.correction.manifestBeforeSha256 === 'e08b4c46ced3259dfca6c4692d481cfbb6d4cda8e7065784a4763496b72e5335' && s02TwoFindingCorrection.correction.manifestAfterSha256 === '2307d9c35cfcff06d239bcbc3b3870b78ad1feff7d6afcf30c816001a46e3625' && s02TwoFindingCorrection.correction.manifestPatchSha256 === 'sha256:57054bad21d4d2dc4785e9f2ccd0865fb5ee5d41c66a774a0e519368c16b32b4', 'S02 two-finding manifest digest/patch mismatch');
+  assert(s02TwoFindingCorrection.correction.acceptanceThresholdsChanged === false && s02TwoFindingCorrection.correction.qualityCoverageWeakened === false && s02TwoFindingCorrection.correction.browserCollectorChanged === false && s02TwoFindingCorrection.correction.browserQaChanged === false && s02TwoFindingCorrection.correction.fontSizeReduced === false && s02TwoFindingCorrection.correction.failureEvidenceUploadRetained === true, 'S02 two-finding correction weakens coverage, changes evidence collection or shrinks text');
+  assert(JSON.stringify(s02TwoFindingCorrection.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }), 'S02 two-finding correction crosses a protected product/release boundary');
+  assert(s02TwoFindingCorrection.status === 'CORRECTED_TWO_BROWSER_FINDINGS_PENDING_RERUN', 'S02 two-finding correction status mismatch');
+  assert(s02TwoFindingCorrectionCommit && git(['rev-parse', `${s02TwoFindingCorrectionCommit}^`]) === s02TwoFindingCorrection.entry.head, 'S02 two-finding correction is not the immediate child of the exact failed commit');
+  assert(git(['rev-parse', `${s02TwoFindingCorrection.entry.head}^{tree}`]) === s02TwoFindingCorrection.entry.tree, 'S02 two-finding correction entry tree mismatch');
+  assertExactChangedPaths(s02TwoFindingCorrection.entry.head, s02TwoFindingCorrectionCommit, s02TwoFindingCorrectionChangedPaths, 'S02 two-finding correction commit');
+  assertAddedOnceAndUnchanged(s02TwoFindingCorrectionPath, s02TwoFindingCorrectionCommit);
+
+  const priorTwoFindingStylesSource = textAt(s02TwoFindingCorrection.entry.head, 'step4/s02/golden-master-p1/styles.css');
+  const correctedTwoFindingStylesSource = textAt(s02TwoFindingCorrectionCommit, 'step4/s02/golden-master-p1/styles.css');
+  const twoFindingStylesPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02TwoFindingCorrection.entry.head, s02TwoFindingCorrectionCommit, '--', 'step4/s02/golden-master-p1/styles.css'], { cwd: root, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+  assert(sha256Text(priorTwoFindingStylesSource) === s02TwoFindingCorrection.correction.stylesBeforeSha256 && sha256Text(correctedTwoFindingStylesSource) === s02TwoFindingCorrection.correction.stylesAfterSha256 && `sha256:${sha256Text(twoFindingStylesPatch)}` === s02TwoFindingCorrection.correction.stylesPatchSha256, 'S02 two-finding style bytes/patch differ from the immutable correction record');
+  assert(correctedTwoFindingStylesSource.includes('background: linear-gradient(90deg, #75402a 0%, #b96d51 17%, #527f77 35%, #e5bd64 52%, #6c537d 69%, #4f8278 84%, #75402a 100%);') && correctedTwoFindingStylesSource.includes('grid-template-rows: 120px 56px;') && correctedTwoFindingStylesSource.includes('grid-column: 1 / -1;') && correctedTwoFindingStylesSource.includes('height: 100px;'), 'S02 two-finding correction lacks the complementary inlay or two-row 200-percent reflow');
+  assert(priorTwoFindingStylesSource.split('font-size:').length === correctedTwoFindingStylesSource.split('font-size:').length, 'S02 two-finding correction shrinks or adds typography instead of reflowing it');
+
+  const priorTwoFindingManifestSource = textAt(s02TwoFindingCorrection.entry.head, 'step4/s02/golden-master-p1/review-manifest.json');
+  const correctedTwoFindingManifestSource = textAt(s02TwoFindingCorrectionCommit, 'step4/s02/golden-master-p1/review-manifest.json');
+  const twoFindingManifestPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02TwoFindingCorrection.entry.head, s02TwoFindingCorrectionCommit, '--', 'step4/s02/golden-master-p1/review-manifest.json'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert(sha256Text(priorTwoFindingManifestSource) === s02TwoFindingCorrection.correction.manifestBeforeSha256 && sha256Text(correctedTwoFindingManifestSource) === s02TwoFindingCorrection.correction.manifestAfterSha256 && `sha256:${sha256Text(twoFindingManifestPatch)}` === s02TwoFindingCorrection.correction.manifestPatchSha256, 'S02 two-finding manifest bytes/patch differ from the immutable correction record');
+  const correctedTwoFindingManifest = JSON.parse(correctedTwoFindingManifestSource);
+  const correctedTwoStylesManifestEntry = correctedTwoFindingManifest.routeFiles?.find(entry => entry.path === 'step4/s02/golden-master-p1/styles.css');
+  assert(JSON.stringify(correctedTwoStylesManifestEntry) === JSON.stringify({ path: 'step4/s02/golden-master-p1/styles.css', bytes: 52958, sha256: s02TwoFindingCorrection.correction.stylesAfterSha256, gitBlob: '57f2a74e863e4d6d4166341477ecee8aff6ab54f' }), 'S02 two-finding manifest does not bind the corrected stylesheet bytes/hash/blob');
+
+  const correctedTwoFindingVerifierSource = textAt(s02TwoFindingCorrectionCommit, 'tests/governance/verify-current-authority.mjs');
+  const twoFindingVerifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02TwoFindingCorrection.entry.head, s02TwoFindingCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+  assert(sha256Text(correctedTwoFindingVerifierSource) === s02TwoFindingCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(twoFindingVerifierPatch)}` === s02TwoFindingCorrection.correction.verifierPatchSha256, 'S02 two-finding verifier bytes/patch differ from the immutable correction record');
+  assert(correctedTwoFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedTwoFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_002') && correctedTwoFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_003') && correctedTwoFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_004') && correctedTwoFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_005') && correctedTwoFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_006') && correctedTwoFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_007') && correctedTwoFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_008') && correctedTwoFindingVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_009') && correctedTwoFindingVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 two-finding verifier removed a prior correction guard or original fail-closed boundary assertion');
+  assertNoPathChangesSince(s02TwoFindingCorrectionCommit, 'HEAD', s02TwoFindingCorrectionChangedPaths, 'S02 two-finding correction freeze');
+  if (requireLiveActions) {
+    const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02TwoFindingCorrection.authorityWorkflow.runId}`);
+    const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02TwoFindingCorrection.authorityWorkflow.jobId}`);
+    const authorityArtifact = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/artifacts/${s02TwoFindingCorrection.authorityWorkflow.artifactId}`);
+    assert(authorityRun.head_sha === s02TwoFindingCorrection.entry.head && authorityRun.head_branch === 'kimi' && authorityRun.status === 'completed' && authorityRun.conclusion === 'success' && authorityRun.run_attempt === 1, 'S02 two-finding correction live authority run mismatch');
+    assert(authorityJob.run_id === authorityRun.id && authorityJob.head_sha === s02TwoFindingCorrection.entry.head && authorityJob.name === 'current-authority' && authorityJob.conclusion === 'success', 'S02 two-finding correction live authority job mismatch');
+    assert(authorityArtifact.name === s02TwoFindingCorrection.authorityWorkflow.artifactName && authorityArtifact.digest === s02TwoFindingCorrection.authorityWorkflow.artifactDigest && authorityArtifact.expired === false && authorityArtifact.workflow_run?.head_sha === s02TwoFindingCorrection.entry.head, 'S02 two-finding correction live authority artifact mismatch');
+    const failedRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02TwoFindingCorrection.failedWorkflow.runId}`);
+    const failedJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02TwoFindingCorrection.failedWorkflow.jobId}`);
+    const failedArtifact = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/artifacts/${s02TwoFindingCorrection.failedWorkflow.artifactId}`);
+    assert(failedRun.head_sha === s02TwoFindingCorrection.entry.head && failedRun.head_branch === 'kimi' && failedRun.status === 'completed' && failedRun.conclusion === 'failure' && failedRun.run_attempt === 1, 'S02 two-finding correction live failed run mismatch');
+    assert(failedJob.run_id === failedRun.id && failedJob.head_sha === s02TwoFindingCorrection.entry.head && failedJob.name === 'Static, eight-master responsive and accessibility verification' && failedJob.conclusion === 'failure', 'S02 two-finding correction live failed job mismatch');
+    const failedSteps = (failedJob.steps ?? []).filter(step => step.name === s02TwoFindingCorrection.failedWorkflow.failedStep);
+    assert(failedSteps.length === 1 && failedSteps[0].conclusion === 'failure', 'S02 two-finding correction live failed step mismatch');
+    assert(failedArtifact.name === s02TwoFindingCorrection.failedWorkflow.artifactName && failedArtifact.digest === s02TwoFindingCorrection.failedWorkflow.artifactDigest && failedArtifact.expired === false && failedArtifact.workflow_run?.head_sha === s02TwoFindingCorrection.entry.head, 'S02 two-finding correction live failure artifact mismatch');
+  }
+}
+// END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_009
 
 function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath = s02ReviewEvidencePaths.deploymentRequest, requireLiveApi = true) {
   assertWorkflowEvidenceKeys(evidence, `${label} workflow evidence`, true);
