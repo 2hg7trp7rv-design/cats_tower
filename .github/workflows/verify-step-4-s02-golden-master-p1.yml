@@ -43,7 +43,7 @@ jobs:
           sha256sum -c <<'SHA256'
           b712ba261f1fc66db97e54c15e833729199e17785b149b7459d0e95ddb13d011  tests/step4/verify-s02-golden-master-p1.mjs
           2661c5a75ee756e0baf5a7d5b0470f97d3fc56e02f29bfa641c1e4510ff3fdd3  tests/step4/s02-golden-master-p1-browser.mjs
-          f67bf7472b108d2e88ac24ac034a386e2c24896a18a95950e82ec5bbf9042d03  tests/step4/s02-golden-master-p1-browser-qa.mjs
+          5190fe2fca12b75356518a02c95dae6947ac2f6e68690c43ac30d7ee82bf293a  tests/step4/s02-golden-master-p1-browser-qa.mjs
           4e7d2ae6e3da801a6ed14835a1cceebc252e369234bbb56f64fa2af34510a531  step4/s02/golden-master-p1/browser-qa/package.json
           7fcf276c46e3e02735f8ad4befe6b90c4d96736a7a94e49023333cf4ef26a8c3  step4/s02/golden-master-p1/browser-qa/package-lock.json
           SHA256

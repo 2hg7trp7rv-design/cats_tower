@@ -209,6 +209,8 @@ function assertS02HistoryWithIncrementalRenewals(base, head, control, label, evi
     const paths = changedPaths(expectedParent, commit);
     if (s02HarnessCorrectionCommit && commit === s02HarnessCorrectionCommit) {
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02HarnessCorrectionChangedPaths].sort()), `${label}: trusted-harness correction changed an unreviewed path`);
+    } else if (s02QaCorrectionCommit && commit === s02QaCorrectionCommit) {
+      assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02QaCorrectionChangedPaths].sort()), `${label}: QA-initialization correction changed an unreviewed path`);
     } else {
       assertBoundary(paths, control, `${label} commit ${commit}`);
     }
@@ -1786,7 +1788,8 @@ const s02VerificationPaths = [
   'step4/s02/golden-master-p1/browser-qa/package.json',
   'step4/s02/golden-master-p1/browser-qa/package-lock.json'
 ];
-const expectedS02WorkflowSha256 = '7219aba5d01f68105339a9815ce61f2d5c265a1c0b9e544f30f50056a7242225';
+const expectedS02WorkflowCorrectionRound001Sha256 = '7219aba5d01f68105339a9815ce61f2d5c265a1c0b9e544f30f50056a7242225';
+const expectedS02WorkflowSha256 = '32e82c7b97cab50f6d51622f316fe11f33ed259d4c0372d1925af58bf4e2592d';
 const s02ContentManifestPatterns = [
   'step4/s02/golden-master-p1/**',
   'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-*.json',
@@ -3708,6 +3711,16 @@ if (s02RepairControl) {
   assert(policy.authority.activeChangeControl === expectedPostRound034Control && dispatcher.currentAddendum === expectedPostRound034Control, 'post-round-034 policy or dispatcher rolled back or skipped the reviewed successor');
 }
 
+const s02QaCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-002.json';
+const s02QaCorrection = exists(s02QaCorrectionPath) ? json(s02QaCorrectionPath) : null;
+const s02QaCorrectionCommit = s02QaCorrection ? firstAddCommit(s02QaCorrectionPath) : null;
+const s02QaCorrectionChangedPaths = [
+  '.github/workflows/verify-step-4-s02-golden-master-p1.yml',
+  s02QaCorrectionPath,
+  'tests/governance/verify-current-authority.mjs',
+  'tests/step4/s02-golden-master-p1-browser-qa.mjs'
+];
+
 // BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001
 const s02HarnessCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-001.json';
 const s02HarnessCorrection = exists(s02HarnessCorrectionPath) ? json(s02HarnessCorrectionPath) : null;
@@ -3761,7 +3774,7 @@ if (s02HarnessCorrection) {
   ];
   assert(s02HarnessCorrection.diagnosis.type === 'WORKFLOW_PINNED_SHA256_VALUES_DO_NOT_MATCH_COMMITTED_HARNESS_BYTES' && JSON.stringify(s02HarnessCorrection.diagnosis.oldPins) === JSON.stringify(expectedOldPins) && JSON.stringify(s02HarnessCorrection.diagnosis.committedSha256) === JSON.stringify(expectedNewPins), 'S02 trusted-harness mismatch diagnosis differs from the failed exact commit');
   assert(s02HarnessCorrection.correction.rule === 'REBIND_WORKFLOW_TO_EXACT_EXISTING_COMMITTED_HARNESS_BYTES_WITHOUT_REMOVING_OR_WEAKENING_ASSERTIONS' && JSON.stringify(s02HarnessCorrection.correction.changedPaths) === JSON.stringify(s02HarnessCorrectionChangedPaths) && JSON.stringify(s02HarnessCorrection.correction.newPins) === JSON.stringify(expectedNewPins), 'S02 trusted-harness correction rule/path/pin set mismatch');
-  assert(s02HarnessCorrection.correction.workflowBeforeSha256 === 'ae42536a3d30dff057afa189bf15a9ed7caa5fb90d3e375dc4671c8757fbe8dc' && s02HarnessCorrection.correction.workflowAfterSha256 === expectedS02WorkflowSha256 && s02HarnessCorrection.correction.assertionSetChanged === false, 'S02 trusted-harness workflow correction overreaches the exact checksum rebinding');
+  assert(s02HarnessCorrection.correction.workflowBeforeSha256 === 'ae42536a3d30dff057afa189bf15a9ed7caa5fb90d3e375dc4671c8757fbe8dc' && s02HarnessCorrection.correction.workflowAfterSha256 === expectedS02WorkflowCorrectionRound001Sha256 && s02HarnessCorrection.correction.assertionSetChanged === false, 'S02 trusted-harness workflow correction overreaches the exact checksum rebinding');
   assert(JSON.stringify(s02HarnessCorrection.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }), 'S02 trusted-harness correction crosses a protected product/release boundary');
   assert(s02HarnessCorrection.status === 'CORRECTED_TRUSTED_HARNESS_PINS_PENDING_RERUN', 'S02 trusted-harness correction status mismatch');
   assert(s02HarnessCorrectionCommit && git(['rev-parse', `${s02HarnessCorrectionCommit}^`]) === s02HarnessCorrection.entry.head, 'S02 trusted-harness correction is not the immediate child of the failed content commit');
@@ -3782,7 +3795,9 @@ if (s02HarnessCorrection) {
   const verifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02HarnessCorrection.entry.head, s02HarnessCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   assert(sha256Text(correctedVerifierSource) === s02HarnessCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(verifierPatch)}` === s02HarnessCorrection.correction.verifierPatchSha256, 'S02 trusted-harness verifier bytes/patch differ from the immutable correction record');
   assert(correctedVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedVerifierSource.includes('// END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 trusted-harness verifier correction removed its self-check or original fail-closed boundary assertion');
-  assertNoPathChangesSince(s02HarnessCorrectionCommit, 'HEAD', s02HarnessCorrectionChangedPaths, 'S02 trusted-harness correction freeze');
+  const firstCorrectionFreezeEnd = s02QaCorrectionCommit ? git(['rev-parse', `${s02QaCorrectionCommit}^`]) : git(['rev-parse', 'HEAD']);
+  assertNoPathChangesSince(s02HarnessCorrectionCommit, firstCorrectionFreezeEnd, s02HarnessCorrectionChangedPaths, 'S02 trusted-harness correction freeze before QA-initialization correction');
+  if (s02QaCorrectionCommit) assertNoPathChangesSince(s02HarnessCorrectionCommit, 'HEAD', [s02HarnessCorrectionPath], 'S02 trusted-harness round 001 record freeze');
   if (requireLiveActions) {
     const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02HarnessCorrection.authorityWorkflow.runId}`);
     const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02HarnessCorrection.authorityWorkflow.jobId}`);
@@ -3799,6 +3814,94 @@ if (s02HarnessCorrection) {
   }
 }
 // END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001
+
+// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_002
+if (s02QaCorrection) {
+  assertExactKeySet(s02QaCorrection, ['schemaVersion', 'artifactId', 'createdAt', 'repository', 'branch', 'changeControl', 'entry', 'authorityWorkflow', 'failedWorkflow', 'diagnosis', 'correction', 'boundaries', 'status'], 'S02 QA-initialization correction');
+  assertExactKeySet(s02QaCorrection.entry, ['head', 'tree'], 'S02 QA-initialization correction entry');
+  assertExactKeySet(s02QaCorrection.authorityWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'artifactId', 'artifactName', 'artifactDigest'], 'S02 QA-initialization authority workflow');
+  assertExactKeySet(s02QaCorrection.failedWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'failedStep', 'error', 'artifactCount'], 'S02 QA-initialization failed workflow');
+  assertExactKeySet(s02QaCorrection.diagnosis, ['type', 'symbol', 'firstUseLine', 'declarationLine', 'browserCaptureCompleted'], 'S02 QA-initialization diagnosis');
+  assertExactKeySet(s02QaCorrection.correction, ['rule', 'changedPaths', 'qaBeforeSha256', 'qaAfterSha256', 'qaPatchSha256', 'workflowBeforeSha256', 'workflowAfterSha256', 'workflowPatchSha256', 'verifierAfterSha256', 'verifierPatchSha256', 'assertionSetChanged', 'acceptanceThresholdsChanged'], 'S02 QA-initialization exact correction');
+  assertExactKeySet(s02QaCorrection.boundaries, ['rootRuntimeChanged', 'gameCoreChanged', 'gameDataChanged', 'economyChanged', 'saveSchemaChanged', 'backendChanged', 'productionChanged', 'productionAliasChanged', 'physicalIPhoneVerified', 'step4Pass', 'step5Allowed'], 'S02 QA-initialization correction boundaries');
+  assert(s02QaCorrection.schemaVersion === 1 && s02QaCorrection.artifactId === 'cats-tower-s02-golden-master-p1-trusted-harness-correction-round-002' && s02QaCorrection.createdAt === '2026-09-02', 'S02 QA-initialization correction identity/date mismatch');
+  assert(s02QaCorrection.repository === '2hg7trp7rv-design/cats_tower' && s02QaCorrection.branch === 'kimi' && s02QaCorrection.changeControl === s02RepairControlPath, 'S02 QA-initialization correction authority mismatch');
+  assert(JSON.stringify(s02QaCorrection.entry) === JSON.stringify({ head: 'c85c1b7244026c2e4cf3ce9e170c5b17acaad5c5', tree: 'f8bfa03017603414e25738f2b00bfe5064490d60' }), 'S02 QA-initialization correction entry is not the exact failed compact-reference commit/tree');
+  assert(JSON.stringify(s02QaCorrection.authorityWorkflow) === JSON.stringify({
+    commit: s02QaCorrection.entry.head,
+    tree: s02QaCorrection.entry.tree,
+    runId: 33591146325,
+    runAttempt: 1,
+    jobId: 100125344631,
+    conclusion: 'SUCCESS',
+    artifactId: 9831795065,
+    artifactName: 'phase0-current-governance-c85c1b7244026c2e4cf3ce9e170c5b17acaad5c5-33591146325-1',
+    artifactDigest: 'sha256:bbe261b7349380b2162d095685972d653701a3c7faee6776c7459eb173a65bec'
+  }), 'S02 QA-initialization correction does not bind the successful exact-entry authority workflow');
+  assert(JSON.stringify(s02QaCorrection.failedWorkflow) === JSON.stringify({
+    commit: s02QaCorrection.entry.head,
+    tree: s02QaCorrection.entry.tree,
+    runId: 33591146303,
+    runAttempt: 1,
+    jobId: 100125228390,
+    conclusion: 'FAILURE',
+    failedStep: 'Capture and verify eight masters plus required responsive variants',
+    error: "ReferenceError: Cannot access 'responsiveByViewport' before initialization",
+    artifactCount: 0
+  }), 'S02 QA-initialization correction does not bind the exact failed workflow/job/step/error');
+  assert(JSON.stringify(s02QaCorrection.diagnosis) === JSON.stringify({ type: 'QA_TEMPORAL_DEAD_ZONE_AFTER_SUCCESSFUL_BROWSER_CAPTURE', symbol: 'responsiveByViewport', firstUseLine: 478, declarationLine: 743, browserCaptureCompleted: true }), 'S02 QA-initialization diagnosis differs from the exact failed job');
+  assert(s02QaCorrection.correction.rule === 'MOVE_EXISTING_RESPONSIVE_CONTRACT_INITIALIZATION_BEFORE_VALIDATE_RAW_WITHOUT_CHANGING_ASSERTIONS_OR_THRESHOLDS' && JSON.stringify(s02QaCorrection.correction.changedPaths) === JSON.stringify(s02QaCorrectionChangedPaths), 'S02 QA-initialization correction rule/path set mismatch');
+  assert(s02QaCorrection.correction.qaBeforeSha256 === 'f67bf7472b108d2e88ac24ac034a386e2c24896a18a95950e82ec5bbf9042d03' && s02QaCorrection.correction.qaAfterSha256 === '5190fe2fca12b75356518a02c95dae6947ac2f6e68690c43ac30d7ee82bf293a' && s02QaCorrection.correction.qaPatchSha256 === 'sha256:c4a323a1cb4142c83dace4ae0284063a1e6c5aa801be12726d30073e03b18ab5', 'S02 QA-initialization source digest/patch mismatch');
+  assert(s02QaCorrection.correction.workflowBeforeSha256 === expectedS02WorkflowCorrectionRound001Sha256 && s02QaCorrection.correction.workflowAfterSha256 === expectedS02WorkflowSha256 && s02QaCorrection.correction.workflowPatchSha256 === 'sha256:459bdb2f6bbd1cfd0038aae250e36b0105c21cda3716c2b657a35bd27ccdf6c6', 'S02 QA-initialization workflow digest/patch mismatch');
+  assert(s02QaCorrection.correction.assertionSetChanged === false && s02QaCorrection.correction.acceptanceThresholdsChanged === false, 'S02 QA-initialization correction changed assertions or acceptance thresholds');
+  assert(JSON.stringify(s02QaCorrection.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }), 'S02 QA-initialization correction crosses a protected product/release boundary');
+  assert(s02QaCorrection.status === 'CORRECTED_QA_INITIALIZATION_ORDER_PENDING_RERUN', 'S02 QA-initialization correction status mismatch');
+  assert(s02QaCorrectionCommit && git(['rev-parse', `${s02QaCorrectionCommit}^`]) === s02QaCorrection.entry.head, 'S02 QA-initialization correction is not the immediate child of the failed commit');
+  assert(git(['rev-parse', `${s02QaCorrection.entry.head}^{tree}`]) === s02QaCorrection.entry.tree, 'S02 QA-initialization correction entry tree mismatch');
+  assertExactChangedPaths(s02QaCorrection.entry.head, s02QaCorrectionCommit, s02QaCorrectionChangedPaths, 'S02 QA-initialization correction commit');
+  assertAddedOnceAndUnchanged(s02QaCorrectionPath, s02QaCorrectionCommit);
+
+  const priorQaSource = textAt(s02QaCorrection.entry.head, 'tests/step4/s02-golden-master-p1-browser-qa.mjs');
+  const correctedQaSource = textAt(s02QaCorrectionCommit, 'tests/step4/s02-golden-master-p1-browser-qa.mjs');
+  const responsiveContractLine = "const responsiveContract = parseJson(path.join(root, 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-responsive-contract.json'), 2 * 1024 * 1024);\n";
+  const responsiveMapBlock = "const responsiveByViewport = new Map((responsiveContract.viewportContracts ?? []).map((contract) => [contract.viewport, contract]));\ninvariant(responsiveByViewport.size === 7 && ['320x568', '320x667', '375x667', '360x800', '390x844', '412x915', '430x932'].every((viewport) => responsiveByViewport.has(viewport)), 'responsive contract does not bind all seven required viewport sizes');\n";
+  const validateRawMarker = "validateRaw(raw, revisionMode ? { requestDefinitions: revisionContract.definitions, assetParticipation: true, offlineVariants: true, browserModes: true } : { offlineVariants: true, browserModes: true });\n";
+  let expectedQaSource = priorQaSource;
+  for (const exactBlock of [responsiveContractLine, responsiveMapBlock, validateRawMarker]) assert(expectedQaSource.split(exactBlock).length === 2, 'S02 QA-initialization prior source does not contain one exact movable block/marker');
+  expectedQaSource = expectedQaSource.replace(responsiveContractLine, '').replace(responsiveMapBlock, '').replace(validateRawMarker, responsiveContractLine + responsiveMapBlock + validateRawMarker);
+  assert(correctedQaSource === expectedQaSource && sha256Text(correctedQaSource) === s02QaCorrection.correction.qaAfterSha256, 'S02 QA-initialization correction changed more than declaration order');
+  const qaPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02QaCorrection.entry.head, s02QaCorrectionCommit, '--', 'tests/step4/s02-golden-master-p1-browser-qa.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert(`sha256:${sha256Text(qaPatch)}` === s02QaCorrection.correction.qaPatchSha256, 'S02 QA-initialization patch digest differs from the immutable correction record');
+
+  const priorQaPin = 'f67bf7472b108d2e88ac24ac034a386e2c24896a18a95950e82ec5bbf9042d03  tests/step4/s02-golden-master-p1-browser-qa.mjs';
+  const correctedQaPin = '5190fe2fca12b75356518a02c95dae6947ac2f6e68690c43ac30d7ee82bf293a  tests/step4/s02-golden-master-p1-browser-qa.mjs';
+  const priorQaWorkflowSource = textAt(s02QaCorrection.entry.head, '.github/workflows/verify-step-4-s02-golden-master-p1.yml');
+  const correctedQaWorkflowSource = textAt(s02QaCorrectionCommit, '.github/workflows/verify-step-4-s02-golden-master-p1.yml');
+  assert(priorQaWorkflowSource.split(priorQaPin).length === 2 && correctedQaWorkflowSource === priorQaWorkflowSource.replace(priorQaPin, correctedQaPin) && sha256Text(correctedQaWorkflowSource) === s02QaCorrection.correction.workflowAfterSha256, 'S02 QA-initialization workflow changed beyond the exact QA pin');
+  const workflowPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02QaCorrection.entry.head, s02QaCorrectionCommit, '--', '.github/workflows/verify-step-4-s02-golden-master-p1.yml'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert(`sha256:${sha256Text(workflowPatch)}` === s02QaCorrection.correction.workflowPatchSha256, 'S02 QA-initialization workflow patch differs from the immutable correction record');
+
+  const correctedQaVerifierSource = textAt(s02QaCorrectionCommit, 'tests/governance/verify-current-authority.mjs');
+  const qaVerifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02QaCorrection.entry.head, s02QaCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert(sha256Text(correctedQaVerifierSource) === s02QaCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(qaVerifierPatch)}` === s02QaCorrection.correction.verifierPatchSha256, 'S02 QA-initialization verifier bytes/patch differ from the immutable correction record');
+  assert(correctedQaVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedQaVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_002') && correctedQaVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 QA-initialization verifier removed a prior correction guard or original fail-closed boundary assertion');
+  assertNoPathChangesSince(s02QaCorrectionCommit, 'HEAD', s02QaCorrectionChangedPaths, 'S02 QA-initialization correction freeze');
+  if (requireLiveActions) {
+    const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02QaCorrection.authorityWorkflow.runId}`);
+    const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02QaCorrection.authorityWorkflow.jobId}`);
+    const authorityArtifact = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/artifacts/${s02QaCorrection.authorityWorkflow.artifactId}`);
+    assert(authorityRun.head_sha === s02QaCorrection.entry.head && authorityRun.head_branch === 'kimi' && authorityRun.status === 'completed' && authorityRun.conclusion === 'success' && authorityRun.run_attempt === 1, 'S02 QA-initialization correction live authority run mismatch');
+    assert(authorityJob.run_id === authorityRun.id && authorityJob.head_sha === s02QaCorrection.entry.head && authorityJob.name === 'current-authority' && authorityJob.conclusion === 'success', 'S02 QA-initialization correction live authority job mismatch');
+    assert(authorityArtifact.name === s02QaCorrection.authorityWorkflow.artifactName && authorityArtifact.digest === s02QaCorrection.authorityWorkflow.artifactDigest && authorityArtifact.expired === false && authorityArtifact.workflow_run?.head_sha === s02QaCorrection.entry.head, 'S02 QA-initialization correction live authority artifact mismatch');
+    const failedRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02QaCorrection.failedWorkflow.runId}`);
+    const failedJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02QaCorrection.failedWorkflow.jobId}`);
+    assert(failedRun.head_sha === s02QaCorrection.entry.head && failedRun.head_branch === 'kimi' && failedRun.status === 'completed' && failedRun.conclusion === 'failure' && failedRun.run_attempt === 1, 'S02 QA-initialization correction live failed run mismatch');
+    assert(failedJob.run_id === failedRun.id && failedJob.head_sha === s02QaCorrection.entry.head && failedJob.name === 'Static, eight-master responsive and accessibility verification' && failedJob.conclusion === 'failure', 'S02 QA-initialization correction live failed job mismatch');
+    const failedSteps = (failedJob.steps ?? []).filter(step => step.name === s02QaCorrection.failedWorkflow.failedStep);
+    assert(failedSteps.length === 1 && failedSteps[0].conclusion === 'failure', 'S02 QA-initialization correction live failed step mismatch');
+  }
+}
+// END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_002
 
 function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath = s02ReviewEvidencePaths.deploymentRequest, requireLiveApi = true) {
   assertWorkflowEvidenceKeys(evidence, `${label} workflow evidence`, true);

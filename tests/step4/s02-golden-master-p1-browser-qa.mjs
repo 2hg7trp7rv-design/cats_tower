@@ -698,6 +698,9 @@ if (revisionMode) {
   priorCritic = parseJson(activeRevisionStage.priorCriticPath, 4 * 1024 * 1024);
   invariant(priorCritic.auditTarget && /^[a-f0-9]{40}$/.test(priorCritic.auditTarget.commit ?? '') && /^[a-f0-9]{40}$/.test(priorCritic.auditTarget.tree ?? ''), 'immediate-prior critic auditTarget is invalid');
 }
+const responsiveContract = parseJson(path.join(root, 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-responsive-contract.json'), 2 * 1024 * 1024);
+const responsiveByViewport = new Map((responsiveContract.viewportContracts ?? []).map((contract) => [contract.viewport, contract]));
+invariant(responsiveByViewport.size === 7 && ['320x568', '320x667', '375x667', '360x800', '390x844', '412x915', '430x932'].every((viewport) => responsiveByViewport.has(viewport)), 'responsive contract does not bind all seven required viewport sizes');
 validateRaw(raw, revisionMode ? { requestDefinitions: revisionContract.definitions, assetParticipation: true, offlineVariants: true, browserModes: true } : { offlineVariants: true, browserModes: true });
 if (revisionMode) {
   baselineRawBytes = readBounded(baselineRawPath, 16 * 1024 * 1024);
@@ -731,7 +734,6 @@ const assetManifest = parseJson(path.join(root, 'step4/s02/golden-master-p1/asse
 const reviewManifest = parseJson(path.join(root, 'step4/s02/golden-master-p1/review-manifest.json'), 2 * 1024 * 1024);
 const acceptanceMatrix = parseJson(path.join(root, 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-acceptance-matrix-round-001.json'), 4 * 1024 * 1024);
 const dataBindingMatrix = parseJson(path.join(root, 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-data-binding-matrix.json'), 2 * 1024 * 1024);
-const responsiveContract = parseJson(path.join(root, 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-responsive-contract.json'), 2 * 1024 * 1024);
 const canonicalBindingIds = new Set((dataBindingMatrix.bindings ?? []).map((binding) => binding.id));
 const assetKinds = new Map((assetManifest.assets ?? []).map((asset) => [asset.path, asset.kind]));
 const assetRecords = new Map((assetManifest.assets ?? []).map((asset) => [asset.path, asset]));
@@ -740,8 +742,6 @@ const allowedBrowserResourcePaths = new Set(['/step4/s02/golden-master-p1/', '/s
 const manifestFrameKeys = (assetManifest.assets ?? []).flatMap((asset) => (asset.frames ?? []).map((frame) => asset.path + '#' + frame.id)).sort();
 const byId = new Map(raw.scenarios.map((scenario) => [scenario.id, scenario]));
 const fixtureByGm = new Map((acceptanceMatrix.reviewFixtures ?? []).map((fixture) => [fixture.goldenMasterId, fixture]));
-const responsiveByViewport = new Map((responsiveContract.viewportContracts ?? []).map((contract) => [contract.viewport, contract]));
-invariant(responsiveByViewport.size === 7 && ['320x568', '320x667', '375x667', '360x800', '390x844', '412x915', '430x932'].every((viewport) => responsiveByViewport.has(viewport)), 'responsive contract does not bind all seven required viewport sizes');
 const gm05AntiBloatContract = responsiveByViewport.get('430x932')?.antiBloat;
 invariant(gm05AntiBloatContract?.reference === 'GM01 390x844'
   && JSON.stringify(gm05AntiBloatContract.components) === JSON.stringify(['.game-hud', '.resource-chip', '.primary-action', '.nav-button'])

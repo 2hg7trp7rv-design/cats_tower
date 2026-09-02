@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-trusted-harness-correction-round-002",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "c85c1b7244026c2e4cf3ce9e170c5b17acaad5c5",
+    "tree": "f8bfa03017603414e25738f2b00bfe5064490d60"
+  },
+  "authorityWorkflow": {
+    "commit": "c85c1b7244026c2e4cf3ce9e170c5b17acaad5c5",
+    "tree": "f8bfa03017603414e25738f2b00bfe5064490d60",
+    "runId": 33591146325,
+    "runAttempt": 1,
+    "jobId": 100125344631,
+    "conclusion": "SUCCESS",
+    "artifactId": 9831795065,
+    "artifactName": "phase0-current-governance-c85c1b7244026c2e4cf3ce9e170c5b17acaad5c5-33591146325-1",
+    "artifactDigest": "sha256:bbe261b7349380b2162d095685972d653701a3c7faee6776c7459eb173a65bec"
+  },
+  "failedWorkflow": {
+    "commit": "c85c1b7244026c2e4cf3ce9e170c5b17acaad5c5",
+    "tree": "f8bfa03017603414e25738f2b00bfe5064490d60",
+    "runId": 33591146303,
+    "runAttempt": 1,
+    "jobId": 100125228390,
+    "conclusion": "FAILURE",
+    "failedStep": "Capture and verify eight masters plus required responsive variants",
+    "error": "ReferenceError: Cannot access 'responsiveByViewport' before initialization",
+    "artifactCount": 0
+  },
+  "diagnosis": {
+    "type": "QA_TEMPORAL_DEAD_ZONE_AFTER_SUCCESSFUL_BROWSER_CAPTURE",
+    "symbol": "responsiveByViewport",
+    "firstUseLine": 478,
+    "declarationLine": 743,
+    "browserCaptureCompleted": true
+  },
+  "correction": {
+    "rule": "MOVE_EXISTING_RESPONSIVE_CONTRACT_INITIALIZATION_BEFORE_VALIDATE_RAW_WITHOUT_CHANGING_ASSERTIONS_OR_THRESHOLDS",
+    "changedPaths": [
+      ".github/workflows/verify-step-4-s02-golden-master-p1.yml",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-002.json",
+      "tests/governance/verify-current-authority.mjs",
+      "tests/step4/s02-golden-master-p1-browser-qa.mjs"
+    ],
+    "qaBeforeSha256": "f67bf7472b108d2e88ac24ac034a386e2c24896a18a95950e82ec5bbf9042d03",
+    "qaAfterSha256": "5190fe2fca12b75356518a02c95dae6947ac2f6e68690c43ac30d7ee82bf293a",
+    "qaPatchSha256": "sha256:c4a323a1cb4142c83dace4ae0284063a1e6c5aa801be12726d30073e03b18ab5",
+    "workflowBeforeSha256": "7219aba5d01f68105339a9815ce61f2d5c265a1c0b9e544f30f50056a7242225",
+    "workflowAfterSha256": "32e82c7b97cab50f6d51622f316fe11f33ed259d4c0372d1925af58bf4e2592d",
+    "workflowPatchSha256": "sha256:459bdb2f6bbd1cfd0038aae250e36b0105c21cda3716c2b657a35bd27ccdf6c6",
+    "verifierAfterSha256": "14b90912d2812f04b5bba87f9d628871cfa94c017ef54267ba05341d12a73c3c",
+    "verifierPatchSha256": "sha256:ec7e9c9b3b7d27fc1fba035f3c418b7448cb6cd630e3936750dd99e6ed48b8d8",
+    "assertionSetChanged": false,
+    "acceptanceThresholdsChanged": false
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_QA_INITIALIZATION_ORDER_PENDING_RERUN"
+}
