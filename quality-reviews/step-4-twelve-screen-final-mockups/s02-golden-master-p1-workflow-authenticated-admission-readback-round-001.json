@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-workflow-authenticated-admission-readback-round-001",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "evidenceRound": "001",
+  "admission": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-workflow-authenticated-admission-round-001.json",
+    "blob": "59f59dbdaac4f9f5b40277aa357af5456b5ed62a",
+    "commit": "677c38ed6f8c2a7e991f83f5958746613a992b10",
+    "tree": "8173594749dba5718a4585105f41b84061feed8c"
+  },
+  "workflow": {
+    "commit": "677c38ed6f8c2a7e991f83f5958746613a992b10",
+    "tree": "8173594749dba5718a4585105f41b84061feed8c",
+    "runId": 33605882735,
+    "runAttempt": 1,
+    "jobId": 100169808238,
+    "conclusion": "SUCCESS",
+    "artifactId": 9837062957,
+    "artifactName": "phase0-current-governance-677c38ed6f8c2a7e991f83f5958746613a992b10-33605882735-1",
+    "artifactDigest": "sha256:22f1468b712e5f07b99c6eea8d6fe2ee57c83196fdf81c4bc8f2b48c0ca953dd",
+    "oidcTokenSha256": "sha256:b7220347730506f86768b1cfbcfec4dd0ae0bea3e69dacde37b0726c9c0ad5b7",
+    "oidcClaims": {
+      "issuer": "https://token.actions.githubusercontent.com",
+      "audience": "cats-tower-current-governance",
+      "subject": "repo:2hg7trp7rv-design@245031448/cats_tower@1331488679:ref:refs/heads/kimi",
+      "repository": "2hg7trp7rv-design/cats_tower",
+      "repositoryId": "1331488679",
+      "repositoryOwnerId": "245031448",
+      "ref": "refs/heads/kimi",
+      "sha": "677c38ed6f8c2a7e991f83f5958746613a992b10",
+      "runId": "33605882735",
+      "runAttempt": "1",
+      "workflowRef": "2hg7trp7rv-design/cats_tower/.github/workflows/verify-current-governance.yml@refs/heads/kimi"
+    },
+    "oidcVerified": true
+  },
+  "verification": {
+    "runApiVerified": true,
+    "jobApiVerified": true,
+    "verifierStepVerified": true,
+    "liveArchiveAdmissionEnforced": true,
+    "bearerTokenPersisted": false
+  },
+  "verdict": "PASS_S02_WORKFLOW_PACKAGE_AUTHENTICATED_ADMISSION_READBACK"
+}
