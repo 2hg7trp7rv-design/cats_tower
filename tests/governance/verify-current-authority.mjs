@@ -76,7 +76,7 @@ function jsonAt(commit, file) {
 }
 
 function textAt(commit, file) {
-  return execFileSync('git', ['show', `${commit}:${file}`], { cwd: root, encoding: 'utf8' });
+  return execFileSync('git', ['show', `${commit}:${file}`], { cwd: root, encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 });
 }
 
 function bytesAt(commit, file) {
@@ -237,6 +237,8 @@ function assertS02HistoryWithIncrementalRenewals(base, head, control, label, evi
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02ReviewVerifierCorrectionChangedPaths].sort()), `${label}: review-verifier correction changed an unreviewed path`);
     } else if (s02ExternalPreviewVerifierCorrectionCommit && commit === s02ExternalPreviewVerifierCorrectionCommit) {
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02ExternalPreviewVerifierCorrectionChangedPaths].sort()), `${label}: external-preview verifier correction changed an unreviewed path`);
+    } else if (s02ExternalPreviewRedirectCorrectionCommit && commit === s02ExternalPreviewRedirectCorrectionCommit) {
+      assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02ExternalPreviewRedirectCorrectionChangedPaths].sort()), `${label}: external-preview redirect correction changed an unreviewed path`);
     } else {
       assertBoundary(paths, control, `${label} commit ${commit}`);
     }
@@ -3915,6 +3917,14 @@ const s02ExternalPreviewVerifierCorrectionChangedPaths = [
   s02ExternalPreviewVerifierCorrectionPath,
   'tests/governance/verify-current-authority.mjs'
 ];
+const s02ExternalPreviewRedirectCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-redirect-correction-round-002.json';
+const s02ExternalPreviewRedirectCorrection = exists(s02ExternalPreviewRedirectCorrectionPath) ? json(s02ExternalPreviewRedirectCorrectionPath) : null;
+const s02ExternalPreviewRedirectCorrectionCommit = s02ExternalPreviewRedirectCorrection ? firstAddCommit(s02ExternalPreviewRedirectCorrectionPath) : null;
+const s02ExternalPreviewRedirectCorrectionChangedPaths = [
+  '.github/workflows/verify-current-governance.yml',
+  s02ExternalPreviewRedirectCorrectionPath,
+  'tests/governance/verify-current-authority.mjs'
+];
 
 // BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001
 const s02HarnessCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-001.json';
@@ -5326,7 +5336,9 @@ if (s02ExternalPreviewVerifierCorrection) {
   assert(correctedVerifierSource.includes('// BEGIN_S02_EXTERNAL_PREVIEW_VERIFIER_CORRECTION_ROUND_001') && correctedVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_013') && correctedVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 corrected verifier removed earlier fail-closed guards');
   assert(JSON.stringify(correction.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }), 'S02 external-preview correction crosses a protected boundary');
   assert(correction.status === 'CORRECTED_EXTERNAL_PREVIEW_VERIFIER_PENDING_RERUN', 'S02 external-preview correction status mismatch');
-  assertNoPathChangesSince(s02ExternalPreviewVerifierCorrectionCommit, 'HEAD', s02ExternalPreviewVerifierCorrectionChangedPaths, 'S02 external-preview verifier correction freeze');
+  const externalPreviewVerifierFreezeEnd = s02ExternalPreviewRedirectCorrectionCommit ? git(['rev-parse', `${s02ExternalPreviewRedirectCorrectionCommit}^`]) : 'HEAD';
+  assertNoPathChangesSince(s02ExternalPreviewVerifierCorrectionCommit, externalPreviewVerifierFreezeEnd, s02ExternalPreviewVerifierCorrectionChangedPaths, 'S02 external-preview verifier correction freeze');
+  if (s02ExternalPreviewRedirectCorrectionCommit) assertNoPathChangesSince(s02ExternalPreviewVerifierCorrectionCommit, 'HEAD', [s02ExternalPreviewVerifierCorrectionPath], 'S02 external-preview verifier correction record freeze');
   if (requireLiveActions) {
     const failedRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${correction.failedWorkflow.runId}/attempts/${correction.failedWorkflow.runAttempt}`);
     const failedJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${correction.failedWorkflow.jobId}`);
@@ -5341,12 +5353,62 @@ if (s02ExternalPreviewVerifierCorrection) {
 }
 // END_S02_EXTERNAL_PREVIEW_VERIFIER_CORRECTION_ROUND_001
 
+// BEGIN_S02_EXTERNAL_PREVIEW_REDIRECT_CORRECTION_ROUND_002
+if (s02ExternalPreviewRedirectCorrection) {
+  const correction = s02ExternalPreviewRedirectCorrection;
+  assertExactKeySet(correction, ['schemaVersion', 'artifactId', 'createdAt', 'repository', 'branch', 'changeControl', 'entry', 'failedWorkflow', 'request', 'diagnosis', 'correction', 'boundaries', 'status'], 'S02 external-preview redirect correction');
+  assertExactKeySet(correction.entry, ['head', 'tree'], 'S02 external-preview redirect correction entry');
+  assertExactKeySet(correction.failedWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'failedStep', 'error'], 'S02 external-preview redirect failed workflow');
+  assertExactKeySet(correction.request, ['path', 'commit', 'tree', 'blob'], 'S02 external-preview redirect request binding');
+  assertExactKeySet(correction.diagnosis, ['type', 'redirectOrigin', 'redirectPath', 'oldPolicy', 'shareTokenValid', 'productQualityAffected', 'originalFailurePreserved'], 'S02 external-preview redirect diagnosis');
+  assertExactKeySet(correction.correction, ['rule', 'changedPaths', 'workflowBeforeSha256', 'workflowAfterSha256', 'workflowPatchSha256', 'verifierAfterSha256', 'verifierPatchSha256', 'httpsOnly', 'allowedHandshakeOrigins', 'allowedDeploymentHandshakePath', 'maxRedirects', 'separateFetchCookieJars', 'ephemeralCookieJars', 'finalOriginAndPathLocked', 'responseCapsRetained', 'immutableAndAliasByteChecksRetained', 'oidcProofRetained', 'acceptanceThresholdsChanged', 'productContentChanged'], 'S02 external-preview redirect exact correction');
+  assertExactKeySet(correction.boundaries, ['rootRuntimeChanged', 'gameCoreChanged', 'gameDataChanged', 'economyChanged', 'saveSchemaChanged', 'backendChanged', 'productionChanged', 'productionAliasChanged', 'physicalIPhoneVerified', 'step4Pass', 'step5Allowed'], 'S02 external-preview redirect correction boundaries');
+  assert(correction.schemaVersion === 1 && correction.artifactId === 'cats-tower-s02-golden-master-p1-external-preview-redirect-correction-round-002' && correction.createdAt === '2026-09-02', 'S02 external-preview redirect correction identity/date mismatch');
+  assert(correction.repository === '2hg7trp7rv-design/cats_tower' && correction.branch === 'kimi' && correction.changeControl === s02RepairControlPath, 'S02 external-preview redirect correction authority mismatch');
+  assert(JSON.stringify(correction.entry) === JSON.stringify({ head: '3ffb1d4b9f312d29f852f3a78966244d8699928b', tree: 'c7d275d7a8c349e5d0309f115ffc1338277e40e8' }), 'S02 external-preview redirect correction entry mismatch');
+  assert(JSON.stringify(correction.failedWorkflow) === JSON.stringify({ commit: correction.entry.head, tree: correction.entry.tree, runId: 33612311631, runAttempt: 1, jobId: 100190324697, conclusion: 'FAILURE', failedStep: 'Generate external S02 Preview proof', error: 'UNTRUSTED_REDIRECT:https://catstower-e72ri5svj-shinyaaas-projects.vercel.app/step4/s02/golden-master-p1/' }), 'S02 external-preview redirect failed workflow mismatch');
+  assert(JSON.stringify(correction.request) === JSON.stringify({ path: s02ReviewEvidencePaths.deploymentRequest, commit: 'e5ba5ed92d0eeb0da67f956637b7ebb1cb6c2a11', tree: 'f706c3146d09f3c30368e0e0d4a92afbfd7850da', blob: 'c034073b7b9beaa34bcffd4a685e36fefc3a0861' }), 'S02 external-preview redirect request binding mismatch');
+  assert(correction.request.commit === firstAddCommit(correction.request.path) && git(['rev-parse', `${correction.request.commit}:${correction.request.path}`]) === correction.request.blob, 'S02 external-preview redirect correction does not bind the immutable request');
+  assert(JSON.stringify(correction.diagnosis) === JSON.stringify({ type: 'VERCEL_SHARE_LINK_REQUIRES_OFFICIAL_CROSS_ORIGIN_COOKIE_HANDSHAKE', redirectOrigin: 'https://vercel.com', redirectPath: '/sso-api', oldPolicy: 'SAME_ORIGIN_REDIRECT_ONLY', shareTokenValid: true, productQualityAffected: false, originalFailurePreserved: true }), 'S02 external-preview redirect diagnosis mismatch');
+  assert(s02ExternalPreviewVerifierCorrectionCommit === correction.entry.head, 'S02 external-preview redirect entry is not the exact first correction commit');
+  assert(s02ExternalPreviewRedirectCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewRedirectCorrectionCommit}^`]) === correction.entry.head, 'S02 external-preview redirect correction is not the immediate child of the failed first correction');
+  assertExactChangedPaths(correction.entry.head, s02ExternalPreviewRedirectCorrectionCommit, s02ExternalPreviewRedirectCorrectionChangedPaths, 'S02 external-preview redirect correction commit');
+  assertAddedOnceAndUnchanged(s02ExternalPreviewRedirectCorrectionPath, s02ExternalPreviewRedirectCorrectionCommit);
+  const priorWorkflowSource = textAt(correction.entry.head, '.github/workflows/verify-current-governance.yml');
+  const correctedWorkflowSource = textAt(s02ExternalPreviewRedirectCorrectionCommit, '.github/workflows/verify-current-governance.yml');
+  const workflowPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', correction.entry.head, s02ExternalPreviewRedirectCorrectionCommit, '--', '.github/workflows/verify-current-governance.yml'], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+  const correctedVerifierSource = textAt(s02ExternalPreviewRedirectCorrectionCommit, 'tests/governance/verify-current-authority.mjs');
+  const verifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', correction.entry.head, s02ExternalPreviewRedirectCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+  assert(JSON.stringify(correction.correction) === JSON.stringify({
+    rule: 'ALLOW_ONLY_THE_OFFICIAL_VERCEL_SHARE_LINK_HTTPS_COOKIE_HANDSHAKE_WITH_BOUNDED_REDIRECTS_AND_RETAIN_EXACT_FINAL_ORIGIN_PATH_AND_BYTE_PROOF',
+    changedPaths: s02ExternalPreviewRedirectCorrectionChangedPaths,
+    workflowBeforeSha256: sha256Text(priorWorkflowSource), workflowAfterSha256: sha256Text(correctedWorkflowSource), workflowPatchSha256: `sha256:${sha256Text(workflowPatch)}`,
+    verifierAfterSha256: sha256Text(correctedVerifierSource), verifierPatchSha256: `sha256:${sha256Text(verifierPatch)}`,
+    httpsOnly: true, allowedHandshakeOrigins: ['ORIGINAL_VERCEL_DEPLOYMENT_ORIGIN', 'https://vercel.com'], allowedDeploymentHandshakePath: '/_vercel/sso-api', maxRedirects: 6,
+    separateFetchCookieJars: true, ephemeralCookieJars: true, finalOriginAndPathLocked: true, responseCapsRetained: true,
+    immutableAndAliasByteChecksRetained: true, oidcProofRetained: true, acceptanceThresholdsChanged: false, productContentChanged: false
+  }), 'S02 external-preview redirect correction bytes, path set or proof guarantees mismatch');
+  assert(priorWorkflowSource.includes("redirected.origin !== url.origin") && priorWorkflowSource.includes('UNTRUSTED_REDIRECT'), 'S02 redirect correction entry does not contain the exact same-origin-only failure policy');
+  assert(correctedWorkflowSource.includes("redirected.origin === 'https://vercel.com'") && correctedWorkflowSource.includes("redirected.pathname === '/sso-api'") && correctedWorkflowSource.includes("redirected.pathname === '/_vercel/sso-api'") && correctedWorkflowSource.includes("'--max-redirs', '6'") && correctedWorkflowSource.includes("'--proto-redir', '=https'") && correctedWorkflowSource.includes('UNTRUSTED_SSO_RETURN') && correctedWorkflowSource.includes('REVIEW_ROUTE_DOES_NOT_EQUAL_TARGET_INDEX') && correctedWorkflowSource.includes('oidcVerified: true'), 'S02 corrected redirect workflow removed its exact Vercel allowlist, final-path, byte-exact or OIDC guarantees');
+  assert(correctedVerifierSource.includes('// BEGIN_S02_EXTERNAL_PREVIEW_REDIRECT_CORRECTION_ROUND_002') && correctedVerifierSource.includes('// BEGIN_S02_EXTERNAL_PREVIEW_VERIFIER_CORRECTION_ROUND_001') && correctedVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 redirect-corrected verifier removed earlier fail-closed guards');
+  assert(JSON.stringify(correction.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }), 'S02 external-preview redirect correction crosses a protected boundary');
+  assert(correction.status === 'CORRECTED_VERCEL_SHARE_REDIRECT_PENDING_RERUN', 'S02 external-preview redirect correction status mismatch');
+  assertNoPathChangesSince(s02ExternalPreviewRedirectCorrectionCommit, 'HEAD', s02ExternalPreviewRedirectCorrectionChangedPaths, 'S02 external-preview redirect correction freeze');
+  if (requireLiveActions) {
+    const failedRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${correction.failedWorkflow.runId}/attempts/${correction.failedWorkflow.runAttempt}`);
+    const failedJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${correction.failedWorkflow.jobId}`);
+    assert(failedRun.id === correction.failedWorkflow.runId && failedRun.run_attempt === correction.failedWorkflow.runAttempt && failedRun.head_sha === correction.entry.head && failedRun.head_branch === 'kimi' && failedRun.status === 'completed' && failedRun.conclusion === 'failure', 'S02 external-preview redirect correction failed run mismatch');
+    assert(failedJob.id === correction.failedWorkflow.jobId && failedJob.run_id === failedRun.id && failedJob.run_attempt === correction.failedWorkflow.runAttempt && failedJob.head_sha === correction.entry.head && failedJob.head_branch === 'kimi' && failedJob.name === 'current-authority' && failedJob.status === 'completed' && failedJob.conclusion === 'failure' && (failedJob.steps ?? []).filter(step => step.name === correction.failedWorkflow.failedStep && step.conclusion === 'failure').length === 1, 'S02 external-preview redirect correction failed job/step mismatch');
+  }
+}
+// END_S02_EXTERNAL_PREVIEW_REDIRECT_CORRECTION_ROUND_002
+
 function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath = s02ReviewEvidencePaths.deploymentRequest, requireLiveApi = true) {
   assertWorkflowEvidenceKeys(evidence, `${label} workflow evidence`, true);
   for (const key of ['runId', 'runAttempt', 'jobId', 'artifactId']) assert(Number.isSafeInteger(evidence[key]) && evidence[key] > 0, `${label}: ${key} is invalid`);
   assert(/^[a-f0-9]{40}$/.test(evidence.commit ?? '') && evidence.tree === git(['rev-parse', `${evidence.commit}^{tree}`]), `${label}: commit/tree mismatch`);
-  const correctedExternalProof = requestPath === s02ReviewEvidencePaths.deploymentRequest && Boolean(s02ExternalPreviewVerifierCorrection);
-  const expectedProofCommit = correctedExternalProof ? s02ExternalPreviewVerifierCorrectionCommit : firstAddCommit(requestPath);
+  const correctedExternalProof = requestPath === s02ReviewEvidencePaths.deploymentRequest && Boolean(s02ExternalPreviewVerifierCorrection || s02ExternalPreviewRedirectCorrection);
+  const expectedProofCommit = s02ExternalPreviewRedirectCorrectionCommit ?? (correctedExternalProof ? s02ExternalPreviewVerifierCorrectionCommit : firstAddCommit(requestPath));
   assert(evidence.commit === expectedProofCommit, `${label}: workflow does not bind the exact request or its reviewed external-proof correction commit`);
   assert(evidence.conclusion === 'SUCCESS' && evidence.artifactName === `s02-external-preview-${evidence.commit}-${evidence.runId}-${evidence.runAttempt}` && /^sha256:[a-f0-9]{64}$/.test(evidence.artifactDigest ?? ''), `${label}: conclusion or artifact identity mismatch`);
   verifyDurableActionsOidc(evidence, label);
@@ -5862,10 +5924,14 @@ function verifyS02ReviewEvidencePrefix(options = {}) {
   assert(git(['rev-parse', `${requestCommit}^`]) === completionCommit, 'S02 deployment request must immediately follow completion');
   assertExactChangedPaths(completionCommit, requestCommit, [paths.deploymentRequest], `${labelPrefix} deployment-readback request commit`);
   assertAddedOnceAndUnchanged(paths.deploymentRequest, requestCommit);
-  const externalProofCommit = paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest && s02ExternalPreviewVerifierCorrectionCommit
-    ? s02ExternalPreviewVerifierCorrectionCommit
+  const externalProofCommit = paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest
+    ? (s02ExternalPreviewRedirectCorrectionCommit ?? s02ExternalPreviewVerifierCorrectionCommit ?? requestCommit)
     : requestCommit;
-  if (externalProofCommit !== requestCommit) assert(git(['rev-parse', `${externalProofCommit}^`]) === requestCommit, `${labelPrefix} external-proof correction is not the immediate request successor`);
+  if (s02ExternalPreviewRedirectCorrectionCommit && paths.deploymentRequest === s02ReviewEvidencePaths.deploymentRequest) {
+    assert(git(['rev-parse', `${externalProofCommit}^`]) === s02ExternalPreviewVerifierCorrectionCommit && git(['rev-parse', `${s02ExternalPreviewVerifierCorrectionCommit}^`]) === requestCommit, `${labelPrefix} two-step external-proof correction chain is not exact`);
+  } else if (externalProofCommit !== requestCommit) {
+    assert(git(['rev-parse', `${externalProofCommit}^`]) === requestCommit, `${labelPrefix} external-proof correction is not the immediate request successor`);
+  }
   if (!presence.deploymentReadback) return { targetCommit, targetTree, contentManifest: expectedContentManifest, ...(revisionChanges ? { acceptanceCommit, feasibilityAuditCommit } : {}), criticCommit, judgeCommit, completionCommit, requestCommit, externalProofCommit };
 
   const readback = json(paths.deploymentReadback);

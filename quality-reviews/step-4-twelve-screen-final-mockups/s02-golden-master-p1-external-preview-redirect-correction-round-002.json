@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-external-preview-redirect-correction-round-002",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "3ffb1d4b9f312d29f852f3a78966244d8699928b",
+    "tree": "c7d275d7a8c349e5d0309f115ffc1338277e40e8"
+  },
+  "failedWorkflow": {
+    "commit": "3ffb1d4b9f312d29f852f3a78966244d8699928b",
+    "tree": "c7d275d7a8c349e5d0309f115ffc1338277e40e8",
+    "runId": 33612311631,
+    "runAttempt": 1,
+    "jobId": 100190324697,
+    "conclusion": "FAILURE",
+    "failedStep": "Generate external S02 Preview proof",
+    "error": "UNTRUSTED_REDIRECT:https://catstower-e72ri5svj-shinyaaas-projects.vercel.app/step4/s02/golden-master-p1/"
+  },
+  "request": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-deployment-readback-request-round-001.json",
+    "commit": "e5ba5ed92d0eeb0da67f956637b7ebb1cb6c2a11",
+    "tree": "f706c3146d09f3c30368e0e0d4a92afbfd7850da",
+    "blob": "c034073b7b9beaa34bcffd4a685e36fefc3a0861"
+  },
+  "diagnosis": {
+    "type": "VERCEL_SHARE_LINK_REQUIRES_OFFICIAL_CROSS_ORIGIN_COOKIE_HANDSHAKE",
+    "redirectOrigin": "https://vercel.com",
+    "redirectPath": "/sso-api",
+    "oldPolicy": "SAME_ORIGIN_REDIRECT_ONLY",
+    "shareTokenValid": true,
+    "productQualityAffected": false,
+    "originalFailurePreserved": true
+  },
+  "correction": {
+    "rule": "ALLOW_ONLY_THE_OFFICIAL_VERCEL_SHARE_LINK_HTTPS_COOKIE_HANDSHAKE_WITH_BOUNDED_REDIRECTS_AND_RETAIN_EXACT_FINAL_ORIGIN_PATH_AND_BYTE_PROOF",
+    "changedPaths": [
+      ".github/workflows/verify-current-governance.yml",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-redirect-correction-round-002.json",
+      "tests/governance/verify-current-authority.mjs"
+    ],
+    "workflowBeforeSha256": "b8fa33551d801697dfc1f67e4ce780d6ddcd01779fc96b3faa109380b93441de",
+    "workflowAfterSha256": "5a1c13faff859bd9486d4201be507d2dac10d7c2b17dd9f00122970f157bcf33",
+    "workflowPatchSha256": "sha256:b97fd257ca22b668e91375bc31cb315de86686367a0e4ddb240d10086731b131",
+    "verifierAfterSha256": "c05e9aee15bf2f09b2c9bb956dd0fa9b2ccc0d69a82d2bd1abd21bf9d452b0e5",
+    "verifierPatchSha256": "sha256:b3b12911897151a27810c9d912e350931e3555ec405e908a09c2052b45863dbc",
+    "httpsOnly": true,
+    "allowedHandshakeOrigins": [
+      "ORIGINAL_VERCEL_DEPLOYMENT_ORIGIN",
+      "https://vercel.com"
+    ],
+    "allowedDeploymentHandshakePath": "/_vercel/sso-api",
+    "maxRedirects": 6,
+    "separateFetchCookieJars": true,
+    "ephemeralCookieJars": true,
+    "finalOriginAndPathLocked": true,
+    "responseCapsRetained": true,
+    "immutableAndAliasByteChecksRetained": true,
+    "oidcProofRetained": true,
+    "acceptanceThresholdsChanged": false,
+    "productContentChanged": false
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_VERCEL_SHARE_REDIRECT_PENDING_RERUN"
+}

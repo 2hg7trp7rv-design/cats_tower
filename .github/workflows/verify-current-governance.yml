@@ -191,7 +191,12 @@ jobs:
           export S02_PREVIEW_REQUEST
           REQUEST_COMMIT=$(git log --diff-filter=A --format=%H -- "$S02_PREVIEW_REQUEST" | tail -n 1)
           CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-verifier-correction-round-001.json'
-          if test -f "$CORRECTION"; then
+          REDIRECT_CORRECTION='quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-external-preview-redirect-correction-round-002.json'
+          if test -f "$REDIRECT_CORRECTION"; then
+            test "$(git log --diff-filter=A --format=%H -- "$REDIRECT_CORRECTION" | tail -n 1)" = "$GITHUB_SHA"
+            test "$(git rev-parse HEAD^)" = "$(jq -er '.entry.head' "$REDIRECT_CORRECTION")"
+            test "$(jq -er '.request.commit' "$REDIRECT_CORRECTION")" = "$REQUEST_COMMIT"
+          elif test -f "$CORRECTION"; then
             test "$(git log --diff-filter=A --format=%H -- "$CORRECTION" | tail -n 1)" = "$GITHUB_SHA"
             test "$(git rev-parse HEAD^)" = "$REQUEST_COMMIT"
             test "$(jq -er '.entry.head' "$CORRECTION")" = "$REQUEST_COMMIT"
@@ -213,6 +218,8 @@ jobs:
           export OIDC_TOKEN
           node --input-type=module - <<'NODE'
           import fs from 'node:fs';
+          import os from 'node:os';
+          import path from 'node:path';
           import { createHash } from 'node:crypto';
           import { execFileSync } from 'node:child_process';
 
@@ -243,42 +250,49 @@ jobs:
           const shareToken = temporaryAccessUrl.searchParams.get('_vercel_share');
           if (!/^[A-Za-z0-9_-]{16,512}$/.test(shareToken || '') || Date.parse(request.review.temporaryAccess.expiresAt) <= Date.now()) throw new Error('TEMPORARY_PREVIEW_ACCESS_EXPIRED_OR_INVALID');
           let aggregateResponseBytes = 0;
+          const httpStateDirectory = fs.mkdtempSync(path.join(os.tmpdir(), 'cats-s02-preview-http-'));
+          const cookieFiles = new Map([[immutableOrigin, path.join(httpStateDirectory, 'immutable.cookies')], [aliasOrigin, path.join(httpStateDirectory, 'alias.cookies')]]);
+          let fetchSequence = 0;
           const withAccess = value => {
             const url = new URL(value);
             if (url.protocol !== 'https:' || url.username || url.password || url.port || ![immutableOrigin, aliasOrigin].includes(url.origin)) throw new Error(`UNTRUSTED_FETCH_URL:${url.href}`);
             url.searchParams.set('_vercel_share', shareToken);
             return url;
           };
-          const readBounded = async (response, cap, source) => {
-            const chunks = [];
-            let length = 0;
-            const reader = response.body?.getReader();
-            if (!reader) return Buffer.alloc(0);
-            while (true) {
-              const { done, value } = await reader.read();
-              if (done) break;
-              length += value.length;
-              aggregateResponseBytes += value.length;
-              if (length > cap || aggregateResponseBytes > 60 * 1024 * 1024) {
-                await reader.cancel();
-                throw new Error(`HTTP_BODY_TOO_LARGE:${source}`);
-              }
-              chunks.push(Buffer.from(value));
-            }
-            return Buffer.concat(chunks, length);
-          };
           const fetchBounded = async (value, cap, allowedPaths) => {
-            let url = withAccess(value);
-            let response = await fetch(url, { redirect: 'manual', signal: AbortSignal.timeout(20000), headers: { 'user-agent': 'cats-tower-s02-preview-proof/1' } });
-            if ([301, 302, 307, 308].includes(response.status)) {
-              const redirected = new URL(response.headers.get('location'), url);
-              if (redirected.protocol !== 'https:' || redirected.username || redirected.password || redirected.port || redirected.origin !== url.origin || !allowedPaths.includes(redirected.pathname)) throw new Error(`UNTRUSTED_REDIRECT:${url}`);
-              url = withAccess(redirected);
-              response = await fetch(url, { redirect: 'error', signal: AbortSignal.timeout(20000), headers: { 'user-agent': 'cats-tower-s02-preview-proof/1' } });
+            const url = withAccess(value);
+            const sequence = String(fetchSequence++).padStart(3, '0');
+            const headerPath = path.join(httpStateDirectory, `${sequence}.headers`);
+            const bodyPath = path.join(httpStateDirectory, `${sequence}.body`);
+            const cookiePath = cookieFiles.get(url.origin);
+            const curlResult = execFileSync('curl', [
+              '--silent', '--show-error', '--location', '--max-redirs', '6',
+              '--proto', '=https', '--proto-redir', '=https', '--connect-timeout', '10', '--max-time', '40',
+              '--compressed', '--max-filesize', String(cap), '--cookie', cookiePath, '--cookie-jar', cookiePath,
+              '--dump-header', headerPath, '--output', bodyPath, '--write-out', '%{json}',
+              '--header', 'user-agent: cats-tower-s02-preview-proof/2', url.href
+            ], { encoding: 'utf8', maxBuffer: 1024 * 1024 });
+            const metadata = JSON.parse(curlResult);
+            const finalUrl = new URL(metadata.url_effective);
+            if (metadata.num_redirects > 6 || finalUrl.protocol !== 'https:' || finalUrl.username || finalUrl.password || finalUrl.port || finalUrl.origin !== url.origin || !allowedPaths.includes(finalUrl.pathname)) throw new Error(`UNEXPECTED_FINAL_PATH:${url}`);
+            const headerText = fs.readFileSync(headerPath, 'utf8');
+            let redirectBase = url;
+            for (const line of headerText.split(/\r?\n/).filter(item => /^location:/i.test(item))) {
+              const redirected = new URL(line.replace(/^location:\s*/i, ''), redirectBase);
+              const deploymentRedirect = redirected.origin === url.origin && (allowedPaths.includes(redirected.pathname) || redirected.pathname === '/_vercel/sso-api');
+              const vercelHandshake = redirected.origin === 'https://vercel.com' && redirected.pathname === '/sso-api';
+              if (redirected.protocol !== 'https:' || redirected.username || redirected.password || redirected.port || (!deploymentRedirect && !vercelHandshake)) throw new Error(`UNTRUSTED_REDIRECT:${redirected.href}`);
+              if (vercelHandshake) {
+                const returnTarget = new URL(redirected.searchParams.get('url') || 'invalid:', url);
+                if (returnTarget.origin !== url.origin || !allowedPaths.includes(returnTarget.pathname)) throw new Error(`UNTRUSTED_SSO_RETURN:${redirected.href}`);
+              }
+              redirectBase = redirected;
             }
-            const finalUrl = new URL(response.url || url);
-            if (finalUrl.protocol !== 'https:' || finalUrl.username || finalUrl.password || finalUrl.port || finalUrl.origin !== url.origin || !allowedPaths.includes(finalUrl.pathname)) throw new Error(`UNEXPECTED_FINAL_PATH:${url}`);
-            const bytes = await readBounded(response, cap, url.href);
+            const bytes = fs.readFileSync(bodyPath);
+            aggregateResponseBytes += bytes.length;
+            if (bytes.length > cap || aggregateResponseBytes > 60 * 1024 * 1024 || Number(metadata.size_download) !== bytes.length) throw new Error(`HTTP_BODY_TOO_LARGE_OR_INCOMPLETE:${url.href}`);
+            const contentType = typeof metadata.content_type === 'string' ? metadata.content_type : '';
+            const response = { status: Number(metadata.http_code), url: finalUrl.href, headers: { get: name => name.toLowerCase() === 'content-type' ? contentType : null } };
             return { response, bytes, finalPath: finalUrl.pathname };
           };
           const route = request.review.route;
