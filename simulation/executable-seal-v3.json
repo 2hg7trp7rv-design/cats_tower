@@ -1,0 +1,202 @@
+{
+  "schemaVersion": "3.0.0",
+  "artifactId": "cats-tower-step2-executable-seal-v3-screen-projection-round-001",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
+  "verdict": "SEALED_STEP2_EXECUTABLE_CONTRACT_SCREEN_PROJECTION_CORRECTED",
+  "semanticCommit": "6adcec2485890129587a276d202dbfe6ba88a994",
+  "semanticTree": "1ded247d243995a31a85e2c392a2cc70fc2a7b60",
+  "bindings": [
+    {
+      "path": "canonical/STEP2_DEPENDENCY_CLOSURE.json",
+      "blob": "d23ea91754f6b11e4d452312752fc8850bd7ab9b"
+    },
+    {
+      "path": "canonical/SCREEN_STATE_REGISTRY.json",
+      "blob": "0cf6337da2ed3993136dbf4a9e4918efac501d2e"
+    },
+    {
+      "path": "quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/acceptance-matrix.json",
+      "blob": "8b1894773b66d3192f0cf9d84b7a6fffcd6479b6"
+    },
+    {
+      "path": "quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/qualification-result-v3.json",
+      "blob": "8477f139754e79ffc92a0df0a0e7984ef1e7a356"
+    },
+    {
+      "path": "quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/screen-projection-coverage-ledger.json",
+      "blob": "03bc3fc897c85c71ded4b8f3df1a62b0decaa1d6"
+    },
+    {
+      "path": "quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/numeric-non-impact.json",
+      "blob": "0426cf130e3c6de85c410ed0be34d7982e0ed942"
+    },
+    {
+      "path": "quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/critic-summary.json",
+      "blob": "ee8588dd3e457870236541ebb6fe44db9d16f6f6"
+    },
+    {
+      "path": "quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/final-judge.json",
+      "blob": "ca6f3aed87e143bd6e36881ffbe6fd152441cb11"
+    },
+    {
+      "path": "quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/completion-evidence.json",
+      "blob": "f0e1d611d993ad632cab11f607cb74b7f6449678"
+    },
+    {
+      "path": "quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/live-readback.json",
+      "blob": "73e0b7dd8fa5a926d053e752630e963395eaf8c5"
+    },
+    {
+      "path": "simulation/candidate-v3.json",
+      "blob": "3f3d518b0d041778411d13690d49c75d07abc4dc"
+    },
+    {
+      "path": "simulation/candidate-v3.schema.json",
+      "blob": "01e4a66ec2c01a8f9142e7555de8f8683920bb06"
+    },
+    {
+      "path": "simulation/validate-candidate-v3.mjs",
+      "blob": "85391e5658bfc2762b80a4bd6cb93bea8eae9910"
+    },
+    {
+      "path": "simulation/execution-contract-v3.json",
+      "blob": "20f7c931a6d7c28d803a44f3479dd232cc2095af"
+    },
+    {
+      "path": "simulation/execution-contract-v3.schema.json",
+      "blob": "9cc6ebba085e530581527d35d7bcabe430d2f5b7"
+    },
+    {
+      "path": "simulation/validate-execution-contract-v3.mjs",
+      "blob": "8e9f5471ffa973e8f7e74abadb2a4cd5d9402bbb"
+    },
+    {
+      "path": "simulation/run-plan-v3.json",
+      "blob": "81224cba0cb6ca8a16af83808643bd4b4892e133"
+    },
+    {
+      "path": "simulation/run-plan-v3.schema.json",
+      "blob": "d7ccad0d74f08ad0d63802f687b7e5f0f8bec00e"
+    },
+    {
+      "path": "simulation/validate-run-plan-v3.mjs",
+      "blob": "2f8784863462b5d4cda560782eb48ad81ac75847"
+    },
+    {
+      "path": "simulation/fixtures/v3/manifest.json",
+      "blob": "e465191d03b8b6940295e634d7b92cd8974b22d3"
+    },
+    {
+      "path": "simulation/fixtures/v3/negative.json",
+      "blob": "e52de653d506c5dbd87468cd10e16cb589f3adca"
+    },
+    {
+      "path": "simulation/fixtures/v3/validate-fixtures.mjs",
+      "blob": "d9acc4cf81dc09c27094402ef6ff4c7472be5018"
+    },
+    {
+      "path": "simulation/result-v3.schema.json",
+      "blob": "411f5198f267794c4d36bfdc73210de75f9a56df"
+    },
+    {
+      "path": "simulation/validate-result-v3.mjs",
+      "blob": "3d025c610786abcc81d20d4f50e7fb3f363ab9be"
+    },
+    {
+      "path": "simulation/run-qualification-v3.mjs",
+      "blob": "54de8ee82adf32456779e32607245bcc65d94943"
+    },
+    {
+      "path": "simulation/engine-v2/run-plan.mjs",
+      "blob": "196ca59a6f6e03137228711fa12bf5a499963ec4"
+    },
+    {
+      "path": "simulation/engine-v2/run-scenario.mjs",
+      "blob": "e0136df1dbd753f7fb5327ef8ad9ec465349c1e4"
+    },
+    {
+      "path": "simulation/engine-v2/high-volume.mjs",
+      "blob": "c324ab4042348febbd4bb1d397bea8272ac7acbc"
+    },
+    {
+      "path": "simulation/engine-v2/index.mjs",
+      "blob": "2d9174ce37aebdd4d7384d0741e5f20ef9f22b43"
+    },
+    {
+      "path": "simulation/engine-v2/rng.mjs",
+      "blob": "62f5970d429b9c2a2d7793b238c5d20a7baf0a48"
+    },
+    {
+      "path": "simulation/engine-v2/statistics.mjs",
+      "blob": "78185ed15b7401137c15f5508fc21bfe56090a75"
+    },
+    {
+      "path": "simulation/engine-v2/hash.mjs",
+      "blob": "2f796cab792617f2ca38ad5535519dff911fd535"
+    },
+    {
+      "path": "simulation/engine-v2/tower.mjs",
+      "blob": "7d4f8d7330e2a37164d46e4e9a3d30c24cf4a783"
+    },
+    {
+      "path": "simulation/engine-v2/economy.mjs",
+      "blob": "1c26e7a90050775a580d4be97ec81db2cfa19892"
+    },
+    {
+      "path": "simulation/engine-v2/numeric.mjs",
+      "blob": "d9eeae9161afb00dcdeffc193091901d7761fcd8"
+    },
+    {
+      "path": "simulation/engine-v2/state-machines.mjs",
+      "blob": "855aa45d0525c0f25be8e0adeb4a73c92ad7ae63"
+    },
+    {
+      "path": "simulation/lib-v2/schema-validator.mjs",
+      "blob": "5e2694e8c2c9eb3677fd132382b5f595706f0801"
+    },
+    {
+      "path": "simulation/migrations/v1-to-v2/migration-map.json",
+      "blob": "77b95090091045975ec96e72db23fbaaa0568635"
+    },
+    {
+      "path": "simulation/executable-seal-v3.schema.json",
+      "blob": "c36ef9ccc2e0c147f41d0b2cac4d5c3f7e827ece"
+    },
+    {
+      "path": "simulation/validate-executable-seal-v3.mjs",
+      "blob": "7d5b890bad12015a7876ca100d0f51cc65a9c4f9"
+    },
+    {
+      "path": "simulation/verify-step2-v3.mjs",
+      "blob": "fbcf4238db42f1216a1909b9c60f416e40021921"
+    },
+    {
+      "path": "tests/governance/verify-step2-screen-projection-round-032.mjs",
+      "blob": "872be882ae62275b20b9b683df236fa1d1315fa2"
+    },
+    {
+      "path": "tests/governance/verify-step3-continuity-round-032.mjs",
+      "blob": "a3c34e3e83ddb1b51e30d2163cb7b5e91a677a76"
+    }
+  ],
+  "reviewEvidence": {
+    "critic": {
+      "path": "quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/critic-summary.json",
+      "blob": "ee8588dd3e457870236541ebb6fe44db9d16f6f6"
+    },
+    "finalJudge": {
+      "path": "quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/final-judge.json",
+      "blob": "ca6f3aed87e143bd6e36881ffbe6fd152441cb11"
+    },
+    "completion": {
+      "path": "quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/completion-evidence.json",
+      "blob": "f0e1d611d993ad632cab11f607cb74b7f6449678"
+    },
+    "liveReadback": {
+      "path": "quality-reviews/step-2-executable-contract-v2/supplement-screen-projection-round-001/live-readback.json",
+      "blob": "73e0b7dd8fa5a926d053e752630e963395eaf8c5"
+    }
+  }
+}
