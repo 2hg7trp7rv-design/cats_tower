@@ -211,6 +211,8 @@ function assertS02HistoryWithIncrementalRenewals(base, head, control, label, evi
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02HarnessCorrectionChangedPaths].sort()), `${label}: trusted-harness correction changed an unreviewed path`);
     } else if (s02QaCorrectionCommit && commit === s02QaCorrectionCommit) {
       assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02QaCorrectionChangedPaths].sort()), `${label}: QA-initialization correction changed an unreviewed path`);
+    } else if (s02ReferenceQaCorrectionCommit && commit === s02ReferenceQaCorrectionCommit) {
+      assert(JSON.stringify([...paths].sort()) === JSON.stringify([...s02ReferenceQaCorrectionChangedPaths].sort()), `${label}: review-reference QA correction changed an unreviewed path`);
     } else {
       assertBoundary(paths, control, `${label} commit ${commit}`);
     }
@@ -1789,7 +1791,8 @@ const s02VerificationPaths = [
   'step4/s02/golden-master-p1/browser-qa/package-lock.json'
 ];
 const expectedS02WorkflowCorrectionRound001Sha256 = '7219aba5d01f68105339a9815ce61f2d5c265a1c0b9e544f30f50056a7242225';
-const expectedS02WorkflowSha256 = '32e82c7b97cab50f6d51622f316fe11f33ed259d4c0372d1925af58bf4e2592d';
+const expectedS02WorkflowCorrectionRound002Sha256 = '32e82c7b97cab50f6d51622f316fe11f33ed259d4c0372d1925af58bf4e2592d';
+const expectedS02WorkflowSha256 = '79d84163ca190041b814b80c4ef020b758d0c61cac36751c498194680904b9c0';
 const s02ContentManifestPatterns = [
   'step4/s02/golden-master-p1/**',
   'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-*.json',
@@ -3720,6 +3723,15 @@ const s02QaCorrectionChangedPaths = [
   'tests/governance/verify-current-authority.mjs',
   'tests/step4/s02-golden-master-p1-browser-qa.mjs'
 ];
+const s02ReferenceQaCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-003.json';
+const s02ReferenceQaCorrection = exists(s02ReferenceQaCorrectionPath) ? json(s02ReferenceQaCorrectionPath) : null;
+const s02ReferenceQaCorrectionCommit = s02ReferenceQaCorrection ? firstAddCommit(s02ReferenceQaCorrectionPath) : null;
+const s02ReferenceQaCorrectionChangedPaths = [
+  '.github/workflows/verify-step-4-s02-golden-master-p1.yml',
+  s02ReferenceQaCorrectionPath,
+  'tests/governance/verify-current-authority.mjs',
+  'tests/step4/s02-golden-master-p1-browser-qa.mjs'
+];
 
 // BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001
 const s02HarnessCorrectionPath = 'quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-001.json';
@@ -3852,7 +3864,7 @@ if (s02QaCorrection) {
   assert(JSON.stringify(s02QaCorrection.diagnosis) === JSON.stringify({ type: 'QA_TEMPORAL_DEAD_ZONE_AFTER_SUCCESSFUL_BROWSER_CAPTURE', symbol: 'responsiveByViewport', firstUseLine: 478, declarationLine: 743, browserCaptureCompleted: true }), 'S02 QA-initialization diagnosis differs from the exact failed job');
   assert(s02QaCorrection.correction.rule === 'MOVE_EXISTING_RESPONSIVE_CONTRACT_INITIALIZATION_BEFORE_VALIDATE_RAW_WITHOUT_CHANGING_ASSERTIONS_OR_THRESHOLDS' && JSON.stringify(s02QaCorrection.correction.changedPaths) === JSON.stringify(s02QaCorrectionChangedPaths), 'S02 QA-initialization correction rule/path set mismatch');
   assert(s02QaCorrection.correction.qaBeforeSha256 === 'f67bf7472b108d2e88ac24ac034a386e2c24896a18a95950e82ec5bbf9042d03' && s02QaCorrection.correction.qaAfterSha256 === '5190fe2fca12b75356518a02c95dae6947ac2f6e68690c43ac30d7ee82bf293a' && s02QaCorrection.correction.qaPatchSha256 === 'sha256:c4a323a1cb4142c83dace4ae0284063a1e6c5aa801be12726d30073e03b18ab5', 'S02 QA-initialization source digest/patch mismatch');
-  assert(s02QaCorrection.correction.workflowBeforeSha256 === expectedS02WorkflowCorrectionRound001Sha256 && s02QaCorrection.correction.workflowAfterSha256 === expectedS02WorkflowSha256 && s02QaCorrection.correction.workflowPatchSha256 === 'sha256:459bdb2f6bbd1cfd0038aae250e36b0105c21cda3716c2b657a35bd27ccdf6c6', 'S02 QA-initialization workflow digest/patch mismatch');
+  assert(s02QaCorrection.correction.workflowBeforeSha256 === expectedS02WorkflowCorrectionRound001Sha256 && s02QaCorrection.correction.workflowAfterSha256 === expectedS02WorkflowCorrectionRound002Sha256 && s02QaCorrection.correction.workflowPatchSha256 === 'sha256:459bdb2f6bbd1cfd0038aae250e36b0105c21cda3716c2b657a35bd27ccdf6c6', 'S02 QA-initialization workflow digest/patch mismatch');
   assert(s02QaCorrection.correction.assertionSetChanged === false && s02QaCorrection.correction.acceptanceThresholdsChanged === false, 'S02 QA-initialization correction changed assertions or acceptance thresholds');
   assert(JSON.stringify(s02QaCorrection.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }), 'S02 QA-initialization correction crosses a protected product/release boundary');
   assert(s02QaCorrection.status === 'CORRECTED_QA_INITIALIZATION_ORDER_PENDING_RERUN', 'S02 QA-initialization correction status mismatch');
@@ -3885,7 +3897,9 @@ if (s02QaCorrection) {
   const qaVerifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02QaCorrection.entry.head, s02QaCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
   assert(sha256Text(correctedQaVerifierSource) === s02QaCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(qaVerifierPatch)}` === s02QaCorrection.correction.verifierPatchSha256, 'S02 QA-initialization verifier bytes/patch differ from the immutable correction record');
   assert(correctedQaVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedQaVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_002') && correctedQaVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 QA-initialization verifier removed a prior correction guard or original fail-closed boundary assertion');
-  assertNoPathChangesSince(s02QaCorrectionCommit, 'HEAD', s02QaCorrectionChangedPaths, 'S02 QA-initialization correction freeze');
+  const secondCorrectionFreezeEnd = s02ReferenceQaCorrectionCommit ? git(['rev-parse', `${s02ReferenceQaCorrectionCommit}^`]) : git(['rev-parse', 'HEAD']);
+  assertNoPathChangesSince(s02QaCorrectionCommit, secondCorrectionFreezeEnd, s02QaCorrectionChangedPaths, 'S02 QA-initialization correction freeze before review-reference correction');
+  if (s02ReferenceQaCorrectionCommit) assertNoPathChangesSince(s02QaCorrectionCommit, 'HEAD', [s02QaCorrectionPath], 'S02 QA-initialization round 002 record freeze');
   if (requireLiveActions) {
     const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02QaCorrection.authorityWorkflow.runId}`);
     const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02QaCorrection.authorityWorkflow.jobId}`);
@@ -3902,6 +3916,99 @@ if (s02QaCorrection) {
   }
 }
 // END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_002
+
+// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_003
+if (s02ReferenceQaCorrection) {
+  assertExactKeySet(s02ReferenceQaCorrection, ['schemaVersion', 'artifactId', 'createdAt', 'repository', 'branch', 'changeControl', 'entry', 'authorityWorkflow', 'failedWorkflow', 'diagnosis', 'correction', 'boundaries', 'status'], 'S02 review-reference QA correction');
+  assertExactKeySet(s02ReferenceQaCorrection.entry, ['head', 'tree'], 'S02 review-reference QA correction entry');
+  assertExactKeySet(s02ReferenceQaCorrection.authorityWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'artifactId', 'artifactName', 'artifactDigest'], 'S02 review-reference authority workflow');
+  assertExactKeySet(s02ReferenceQaCorrection.failedWorkflow, ['commit', 'tree', 'runId', 'runAttempt', 'jobId', 'conclusion', 'failedStep', 'error', 'artifactCount'], 'S02 review-reference failed workflow');
+  assertExactKeySet(s02ReferenceQaCorrection.diagnosis, ['type', 'collectorContract', 'validatorContract', 'browserCaptureCompleted'], 'S02 review-reference diagnosis');
+  assertExactKeySet(s02ReferenceQaCorrection.correction, ['rule', 'changedPaths', 'qaBeforeSha256', 'qaAfterSha256', 'qaPatchSha256', 'workflowBeforeSha256', 'workflowAfterSha256', 'workflowPatchSha256', 'verifierAfterSha256', 'verifierPatchSha256', 'assertionChangeKind', 'acceptanceThresholdsChanged', 'qualityCoverageWeakened', 'failureEvidenceUploadEnabled'], 'S02 review-reference exact correction');
+  assertExactKeySet(s02ReferenceQaCorrection.boundaries, ['rootRuntimeChanged', 'gameCoreChanged', 'gameDataChanged', 'economyChanged', 'saveSchemaChanged', 'backendChanged', 'productionChanged', 'productionAliasChanged', 'physicalIPhoneVerified', 'step4Pass', 'step5Allowed'], 'S02 review-reference correction boundaries');
+  assert(s02ReferenceQaCorrection.schemaVersion === 1 && s02ReferenceQaCorrection.artifactId === 'cats-tower-s02-golden-master-p1-trusted-harness-correction-round-003' && s02ReferenceQaCorrection.createdAt === '2026-09-02', 'S02 review-reference correction identity/date mismatch');
+  assert(s02ReferenceQaCorrection.repository === '2hg7trp7rv-design/cats_tower' && s02ReferenceQaCorrection.branch === 'kimi' && s02ReferenceQaCorrection.changeControl === s02RepairControlPath, 'S02 review-reference correction authority mismatch');
+  assert(JSON.stringify(s02ReferenceQaCorrection.entry) === JSON.stringify({ head: '0d75cd6496c538ee6730f02aaeebd9c4063c6cee', tree: '7cc4fcedb181fe127dae020159a7a0f91a1db807' }), 'S02 review-reference correction entry is not the exact failed QA-initialization correction commit/tree');
+  assert(JSON.stringify(s02ReferenceQaCorrection.authorityWorkflow) === JSON.stringify({
+    commit: s02ReferenceQaCorrection.entry.head,
+    tree: s02ReferenceQaCorrection.entry.tree,
+    runId: 33591754174,
+    runAttempt: 1,
+    jobId: 100127121721,
+    conclusion: 'SUCCESS',
+    artifactId: 9831995434,
+    artifactName: 'phase0-current-governance-0d75cd6496c538ee6730f02aaeebd9c4063c6cee-33591754174-1',
+    artifactDigest: 'sha256:cfb43b6677c725d9815da2ab9ad0d5fa6f9a967b34736d2bbfe2677c75c1ff3f'
+  }), 'S02 review-reference correction does not bind the successful exact-entry authority workflow');
+  assert(JSON.stringify(s02ReferenceQaCorrection.failedWorkflow) === JSON.stringify({
+    commit: s02ReferenceQaCorrection.entry.head,
+    tree: s02ReferenceQaCorrection.entry.tree,
+    runId: 33591754259,
+    runAttempt: 1,
+    jobId: 100127012034,
+    conclusion: 'FAILURE',
+    failedStep: 'Capture and verify eight masters plus required responsive variants',
+    error: 'Error: GM02: review reference did not load in ordinary review chrome',
+    artifactCount: 0
+  }), 'S02 review-reference correction does not bind the exact failed workflow/job/step/error');
+  assert(JSON.stringify(s02ReferenceQaCorrection.diagnosis) === JSON.stringify({
+    type: 'QA_REVIEW_REFERENCE_SCOPE_CONTRADICTION_AFTER_SUCCESSFUL_BROWSER_CAPTURE',
+    collectorContract: 'ONE_VISIBLE_DECODED_REVIEW_REFERENCE_REQUIRED_IN_EVERY_SCENARIO',
+    validatorContract: 'REJECTED_EVERY_PRIMARY_SCENARIO_WITH_REFERENCE_EXCEPT_GM01',
+    browserCaptureCompleted: true
+  }), 'S02 review-reference diagnosis differs from the exact contradictory contracts');
+  assert(s02ReferenceQaCorrection.correction.rule === 'REQUIRE_VISIBLE_REFERENCE_RESOURCE_PARTICIPATION_IN_EACH_PRIMARY_GOLDEN_MASTER_WITHOUT_CHANGING_VISUAL_THRESHOLDS' && JSON.stringify(s02ReferenceQaCorrection.correction.changedPaths) === JSON.stringify(s02ReferenceQaCorrectionChangedPaths), 'S02 review-reference correction rule/path set mismatch');
+  assert(s02ReferenceQaCorrection.correction.qaBeforeSha256 === '5190fe2fca12b75356518a02c95dae6947ac2f6e68690c43ac30d7ee82bf293a' && s02ReferenceQaCorrection.correction.qaAfterSha256 === '0778dd5e74031aab8a6db3ff44c0563aa5907c362bdad64779db781422ca5463' && s02ReferenceQaCorrection.correction.qaPatchSha256 === 'sha256:3b6702385a4481b01c7597a0796976b56b285b3bb37127ad1f3a615b2585d2c0', 'S02 review-reference QA source digest/patch mismatch');
+  assert(s02ReferenceQaCorrection.correction.workflowBeforeSha256 === expectedS02WorkflowCorrectionRound002Sha256 && s02ReferenceQaCorrection.correction.workflowAfterSha256 === expectedS02WorkflowSha256 && s02ReferenceQaCorrection.correction.workflowPatchSha256 === 'sha256:d214fb2f79f1c9ec4e3e6b1740f23eb59d3b1a56b8522fbb4688b394b27a0f21', 'S02 review-reference workflow digest/patch mismatch');
+  assert(s02ReferenceQaCorrection.correction.assertionChangeKind === 'CONTRADICTION_REPAIR_ENFORCING_EVERY_PRIMARY_SCENARIO' && s02ReferenceQaCorrection.correction.acceptanceThresholdsChanged === false && s02ReferenceQaCorrection.correction.qualityCoverageWeakened === false && s02ReferenceQaCorrection.correction.failureEvidenceUploadEnabled === true, 'S02 review-reference correction weakens coverage or misstates diagnostics');
+  assert(JSON.stringify(s02ReferenceQaCorrection.boundaries) === JSON.stringify({ rootRuntimeChanged: false, gameCoreChanged: false, gameDataChanged: false, economyChanged: false, saveSchemaChanged: false, backendChanged: false, productionChanged: false, productionAliasChanged: false, physicalIPhoneVerified: false, step4Pass: false, step5Allowed: false }), 'S02 review-reference correction crosses a protected product/release boundary');
+  assert(s02ReferenceQaCorrection.status === 'CORRECTED_REVIEW_REFERENCE_QA_PENDING_RERUN', 'S02 review-reference correction status mismatch');
+  assert(s02ReferenceQaCorrectionCommit && git(['rev-parse', `${s02ReferenceQaCorrectionCommit}^`]) === s02ReferenceQaCorrection.entry.head, 'S02 review-reference correction is not the immediate child of the failed commit');
+  assert(git(['rev-parse', `${s02ReferenceQaCorrection.entry.head}^{tree}`]) === s02ReferenceQaCorrection.entry.tree, 'S02 review-reference correction entry tree mismatch');
+  assertExactChangedPaths(s02ReferenceQaCorrection.entry.head, s02ReferenceQaCorrectionCommit, s02ReferenceQaCorrectionChangedPaths, 'S02 review-reference correction commit');
+  assertAddedOnceAndUnchanged(s02ReferenceQaCorrectionPath, s02ReferenceQaCorrectionCommit);
+
+  const priorReferenceQaSource = textAt(s02ReferenceQaCorrection.entry.head, 'tests/step4/s02-golden-master-p1-browser-qa.mjs');
+  const correctedReferenceQaSource = textAt(s02ReferenceQaCorrectionCommit, 'tests/step4/s02-golden-master-p1-browser-qa.mjs');
+  const contradictoryReferenceAssertion = "invariant(scenario.id === 'GM01' && scenario.diagnostics.resourcePaths.includes('/step4/s02/golden-master-p1/' + reference.path), scenario.id + ': review reference did not load in ordinary review chrome');";
+  const everyScenarioReferenceAssertion = "invariant(scenario.diagnostics.resourcePaths.includes('/step4/s02/golden-master-p1/' + reference.path), scenario.id + ': review reference did not load in ordinary review chrome');";
+  assert(priorReferenceQaSource.split(contradictoryReferenceAssertion).length === 2 && correctedReferenceQaSource === priorReferenceQaSource.replace(contradictoryReferenceAssertion, everyScenarioReferenceAssertion) && sha256Text(correctedReferenceQaSource) === s02ReferenceQaCorrection.correction.qaAfterSha256, 'S02 review-reference correction changed more than the contradictory scenario gate');
+  const referenceQaPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02ReferenceQaCorrection.entry.head, s02ReferenceQaCorrectionCommit, '--', 'tests/step4/s02-golden-master-p1-browser-qa.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert(`sha256:${sha256Text(referenceQaPatch)}` === s02ReferenceQaCorrection.correction.qaPatchSha256, 'S02 review-reference QA patch differs from the immutable correction record');
+
+  const priorReferenceQaPin = '5190fe2fca12b75356518a02c95dae6947ac2f6e68690c43ac30d7ee82bf293a  tests/step4/s02-golden-master-p1-browser-qa.mjs';
+  const correctedReferenceQaPin = '0778dd5e74031aab8a6db3ff44c0563aa5907c362bdad64779db781422ca5463  tests/step4/s02-golden-master-p1-browser-qa.mjs';
+  const uploadStepName = '      - name: Upload uncredentialed semantic evidence\n';
+  const uploadAlways = '        if: always()\n';
+  const priorReferenceWorkflowSource = textAt(s02ReferenceQaCorrection.entry.head, '.github/workflows/verify-step-4-s02-golden-master-p1.yml');
+  const correctedReferenceWorkflowSource = textAt(s02ReferenceQaCorrectionCommit, '.github/workflows/verify-step-4-s02-golden-master-p1.yml');
+  assert(priorReferenceWorkflowSource.split(priorReferenceQaPin).length === 2 && priorReferenceWorkflowSource.split(uploadStepName).length === 2 && !priorReferenceWorkflowSource.includes(uploadStepName + uploadAlways), 'S02 review-reference prior workflow lacks the exact pin/upload marker');
+  const expectedReferenceWorkflowSource = priorReferenceWorkflowSource.replace(priorReferenceQaPin, correctedReferenceQaPin).replace(uploadStepName, uploadStepName + uploadAlways);
+  assert(correctedReferenceWorkflowSource === expectedReferenceWorkflowSource && sha256Text(correctedReferenceWorkflowSource) === s02ReferenceQaCorrection.correction.workflowAfterSha256, 'S02 review-reference workflow changed beyond the exact QA pin and always-upload diagnostic');
+  const referenceWorkflowPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02ReferenceQaCorrection.entry.head, s02ReferenceQaCorrectionCommit, '--', '.github/workflows/verify-step-4-s02-golden-master-p1.yml'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert(`sha256:${sha256Text(referenceWorkflowPatch)}` === s02ReferenceQaCorrection.correction.workflowPatchSha256, 'S02 review-reference workflow patch differs from the immutable correction record');
+
+  const correctedReferenceVerifierSource = textAt(s02ReferenceQaCorrectionCommit, 'tests/governance/verify-current-authority.mjs');
+  const referenceVerifierPatch = execFileSync('git', ['diff', '--no-ext-diff', '--no-color', s02ReferenceQaCorrection.entry.head, s02ReferenceQaCorrectionCommit, '--', 'tests/governance/verify-current-authority.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  assert(sha256Text(correctedReferenceVerifierSource) === s02ReferenceQaCorrection.correction.verifierAfterSha256 && `sha256:${sha256Text(referenceVerifierPatch)}` === s02ReferenceQaCorrection.correction.verifierPatchSha256, 'S02 review-reference verifier bytes/patch differ from the immutable correction record');
+  assert(correctedReferenceVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_001') && correctedReferenceVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_002') && correctedReferenceVerifierSource.includes('// BEGIN_S02_TRUSTED_HARNESS_CORRECTION_ROUND_003') && correctedReferenceVerifierSource.includes("assertBoundary(paths, control, `${label} commit ${commit}`);"), 'S02 review-reference verifier removed a prior correction guard or original fail-closed boundary assertion');
+  assertNoPathChangesSince(s02ReferenceQaCorrectionCommit, 'HEAD', s02ReferenceQaCorrectionChangedPaths, 'S02 review-reference correction freeze');
+  if (requireLiveActions) {
+    const authorityRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02ReferenceQaCorrection.authorityWorkflow.runId}`);
+    const authorityJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02ReferenceQaCorrection.authorityWorkflow.jobId}`);
+    const authorityArtifact = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/artifacts/${s02ReferenceQaCorrection.authorityWorkflow.artifactId}`);
+    assert(authorityRun.head_sha === s02ReferenceQaCorrection.entry.head && authorityRun.head_branch === 'kimi' && authorityRun.status === 'completed' && authorityRun.conclusion === 'success' && authorityRun.run_attempt === 1, 'S02 review-reference correction live authority run mismatch');
+    assert(authorityJob.run_id === authorityRun.id && authorityJob.head_sha === s02ReferenceQaCorrection.entry.head && authorityJob.name === 'current-authority' && authorityJob.conclusion === 'success', 'S02 review-reference correction live authority job mismatch');
+    assert(authorityArtifact.name === s02ReferenceQaCorrection.authorityWorkflow.artifactName && authorityArtifact.digest === s02ReferenceQaCorrection.authorityWorkflow.artifactDigest && authorityArtifact.expired === false && authorityArtifact.workflow_run?.head_sha === s02ReferenceQaCorrection.entry.head, 'S02 review-reference correction live authority artifact mismatch');
+    const failedRun = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/runs/${s02ReferenceQaCorrection.failedWorkflow.runId}`);
+    const failedJob = ghJson(`/repos/2hg7trp7rv-design/cats_tower/actions/jobs/${s02ReferenceQaCorrection.failedWorkflow.jobId}`);
+    assert(failedRun.head_sha === s02ReferenceQaCorrection.entry.head && failedRun.head_branch === 'kimi' && failedRun.status === 'completed' && failedRun.conclusion === 'failure' && failedRun.run_attempt === 1, 'S02 review-reference correction live failed run mismatch');
+    assert(failedJob.run_id === failedRun.id && failedJob.head_sha === s02ReferenceQaCorrection.entry.head && failedJob.name === 'Static, eight-master responsive and accessibility verification' && failedJob.conclusion === 'failure', 'S02 review-reference correction live failed job mismatch');
+    const failedSteps = (failedJob.steps ?? []).filter(step => step.name === s02ReferenceQaCorrection.failedWorkflow.failedStep);
+    assert(failedSteps.length === 1 && failedSteps[0].conclusion === 'failure', 'S02 review-reference correction live failed step mismatch');
+  }
+}
+// END_S02_TRUSTED_HARNESS_CORRECTION_ROUND_003
 
 function verifyS02ExternalPreviewEvidence(evidence, request, label, requestPath = s02ReviewEvidencePaths.deploymentRequest, requireLiveApi = true) {
   assertWorkflowEvidenceKeys(evidence, `${label} workflow evidence`, true);

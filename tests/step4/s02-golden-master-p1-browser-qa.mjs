@@ -778,7 +778,7 @@ for (const scenario of primaryGoldenMasterScenarios) {
   }
   for (const reference of scenario.semantics.reviewAssetReferences) {
     invariant(assetRecords.get(reference.path)?.reviewOnly === true && assetKinds.get(reference.path) === 'reference' && reference.surface === 'review', scenario.id + ': review reference kind/surface mismatch');
-    invariant(scenario.id === 'GM01' && scenario.diagnostics.resourcePaths.includes('/step4/s02/golden-master-p1/' + reference.path), scenario.id + ': review reference did not load in ordinary review chrome');
+    invariant(scenario.diagnostics.resourcePaths.includes('/step4/s02/golden-master-p1/' + reference.path), scenario.id + ': review reference did not load in ordinary review chrome');
     invariant(reference.resolvedUrl === new URL(reference.path, baseUrl).href, scenario.id + ': review reference resolved URL differs from its exact manifest path');
   }
   const bindingIds = new Set(scenario.semantics.dataBindings.map((binding) => binding.id));

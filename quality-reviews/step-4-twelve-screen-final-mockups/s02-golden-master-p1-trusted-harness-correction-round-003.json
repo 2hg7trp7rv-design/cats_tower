@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-trusted-harness-correction-round-003",
+  "createdAt": "2026-09-02",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "entry": {
+    "head": "0d75cd6496c538ee6730f02aaeebd9c4063c6cee",
+    "tree": "7cc4fcedb181fe127dae020159a7a0f91a1db807"
+  },
+  "authorityWorkflow": {
+    "commit": "0d75cd6496c538ee6730f02aaeebd9c4063c6cee",
+    "tree": "7cc4fcedb181fe127dae020159a7a0f91a1db807",
+    "runId": 33591754174,
+    "runAttempt": 1,
+    "jobId": 100127121721,
+    "conclusion": "SUCCESS",
+    "artifactId": 9831995434,
+    "artifactName": "phase0-current-governance-0d75cd6496c538ee6730f02aaeebd9c4063c6cee-33591754174-1",
+    "artifactDigest": "sha256:cfb43b6677c725d9815da2ab9ad0d5fa6f9a967b34736d2bbfe2677c75c1ff3f"
+  },
+  "failedWorkflow": {
+    "commit": "0d75cd6496c538ee6730f02aaeebd9c4063c6cee",
+    "tree": "7cc4fcedb181fe127dae020159a7a0f91a1db807",
+    "runId": 33591754259,
+    "runAttempt": 1,
+    "jobId": 100127012034,
+    "conclusion": "FAILURE",
+    "failedStep": "Capture and verify eight masters plus required responsive variants",
+    "error": "Error: GM02: review reference did not load in ordinary review chrome",
+    "artifactCount": 0
+  },
+  "diagnosis": {
+    "type": "QA_REVIEW_REFERENCE_SCOPE_CONTRADICTION_AFTER_SUCCESSFUL_BROWSER_CAPTURE",
+    "collectorContract": "ONE_VISIBLE_DECODED_REVIEW_REFERENCE_REQUIRED_IN_EVERY_SCENARIO",
+    "validatorContract": "REJECTED_EVERY_PRIMARY_SCENARIO_WITH_REFERENCE_EXCEPT_GM01",
+    "browserCaptureCompleted": true
+  },
+  "correction": {
+    "rule": "REQUIRE_VISIBLE_REFERENCE_RESOURCE_PARTICIPATION_IN_EACH_PRIMARY_GOLDEN_MASTER_WITHOUT_CHANGING_VISUAL_THRESHOLDS",
+    "changedPaths": [
+      ".github/workflows/verify-step-4-s02-golden-master-p1.yml",
+      "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-003.json",
+      "tests/governance/verify-current-authority.mjs",
+      "tests/step4/s02-golden-master-p1-browser-qa.mjs"
+    ],
+    "qaBeforeSha256": "5190fe2fca12b75356518a02c95dae6947ac2f6e68690c43ac30d7ee82bf293a",
+    "qaAfterSha256": "0778dd5e74031aab8a6db3ff44c0563aa5907c362bdad64779db781422ca5463",
+    "qaPatchSha256": "sha256:3b6702385a4481b01c7597a0796976b56b285b3bb37127ad1f3a615b2585d2c0",
+    "workflowBeforeSha256": "32e82c7b97cab50f6d51622f316fe11f33ed259d4c0372d1925af58bf4e2592d",
+    "workflowAfterSha256": "79d84163ca190041b814b80c4ef020b758d0c61cac36751c498194680904b9c0",
+    "workflowPatchSha256": "sha256:d214fb2f79f1c9ec4e3e6b1740f23eb59d3b1a56b8522fbb4688b394b27a0f21",
+    "verifierAfterSha256": "6cad4cad4a3c1ee9d57f5e98d131da2534d9809f3ee978109f2987617f5a34a7",
+    "verifierPatchSha256": "sha256:79dd9b3476755c78f9cae994f8f6f939892ac51308f075e84dc5dd3240016d49",
+    "assertionChangeKind": "CONTRADICTION_REPAIR_ENFORCING_EVERY_PRIMARY_SCENARIO",
+    "acceptanceThresholdsChanged": false,
+    "qualityCoverageWeakened": false,
+    "failureEvidenceUploadEnabled": true
+  },
+  "boundaries": {
+    "rootRuntimeChanged": false,
+    "gameCoreChanged": false,
+    "gameDataChanged": false,
+    "economyChanged": false,
+    "saveSchemaChanged": false,
+    "backendChanged": false,
+    "productionChanged": false,
+    "productionAliasChanged": false,
+    "physicalIPhoneVerified": false,
+    "step4Pass": false,
+    "step5Allowed": false
+  },
+  "status": "CORRECTED_REVIEW_REFERENCE_QA_PENDING_RERUN"
+}
