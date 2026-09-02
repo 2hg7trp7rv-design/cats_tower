@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-phase0-governance-recovery-final-judge-round-002",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
+  "target": {
+    "commit": "3b5acb5ef73abdf0cb854ca6af1aab29a7203d9d",
+    "tree": "02a52abbf1e11fa03ede552a9e7824f7c35886a4"
+  },
+  "critic": {
+    "path": "quality-reviews/phase-0-governance-recovery/critic-summary-round-003.json",
+    "blob": "de9185988dee9e96e55c15b14a2a16a8fbf4be39"
+  },
+  "verdict": "PASS_PHASE0_GOVERNANCE_RECOVERY",
+  "coverage": [
+    "ROUND031_REPAIR_TARGET_INTEGRITY",
+    "ROUND032_EXACT_WRITE_BOUNDARY",
+    "STEP2_V3_SEAL_AND_CONTINUITY",
+    "NON_STEP2_AUTHORITY_FREEZE",
+    "EVIDENCE_CHAIN_IMMUTABILITY",
+    "PRODUCTION_RUNTIME_DEVICE_BOUNDARIES"
+  ],
+  "findings": [
+    {
+      "id": "PHASE0-POST-CLOSURE-BOUNDARY-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "PHASE0-ACCEPTANCE-CLOSURE-ID-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "PHASE0-PREMATURE-EVIDENCE-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "PHASE0-IMMUTABLE-EVIDENCE-OVERWRITE-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S2-P0-SCREEN-PROJECTION-001",
+      "severity": "P0",
+      "resolved": true
+    },
+    {
+      "id": "PHASE0-P2-PR8-STALE-METADATA",
+      "severity": "P2",
+      "resolved": false
+    },
+    {
+      "id": "PHASE0-P2-KIMI-UNPROTECTED-EXTERNAL-ENFORCEMENT",
+      "severity": "P2",
+      "resolved": false
+    }
+  ],
+  "unresolved": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 2
+  },
+  "resolvedFindings": [
+    "PHASE0-POST-CLOSURE-BOUNDARY-001",
+    "PHASE0-ACCEPTANCE-CLOSURE-ID-001",
+    "PHASE0-PREMATURE-EVIDENCE-001",
+    "PHASE0-IMMUTABLE-EVIDENCE-OVERWRITE-001",
+    "S2-P0-SCREEN-PROJECTION-001"
+  ],
+  "retainedP2": [
+    "PHASE0-P2-PR8-STALE-METADATA",
+    "PHASE0-P2-KIMI-UNPROTECTED-EXTERNAL-ENFORCEMENT"
+  ],
+  "maximumVerdict": "READY_FOR_PHASE0_COMPLETION_EVIDENCE"
+}
