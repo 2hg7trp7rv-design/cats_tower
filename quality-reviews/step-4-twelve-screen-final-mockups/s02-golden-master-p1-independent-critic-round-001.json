@@ -1,0 +1,629 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-independent-critic-round-001",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "auditTarget": {
+    "commit": "0fa6ac052ca303f24b6e0cf859322792491fcdef",
+    "tree": "61866194848cedaf2ffc52b199f122f5fb0daf79"
+  },
+  "contentManifest": [
+    {
+      "path": ".github/workflows/verify-step-4-s02-golden-master-p1.yml",
+      "mode": "100644",
+      "blob": "358834577073fcbf5e684c9bad21157242d9d29a",
+      "bytes": 44136
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-acceptance-matrix-round-001.json",
+      "mode": "100644",
+      "blob": "9ddc4605a4f171c6882cd1b6af896e407d94af53",
+      "bytes": 39638
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-animation-contract.json",
+      "mode": "100644",
+      "blob": "33adb0b889364afd7daed20fadc3737a34efc4f2",
+      "bytes": 16057
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-art-direction.json",
+      "mode": "100644",
+      "blob": "002d5251908d0877e0025cf4fd6edfb0bc0a5591",
+      "bytes": 15301
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-asset-decomposition.json",
+      "mode": "100644",
+      "blob": "45cfb737dead4ab013b39777628bd12fb3e91ce6",
+      "bytes": 18660
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-competitive-research.md",
+      "mode": "100644",
+      "blob": "97be0a6127fe9d6cfb7813d7df42baa0e0b142c5",
+      "bytes": 22800
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-data-binding-matrix.json",
+      "mode": "100644",
+      "blob": "de93eedcc3ed76a4ecaebba491baf76b4b9a4834",
+      "bytes": 27480
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-feasibility-audit.json",
+      "mode": "100644",
+      "blob": "18f7cf6b880642a1e72b0da152be2ea1857c13c4",
+      "bytes": 9609
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-information-priority.json",
+      "mode": "100644",
+      "blob": "9b9bc5421d8c5cfdca9f6d4bf0b543ae84307442",
+      "bytes": 15796
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-player-experience.json",
+      "mode": "100644",
+      "blob": "34563a2b3fe009447d5ae1b8fbbef1ca0ee36093",
+      "bytes": 13523
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-responsive-contract.json",
+      "mode": "100644",
+      "blob": "3224b7de51effa12726619bd956b98600e86c7ad",
+      "bytes": 14354
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-001.json",
+      "mode": "100644",
+      "blob": "89e2fe33ff952ec683ab5dffe23006aa06e43e16",
+      "bytes": 4177
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-002.json",
+      "mode": "100644",
+      "blob": "34e55317368767144e9888cc19ac5b5587864253",
+      "bytes": 3332
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-003.json",
+      "mode": "100644",
+      "blob": "178120ececad01049c59103e6164b545405e0fba",
+      "bytes": 3561
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-004.json",
+      "mode": "100644",
+      "blob": "8aa1c11d4699ee637c779faeb317453a39a75053",
+      "bytes": 5693
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-005.json",
+      "mode": "100644",
+      "blob": "92e121fd0f01e103120c1df61f1c97a6dd94184e",
+      "bytes": 4054
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-006.json",
+      "mode": "100644",
+      "blob": "249e9fd5e62f018f5088babe2526472648f5ca61",
+      "bytes": 5787
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-007.json",
+      "mode": "100644",
+      "blob": "ffedd0f35b0c4a1e74bfae5ac16e6a3b8f9d9600",
+      "bytes": 5000
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-008.json",
+      "mode": "100644",
+      "blob": "f78a46ae1ec6a0f526389eeb12fd4d61ce04b5bf",
+      "bytes": 4786
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-009.json",
+      "mode": "100644",
+      "blob": "a6eff780e37b8ef4bb33b05df44fe12febb851bf",
+      "bytes": 4622
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-010.json",
+      "mode": "100644",
+      "blob": "040a871e56f90de518b352e2d02639e5799eca83",
+      "bytes": 4661
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-011.json",
+      "mode": "100644",
+      "blob": "dab78b68808ded4e01364e8173d1b90ca768e2e5",
+      "bytes": 4416
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-trusted-harness-correction-round-012.json",
+      "mode": "100644",
+      "blob": "b3eabc8d629e96a3f6f315c497f211cae25a4429",
+      "bytes": 4470
+    },
+    {
+      "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-ui-design-system.json",
+      "mode": "100644",
+      "blob": "2fe1b651bbe1bc12794e985f6d2a8104578d4fcb",
+      "bytes": 18107
+    },
+    {
+      "path": "step4/s02/golden-master-p1/app.js",
+      "mode": "100644",
+      "blob": "2d4e834a8c3d0313336ae3bc096ba4d96a9da00b",
+      "bytes": 33407
+    },
+    {
+      "path": "step4/s02/golden-master-p1/asset-manifest.json",
+      "mode": "100644",
+      "blob": "31376281c83db0c7ce121a8daeca01b4ec2a7a0d",
+      "bytes": 6283
+    },
+    {
+      "path": "step4/s02/golden-master-p1/assets/clockwork-marten.webp",
+      "mode": "100644",
+      "blob": "75e7c7d9547165847d6f73d4df70fecc9c7d354a",
+      "bytes": 106552
+    },
+    {
+      "path": "step4/s02/golden-master-p1/assets/party-actions.webp",
+      "mode": "100644",
+      "blob": "d41598578bbbb45143040b56cf6900c7565ae456",
+      "bytes": 136258
+    },
+    {
+      "path": "step4/s02/golden-master-p1/assets/party-roster.webp",
+      "mode": "100644",
+      "blob": "ecd16b1747577dd16d295f9b916a25772a356029",
+      "bytes": 215632
+    },
+    {
+      "path": "step4/s02/golden-master-p1/assets/prior-reference-s02.webp",
+      "mode": "100644",
+      "blob": "171de13f77df95780a7b7961b4a1a70b6d6382bb",
+      "bytes": 137032
+    },
+    {
+      "path": "step4/s02/golden-master-p1/assets/tower-corridor.webp",
+      "mode": "100644",
+      "blob": "dba580ffd7008786996d69994ac01f7cf68e506d",
+      "bytes": 152980
+    },
+    {
+      "path": "step4/s02/golden-master-p1/browser-qa/package-lock.json",
+      "mode": "100644",
+      "blob": "0c7ccf364c039a4dec276ef97abe61c967dc6330",
+      "bytes": 1764
+    },
+    {
+      "path": "step4/s02/golden-master-p1/browser-qa/package.json",
+      "mode": "100644",
+      "blob": "8bf4083b2595c761394112d4f35181b2323be91d",
+      "bytes": 263
+    },
+    {
+      "path": "step4/s02/golden-master-p1/golden-master-spec.json",
+      "mode": "100644",
+      "blob": "e796e23cb7a2397892488aa09801cb0fe162ca6d",
+      "bytes": 2232
+    },
+    {
+      "path": "step4/s02/golden-master-p1/index.html",
+      "mode": "100644",
+      "blob": "f8be91f43840aed8ea423a06fca380a1152d2f14",
+      "bytes": 6611
+    },
+    {
+      "path": "step4/s02/golden-master-p1/review-manifest.json",
+      "mode": "100644",
+      "blob": "2115f150fb3db2184020675ccf3dec6313aca3b8",
+      "bytes": 5363
+    },
+    {
+      "path": "step4/s02/golden-master-p1/styles.css",
+      "mode": "100644",
+      "blob": "639f442f20fa091c100c73605f9414d98a3efa9b",
+      "bytes": 53801
+    },
+    {
+      "path": "tests/step4/s02-golden-master-p1-browser-qa.mjs",
+      "mode": "100644",
+      "blob": "6c5ded2e59b50f4c691d7ddde379d46e0221cffb",
+      "bytes": 182039
+    },
+    {
+      "path": "tests/step4/s02-golden-master-p1-browser.mjs",
+      "mode": "100644",
+      "blob": "4a35372a4c89992fcdd3630fe0b93ffd922a3c39",
+      "bytes": 107869
+    },
+    {
+      "path": "tests/step4/verify-s02-golden-master-p1.mjs",
+      "mode": "100644",
+      "blob": "495d823e1c65cae044420f3af7ea9e55f188f7e9",
+      "bytes": 47294
+    }
+  ],
+  "workflow": {
+    "commit": "0fa6ac052ca303f24b6e0cf859322792491fcdef",
+    "tree": "61866194848cedaf2ffc52b199f122f5fb0daf79",
+    "runId": 33602357267,
+    "runAttempt": 1,
+    "jobId": 100158959880,
+    "conclusion": "SUCCESS",
+    "artifactId": 9835736575,
+    "artifactName": "step4-s02-golden-master-p1-0fa6ac052ca303f24b6e0cf859322792491fcdef-33602357267-1",
+    "artifactDigest": "sha256:20f872c43d502d137a3415a55d195f7df7c5408499561ca460b712203c0d1eb7",
+    "oidcTokenSha256": "sha256:02db63adcdd7eab5d3461f64714e77b7bd8e35f6c84b353f317e9a829d8678bf",
+    "oidcClaims": {
+      "issuer": "https://token.actions.githubusercontent.com",
+      "audience": "cats-tower-s02-golden-master-p1",
+      "subject": "repo:2hg7trp7rv-design@245031448/cats_tower@1331488679:ref:refs/heads/kimi",
+      "repository": "2hg7trp7rv-design/cats_tower",
+      "repositoryId": "1331488679",
+      "repositoryOwnerId": "245031448",
+      "ref": "refs/heads/kimi",
+      "sha": "0fa6ac052ca303f24b6e0cf859322792491fcdef",
+      "runId": "33602357267",
+      "runAttempt": "1",
+      "workflowRef": "2hg7trp7rv-design/cats_tower/.github/workflows/verify-step-4-s02-golden-master-p1.yml@refs/heads/kimi"
+    },
+    "oidcVerified": true
+  },
+  "screenshots": [
+    {
+      "path": "semantic-evidence/screenshots/GM01-390x844.png",
+      "sha256": "sha256:32abc35370f20079d68f718770f1f78e1d1480bdd573c48da8f61da5c18306d2"
+    },
+    {
+      "path": "semantic-evidence/screenshots/GM02-320x667.png",
+      "sha256": "sha256:8720aba2c51f0361e6ef52bfab3af2e1d660795566c5f6bb9f770b374ebfddb8"
+    },
+    {
+      "path": "semantic-evidence/screenshots/GM03-375x667.png",
+      "sha256": "sha256:0aa475a50817df21e0875fdb68cb6a5962801ae294a2840b8b01c309fefad9e5"
+    },
+    {
+      "path": "semantic-evidence/screenshots/GM04-320x568.png",
+      "sha256": "sha256:27f21e344e2ef2d3c0f8765acb73496c1d7e4219c89a85c5c1360c2617958704"
+    },
+    {
+      "path": "semantic-evidence/screenshots/GM05-430x932.png",
+      "sha256": "sha256:a95ed068bd0184236cb9268e3b947624f9ae7dc37c3fc0a93e72e38cad911246"
+    },
+    {
+      "path": "semantic-evidence/screenshots/GM06-390x844.png",
+      "sha256": "sha256:f65eef64261bdf7e03c1bd48794a8a5a6b9858e6cc602c8c4cd4b5db5c13952b"
+    },
+    {
+      "path": "semantic-evidence/screenshots/GM07-390x844.png",
+      "sha256": "sha256:1ea0382d95f2e2c9a1bb9f2bd04b695ff3746723d4c45da63b6761149e4936dd"
+    },
+    {
+      "path": "semantic-evidence/screenshots/GM08-390x844.png",
+      "sha256": "sha256:a47e208cee88106239b0597f20b30ba1af9ae031deaf9224d84a059c382af85e"
+    },
+    {
+      "path": "semantic-evidence/screenshots/RV360-360x800.png",
+      "sha256": "sha256:9523805b2639e84ad9c9247b5a924b084d3801805a7bf29a0b69df19f66bc8f7"
+    },
+    {
+      "path": "semantic-evidence/screenshots/RV412-412x915.png",
+      "sha256": "sha256:f7d5d9b3bbfca8d34f1bd5ee6d1fd03a58327c2c97beb0724ec43328948bac2e"
+    },
+    {
+      "path": "semantic-evidence/screenshots/SAFE390-390x844.png",
+      "sha256": "sha256:50d1a9b4bb34ca8d57ec888a6288e140647fed97a1885e848626618294507386"
+    },
+    {
+      "path": "semantic-evidence/screenshots/TEXT200-320x568.png",
+      "sha256": "sha256:a433432af852250d4c3d3ff50515ce6258bcf9e45a2be5bb43717e4f3422fb41"
+    },
+    {
+      "path": "semantic-evidence/screenshots/GM07C320-320x568.png",
+      "sha256": "sha256:da0e340872968ef9660e40631295e68190905c47205689ab6838194ad0af61c8"
+    },
+    {
+      "path": "semantic-evidence/screenshots/GM07C320TEXT200-320x568.png",
+      "sha256": "sha256:71478f1aa6c8dcdcbea13ea9cf6a4ebe13bac5c6dfaa542e11b0922167447645"
+    },
+    {
+      "path": "semantic-evidence/screenshots/TEXT200SAFE-320x568.png",
+      "sha256": "sha256:46438e65a782c1080541fc979334198c1249bd43f8f4bd97c4d3d5a87d0e4819"
+    }
+  ],
+  "findingClosure": [
+    {
+      "findingId": "S02-P1-VISIBLE-BOUNDS-001",
+      "changedPaths": [
+        "step4/s02/golden-master-p1/app.js",
+        "step4/s02/golden-master-p1/styles.css",
+        "tests/step4/s02-golden-master-p1-browser-qa.mjs"
+      ],
+      "testAssertions": [
+        "VISIBLE_CAT_ALPHA_HEIGHT_MIN_60",
+        "VISIBLE_ENEMY_ALPHA_HEIGHT_MIN_80",
+        "STANDARD_CAT_ALPHA_HEIGHT_MIN_68",
+        "STANDARD_ENEMY_ALPHA_HEIGHT_MIN_96",
+        "TRANSPARENT_WRAPPER_EXCLUDED"
+      ],
+      "evidence": {
+        "artifactId": 9835736575,
+        "artifactDigest": "sha256:20f872c43d502d137a3415a55d195f7df7c5408499561ca460b712203c0d1eb7",
+        "browserReport": "semantic-evidence/browser-report.json"
+      }
+    },
+    {
+      "findingId": "S02-P1-PARTY-ATLAS-ANCHOR-001",
+      "changedPaths": [
+        "step4/s02/golden-master-p1/app.js",
+        "step4/s02/golden-master-p1/asset-manifest.json",
+        "step4/s02/golden-master-p1/assets/party-actions.webp",
+        "step4/s02/golden-master-p1/assets/party-roster.webp"
+      ],
+      "testAssertions": [
+        "NON_UNIFORM_CHARACTER_SCALE_ABSENT",
+        "FOOT_AND_HIT_ANCHORS_BOUND",
+        "DEFEAT_POSE_VISUALLY_DISTINCT"
+      ],
+      "evidence": {
+        "artifactId": 9835736575,
+        "artifactDigest": "sha256:20f872c43d502d137a3415a55d195f7df7c5408499561ca460b712203c0d1eb7",
+        "browserReport": "semantic-evidence/browser-report.json"
+      }
+    },
+    {
+      "findingId": "S02-P1-DESIGN-TOKEN-MINIMUM-001",
+      "changedPaths": [
+        "step4/s02/golden-master-p1/styles.css",
+        "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-ui-design-system.json",
+        "tests/step4/verify-s02-golden-master-p1.mjs"
+      ],
+      "testAssertions": [
+        "MEANINGFUL_TEXT_MIN_14",
+        "METADATA_TEXT_MIN_12",
+        "PRIMARY_LABEL_MIN_14",
+        "PRIMARY_CONTROL_HIT_AREA_MIN_48",
+        "IMPORTANT_CONTROL_HIT_AREA_MIN_44",
+        "CONTROL_HIT_BOUNDS_NONOVERLAP",
+        "CONTROL_HIT_BOUNDS_MIN_GAP_8",
+        "MEANINGFUL_TEXT_CONTRAST_WCAG",
+        "STATE_SEMANTICS_NOT_COLOR_ONLY",
+        "DESIGN_TOKEN_DRIFT_ZERO"
+      ],
+      "evidence": {
+        "artifactId": 9835736575,
+        "artifactDigest": "sha256:20f872c43d502d137a3415a55d195f7df7c5408499561ca460b712203c0d1eb7",
+        "browserReport": "semantic-evidence/browser-report.json"
+      }
+    },
+    {
+      "findingId": "S02-P1-RESPONSIVE-SAFEAREA-001",
+      "changedPaths": [
+        "step4/s02/golden-master-p1/styles.css",
+        "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-responsive-contract.json",
+        "tests/step4/s02-golden-master-p1-browser.mjs",
+        "tests/step4/s02-golden-master-p1-browser-qa.mjs"
+      ],
+      "testAssertions": [
+        "SEVEN_REQUIRED_VIEWPORTS_PASS",
+        "NONZERO_SAFE_AREA_PASS",
+        "TEXT_200_PERCENT_NO_LOSS",
+        "LAYOUT_AND_VISUAL_VIEWPORT_MATCH",
+        "INITIAL_SCROLL_ORIGIN_ZERO",
+        "UNIFORM_FULL_SCREEN_SCALE_ABSENT",
+        "REDUCED_MOTION_POLICY_NATIVE",
+        "REVIEW_BROWSER_MODES_OPERABLE",
+        "GM05_UI_ANTI_BLOAT",
+        "RESPONSIVE_GEOMETRY_CONTRACT",
+        "GM04_REFLOW_OR_SCROLL_PASS"
+      ],
+      "evidence": {
+        "artifactId": 9835736575,
+        "artifactDigest": "sha256:20f872c43d502d137a3415a55d195f7df7c5408499561ca460b712203c0d1eb7",
+        "browserReport": "semantic-evidence/browser-report.json"
+      }
+    },
+    {
+      "findingId": "S02-P1-RESOURCE-RANK-BINDING-001",
+      "changedPaths": [
+        "step4/s02/golden-master-p1/app.js",
+        "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-data-binding-matrix.json",
+        "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-information-priority.json"
+      ],
+      "testAssertions": [
+        "UNBOUND_RUBY_REMOVED",
+        "UNBOUND_RANK_REMOVED_OR_BOUND"
+      ],
+      "evidence": {
+        "artifactId": 9835736575,
+        "artifactDigest": "sha256:20f872c43d502d137a3415a55d195f7df7c5408499561ca460b712203c0d1eb7",
+        "browserReport": "semantic-evidence/browser-report.json"
+      }
+    },
+    {
+      "findingId": "S02-P1-COMBAT-REWARD-CAUSALITY-001",
+      "changedPaths": [
+        "step4/s02/golden-master-p1/app.js",
+        "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-animation-contract.json",
+        "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-player-experience.json"
+      ],
+      "testAssertions": [
+        "KILL_COUNTER_AND_OBJECTIVE_CONSISTENT",
+        "REWARD_PROVISIONAL_NOT_CONFIRMED",
+        "ATTACK_HIT_DEFEAT_REWARD_CAUSALITY_VISIBLE"
+      ],
+      "evidence": {
+        "artifactId": 9835736575,
+        "artifactDigest": "sha256:20f872c43d502d137a3415a55d195f7df7c5408499561ca460b712203c0d1eb7",
+        "browserReport": "semantic-evidence/browser-report.json"
+      }
+    },
+    {
+      "findingId": "S02-P1-SUPPORT-CAUSALITY-001",
+      "changedPaths": [
+        "step4/s02/golden-master-p1/app.js",
+        "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-data-binding-matrix.json",
+        "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-player-experience.json"
+      ],
+      "testAssertions": [
+        "SUPPORT_NEXT_BATTLE_CAUSALITY_VISIBLE",
+        "GM04_SUPPORT_REMAINS_AVAILABLE"
+      ],
+      "evidence": {
+        "artifactId": 9835736575,
+        "artifactDigest": "sha256:20f872c43d502d137a3415a55d195f7df7c5408499561ca460b712203c0d1eb7",
+        "browserReport": "semantic-evidence/browser-report.json"
+      }
+    },
+    {
+      "findingId": "S02-P1-OFFLINE-PARTY-SEMANTICS-001",
+      "changedPaths": [
+        "step4/s02/golden-master-p1/index.html",
+        "step4/s02/golden-master-p1/app.js",
+        "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-information-priority.json"
+      ],
+      "testAssertions": [
+        "OFFLINE_RECONCILIATION_ACCESSIBLE",
+        "PARTY_STATE_LABELS_CANONICAL",
+        "REVIEW_COPY_EXCLUDED_FROM_GAME_UI"
+      ],
+      "evidence": {
+        "artifactId": 9835736575,
+        "artifactDigest": "sha256:20f872c43d502d137a3415a55d195f7df7c5408499561ca460b712203c0d1eb7",
+        "browserReport": "semantic-evidence/browser-report.json"
+      }
+    },
+    {
+      "findingId": "S02-P1-ASSET-SEPARATION-001",
+      "changedPaths": [
+        "step4/s02/golden-master-p1/asset-manifest.json",
+        "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-animation-contract.json",
+        "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-asset-decomposition.json",
+        "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-feasibility-audit.json"
+      ],
+      "testAssertions": [
+        "EFFECTS_SEPARATED_FROM_CHARACTER_FRAMES",
+        "ANIMATION_ANCHORS_COMPLETE",
+        "NINE_SLICE_CAPS_AND_MINIMUMS_VALID"
+      ],
+      "evidence": {
+        "artifactId": 9835736575,
+        "artifactDigest": "sha256:20f872c43d502d137a3415a55d195f7df7c5408499561ca460b712203c0d1eb7",
+        "browserReport": "semantic-evidence/browser-report.json"
+      }
+    },
+    {
+      "findingId": "S02-P1-TEST-RESEARCH-COVERAGE-001",
+      "changedPaths": [
+        ".github/workflows/verify-step-4-s02-golden-master-p1.yml",
+        "tests/step4/s02-golden-master-p1-browser.mjs",
+        "tests/step4/s02-golden-master-p1-browser-qa.mjs",
+        "tests/step4/verify-s02-golden-master-p1.mjs",
+        "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-competitive-research.md"
+      ],
+      "testAssertions": [
+        "PRIMARY_SOURCE_COMPETITORS_6_TO_10",
+        "OFFICIAL_SOURCE_CURRENT_LISTING_CHECKED",
+        "ALL_TEN_FINDING_GROUPS_AUTOMATED"
+      ],
+      "evidence": {
+        "artifactId": 9835736575,
+        "artifactDigest": "sha256:20f872c43d502d137a3415a55d195f7df7c5408499561ca460b712203c0d1eb7",
+        "browserReport": "semantic-evidence/browser-report.json"
+      }
+    }
+  ],
+  "verdict": "PASS_S02_GOLDEN_MASTER_P1_INDEPENDENT_CRITIC",
+  "coverage": [
+    "FIRST_FIVE_SECONDS_COMBAT_CAT_FLOOR_THREAT_CAUSALITY",
+    "VISIBLE_ALPHA_BOUNDS_AND_CHARACTER_IDENTITY",
+    "DESIGN_SYSTEM_TOKENS_TYPE_AND_HIT_AREAS",
+    "ALL_REQUIRED_VIEWPORTS_SAFE_AREA_AND_200_PERCENT_TEXT",
+    "COMBAT_REWARD_SUPPORT_OFFLINE_AND_PARTY_STATE_SEMANTICS",
+    "ASSET_ANIMATION_DATA_BINDING_AND_IMPLEMENTATION_FEASIBILITY",
+    "CURRENT_PRIMARY_SOURCE_COMPETITIVE_RESEARCH_AND_COPY_AVOIDANCE"
+  ],
+  "testedViewports": [
+    "320x568",
+    "320x667",
+    "375x667",
+    "360x800",
+    "390x844",
+    "412x915",
+    "430x932"
+  ],
+  "goldenMasters": [
+    "GM01",
+    "GM02",
+    "GM03",
+    "GM04",
+    "GM05",
+    "GM06",
+    "GM07",
+    "GM08"
+  ],
+  "findings": [
+    {
+      "id": "S02-P1-VISIBLE-BOUNDS-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S02-P1-PARTY-ATLAS-ANCHOR-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S02-P1-DESIGN-TOKEN-MINIMUM-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S02-P1-RESPONSIVE-SAFEAREA-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S02-P1-RESOURCE-RANK-BINDING-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S02-P1-COMBAT-REWARD-CAUSALITY-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S02-P1-SUPPORT-CAUSALITY-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S02-P1-OFFLINE-PARTY-SEMANTICS-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S02-P1-ASSET-SEPARATION-001",
+      "severity": "P1",
+      "resolved": true
+    },
+    {
+      "id": "S02-P1-TEST-RESEARCH-COVERAGE-001",
+      "severity": "P1",
+      "resolved": true
+    }
+  ],
+  "unresolved": {
+    "P0": 0,
+    "P1": 0
+  },
+  "maximumVerdict": "READY_FOR_S02_P1_FINAL_JUDGE"
+}
