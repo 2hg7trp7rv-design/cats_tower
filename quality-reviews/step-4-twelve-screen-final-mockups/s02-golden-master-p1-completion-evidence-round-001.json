@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-s02-golden-master-p1-completion-round-001",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "branch": "kimi",
+  "changeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-034.json",
+  "verifiedContent": {
+    "commit": "0fa6ac052ca303f24b6e0cf859322792491fcdef",
+    "tree": "61866194848cedaf2ffc52b199f122f5fb0daf79"
+  },
+  "finalJudge": {
+    "path": "quality-reviews/step-4-twelve-screen-final-mockups/s02-golden-master-p1-final-judge-round-001.json",
+    "blob": "36aa98e5db84cf601213e3d749e6cfea4fe87e41"
+  },
+  "workflow": {
+    "commit": "0fa6ac052ca303f24b6e0cf859322792491fcdef",
+    "tree": "61866194848cedaf2ffc52b199f122f5fb0daf79",
+    "runId": 33602357267,
+    "runAttempt": 1,
+    "jobId": 100158959880,
+    "conclusion": "SUCCESS",
+    "artifactId": 9835736575,
+    "artifactName": "step4-s02-golden-master-p1-0fa6ac052ca303f24b6e0cf859322792491fcdef-33602357267-1",
+    "artifactDigest": "sha256:20f872c43d502d137a3415a55d195f7df7c5408499561ca460b712203c0d1eb7",
+    "oidcTokenSha256": "sha256:02db63adcdd7eab5d3461f64714e77b7bd8e35f6c84b353f317e9a829d8678bf",
+    "oidcClaims": {
+      "issuer": "https://token.actions.githubusercontent.com",
+      "audience": "cats-tower-s02-golden-master-p1",
+      "subject": "repo:2hg7trp7rv-design@245031448/cats_tower@1331488679:ref:refs/heads/kimi",
+      "repository": "2hg7trp7rv-design/cats_tower",
+      "repositoryId": "1331488679",
+      "repositoryOwnerId": "245031448",
+      "ref": "refs/heads/kimi",
+      "sha": "0fa6ac052ca303f24b6e0cf859322792491fcdef",
+      "runId": "33602357267",
+      "runAttempt": "1",
+      "workflowRef": "2hg7trp7rv-design/cats_tower/.github/workflows/verify-step-4-s02-golden-master-p1.yml@refs/heads/kimi"
+    },
+    "oidcVerified": true
+  },
+  "verdict": "READY_FOR_S02_DEPLOYMENT_READBACK",
+  "unresolved": {
+    "P0": 0,
+    "P1": 0
+  },
+  "maximumVerdict": "READY_FOR_S02_DEPLOYMENT_READBACK"
+}
