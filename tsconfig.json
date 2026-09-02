@@ -20,10 +20,9 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
-    "baseUrl": ".",
     "paths": {
       "@cats-tower/domain": [
-        "packages/domain/src/index.ts"
+        "./packages/domain/src/index.ts"
       ]
     }
   },
