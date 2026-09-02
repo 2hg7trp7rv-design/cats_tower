@@ -12,7 +12,7 @@
   },
   "authority": {
     "index": "CURRENT_AUTHORITY_INDEX.json",
-    "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json",
+    "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
     "supersededGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
     "step2ScreenProjectionCorrection": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
     "plannedGovernanceRecoveryClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
@@ -22,9 +22,9 @@
   },
   "current": {
     "repositoryStep": 4,
-    "internalPhase": "PHASE0-GOVERNANCE-RECOVERY",
+    "internalPhase": "STEP2-SCREEN-PROJECTION-CORRECTION",
     "status": "IN_PROGRESS",
-    "verdict": "IN_PROGRESS_PHASE0_CLOSURE_INTEGRITY_RECOVERY",
+    "verdict": "IN_PROGRESS_STEP2_SCREEN_PROJECTION_CORRECTION",
     "step4Pass": false,
     "step5Allowed": false,
     "productionAllowed": false,
@@ -74,8 +74,8 @@
     "legacyOperationalWorkflowsRetired": true
   },
   "currentWriteBoundary": {
-    "allowed": "round 031 allowedWrites only",
-    "preWriteRequirement": "Repair Phase 0 closure integrity and complete independent re-judgment before any S02-P1 product write.",
+    "allowed": "round 032 allowedWrites only",
+    "preWriteRequirement": "Complete the versioned Step 2 screen-projection correction, independent re-judgment, and corrected round 033 Phase 0 closure before any S02-P1 product write.",
     "forbidden": [
       "actual root replacement",
       "gameplay runtime mutation",

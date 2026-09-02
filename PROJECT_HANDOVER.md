@@ -1,6 +1,5 @@
 # Cat's Tower — Current Handover
 
-更新日: **2026-09-02**
 Repository: `2hg7trp7rv-design/cats_tower`
 Branch: existing `kimi` only
 
@@ -13,84 +12,20 @@ PHYSICAL_IPHONE_VERIFIED: false
 USER_VISUAL_APPROVAL: false
 ```
 
-## Current conclusion
+CURRENT_AUTHORITY_SNAPSHOT: quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json | STEP 4 | STEP2-SCREEN-PROJECTION-CORRECTION | IN_PROGRESS_STEP2_SCREEN_PROJECTION_CORRECTION
 
-Phase 0 governance closure was reopened after independent criticism found four closure-integrity P1 defects. The numbered independent re-critic has now verified the round 031 repair at P0/P1 0/0. Step 2 correction and corrected closure evidence remain pending.
+## Purpose
 
-- Phase 0: `IN_PROGRESS_PHASE0_CLOSURE_INTEGRITY_RECOVERY`
-- Step 1: `PASS_CANONICAL`
-- Step 2: `IN_PROGRESS_CONTRACT_CORRECTION_REQUIRED`
-- Step 3: `PASS_MODEL`
-- Step 4: `IN_PROGRESS`
-- Step 5: `BLOCKED`
-- Physical iPhone: `NOT_VERIFIED`
-- Production alias changed: `false`
+Repair the canonical Step 2 S01-S12 screen projection without changing immutable v2 history, runtime, economy, save data, Production or device claims.
 
-Current authority:
+## Completed so far
 
-- `CURRENT_AUTHORITY_INDEX.json`
-- `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json`
+The numbered round 031 independent re-critic verified the closure-integrity repair at Phase 0 P0/P1 `0 / 0`. Round 032 is active; S02 A-J and GM01-GM08 remain preserved and read-only.
 
-Superseded Phase 0 closure attempt:
+## Next
 
-- `quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json`
-- verified content commit/tree: `21f5ce897c24b45a0a559d7a2e39002d59e00e70` / `941780c9e2a482f91597cbda0bd5e09d8bc42e57`
-- evidence commit/tree: `02d5e5bdf017447617d1a874ef2d86a114328463` / `c0071113541f0c6fea1864f3b43e56b8fc9a4cfa`
-- workflow run/job: `33539938108` / `99963403759`
-- artifact ID/digest: `9813183649` / `sha256:01ea8293921134370f8e2e30cb9f9a1f4a6f8d50bb9259af30646b766197140c`
-- Current Phase 0 unresolved after numbered repair re-criticism: P0/P1 `0 / 0`
-
-Round 032 is reserved for the narrow Step 2 screen-projection correction. The corrected Phase 0 closure is round 033. Until both complete with numbered critic, judge, completion and live-readback evidence, S02-P1 product files remain read-only.
-
-New P0: `S2-P0-SCREEN-PROJECTION-001`. The sealed candidate uses screen responsibilities and generic states that disagree with canonical S01-S12. Numeric-engine impact is not established; existing Golden Master art is preserved.
-
-## What Phase 0 changed
-
-- established `CURRENT_AUTHORITY_INDEX.json` as the single current dispatcher
-- completely replaced `CHATGPT_PROJECT_INSTRUCTIONS1.md`
-- added `DEVELOPMENT_PLAYBOOK.md`
-- added `PROJECT_SOURCE_MANIFEST.md`
-- synchronized all current mirrors
-- split current governance and immutable Round 7 verification
-- validated all Step 2 seal bindings and reproduced the source-bound verifier in an intact historical worktree
-- deleted 6 obsolete root design/Project-source files
-- deleted 14 obsolete Step 4 write/recovery workflows
-- deleted 13 obsolete Step 1-3 operational workflows
-- preserved sealed Step 1-3 evidence and all Git/Actions history
-- did not mutate gameplay, economy, save, assets, backend, payment, ads or Production
-
-## Current product work
-
-Next product phase after corrected closure: **S02-P1 Golden Master A-J audit**
-
-Existing route and artifacts were written concurrently during Phase 0 and were preserved:
-
-- route: `step4/s02/golden-master-p1/`
-- GM states claimed: `8`
-- A-J artifacts claimed: `10`
-- accepted GM states: `0 / 8`
-- accepted A-J deliverables: `0 / 10`
-
-They are not rejected merely because they were concurrent, but they are not accepted merely because they exist.
-
-## Exact next action
-
-Before any further product-content write:
-
-1. open round 032 and correct the canonical S01-S12 projection without rewriting immutable v2 history
-2. reseal the corrected Step 2 contract and prove Step 3 numeric-model continuity
-3. bind numbered critic, judge, completion and live-readback evidence in round 033
-4. only after round 033 returns authority to round 026, freeze and audit S02-P1 A-J and GM01-GM08
-5. reuse conforming material, repair evidenced gaps and run browser/render verification
-6. reach at most `READY_FOR_USER_VISUAL_REVIEW`
-
-Do not alter actual root, gameplay core, economy, save schema, backend, payment, ads, Production or physical-device verdict during S02-P1.
-
-## Remaining findings
-
-- Product P1: `S4-RECOVERY-VIS-001`
-- Nonblocking governance P2: `PHASE0-P2-PR8-STALE-METADATA`
-- Nonblocking external-enforcement P2: `PHASE0-P2-KIMI-UNPROTECTED-EXTERNAL-ENFORCEMENT`
-
-PR #8 was not edited or closed because PR operations are prohibited. It is excluded from current authority and release evidence.
-Live GitHub reports `kimi protected=false`. The current verifier is an auditable cooperative-process gate, not protection against an authorized writer disabling the workflow in the same push. No repository setting was changed; branch protection requires a separately authorized external setting change before release or parallel-writer operation.
+1. create and validate the versioned v3 semantic contract
+2. bind independent critic, judge, completion and live readback
+3. prove Step 3 numeric continuity
+4. close corrected Phase 0 under round 033
+5. return to round 026 and audit the preserved S02 Golden Master

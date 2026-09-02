@@ -5,13 +5,13 @@
   "repository": "2hg7trp7rv-design/cats_tower",
   "branch": "kimi",
   "authorityIndex": "CURRENT_AUTHORITY_INDEX.json",
-  "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-031.json",
+  "activeChangeControl": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
   "status": "IN_PROGRESS",
   "currentRepositoryStep": 4,
-  "currentInternalPhase": "PHASE0-GOVERNANCE-RECOVERY",
-  "currentVerdict": "IN_PROGRESS_PHASE0_CLOSURE_INTEGRITY_RECOVERY",
+  "currentInternalPhase": "STEP2-SCREEN-PROJECTION-CORRECTION",
+  "currentVerdict": "IN_PROGRESS_STEP2_SCREEN_PROJECTION_CORRECTION",
   "governanceRecovery": {
-    "status": "REOPENED_PHASE0_CLOSURE_AND_CONTRACT_INTEGRITY",
+    "status": "STEP2_SCREEN_PROJECTION_CORRECTION_IN_PROGRESS",
     "supersededClosureAttempt": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
     "step2Correction": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
     "plannedCorrectedClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json",
@@ -38,7 +38,7 @@
     "goldenMastersAccepted": 0,
     "deliverablesClaimedForAudit": 10,
     "deliverablesAccepted": 0,
-    "currentState": "AUDIT_REQUIRED_BEFORE_ADDITIONAL_PRODUCT_WRITE"
+    "currentState": "READ_ONLY_UNTIL_ROUND_033_CORRECTED_CLOSURE"
   },
   "openFindings": {
     "P0": 1,
@@ -65,7 +65,7 @@
     "productionAliasChanged": false,
     "productionReady": false
   },
-  "nextAuthorizedAction": "Repair Phase 0 closure integrity, then perform the narrow Step 2 screen-projection correction under round 032. Keep S02-P1 product content read-only until corrected closure round 033 returns authority to round 026.",
+  "nextAuthorizedAction": "Complete the versioned Step 2 screen-projection correction and corrected Phase 0 closure under rounds 032 and 033. Keep S02-P1 product content read-only.",
   "step5Allowed": false,
   "productionAllowed": false,
   "physicalIPhoneVerified": false

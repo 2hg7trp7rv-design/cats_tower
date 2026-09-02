@@ -5,10 +5,10 @@
   "branch": "kimi",
   "authorityIndex": "CURRENT_AUTHORITY_INDEX.json",
   "currentRepositoryStep": 4,
-  "currentInternalPhase": "PHASE0-GOVERNANCE-RECOVERY",
-  "status": "IN_PROGRESS_PHASE0_CLOSURE_INTEGRITY_RECOVERY",
+  "currentInternalPhase": "STEP2-SCREEN-PROJECTION-CORRECTION",
+  "status": "IN_PROGRESS_STEP2_SCREEN_PROJECTION_CORRECTION",
   "governanceRecovery": {
-    "status": "REOPENED_PHASE0_CLOSURE_INTEGRITY",
+    "status": "STEP2_SCREEN_PROJECTION_CORRECTION_IN_PROGRESS",
     "supersededClosureAttempt": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-030.json",
     "step2Correction": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-032.json",
     "plannedCorrectedClosure": "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-033.json"
@@ -50,5 +50,5 @@
   "step5Allowed": false,
   "physicalIPhoneVerified": false,
   "productionAliasChanged": false,
-  "nextAction": "Complete round 031 repair verification, then open round 032 for the narrow Step 2 screen-projection correction. Keep S02 content read-only through round 033."
+  "nextAction": "Complete the versioned Step 2 screen-projection correction, independent review, continuity proof, and corrected round 033 closure."
 }

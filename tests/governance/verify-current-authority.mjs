@@ -1693,7 +1693,7 @@ function isExactRepairBootstrapCommit(commit) {
   }
 }
 // Round 032 opening must replace this null with the immutable blob created for the new control.
-const expectedStep2CorrectionControlBlob = null;
+const expectedStep2CorrectionControlBlob = '3db99b4a5d4e1c1ca75932b84686541f89917e5a';
 // The closure-integrity critic commit must replace this null with the immutable critic blob.
 const expectedClosureRepairCriticBlob = '5c706202de5f32fa638e2abdb636a2b89f9b0fe5';
 // The closure-integrity critic commit must pin the independently reviewed repair-target sources.
@@ -1702,8 +1702,8 @@ const expectedRepairTargetWorkflowBlob = '3812269fb8c287a8d91ecee2fcc2f77ad551ca
 const expectedRepairTargetCurrentDocBlobs = {"QUALITY_GATE.md":"f65ed017a48c77e67f6dd0dbd8d068c381cfef96","PROJECT_HANDOVER.md":"cdcfbdd92764e9873a045006328dcdfb8b642730",".github/workflows/CURRENT_STATUS.md":"5474ad8ec2cc909ca488c2ee685f388c19cf1903","AGENTS.md":"5fc36abe3525d04d328343d62afda66b75a4af15","README.md":"f90c4d703836f4479388fd81f0367f669ce5c899"};
 const expectedPostCriticCurrentDocBlobs = {"QUALITY_GATE.md":"5253b1f5e503efa3dee7282464a64b50d7045cfb","PROJECT_HANDOVER.md":"69926893a6028415dd919168056b51147982e126",".github/workflows/CURRENT_STATUS.md":"2a78777b6798098a10307f712094d2e72141624b","AGENTS.md":"383b34fa094a99b4fb0929f8084d18d57332d4ed","README.md":"b994a822d7a45dc46f964e864828a3f52fbc2bb5"};
 // Round 032 opening must pin the complete current Markdown set for correction and closure phases.
-const expectedRound032CurrentDocBlobs = null;
-const expectedRound033CurrentDocBlobs = null;
+const expectedRound032CurrentDocBlobs = {"QUALITY_GATE.md":"adeffd52454921bcbc2a9bb155a353b3e247ba6f","PROJECT_HANDOVER.md":"246bd861145a2f6722aa223379c23d8d1b8a919c",".github/workflows/CURRENT_STATUS.md":"871e1002843556fa90504993f69b587808be0fbf","AGENTS.md":"918f29fcd24965842362f77493fa602cd60d7982","README.md":"3fc4241b0f7c3637c1f79603a28a0bbabe69aed5"};
+const expectedRound033CurrentDocBlobs = {"QUALITY_GATE.md":"4897a35857957de9786dca3d16072a26a73eb6c7","PROJECT_HANDOVER.md":"0366189ffd64fae0f58a2e754138aba3b3471eef",".github/workflows/CURRENT_STATUS.md":"40bcd64b1c1b8e7f2c896e2fb65a5e1eebbf040b","AGENTS.md":"f9bf76ada0a98db96f32909ef33abd5247d887b0","README.md":"b368abd8414abaa284eecb5649e0fa0cf64f9bf6"};
 // Round 034 opening replaces this null with the immutable reviewed S02 repair-control blob.
 const expectedS02RepairControlBlob = null;
 const productControl = json('quality-reviews/step-1-canonical-design/active-change-control-addendum-round-026.json');
