@@ -76,10 +76,14 @@ button:focus-visible {
 
 .top-hud {
   min-height: 72px;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
+}
+
+.top-hud > div:first-child {
+  min-width: 0;
 }
 
 .eyebrow,
@@ -101,7 +105,9 @@ footer b {
 }
 
 .top-hud h1 {
-  font-size: clamp(24px, 8vw, 32px);
+  font-size: clamp(20px, 6vw, 28px);
+  line-height: 1.15;
+  white-space: nowrap;
 }
 
 .resource-stack {
@@ -318,7 +324,7 @@ footer b {
   }
 
   .top-hud h1 {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .resource-stack span {
@@ -363,7 +369,6 @@ footer b {
 
   .top-hud h1 {
     font-size: 20px;
-    white-space: nowrap;
   }
 
   .resource-stack {

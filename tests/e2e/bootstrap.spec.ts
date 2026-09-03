@@ -195,7 +195,13 @@ test('boots a candidate-v3-bound mobile tower combat loop without browser errors
     const canvas = document.querySelector('canvas');
     const topHud = document.querySelector('[data-testid="top-hud"]');
     const heading = document.querySelector('h1');
+    const resourceStack = document.querySelector('.resource-stack');
     const controls = document.querySelector('.controls');
+
+    const headingStyle = heading ? getComputedStyle(heading) : null;
+    const headingLineHeight = headingStyle
+      ? Number.parseFloat(headingStyle.lineHeight)
+      : Number.NaN;
 
     return {
       innerWidth: window.innerWidth,
@@ -204,6 +210,9 @@ test('boots a candidate-v3-bound mobile tower combat loop without browser errors
       canvas: canvas?.getBoundingClientRect().toJSON(),
       topHud: topHud?.getBoundingClientRect().toJSON(),
       heading: heading?.getBoundingClientRect().toJSON(),
+      headingLineHeight,
+      headingWhiteSpace: headingStyle?.whiteSpace ?? '',
+      resourceStack: resourceStack?.getBoundingClientRect().toJSON(),
       controls: controls?.getBoundingClientRect().toJSON(),
     };
   });
@@ -214,7 +223,14 @@ test('boots a candidate-v3-bound mobile tower combat loop without browser errors
     layout.innerWidth + 1,
   );
   expect(layout.topHud?.top ?? -1).toBeGreaterThanOrEqual(0);
-  expect(layout.heading?.height ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual(32);
+  expect(layout.headingWhiteSpace).toBe('nowrap');
+  expect(layout.headingLineHeight).toBeGreaterThan(0);
+  expect(layout.heading?.height ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual(
+    layout.headingLineHeight + 1,
+  );
+  expect(layout.heading?.right ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual(
+    (layout.resourceStack?.left ?? Number.NEGATIVE_INFINITY) - 1,
+  );
   expect(layout.controls?.bottom ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual(
     layout.innerHeight + 1,
   );
