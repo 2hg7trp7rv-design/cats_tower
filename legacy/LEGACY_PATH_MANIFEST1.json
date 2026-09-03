@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-legacy-path-manifest-1",
+  "preparedAt": "2026-09-04T00:00:00+09:00",
+  "classification": "LOGICALLY_ISOLATED_PHYSICALLY_STABLE",
+  "v2RuntimeRoot": "apps/game",
+  "v2DomainRoot": "packages/domain",
+  "v2BuildOutput": "dist/v2",
+  "legacyRootFiles": [
+    "index.html",
+    "app.js",
+    "game-core.js",
+    "game-data.js",
+    "styles.css",
+    "sw.js",
+    "manifest.webmanifest"
+  ],
+  "legacyDirectories": [
+    "runtime/**"
+  ],
+  "historicalReferenceDirectories": [
+    "step4/**",
+    "quality-reviews/**",
+    ".github/baselines/**"
+  ],
+  "writePolicy": "DO_NOT_EXTEND_DURING_V2",
+  "servedByCurrentVercelBuild": false,
+  "relocationRejectedBecause": [
+    "stable historical paths are referenced by evidence and manifests",
+    "step4 and quality-reviews contain protected history rather than disposable runtime code",
+    "physical relocation would create broad unrelated diffs and downstream breakage",
+    "V2 is already isolated by source root and build output"
+  ]
+}

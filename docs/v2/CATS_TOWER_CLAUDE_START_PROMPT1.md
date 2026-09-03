@@ -24,24 +24,28 @@
 2. indexが指すactive change-control
 3. `AI_PROJECT_POLICY.json`
 4. `CLAUDE.md`
-5. `.claude/rules/cats-tower-handoff1.md`
-6. `docs/v2/CATS_TOWER_CLAUDE_MASTER_HANDOFF1.md`
-7. `docs/v2/CATS_TOWER_SCREEN_VISUAL_BIBLE1.md`
-8. `docs/v2/CATS_TOWER_COMPLETION_BLUEPRINT1.md`
-9. `docs/v2/CATS_TOWER_VISUAL_REFERENCE_MANIFEST1.json`
-10. `docs/v2/CLAUDE_HANDOFF.md`
-11. `docs/v2/PRODUCT_AND_SYSTEM_SPEC.md`
-12. `docs/v2/VISUAL_DIRECTION.md`
-13. `docs/v2/DECISION_REGISTER.json`
-14. `MASTER_SPEC.md`
-15. `FLOORS_1_10_DESIGN.md`
-16. `canonical/**`
+5. `CLAUDE_ENTRY1.md`
+6. `.claude/rules/cats-tower-handoff1.md`
+7. `.claude/rules/canonical-runtime-correction1.md`
+8. `docs/v2/CANONICAL_RUNTIME_BINDING1.md`
+9. `docs/v2/HANDOFF_VALIDATION2.json`
+10. `docs/v2/ROUND_036_RECOVERY_STATUS1.md`
+11. `docs/v2/CATS_TOWER_CLAUDE_HANDOFF_INDEX1.md`
+12. `docs/v2/CATS_TOWER_CLAUDE_MASTER_HANDOFF1.md`
+13. `docs/v2/CATS_TOWER_SCREEN_VISUAL_BIBLE1.md`
+14. `docs/v2/CATS_TOWER_COMPLETION_BLUEPRINT1.md`
+15. `docs/v2/CATS_TOWER_VISUAL_REFERENCE_MANIFEST1.json`
+16. `docs/v2/CLAUDE_HANDOFF.md`
+17. `docs/v2/PRODUCT_AND_SYSTEM_SPEC.md`
+18. `docs/v2/VISUAL_DIRECTION.md`
+19. `docs/v2/DECISION_REGISTER.json`
+20. `MASTER_SPEC.md`, `FLOORS_1_10_DESIGN.md`, `canonical/**`
 
-旧runtime、旧Step 4表記、旧商人サーガclone framing、既存S02 Golden Master、10枚のreference画像は、上位authorityと衝突する場合は採用しない。
+旧runtime、旧Step 4表記、旧商人サーガclone framing、既存S02 Golden Master、reference画像は、上位authorityと衝突する場合は採用しない。round-036の報告済み追加仕様は原文未発見であり、名称だけから再設計しない。
 
 ### 現在の任務
 
-現在はV2-0 verified bootstrap closureだけを行う。
+現在はV2-0 verified bootstrap closureと、そのdomain正本結線の検証だけを行う。旧100ms・float・独自wave・誤role実装はsupersededであり、復元しない。
 
 - React HUD
 - Phaser battlefield
@@ -52,7 +56,7 @@
 - Playwright Chromium 320×568 / 390×844 / 430×932
 - WebKit 390×844
 - deterministic snapshot
-- enemy defeat → reward → next wave/enemy
+- enemy defeat → candidate-v3 floor reward → next floor/enemy
 - horizontal overflow 0
 - uncaught/page/console error 0
 - candidate commitに紐づくVercel Previewとbrowser evidence

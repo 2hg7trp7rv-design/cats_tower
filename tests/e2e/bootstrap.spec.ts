@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test('boots a deterministic mobile combat loop without browser errors', async ({
+test('boots a candidate-v3-bound mobile tower combat loop without browser errors', async ({
   page,
 }, testInfo) => {
   const consoleErrors: string[] = [];
@@ -16,28 +16,79 @@ test('boots a deterministic mobile combat loop without browser errors', async ({
   });
 
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: '第1区画' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /F・第\d+区画/ })).toBeVisible();
   await expect(page.getByTestId('game-container').locator('canvas')).toBeVisible();
   await page.waitForFunction(() => Boolean(window.__CATS_TOWER_V2__));
+  await expect(
+    page.getByText('candidate-v3 / engine-v2 / combat値は仮'),
+  ).toBeVisible();
+  await expect(page.getByText(/WAVE/)).toHaveCount(0);
 
   const first = await page.evaluate(() => {
     window.__CATS_TOWER_V2__.pause();
-    window.__CATS_TOWER_V2__.restart(42);
+    window.__CATS_TOWER_V2__.restart('42', { startFloor: '1' });
     window.__CATS_TOWER_V2__.pause();
     return window.__CATS_TOWER_V2__.advanceForTest(30_000);
   });
 
-  expect(first.kills).toBeGreaterThan(0);
-  expect(first.coins).toBeGreaterThan(0);
-  expect(first.wave).toBe(first.kills + 1);
+  expect(BigInt(first.kills)).toBeGreaterThan(0n);
+  expect(BigInt(first.coins)).toBeGreaterThan(0n);
+  expect(BigInt(first.floor)).toBeGreaterThan(1n);
+  expect(first.fixedStepMs).toBe(50);
+  expect(first.authority.candidatePath).toBe('simulation/candidate-v3.json');
+  expect(first.authority.towerEnginePath).toBe(
+    'simulation/engine-v2/tower.mjs',
+  );
+  expect(first.cats.map((cat) => [cat.id, cat.role])).toEqual([
+    ['character.launch.001', 'frontline-control'],
+    ['character.launch.002', 'ranged-anti-air'],
+    ['character.launch.003', 'healing-support'],
+    ['character.launch.004', 'runner-backline-disruption'],
+  ]);
+
+  const floorTen = await page.evaluate(() =>
+    window.__CATS_TOWER_V2__.restart('browser-floor-parity', {
+      startFloor: '10',
+    }),
+  );
+  expect(floorTen.tower).toMatchObject({
+    floor: '10',
+    district: '1',
+    districtId: 'tower.district.001',
+    cycleId: 'tower.cycle.000001',
+    milestoneId: 'tower.milestone.floor.10',
+    boss: {
+      kind: 'district',
+      id: 'tower.boss.d01.kagetsubasa',
+    },
+    modifiers: ['tower.modifier.flying', 'tower.modifier.haste'],
+    hp: { representation: 'expanded-integer', value: '156' },
+    attack: { representation: 'expanded-integer', value: '16' },
+    coin: { representation: 'expanded-integer', value: '29' },
+  });
 
   const second = await page.evaluate(() => {
-    window.__CATS_TOWER_V2__.restart(42);
+    window.__CATS_TOWER_V2__.restart('42', { startFloor: '1' });
     window.__CATS_TOWER_V2__.pause();
     return window.__CATS_TOWER_V2__.advanceForTest(30_000);
   });
 
   expect(second).toEqual(first);
+
+  const levelResult = await page.evaluate(() => {
+    window.__CATS_TOWER_V2__.restart('level-test', {
+      startCoins: '25',
+    });
+    return window.__CATS_TOWER_V2__.levelUp();
+  });
+  expect(levelResult.partyLevel).toBe('2');
+  expect(levelResult.coins).toBe('0');
+
+  await page.evaluate(() => {
+    window.__CATS_TOWER_V2__.restart('42', { startFloor: '1' });
+    window.__CATS_TOWER_V2__.pause();
+    window.__CATS_TOWER_V2__.advanceForTest(30_000);
+  });
 
   const readVisualIntegrity = () =>
     page.evaluate(() => {
@@ -51,8 +102,6 @@ test('boots a deterministic mobile combat loop without browser errors', async ({
         return null;
       }
 
-      // Phaser already owns this 2D context. Re-request it without changing
-      // context attributes so WebKit returns the active rendered surface.
       const context = canvas.getContext('2d');
       if (!context || canvas.width <= 0 || canvas.height <= 0) {
         return null;
@@ -91,9 +140,11 @@ test('boots a deterministic mobile combat loop without browser errors', async ({
       const fillRect = fill?.getBoundingClientRect();
       const trackRect = track?.getBoundingClientRect();
       const snapshot = window.__CATS_TOWER_V2__.getSnapshot();
+      const current = BigInt(snapshot.enemy.hp);
+      const maximum = BigInt(snapshot.enemy.maxHp);
       const expectedEnemyRatio =
-        snapshot.enemy.maxHp > 0
-          ? snapshot.enemy.hp / snapshot.enemy.maxHp
+        maximum > 0n
+          ? Number((current * 10_000n) / maximum) / 10_000
           : 0;
 
       return {
@@ -108,9 +159,6 @@ test('boots a deterministic mobile combat loop without browser errors', async ({
       };
     });
 
-  // The deterministic advance runs synchronously. React's commit, the CSS HP
-  // transition and Phaser's next paint are asynchronous, so explicitly wait
-  // for the rendered view to catch up before measuring it.
   await page.evaluate(
     () =>
       new Promise<void>((resolve) => {
@@ -142,18 +190,6 @@ test('boots a deterministic mobile combat loop without browser errors', async ({
       { timeout: 5_000 },
     )
     .toBeLessThanOrEqual(0.02);
-
-  const visualIntegrity = await readVisualIntegrity();
-
-  expect(visualIntegrity).not.toBeNull();
-  expect(visualIntegrity?.nonBackgroundRatio ?? 0).toBeGreaterThan(0.2);
-  expect(visualIntegrity?.brightRatio ?? 0).toBeGreaterThan(0.08);
-  expect(
-    Math.abs(
-      (visualIntegrity?.renderedEnemyRatio ?? Number.NaN) -
-        (visualIntegrity?.expectedEnemyRatio ?? Number.NaN),
-    ),
-  ).toBeLessThanOrEqual(0.02);
 
   const layout = await page.evaluate(() => {
     const canvas = document.querySelector('canvas');

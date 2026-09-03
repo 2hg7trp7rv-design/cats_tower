@@ -7,6 +7,12 @@ const domainEntry = fileURLToPath(
   new URL('../../packages/domain/src/index.ts', import.meta.url),
 );
 const outputDirectory = fileURLToPath(new URL('../../dist/v2', import.meta.url));
+const browserCryptoBridge = fileURLToPath(
+  new URL('../../packages/domain/src/browser/node-crypto.ts', import.meta.url),
+);
+const browserFsPromisesBridge = fileURLToPath(
+  new URL('../../packages/domain/src/browser/node-fs-promises.ts', import.meta.url),
+);
 
 export default defineConfig({
   root: appRoot,
@@ -14,6 +20,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@cats-tower/domain': domainEntry,
+      'node:crypto': browserCryptoBridge,
+      'node:fs/promises': browserFsPromisesBridge,
     },
   },
   build: {

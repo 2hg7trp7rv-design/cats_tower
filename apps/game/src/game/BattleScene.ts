@@ -4,13 +4,14 @@ import type {
   BattleSnapshot,
   CatRole,
 } from '@cats-tower/domain';
+import { ratioForDisplay } from '@cats-tower/domain';
 import { battleRuntime } from './runtime';
 
 interface VisualEffect {
   readonly type: 'attack' | 'hit' | 'heal' | 'defeat' | 'reward';
   readonly actorId?: string;
   readonly targetId?: string;
-  readonly amount?: number;
+  readonly amount?: string;
   readonly createdAt: number;
 }
 
@@ -19,14 +20,15 @@ const HEIGHT = 360;
 const FLOOR_Y = 285;
 
 const roleColor: Record<CatRole, number> = {
-  guardian: 0x78a8c8,
-  striker: 0xe4a267,
-  ranger: 0xa890d6,
-  support: 0x83b89b,
+  'frontline-control': 0x78a8c8,
+  'ranged-anti-air': 0xa890d6,
+  'healing-support': 0x83b89b,
+  'runner-backline-disruption': 0xe4a267,
 };
 
 export class BattleScene extends Phaser.Scene {
   private graphics!: Phaser.GameObjects.Graphics;
+  private floorTitle!: Phaser.GameObjects.Text;
   private effects: VisualEffect[] = [];
 
   public constructor() {
@@ -36,8 +38,8 @@ export class BattleScene extends Phaser.Scene {
   public create(): void {
     this.cameras.main.setBackgroundColor('#07131c');
     this.graphics = this.add.graphics();
-    this.add
-      .text(16, 12, '第1区画・崩れた回廊', {
+    this.floorTitle = this.add
+      .text(16, 12, '1F・第1区画', {
         color: '#f2e9d4',
         fontFamily: 'system-ui, sans-serif',
         fontSize: '16px',
@@ -78,6 +80,9 @@ export class BattleScene extends Phaser.Scene {
   private renderBattle(snapshot: BattleSnapshot, time: number): void {
     const graphics = this.graphics;
     graphics.clear();
+    this.floorTitle.setText(
+      `${snapshot.floor}F・第${snapshot.tower.district}区画`,
+    );
 
     graphics.fillStyle(0x07131c, 1);
     graphics.fillRect(0, 0, WIDTH, HEIGHT);
@@ -142,10 +147,7 @@ export class BattleScene extends Phaser.Scene {
 
     snapshot.cats.forEach((cat, index) => {
       const position = positions[index];
-
-      if (!position) {
-        return;
-      }
+      if (!position) return;
 
       const alpha = cat.alive ? 1 : 0.28;
       const color = roleColor[cat.role];
@@ -182,7 +184,7 @@ export class BattleScene extends Phaser.Scene {
         position.x - 22,
         position.y - 34,
         44,
-        cat.hp / cat.maxHp,
+        ratioForDisplay(cat.hp, cat.maxHp),
         0x75c58a,
       );
     });
@@ -215,7 +217,7 @@ export class BattleScene extends Phaser.Scene {
       42,
       186,
       80,
-      enemy.hp / enemy.maxHp,
+      ratioForDisplay(enemy.hp, enemy.maxHp),
       0xd16f6f,
     );
   }
@@ -231,7 +233,13 @@ export class BattleScene extends Phaser.Scene {
     graphics.fillStyle(0x02070b, 0.78);
     graphics.fillRoundedRect(x, y, width, 7, 3);
     graphics.fillStyle(color, 1);
-    graphics.fillRoundedRect(x + 1, y + 1, Math.max(0, (width - 2) * ratio), 5, 2);
+    graphics.fillRoundedRect(
+      x + 1,
+      y + 1,
+      Math.max(0, (width - 2) * ratio),
+      5,
+      2,
+    );
   }
 
   private drawEffect(
@@ -282,19 +290,17 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private positionFor(id?: string): { x: number; y: number } | undefined {
-    if (!id) {
-      return undefined;
-    }
+    if (!id) return undefined;
 
-    if (id.startsWith('enemy.')) {
+    if (id.startsWith('enemy.') || id.startsWith('tower.boss.')) {
       return { x: 82, y: 236 };
     }
 
     const positions: Record<string, { x: number; y: number }> = {
-      'cat.guardian': { x: 224, y: 228 },
-      'cat.striker': { x: 278, y: 240 },
-      'cat.ranger': { x: 326, y: 218 },
-      'cat.support': { x: 346, y: 256 },
+      'character.launch.001': { x: 224, y: 228 },
+      'character.launch.002': { x: 278, y: 240 },
+      'character.launch.003': { x: 326, y: 218 },
+      'character.launch.004': { x: 346, y: 256 },
     };
 
     return positions[id];

@@ -1,5 +1,6 @@
 import {
   createBattleEngine,
+  type BattleEngineOptions,
   type BattleEvent,
   type BattleSnapshot,
 } from '@cats-tower/domain';
@@ -51,9 +52,19 @@ class BattleRuntime {
     return this.getSnapshot();
   }
 
-  public restart(seed = 20_260_902): BattleSnapshot {
-    this.engine.restart(seed);
+  public restart(
+    seed: string | number = '20260902',
+    options?: BattleEngineOptions,
+  ): BattleSnapshot {
+    this.engine.restart(seed, options);
     this.pendingVisualEvents = this.engine.drainEvents();
+    this.notify();
+    return this.getSnapshot();
+  }
+
+  public levelUp(): BattleSnapshot {
+    this.engine.levelUp();
+    this.captureEvents();
     this.notify();
     return this.getSnapshot();
   }

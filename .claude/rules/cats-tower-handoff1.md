@@ -6,6 +6,10 @@ This rule is loaded by Claude Code as project context. It is lower than the late
 
 Read these files in full:
 
+- `docs/v2/CANONICAL_RUNTIME_BINDING1.md`
+- `docs/v2/HANDOFF_VALIDATION2.json`
+- `docs/v2/ROUND_036_RECOVERY_STATUS1.md`
+- `docs/v2/CORRECTION_AUDIT2.md`
 - `docs/v2/CATS_TOWER_CLAUDE_HANDOFF_INDEX1.md`
 - `docs/v2/CATS_TOWER_CLAUDE_MASTER_HANDOFF1.md`
 - `docs/v2/CATS_TOWER_SCREEN_VISUAL_BIBLE1.md`
@@ -25,7 +29,9 @@ Also obey the existing root `CLAUDE.md`, `docs/v2/CLAUDE_HANDOFF.md`, `docs/v2/P
 - Do not create another branch.
 - Do not write directly to `main` or `kimi`.
 - Do not merge PR #9 without explicit authority.
-- Current mission is V2-0 bootstrap verification and repair only.
+- Current mission is V2-0 bootstrap verification and canonical source-binding repair only.
+- The former 100 ms / float / invented-wave / wrong-role battle implementation is superseded.
+- `candidate-v3` and `engine-v2` are the binding sources for tick, numeric, RNG, floor and reward behavior.
 
 ## Product truths that must survive
 

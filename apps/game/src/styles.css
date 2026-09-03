@@ -44,7 +44,12 @@ button {
   touch-action: manipulation;
 }
 
-button:active {
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+button:active:not(:disabled) {
   transform: translateY(1px);
 }
 
@@ -247,10 +252,10 @@ footer b {
   border-radius: 99px;
 }
 
-.role-guardian { background: #78a8c8; }
-.role-striker { background: #e4a267; }
-.role-ranger { background: #a890d6; }
-.role-support { background: #83b89b; }
+.role-frontline-control { background: #78a8c8; }
+.role-ranged-anti-air { background: #a890d6; }
+.role-healing-support { background: #83b89b; }
+.role-runner-backline-disruption { background: #e4a267; }
 
 .party-chip div {
   min-width: 0;
@@ -280,7 +285,7 @@ footer b {
 
 .controls {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
 

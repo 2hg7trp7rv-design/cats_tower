@@ -5,9 +5,10 @@ import { battleRuntime } from './game/runtime';
 import './styles.css';
 
 window.__CATS_TOWER_V2__ = {
-  version: 'v2-bootstrap-1',
+  version: 'v2-bootstrap-2-canonical-binding',
   getSnapshot: battleRuntime.getSnapshot,
-  restart: (seed?: number) => battleRuntime.restart(seed),
+  restart: (seed, options) => battleRuntime.restart(seed, options),
+  levelUp: () => battleRuntime.levelUp(),
   pause: () => battleRuntime.pause(),
   resume: () => battleRuntime.resume(),
   advanceForTest: (milliseconds: number) =>
