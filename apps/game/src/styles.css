@@ -351,6 +351,7 @@ footer b {
   }
 
   footer {
-    display: none;
+    min-height: 24px;
+    font-size: 8px;
   }
 }
