@@ -194,6 +194,7 @@ test('boots a candidate-v3-bound mobile tower combat loop without browser errors
   const layout = await page.evaluate(() => {
     const canvas = document.querySelector('canvas');
     const topHud = document.querySelector('[data-testid="top-hud"]');
+    const heading = document.querySelector('h1');
     const controls = document.querySelector('.controls');
 
     return {
@@ -202,6 +203,7 @@ test('boots a candidate-v3-bound mobile tower combat loop without browser errors
       scrollWidth: document.documentElement.scrollWidth,
       canvas: canvas?.getBoundingClientRect().toJSON(),
       topHud: topHud?.getBoundingClientRect().toJSON(),
+      heading: heading?.getBoundingClientRect().toJSON(),
       controls: controls?.getBoundingClientRect().toJSON(),
     };
   });
@@ -212,6 +214,7 @@ test('boots a candidate-v3-bound mobile tower combat loop without browser errors
     layout.innerWidth + 1,
   );
   expect(layout.topHud?.top ?? -1).toBeGreaterThanOrEqual(0);
+  expect(layout.heading?.height ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual(32);
   expect(layout.controls?.bottom ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual(
     layout.innerHeight + 1,
   );

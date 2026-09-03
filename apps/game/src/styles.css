@@ -355,3 +355,23 @@ footer b {
     font-size: 8px;
   }
 }
+
+@media (max-width: 340px) {
+  .top-hud {
+    gap: 6px;
+  }
+
+  .top-hud h1 {
+    font-size: 20px;
+    white-space: nowrap;
+  }
+
+  .resource-stack {
+    grid-template-columns: repeat(2, minmax(68px, 1fr));
+    gap: 4px;
+  }
+
+  .resource-stack span {
+    padding-inline: 5px;
+  }
+}
