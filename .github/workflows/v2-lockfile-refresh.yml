@@ -1,0 +1,74 @@
+name: Refresh V2 lockfile
+
+on:
+  push:
+    branches:
+      - task/v2-bootstrap
+    paths:
+      - package.json
+      - .github/workflows/v2-lockfile-refresh.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cats-tower-v2-lockfile-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh-lockfile:
+    name: refresh-lockfile
+    if: github.repository == '2hg7trp7rv-design/cats_tower' && github.ref == 'refs/heads/task/v2-bootstrap'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout exact task branch commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Assert safe generation boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${GITHUB_REPOSITORY}" = "2hg7trp7rv-design/cats_tower"
+          test "${GITHUB_REF}" = "refs/heads/task/v2-bootstrap"
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          test -z "$(git status --porcelain)"
+          git fetch --no-tags origin main kimi
+          test "$(git rev-parse origin/main)" = "597de5e614977935b499771293dd7bf024df33e8"
+          git merge-base --is-ancestor origin/kimi HEAD
+
+      - name: Use Node 24
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+
+      - name: Generate and reproduce exact lockfile
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e package-lock.json
+          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+          test -s package-lock.json
+          npm ci --no-audit --no-fund
+          npm run typecheck
+          npm run test:unit
+          npm run build
+          test "$(git status --porcelain | wc -l | tr -d ' ')" = "1"
+          test "$(git status --porcelain)" = "?? package-lock.json"
+
+      - name: Commit only the reproduced lockfile
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "cats-tower-v2-lock-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          test "$(git diff --cached --name-only)" = "package-lock.json"
+          git commit -m "chore(v2): lock verified dependency graph"
+          git push origin HEAD:task/v2-bootstrap

@@ -1,0 +1,87 @@
+{
+  "defaultMode": "acceptEdits",
+  "disableBypassPermissionsMode": "disable",
+  "permissions": {
+    "allow": [
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git show *)",
+      "Bash(git rev-parse *)",
+      "Bash(npm ci --no-audit --no-fund)",
+      "Bash(npm run typecheck)",
+      "Bash(npm run test:unit)",
+      "Bash(npm run build)",
+      "Bash(npm run test:e2e)",
+      "Bash(npm run verify:v2)"
+    ],
+    "ask": [
+      "Bash(git push *)",
+      "Bash(gh pr create *)",
+      "Bash(vercel *)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(secrets/**)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git reset --hard*)",
+      "Bash(git clean -*)",
+      "Bash(git rebase*)",
+      "Bash(git merge*)",
+      "Bash(gh pr merge*)",
+      "Bash(vercel --prod*)",
+      "Edit(canonical/**)",
+      "Edit(simulation/**)",
+      "Edit(quality-reviews/**)",
+      "Edit(step4/**)",
+      "Edit(MASTER_SPEC.md)",
+      "Edit(FLOORS_1_10_DESIGN.md)",
+      "Edit(CURRENT_AUTHORITY_INDEX.json)",
+      "Edit(AI_PROJECT_POLICY.json)",
+      "Edit(index.html)",
+      "Edit(app.js)",
+      "Edit(game-core.js)",
+      "Edit(game-data.js)",
+      "Edit(styles.css)",
+      "Edit(sw.js)",
+      "Edit(PROJECT_SOURCE_MANIFEST.md)",
+      "Edit(CLAUDE.md)",
+      "Edit(CLAUDE_ENTRY1.md)",
+      "Edit(CLAUDE_START_PROMPT1.md)",
+      "Edit(.claude/rules/cats-tower-handoff1.md)",
+      "Edit(.claude/rules/canonical-runtime-correction1.md)",
+      "Edit(docs/v2/CANONICAL_RUNTIME_BINDING1.md)",
+      "Edit(docs/v2/CORRECTION_AUDIT2.md)",
+      "Edit(docs/v2/HANDOFF_VALIDATION2.json)",
+      "Edit(docs/v2/ROUND_036_RECOVERY_STATUS1.md)",
+      "Edit(docs/v2/CATS_TOWER_CLAUDE_HANDOFF_INDEX1.md)",
+      "Edit(docs/v2/CATS_TOWER_CLAUDE_START_PROMPT1.md)",
+      "Edit(legacy/LEGACY_PATH_MANIFEST1.json)",
+      "Edit(.claude/settings.json)",
+      "Edit(.claude/hooks/enforce-handoff.mjs)",
+      "Edit(docs/v2/CLAUDE_HANDOFF.md)",
+      "Edit(docs/v2/PRODUCT_AND_SYSTEM_SPEC.md)",
+      "Edit(docs/v2/VISUAL_DIRECTION.md)",
+      "Edit(docs/v2/DECISION_REGISTER.json)",
+      "Edit(CHATGPT_PROJECT_INSTRUCTIONS2.md)",
+      "Edit(CATS_TOWER_AI_NATIVE_BUILD_PROTOCOL1.md)",
+      "Edit(CATS_TOWER_PRODUCT_SNAPSHOT1.md)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/enforce-handoff.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

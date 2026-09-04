@@ -1,0 +1,133 @@
+name: V2 quality gate
+
+on:
+  push:
+    branches:
+      - kimi
+  pull_request:
+    branches:
+      - kimi
+    paths:
+      - 'apps/game/**'
+      - 'packages/**'
+      - 'tests/v2/**'
+      - 'tests/e2e/**'
+      - 'docs/v2/**'
+      - '.claude/**'
+      - 'CLAUDE.md'
+      - 'CLAUDE_ENTRY1.md'
+      - 'CLAUDE_START_PROMPT1.md'
+      - 'legacy/**'
+      - 'PROJECT_SOURCE_MANIFEST.md'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.json'
+      - 'vitest.config.ts'
+      - 'playwright.config.ts'
+      - 'vercel.json'
+      - '.github/workflows/v2-quality-gate.yml'
+      - 'CHATGPT_PROJECT_INSTRUCTIONS2.md'
+      - 'CATS_TOWER_AI_NATIVE_BUILD_PROTOCOL1.md'
+      - 'CATS_TOWER_PRODUCT_SNAPSHOT1.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cats-tower-v2-${{ github.event.pull_request.number || github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  v2-quality-gate:
+    name: v2-quality-gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Assert safe branch and unchanged release branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${GITHUB_REPOSITORY}" = "2hg7trp7rv-design/cats_tower"
+          test "${GITHUB_BASE_REF:-kimi}" = "kimi"
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          test -z "$(git status --porcelain)"
+          git fetch --no-tags origin main kimi
+          test "$(git rev-parse origin/main)" = "597de5e614977935b499771293dd7bf024df33e8"
+
+      - name: Use Node 24
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+
+      - name: Install exact declared dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          if test -f package-lock.json; then
+            npm ci --no-audit --no-fund
+          else
+            npm install --no-audit --no-fund
+          fi
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm run test:unit
+
+      - name: Production build
+        run: npm run build
+
+      - name: Install Chromium and WebKit
+        run: npx playwright install --with-deps chromium webkit
+
+      - name: Browser, responsive and determinism checks
+        run: npm run test:e2e
+
+      - name: Build tracked full-repository handoff archive
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .handoff-export
+          mkdir -p .handoff-export
+          if test -n "${GITHUB_HEAD_REF:-}"; then
+            git fetch --no-tags origin "${GITHUB_HEAD_REF}"
+            git archive --format=zip FETCH_HEAD -o .handoff-export/cats4.zip
+          else
+            git archive --format=zip HEAD -o .handoff-export/cats4.zip
+          fi
+          test -s .handoff-export/cats4.zip
+
+      - name: Upload bootstrap evidence and generated lock
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cats-tower-v2-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          if-no-files-found: warn
+          retention-days: 7
+          compression-level: 6
+          path: |
+            package-lock.json
+            dist/v2/**
+            test-results/**
+            playwright-report/**
+
+      - name: Upload full-repository Claude handoff
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cats4-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+          path: .handoff-export/cats4.zip

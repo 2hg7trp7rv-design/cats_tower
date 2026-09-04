@@ -1,0 +1,269 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "cats-tower-claude-handoff-decision-register",
+  "preparedAt": "2026-09-03T00:00:00+09:00",
+  "repository": "2hg7trp7rv-design/cats_tower",
+  "pipeline": "AI_NATIVE_V2",
+  "handoffBaseSnapshot": {
+    "workBranch": "task/v2-bootstrap",
+    "headCommitAtPreparationStart": "fe71c68895bd5755967827adb47740a64e807bd1",
+    "integrationBranch": "kimi",
+    "integrationCommitAtPreparationStart": "64b5e3bff2af776c10bb8b1e854a180c2a894a6d",
+    "releaseHistoryBranch": "main",
+    "pullRequest": 9,
+    "pullRequestStateAtPreparation": "OPEN_DRAFT"
+  },
+  "branchLock": {
+    "status": "LOCKED_FOR_CURRENT_HANDOFF",
+    "allowedWorkBranch": "task/v2-bootstrap",
+    "allowedPullRequestBase": "kimi",
+    "directWriteToIntegration": false,
+    "directWriteToReleaseHistory": false,
+    "createAnotherBranch": false,
+    "forcePush": false,
+    "mergePullRequestWithoutExplicitAuthority": false,
+    "mismatchBehavior": "STOP_WRITES_READ_BACK_STATE",
+    "expiresWhenAny": [
+      "pull request 9 is merged or closed",
+      "task/v2-bootstrap is deleted",
+      "CURRENT_AUTHORITY_INDEX.json or a later active change-control authorizes V2-1 or another branch",
+      "the user explicitly replaces this branch decision"
+    ]
+  },
+  "currentMission": {
+    "stage": "V2-0",
+    "name": "verified bootstrap closure",
+    "status": "ACTIVE",
+    "goal": "Close the typed React, Phaser and deterministic-domain bootstrap with reproducible unit, browser and Vercel evidence.",
+    "allowedScope": [
+      "apps/game/**",
+      "packages/domain/**",
+      "tests/v2/**",
+      "tests/e2e/**",
+      "tools/v2/**",
+      "docs/v2/** except the fixed handoff contract files",
+      ".claude/**",
+      "package.json",
+      "package-lock.json",
+      "tsconfig.json",
+      "vitest.config.ts",
+      "playwright.config.ts",
+      "vercel.json",
+      ".github/workflows/v2-quality-gate.yml"
+    ],
+    "completionRequires": [
+      "typecheck pass",
+      "unit tests pass",
+      "production build pass",
+      "Chromium pass at 320x568, 390x844 and 430x932",
+      "WebKit pass at 390x844",
+      "zero horizontal overflow",
+      "zero uncaught browser errors",
+      "same seed and elapsed time produce the same snapshot",
+      "defeat causes reward and next wave or enemy",
+      "Vercel Preview evidence bound to the candidate commit"
+    ],
+    "notAuthorized": [
+      "V2-1 implementation",
+      "production asset mass generation",
+      "final balance locking",
+      "save or backend implementation",
+      "payment, ad, gacha or permanent wallet implementation",
+      "legacy runtime continuation",
+      "pull request merge",
+      "production deployment"
+    ],
+    "protectedOperationalContract": [
+      "CLAUDE.md",
+      ".claude/settings.json",
+      ".claude/hooks/enforce-handoff.mjs",
+      "docs/v2/CLAUDE_HANDOFF.md",
+      "docs/v2/PRODUCT_AND_SYSTEM_SPEC.md",
+      "docs/v2/VISUAL_DIRECTION.md",
+      "docs/v2/DECISION_REGISTER.json",
+      "PROJECT_SOURCE_MANIFEST.md"
+    ]
+  },
+  "authorityPrecedence": [
+    "latest explicit user decision in the active session",
+    "CURRENT_AUTHORITY_INDEX.json",
+    "quality-reviews/step-1-canonical-design/active-change-control-addendum-round-035.json",
+    "AI_PROJECT_POLICY.json",
+    "CLAUDE.md and this register",
+    "MASTER_SPEC.md",
+    "FLOORS_1_10_DESIGN.md",
+    "canonical sealed contracts and registries",
+    "current V2 code, tests and docs",
+    "S02 Golden Master and design contracts as reference only",
+    "legacy runtime, old instructions and historical reviews"
+  ],
+  "lockedDecisions": [
+    {
+      "id": "CT-D001",
+      "topic": "product identity",
+      "decision": "Portrait-mobile idle and incremental RPG led by four named cats or cat-people, auto battle, unbounded tower and combat-supporting shops and delivery.",
+      "status": "LOCKED"
+    },
+    {
+      "id": "CT-D002",
+      "topic": "party",
+      "decision": "Four permanent battle slots: Mugi, Luna, Toto and Kohaku. Temporary support is a separate layer.",
+      "status": "LOCKED"
+    },
+    {
+      "id": "CT-D003",
+      "topic": "combat input",
+      "decision": "Direct tap damage is zero. Auto battle and offline progress are foundational.",
+      "status": "LOCKED"
+    },
+    {
+      "id": "CT-D004",
+      "topic": "combat causality",
+      "decision": "movement then engagement or range, anticipation, release or contact, impact, damage and HP change, hit reaction, defeat, reward and progression.",
+      "status": "LOCKED"
+    },
+    {
+      "id": "CT-D005",
+      "topic": "tower",
+      "decision": "The player sees no final floor. 10F and 100F are milestones, not endings; 101F and beyond continue.",
+      "status": "LOCKED"
+    },
+    {
+      "id": "CT-D006",
+      "topic": "shop and delivery",
+      "decision": "Commerce supports DPS, survival, coin flow and reclear speed and never replaces battle as the protagonist or requires routine collection chores.",
+      "status": "LOCKED"
+    },
+    {
+      "id": "CT-D007",
+      "topic": "reset",
+      "decision": "One reset system, reset.tower_return, returns to Floor 1 with defined retained acceleration and idempotent reward handling.",
+      "status": "LOCKED"
+    },
+    {
+      "id": "CT-D008",
+      "topic": "large numbers",
+      "decision": "Unbounded permanent values use canonical decimal strings or a versioned arbitrary-precision type, never unsafe JavaScript Number semantics.",
+      "status": "LOCKED"
+    },
+    {
+      "id": "CT-D009",
+      "topic": "trust boundary",
+      "decision": "Permanent economy, purchases, gacha results, acquisition, pity, reset rewards and highest floor are server authoritative. localStorage is not authority.",
+      "status": "LOCKED"
+    },
+    {
+      "id": "CT-D010",
+      "topic": "gacha structure",
+      "decision": "Character and weapon gacha are separate; first copy is functional; compound gacha is prohibited; N and R deterministic roles remain viable.",
+      "status": "LOCKED"
+    },
+    {
+      "id": "CT-D011",
+      "topic": "V2 architecture",
+      "decision": "React owns HUD and controls, Phaser owns battle rendering, packages/domain owns deterministic state and events, and build output is dist/v2.",
+      "status": "LOCKED_FOR_BOOTSTRAP"
+    },
+    {
+      "id": "CT-D012",
+      "topic": "branch workflow",
+      "decision": "Work only on task/v2-bootstrap, integrate by PR to kimi, leave main frozen, do not create another branch or merge PR 9 without authority.",
+      "status": "LOCKED_FOR_CURRENT_HANDOFF"
+    },
+    {
+      "id": "CT-D013",
+      "topic": "visual direction",
+      "decision": "Warm wood, brass, stone and burgundy tower workshop with premium pixel-art chibi cats, role-readable silhouettes, cold enemy separation and battle-first hierarchy.",
+      "status": "WORKING_DIRECTION_LOCKED_NOT_USER_APPROVED"
+    },
+    {
+      "id": "CT-D014",
+      "topic": "S02 assets",
+      "decision": "Existing S02 Golden Masters and assets are reference-only, are not user-visually-approved and are not authorized as production runtime assets or a complete-screen raster.",
+      "status": "LOCKED_BOUNDARY"
+    },
+    {
+      "id": "CT-D015",
+      "topic": "asset production order",
+      "decision": "Prove representative four-cat, enemy, background, component and causal animation quality in a browser before mass-producing final assets.",
+      "status": "LOCKED_PROCESS"
+    },
+    {
+      "id": "CT-D016",
+      "topic": "verification language",
+      "decision": "Vercel READY, browser emulation and physical iPhone verification are separate claims. Unknown evidence remains NOT_VERIFIED.",
+      "status": "LOCKED"
+    }
+  ],
+  "conflictResolutions": [
+    {
+      "conflict": "Old documents say only kimi is writable.",
+      "resolution": "Stale for V2. Current work branch is task/v2-bootstrap and kimi is integration-only."
+    },
+    {
+      "conflict": "Old documents say the formal current task is Step 4 S02-P1.",
+      "resolution": "Historical only. Current pipeline is AI_NATIVE_V2, stage V2-0."
+    },
+    {
+      "conflict": "Legacy introduction says Mugi does not fight.",
+      "resolution": "Stale. Mugi is character.launch.001, frontline-control and an active combatant."
+    },
+    {
+      "conflict": "Old finite-tower assumptions treat 100F as completion.",
+      "resolution": "Rejected. The tower is unbounded and 100F is a milestone."
+    },
+    {
+      "conflict": "S02 reference package looks visually complete.",
+      "resolution": "Visual completeness does not equal approval or runtime authorization. User visual approval remains false."
+    }
+  ],
+  "tunableOrDeferred": [
+    {
+      "topic": "exact balance and pacing",
+      "status": "PRESERVED_MODEL_INPUT_NOT_BOOTSTRAP_RUNTIME_TRUTH"
+    },
+    {
+      "topic": "first effective Tower Return",
+      "value": "20 to 35 minutes",
+      "status": "SIMULATION_TARGET"
+    },
+    {
+      "topic": "gacha pity and reward tempo targets",
+      "status": "REQUIRES_VALIDATION_AND_LATER_SCOPE"
+    },
+    {
+      "topic": "final production visual approval",
+      "status": "USER_APPROVAL_REQUIRED"
+    },
+    {
+      "topic": "backend, payment, ads, gacha and permanent save",
+      "status": "DEFERRED"
+    },
+    {
+      "topic": "physical iPhone pass",
+      "status": "NOT_VERIFIED"
+    }
+  ],
+  "verificationAtPreparation": {
+    "githubRepositoryRead": true,
+    "workBranchObserved": "task/v2-bootstrap",
+    "pullRequestObserved": 9,
+    "pullRequestObservedState": "OPEN_DRAFT",
+    "previousQualityRunAtBaseHead": "ACTION_REQUIRED_NO_JOBS_OBSERVED",
+    "vercelDeploymentAtBaseHead": "READY_REPORTED_BY_VERCEL_API",
+    "livePreviewVisualInspectionInThisHandoff": false,
+    "reasonLiveVisualNotCounted": "The observed Preview was protected and no new browser screenshot was successfully inspected during handoff preparation.",
+    "physicalIPhone": false,
+    "productionReady": false,
+    "userVisualApproval": false
+  },
+  "reportingContract": [
+    "state purpose",
+    "state branch and HEAD",
+    "list changed files",
+    "list each gate and its actual result",
+    "separate Vercel, browser and physical-device evidence",
+    "state blockers and unknowns",
+    "state the next task required to reach the finished game"
+  ]
+}
