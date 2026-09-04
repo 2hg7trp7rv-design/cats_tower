@@ -1,249 +1,57 @@
 {
   "schemaVersion": 2,
   "artifactId": "cats-tower-handoff-validation-2",
-  "preparedAt": "2026-09-04T00:00:00+09:00",
+  "preparedAt": "2026-09-04T09:00:00+09:00",
   "deliveryFilename": "cats4.zip",
   "repository": "2hg7trp7rv-design/cats_tower",
   "workBranch": "task/v2-bootstrap",
-  "pullRequest": 9,
-  "pullRequestBase": "kimi",
+  "pullRequest": {
+    "number": 9,
+    "state": "OPEN_DRAFT",
+    "base": "kimi",
+    "mergeAuthorized": false
+  },
   "sourceBase": {
     "head": "34106bc09f31d1c31d02a581591d3328b44df298",
     "tree": "9f29f29f13876fdc8619a0b1cc9cb90d1bab39ee"
   },
-  "manifest": {
-    "trackedFileCountAfterThisDocument": 767,
+  "contentCandidate": {
+    "head": "3f34698a4dc5a280e9341de79c6cd1886f03755b",
+    "tree": "b535a5f36d7ce84b5da4901ab9d63d2324b65871",
+    "commitCountFromSourceBase": 4,
+    "status": "VERIFIED_AUTOMATED_CONTENT_CANDIDATE"
+  },
+  "repositoryManifest": {
+    "trackedFileCount": 767,
+    "changedFileCountExcludingThisDocument": 30,
+    "cryptographicBinding": "The exact Git tree SHA above binds every tracked path and blob in the content candidate. This document intentionally does not contain a self-referential hash.",
     "requiredPaths": [
-      {
-        "path": "CLAUDE.md",
-        "exists": true
-      },
-      {
-        "path": "CLAUDE_ENTRY1.md",
-        "exists": true
-      },
-      {
-        "path": "CLAUDE_START_PROMPT1.md",
-        "exists": true
-      },
-      {
-        "path": ".claude/rules/cats-tower-handoff1.md",
-        "exists": true
-      },
-      {
-        "path": ".claude/rules/canonical-runtime-correction1.md",
-        "exists": true
-      },
-      {
-        "path": "docs/v2/CANONICAL_RUNTIME_BINDING1.md",
-        "exists": true
-      },
-      {
-        "path": "docs/v2/CORRECTION_AUDIT2.md",
-        "exists": true
-      },
-      {
-        "path": "docs/v2/ROUND_036_RECOVERY_STATUS1.md",
-        "exists": true
-      },
-      {
-        "path": "docs/v2/CATS_TOWER_CLAUDE_HANDOFF_INDEX1.md",
-        "exists": true
-      },
-      {
-        "path": "docs/v2/CATS_TOWER_CLAUDE_START_PROMPT1.md",
-        "exists": true
-      },
-      {
-        "path": "packages/domain/src/canonical.ts",
-        "exists": true
-      },
-      {
-        "path": "packages/domain/src/battle.ts",
-        "exists": true
-      },
-      {
-        "path": "simulation/candidate-v3.json",
-        "exists": true
-      },
-      {
-        "path": "simulation/engine-v2/numeric.mjs",
-        "exists": true
-      },
-      {
-        "path": "simulation/engine-v2/rng.mjs",
-        "exists": true
-      },
-      {
-        "path": "simulation/engine-v2/tower.mjs",
-        "exists": true
-      },
-      {
-        "path": "legacy/LEGACY_PATH_MANIFEST1.json",
-        "exists": true
-      }
+      "CLAUDE.md",
+      "CLAUDE_ENTRY1.md",
+      "CLAUDE_START_PROMPT1.md",
+      ".claude/rules/cats-tower-handoff1.md",
+      ".claude/rules/canonical-runtime-correction1.md",
+      "docs/v2/CANONICAL_RUNTIME_BINDING1.md",
+      "docs/v2/CORRECTION_AUDIT2.md",
+      "docs/v2/ROUND_036_RECOVERY_STATUS1.md",
+      "docs/v2/CATS_TOWER_CLAUDE_HANDOFF_INDEX1.md",
+      "docs/v2/CATS_TOWER_CLAUDE_START_PROMPT1.md",
+      "packages/domain/src/canonical.ts",
+      "packages/domain/src/battle.ts",
+      "simulation/candidate-v3.json",
+      "simulation/engine-v2/numeric.mjs",
+      "simulation/engine-v2/rng.mjs",
+      "simulation/engine-v2/tower.mjs",
+      "legacy/LEGACY_PATH_MANIFEST1.json"
     ],
-    "changedFileHashAlgorithm": "sha256",
-    "changedFileHashCoverage": "all content-commit changed and added files except this self-referential validation document",
-    "selfHashExcluded": true,
-    "changedFiles": [
-      {
-        "path": ".claude/hooks/enforce-handoff.mjs",
-        "bytes": 6975,
-        "sha256": "ab9b7057e68ee00cd24284ed18d5966a9bd956184d3b8fe289233da05dd6b042"
-      },
-      {
-        "path": ".claude/rules/canonical-runtime-correction1.md",
-        "bytes": 2363,
-        "sha256": "4e703cdea4efb66abcacee879cd62ffa1dfaaab30ca3fff5dc551d62a8bf4e46"
-      },
-      {
-        "path": ".claude/rules/cats-tower-handoff1.md",
-        "bytes": 2893,
-        "sha256": "1d171d9c4cb6df555bda6e37856fb615c4078d26bd0f70003cd0d16c8c7813d2"
-      },
-      {
-        "path": ".claude/settings.json",
-        "bytes": 2627,
-        "sha256": "93d145d562c9d2b30da0997eb2e975bb3ef408b723a68992fffd18883910eb54"
-      },
-      {
-        "path": ".github/workflows/v2-quality-gate.yml",
-        "bytes": 3946,
-        "sha256": "669a3faa1653ec53b377a72ea29bbc2cf4868b02020a15d1ee99e2ce6ed7dae4"
-      },
-      {
-        "path": "CLAUDE_ENTRY1.md",
-        "bytes": 637,
-        "sha256": "92d336b15c5840c815dff1c8f27e0e14e16b2fb5a960147da2d2272e04a95f77"
-      },
-      {
-        "path": "CLAUDE_START_PROMPT1.md",
-        "bytes": 296,
-        "sha256": "b094a2fd83ae598174c630b48328dafb081efe129c643e55a134d36abe195f39"
-      },
-      {
-        "path": "apps/game/src/App.tsx",
-        "bytes": 3997,
-        "sha256": "1bcc64580f48067563510220be85c79680d8f1e845bfe7543826c223631cde48"
-      },
-      {
-        "path": "apps/game/src/game/BattleScene.ts",
-        "bytes": 8701,
-        "sha256": "81d22d262344a772d8f9e01926486e716cb320ffc7fc8b1b00d27451822256a1"
-      },
-      {
-        "path": "apps/game/src/game/runtime.ts",
-        "bytes": 2480,
-        "sha256": "43c5b46d137c5d92660f39cf2e9b63f1fffc5d2a4d6117958abbdfd729275689"
-      },
-      {
-        "path": "apps/game/src/main.tsx",
-        "bytes": 770,
-        "sha256": "2eb4d9f0b93b11ca053397e097ef87423129e0160e3934165cd24dc80923bb72"
-      },
-      {
-        "path": "apps/game/src/styles.css",
-        "bytes": 5872,
-        "sha256": "f295c1e450ad703702cae4b6001f9e3b2393ad1a2cd39031e6e48b04437f0ea8"
-      },
-      {
-        "path": "apps/game/src/vite-env.d.ts",
-        "bytes": 572,
-        "sha256": "e94772a632522629d0edcda249fc647e7ae326caa5d193980259baa29d0f495c"
-      },
-      {
-        "path": "apps/game/vite.config.ts",
-        "bytes": 1097,
-        "sha256": "cd45e113900457be915d8d8b50cc3ef29b4b757560f42b4db6bb2d1b9075b6de"
-      },
-      {
-        "path": "docs/v2/CANONICAL_RUNTIME_BINDING1.md",
-        "bytes": 4978,
-        "sha256": "d988b98157eb60d185afb347d0c9bb0892c3480a3745ecaea27cccee618c6697"
-      },
-      {
-        "path": "docs/v2/CATS_TOWER_CLAUDE_HANDOFF_INDEX1.md",
-        "bytes": 2016,
-        "sha256": "855dc0602b6e924bee487f9da339902c25430706a3806d11a7f4f35c4174abf2"
-      },
-      {
-        "path": "docs/v2/CATS_TOWER_CLAUDE_START_PROMPT1.md",
-        "bytes": 5790,
-        "sha256": "68eaaf5a164f04f3e23e02e6f30a58c33b979f929217971cf93794c7a6b6105b"
-      },
-      {
-        "path": "docs/v2/CORRECTION_AUDIT2.md",
-        "bytes": 2272,
-        "sha256": "9e18fa58614647af6c99547892cb0707c79293fd30afa5b99692ca50e12a5008"
-      },
-      {
-        "path": "docs/v2/ROUND_036_RECOVERY_STATUS1.md",
-        "bytes": 1765,
-        "sha256": "7ba31814a11c8c79ff524bbd20053d735772cea8829eeaea7afe075775c46dfd"
-      },
-      {
-        "path": "legacy/LEGACY_PATH_MANIFEST1.json",
-        "bytes": 1034,
-        "sha256": "f1e3cb87892e2a66d004ede174ede28738f7011bb58a849f43b018771a253dde"
-      },
-      {
-        "path": "legacy/README.md",
-        "bytes": 513,
-        "sha256": "5db18cb19d78a77135129a910396c9f400239c841263f0ba173ca2c79e50672a"
-      },
-      {
-        "path": "packages/domain/src/battle.ts",
-        "bytes": 17217,
-        "sha256": "73f0cefed1ad2a8f943c616e743f5561404839dbeab90992cf268e507c5d409c"
-      },
-      {
-        "path": "packages/domain/src/browser/node-crypto.ts",
-        "bytes": 6274,
-        "sha256": "49660ac639587688c27aa273345eee49a48797605326e78a3a148b69faeee504"
-      },
-      {
-        "path": "packages/domain/src/browser/node-fs-promises.ts",
-        "bytes": 136,
-        "sha256": "87ef7b7a05d33608321766c07f70c0a37f00473ff11f3837bc71f1f3e92c08db"
-      },
-      {
-        "path": "packages/domain/src/canonical.ts",
-        "bytes": 9904,
-        "sha256": "0cf3a9d79f72dd96e423b3ccc210f2b816187bdf95109c147e31f5ce389a8cca"
-      },
-      {
-        "path": "packages/domain/src/index.ts",
-        "bytes": 629,
-        "sha256": "7ac46cf9e59ec4e1a43d8401794c641c5117c6c501b20856d8fec55dc56da326"
-      },
-      {
-        "path": "packages/domain/src/types.ts",
-        "bytes": 3064,
-        "sha256": "7e6e9c0d0083f16e72df9aae97945b053fe031fd9524f27ff0d3c21fcc1900cb"
-      },
-      {
-        "path": "tests/e2e/bootstrap.spec.ts",
-        "bytes": 7088,
-        "sha256": "f5702c55beb2a290fa09fd86da96ed3437064551adac0f78eaf4ba0da819b1f3"
-      },
-      {
-        "path": "tests/v2/domain/battle.test.ts",
-        "bytes": 5562,
-        "sha256": "1a85b35fcb98cf69427966e806a1dfeaed2917ff51ebf0e90449dc555f8a3a2d"
-      },
-      {
-        "path": "tests/v2/domain/browser-crypto.test.ts",
-        "bytes": 1659,
-        "sha256": "e140f8eb2d9bb9bd3e4161d36be028d5415f51f586a31c8bf61945c32a96e031"
-      }
-    ]
+    "allRequiredPathsObserved": true
   },
   "confirmedCorrections": [
     {
       "id": "CT-CORR-001",
-      "finding": "runtime did not use candidate-v3/engine-v2",
-      "status": "IMPLEMENTED_PENDING_GITHUB_CI",
+      "finding": "runtime did not consume candidate-v3 or engine-v2",
+      "status": "VERIFIED_AUTOMATED",
+      "scope": "Direct imports now bind candidate-v3 plus engine-v2 numeric, RNG and tower operations. Full realtime combat-model equivalence is not claimed.",
       "evidencePaths": [
         "packages/domain/src/canonical.ts",
         "tests/v2/domain/battle.test.ts"
@@ -251,8 +59,9 @@
     },
     {
       "id": "CT-CORR-002",
-      "finding": "canonical gameplay quantities used JavaScript number",
-      "status": "IMPLEMENTED_PENDING_GITHUB_CI",
+      "finding": "HP, coin, level and floor used unsafe JavaScript number semantics",
+      "status": "VERIFIED_AUTOMATED",
+      "scope": "Unbounded gameplay mutation uses BigInt and snapshots use normalized decimal strings. Bounded render ratios and milliseconds remain derived numbers.",
       "evidencePaths": [
         "packages/domain/src/types.ts",
         "packages/domain/src/battle.ts"
@@ -261,62 +70,179 @@
     {
       "id": "CT-CORR-003",
       "finding": "Mugi and Toto roles conflicted with canon",
-      "status": "IMPLEMENTED_PENDING_GITHUB_CI",
-      "evidencePaths": [
-        "packages/domain/src/canonical.ts",
-        "tests/v2/domain/battle.test.ts"
-      ]
+      "status": "VERIFIED_AUTOMATED",
+      "canonicalRoles": {
+        "character.launch.001": "frontline-control",
+        "character.launch.002": "ranged-anti-air",
+        "character.launch.003": "healing-support",
+        "character.launch.004": "runner-backline-disruption"
+      }
     },
     {
       "id": "CT-CORR-004",
       "finding": "fixed timestep was 100 ms",
-      "status": "IMPLEMENTED_PENDING_GITHUB_CI",
-      "evidencePaths": [
-        "packages/domain/src/canonical.ts",
-        "packages/domain/src/battle.ts"
-      ]
+      "status": "VERIFIED_AUTOMATED",
+      "valueMilliseconds": 50
     },
     {
       "id": "CT-CORR-005",
       "finding": "invented wave arena replaced tower progression",
-      "status": "IMPLEMENTED_PENDING_GITHUB_CI",
-      "evidencePaths": [
-        "packages/domain/src/battle.ts",
-        "tests/e2e/bootstrap.spec.ts"
+      "status": "VERIFIED_AUTOMATED",
+      "verifiedBehavior": [
+        "canonical floor descriptor",
+        "district, cycle, boss and modifiers",
+        "candidate floor reward",
+        "defeat to next floor",
+        "Floor 10 to Floor 11",
+        "no WAVE UI"
       ]
     }
   ],
-  "localVerification": {
-    "gitDiffCheck": "PASS",
-    "domainStrictTypecheck": "PASS_TYPESCRIPT_5_8_3_ISOLATED_DOMAIN",
-    "browserSha256ParityAgainstNode": "PASS",
-    "forbiddenLegacyPatternSearch": "PASS_ZERO_MATCHES_IN_V2_RUNTIME",
-    "fullRepositoryNode24Verify": "PENDING_GITHUB_CI",
-    "localLimitation": "The local container did not contain the exact dependency installation and runs Node 22; repository authority requires Node 24."
+  "automatedVerification": {
+    "workflow": {
+      "name": "V2 quality gate",
+      "runId": 33819603390,
+      "runNumber": 13,
+      "status": "completed",
+      "conclusion": "success",
+      "headBranch": "task/v2-bootstrap",
+      "headSha": "3f34698a4dc5a280e9341de79c6cd1886f03755b",
+      "pullRequestMergeRefSha": "9c25041546dcd47a916cc5151b59af21ada7101e",
+      "jobId": 100859187564,
+      "jobName": "v2-quality-gate",
+      "jobConclusion": "success"
+    },
+    "steps": {
+      "exactCheckoutAndSafety": "PASS",
+      "node24": "PASS",
+      "dependencyInstall": "PASS",
+      "typecheck": "PASS",
+      "unitTests": "PASS",
+      "productionBuild": "PASS",
+      "chromiumAndWebkitInstall": "PASS",
+      "browserResponsiveDeterminism": "PASS",
+      "fullRepositoryArchiveBuild": "PASS",
+      "artifactUploads": "PASS"
+    },
+    "browserProjects": [
+      {
+        "engine": "Chromium",
+        "viewport": "320x568",
+        "status": "PASS"
+      },
+      {
+        "engine": "Chromium",
+        "viewport": "390x844",
+        "status": "PASS"
+      },
+      {
+        "engine": "Chromium",
+        "viewport": "430x932",
+        "status": "PASS"
+      },
+      {
+        "engine": "WebKit",
+        "viewport": "390x844",
+        "status": "PASS"
+      }
+    ],
+    "browserAssertions": {
+      "sameSeedSameElapsedSnapshot": "PASS",
+      "fixedStep50ms": "PASS",
+      "canonicalRoleOrder": "PASS",
+      "candidateAndTowerEngineBinding": "PASS",
+      "floor10CanonicalDescriptor": "PASS",
+      "defeatRewardFloorProgression": "PASS",
+      "manualLevelCost": "PASS",
+      "canvasRenderSignal": "PASS",
+      "enemyHpDomCanvasBinding": "PASS",
+      "horizontalOverflowZero": "PASS",
+      "consoleErrorsZero": "PASS",
+      "pageErrorsZero": "PASS",
+      "compactHeadingSingleLine": "PASS",
+      "compactHeadingResourceNonOverlap": "PASS"
+    },
+    "artifactSet": [
+      {
+        "id": 9917801741,
+        "name": "cats-tower-v2-9c25041546dcd47a916cc5151b59af21ada7101e-33819603390-1",
+        "purpose": "build, Playwright report and viewport screenshots",
+        "sizeBytes": 3035801,
+        "digest": "sha256:a809fa3cd1d940f6d2776740709c30d010a8a6bb241dbf3561e26c1afce48476",
+        "expired": false
+      },
+      {
+        "id": 9917802247,
+        "name": "cats4-9c25041546dcd47a916cc5151b59af21ada7101e-33819603390-1",
+        "purpose": "full tracked repository archive generated from the pull-request head branch",
+        "sizeBytes": 34510700,
+        "digest": "sha256:5714880f27c2b4cfb0cbafa5194bb5b9ec0f9a6d4055f3882eced3103cade2ed",
+        "expired": false
+      }
+    ],
+    "visualInspection": {
+      "ciScreenshotsInspected": true,
+      "screenCount": 4,
+      "observed": [
+        "320x568 heading remains one line",
+        "heading does not overlap resource HUD",
+        "canonical source-bound warning is visible",
+        "no WAVE label is visible",
+        "four canonical-role party chips are visible"
+      ],
+      "classification": "BOOTSTRAP_TECHNICAL_VISUAL_ONLY_NOT_FINAL_ART_APPROVAL"
+    }
+  },
+  "deployment": {
+    "provider": "Vercel",
+    "projectId": "prj_3Ip3e0eYMy9SchP1vS36ibjJP9LB",
+    "teamId": "team_6odZCZQ1QxjzhPdC9sgEtoCM",
+    "deploymentId": "dpl_FZRBaNwrF938dmyaMHyRbFPdsHbN",
+    "state": "READY",
+    "target": "PREVIEW",
+    "url": "catstower-jfaidhlu6-shinyaaas-projects.vercel.app",
+    "gitBranch": "task/v2-bootstrap",
+    "gitCommitSha": "3f34698a4dc5a280e9341de79c6cd1886f03755b",
+    "pullRequest": 9,
+    "directLiveVisualInspection": "NOT_VERIFIED_SSO_PROTECTED",
+    "productionAliasChanged": false
   },
   "round036": {
     "status": "BLOCKED_SOURCE_NOT_FOUND",
     "restored": false,
     "inventedReplacement": false,
+    "searchedScopes": [
+      "live repository",
+      "branches",
+      "commits",
+      "pull requests",
+      "task/canon-fix-round-036",
+      "delivery archive",
+      "conversation uploads",
+      "accessible File Library"
+    ],
     "detailPath": "docs/v2/ROUND_036_RECOVERY_STATUS1.md"
   },
   "legacyBoundary": {
     "status": "LOGICALLY_ISOLATED_PHYSICALLY_STABLE",
     "physicalRelocationPerformed": false,
-    "v2BuildRoot": "apps/game",
+    "v2SourceRoot": "apps/game",
+    "v2DomainRoot": "packages/domain",
     "v2BuildOutput": "dist/v2",
+    "reason": "Sealed evidence and historical manifests depend on stable legacy paths.",
     "detailPath": "legacy/LEGACY_PATH_MANIFEST1.json"
   },
   "claimBoundaries": {
     "fullRealtimeCombatModelSharedAndResealed": false,
+    "provisionalPerCatCombatValuesRemain": true,
+    "symbolicCombatAboveExpandedFloorBoundaryImplemented": false,
     "step3ModelEvidenceConvertedToRuntimeEvidence": false,
+    "passRuntimeClaimed": false,
     "productionReady": false,
     "productionAliasChanged": false,
     "physicalIPhoneVerified": false,
     "userVisualApproval": false
   },
-  "contentCommit": null,
-  "contentWorkflow": null,
-  "contentDeployment": null,
-  "status": "PRE_CI_CONTENT_CANDIDATE"
+  "evidenceCommitRole": "This file is the C3 evidence content for the content candidate above. Its own commit SHA is deliberately obtained by live Git read-back rather than self-reference.",
+  "status": "AUTOMATED_CONTENT_GATES_VERIFIED"
 }
